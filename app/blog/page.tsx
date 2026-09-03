@@ -32,13 +32,15 @@ function SiteHeader() {
   return (
     <header className="site-nav blog-site-nav">
       <a className="nav-brand" href="/" aria-label="OutBrick home">
-        <span className="nav-app-icon"><img src="/icon.png" alt="" /></span>
+        <span className="nav-app-icon"><img src="/icon.png" alt="OutBrick app icon" title="OutBrick app icon" /></span>
         <span><OutBrickLogo compact /><small>the sliding-brick puzzle</small></span>
       </a>
       <nav className="nav-links blog-nav-links" aria-label="Primary navigation">
         <a href="/">The game</a>
         <a href="/blog" aria-current="page">Journal</a>
         <a href="/#characters">Mascots</a>
+        <a href="/about">About</a>
+        <a href="/authors">Authors</a>
         <a href="/support">Support</a>
       </nav>
       <div className="nav-side-actions blog-nav-actions"><StoreBadge compact /></div>
@@ -56,8 +58,8 @@ function SiteFooter() {
           <StoreBadge />
         </div>
         <div className="footer-links">
-          <div><span className="footer-label">Explore</span><a href="/">The game</a><a href="/blog">Journal</a><a href="/#characters">Mascots</a><a href="/#widgets">Widgets</a></div>
-          <div><span className="footer-label">Read about</span><a href="/blog#player-habits">Player habits</a><a href="/blog#success-stories">Success stories</a><a href="/blog#game-craft">Game craft</a><a href="/blog#inclusive-design">Inclusive design</a></div>
+          <div><span className="footer-label">Explore</span><a href="/">The game</a><a href="/blog">Journal</a><a href="/#characters">Mascots</a><a href="/#widgets">Widgets</a><a href="/about">About OutBrick</a></div>
+          <div><span className="footer-label">Read about</span><a href="/blog#category-player-habits">Player habits</a><a href="/blog#category-success-stories">Success stories</a><a href="/blog#category-game-craft">Game craft</a><a href="/blog#category-inclusive-design">Inclusive design</a><a href="/research">Research method</a></div>
           <div><span className="footer-label">Contact</span><a href="/support">Support</a><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility <ArrowUpRight size={14} /></a></div>
         </div>
       </div>
@@ -66,12 +68,12 @@ function SiteFooter() {
   );
 }
 
-function ArticleCard({ article, featured = false }: { article: BlogArticle; featured?: boolean }) {
+function ArticleCard({ article, featured = false, anchorId }: { article: BlogArticle; featured?: boolean; anchorId?: string }) {
   const author = getAuthor(article.authorId);
   return (
-    <article className={`blog-card blog-card-${article.categoryColor} ${featured ? 'blog-card-featured' : ''}`}>
+    <article id={anchorId} className={`blog-card blog-card-${article.categoryColor} ${featured ? 'blog-card-featured' : ''}`}>
       <a className="blog-card-image" href={`/blog/${article.slug}`} aria-label={`Read ${article.title}`}>
-        <img src={article.image} alt={article.imageAlt} loading={featured ? 'eager' : 'lazy'} />
+        <img src={article.image} alt={article.imageAlt} title={article.title} loading={featured ? 'eager' : 'lazy'} />
         <span className="blog-card-image-label"><BookOpen size={14} /> {article.category}</span>
       </a>
       <div className="blog-card-body">
@@ -88,6 +90,8 @@ export default function BlogPage() {
   const featured = articles[0]!;
   const remaining = articles.slice(1);
   const categories = Array.from(new Set(articles.map((article) => article.category)));
+  const categoryAnchor = (category: string) => `category-${category.toLowerCase().replaceAll(' ', '-')}`;
+  const firstArticleByCategory = new Map(categories.map((category) => [category, articles.find((article) => article.category === category)?.slug]));
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -118,18 +122,18 @@ export default function BlogPage() {
             <h1 id="journal-title">Play has more <span>than one shape.</span></h1>
             <p>Notes from the space around the board: how games fit into real lives, why tiny rules can carry a whole world, and what we are learning while we make OutBrick.</p>
             <div className="blog-hero-actions"><a className="nav-cta" href="#stories">Read the latest <ArrowUpRight size={15} /></a><a className="blog-text-link" href="/#experience">Back to the game <ArrowUpRight size={15} /></a></div>
-            <div className="blog-hero-proof"><span><Sparkles size={15} /> 10 original essays</span><span><BookOpen size={15} /> Research + craft</span><span>Updated September 2026</span></div>
+            <div className="blog-hero-proof"><span><Sparkles size={15} /> 20 original essays</span><span><BookOpen size={15} /> Research + craft</span><span>Updated September 2026</span></div>
           </div>
           <div className="blog-hero-card">
-            <div className="blog-hero-card-topline"><span>FEATURED NOTE</span><span>01 / 10</span></div>
-            <img src={featured.image} alt={featured.imageAlt} />
+            <div className="blog-hero-card-topline"><span>FEATURED NOTE</span><span>01 / 20</span></div>
+            <img src={featured.image} alt={featured.imageAlt} title={featured.title} />
             <div className="blog-hero-card-caption"><span className="blog-kicker">{featured.category}</span><strong>{featured.title}</strong><span>{featured.readingTime} · {getAuthor(featured.authorId).name}</span></div>
           </div>
         </section>
 
         <section className="blog-filter-row" aria-label="Journal categories">
           <span className="blog-filter-label">Browse by</span>
-          {categories.map((category) => <a key={category} id={category.toLowerCase().replaceAll(' ', '-')} href={`#${category.toLowerCase().replaceAll(' ', '-')}`}>{category}</a>)}
+          {categories.map((category) => <a key={category} href={`#${categoryAnchor(category)}`}>{category}</a>)}
         </section>
 
         <section id="stories" className="blog-stories section-block" aria-labelledby="stories-title">
@@ -137,9 +141,9 @@ export default function BlogPage() {
             <div><div className="eyebrow"><span className="eyebrow-dot" /> The reading shelf</div><h2 id="stories-title">Small games.<br /><span>Big questions.</span></h2></div>
             <p>Every story starts with OutBrick, then follows the thread somewhere useful: a player habit, a design decision, or a game that made the medium feel larger.</p>
           </div>
-          <div className="blog-feature-wrap"><ArticleCard article={featured} featured /></div>
-          <div className="blog-grid" id="player-habits">
-            {remaining.map((article) => <ArticleCard key={article.slug} article={article} />)}
+          <div className="blog-feature-wrap"><ArticleCard article={featured} featured anchorId={firstArticleByCategory.get(featured.category) === featured.slug ? categoryAnchor(featured.category) : undefined} /></div>
+          <div className="blog-grid">
+            {remaining.map((article) => <ArticleCard key={article.slug} article={article} anchorId={firstArticleByCategory.get(article.category) === article.slug ? categoryAnchor(article.category) : undefined} />)}
           </div>
         </section>
 
@@ -152,7 +156,7 @@ export default function BlogPage() {
 
         <section className="blog-authors section-block" aria-labelledby="authors-title">
           <div className="blog-section-heading section-heading-split"><div><div className="eyebrow"><span className="eyebrow-dot" /> By the people behind the bricks</div><h2 id="authors-title">Meet the <span>voices.</span></h2></div><p>OutBrick is a small studio, so the journal stays close to the work. Design notes come from the maker; research notes are edited for clarity and care.</p></div>
-          <div className="blog-author-grid">{authors.map((author) => <div className="blog-author-card" key={author.id}><span className="blog-avatar">{author.initials}</span><div><h3>{author.name}</h3><span>{author.role}</span><p>{author.bio}</p></div></div>)}</div>
+          <div className="blog-author-grid">{authors.map((author) => <a className="blog-author-card" href={`/authors/${author.id}`} key={author.id}><span className="blog-avatar" title={`${author.name} avatar`}>{author.initials}</span><div><h3>{author.name}</h3><span>{author.role}</span><p>{author.bio}</p><span className="blog-text-link">View author page <ArrowUpRight size={14} /></span></div></a>)}</div>
         </section>
       </main>
       <SiteFooter />

@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
   <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog</loc><lastmod>2026-09-04</lastmod><changefreq>weekly</changefreq><priority>0.95</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/about</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/authors</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/research</loc><lastmod>2026-09-04</lastmod><changefreq>weekly</changefreq><priority>0.75</priority></url>
   <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/play</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/support</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/contact</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
@@ -23,4 +26,16 @@
   <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/color-shape-accessibility</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/when-to-play-and-when-to-pause</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/kinder-difficulty-curve</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/cozy-progress-without-grind</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/hades-run-keeps-learning</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/celeste-assist-mode-accessibility</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/sims-stories-systems-tell</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/pokemon-go-power-of-place</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/games-teach-curiosity-without-lecture</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/animal-crossing-shared-time</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/papers-please-meaningful-friction</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/how-games-become-habits</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/blog/commuter-puzzle-two-minute</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/authors/mourad-hamdi</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <url><loc>https://outbrick.mourad-hamdi.chatgpt.site/authors/outbrick-editorial</loc><lastmod>2026-09-04</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
 </urlset>

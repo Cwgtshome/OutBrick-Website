@@ -29,7 +29,7 @@ export function LegalPage({ eyebrow, title, summary, updated, children }: LegalP
       <header className="site-nav">
         <a className="nav-brand" href="/" aria-label="OutBrick home">
           <span className="nav-app-icon">
-            <img src="/icon.png" alt="" />
+            <img src="/icon.png" alt="OutBrick app icon" title="OutBrick app icon" />
           </span>
           <span>
             <OutBrickWordmark />
@@ -41,6 +41,9 @@ export function LegalPage({ eyebrow, title, summary, updated, children }: LegalP
           <a href="/#characters">Mascots</a>
           <a href="/#widgets">Widgets</a>
           <a href="/play">Play guide</a>
+          <a href="/blog">Journal</a>
+          <a href="/about">About</a>
+          <a href="/accessibility">Accessibility</a>
         </nav>
         <StoreBadge compact />
       </header>

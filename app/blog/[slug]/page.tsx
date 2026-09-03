@@ -56,11 +56,11 @@ function SiteHeader() {
   return (
     <header className="site-nav blog-site-nav">
       <a className="nav-brand" href="/" aria-label="OutBrick home">
-        <span className="nav-app-icon"><img src="/icon.png" alt="" /></span>
+        <span className="nav-app-icon"><img src="/icon.png" alt="OutBrick app icon" title="OutBrick app icon" /></span>
         <span><OutBrickLogo compact /><small>the sliding-brick puzzle</small></span>
       </a>
       <nav className="nav-links blog-nav-links" aria-label="Primary navigation">
-        <a href="/">The game</a><a href="/blog" aria-current="page">Journal</a><a href="/#characters">Mascots</a><a href="/support">Support</a>
+        <a href="/">The game</a><a href="/blog" aria-current="page">Journal</a><a href="/#characters">Mascots</a><a href="/about">About</a><a href="/authors">Authors</a><a href="/support">Support</a>
       </nav>
       <div className="nav-side-actions blog-nav-actions"><StoreBadge compact /></div>
     </header>
@@ -73,8 +73,8 @@ function SiteFooter() {
       <div className="footer-main">
         <div className="footer-brand"><OutBrickLogo /><p>A sliding-brick colour-sort puzzle, with a journal for the curious bits around it.</p><StoreBadge /></div>
         <div className="footer-links">
-          <div><span className="footer-label">Explore</span><a href="/">The game</a><a href="/blog">Journal</a><a href="/#characters">Mascots</a><a href="/#widgets">Widgets</a></div>
-          <div><span className="footer-label">Read about</span><a href="/blog#player-habits">Player habits</a><a href="/blog#success-stories">Success stories</a><a href="/blog#game-craft">Game craft</a><a href="/blog#inclusive-design">Inclusive design</a></div>
+          <div><span className="footer-label">Explore</span><a href="/">The game</a><a href="/blog">Journal</a><a href="/#characters">Mascots</a><a href="/#widgets">Widgets</a><a href="/about">About OutBrick</a></div>
+          <div><span className="footer-label">Read about</span><a href="/blog#category-player-habits">Player habits</a><a href="/blog#category-success-stories">Success stories</a><a href="/blog#category-game-craft">Game craft</a><a href="/blog#category-inclusive-design">Inclusive design</a><a href="/research">Research method</a></div>
           <div><span className="footer-label">Contact</span><a href="/support">Support</a><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility <ArrowUpRight size={14} /></a></div>
         </div>
       </div>
@@ -99,7 +99,7 @@ function SourceMarkers({ sourceIds, references }: { sourceIds?: string[]; refere
 function RelatedCard({ article }: { article: BlogArticle }) {
   return (
     <article className={`blog-card blog-card-${article.categoryColor} blog-card-related`}>
-      <a className="blog-card-image" href={`/blog/${article.slug}`} aria-label={`Read ${article.title}`}><img src={article.image} alt={article.imageAlt} loading="lazy" /><span className="blog-card-image-label"><BookOpen size={14} /> {article.category}</span></a>
+      <a className="blog-card-image" href={`/blog/${article.slug}`} aria-label={`Read ${article.title}`}><img src={article.image} alt={article.imageAlt} title={article.title} loading="lazy" /><span className="blog-card-image-label"><BookOpen size={14} /> {article.category}</span></a>
       <div className="blog-card-body"><div className="blog-card-meta"><span>{article.category}</span><span><Clock3 size={13} /> {article.readingTime}</span></div><h3><a href={`/blog/${article.slug}`}>{article.title}</a></h3><p>{article.dek}</p><a className="blog-read-link" href={`/blog/${article.slug}`}>Read story <ChevronRight size={16} /></a></div>
     </article>
   );
@@ -155,13 +155,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <h1>{article.title}</h1>
           <p className="article-dek">{article.dek}</p>
           <div className="article-meta">
-            <div className="article-byline"><span className="blog-avatar">{author.initials}</span><span><strong>{author.name}</strong><small>{author.role}</small></span></div>
+            <a className="article-byline" href={`/authors/${author.id}`}><span className="blog-avatar" title={`${author.name} avatar`}>{author.initials}</span><span><strong>{author.name}</strong><small>{author.role}</small></span></a>
             <span><Clock3 size={15} /> {article.readingTime}</span><span>Published {article.publishedAt}</span><span>Updated {article.updatedAt}</span>
           </div>
           <div className="article-tags">{article.tags.map((tag) => <span key={tag}>#{tag.replaceAll(' ', '-')}</span>)}</div>
         </header>
 
-        <figure className="article-hero-image"><img src={article.image} alt={article.imageAlt} /><figcaption>{article.imageAlt}. Original OutBrick journal artwork.</figcaption></figure>
+        <figure className="article-hero-image"><img src={article.image} alt={article.imageAlt} title={article.title} /><figcaption>{article.imageAlt}. Original OutBrick journal artwork.</figcaption></figure>
 
         <div className="article-layout">
           <aside className="article-aside">
@@ -169,7 +169,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <div className="blog-kicker"><BookOpen size={14} /> In this story</div>
               <nav aria-label="On this page"><ol>{article.sections.map((section) => <li key={section.id}><a href={`#${section.id}`}>{section.title}</a></li>)}{article.faqs?.length ? <li><a href="#faq">Questions, answered</a></li> : null}<li><a href="#references">References</a></li></ol></nav>
             </div>
-            <div className="article-author-card"><span className="blog-avatar">{author.initials}</span><span className="blog-kicker">Written by</span><h2>{author.name}</h2><p>{author.bio}</p><a className="blog-text-link" href="/blog">More from the journal <ArrowUpRight size={14} /></a></div>
+            <div className="article-author-card"><span className="blog-avatar" title={`${author.name} avatar`}>{author.initials}</span><span className="blog-kicker">Written by</span><h2>{author.name}</h2><p>{author.bio}</p><a className="blog-text-link" href={`/authors/${author.id}`}>View author page <ArrowUpRight size={14} /></a></div>
             <a className="article-back-link" href="/blog"><ArrowLeft size={15} /> All journal stories</a>
           </aside>
 
