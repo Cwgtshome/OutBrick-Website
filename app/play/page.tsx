@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { ArrowLeft, ArrowUpRight, Check, Gamepad2 } from 'lucide-react';
+import { StoreBadge } from '../store-badge';
 
 export const metadata: Metadata = {
   title: 'Play guide',
@@ -14,10 +15,10 @@ export default function PlayPage() {
         <a className="nav-brand" href="/" aria-label="OutBrick home">
           <span className="nav-app-icon"><img src="/icon.png" alt="" /></span>
           <span className="wordmark wordmark-compact" aria-label="OutBrick">
-            {['O', 'u', 't', 'B', 'r', 'i', 'c', 'k'].map((letter, index) => <span className={`wordmark-letter letter-${index % 8}`} key={`${letter}-${index}`}>{letter}</span>)}
+            {['O', 'U', 'T', 'B', 'R', 'I', 'C', 'K'].map((letter, index) => <span className={`wordmark-letter letter-${index % 8}`} key={`${letter}-${index}`}>{letter}</span>)}
           </span>
         </a>
-        <a className="nav-cta" href="/"><ArrowLeft size={15} /> Back to site</a>
+        <div className="play-header-actions"><StoreBadge compact /><a className="nav-cta" href="/"><ArrowLeft size={15} /> Back to site</a></div>
       </header>
 
       <main className="play-main">
@@ -42,6 +43,7 @@ export default function PlayPage() {
 
         <div className="play-actions"><a className="gloss-button gloss-green" href="/#experience"><span className="gloss-button-inner">See every screen <ArrowUpRight size={18} /></span></a><a className="back-link" href="/"><ArrowLeft size={16} /> Back to the official site</a></div>
       </main>
+      <footer className="site-footer play-footer"><div className="footer-bottom"><span>© 2026 OutBrick</span><StoreBadge compact /></div></footer>
     </div>
   );
 }

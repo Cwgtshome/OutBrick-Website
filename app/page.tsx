@@ -6,7 +6,6 @@ import {
   Check,
   ChevronRight,
   CircleDollarSign,
-  ExternalLink,
   Gamepad2,
   HeartHandshake,
   Map,
@@ -21,6 +20,7 @@ import {
   WifiOff,
   X,
 } from 'lucide-react';
+import { StoreBadge } from './store-badge';
 
 type ViewId = 'home' | 'play' | 'journey' | 'shop' | 'pass' | 'wedged';
 
@@ -287,17 +287,18 @@ export default function Home() {
             <small>the sliding-brick puzzle</small>
           </span>
         </a>
-        <button className="nav-menu" type="button" aria-label="Toggle navigation" onClick={() => setMobileOpen((open) => !open)}>
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="nav-side-actions">
+          <StoreBadge compact />
+          <button className="nav-menu" type="button" aria-label="Toggle navigation" onClick={() => setMobileOpen((open) => !open)}>
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
         <nav className={`nav-links ${mobileOpen ? 'nav-links-open' : ''}`} aria-label="Primary navigation">
           <a href="#experience" onClick={() => setMobileOpen(false)}>The game</a>
           <a href="#characters" onClick={() => setMobileOpen(false)}>Mascots</a>
           <a href="#widgets" onClick={() => setMobileOpen(false)}>Widgets</a>
           <a href="/support" onClick={() => setMobileOpen(false)}>Support</a>
-          <a className="nav-cta" href="#experience" onClick={() => { setMobileOpen(false); jumpTo('experience'); }}>
-            Explore OutBrick <ArrowUpRight size={15} />
-          </a>
+          <a className="nav-cta" href="#experience" onClick={() => setMobileOpen(false)}>Explore OutBrick <ArrowUpRight size={15} /></a>
         </nav>
       </header>
 
@@ -532,14 +533,14 @@ export default function Home() {
 
       <footer className="site-footer">
         <div className="footer-main">
-          <div className="footer-brand"><OutBrickLogo /><p>A sliding-brick colour-sort puzzle by RiseHush.</p></div>
+          <div className="footer-brand"><OutBrickLogo /><p>A sliding-brick colour-sort puzzle by OutBrick.</p><StoreBadge /></div>
           <div className="footer-links">
             <div><span className="footer-label">Explore</span><a href="#experience">The game</a><a href="#characters">Mascots</a><a href="#widgets">Widgets</a></div>
-            <div><span className="footer-label">Apple fields</span><a href="/support">Support</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a></div>
-            <div><span className="footer-label">Open source home</span><a href="https://github.com/Cwgtshome/OutBrick" target="_blank" rel="noreferrer">GitHub <ExternalLink size={14} /></a><a href="mailto:mourad.hamdi@me.com">Email the team <ExternalLink size={14} /></a></div>
+            <div><span className="footer-label">Apple fields</span><a href="/support">Support</a><a href="/terms">Terms</a><a href="/privacy">Privacy policy</a><a href="/privacy-choices">Privacy choices</a><a href="/license-agreement">License agreement</a><a href="/eula">Apple EULA</a><a href="/age-rating">Age suitability</a><a href="/accessibility">Accessibility</a><a href="/refunds">Refunds & purchases</a></div>
+            <div><span className="footer-label">Contact</span><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility support <ArrowUpRight size={14} /></a></div>
           </div>
         </div>
-        <div className="footer-bottom"><span>© 2026 RiseHush</span><span><ShieldCheck size={14} /> No ads. No accounts. No tracking.</span><span>Made with bricks and patience.</span></div>
+        <div className="footer-bottom"><span>© 2026 OutBrick</span><span><ShieldCheck size={14} /> No ads. No accounts. No tracking.</span><span>Made with bricks and patience.</span></div>
       </footer>
 
       {toast && <div className="site-toast" role="status"><Check size={17} /> {toast}</div>}

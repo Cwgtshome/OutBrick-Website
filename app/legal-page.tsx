@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { ArrowLeft, ExternalLink, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ShieldCheck } from 'lucide-react';
+import { StoreBadge } from './store-badge';
 
 type LegalPageProps = {
   eyebrow: string;
@@ -12,7 +13,7 @@ type LegalPageProps = {
 function OutBrickWordmark() {
   return (
     <span className="wordmark wordmark-compact" aria-label="OutBrick">
-      {['O', 'u', 't', 'B', 'r', 'i', 'c', 'k'].map((letter, index) => (
+      {['O', 'U', 'T', 'B', 'R', 'I', 'C', 'K'].map((letter, index) => (
         <span className={`wordmark-letter letter-${index % 8}`} key={`${letter}-${index}`}>
           {letter}
         </span>
@@ -39,8 +40,9 @@ export function LegalPage({ eyebrow, title, summary, updated, children }: LegalP
           <a href="/">The game</a>
           <a href="/#characters">Mascots</a>
           <a href="/#widgets">Widgets</a>
-          <a className="nav-cta" href="/play">Open the play guide <ExternalLink size={15} /></a>
+          <a href="/play">Play guide</a>
         </nav>
+        <StoreBadge compact />
       </header>
 
       <main className="legal-main">
@@ -54,11 +56,22 @@ export function LegalPage({ eyebrow, title, summary, updated, children }: LegalP
       </main>
 
       <footer className="site-footer legal-footer">
+        <div className="legal-footer-main"><span>Keep the next board close.</span><StoreBadge /></div>
+        <div className="legal-footer-links">
+          <a href="/contact">Contact OutBrick</a>
+          <a href="/support">Support</a>
+          <a href="/privacy">Privacy policy</a>
+          <a href="/privacy-choices">Privacy choices</a>
+          <a href="/terms">Terms</a>
+          <a href="/license-agreement">License agreement</a>
+          <a href="/eula">Apple EULA</a>
+          <a href="/age-rating">Age suitability</a>
+          <a href="/accessibility">Accessibility</a>
+          <a href="/refunds">Refunds & purchases</a>
+        </div>
         <div className="footer-bottom">
-          <span>© 2026 RiseHush</span>
-          <span><a href="/support">Support</a></span>
-          <span><a href="/terms">Terms</a></span>
-          <span><a href="/privacy">Privacy</a></span>
+          <span>© 2026 OutBrick</span>
+          <span><a href="/">Back to OutBrick</a></span>
         </div>
       </footer>
     </div>

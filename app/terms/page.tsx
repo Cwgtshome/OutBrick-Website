@@ -24,7 +24,7 @@ export default function TermsPage() {
       </section>
 
       <h2>Using OutBrick</h2>
-      <p>You may download and use OutBrick on devices you control, subject to Apple’s App Store terms. The game’s artwork, mascots, code, name, and other original materials belong to RiseHush or their respective rights holders.</p>
+      <p>You may download and use OutBrick on devices you control, subject to Apple’s App Store terms. The game’s artwork, mascots, code, name, and other original materials belong to OutBrick or their respective rights holders.</p>
 
       <h2>Game Center and purchases</h2>
       <p>Game Center features are provided through Apple and are subject to Apple’s terms and policies. In-app purchases are processed by Apple; refunds, billing, and payment questions are handled through Apple’s App Store support.</p>
@@ -33,7 +33,7 @@ export default function TermsPage() {
       <p>This website is provided for information, support, and product updates. We aim to keep it accurate, but the game and site may change as OutBrick is improved. External links are provided for convenience and are governed by their own terms.</p>
 
       <h2>Availability and liability</h2>
-      <p>OutBrick and this website are provided on an “as available” basis. To the extent allowed by law, RiseHush is not responsible for losses caused by events outside its reasonable control, including device failures, network outages, or third-party service changes.</p>
+      <p>OutBrick and this website are provided on an “as available” basis. To the extent allowed by law, OutBrick is not responsible for losses caused by events outside its reasonable control, including device failures, network outages, or third-party service changes.</p>
 
       <div className="legal-fact-row">
         <span><Check size={16} /> No account required</span>
@@ -42,7 +42,7 @@ export default function TermsPage() {
       </div>
 
       <h2>Questions</h2>
-      <p>For support or questions about these terms, contact <a className="inline-link" href="mailto:mourad.hamdi@me.com">mourad.hamdi@me.com</a>.</p>
+      <p>For support or questions about these terms, use the <a className="inline-link" href="/contact">OutBrick contact form</a>.</p>
     </LegalPage>
   );
 }

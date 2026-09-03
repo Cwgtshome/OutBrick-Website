@@ -11,9 +11,9 @@ export const metadata: Metadata = {
   },
   description: 'OutBrick is a relaxed sliding-brick colour-sort puzzle with real mascots, useful widgets, and no ads or lives.',
   applicationName: 'OutBrick',
-  authors: [{ name: 'RiseHush' }],
-  creator: 'RiseHush',
-  keywords: ['OutBrick', 'sliding brick puzzle', 'colour sort', 'offline puzzle', 'RiseHush'],
+  authors: [{ name: 'OutBrick' }],
+  creator: 'OutBrick',
+  keywords: ['OutBrick', 'sliding brick puzzle', 'colour sort', 'offline puzzle'],
   openGraph: {
     type: 'website',
     url: siteUrl,

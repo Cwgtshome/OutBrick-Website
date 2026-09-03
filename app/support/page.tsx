@@ -34,14 +34,14 @@ export default function SupportPage() {
       <h2>Still stuck?</h2>
       <p>Tell us the level number, device model, iOS version, and what happened. A screenshot is always useful. We do not need your Game Center login or any payment details.</p>
       <div className="legal-contact-grid">
-        <a className="legal-contact" href="mailto:mourad.hamdi@me.com">
+        <a className="legal-contact" href="/contact">
           <Mail size={20} />
-          <span><strong>Email the team</strong><small>mourad.hamdi@me.com</small></span>
+          <span><strong>Contact OutBrick</strong><small>Real contact form</small></span>
           <ArrowUpRight size={16} />
         </a>
-        <a className="legal-contact" href="https://github.com/Cwgtshome/OutBrick/issues" target="_blank" rel="noreferrer">
+        <a className="legal-contact" href="/accessibility">
           <MessageCircle size={20} />
-          <span><strong>Open an issue</strong><small>GitHub issue tracker</small></span>
+          <span><strong>Accessibility support</strong><small>Tell us what needs fixing</small></span>
           <ArrowUpRight size={16} />
         </a>
       </div>
