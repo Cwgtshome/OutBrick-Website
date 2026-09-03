@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-
-const siteUrl = 'https://outbrick.mourad-hamdi.chatgpt.site';
+import { siteUrl } from '../lib/site';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -13,7 +12,17 @@ export const metadata: Metadata = {
   applicationName: 'OutBrick',
   authors: [{ name: 'OutBrick' }],
   creator: 'OutBrick',
-  keywords: ['OutBrick', 'sliding brick puzzle', 'colour sort', 'offline puzzle'],
+  keywords: [
+    'OutBrick',
+    'sliding brick puzzle',
+    'colour sort puzzle',
+    'offline puzzle game',
+    'calm mobile games',
+    'game design journal',
+    'gaming habits research',
+  ],
+  alternates: { canonical: siteUrl },
+  robots: { index: true, follow: true },
   openGraph: {
     type: 'website',
     url: siteUrl,
@@ -39,9 +48,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'OutBrick',
+    url: siteUrl,
+    logo: `${siteUrl}/icon.png`,
+    description: 'A relaxed sliding-brick colour-sort puzzle and an independent game design journal.',
+  };
+
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      </body>
     </html>
   );
 }

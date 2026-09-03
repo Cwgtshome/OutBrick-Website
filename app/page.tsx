@@ -297,6 +297,7 @@ export default function Home() {
           <a href="#experience" onClick={() => setMobileOpen(false)}>The game</a>
           <a href="#characters" onClick={() => setMobileOpen(false)}>Mascots</a>
           <a href="#widgets" onClick={() => setMobileOpen(false)}>Widgets</a>
+          <a href="/blog" onClick={() => setMobileOpen(false)}>Journal</a>
           <a href="/support" onClick={() => setMobileOpen(false)}>Support</a>
           <a className="nav-cta" href="#experience" onClick={() => setMobileOpen(false)}>Explore OutBrick <ArrowUpRight size={15} /></a>
         </nav>
@@ -535,7 +536,7 @@ export default function Home() {
         <div className="footer-main">
           <div className="footer-brand"><OutBrickLogo /><p>A sliding-brick colour-sort puzzle by OutBrick.</p><StoreBadge /></div>
           <div className="footer-links">
-            <div><span className="footer-label">Explore</span><a href="#experience">The game</a><a href="#characters">Mascots</a><a href="#widgets">Widgets</a></div>
+            <div><span className="footer-label">Explore</span><a href="#experience">The game</a><a href="#characters">Mascots</a><a href="#widgets">Widgets</a><a href="/blog">Journal</a></div>
             <div><span className="footer-label">Apple fields</span><a href="/support">Support</a><a href="/terms">Terms</a><a href="/privacy">Privacy policy</a><a href="/privacy-choices">Privacy choices</a><a href="/license-agreement">License agreement</a><a href="/eula">Apple EULA</a><a href="/age-rating">Age suitability</a><a href="/accessibility">Accessibility</a><a href="/refunds">Refunds & purchases</a></div>
             <div><span className="footer-label">Contact</span><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility support <ArrowUpRight size={14} /></a></div>
           </div>
