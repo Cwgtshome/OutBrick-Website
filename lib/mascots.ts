@@ -21,6 +21,7 @@ export type MascotStory = {
   opening: string;
   quote: string;
   voice: string;
+  widgetLine: string;
   superpower: string;
   tells: string;
   favoriteMove: string;
@@ -42,6 +43,7 @@ export const mascotStories: MascotStory[] = [
     opening: 'Every morning, when the village gates click awake, Bloo is already standing on the brightest square. He calls it a starting line. Peach calls it “a perfectly avoidable place to trip.” Sprout calls it exciting. Bloo calls it Tuesday.',
     quote: '“One friendly nudge. Then we see what happens.”',
     voice: 'Cheerful, brave, and always ready with a high five.',
+    widgetLine: 'One friendly nudge. Then we see what happens.',
     superpower: 'Turning “maybe” into “let’s look.”',
     tells: 'He gets louder when he is nervous, which is how everyone knows the big grin is doing important work.',
     favoriteMove: 'A confident slide followed by an even more confident “I meant to do that.”',
@@ -86,6 +88,7 @@ export const mascotStories: MascotStory[] = [
     opening: 'Peach arrives at the board with a list. Then a second list, in case the first list becomes overwhelmed. She knows where every brick is, which is comforting right up until one of them moves. Luckily, Peach is learning that a plan can be a soft place to start—not a cage to stay inside.',
     quote: '“Careful is not the same as afraid.”',
     voice: 'Thoughtful, loyal, and only slightly panicked when the board gets interesting.',
+    widgetLine: 'Careful is not the same as afraid.',
     superpower: 'Seeing the quiet route through the noise.',
     tells: 'She says “this is fine” exactly when it is becoming a little exciting.',
     favoriteMove: 'A tidy setup, a measured slide, and one relieved little nod.',
@@ -130,6 +133,7 @@ export const mascotStories: MascotStory[] = [
     opening: 'Sprout does not walk past a puzzle. Sprout investigates it. Why does this brick have studs? Why does that gate match? What happens if we try the thing Peach just asked us not to try? The answers are not always useful, but they are nearly always interesting.',
     quote: '“What if the answer is hiding behind that brick?”',
     voice: 'Wide-eyed, warm, and permanently one “ooh!” away from a discovery.',
+    widgetLine: 'What if the answer is hiding behind that brick?',
     superpower: 'Keeping wonder in the room after the rule is understood.',
     tells: 'Sprout counts everything, including the things everyone else thought were decorative.',
     favoriteMove: 'The unexpected route that works for a reason Sprout is still explaining.',
@@ -164,6 +168,12 @@ export const mascotStories: MascotStory[] = [
 
 export function getMascotStory(id: string): MascotStory | undefined {
   return mascotStories.find((story) => story.id === id);
+}
+
+export function getMascotOfTheDay(date = new Date()): MascotStory {
+  const utcDay = Math.floor(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()) / 86_400_000);
+  const index = ((utcDay % mascotStories.length) + mascotStories.length) % mascotStories.length;
+  return mascotStories[index]!;
 }
 
 export function getAdjacentMascot(id: MascotStory['id'], direction: -1 | 1): MascotStory {

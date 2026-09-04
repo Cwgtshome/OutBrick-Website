@@ -13,7 +13,7 @@ export function OutBrickLogo({ compact = false }: { compact?: boolean }) {
   );
 }
 
-export function EditorialHeader({ current }: { current?: 'about' | 'authors' | 'research' | 'blog' | 'mascots' }) {
+export function EditorialHeader({ current }: { current?: 'about' | 'authors' | 'research' | 'blog' | 'mascots' | 'press-kit' }) {
   return (
     <header className="site-nav blog-site-nav">
       <a className="nav-brand" href="/" aria-label="OutBrick home">
@@ -24,6 +24,7 @@ export function EditorialHeader({ current }: { current?: 'about' | 'authors' | '
         <a href="/">The game</a>
         <a href="/blog" aria-current={current === 'blog' ? 'page' : undefined}>Journal</a>
         <a href="/mascots" aria-current={current === 'mascots' ? 'page' : undefined}>Mascots</a>
+        <a href="/press-kit" aria-current={current === 'press-kit' ? 'page' : undefined}>Press kit</a>
         <a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
         <a href="/authors" aria-current={current === 'authors' ? 'page' : undefined}>Authors</a>
         <a href="/research" aria-current={current === 'research' ? 'page' : undefined}>Research</a>
@@ -44,7 +45,7 @@ export function EditorialFooter() {
           <StoreBadge />
         </div>
         <div className="footer-links">
-          <div><span className="footer-label">Explore</span><a href="/">The game</a><a href="/blog">Journal</a><a href="/mascots">Mascots</a><a href="/#widgets">Widgets</a><a href="/about">About OutBrick</a></div>
+          <div><span className="footer-label">Explore</span><a href="/">The game</a><a href="/blog">Journal</a><a href="/mascots">Mascots</a><a href="/#widgets">Widgets</a><a href="/press-kit">Press kit</a><a href="/about">About OutBrick</a></div>
           <div><span className="footer-label">Read about</span><a href="/authors">Authors</a><a href="/research">Research method</a><a href="/blog#category-player-habits">Player habits</a><a href="/blog#category-success-stories">Success stories</a><a href="/blog#category-inclusive-design">Inclusive design</a></div>
           <div><span className="footer-label">Contact</span><a href="/support">Support</a><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility <ArrowUpRight size={14} /></a></div>
         </div>

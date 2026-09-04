@@ -20,6 +20,7 @@ import {
   WifiOff,
   X,
 } from 'lucide-react';
+import { getMascotOfTheDay } from '../lib/mascots';
 import { StoreBadge } from './store-badge';
 
 type ViewId = 'home' | 'play' | 'journey' | 'shop' | 'pass' | 'wedged';
@@ -245,6 +246,7 @@ function WidgetCard({
 export default function Home() {
   const [activeView, setActiveView] = useState<ViewId>('home');
   const [selectedMascot, setSelectedMascot] = useState('bloo');
+  const [mascotOfTheDay, setMascotOfTheDay] = useState(() => getMascotOfTheDay());
   const [feature, setFeature] = useState('relaxed');
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toast, setToast] = useState('');
@@ -252,6 +254,8 @@ export default function Home() {
   const currentView = viewData.find((view) => view.id === activeView) ?? viewData[0];
 
   useEffect(() => {
+    const refreshMascotOfTheDay = () => setMascotOfTheDay(getMascotOfTheDay());
+    const dailyRefresh = window.setInterval(refreshMascotOfTheDay, 60_000);
     const hash = window.location.hash.replace('#', '');
     if (viewData.some((view) => view.id === hash)) {
       setActiveView(hash as ViewId);
@@ -259,6 +263,7 @@ export default function Home() {
     if (hash === 'widgets' || hash === 'characters') {
       document.getElementById(hash)?.scrollIntoView();
     }
+    return () => window.clearInterval(dailyRefresh);
   }, []);
 
   function jumpTo(id: string) {
@@ -473,10 +478,26 @@ export default function Home() {
                 <div className="widget-streak"><span className="streak-flame">✦</span><span>Claimed today</span></div>
                 <small>Next reward · Lv 5</small>
               </WidgetCard>
-              <WidgetCard eyebrow="MASCOT OF THE DAY" title="Sprout" color="purple" mascot="/assets/sprout-cheer.png" mascotLabel="Sprout OutBrick mascot illustration">
-                <p className="widget-speech">Brick Pass tiers are claimed for you on clear.</p>
+              <WidgetCard eyebrow="MASCOT OF THE DAY" title={mascotOfTheDay.name} color="purple" mascot={mascotOfTheDay.heroImage} mascotLabel={mascotOfTheDay.imageAlt}>
+                <p className="widget-speech">{mascotOfTheDay.widgetLine}</p>
+                <a className="widget-story-link" href={`/mascots/${mascotOfTheDay.id}`}>Read the story <ArrowUpRight size={13} /></a>
               </WidgetCard>
             </div>
+          </div>
+
+          <div className="mascot-day-module" aria-labelledby="mascot-day-title">
+            <div className="mascot-day-copy">
+              <div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-pink" /> Today’s companion</div>
+              <h3 id="mascot-day-title">A little company for today’s board.</h3>
+              <p>On the Home Screen, {mascotOfTheDay.name} is a small hello between clears: the same friendly cast from the game, ready with a line, a look, or a very good idea.</p>
+              <div className="mascot-day-meta"><span><strong>{mascotOfTheDay.name}</strong> · {mascotOfTheDay.role}</span><span>Changes with the calendar</span></div>
+              <a className="inline-link" href={`/mascots/${mascotOfTheDay.id}`}>Read {mascotOfTheDay.name}’s story <ArrowUpRight size={16} /></a>
+            </div>
+            <a className="mascot-day-art" href={`/mascots/${mascotOfTheDay.id}`} aria-label={`Read ${mascotOfTheDay.name}'s mascot story`}>
+              <span className="mascot-day-art-label">Mascot of the day</span>
+              <img src={mascotOfTheDay.heroImage} alt={mascotOfTheDay.imageAlt} title={`${mascotOfTheDay.name} OutBrick mascot`} />
+              <span className="mascot-day-quote">{mascotOfTheDay.quote}</span>
+            </a>
           </div>
         </section>
 
@@ -544,7 +565,7 @@ export default function Home() {
         <div className="footer-main">
           <div className="footer-brand"><OutBrickLogo /><p>A sliding-brick colour-sort puzzle by OutBrick.</p><StoreBadge /></div>
           <div className="footer-links">
-            <div><span className="footer-label">Explore</span><a href="#experience">The game</a><a href="#characters">Mascots</a><a href="#widgets">Widgets</a><a href="/blog">Journal</a><a href="/about">About OutBrick</a><a href="/authors">Authors</a><a href="/research">Research method</a></div>
+            <div><span className="footer-label">Explore</span><a href="#experience">The game</a><a href="#characters">Mascots</a><a href="#widgets">Widgets</a><a href="/mascots">Mascot stories</a><a href="/press-kit">Press kit</a><a href="/blog">Journal</a><a href="/about">About OutBrick</a><a href="/authors">Authors</a><a href="/research">Research method</a></div>
             <div><span className="footer-label">Apple fields</span><a href="/support">Support</a><a href="/terms">Terms</a><a href="/privacy">Privacy policy</a><a href="/privacy-choices">Privacy choices</a><a href="/license-agreement">License agreement</a><a href="/eula">Apple EULA</a><a href="/age-rating">Age suitability</a><a href="/accessibility">Accessibility</a><a href="/refunds">Refunds & purchases</a></div>
             <div><span className="footer-label">Contact</span><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility support <ArrowUpRight size={14} /></a></div>
           </div>
