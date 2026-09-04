@@ -2095,7 +2095,8 @@ img {
   .blog-site .site-nav { width: min(calc(100% - 30px), var(--max-width)); flex-wrap: wrap; gap: 10px 13px; }
   .blog-site .nav-brand small { display: none; }
   .blog-nav-actions { margin-left: auto; }
-  .blog-site .blog-nav-links { position: static; display: flex; flex: 1 0 100%; flex-direction: row; order: 3; gap: 18px; overflow-x: auto; padding: 1px 0 5px; border: 0; border-radius: 0; background: transparent; box-shadow: none; font-size: 11px; white-space: nowrap; }
+  .blog-site .blog-nav-links { position: static; display: flex; flex: 1 0 100%; flex-direction: row; order: 3; gap: 18px; overflow-x: auto; padding: 1px 0 5px; border: 0; border-radius: 0; background: transparent; box-shadow: none; font-size: 11px; white-space: nowrap; scrollbar-width: none; -ms-overflow-style: none; }
+  .blog-site .blog-nav-links::-webkit-scrollbar { display: none; width: 0; height: 0; }
   .blog-site .blog-nav-links > a { padding: 0; }
   .blog-site .blog-nav-links > a:hover { background: transparent; }
   .blog-landing-hero, .blog-filter-row, .blog-research-strip { width: min(calc(100% - 30px), var(--max-width)); }
