@@ -1,0 +1,5 @@
+# Apple's CDN only accepts the association file when it is served as JSON, and the file has no
+# extension for the host to infer that from.
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
