@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://outbrick.mourad-hamdi.chatgpt.site/sitemap.xml

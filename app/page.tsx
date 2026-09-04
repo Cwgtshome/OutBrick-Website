@@ -185,7 +185,7 @@ function IphoneFrame({
         <div className="iphone-button iphone-button-power" />
         <div className="iphone-screen">
           <div className="iphone-screen-glare" />
-          <img src={image} alt={alt} loading={priority ? 'eager' : 'lazy'} />
+          <img src={image} alt={alt} title={alt} loading={priority ? 'eager' : 'lazy'} />
         </div>
       </div>
     </div>
@@ -220,19 +220,21 @@ function WidgetCard({
   title,
   children,
   mascot,
+  mascotLabel,
   color = 'blue',
 }: {
   eyebrow: string;
   title: string;
   children: ReactNode;
   mascot?: string;
+  mascotLabel?: string;
   color?: 'blue' | 'green' | 'orange' | 'purple';
 }) {
   return (
     <article className={`widget-card widget-${color}`}>
       <div className="widget-topline">
         <span>{eyebrow}</span>
-        {mascot ? <img src={mascot} alt="" /> : <span className="widget-corner-dot" />}
+        {mascot ? <img src={mascot} alt={mascotLabel ?? 'OutBrick mascot illustration'} title={mascotLabel ?? 'OutBrick mascot illustration'} /> : <span className="widget-corner-dot" />}
       </div>
       <h3>{title}</h3>
       <div className="widget-content">{children}</div>
@@ -280,7 +282,7 @@ export default function Home() {
       <header className="site-nav">
         <a className="nav-brand" href="#top" aria-label="OutBrick home">
           <span className="nav-app-icon">
-            <img src="/icon.png" alt="" />
+            <img src="/icon.png" alt="OutBrick app icon" title="OutBrick app icon" />
           </span>
           <span>
             <OutBrickLogo compact />
@@ -297,6 +299,10 @@ export default function Home() {
           <a href="#experience" onClick={() => setMobileOpen(false)}>The game</a>
           <a href="#characters" onClick={() => setMobileOpen(false)}>Mascots</a>
           <a href="#widgets" onClick={() => setMobileOpen(false)}>Widgets</a>
+          <a href="/blog" onClick={() => setMobileOpen(false)}>Journal</a>
+          <a href="/about" onClick={() => setMobileOpen(false)}>About</a>
+          <a href="/authors" onClick={() => setMobileOpen(false)}>Authors</a>
+          <a href="/research" onClick={() => setMobileOpen(false)}>Research</a>
           <a href="/support" onClick={() => setMobileOpen(false)}>Support</a>
           <a className="nav-cta" href="#experience" onClick={() => setMobileOpen(false)}>Explore OutBrick <ArrowUpRight size={15} /></a>
         </nav>
@@ -331,7 +337,7 @@ export default function Home() {
             <div className="stage-cloud cloud-two" />
             <div className="stage-bricks stage-bricks-left"><BrickRow colors={['#E2372F', '#F9C823', '#2C7BE5']} /></div>
             <div className="stage-bricks stage-bricks-right"><BrickRow colors={['#4CB944', '#F26AB8']} /></div>
-            <img className="hero-mascots" src="/assets/mascots-group.png" alt="Bloo, Peach, and Sprout" />
+            <img className="hero-mascots" src="/assets/mascots-group.png" alt="Bloo, Peach, and Sprout OutBrick mascot group" title="Bloo, Peach, and Sprout OutBrick mascot group" />
             <IphoneFrame image="/assets/home-screen.png" alt="OutBrick Home screen with Bloo, Peach, and Sprout" priority />
             <div className="hero-stage-label"><span>Home</span><span>Level 32</span><span><CoinPill /></span></div>
           </div>
@@ -408,7 +414,7 @@ export default function Home() {
           <div className="characters-layout">
             <div className="character-stage">
               <div className="character-stage-topline"><span>Today in the village</span><span><span className="live-dot" /> real-time 3D</span></div>
-              <img className="character-group-cheer" src="/assets/mascots-group-cheer.png" alt="The OutBrick mascots cheering" />
+              <img className="character-group-cheer" src="/assets/mascots-group-cheer.png" alt="The OutBrick mascots cheering" title="The OutBrick mascots cheering" />
               <div className="character-speech">{selectedMascot === 'bloo' ? 'That was gorgeous. Do it again!' : selectedMascot === 'peach' ? 'No clear from here? We can step back.' : 'There is definitely a clever way through.'}</div>
               <div className="character-stage-floor" />
             </div>
@@ -421,7 +427,7 @@ export default function Home() {
                   onClick={() => setSelectedMascot(mascot.id)}
                 >
                   <span className="character-card-image" style={{ background: `linear-gradient(145deg, ${mascot.color}33, #1A1350)` }}>
-                    <img src={selectedMascot === mascot.id ? mascot.cheer : mascot.image} alt="" />
+                    <img src={selectedMascot === mascot.id ? mascot.cheer : mascot.image} alt={`OutBrick ${mascot.name} ${selectedMascot === mascot.id ? 'cheering' : 'resting'} mascot illustration`} title={`OutBrick ${mascot.name} mascot illustration`} />
                   </span>
                   <span className="character-card-copy">
                     <span className="character-card-name">{mascot.name}</span>
@@ -432,6 +438,9 @@ export default function Home() {
                 </button>
               ))}
               <div className="character-note"><Sparkles size={17} /><span>Idle, cheer, think, blink. The cast keeps the tone soft when the solver gets serious.</span></div>
+              <div className="character-story-links" aria-label="Mascot stories">
+                {mascots.map((mascot) => <a key={mascot.id} href={`/mascots/${mascot.id}`}>Read {mascot.name}’s story <ArrowUpRight size={14} /></a>)}
+              </div>
             </div>
           </div>
         </section>
@@ -448,11 +457,11 @@ export default function Home() {
           <div className="widgets-layout">
             <div className="widget-montage-card">
               <div className="montage-header"><span>Home Screen widgets</span><span className="montage-chip">iOS</span></div>
-              <img src="/assets/widgets-montage.jpg" alt="OutBrick Home Screen widget montage showing level, daily brick, streak, mascot, chapter, event, and Endless widgets" />
+              <img src="/assets/widgets-montage.jpg" alt="OutBrick Home Screen widget montage showing level, daily brick, streak, mascot, chapter, event, and Endless widgets" title="OutBrick Home Screen widget montage" />
               <div className="montage-footer"><span>One shared snapshot</span><span>Eight widget surfaces</span><span>Updated after every clear</span></div>
             </div>
             <div className="widget-grid">
-              <WidgetCard eyebrow="LEVEL" title="Keep your place" color="blue" mascot="/assets/bloo-idle.png">
+              <WidgetCard eyebrow="LEVEL" title="Keep your place" color="blue" mascot="/assets/bloo-idle.png" mascotLabel="Bloo OutBrick mascot illustration">
                 <div className="widget-level-row"><strong>32</strong><span>Village Run</span></div>
                 <GlossButton color="green"><Play size={13} /> Play</GlossButton>
               </WidgetCard>
@@ -460,11 +469,11 @@ export default function Home() {
                 <div className="widget-claim"><BrickRow colors={['#4CB944', '#4CB944', '#4CB944', '#4CB944']} /><Check size={23} /></div>
                 <small>Back tomorrow</small>
               </WidgetCard>
-              <WidgetCard eyebrow="STREAK" title="1 day" color="orange" mascot="/assets/peach-idle.png">
+              <WidgetCard eyebrow="STREAK" title="1 day" color="orange" mascot="/assets/peach-idle.png" mascotLabel="Peach OutBrick mascot illustration">
                 <div className="widget-streak"><span className="streak-flame">✦</span><span>Claimed today</span></div>
                 <small>Next reward · Lv 5</small>
               </WidgetCard>
-              <WidgetCard eyebrow="MASCOT OF THE DAY" title="Sprout" color="purple" mascot="/assets/sprout-cheer.png">
+              <WidgetCard eyebrow="MASCOT OF THE DAY" title="Sprout" color="purple" mascot="/assets/sprout-cheer.png" mascotLabel="Sprout OutBrick mascot illustration">
                 <p className="widget-speech">Brick Pass tiers are claimed for you on clear.</p>
               </WidgetCard>
             </div>
@@ -526,7 +535,7 @@ export default function Home() {
                 <a className="inline-link" href="/support">Read support & privacy <ArrowUpRight size={16} /></a>
               </div>
             </div>
-            <div className="close-mascots"><img src="/assets/mascots-group.png" alt="OutBrick mascots" /></div>
+            <div className="close-mascots"><img src="/assets/mascots-group.png" alt="OutBrick mascots" title="OutBrick mascots" /></div>
           </div>
         </section>
       </main>
@@ -535,7 +544,7 @@ export default function Home() {
         <div className="footer-main">
           <div className="footer-brand"><OutBrickLogo /><p>A sliding-brick colour-sort puzzle by OutBrick.</p><StoreBadge /></div>
           <div className="footer-links">
-            <div><span className="footer-label">Explore</span><a href="#experience">The game</a><a href="#characters">Mascots</a><a href="#widgets">Widgets</a></div>
+            <div><span className="footer-label">Explore</span><a href="#experience">The game</a><a href="#characters">Mascots</a><a href="#widgets">Widgets</a><a href="/blog">Journal</a><a href="/about">About OutBrick</a><a href="/authors">Authors</a><a href="/research">Research method</a></div>
             <div><span className="footer-label">Apple fields</span><a href="/support">Support</a><a href="/terms">Terms</a><a href="/privacy">Privacy policy</a><a href="/privacy-choices">Privacy choices</a><a href="/license-agreement">License agreement</a><a href="/eula">Apple EULA</a><a href="/age-rating">Age suitability</a><a href="/accessibility">Accessibility</a><a href="/refunds">Refunds & purchases</a></div>
             <div><span className="footer-label">Contact</span><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility support <ArrowUpRight size={14} /></a></div>
           </div>

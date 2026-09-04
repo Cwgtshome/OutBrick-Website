@@ -13,7 +13,7 @@ export default function PlayPage() {
       <div className="site-grain" aria-hidden="true" />
       <header className="site-nav">
         <a className="nav-brand" href="/" aria-label="OutBrick home">
-          <span className="nav-app-icon"><img src="/icon.png" alt="" /></span>
+          <span className="nav-app-icon"><img src="/icon.png" alt="OutBrick app icon" title="OutBrick app icon" /></span>
           <span className="wordmark wordmark-compact" aria-label="OutBrick">
             {['O', 'U', 'T', 'B', 'R', 'I', 'C', 'K'].map((letter, index) => <span className={`wordmark-letter letter-${index % 8}`} key={`${letter}-${index}`}>{letter}</span>)}
           </span>
@@ -31,7 +31,7 @@ export default function PlayPage() {
           </div>
           <div className="play-device-card">
             <div className="device-topline"><span><Gamepad2 size={14} /> LIVE BOARD</span><span>LEVEL 001</span></div>
-            <div className="iphone-frame play-route-phone"><div className="iphone-screen"><img src="/assets/play-screen.png" alt="OutBrick play screen" /></div></div>
+            <div className="iphone-frame play-route-phone"><div className="iphone-screen"><img src="/assets/play-screen.png" alt="OutBrick play screen" title="OutBrick play screen" /></div></div>
           </div>
         </section>
 
