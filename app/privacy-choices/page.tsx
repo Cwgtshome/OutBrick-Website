@@ -13,18 +13,21 @@ export default function PrivacyChoicesPage() {
       eyebrow="User privacy choices"
       title="Your choices, clearly."
       summary="OutBrick does not operate an account, advertising, or analytics system. These are the controls available to manage the small amount of information that can exist on your device or in Apple services."
-      updated="4 September 2026"
+      updated="7 September 2026"
     >
       <section className="legal-highlight legal-highlight-blue">
         <Eraser size={25} />
         <div>
-          <h2>Delete local game data.</h2>
-          <p>Open OutBrick › Settings › Delete My Data. This removes local progress, coins, boosters, preferences, and stats from that device. The action cannot be undone.</p>
+          <h2>Reset game data.</h2>
+          <p>Open OutBrick › Settings › Delete My Data. This resets local progress, coins, boosters, preferences, and stats and requests removal of the iCloud save. Build 18 also removes any iCloud recovery copy. Sync requires iCloud availability; another device with an older save can upload it again. The action cannot be undone. Apple’s purchase records, Game Center data, device backups, and media you saved or shared are managed separately.</p>
         </div>
       </section>
 
       <h2>OutBrick data</h2>
-      <p>OutBrick does not collect personal information, create user accounts, run analytics or advertising SDKs, or sell data. The game stores progress and preferences locally so the board can work offline. If your device includes the app in an iCloud backup, Apple controls that backup.</p>
+      <p>The developer does not receive gameplay or face data, create game accounts, run analytics or advertising SDKs in the game, or sell data. The game stores progress and preferences locally so the board can work offline. When available, iCloud also syncs progress, profile choices, and the colour-blind preference to your own Apple Account. Manage the app’s iCloud access in device Settings. Apple controls separate device backups.</p>
+
+      <h2>Camera and face data</h2>
+      <p>The camera-free update (build 18) removes face tracking. In an older iOS build, turn off “Look at me (camera)” in OutBrick Settings or revoke Camera permission in device Settings to prevent camera access. Face values are processed temporarily on the device, not saved as a dataset or sent to us. Read the <a className="inline-link" href="/privacy#face-data">face-data policy</a> for the exact information, uses, storage, and retention practices in earlier builds.</p>
 
       <h2>Game Center</h2>
       <p>If you use Game Center, Apple manages the associated account, leaderboards, achievements, and challenges. You can sign out of Game Center or change its permissions in iOS Settings. Requests about Game Center account data should be directed to Apple.</p>

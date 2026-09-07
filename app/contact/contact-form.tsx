@@ -55,7 +55,7 @@ export function ContactForm() {
         </button>
         <span className="contact-form-note"><Mail size={15} /> This opens a ready-to-send email to {CONTACT_EMAIL}.</span>
       </div>
-      {submitted && <p className="contact-form-status" role="status"><Check size={16} /> Your message is ready in your mail app.</p>}
+      {submitted && <p className="contact-form-status" role="status"><Check size={16} /> If your mail app opened, review the draft and send it there. If it did not open, email mourad.hamdi@me.com directly.</p>}
       <p className="contact-form-privacy"><ShieldCheck size={15} /> Please do not include passwords, payment card details, or other sensitive information.</p>
     </form>
   );
