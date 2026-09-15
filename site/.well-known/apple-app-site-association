@@ -1,0 +1,22 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["N8QNP8L662.com.risehush.brickout"],
+        "components": [
+          {
+            "/": "/c",
+            "comment": "An OutBrick challenge sent from Messages opens the board in the app when it is installed."
+          },
+          {
+            "/": "/c/*",
+            "comment": "Challenge links in path form."
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": []
+  }
+}

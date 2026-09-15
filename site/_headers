@@ -1,0 +1,11 @@
+# Apple's CDN only accepts the association file when it is served as JSON, and the file has no
+# extension for the host to infer that from.
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
+# app-ads.txt must be served as plain text for the crawler to parse it; a host that guesses
+# text/html from the extension is the usual reason verification silently fails.
+/app-ads.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600

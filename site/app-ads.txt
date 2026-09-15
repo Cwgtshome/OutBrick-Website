@@ -1,0 +1,14 @@
+# app-ads.txt — IAB Tech Lab authorised digital sellers, for apps.
+#
+# This file is how an ad exchange checks that whoever is selling ad space in OutBrick is
+# allowed to. AdMob crawls it at the root of the developer website listed on the App Store
+# listing — https://www.outbrick.site — and that domain has to match the
+# store entry exactly, so it is the `marketingUrl` in fastlane/metadata/app.json and nothing
+# else. Without this file the app stays unverified in AdMob and a share of bids are refused.
+#
+# The line below is public by design: a publisher ID is meant to be read by anyone, and the
+# whole point of the standard is that it can be checked without asking us. It is not a secret
+# and is not a credential.
+#
+# Spec: https://iabtechlab.com/ads-txt/
+google.com, pub-5443779967190041, DIRECT, f08c47fec0942fa0
