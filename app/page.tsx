@@ -2,14 +2,19 @@
 
 import { useEffect, useState, type ReactNode } from 'react';
 import {
+  Accessibility,
   ArrowUpRight,
   Check,
   ChevronRight,
   CircleDollarSign,
+  Cloud,
   Gamepad2,
   HeartHandshake,
+  LayoutGrid,
   Map,
   Menu,
+  MessageCircle,
+  Mic,
   Palette,
   Play,
   RotateCcw,
@@ -17,6 +22,8 @@ import {
   ShoppingBag,
   Sparkles,
   Ticket,
+  Trophy,
+  Watch,
   WifiOff,
   X,
 } from 'lucide-react';
@@ -501,6 +508,32 @@ export default function Home() {
           </div>
         </section>
 
+        {/* The capability map. Everything here is a shipping capability of the current
+            build, phrased the way the App Store listing phrases it, because a marketing page
+            that promises more than the listing is a rejection waiting to happen and one that
+            promises less is just a worse page. */}
+        <section id="capabilities" className="section-block">
+          <div className="section-heading section-heading-center">
+            <div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-gold" /> Everything in the box</div>
+            <h2>One rule to learn.<br /><span>Rather a lot that comes with it.</span></h2>
+            <p>The board is the whole game, and it is three seconds of teaching. The rest of this is what the game does while you are not looking at it.</p>
+          </div>
+          <div className="info-card-grid">
+            <article className="info-card info-card-yellow"><span className="info-card-icon"><Sparkles size={20} /></span><h3>Three stars, one target</h3><p>Clearing a board earns a star. Clearing it at or under the solver&rsquo;s own move target earns two. Doing that without a single undo earns three &mdash; and the third is a thing you come back for.</p></article>
+            <article className="info-card info-card-blue"><span className="info-card-icon"><Trophy size={20} /></span><h3>Game Center, built in</h3><p>Three leaderboards, 57 achievements, a Daily Brick that is the same seeded board for everybody, and challenges you can send to someone you actually know.</p></article>
+            <article className="info-card info-card-teal"><span className="info-card-icon"><Watch size={20} /></span><h3>On your wrist</h3><p>A standalone Apple Watch game with complications, so a board is one wrist-turn away and never needs the phone out of your pocket.</p></article>
+            <article className="info-card info-card-green"><span className="info-card-icon"><MessageCircle size={20} /></span><h3>In the conversation</h3><p>An iMessage app with stickers and challenges you can drop straight into a thread, without anyone leaving Messages to do it.</p></article>
+            <article className="info-card info-card-yellow"><span className="info-card-icon"><LayoutGrid size={20} /></span><h3>On the Lock Screen</h3><p>Live Activities on the Lock Screen and in the Dynamic Island, Home Screen widgets, and Lock Screen accessories &mdash; all reading the same shared snapshot.</p></article>
+            <article className="info-card info-card-blue"><span className="info-card-icon"><Mic size={20} /></span><h3>Siri, Spotlight, Handoff</h3><p>Ask Siri for a board. Find one in Spotlight. Start on iPhone, pick it up on iPad exactly where the bricks were.</p></article>
+            <article className="info-card info-card-teal"><span className="info-card-icon"><Accessibility size={20} /></span><h3>Playable without seeing it</h3><p>Every brick is a VoiceOver element that reads its colour, shape and position, with a custom action for each direction it can slide. Larger Text scales all the way up, colour-blind mode stamps a glyph on every brick and gate, and Reduce Motion is honoured throughout.</p></article>
+            <article className="info-card info-card-green"><span className="info-card-icon"><Cloud size={20} /></span><h3>Your progress follows you</h3><p>Signed in to iCloud, a new device picks up exactly where the old one stopped &mdash; level, coins, streak, Collection and all. It lives in your iCloud, not ours.</p></article>
+            <article className="info-card info-card-yellow"><span className="info-card-icon"><Sparkles size={20} /></span><h3>Lines they write themselves</h3><p>On iPhones with Apple Intelligence, Bloo, Peach and Sprout write their own dialogue using Apple&rsquo;s on-device model. Nothing leaves the phone to do it, and the game is the same game without it.</p></article>
+            <article className="info-card info-card-blue"><span className="info-card-icon"><Ticket size={20} /></span><h3>Events, not banners</h3><p>Launch Week, Rush Hour Weekend, Night Boards, Pumpkin Bricks, Bloo&rsquo;s Birthday, Frost Bricks, the Brick Olympics &mdash; a calendar that changes what a clear pays out.</p></article>
+            <article className="info-card info-card-teal"><span className="info-card-icon"><HeartHandshake size={20} /></span><h3>Ads you asked for</h3><p>Rewarded video only. No banners, no interstitials, nothing between you and a board. Declining costs you nothing, and Remove Ads or the Brick Pass switches it off for good.</p></article>
+            <article className="info-card info-card-green"><span className="info-card-icon"><Gamepad2 size={20} /></span><h3>Five places to play it</h3><p>iPhone, iPad, Mac, Apple Vision Pro and Apple Watch. One purchase, one progress, and the boards come with you.</p></article>
+          </div>
+        </section>
+
         <section id="principles" className="section-block principles-section">
           <div className="section-heading section-heading-center">
             <div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-blue" /> The small decisions</div>
@@ -536,7 +569,7 @@ export default function Home() {
               )}
               {feature === 'offline' && (
                 <>
-                  <div className="principle-showcase-copy"><span className="showcase-number">03</span><h3>The dead-time session, made well.</h3><p>Progress, coins, settings, and the full board live on the device. Game Center and purchases are optional Apple-managed edges.</p><div className="principle-points"><span><Check size={15} /> On-device progress</span><span><Check size={15} /> No analytics SDK</span><span><Check size={15} /> No third-party tracking</span></div></div>
+                  <div className="principle-showcase-copy"><span className="showcase-number">03</span><h3>The dead-time session, made well.</h3><p>Progress, coins, settings, and the full board live on the device, and every board plays with the aeroplane mode on. Game Center and purchases are optional Apple-managed edges. There is one third party in the app &mdash; Google&rsquo;s ad SDK &mdash; and it wakes up only when you press a button asking for a video. <a className="inline-link" href="/privacy">The privacy policy</a> says exactly what it collects.</p><div className="principle-points"><span><Check size={15} /> Boards play offline</span><span><Check size={15} /> No analytics SDK of ours</span><span><Check size={15} /> One ad partner, on request</span></div></div>
                   <IphoneFrame image="/assets/play-screen.png" alt="OutBrick offline play board" className="principle-phone" />
                 </>
               )}
@@ -550,7 +583,7 @@ export default function Home() {
             <div>
               <div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-green" /> A softer kind of replayability</div>
               <h2>Clear a board.<br /><span>Leave with a little more.</span></h2>
-              <p>OutBrick is built for iPhone and iPad, tuned for one hand, and happy to wait in the corner until you feel like moving one more brick. You hold five lives and one comes back every half hour; every board hands you a free undo that cannot run out; and a video only ever plays because you pressed a button asking for one. Say no to all of it and the game is exactly the same game.</p>
+              <p>OutBrick is built for iPhone, iPad, Mac, Apple Vision Pro and Apple Watch, tuned for one hand, and happy to wait in the corner until you feel like moving one more brick. You hold five lives and one comes back every half hour; every board hands you a free undo that cannot run out; and a video only ever plays because you pressed a button asking for one. Say no to all of it and the game is exactly the same game.</p>
               <div className="close-actions">
                 <GlossButton href="#experience">Explore the game <ArrowUpRight size={18} /></GlossButton>
                 <a className="inline-link" href="/support">Read support & privacy <ArrowUpRight size={16} /></a>
@@ -565,12 +598,12 @@ export default function Home() {
         <div className="footer-main">
           <div className="footer-brand"><OutBrickLogo /><p>A sliding-brick colour-sort puzzle by OutBrick.</p><StoreBadge /></div>
           <div className="footer-links">
-            <div><span className="footer-label">Explore</span><a href="#experience">The game</a><a href="#characters">Mascots</a><a href="#widgets">Widgets</a><a href="/mascots">Mascot stories</a><a href="/press-kit">Press kit</a><a href="/blog">Journal</a><a href="/about">About OutBrick</a><a href="/authors">Authors</a><a href="/research">Research method</a></div>
+            <div><span className="footer-label">Explore</span><a href="#experience">The game</a><a href="#characters">Mascots</a><a href="#widgets">Widgets</a><a href="#capabilities">Everything in the box</a><a href="/mascots">Mascot stories</a><a href="/press-kit">Press kit</a><a href="/blog">Journal</a><a href="/about">About OutBrick</a><a href="/authors">Authors</a><a href="/research">Research method</a></div>
             <div><span className="footer-label">Apple fields</span><a href="/support">Support</a><a href="/terms">Terms</a><a href="/privacy">Privacy policy</a><a href="/privacy-choices">Privacy choices</a><a href="/license-agreement">License agreement</a><a href="/eula">Apple EULA</a><a href="/age-rating">Age suitability</a><a href="/accessibility">Accessibility</a><a href="/refunds">Refunds & purchases</a></div>
             <div><span className="footer-label">Contact</span><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility support <ArrowUpRight size={14} /></a></div>
           </div>
         </div>
-        <div className="footer-bottom"><span>© 2026 OutBrick</span><span><ShieldCheck size={14} /> No accounts. No analytics. Ads only when you ask.</span><span>Made with bricks and patience.</span></div>
+        <div className="footer-bottom"><span>© 2026 OutBrick</span><span><ShieldCheck size={14} /> No accounts. Progress stays on your device. Ads only when you ask.</span><span>Made with bricks and patience.</span></div>
       </footer>
 
       {toast && <div className="site-toast" role="status"><Check size={17} /> {toast}</div>}
