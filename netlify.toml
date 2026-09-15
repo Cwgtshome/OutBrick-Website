@@ -1,17 +1,24 @@
-# The OutBrick website is published here as a finished static build, not built by Netlify.
+# Netlify builds this site from source. That is the whole point of this file.
 #
-# The site's source is a Next/vinext app that lives in the OutBrick app repository under
-# `website/`; `pnpm build` there prerenders every page into `website/dist/client`, and that
-# directory is what `site/` holds. Netlify has nothing to compile, so there is no build
-# command — an empty one is deliberate, not an omission. Re-publishing is: rebuild in the app
-# repository, copy `website/dist/client` over `site/`, commit.
+# It used to publish a prerendered copy instead, because the machine that assembled it had no
+# Node and could not run the build. That worked and was wrong: the copy was a month old, and
+# the privacy policy it served still said OutBrick contained no advertising SDK — which had
+# stopped being true when 3.0 added rewarded video. A build output committed by hand goes
+# stale silently, and the page that goes stale is never the one you would have checked.
 #
-# `site/_headers` carries the two content types that must not be guessed: the Apple app-site
-# association file (JSON, and extensionless, so the host cannot infer it) and app-ads.txt
-# (plain text — a host that answers text/html is the usual reason AdMob verification fails).
+# `vinext build` prerenders every route into dist/client. There is no server component to
+# deploy: dist/server exists in the build but nothing here serves it, and every page in this
+# site is static.
 [build]
-  publish = "site"
-  command = ""
+  command = "pnpm build"
+  publish = "dist/client"
 
-# Pages are prerendered as `<name>.html` at the root and served at `/<name>`; Netlify's
-# Pretty URLs do that mapping, so no redirect rules are needed for them.
+[build.environment]
+  # package.json asks for >=22.13.0; pin both so a Netlify default change cannot move them.
+  NODE_VERSION = "22.13.0"
+  PNPM_VERSION = "10.12.1"
+
+# Content types that must not be guessed are set in `public/_headers`, which the build copies
+# to the root of dist/client: the Apple app-site-association file (JSON, and extensionless,
+# so a host cannot infer it) and app-ads.txt (plain text — a host answering text/html is the
+# usual reason AdMob verification fails without saying so).

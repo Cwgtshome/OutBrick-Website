@@ -3,24 +3,25 @@
 The public site for **OutBrick: Block Sort Puzzle**, served at
 [www.outbrick.site](https://www.outbrick.site).
 
-## What is in here
-
-`site/` is a finished static build — every page prerendered, nothing left to compile. Netlify
-publishes it as-is (`netlify.toml` sets `publish = "site"` and no build command).
-
-The **source** is not here. It is the Next/vinext app in the OutBrick app repository under
-`website/`. To change the site:
-
-1. `pnpm build` in that `website/` directory — it prerenders into `website/dist/client`,
-2. copy `website/dist/client` over `site/` here,
-3. commit and push; Netlify publishes on push to `main`.
+Netlify builds it from this source on every push to `main` — `pnpm build` prerenders every
+route into `dist/client`, which is what gets published. Nothing here is committed build
+output, deliberately: an earlier version of this repository held a prerendered copy, and it
+went a month stale without anybody noticing, still telling readers the game contained no
+advertising SDK after the game had one.
 
 ## Two files that carry real obligations
 
-* `site/app-ads.txt` — the IAB authorised-sellers record. AdMob crawls it at the root of the
-  developer website named on the App Store listing, so **this domain and the App Store
-  marketing URL have to stay the same host**. Change one and the other must follow, or the
-  app quietly goes back to unverified and a share of bids are refused.
-* `site/.well-known/apple-app-site-association` — universal links. It must be served as
-  `application/json`; it has no extension for a host to infer that from, which is why
-  `site/_headers` sets it explicitly.
+* `public/app-ads.txt` — the IAB authorised-sellers record. AdMob does not find it from the
+  app; it reads the developer website named on the App Store listing, takes that root domain,
+  and fetches `/app-ads.txt` there. **This domain and the App Store marketing URL have to
+  stay the same host.** Change one and the other must follow, or the app quietly goes back to
+  unverified and a share of bids are refused.
+* `public/.well-known/apple-app-site-association` — universal links. It only does anything
+  for a build whose Associated Domains entitlement names this host, so it and the app ship
+  together.
+
+Both are served with explicit content types from `public/_headers`.
+
+## Where the app lives
+
+The game itself is a separate repository. This one is only the website.
