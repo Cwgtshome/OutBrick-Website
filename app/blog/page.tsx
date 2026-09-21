@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import { EditorialFooter, EditorialHeader } from '../editorial-shell';
 import { ArrowUpRight, BookOpen, ChevronRight, Clock3, Sparkles } from 'lucide-react';
-import { StoreBadge } from '../store-badge';
 import { articles, authors, getAuthor, type BlogArticle } from '../../lib/blog';
 
 export const metadata: Metadata = {
@@ -16,57 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-function OutBrickLogo({ compact = false }: { compact?: boolean }) {
-  return (
-    <span className={`wordmark ${compact ? 'wordmark-compact' : ''}`} aria-label="OutBrick">
-      {'OUTBRICK'.split('').map((letter, index) => (
-        <span className={`wordmark-letter letter-${index}`} aria-hidden="true" key={`${letter}-${index}`}>
-          {letter}
-        </span>
-      ))}
-    </span>
-  );
-}
 
-function SiteHeader() {
-  return (
-    <header className="site-nav blog-site-nav">
-      <a className="nav-brand" href="/" aria-label="OutBrick home">
-        <span className="nav-app-icon"><img src="/icon.png" alt="OutBrick app icon" title="OutBrick app icon" /></span>
-        <span><OutBrickLogo compact /><small>the sliding-brick puzzle</small></span>
-      </a>
-      <nav className="nav-links blog-nav-links" aria-label="Primary navigation">
-        <a href="/">The game</a>
-        <a href="/blog" aria-current="page">Journal</a>
-        <a href="/mascots">Mascots</a>
-        <a href="/about">About</a>
-        <a href="/authors">Authors</a>
-        <a href="/support">Support</a>
-      </nav>
-      <div className="nav-side-actions blog-nav-actions"><StoreBadge compact /></div>
-    </header>
-  );
-}
-
-function SiteFooter() {
-  return (
-    <footer className="site-footer blog-footer">
-      <div className="footer-main">
-        <div className="footer-brand">
-          <OutBrickLogo />
-          <p>A sliding-brick colour-sort puzzle, with a journal for the curious bits around it.</p>
-          <StoreBadge />
-        </div>
-        <div className="footer-links">
-          <div><span className="footer-label">Explore</span><a href="/">The game</a><a href="/blog">Journal</a><a href="/mascots">Mascots</a><a href="/#widgets">Widgets</a><a href="/about">About OutBrick</a></div>
-          <div><span className="footer-label">Read about</span><a href="/blog#category-player-habits">Player habits</a><a href="/blog#category-success-stories">Success stories</a><a href="/blog#category-game-craft">Game craft</a><a href="/blog#category-inclusive-design">Inclusive design</a><a href="/research">Research method</a></div>
-          <div><span className="footer-label">Contact</span><a href="/support">Support</a><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility <ArrowUpRight size={14} /></a></div>
-        </div>
-      </div>
-      <div className="footer-bottom"><span>© 2026 OutBrick</span><span>Research is cited. Claims stay modest.</span><span>Made with bricks and patience.</span></div>
-    </footer>
-  );
-}
 
 function ArticleCard({ article, featured = false, anchorId }: { article: BlogArticle; featured?: boolean; anchorId?: string }) {
   const author = getAuthor(article.authorId);
@@ -114,14 +64,14 @@ export default function BlogPage() {
   return (
     <div className="blog-site">
       <div className="site-grain" aria-hidden="true" />
-      <SiteHeader />
+      <EditorialHeader current="blog" />
       <main>
         <section className="blog-landing-hero" aria-labelledby="journal-title">
           <div className="blog-hero-copy">
             <div className="eyebrow"><span className="eyebrow-dot" /> The OutBrick journal</div>
             <h1 id="journal-title">Play has more <span>than one shape.</span></h1>
             <p>Notes from the space around the board: how games fit into real lives, why tiny rules can carry a whole world, and what we are learning while we make OutBrick.</p>
-            <div className="blog-hero-actions"><a className="nav-cta" href="#stories">Read the latest <ArrowUpRight size={15} /></a><a className="blog-text-link" href="/#experience">Back to the game <ArrowUpRight size={15} /></a></div>
+            <div className="blog-hero-actions"><a className="nav-cta" href="#stories">Read the latest <ArrowUpRight size={15} /></a><a className="blog-text-link" href="/#apple">Back to the game <ArrowUpRight size={15} /></a></div>
             <div className="blog-hero-proof"><span><Sparkles size={15} /> 20 original essays</span><span><BookOpen size={15} /> Research + craft</span><span>Updated September 2026</span></div>
           </div>
           <div className="blog-hero-card">
@@ -159,7 +109,7 @@ export default function BlogPage() {
           <div className="blog-author-grid">{authors.map((author) => <a className="blog-author-card" href={`/authors/${author.id}`} key={author.id}><span className="blog-avatar" title={`${author.name} avatar`}>{author.initials}</span><div><h3>{author.name}</h3><span>{author.role}</span><p>{author.bio}</p><span className="blog-text-link">View author page <ArrowUpRight size={14} /></span></div></a>)}</div>
         </section>
       </main>
-      <SiteFooter />
+      <EditorialFooter />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
     </div>
   );

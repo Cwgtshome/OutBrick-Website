@@ -77,7 +77,7 @@ export default function PressKitPage() {
             <div className="press-kit-art-grid" aria-hidden="true" />
             <img src="/assets/mascots-group-cheer.png" alt="Bloo, Peach, and Sprout celebrating together" title="OutBrick mascot group" />
             <div className="press-kit-art-caption"><span>The cast behind the clear</span><strong>Small moves.<br />Big little smiles.</strong></div>
-            <div className="press-kit-art-sticker"><span className="press-kit-art-sticker-icon"><img src="/icon.png" alt="" /></span><span>iPhone + iPad<br /><strong>OutBrick</strong></span></div>
+            <div className="press-kit-art-sticker"><span className="press-kit-art-sticker-icon"><img src="/icon.png" alt="" /></span><span>Six Apple platforms<br /><strong>OutBrick</strong></span></div>
           </div>
         </section>
 
@@ -89,8 +89,8 @@ export default function PressKitPage() {
           </div>
           <div className="press-kit-story-copy">
             <p>OutBrick is a one-finger colour-sort puzzle for the moments between things. Slide every brick to its matching gate, keep the good bits, and come back when the next small clear sounds fun.</p>
-            <p>It runs the genre’s shape with the dial turned toward the player: five lives that refill one every thirty minutes, a free undo on every single board that can never run out, and advertising that is rewarded video only — no banners, no interstitials, nothing between levels. A video plays when a player presses a button asking for a life, an undo or five more moves, and declining changes nothing about the game. One-time purchases, no subscription.</p>
-            <div className="press-kit-facts"><span><strong>Format</strong> iPhone + iPad game</span><span><strong>Feel</strong> Calm, tactile, readable</span><span><strong>Promise</strong> Nothing interrupts a board.</span></div>
+            <p>It runs the genre’s shape with the dial turned toward the player: five lives that refill one every thirty minutes, a free undo on every single board that can never run out, and advertising that is rewarded video only — no banners, no interstitials, nothing between levels. A video plays when a player presses a button asking for one of six things — a life, five more moves at the limit, two undos, a booster armed for the board ahead, the clear card’s coins paid again, or a second spin of the Brick Wheel — each capped daily, and declining changes nothing about the game. One-time purchases, no subscription.</p>
+            <div className="press-kit-facts"><span><strong>Format</strong> iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch</span><span><strong>Feel</strong> Calm, tactile, readable</span><span><strong>Promise</strong> Nothing interrupts a board.</span></div>
           </div>
         </section>
 
@@ -153,7 +153,7 @@ export default function PressKitPage() {
 
         <section className="press-kit-notes" aria-labelledby="press-kit-notes-title">
           <div><div className="blog-kicker"><Check size={14} /> Quick facts</div><h2 id="press-kit-notes-title">Use the <span>right words.</span></h2></div>
-          <div className="press-kit-notes-grid"><div><span>Official title</span><strong>OutBrick</strong></div><div><span>Category</span><strong>Sliding-brick colour-sort puzzle</strong></div><div><span>Platform</span><strong>iPhone and iPad</strong></div><div><span>Official page</span><a href={siteUrl}>{siteUrl.replace('https://', '')}</a></div></div>
+          <div className="press-kit-notes-grid"><div><span>Official title</span><strong>OutBrick</strong></div><div><span>Category</span><strong>Sliding-brick colour-sort puzzle</strong></div><div><span>Platform</span><strong>iPhone, iPad, Mac, Apple TV, Apple Vision Pro, Apple Watch</strong></div><div><span>Official page</span><a href={siteUrl}>{siteUrl.replace('https://', '')}</a></div></div>
         </section>
       </main>
 

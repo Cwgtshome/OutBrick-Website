@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
+import { EditorialFooter, EditorialHeader } from '../../editorial-shell';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight, BookOpen, ChevronRight, Clock3, ExternalLink, Sparkles } from 'lucide-react';
-import { StoreBadge } from '../../store-badge';
 import { articles, getArticle, getAuthor, getRelatedArticles, type BlogArticle, type BlogReference } from '../../../lib/blog';
 import { siteUrl } from '../../../lib/site';
 
@@ -44,44 +44,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   };
 }
 
-function OutBrickLogo({ compact = false }: { compact?: boolean }) {
-  return (
-    <span className={`wordmark ${compact ? 'wordmark-compact' : ''}`} aria-label="OutBrick">
-      {'OUTBRICK'.split('').map((letter, index) => <span className={`wordmark-letter letter-${index}`} aria-hidden="true" key={`${letter}-${index}`}>{letter}</span>)}
-    </span>
-  );
-}
 
-function SiteHeader() {
-  return (
-    <header className="site-nav blog-site-nav">
-      <a className="nav-brand" href="/" aria-label="OutBrick home">
-        <span className="nav-app-icon"><img src="/icon.png" alt="OutBrick app icon" title="OutBrick app icon" /></span>
-        <span><OutBrickLogo compact /><small>the sliding-brick puzzle</small></span>
-      </a>
-      <nav className="nav-links blog-nav-links" aria-label="Primary navigation">
-        <a href="/">The game</a><a href="/blog" aria-current="page">Journal</a><a href="/mascots">Mascots</a><a href="/about">About</a><a href="/authors">Authors</a><a href="/support">Support</a>
-      </nav>
-      <div className="nav-side-actions blog-nav-actions"><StoreBadge compact /></div>
-    </header>
-  );
-}
-
-function SiteFooter() {
-  return (
-    <footer className="site-footer blog-footer">
-      <div className="footer-main">
-        <div className="footer-brand"><OutBrickLogo /><p>A sliding-brick colour-sort puzzle, with a journal for the curious bits around it.</p><StoreBadge /></div>
-        <div className="footer-links">
-          <div><span className="footer-label">Explore</span><a href="/">The game</a><a href="/blog">Journal</a><a href="/mascots">Mascots</a><a href="/#widgets">Widgets</a><a href="/about">About OutBrick</a></div>
-          <div><span className="footer-label">Read about</span><a href="/blog#category-player-habits">Player habits</a><a href="/blog#category-success-stories">Success stories</a><a href="/blog#category-game-craft">Game craft</a><a href="/blog#category-inclusive-design">Inclusive design</a><a href="/research">Research method</a></div>
-          <div><span className="footer-label">Contact</span><a href="/support">Support</a><a href="/contact">Contact OutBrick <ArrowUpRight size={14} /></a><a href="/accessibility">Accessibility <ArrowUpRight size={14} /></a></div>
-        </div>
-      </div>
-      <div className="footer-bottom"><span>© 2026 OutBrick</span><span>Research is cited. Claims stay modest.</span><span>Made with bricks and patience.</span></div>
-    </footer>
-  );
-}
 
 function SourceMarkers({ sourceIds, references }: { sourceIds?: string[]; references: BlogReference[] }) {
   if (!sourceIds?.length) return null;
@@ -147,7 +110,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <div className="blog-site article-site">
       <div className="site-grain" aria-hidden="true" />
-      <SiteHeader />
+      <EditorialHeader current="blog" />
       <main className="article-main">
         <div className="article-breadcrumbs"><a href="/">OutBrick</a><ChevronRight size={14} /><a href="/blog">Journal</a><ChevronRight size={14} /><span>{article.category}</span></div>
         <header className="article-header">
@@ -186,7 +149,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         <section className="article-related" aria-labelledby="related-title"><div className="blog-section-heading section-heading-split"><div><div className="eyebrow"><span className="eyebrow-dot" /> Keep exploring</div><h2 id="related-title">Another good <span>thread.</span></h2></div><p>Follow the idea into another corner of OutBrick: a success story, a design question, or a player habit worth noticing.</p></div><div className="blog-grid">{relatedArticles.map((relatedArticle) => <RelatedCard article={relatedArticle} key={relatedArticle.slug} />)}</div></section>
       </main>
-      <SiteFooter />
+      <EditorialFooter />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
       {faqData ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqData) }} /> : null}

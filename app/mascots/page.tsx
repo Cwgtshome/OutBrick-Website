@@ -86,7 +86,7 @@ export default function MascotsPage() {
           <div className="mascot-cast-collective-mark"><OutBrickLogo /></div>
           <div><div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-green" /> Same board, different eyes</div><h2 id="collective-title">The answer gets better <span>when it is shared.</span></h2></div>
           <p>Bloo brings the nerve, Peach brings the care, and Sprout brings the question nobody else thought to ask. Together, they make the game feel like a place you can return to—not a test you have to pass.</p>
-          <a className="blog-text-link" href="/#characters">See them on the Home screen <ArrowUpRight size={15} /></a>
+          <a className="blog-text-link" href="/#cast">See them on the Home screen <ArrowUpRight size={15} /></a>
         </section>
       </main>
       <EditorialFooter />

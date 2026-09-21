@@ -1,33 +1,51 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { ArrowLeft, ArrowUpRight, Check, Flag } from 'lucide-react';
-import { StoreBadge } from '../store-badge';
+import { useEffect, useState, type CSSProperties } from 'react';
+import { AppStoreBadge, VillageFooter, VillageHeader } from '../village-shell';
 
-type Challenge = { level: number; par: number };
+type Challenge = { level: number; par: number; beat: boolean };
 
 /**
- * The site is a static export, so the challenge is read on the client from the query string
- * the iMessage bubble carried: /c?lv=42&par=11.
+ * The site is a static export, so the dare is read on the client from the link
+ * the iMessage bubble carried. Both shapes `BrickoutMessages/Challenge.swift`
+ * can produce are parsed, exactly as `Challenge.init(url:)` parses them:
  *
- * `par` here is a wire name, not a word for a reader. The app's internal symbol is still
- * `Level.par` and the link format is fixed by `BrickoutMessages/Challenge.swift` and
- * `Brickout/Services/DeepLink.swift`, so renaming this key would break every link already
- * sent. Everything a visitor can read says "target" or just "moves".
+ *   /c?lv=<n>&par=<p>&beat=<0|1>   the form that rides on the message bubble
+ *   /c/<n>?par=<p>&beat=<0|1>      the hand-typed path form
  *
- * `kind` is gone. It only ever had two values and the second named the Daily Brick, which was
- * withdrawn along with Zen and Endless; every dare is a Journey board now. Links already sent
- * still carry `kind=daily`, and both ends ignore it — `DeepLink.challenge(from:)` reads an
- * unknown or missing kind as a Journey board rather than an error, so an old bubble opens the
- * level it names and nothing here has to know the word.
+ * `beat` defaults to 1, matching the Swift initialiser: a dare on a board the
+ * sender has already cleared reads "beat their N moves", one on a board they
+ * have not reads "clear it in N moves".
+ *
+ * `par` is a wire name, not a word for a reader. The app's internal symbol is
+ * still `Level.par` and the link format is fixed by `Challenge.swift` and
+ * `Brickout/Services/DeepLink.swift`, so renaming this key would break every
+ * link already sent. Everything a visitor can read says "target" or "moves".
+ *
+ * `kind` is gone. It only ever had two values and the second named the Daily
+ * Brick, which was withdrawn; every dare is a Journey board now. Links already
+ * sent still carry `kind=daily`, and both ends ignore it.
+ *
+ * The path form only reaches this component because Netlify rewrites `/c/*` to
+ * `/c` with a 200, keeping the address bar on `/c/42` so `pathname` still
+ * carries the number. Without that rule the path form is a 404, which is the
+ * bug this page exists to remove. On a device with OutBrick installed,
+ * `/.well-known/apple-app-site-association` claims both `/c` and `/c/*`, so
+ * iOS opens the board in the app and this page is never drawn.
  */
 function readChallenge(): Challenge | null {
   if (typeof window === 'undefined') return null;
-  const q = new URLSearchParams(window.location.search);
-  const level = Number.parseInt(q.get('lv') ?? '', 10);
+  const query = new URLSearchParams(window.location.search);
+  const segments = window.location.pathname.replace(/^\/+|\/+$/g, '').split('/');
+  const fromPath = segments[0] === 'c' ? segments[1] : undefined;
+  const level = Number.parseInt(query.get('lv') ?? fromPath ?? '', 10);
   if (!Number.isFinite(level) || level < 1 || level > 100000) return null;
-  const par = Number.parseInt(q.get('par') ?? '', 10);
-  return { level, par: Number.isFinite(par) && par > 0 ? par : 0 };
+  const par = Number.parseInt(query.get('par') ?? '', 10);
+  return {
+    level,
+    par: Number.isFinite(par) && par > 0 ? par : 0,
+    beat: query.get('beat') !== '0',
+  };
 }
 
 export function ChallengeLanding() {
@@ -39,61 +57,115 @@ export function ChallengeLanding() {
     setReady(true);
   }, []);
 
-  const title = challenge ? `Level ${challenge.level}` : 'An OutBrick challenge';
-  const dare = challenge && challenge.par > 0 ? `Clear it in ${challenge.par} moves.` : 'Clear the board.';
+  useEffect(() => {
+    if (challenge) document.title = `Level ${challenge.level} — an OutBrick challenge`;
+  }, [challenge]);
 
-  // Only offered as a button, never as an automatic redirect: firing a custom scheme at
-  // someone who does not have the app is exactly the dead end this page exists to remove.
+  const plaque = challenge ? `Level ${challenge.level}` : ready ? 'OutBrick' : 'Level';
+  const subtitle = challenge
+    ? challenge.par > 0
+      ? `Journey · target ${challenge.par}`
+      : 'Journey'
+    : ready
+      ? 'a sliding-brick puzzle'
+      : 'a board of OutBrick';
+  const dare = challenge
+    ? challenge.par > 0
+      ? challenge.beat
+        ? `Beat their ${challenge.par} moves.`
+        : `Clear it in ${challenge.par} moves.`
+      : 'Can you clear it?'
+    : 'Clear the board.';
+
+  /**
+   * Offered as a button, never as an automatic redirect: firing a custom scheme
+   * at someone who does not have the app is exactly the dead end this page
+   * exists to remove. The URL is `Challenge.appURL` rebuilt from the same
+   * parts — level in the path, `par` and `beat` in the query — so the app opens
+   * the board it names instead of dropping the visitor on the map.
+   */
   const appUrl = challenge
-    ? `outbrick://level/${challenge.level}?par=${challenge.par}`
+    ? `outbrick://level/${challenge.level}?par=${challenge.par}&beat=${challenge.beat ? '1' : '0'}`
     : 'outbrick://play';
 
   return (
-    <div className="site-shell play-shell">
-      <div className="site-grain" aria-hidden="true" />
-      <header className="site-nav">
-        <a className="nav-brand" href="/" aria-label="OutBrick home">
-          <span className="nav-app-icon"><img src="/icon.png" alt="OutBrick app icon" title="OutBrick app icon" /></span>
-          <span className="wordmark wordmark-compact" aria-label="OutBrick">
-            {['O', 'U', 'T', 'B', 'R', 'I', 'C', 'K'].map((letter, index) => <span className={`wordmark-letter letter-${index % 8}`} key={`${letter}-${index}`}>{letter}</span>)}
-          </span>
-        </a>
-        <div className="play-header-actions"><StoreBadge compact /></div>
-      </header>
+    <div className="ob-site">
+      <a className="skip" href="#main">Skip to content</a>
+      <VillageHeader links={[]} label="OutBrick" />
 
-      <main className="play-main">
-        <section className="play-intro">
-          <div>
-            <div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-gold" /> <Flag size={13} /> You have been challenged</div>
-            <h1>{ready ? title : 'Loading…'}<br /><span>{dare}</span></h1>
-            <p>
+      <main id="main">
+        <div className="challenge">
+          <div className="cloud hide-sm" style={{ '--w': '130px', left: '3%', top: '6%' } as CSSProperties}><i /></div>
+          <div className="cloud hide-sm" style={{ '--w': '96px', right: '6%', top: '13%' } as CSSProperties}><i /></div>
+
+          <div className="wrap">
+            <p className="eyebrow centred">You have been challenged</p>
+
+            <div className="brick levelplaque">
+              <b>{plaque}</b>
+              <span>{subtitle}</span>
+            </div>
+
+            <h1>{dare}</h1>
+
+            <p className="lede">
               Someone dared you to a board of OutBrick — a relaxed sliding-brick colour-sort puzzle.
-              Match every brick to its gate, take the free undo the board comes with, and beat their move count.
+              Match every brick to its gate, take the free undo the board comes with, and beat their
+              move count.
             </p>
-            <div className="hero-proof"><span><Check size={15} /> a free undo every board</span><span><Check size={15} /> no ad between levels</span><span><Check size={15} /> works offline</span></div>
-            <div className="play-actions" style={{ justifyContent: 'flex-start' }}>
-              <StoreBadge />
-              <a className="back-link" href={appUrl}>Already have OutBrick? Open this board <ArrowUpRight size={16} /></a>
+
+            <ul className="facts centred">
+              <li>a free undo every board</li>
+              <li>no ad between levels</li>
+              <li>works offline</li>
+            </ul>
+
+            <div className="cta-row centred">
+              <AppStoreBadge />
+              <a className="btn ghost" href={appUrl}>Already have OutBrick? Open this board</a>
             </div>
           </div>
-          <div className="play-device-card">
-            <div className="device-topline">
-              <span><Flag size={14} /> THE CHALLENGE</span>
-              <span>{ready && challenge ? `LEVEL ${String(challenge.level).padStart(3, '0')}` : 'OUTBRICK'}</span>
+          <div className="road" aria-hidden="true"><div className="paving" /></div>
+        </div>
+
+        <section className="band-cream">
+          <div className="wrap">
+            <div className="section-head">
+              <p className="eyebrow">The challenge</p>
+              <h2>Three steps, and you are on the board.</h2>
             </div>
-            <div className="iphone-frame play-route-phone"><div className="iphone-screen"><img src="/assets/play-screen.png" alt="OutBrick play screen" title="OutBrick play screen" /></div></div>
+            <div className="grid g3">
+              <div className="brick card cream">
+                <span className="step-n">1</span>
+                <h3>Get the game</h3>
+                <p>
+                  OutBrick is a free download on iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple
+                  Watch. No subscription, no clock anywhere, and nothing plays that you did not press a
+                  button to see.
+                </p>
+              </div>
+              <div className="brick card cream">
+                <span className="step-n">2</span>
+                <h3>Open the board</h3>
+                <p>
+                  {challenge ? `Head to Level ${challenge.level} and play it.` : 'Head to the board you were sent and play it.'}{' '}
+                  Every board comes with a free undo that never runs out.
+                </p>
+              </div>
+              <div className="brick card cream">
+                <span className="step-n">3</span>
+                <h3>Send one back</h3>
+                <p>Tap the OutBrick app in Messages to dare them right back with any board you like.</p>
+              </div>
+            </div>
+            <p className="note">
+              <a href="/#rule">How OutBrick plays</a> · <a href="/">Back to the official site</a>
+            </p>
           </div>
         </section>
-
-        <section className="play-steps">
-          <div><span className="play-step-number">01</span><h2>Get the game</h2><p>OutBrick is a free download on iPhone, iPad and Apple Watch. No subscription, no forced timer, and nothing plays that you did not press a button to see.</p></div>
-          <div><span className="play-step-number">02</span><h2>Open the board</h2><p>{ready && challenge ? `Head to Level ${challenge.level} and play it.` : 'Head to the board you were sent and play it.'}</p></div>
-          <div><span className="play-step-number">03</span><h2>Send one back</h2><p>Tap the OutBrick app in Messages to dare them right back with any board you like.</p></div>
-        </section>
-
-        <div className="play-actions"><a className="gloss-button gloss-green" href="/play"><span className="gloss-button-inner">How OutBrick plays <ArrowUpRight size={18} /></span></a><a className="back-link" href="/"><ArrowLeft size={16} /> Back to the official site</a></div>
       </main>
-      <footer className="site-footer play-footer"><div className="footer-bottom"><span>© 2026 OutBrick</span><StoreBadge compact /></div></footer>
+
+      <VillageFooter />
     </div>
   );
 }

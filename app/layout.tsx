@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     default: 'OutBrick — Slide bricks out.',
     template: '%s — OutBrick',
   },
-  description: 'OutBrick is a relaxed sliding-brick colour-sort puzzle with real mascots, useful widgets, and nothing that interrupts a board: no banners, no ad between levels, and a free undo every time.',
+  description: 'OutBrick is a sliding-brick colour-sort puzzle: 2,000 solver-verified boards across 100 chapters, a Journey of 167 villages built stud by stud out of brick, and nine brick friends. One finger, no clock, and nothing that interrupts a board.',
   applicationName: 'OutBrick',
   authors: [{ name: 'OutBrick' }],
   creator: 'OutBrick',
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     'calm mobile games',
     'game design journal',
     'gaming habits research',
+    'brick village map',
   ],
   alternates: { canonical: siteUrl },
   robots: {
@@ -46,9 +47,13 @@ export const metadata: Metadata = {
     images: ['/og.png'],
   },
   icons: {
-    icon: '/icon.png',
-    apple: '/icon.png',
+    icon: [
+      { url: '/assets/icon/favicon-64.png', sizes: '64x64' },
+      { url: '/assets/icon/icon-192.png', sizes: '192x192' },
+    ],
+    apple: '/assets/icon/apple-touch-icon.png',
   },
+  appleWebApp: { title: 'OutBrick' },
 };
 
 export default function RootLayout({
@@ -78,6 +83,22 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        {/*
+          Fredoka is the display face of the brick site — the nearest web
+          equivalent of the rounded type the game sets its titles in. React 19
+          hoists these into <head>; the stack in the stylesheet falls back to
+          SF Pro Rounded, so an Apple device still reads right if the font never
+          arrives.
+        */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap"
+        />
+        <meta name="theme-color" content="#1a1350" />
+      </head>
       <body className="antialiased">
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />

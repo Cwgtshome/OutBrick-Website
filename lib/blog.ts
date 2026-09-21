@@ -882,7 +882,7 @@ export const articles: BlogArticle[] = [
     keyTakeaways: [
       'GameFlow-oriented research emphasizes challenge-skill balance, clear goals, feedback, control, and immersion.',
       'A small study of movement-based rehabilitation games found meaningful individual differences in flow and perceived control.',
-      'OutBrick uses solver-verified boards, recovery tools, and optional Rush pressure to keep challenge adjustable.',
+      'OutBrick uses solver-verified boards, recovery tools, and a move limit rather than a clock to keep challenge adjustable.',
     ],
     sections: [
       {
@@ -907,7 +907,7 @@ export const articles: BlogArticle[] = [
         id: 'our-tools-for-a-kinder-curve',
         title: 'Our tools for a kinder curve',
         paragraphs: [
-          'OutBrick’s board generator is solver-verified, which means the game can ask for planning without accidentally asking for the impossible. Every board’s move limit is checked against the solution the solver actually found, so no board ships with a rope shorter than its own proven route. When a position becomes wedged, the recovery sheet explains that the board is stuck and offers a path forward — and the undo on that sheet is free and outside every count, because a board that wedged itself is the game’s doing, not the player’s. Rush stays optional rather than the default tempo.',
+          'OutBrick’s board generator is solver-verified, which means the game can ask for planning without accidentally asking for the impossible. Every board’s move limit is checked against the solution the solver actually found, so no board ships with a rope shorter than its own proven route. When a position becomes wedged, the recovery sheet explains that the board is stuck and offers a path forward — and the undo on that sheet is free and outside every count, because a board that wedged itself is the game’s doing, not the player’s. And the pressure a board applies is a move limit, never a clock: the optional Rush timer was withdrawn, and there is no countdown anywhere in the game.',
           'These are not shortcuts around challenge. They separate useful friction from accidental friction. The player should spend their attention on the puzzle’s idea, not on defending themselves from the interface.',
         ],
         bullets: ['Verified solvability before a board ships', 'Undo that teaches instead of scolds', 'A restart path when the state is genuinely stuck', 'Optional speed pressure for players who want it'],

@@ -2798,3 +2798,1204 @@ img {
   .mascot-cast-collective-mark .wordmark { font-size: 24px; }
   .mascot-cast-collective h2 { font-size: 34px; }
 }
+
+/* ==================================================================
+   OutBrick — the village design system, on the web.
+
+   Ported from website/site/styles.css + page.css in the app checkout. Every
+   colour is lifted from the game: Brickout/UI/Kit.swift for the chrome,
+   Brickout/UI/Journey/VillageKit.swift + the 28 themes for the land. The
+   brick primitive below is the web restatement of VillageKit.brick(): a slab
+   with its own depth under it, a rounded face, a lit strip along the top, a
+   seam at the foot, and studs only where the top is exposed.
+
+   EVERYTHING here is scoped under `.ob-site`. The static site owned the
+   document, this app does not: `.card`, `.grid`, `.badge`, `.btn`, `section`
+   and `h1` all already mean something to the twenty blog posts and the
+   editorial routes above. Scoping is what lets the new furniture sit on the
+   same page as the old body copy without rewriting it.
+   ================================================================== */
+
+.ob-site {
+  /* The land, read off the Journey captures. The chrome colours (--panel,
+     --ink, --gold, …) are already on :root at the top of this file and are
+     the same values the game uses. */
+  --sky: #8ed1f3;
+  --sky-high: #c6ecfd;
+  --grass: #6cc24a;
+  --grass-dark: #4c9a33;
+  --paving: #e8d5a8;
+  --paving-dark: #cbb383;
+  --outline: #2a1b5e;
+  --teal-dark: #087e84;
+  --cream: #fff3dd;
+  --title-fill: #fff6d6;
+  --ink-on-cream: #142b49;
+  --muted-on-cream: #586879;
+
+  --radius: 18px;
+  --press: 3px;
+  --maxw: 1180px;
+  --gutter: 16px;
+
+  --display: 'Fredoka', ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --text: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  font-family: var(--text);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--lilac);
+  background: var(--ink);
+  overflow-x: clip;
+}
+
+.ob-site *,
+.ob-site *::before,
+.ob-site *::after { box-sizing: border-box; }
+
+.ob-site img { max-width: 100%; display: block; }
+.ob-site a { color: inherit; }
+
+.ob-site .wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.ob-site .skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--gold);
+  color: var(--ink);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  z-index: 200;
+}
+.ob-site .skip:focus { left: 12px; top: 12px; }
+
+/* ---------------- the brick primitive ---------------- */
+
+.ob-site .brick {
+  position: relative;
+  border-radius: 14px;
+  background: var(--b, var(--panel));
+  box-shadow: 0 var(--depth, 7px) 0 var(--b-foot, rgba(0, 0, 0, 0.34)), inset 0 -2px 0 rgba(0, 0, 0, 0.14);
+}
+/* the lit strip along the top */
+.ob-site .brick::before {
+  content: '';
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 7px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.26);
+  pointer-events: none;
+}
+/* the seam at the foot */
+.ob-site .brick::after {
+  content: '';
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  bottom: 7px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+/* a row of studs sitting on an exposed top edge */
+.ob-site .studs { position: relative; }
+.ob-site .studrow {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: -9px;
+  height: 14px;
+  display: flex;
+  justify-content: space-around;
+  pointer-events: none;
+}
+.ob-site .studrow i {
+  width: 22px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--s, var(--panel-light));
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.28);
+  position: relative;
+}
+.ob-site .studrow i::after {
+  content: '';
+  position: absolute;
+  left: 22%;
+  top: 18%;
+  width: 38%;
+  height: 40%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+/* a running-bond course used as a section divider */
+.ob-site .course {
+  display: flex;
+  gap: 6px;
+  padding: 0 0 14px;
+  overflow: hidden;
+  width: 100%;
+}
+.ob-site .course span {
+  height: 22px;
+  flex: 1 1 auto;
+  border-radius: 8px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.32);
+  position: relative;
+}
+.ob-site .course span::before {
+  content: '';
+  position: absolute;
+  inset: 3px 10% auto 10%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+}
+.ob-site .course.offset { padding-left: 34px; }
+
+/* ---------------- moulded controls ---------------- */
+
+.ob-site .btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  color: #fff;
+  text-decoration: none;
+  padding: 15px 26px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--green);
+  box-shadow: 0 6px 0 var(--green-dark), 0 10px 18px rgba(0, 0, 0, 0.35);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  cursor: pointer;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.22);
+}
+.ob-site .btn:hover { filter: brightness(1.05); }
+.ob-site .btn:active {
+  transform: translateY(var(--press));
+  box-shadow: 0 3px 0 var(--green-dark), 0 6px 12px rgba(0, 0, 0, 0.35);
+}
+.ob-site .btn.ghost {
+  background: var(--panel);
+  box-shadow: 0 6px 0 var(--panel-dark), 0 10px 18px rgba(0, 0, 0, 0.35);
+}
+.ob-site .btn.ghost:active { box-shadow: 0 3px 0 var(--panel-dark); }
+
+/* The official Apple badge — clear space and minimum size per Apple's
+   marketing guidelines: never smaller than 40px tall on screen, and at least
+   1/4 of the badge's height of clear space on every side. */
+.ob-site .badge {
+  display: inline-block;
+  padding: 12px;
+  line-height: 0;
+  border-radius: 12px;
+  transition: transform 0.12s ease;
+}
+.ob-site .badge img { height: 48px; width: auto; }
+.ob-site .badge:hover { transform: translateY(-2px); }
+.ob-site .badge:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+.ob-site :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+/* ---------------- type ---------------- */
+
+.ob-site h1,
+.ob-site h2,
+.ob-site h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  color: var(--title-fill);
+  line-height: 1.04;
+  margin: 0 0 0.4em;
+  letter-spacing: -0.015em;
+  text-shadow: 0 3px 0 rgba(26, 19, 80, 0.55);
+}
+.ob-site h1 { font-size: clamp(2.5rem, 9vw, 4.6rem); }
+.ob-site h2 { font-size: clamp(1.9rem, 5.4vw, 3rem); }
+.ob-site h3 { font-size: clamp(1.1rem, 2.6vw, 1.35rem); text-shadow: none; }
+
+.ob-site .eyebrow {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ob-site .eyebrow::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--gold);
+  box-shadow: 0 3px 0 var(--gold-dark);
+  flex: none;
+}
+.ob-site .eyebrow.centred { justify-content: center; }
+
+.ob-site .lede { font-size: clamp(1.05rem, 2.3vw, 1.25rem); max-width: 60ch; }
+
+/* ---------------- header ---------------- */
+
+.ob-site header.site {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(26, 19, 80, 0.86);
+  backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 2px solid rgba(110, 98, 230, 0.35);
+}
+.ob-site header.site .wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 68px;
+  padding-block: 10px;
+}
+.ob-site .logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  flex: none;
+}
+.ob-site .logo img {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+}
+.ob-site .logo b {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+.ob-site nav.main {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+.ob-site nav.main a {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--lilac);
+  text-decoration: none;
+  padding: 9px 13px;
+  border-radius: 10px;
+}
+.ob-site nav.main a:hover,
+.ob-site nav.main a[aria-current='page'] { color: #fff; background: rgba(110, 98, 230, 0.3); }
+.ob-site header.site .badge { padding: 6px; flex: none; }
+.ob-site header.site .badge img { height: 40px; }
+
+@media (max-width: 900px) {
+  .ob-site nav.main { display: none; }
+}
+@media (max-width: 420px) {
+  .ob-site header.site .badge img { height: 34px; }
+  .ob-site .logo b { font-size: 1.1rem; }
+}
+
+/* ---------------- the boulevard (hero) ---------------- */
+
+.ob-site .hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--sky-high) 0%, var(--sky) 42%, #bfe6a6 74%, var(--grass) 100%);
+  padding: 26px 0 0;
+}
+.ob-site .hero .wrap { position: relative; z-index: 3; }
+.ob-site .hero h1 { color: #fff; text-shadow: 0 4px 0 var(--outline), 0 10px 22px rgba(42, 27, 94, 0.4); }
+.ob-site .hero h1 .gold { color: var(--gold); }
+.ob-site .hero .eyebrow { color: var(--panel-dark); }
+.ob-site .hero .eyebrow::before { background: var(--panel); box-shadow: 0 3px 0 var(--panel-dark); }
+.ob-site .hero .lede {
+  color: #21306b;
+  font-weight: 500;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.ob-site .hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 32px;
+  align-items: center;
+  padding-bottom: 40px;
+}
+@media (max-width: 880px) {
+  .ob-site .hero-grid { grid-template-columns: 1fr; text-align: left; }
+  .ob-site .hide-sm { display: none; }
+  .ob-site .cloud { opacity: 0.55; }
+  .ob-site .hero > .cloud:nth-of-type(1) { top: 2%; left: 2%; right: auto; }
+  .ob-site .hero > .cloud:nth-of-type(2) { top: 40%; right: 3%; left: auto; }
+}
+
+.ob-site .cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 4px;
+  margin-top: 22px;
+}
+.ob-site .cta-row.centred { justify-content: center; }
+
+.ob-site .facts {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ob-site .facts.centred { justify-content: center; }
+.ob-site .facts li {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.88rem;
+  color: #fff;
+  background: var(--panel);
+  padding: 8px 14px;
+  border-radius: 999px;
+  box-shadow: 0 4px 0 var(--panel-dark);
+}
+
+/* the phone standing on the road */
+.ob-site .phone {
+  position: relative;
+  width: min(320px, 78vw);
+  margin-inline: auto;
+  border-radius: 42px;
+  padding: 9px;
+  background: linear-gradient(160deg, #3a3170, #1a1350);
+  box-shadow: 0 18px 0 rgba(26, 19, 80, 0.35), 0 34px 60px rgba(20, 14, 60, 0.5);
+}
+.ob-site .phone img {
+  border-radius: 34px;
+  height: min(620px, 62vh);
+  min-height: 380px;
+  width: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* drifting sky props — three lobes and a base, the way the map draws a cloud */
+.ob-site .cloud {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  width: var(--w, 120px);
+  height: calc(var(--w, 120px) * 0.34);
+  filter: drop-shadow(0 6px 0 rgba(150, 194, 224, 0.5));
+}
+.ob-site .cloud i,
+.ob-site .cloud i::before,
+.ob-site .cloud i::after {
+  position: absolute;
+  background: #fff;
+  border-radius: 999px;
+}
+.ob-site .cloud i {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 52%;
+}
+.ob-site .cloud i::before {
+  content: '';
+  left: 6%;
+  bottom: 30%;
+  width: 52%;
+  height: 165%;
+}
+.ob-site .cloud i::after {
+  content: '';
+  right: 8%;
+  bottom: 26%;
+  width: 40%;
+  height: 120%;
+}
+
+.ob-site .leaf {
+  position: absolute;
+  width: 13px;
+  height: 9px;
+  border-radius: 60% 10% 60% 10%;
+  background: var(--grass-dark);
+  opacity: 0.6;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* the paved road that closes the hero */
+.ob-site .road {
+  position: relative;
+  height: 74px;
+  background: var(--paving);
+  border-top: 5px solid var(--purple);
+  overflow: hidden;
+}
+.ob-site .road .paving {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, var(--paving-dark) 2px, transparent 2px),
+    linear-gradient(180deg, var(--paving-dark) 2px, transparent 2px);
+  background-size: 64px 37px;
+  opacity: 0.55;
+  animation: ob-roll 14s linear infinite;
+}
+@keyframes ob-roll {
+  to { background-position: -64px 0, -64px 0; }
+}
+
+/* ---------------- sections ---------------- */
+
+.ob-site section { padding: 74px 0; position: relative; }
+.ob-site section.tight { padding: 52px 0; }
+
+.ob-site .band-ink { background: var(--ink); }
+.ob-site .band-panel { background: radial-gradient(1200px 500px at 50% -10%, var(--panel-inner), var(--ink) 70%); }
+.ob-site .band-cream { background: var(--cream); color: var(--ink-on-cream); }
+.ob-site .band-cream h2,
+.ob-site .band-cream h3 { color: var(--ink-on-cream); text-shadow: none; }
+.ob-site .band-cream .eyebrow { color: var(--teal-dark); }
+.ob-site .band-cream .eyebrow::before { background: var(--teal); box-shadow: 0 3px 0 var(--teal-dark); }
+.ob-site .band-cream .lede { color: var(--muted-on-cream); }
+
+.ob-site .section-head { max-width: 62ch; margin-bottom: 40px; }
+
+/* ---------------- cards ---------------- */
+
+.ob-site .grid { display: grid; gap: 18px; }
+.ob-site .g2 { grid-template-columns: repeat(2, 1fr); }
+.ob-site .g3 { grid-template-columns: repeat(3, 1fr); }
+.ob-site .g4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px) {
+  .ob-site .g3,
+  .ob-site .g4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .ob-site .g2,
+  .ob-site .g3,
+  .ob-site .g4 { grid-template-columns: 1fr; }
+}
+
+.ob-site .card {
+  --b: var(--panel);
+  --depth: 8px;
+  --b-foot: var(--panel-dark);
+  padding: 24px 22px 26px;
+  border-radius: var(--radius);
+}
+.ob-site .card h3 { color: #fff; margin-bottom: 8px; }
+.ob-site .card p { margin: 0; color: var(--lilac); font-size: 0.97rem; }
+.ob-site .card .tag {
+  display: inline-block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gold);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 0 var(--gold-dark);
+}
+.ob-site .card.cream {
+  --b: #fff;
+  --b-foot: #e0cfae;
+  color: var(--ink-on-cream);
+}
+.ob-site .card.cream h3 { color: var(--ink-on-cream); }
+.ob-site .card.cream p { color: var(--muted-on-cream); }
+
+/* the number plaque */
+.ob-site .plaque {
+  --b: var(--panel-inner);
+  --b-foot: #241d7c;
+  padding: 22px 18px;
+  border-radius: 16px;
+  text-align: center;
+}
+.ob-site .plaque b {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 5vw, 2.7rem);
+  color: var(--gold);
+  line-height: 1;
+  text-shadow: 0 3px 0 var(--gold-dark);
+}
+.ob-site .plaque span {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--lilac);
+}
+
+/* ---------------- the three-step rule ---------------- */
+
+.ob-site .step-shot {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.3), 0 20px 40px rgba(0, 0, 0, 0.35);
+  background: var(--panel-inner);
+}
+.ob-site .step-shot img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  object-position: center 34%;
+}
+@media (max-width: 560px) {
+  .ob-site .step-shot img { height: 340px; }
+}
+.ob-site .step-copy { padding-top: 20px; }
+.ob-site .step-copy p { margin: 0; color: var(--lilac); }
+.ob-site .band-cream .step-copy p { color: var(--muted-on-cream); }
+.ob-site .step-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--purple);
+  box-shadow: 0 5px 0 var(--purple-dark);
+  font-family: var(--display);
+  font-weight: 600;
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 14px;
+}
+
+/* ---------------- the village boulevard ---------------- */
+
+.ob-site .boulevard {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 0 24px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.ob-site .lane {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: ob-lane 95s linear infinite;
+}
+.ob-site .lane.back { animation-duration: 150s; animation-direction: reverse; }
+.ob-site .boulevard:hover .lane { animation-play-state: paused; }
+@keyframes ob-lane {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.ob-site .village {
+  flex: none;
+  width: 178px;
+  text-align: center;
+}
+.ob-site .village .frame {
+  border-radius: 18px;
+  overflow: hidden;
+  border: 4px solid var(--panel-light);
+  box-shadow: 0 8px 0 var(--panel-dark);
+  background: var(--panel-inner);
+}
+.ob-site .village .frame img { height: 300px; width: 100%; object-fit: cover; object-position: center 62%; }
+.ob-site .village b {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.88rem;
+  color: #fff;
+}
+.ob-site .village span { font-size: 0.75rem; color: var(--lilac); }
+
+/* the pass chips — the six times the road comes round */
+.ob-site .passes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+  list-style: none;
+  padding: 0;
+}
+.ob-site .passes li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.92rem;
+  color: #fff;
+  background: var(--panel-inner);
+  padding: 9px 16px 9px 10px;
+  border-radius: 999px;
+  box-shadow: 0 5px 0 #241d7c;
+}
+.ob-site .chip {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 3px 0 var(--green-dark), 0 0 0 0 rgba(255, 197, 61, 0.7);
+  flex: none;
+  animation: ob-pulse 2.6s ease-in-out infinite;
+}
+@keyframes ob-pulse {
+  0%, 100% { box-shadow: 0 3px 0 var(--green-dark), 0 0 0 0 rgba(255, 197, 61, 0.75); }
+  55% { box-shadow: 0 3px 0 var(--green-dark), 0 0 0 11px rgba(255, 197, 61, 0); }
+}
+
+/* ---------------- the cast ---------------- */
+
+.ob-site .cast { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 760px) {
+  .ob-site .cast { grid-template-columns: repeat(2, 1fr); }
+}
+
+.ob-site .friend {
+  --b: var(--panel-inner);
+  --b-foot: #241d7c;
+  padding: 20px 14px 22px;
+  border-radius: 18px;
+  text-align: center;
+}
+.ob-site .friend .plinth {
+  position: relative;
+  height: 150px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.ob-site .friend .plinth img {
+  height: 150px;
+  width: auto;
+  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.35));
+  animation: ob-bob 3.4s ease-in-out infinite;
+}
+@keyframes ob-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+.ob-site .friend b {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--display);
+  font-weight: 600;
+  color: #fff;
+  font-size: 1.05rem;
+}
+.ob-site .friend span { font-size: 0.79rem; color: var(--lilac); }
+
+/* ---------------- the economy table ---------------- */
+
+.ob-site .ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.ob-site .ledger li {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 14px;
+  align-items: start;
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 6px 0 #e0cfae;
+}
+.ob-site .ledger .mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-weight: 600;
+  color: #fff;
+  font-size: 1rem;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+}
+.ob-site .ledger b { display: block; color: var(--ink-on-cream); font-family: var(--display); font-weight: 600; }
+.ob-site .ledger p { margin: 3px 0 0; color: var(--muted-on-cream); font-size: 0.95rem; }
+
+.ob-site .note {
+  margin-top: 26px;
+  font-size: 0.9rem;
+  color: var(--muted-on-cream);
+  border-left: 4px solid var(--teal);
+  padding-left: 14px;
+}
+.ob-site .band-ink .note { color: var(--lilac); border-color: var(--panel-light); }
+
+/* ---------------- shots strip ---------------- */
+
+.ob-site .shots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 44px;
+}
+@media (max-width: 860px) {
+  .ob-site .shots { grid-template-columns: repeat(2, 1fr); }
+}
+.ob-site .shots figure { margin: 0; }
+.ob-site .shots img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  object-position: center 52%;
+  border-radius: 16px;
+  border: 3px solid var(--panel-light);
+  box-shadow: 0 8px 0 var(--panel-dark);
+}
+.ob-site .shots figcaption {
+  margin-top: 12px;
+  font-size: 0.86rem;
+  color: var(--lilac);
+  text-align: center;
+}
+
+/* ---------------- footer ---------------- */
+
+.ob-site footer.site {
+  background: #140e3d;
+  padding: 54px 0 38px;
+  color: var(--lilac);
+  font-size: 0.93rem;
+}
+.ob-site footer.site .cols {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .ob-site footer.site .cols { grid-template-columns: 1fr; }
+}
+.ob-site footer.site h4 {
+  font-family: var(--display);
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+.ob-site footer.site ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.ob-site footer.site a { color: var(--lilac); text-decoration: none; }
+.ob-site footer.site a:hover { color: #fff; text-decoration: underline; }
+.ob-site footer.site .blurb { margin: 0; max-width: 40ch; }
+.ob-site footer.site .logo { margin-bottom: 14px; }
+.ob-site footer.site .legal {
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 2px solid rgba(110, 98, 230, 0.28);
+  font-size: 0.82rem;
+  color: #8a82c9;
+}
+
+/* ---------------- reveal on scroll ---------------- */
+
+.ob-site .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.ob-site .reveal.in { opacity: 1; transform: none; }
+
+/* ==================================================================
+   The document pages (ported from page.css).
+
+   Additive: every colour, the brick primitive, the header, the footer and
+   the Reduce Motion block come from above unchanged. What is here is only
+   what a page of running text needs and the home page never did.
+   ================================================================== */
+
+.ob-site .doc-head {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(1100px 420px at 18% -20%, var(--panel-inner), var(--ink) 72%);
+  padding: 46px 0 0;
+  border-bottom: 2px solid rgba(110, 98, 230, 0.3);
+}
+.ob-site .doc-head .wrap { position: relative; z-index: 2; max-width: 880px; }
+.ob-site .doc-head h1 {
+  font-size: clamp(2.1rem, 6.4vw, 3.5rem);
+  max-width: 18ch;
+  text-shadow: 0 4px 0 var(--outline);
+}
+.ob-site .doc-head .lede { color: var(--lilac); }
+.ob-site .doc-head .course { margin-bottom: 26px; }
+
+/* the paved strip that closes the masthead, as under the hero */
+.ob-site .doc-head .road {
+  position: relative;
+  height: 26px;
+  margin-top: 34px;
+  border-top: 0;
+  background: var(--paving);
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.35);
+}
+.ob-site .doc-head .road::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0 44px, var(--paving-dark) 44px 47px);
+  opacity: 0.55;
+}
+
+/* "Back to OutBrick" */
+.ob-site .backlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.92rem;
+  color: var(--lilac);
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+.ob-site .backlink::before {
+  content: '';
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  background: var(--gold);
+  box-shadow: 0 3px 0 var(--gold-dark);
+  flex: none;
+}
+.ob-site .backlink:hover { color: #fff; }
+
+/* the revision stamp */
+.ob-site .stamp {
+  display: inline-block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gold);
+  padding: 5px 13px;
+  border-radius: 999px;
+  box-shadow: 0 3px 0 var(--gold-dark);
+  margin-top: 22px;
+}
+
+/* ---------------- the reading column ---------------- */
+
+.ob-site .doc { padding: 52px 0 64px; }
+.ob-site .doc .wrap { max-width: 880px; }
+.ob-site .doc .column { max-width: 74ch; }
+.ob-site .doc h2 { font-size: clamp(1.4rem, 3.4vw, 1.95rem); margin: 0 0 14px; }
+.ob-site .doc h2 + p { margin-top: 0; }
+.ob-site .doc p {
+  margin: 0 0 18px;
+  color: var(--muted-on-cream);
+  font-size: 1.02rem;
+}
+.ob-site .doc a {
+  color: #2c2296;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgba(75, 63, 201, 0.4);
+}
+.ob-site .doc a:hover { text-decoration-color: currentColor; }
+
+/* a section is a slab with a seam under it, not a blank run of text */
+.ob-site .doc section {
+  padding: 26px 26px 10px;
+  margin-bottom: 20px;
+  border-radius: var(--radius);
+  --b: #fff;
+  --b-foot: #e0cfae;
+  --depth: 7px;
+}
+@media (max-width: 560px) {
+  .ob-site .doc section { padding: 22px 18px 8px; }
+}
+
+/* the one sentence the page is really about */
+.ob-site .doc .headline {
+  --b: var(--panel);
+  --b-foot: var(--panel-dark);
+  --depth: 8px;
+  padding: 28px 26px 12px;
+  color: var(--lilac);
+  margin-bottom: 26px;
+  border-radius: var(--radius);
+}
+.ob-site .doc .headline h2 { color: #fff; text-shadow: 0 3px 0 rgba(26, 19, 80, 0.5); }
+.ob-site .doc .headline p { color: var(--lilac); }
+.ob-site .doc .headline a { color: var(--gold); text-decoration-color: rgba(255, 197, 61, 0.5); }
+
+.ob-site .doc ul.points {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.ob-site .doc ul.points li {
+  position: relative;
+  padding-left: 30px;
+  color: var(--muted-on-cream);
+  font-size: 1.02rem;
+}
+.ob-site .doc ul.points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  background: var(--teal);
+  box-shadow: 0 3px 0 var(--teal-dark);
+}
+.ob-site .doc ul.points li b { color: var(--ink-on-cream); }
+
+/* the little assurance strip the live pages close a section with */
+.ob-site .doc .pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 28px;
+}
+.ob-site .doc .pills li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.88rem;
+  color: #fff;
+  background: var(--panel-inner);
+  padding: 8px 15px 8px 9px;
+  border-radius: 999px;
+  box-shadow: 0 5px 0 #241d7c;
+}
+.ob-site .doc .pills .chip { width: 22px; height: 22px; }
+
+/* an outbound action inside a section */
+.ob-site .doc .act {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 4px 0 24px;
+}
+.ob-site .doc .act .btn { text-decoration: none; color: #fff; }
+
+/* a two-line call-out card at the foot of a page */
+.ob-site .doc .handoff {
+  --b: var(--panel-inner);
+  --b-foot: #241d7c;
+  --depth: 8px;
+  padding: 24px 26px;
+  border-radius: var(--radius);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.ob-site .doc .handoff b {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: #fff;
+}
+.ob-site .doc .handoff span { color: var(--lilac); font-size: 0.95rem; }
+.ob-site .doc .handoff .btn { text-decoration: none; flex: none; color: #fff; }
+
+/* ---------------- the other-pages index ---------------- */
+
+.ob-site .alsoread { padding: 44px 0 56px; }
+.ob-site .alsoread ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .ob-site .alsoread ul { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .ob-site .alsoread ul { grid-template-columns: 1fr; }
+}
+.ob-site .alsoread a {
+  display: block;
+  padding: 15px 17px;
+  border-radius: 13px;
+  text-decoration: none;
+  font-family: var(--display);
+  font-weight: 500;
+  color: #fff;
+  background: var(--panel-inner);
+  box-shadow: 0 5px 0 #241d7c;
+}
+.ob-site .alsoread a:hover { background: var(--panel); }
+.ob-site .alsoread a[aria-current='page'] {
+  background: var(--panel);
+  box-shadow: 0 5px 0 var(--panel-dark), inset 0 0 0 2px var(--gold);
+}
+.ob-site .alsoread a small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--lilac);
+  margin-top: 3px;
+}
+
+/* ---------------- the contact form ---------------- */
+
+.ob-site .form {
+  display: grid;
+  gap: 16px;
+  max-width: 44rem;
+}
+.ob-site .form label {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink-on-cream);
+  margin-bottom: 7px;
+}
+.ob-site .form input,
+.ob-site .form select,
+.ob-site .form textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink-on-cream);
+  background: #fff;
+  border: 2px solid #ddcaa6;
+  border-bottom-width: 4px;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.ob-site .form textarea { min-height: 150px; resize: vertical; }
+.ob-site .form input:focus-visible,
+.ob-site .form select:focus-visible,
+.ob-site .form textarea:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 1px;
+  border-color: var(--panel);
+}
+.ob-site .form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 560px) {
+  .ob-site .form .row { grid-template-columns: 1fr; }
+}
+.ob-site .form .btn { border: 0; cursor: pointer; font-family: var(--display); font-weight: 600; }
+.ob-site .form-status {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted-on-cream);
+}
+
+/* ---------------- the challenge page ---------------- */
+
+.ob-site .challenge {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(1000px 460px at 50% -12%, var(--panel-inner), var(--ink) 70%);
+  padding: 56px 0 0;
+  text-align: center;
+}
+.ob-site .challenge .wrap { position: relative; z-index: 2; }
+.ob-site .challenge h1 { font-size: clamp(2.3rem, 8vw, 4rem); margin-inline: auto; }
+.ob-site .challenge .lede { margin-inline: auto; }
+.ob-site .challenge .cta-row { justify-content: center; }
+.ob-site .challenge .facts { justify-content: center; }
+.ob-site .levelplaque {
+  --b: var(--gold);
+  --b-foot: var(--gold-dark);
+  --depth: 9px;
+  display: inline-block;
+  min-width: 190px;
+  padding: 20px 26px 22px;
+  border-radius: 18px;
+  margin: 6px 0 26px;
+}
+.ob-site .levelplaque b {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 8vw, 3.4rem);
+  line-height: 1;
+  color: var(--ink);
+}
+.ob-site .levelplaque span {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.92rem;
+  color: #6b4a00;
+}
+
+.ob-site .centred-block { text-align: center; }
+.ob-site .centred-block .lede { margin-inline: auto; }
+.ob-site .close-icon {
+  border-radius: 24px;
+  margin: 0 auto 22px;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* ---------------- Reduce Motion ----------------
+   The app stops every animated prop under Reduce Motion (the VillageKit /
+   VillageTheme rule). The site does the same: nothing drifts, nothing
+   counter-scrolls, nothing pulses, and the boulevard — which has no other
+   way to be read once the lane stops — becomes hand-scrollable and
+   focusable. */
+@media (prefers-reduced-motion: reduce) {
+  .ob-site *,
+  .ob-site *::before,
+  .ob-site *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .ob-site .reveal { opacity: 1; transform: none; }
+  .ob-site .lane { animation: none !important; }
+  .ob-site .boulevard { overflow-x: auto; }
+  .ob-site .boulevard:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+}

@@ -22,3 +22,20 @@
 # to the root of dist/client: the Apple app-site-association file (JSON, and extensionless,
 # so a host cannot infer it) and app-ads.txt (plain text — a host answering text/html is the
 # usual reason AdMob verification fails without saying so).
+
+# The path form of a challenge link.
+#
+# `BrickoutMessages/Challenge.swift` parses both `/c?lv=<n>` and `/c/<n>`, and
+# `/.well-known/apple-app-site-association` claims both against the app, so on a device
+# with OutBrick installed iOS opens the board and no page is drawn at all. On a device
+# without it, only `/c` is a real prerendered file — `/c/42` was a 404, which is exactly
+# the dead end the https form exists to remove.
+#
+# A 200 rewrite rather than a redirect: the address bar stays on `/c/42`, so the page can
+# still read the level out of `location.pathname`. Generating a page per level is the
+# other way and it is the wrong one — the road keeps generating addresses past 2,000,
+# so there is no finite set to prerender.
+[[redirects]]
+  from = "/c/*"
+  to = "/c"
+  status = 200
