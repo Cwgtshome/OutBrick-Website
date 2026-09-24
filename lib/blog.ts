@@ -2724,6 +2724,76 @@ export const articles: BlogArticle[] = [
       { question: 'Who invented Rush Hour?', answer: 'Rush Hour was created by the Japanese puzzle designer Nob Yoshigahara and released in the United States in 1996 by Binary Arts, the company later renamed ThinkFun.' },
     ],
   },
+  {
+    slug: 'verifying-2000-sliding-block-boards',
+    title: 'How we verified 2,000 sliding-block puzzle boards before release',
+    dek: 'A pathfinding result is only the beginning. Here is how we replayed a clear for every OutBrick board against the same rules the game uses.',
+    category: 'Game craft',
+    categoryColor: 'purple',
+    publishedAt: 'September 25, 2026',
+    updatedAt: 'September 25, 2026',
+    readingTime: '6 min read',
+    authorId: 'mourad-hamdi',
+    image: '/blog/how-to-solve-sliding-block-puzzles.webp',
+    imageAlt: 'A real OutBrick sliding-block board with colour and glyph cues, shown alongside the game’s block pieces',
+    tags: ['game development', 'puzzle design', 'pathfinding', 'quality assurance', 'sliding block puzzles'],
+    intro: '“Two thousand boards, all solvable” sounds like one claim. It is really a chain of them. A search must find a route; that route must still work when replayed from the board’s real starting state; and each move must obey the same rules that players meet. For OutBrick, we kept route-finding and route-checking as separate jobs, then replayed a witness for every board before release.',
+    keyTakeaways: [
+      'The search looks for a clearing route with weighted A* and an ExitTable heuristic; it is designed to find a good route quickly, not to prove that route is shortest.',
+      'A separate witness replay applies every saved move with the game’s rules and rejects illegal, nondeterministic, out-of-bounds, overlapping or uncleared results.',
+      'A node budget that runs out means “unknown”. It is never evidence that a board has no solution.',
+    ],
+    sections: [
+      {
+        id: 'one-rules-engine',
+        title: 'Start with one rules engine',
+        paragraphs: [
+          'A solver is only trustworthy if its idea of a move matches the game. In a sliding-block puzzle, a piece may glide until it reaches a wall, another piece or a gate that will not admit its colour. OutBrick adds stateful details too: keys can change gates, ice can take several slides to clear, and generators can introduce queued pieces. Reimplementing a simplified version of those rules for the verifier would leave a gap exactly where a bug could hide.',
+          'So the search asks the game’s own rules for legal moves and applies those moves through the same state-transition code used by play. The state key also includes the gate state, and includes a folded move count when cycling or timed gates make that count relevant. Two boards that look alike but have different live gate states must remain different search states.',
+        ],
+      },
+      {
+        id: 'search-finds-route',
+        title: 'Use search to find a route, not to claim perfection',
+        paragraphs: [
+          'The solver uses weighted A*. Its ExitTable heuristic asks how many slides each piece would need to reach a fitting exit if the other bricks were taken away. That relaxed board is cheaper to reason about than the real one and gives the search a useful estimate of what remains. Weighting the heuristic more heavily favours finding a clear quickly.',
+          'That choice has a limit: the route found is useful, but it is not guaranteed to be the shortest. A search can also stop at its node budget. When that happens the answer is unknown; the solver does not label the board impossible. Only a fully exhausted reachable state space can support a no-clear verdict. Keeping those outcomes distinct prevents a time limit or cancellation from becoming a false claim about the puzzle.',
+        ],
+      },
+      {
+        id: 'replay-the-witness',
+        title: 'Replay the witness from the original board',
+        paragraphs: [
+          'Finding a route is not the final check. For each authored board, we store a witness: the sequence of moves from its initial state to a clear. The replay starts from a fresh game state, checks that the initial state is valid, and applies the witness one move at a time through the real rules. An illegal move fails the replay immediately.',
+          'The checker also replays each move from the same before-state and compares the resulting state, events and outcome. This catches transitions that would behave differently when repeated. After each move it checks that every piece remains on a valid board cell and that no two pieces occupy the same cell. At the end, the board must actually be clear. A route that merely looks plausible, or stops with one brick still inside, does not count.',
+        ],
+      },
+      {
+        id: 'solvable-isnt-difficulty',
+        title: 'Solvable is not the same as well-paced',
+        paragraphs: [
+          'A legal witness proves that a route exists. It does not prove that a person will find it, that it feels fair, or that the board is difficult in the right way. Nor does the solver’s route establish an optimal move count. Those are separate design questions, which is why we treat a full-pack replay as a correctness gate and assess pacing and difficulty separately.',
+          'The move limit must also leave room for the board’s verified route. The player can think as long as they need: the limit counts moves, and OutBrick has no clock. That gives the puzzle pressure without turning the validation result into a timer.',
+        ],
+      },
+      {
+        id: 'repeatable-release-check',
+        title: 'Make the check repeatable at release time',
+        paragraphs: [
+          'The useful release result is not “the solver ran once”. It is that every board in the pack had a witness that replayed cleanly against the rules being shipped. When a rule or a board changes, the pack can be checked again, and the first failing move points to the part of the contract that broke: legality, determinism, board geometry or the final clear.',
+          'That is how we checked OutBrick’s 2,000 boards before release. You can try the same kind of sliding puzzle on the [free browser board](/play), or [download OutBrick for iPhone and iPad](https://apps.apple.com/us/app/outbrick/id6807997465).',
+        ],
+      },
+    ],
+    references: [],
+    relatedSlugs: ['how-to-solve-sliding-block-puzzles', 'designing-for-real-life-play', 'history-of-sliding-block-puzzles'],
+    pullQuote: 'A found route is a candidate. A clean replay under the game’s rules is evidence.',
+    faqs: [
+      { question: 'Does the solver find the shortest solution?', answer: 'No. Weighted A* is used to find a good clearing route quickly, but that route is not guaranteed to be optimal. The replay check verifies that the route is legal and clears the board.' },
+      { question: 'What happens when the solver reaches its node budget?', answer: 'The result is unknown, not unsolvable. A budget limit or cancellation is not a proof that no route exists.' },
+      { question: 'What does “solver-verified” mean for an OutBrick board?', answer: 'A route was found and replayed from the board’s starting state through the game rules. The replay checks legal moves, repeatable state transitions, valid non-overlapping positions and a completed clear.' },
+    ],
+  },
 ];
 
 export function getArticle(slug: string) {
