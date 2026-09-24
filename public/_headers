@@ -59,3 +59,21 @@
 /llms.txt
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=3600
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/humans.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=86400
+
+# RFC 9116. Written by scripts/postbuild.mjs with an Expires one year after the build.
+/.well-known/security.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=86400
+
+# Web app manifest: the CSP above allows it through manifest-src 'self'.
+/site.webmanifest
+  Content-Type: application/manifest+json; charset=utf-8
+  Cache-Control: public, max-age=86400

@@ -1,0 +1,20 @@
+{
+  "name": "OutBrick: Block Sort Puzzle",
+  "short_name": "OutBrick",
+  "description": "The official site of OutBrick, a relaxed sliding-brick colour-sort puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "lang": "en",
+  "theme_color": "#1a1350",
+  "background_color": "#fff3dd",
+  "icons": [
+    { "src": "/assets/icon/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icon/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ],
+  "related_applications": [
+    { "platform": "itunes", "url": "https://apps.apple.com/us/app/outbrick/id6807997465", "id": "6807997465" }
+  ],
+  "prefer_related_applications": false
+}

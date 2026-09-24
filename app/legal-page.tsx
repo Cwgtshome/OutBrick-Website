@@ -1,5 +1,22 @@
 import type { ReactNode } from 'react';
+import { siteUrl } from '../lib/site';
+import { breadcrumbNode, graph, isoDay, ref, ids, webPageNode } from '../lib/structured-data';
+import { JsonLd } from './editorial-shell';
 import { AlsoRead, Course, docNav, VillageFooter, VillageHeader } from './village-shell';
+
+/** The breadcrumb name of each document, and the schema.org page type where it is not a plain WebPage. */
+const documents: Record<string, { crumb: string; type?: string }> = {
+  '/support': { crumb: 'Support' },
+  '/contact': { crumb: 'Contact', type: 'ContactPage' },
+  '/privacy': { crumb: 'Privacy policy' },
+  '/privacy-choices': { crumb: 'Privacy choices' },
+  '/terms': { crumb: 'Terms' },
+  '/license-agreement': { crumb: 'License agreement' },
+  '/eula': { crumb: 'Apple EULA' },
+  '/refunds': { crumb: 'Refunds' },
+  '/age-rating': { crumb: 'Age rating' },
+  '/accessibility': { crumb: 'Accessibility' },
+};
 
 /**
  * A document page: support, privacy, terms, and the rest of the legal shelf.
@@ -24,6 +41,24 @@ type LegalPageProps = {
 };
 
 export function LegalPage({ eyebrow, title, summary, updated, current, children }: LegalPageProps) {
+  const url = current ? `${siteUrl}${current}` : undefined;
+  const doc = current ? documents[current] : undefined;
+  const structuredData = url
+    ? graph(
+        webPageNode({
+          type: doc?.type ?? 'WebPage',
+          url,
+          name: eyebrow,
+          description: summary,
+          dateModified: isoDay(updated),
+          about: ref(ids.organization),
+        }),
+        breadcrumbNode(url, [
+          { name: 'OutBrick', path: '/' },
+          { name: doc?.crumb ?? eyebrow, path: current! },
+        ]),
+      )
+    : null;
   return (
     <div className="ob-site">
       <a className="skip" href="#main">Skip to content</a>
@@ -52,6 +87,7 @@ export function LegalPage({ eyebrow, title, summary, updated, current, children 
       </main>
 
       <VillageFooter />
+      {structuredData ? <JsonLd data={structuredData} /> : null}
     </div>
   );
 }

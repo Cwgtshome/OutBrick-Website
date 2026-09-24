@@ -1,6 +1,41 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
 import { Handoff, LegalPage } from '../../legal-page';
+import { JsonLd } from '../../editorial-shell';
+import { graph } from '../../../lib/structured-data';
+import { siteUrl } from '../../../lib/site';
+
+/**
+ * Short answers to the questions support hears most. Every answer restates a fact the sections
+ * above already give in full; nothing here is new. The same list is the page's FAQPage JSON-LD,
+ * so the markup can never say something the page does not.
+ */
+const faqs: { question: string; answer: string }[] = [
+  {
+    question: 'Is the first undo on a board really free?',
+    answer: 'Yes. The first undo on every board is free, never comes out of your tank and cannot run out. After that, undos come from a tank of five that refills one every twenty-five minutes, or five for 250 coins, or two for a rewarded video.',
+  },
+  {
+    question: 'How many lives do I get, and when is one spent?',
+    answer: 'Five, or eight while you hold the Brick Pass, and one comes back every thirty minutes. A life is spent only when you run out of moves and choose Try again, or leave a board you have already made a move on.',
+  },
+  {
+    question: 'Does OutBrick show ads?',
+    answer: 'Only rewarded video, and only when you press a button asking for something. There are no banners, no interstitials and no ad when the app opens. Remove Ads is a one-time $4.99 purchase.',
+  },
+  {
+    question: 'Is there a timer?',
+    answer: 'No. Every board has a move limit, shown beside your move count from the first tap, but there is no clock or countdown. Reaching the limit offers five more moves for coins or a video before anything else happens.',
+  },
+  {
+    question: 'How do I restore a purchase?',
+    answer: 'Open Shop, then choose Restore purchases. Apple processes the transaction through your Apple ID.',
+  },
+  {
+    question: 'How do I contact OutBrick support?',
+    answer: 'Use the contact form, and tell us the level number, device model, iOS version and what happened. We never need your Game Center login or any payment details.',
+  },
+];
 
 export const metadata: Metadata = pageMetadata({
   path: '/support',
@@ -85,6 +120,16 @@ export default function SupportPage() {
         </ul>
       </section>
 
+      <section className="brick faq" aria-labelledby="faq-title">
+        <h2 id="faq-title">Common questions</h2>
+        {faqs.map((faq) => (
+          <div key={faq.question}>
+            <h3>{faq.question}</h3>
+            <p>{faq.answer}</p>
+          </div>
+        ))}
+      </section>
+
       <section className="brick">
         <h2>Still stuck?</h2>
         <p>
@@ -94,6 +139,15 @@ export default function SupportPage() {
       </section>
 
       <Handoff title="Contact OutBrick" note="Real contact form" action="Open the contact form" href="/contact" />
+      <JsonLd
+        data={graph({
+          '@type': 'FAQPage',
+          '@id': `${siteUrl}/support#faq`,
+          url: `${siteUrl}/support`,
+          isPartOf: { '@id': `${siteUrl}/support#webpage` },
+          mainEntity: faqs.map((faq) => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: faq.answer } })),
+        })}
+      />
     </LegalPage>
   );
 }

@@ -3,6 +3,7 @@ import { Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { friends, mascotStories } from '../../../lib/mascots';
 import { siteUrl } from '../../../lib/site';
 import { FriendMoves } from '../../components/friend-moves-binder';
+import { appNode, breadcrumbNode, graph, ids, ref, webPageNode } from '../../../lib/structured-data';
 
 const description =
   'Meet the nine brick friends of OutBrick: Bloo, Peach, Sprout, Bricko, Flurry, Moss, Poppy, Vio and Zippy. Three share your Home screen at a time.';
@@ -27,33 +28,42 @@ export default function MascotsPage() {
   const withStory = friends.filter((friend) => friend.hasStory);
   const others = friends.filter((friend) => !friend.hasStory);
 
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    '@id': `${siteUrl}/mascots#page`,
-    url: `${siteUrl}/mascots`,
-    name: 'The nine brick friends of OutBrick',
-    description,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    mainEntity: {
+  const url = `${siteUrl}/mascots`;
+  const structuredData = graph(
+    webPageNode({
+      type: 'CollectionPage',
+      url,
+      name: 'The nine brick friends of OutBrick',
+      description,
+      about: ref(ids.app),
+      mainEntity: ref(`${url}#friends`),
+    }),
+    {
       '@type': 'ItemList',
+      '@id': `${url}#friends`,
+      name: 'The nine brick friends',
+      numberOfItems: friends.length,
+      itemListOrder: 'https://schema.org/ItemListUnordered',
       itemListElement: friends.map((friend, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        url: friend.hasStory ? `${siteUrl}/mascots/${friend.id}` : `${siteUrl}/mascots#${friend.id}`,
-        name: friend.name,
-        image: `${siteUrl}${friend.image}`,
+        item: {
+          '@type': 'Thing',
+          '@id': `${siteUrl}/mascots#${friend.id}`,
+          name: friend.name,
+          description: `${friend.role}. ${friend.line}`,
+          image: `${siteUrl}${friend.image}`,
+          url: friend.hasStory ? `${siteUrl}/mascots/${friend.id}` : `${siteUrl}/mascots#${friend.id}`,
+          subjectOf: ref(ids.app),
+        },
       })),
     },
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Mascots', item: `${siteUrl}/mascots` },
-    ],
-  };
+    breadcrumbNode(url, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Mascots', path: '/mascots' },
+    ]),
+    appNode(),
+  );
 
   return (
     <EditorialPage current="mascots">
@@ -166,7 +176,6 @@ export default function MascotsPage() {
       </section>
 
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
       <FriendMoves />
     </EditorialPage>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { articles, authors } from '../../../lib/blog';
 import { siteUrl } from '../../../lib/site';
+import { authorByline, breadcrumbNode, graph, webPageNode } from '../../../lib/structured-data';
 import { StoryRow } from '../blog/journal-kit';
 
 const description =
@@ -23,32 +24,27 @@ export const metadata: Metadata = {
 };
 
 export default function AuthorsPage() {
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    '@id': `${siteUrl}/authors#page`,
-    name: 'Authors of the OutBrick Journal',
-    description,
-    url: `${siteUrl}/authors`,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    mainEntity: {
-      '@type': 'ItemList',
-      itemListElement: authors.map((author, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        url: `${siteUrl}/authors/${author.id}`,
-        name: author.name,
-      })),
-    },
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Authors', item: `${siteUrl}/authors` },
-    ],
-  };
+  const url = `${siteUrl}/authors`;
+  const structuredData = graph(
+    webPageNode({
+      type: 'CollectionPage',
+      url,
+      name: 'Authors of the OutBrick Journal',
+      description,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: authors.map((author, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          item: authorByline(author.id),
+        })),
+      },
+    }),
+    breadcrumbNode(url, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Authors', path: '/authors' },
+    ]),
+  );
 
   return (
     <EditorialPage current="authors">
@@ -91,7 +87,6 @@ export default function AuthorsPage() {
       })}
 
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
     </EditorialPage>
   );
 }

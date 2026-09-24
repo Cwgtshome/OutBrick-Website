@@ -8,7 +8,21 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const out = new URL('../lib/generated/app-store.json', import.meta.url);
-let record = { averageUserRating: 0, userRatingCount: 0, version: null, fetchedAt: new Date().toISOString() };
+// Every key is always written (null when unknown), so the file's shape — and the types the
+// lint reads from it — is the same whether or not the lookup succeeded. lib/structured-data.ts
+// falls back to the last known values for the fields the game's JSON-LD needs.
+let record = {
+  averageUserRating: 0,
+  userRatingCount: 0,
+  version: null,
+  releaseDate: null,
+  currentVersionReleaseDate: null,
+  minimumOsVersion: null,
+  languages: null,
+  genres: null,
+  contentRating: null,
+  fetchedAt: new Date().toISOString(),
+};
 
 try {
   const response = await fetch('https://itunes.apple.com/lookup?id=6807997465&country=us', { signal: AbortSignal.timeout(8000) });
@@ -19,6 +33,13 @@ try {
       averageUserRating: Number(app.averageUserRating) || 0,
       userRatingCount: Number(app.userRatingCount) || 0,
       version: app.version ?? null,
+      releaseDate: app.releaseDate ?? null,
+      currentVersionReleaseDate: app.currentVersionReleaseDate ?? null,
+      minimumOsVersion: app.minimumOsVersion ?? null,
+      // ISO 639-1, lower-cased: ["en", "fr", …]
+      languages: Array.isArray(app.languageCodesISO2A) ? app.languageCodesISO2A.map((code) => String(code).toLowerCase()) : null,
+      genres: Array.isArray(app.genres) ? app.genres.filter((genre) => genre !== 'Games') : null,
+      contentRating: app.trackContentRating ?? app.contentAdvisoryRating ?? null,
       fetchedAt: record.fetchedAt,
     };
   }
