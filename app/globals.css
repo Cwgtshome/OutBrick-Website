@@ -8,6 +8,8 @@
 @import './styles/friend-moves.css';
 /* Contact, affiliates, creators, press and careers, and the forms they share. */
 @import './styles/business.css';
+/* Scroll-linked entrances for the inner pages (CSS only). */
+@import './styles/scroll-reveal.css';
 
 @custom-variant dark (&:is(.dark *));
 

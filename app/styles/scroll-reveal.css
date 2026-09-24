@@ -1,0 +1,39 @@
+/*
+ * Scroll-linked entrances for the inner pages, the same gesture the home page and the journal
+ * use: each block rises and settles as it scrolls in, tied to the scroll position rather than
+ * a timer, so it follows the finger exactly and runs backwards when you scroll back.
+ *
+ * - CSS only (`animation-timeline: view()`). Browsers without it, and Reduce Motion, show
+ *   everything in place.
+ * - The range is a fixed 180px of entry, not a percentage, so a block taller than the screen
+ *   is settled after a short scroll instead of staying faded while you read it.
+ * - It never starts below 25% opacity: nothing is ever invisible, only still arriving.
+ * - The home page has its own choreography (village-motion.tsx), and the playable board is
+ *   left alone so a drag never lands on a moving target.
+ */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* editorial pages: careers, affiliates, press, creators, what's new, mascots */
+    .ed .ed-band > .ed-wrap > :not(:has(.pb)),
+    .ed .bz-role,
+    .ed .wn-group,
+    /* village pages: play, daily, contact, support and the documents */
+    .ob-site:not(.ob-home) main :is(section.brick, .doc .brick, .grid > .brick, .section-head, .play-guide-step):not(:has(.pb)) {
+      animation: ob-scroll-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0px entry 180px;
+    }
+  }
+}
+
+@keyframes ob-scroll-rise {
+  from {
+    opacity: 0.25;
+    transform: translateY(28px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
