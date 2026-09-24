@@ -481,7 +481,8 @@
   padding-block: 26px 30px;
 }
 .ed-rail .ed-chip { min-height: 38px; padding: 9px 14px 8px; font-size: 0.85rem; }
-.ed-rail .ed-chip b { font-weight: 600; opacity: 0.75; }
+/* The count keeps full colour: faded, it fell under 4.5:1 on the purple and blue chips. */
+.ed-rail .ed-chip b { font-weight: 700; margin-left: 2px; font-variant-numeric: tabular-nums; }
 .ed-rail .ed-chip:hover { transform: translateY(-2px); box-shadow: 0 5px 0 var(--c-foot); }
 .ed-rail .ed-chip { transition: transform 0.18s ease, box-shadow 0.18s ease; }
 
@@ -1633,7 +1634,7 @@ ul.ed-rail { list-style: none; margin: 0; }
 .ed-search-none { padding: 4px 10px 12px; }
 .ed-search-none p { font-size: 0.98rem; color: var(--ed-on-paper); }
 .ed-search-none ul { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 10px; }
-.ed-search-none .ed-chip b { font-weight: 600; opacity: 0.8; }
+.ed-search-none .ed-chip b { font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /* ---------------- shelf filter + sort ---------------- */
 
