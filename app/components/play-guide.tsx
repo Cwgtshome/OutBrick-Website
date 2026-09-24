@@ -67,6 +67,10 @@ export function PlayGuide({ locale }: { locale: Locale }) {
                   <li key={bold}><b>{bold}</b>{rest}</li>
                 ))}
               </ul>
+              <p className="play-daily">
+                {t.daily[0]}
+                <a className="daily-link" href="/daily" hrefLang={locale === 'en' ? undefined : 'en'}>{t.daily[1]}</a>
+              </p>
             </div>
             <div className="play-board-wrap">
               <PlayBoard label={t.boardLabel} locale={locale} />

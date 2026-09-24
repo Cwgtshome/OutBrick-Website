@@ -856,3 +856,10 @@ section.pb { padding: 0; }
    take two lines rather than push Share and Replay out of the card. */
 .pb:not(:lang(en)) .pb-card-actions > * { flex-shrink: 0; }
 .pb:not(:lang(en)) .pb-card .pb-btn-go { flex: 1 1 0; min-width: 0; white-space: normal; line-height: 1.1; text-align: center; hyphens: auto; }
+
+/*
+ * A board played on its own (a daily board, or a shared result past the tour):
+ * no pips, so the name leads the HUD and stays put on the narrowest phones,
+ * where the tour hides it to make room for the pips.
+ */
+.pb[data-single] .pb-name { display: block; margin-left: 2px; min-width: 0; }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { tourBoardCount } from '../../../../../lib/board-levels';
 import { siteUrl } from '../../../../../lib/site';
 import { PlayableBoard } from '../../../../components/playable-board';
 import { AppStoreBadge, Course, editorialNav, VillageFooter, VillageHeader } from '../../../../village-shell';
@@ -90,6 +91,9 @@ export default async function ResultPage({ params }: ResultPageProps) {
               <div className="cta-row result-cta">
                 <AppStoreBadge />
                 <a className="result-guide" href="/play">How the stars work</a>
+                {result.levelIndex >= tourBoardCount && (
+                  <a className="result-guide" href="/daily">Today’s daily board</a>
+                )}
               </div>
             </div>
             <div className="play-board-wrap">

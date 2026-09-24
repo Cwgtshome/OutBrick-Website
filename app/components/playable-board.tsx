@@ -16,7 +16,7 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
 } from 'react';
-import { boardLevels } from '../../lib/board-levels';
+import { boardLevels, tourBoardCount } from '../../lib/board-levels';
 import {
   applyMove,
   initialPlacements,
@@ -217,7 +217,7 @@ const makeReducer = (t: BoardStrings) => function reducer(state: GameState, acti
       return freshState(
         action.level,
         seq,
-        t.levelChange(action.level + 1, boardLevels.length, t.levelName[lv.id] ?? lv.name, lv.target),
+        t.levelChange(action.level + 1, tourBoardCount, t.levelName[lv.id] ?? lv.name, lv.target),
       );
     }
   }
@@ -283,12 +283,14 @@ const CONFETTI = Array.from({ length: 30 }, (_, i) => {
 });
 
 /** What "Share result" sends: a static result page (app/play/result) and a line of text. */
-function shareFor(t: BoardStrings, levelIndex: number, moves: number, stars: number) {
+function shareFor(t: BoardStrings, levelIndex: number, moves: number, stars: number, words?: ShareWords) {
   const level = boardLevels[levelIndex];
   const board = levelIndex + 1;
   const url = `${RESULT_URL}/${board}-${stars}`;
+  const starLine = `${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`;
+  if (words) return { url, ...words(moves, stars, starLine) };
   const title = t.shareTitle(board, stars);
-  const text = t.shareText(board, t.levelName[level.id] ?? level.name, moves, level.target, `${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`);
+  const text = t.shareText(board, t.levelName[level.id] ?? level.name, moves, level.target, starLine);
   return { url, title, text };
 }
 
@@ -303,6 +305,9 @@ async function copyText(value: string): Promise<boolean> {
 
 /* ------------------------------------------------------------ component */
 
+/** Replacement title and text for "Share result" (the link stays the board's result page). */
+export type ShareWords = (moves: number, stars: number, starLine: string) => { title: string; text: string };
+
 export interface PlayableBoardProps {
   /** Extra class on the outer wrapper. */
   className?: string;
@@ -315,9 +320,26 @@ export interface PlayableBoardProps {
    * English by default. Behaviour is the same in every language.
    */
   locale?: Locale;
+  /**
+   * Play this one board on its own: no board pips, and the clear card offers
+   * a replay instead of the next board. Boards past the tour always play this way.
+   */
+  single?: boolean;
+  /** Line above "Board clear" on the clear card, instead of "Board 2 of 3". */
+  kicker?: string;
+  /** Title and text for "Share result", instead of the board-number wording. */
+  shareWords?: ShareWords;
 }
 
-export function PlayableBoard({ className, startLevel = 0, label, locale = 'en' }: PlayableBoardProps) {
+export function PlayableBoard({
+  className,
+  startLevel = 0,
+  label,
+  locale = 'en',
+  single = false,
+  kicker,
+  shareWords,
+}: PlayableBoardProps) {
   const t = boardStrings[locale];
   const reducer = useMemo(() => makeReducer(t), [t]);
   const appStore = appStoreUrl(locale === 'en' ? 'board-clear' : `${locale}-board-clear`, storefronts[locale]);
@@ -439,7 +461,7 @@ export function PlayableBoard({ className, startLevel = 0, label, locale = 'en' 
   };
 
   const shareResult = async () => {
-    const data = shareFor(t, state.level, state.moves, stars);
+    const data = shareFor(t, state.level, state.moves, stars, shareWords);
     if (typeof navigator.share === 'function') {
       try {
         await navigator.share(data);
@@ -453,7 +475,9 @@ export function PlayableBoard({ className, startLevel = 0, label, locale = 'en' 
     setNote({ text: (await copyText(data.url)) ? t.copied : t.copyFailed, seq });
   };
 
-  const isLast = state.level === boardLevels.length - 1;
+  // The tour (the first boards) is walked with pips and "Next board"; any other board stands alone.
+  const onTour = !single && state.level < tourBoardCount;
+  const isLast = state.level === tourBoardCount - 1;
   const motion = state.motion;
   let clearDelay = 0;
   if (motion.kind === 'exit') {
@@ -468,13 +492,14 @@ export function PlayableBoard({ className, startLevel = 0, label, locale = 'en' 
   return (
     <section
       className={`pb${className ? ` ${className}` : ''}`}
+      data-single={onTour ? undefined : true}
       aria-label={label ?? t.label}
       style={{ '--cols': level.cols, '--rows': level.rows } as CSSProperties}
     >
       <div className="pb-hud">
         <div className="pb-boards">
-          <span className="pb-sr">{t.boards}</span>
-          {boardLevels.map((lv, i) => (
+          {onTour && <span className="pb-sr">{t.boards}</span>}
+          {onTour && boardLevels.slice(0, tourBoardCount).map((lv, i) => (
             <button
               key={lv.id}
               type="button"
@@ -641,7 +666,7 @@ export function PlayableBoard({ className, startLevel = 0, label, locale = 'en' 
             <div className="pb-card" style={{ '--delay': `${clearDelay}ms` } as CSSProperties}>
               <section className="pb-card-panel" aria-labelledby={`${uid}-clear`}>
                 <p className="pb-card-kicker">
-                  {t.kicker(state.level + 1, boardLevels.length)}
+                  {kicker ?? (onTour ? t.kicker(state.level + 1, tourBoardCount) : t.pip(state.level + 1, levelName))}
                 </p>
                 <h3 className="pb-card-title" id={`${uid}-clear`}>
                   {t.clear}
@@ -664,17 +689,35 @@ export function PlayableBoard({ className, startLevel = 0, label, locale = 'en' 
                   )}
                 </p>
                 <div className="pb-card-actions">
-                  <button
-                    ref={nextBtn}
-                    type="button"
-                    className="pb-btn pb-btn-go"
-                    onClick={() => goLevel(isLast ? 0 : state.level + 1)}
-                  >
-                    {isLast ? t.again : t.next}
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                      <path d="M5 12h13m-5-6 6 6-6 6" />
-                    </svg>
-                  </button>
+                  {onTour ? (
+                    <button
+                      ref={nextBtn}
+                      type="button"
+                      className="pb-btn pb-btn-go"
+                      onClick={() => goLevel(isLast ? 0 : state.level + 1)}
+                    >
+                      {isLast ? t.again : t.next}
+                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M5 12h13m-5-6 6 6-6 6" />
+                      </svg>
+                    </button>
+                  ) : (
+                    <button
+                      ref={nextBtn}
+                      type="button"
+                      className="pb-btn pb-btn-go"
+                      onClick={() => {
+                        setGrabbed(null);
+                        dispatch({ type: 'reset' });
+                      }}
+                    >
+                      {t.replay}
+                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" />
+                        <path d="M3 4v5h5" />
+                      </svg>
+                    </button>
+                  )}
                   <button
                     type="button"
                     className="pb-btn pb-btn-quiet pb-btn-share"
@@ -687,18 +730,20 @@ export function PlayableBoard({ className, startLevel = 0, label, locale = 'en' 
                     </svg>
                     {t.share}
                   </button>
-                  <button
-                    type="button"
-                    className="pb-btn pb-btn-quiet pb-btn-icon"
-                    aria-label={t.replay}
-                    title={t.replay}
-                    onClick={() => dispatch({ type: 'reset' })}
-                  >
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                      <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" />
-                      <path d="M3 4v5h5" />
-                    </svg>
-                  </button>
+                  {onTour && (
+                    <button
+                      type="button"
+                      className="pb-btn pb-btn-quiet pb-btn-icon"
+                      aria-label={t.replay}
+                      title={t.replay}
+                      onClick={() => dispatch({ type: 'reset' })}
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" />
+                        <path d="M3 4v5h5" />
+                      </svg>
+                    </button>
+                  )}
                   <output className="pb-share-note" aria-live="polite" data-show={shareNote ? true : undefined}>
                     {shareNote}
                   </output>

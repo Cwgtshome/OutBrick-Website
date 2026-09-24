@@ -354,6 +354,7 @@ export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?:
               <li><a href={`${home}#fair`}>{copy.costs}</a></li>
               <li><a href={localePath(locale, '/play')}>{copy.playGuide}</a></li>
               <li><a href={localePath(locale, '/whats-new')}>{copy.whatsNew}</a></li>
+              <li><a href="/daily" hrefLang={en}>{copy.daily}</a></li>
               <li><a href="/blog" hrefLang={en}>{copy.journal}</a></li>
               <li><a href="/press-kit" hrefLang={en}>{copy.pressKit}</a></li>
             </ul>
