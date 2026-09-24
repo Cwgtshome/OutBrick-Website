@@ -1916,6 +1916,33 @@ img {
   overflow-x: clip;
 }
 
+/*
+  Translated pages (app/[locale]). Fredoka and Figtree are Latin-only, so
+  Japanese keeps them first — for the Latin words and digits in its copy —
+  and falls back to the system's Japanese faces for everything else, rounded
+  first for the display face. Japanese breaks at phrase boundaries where the
+  browser can (`word-break: auto-phrase`) and never before small kana or
+  closing punctuation (`line-break: strict`). German and French compounds
+  hyphenate by the page's `lang` rather than overflow a narrow column.
+*/
+.ob-site:lang(ja) {
+  --display: 'Fredoka', 'Hiragino Maru Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', system-ui, sans-serif;
+  --text: 'Figtree', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', Meiryo, system-ui, sans-serif;
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+/* Short labels (menu button, tags, buttons) stay on one line. */
+.ob-site:lang(ja) :is(summary, .tag, .btn, .badge, .eyebrow) { white-space: nowrap; }
+@supports (word-break: auto-phrase) {
+  .ob-site:lang(ja) { word-break: auto-phrase; }
+}
+.ob-site:lang(de),
+.ob-site:lang(fr) {
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
 .ob-site *,
 .ob-site *::before,
 .ob-site *::after { box-sizing: border-box; }
@@ -2112,6 +2139,11 @@ img {
 .ob-site h1 { font-size: clamp(2.5rem, 9vw, 4.6rem); }
 .ob-site h2 { font-size: clamp(1.9rem, 5.4vw, 3rem); }
 .ob-site h3 { font-size: clamp(1.1rem, 2.6vw, 1.35rem); text-shadow: none; }
+/* Japanese: full-width glyphs set larger and denser than Latin at the same
+   size, so headings come down a step and every line gets more leading. */
+.ob-site:lang(ja) :is(h1, h2, h3) { font-weight: 700; letter-spacing: 0.02em; line-height: 1.3; }
+.ob-site:lang(ja) h2 { font-size: clamp(1.6rem, 4.2vw, 2.45rem); }
+.ob-site:lang(ja) :is(p, li, dd) { line-height: 1.8; }
 
 .ob-site .eyebrow {
   font-family: var(--display);
@@ -2823,6 +2855,24 @@ img {
 .ob-site footer.site a:hover { color: #fff; text-decoration: underline; }
 .ob-site footer.site .blurb { margin: 0; max-width: 40ch; }
 .ob-site footer.site .logo { margin-bottom: 14px; }
+/* The language switcher (VillageFooter on the home page and play guide). */
+.ob-site footer.site .langs { margin-top: 18px; }
+.ob-site footer.site .langs ul { display: flex; flex-wrap: wrap; gap: 8px; }
+.ob-site footer.site .langs a {
+  display: inline-block;
+  padding: 5px 12px;
+  border: 1.5px solid rgba(201, 194, 255, 0.28);
+  border-radius: 999px;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+.ob-site footer.site .langs a:hover { border-color: rgba(255, 255, 255, 0.7); text-decoration: none; }
+.ob-site footer.site .langs a[aria-current='page'] {
+  color: #1a1350;
+  background: #ffc53d;
+  border-color: #ffc53d;
+  font-weight: 700;
+}
 .ob-site footer.site .legal {
   margin-top: 34px;
   padding-top: 22px;

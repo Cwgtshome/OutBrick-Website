@@ -1228,3 +1228,13 @@ html.js .ob-home [data-reveal='unmask']:not(.in) img { clip-path: inset(0 0 100%
   .ob-home .lane-bricks i { transform: none; }
   .ob-home .lane-clear { display: none; }
 }
+
+/*
+  Japanese. The headings above are capped in `ch` — the width of a Latin
+  digit, about half a kana — which leaves a Japanese heading six characters
+  to a line and splits phrases. `ic` is the width of one ideograph, so these
+  caps give the same visual measure to Japanese text.
+*/
+.ob-home:lang(ja) :is(.rule-top h2, .journey-head h2, .cast-head h2, .fair-head h2, .apple-head h2, .close h2) { max-width: 10ic; }
+.ob-home:lang(ja) .passes-block .lede { max-width: 14ic; }
+.ob-home:lang(ja) .close h2 { font-size: clamp(2rem, 1rem + 3.4vw, 3.8rem); }
