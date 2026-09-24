@@ -1,0 +1,62 @@
+# Runs on every pull request and push to main, so a change cannot quietly undo the site's
+# baseline: it must build, lint, keep every page's SEO metadata valid, keep the playable boards
+# solvable at their stated targets, and pass axe (WCAG 2.1 AA) at desktop and phone widths.
+name: Site checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # postbuild.mjs dates sitemap entries from git history.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
+      - name: SEO audit
+        run: pnpm audit:seo
+
+      - name: Playable boards are solvable at their targets
+        run: node --experimental-strip-types scripts/verify-board-levels.mjs
+
+      - name: Install audit tools (outside the project, not site dependencies)
+        run: |
+          mkdir -p "$RUNNER_TEMP/audit-tools" && cd "$RUNNER_TEMP/audit-tools"
+          npm init -y >/dev/null
+          npm i playwright@1.56.1 axe-core@4
+          npx playwright install --with-deps chromium
+
+      - name: Accessibility, console errors and overflow
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/audit-tools/node_modules/playwright/index.mjs
+          AXE_PATH: ${{ runner.temp }}/audit-tools/node_modules/axe-core/axe.min.js
+        run: |
+          node scripts/serve-dist.mjs 4321 &
+          sleep 1
+          node scripts/audit-a11y.mjs http://127.0.0.1:4321

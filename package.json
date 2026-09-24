@@ -12,7 +12,9 @@
     "lint": "oxlint",
     "format": "oxfmt",
     "audit:seo": "node scripts/audit-seo.mjs",
-    "indexnow": "node scripts/indexnow-submit.mjs"
+    "indexnow": "node scripts/indexnow-submit.mjs",
+    "audit:a11y": "node scripts/audit-a11y.mjs",
+    "serve:dist": "node scripts/serve-dist.mjs"
   },
   "dependencies": {
     "react": "19.2.6",
