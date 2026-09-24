@@ -3306,3 +3306,19 @@ html.js .ob-site .reveal:not(.in) {
 }
 .ob-site footer.site .social a:hover { translate: 0 -2px; box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.1), 0 6px 0 #120c3a; }
 .ob-site footer.site .social svg { flex: none; }
+
+/* Narrow phones: the header holds the brand mark, the App Store badge and the menu. The menu's
+   name comes from its aria-label, so its visible word can go first; then the mark and badge
+   step down, so nothing crosses the right edge at 320px in any language. */
+@media (max-width: 460px) {
+  .ob-site .menu > summary { padding: 0 12px; }
+  .ob-site .menu > summary .menu-word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+@media (max-width: 380px) {
+  .ob-site header.site .brandmark-word { height: 17px; }
+}
+@media (max-width: 359px) {
+  .ob-site header.site .brandmark-icon { width: 32px; height: 32px; }
+  .ob-site header.site .brandmark-word { height: 14px; }
+  .ob-site header.site .badge img { height: 34px; width: auto; }
+}
