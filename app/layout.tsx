@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import './styles/fonts.css';
 import './globals.css';
 import { siteUrl } from '../lib/site';
 
@@ -82,20 +83,29 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en">
+    // suppressHydrationWarning: the inline script below adds `js` to <html>
+    // before React hydrates, which is the whole point of it.
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/*
-          Fredoka is the display face of the brick site — the nearest web
-          equivalent of the rounded type the game sets its titles in. React 19
-          hoists these into <head>; the stack in the stylesheet falls back to
-          SF Pro Rounded, so an Apple device still reads right if the font never
-          arrives.
+          Self-hosted type (app/styles/fonts.css): Fredoka for display — the
+          nearest web equivalent of the rounded type the game sets its titles
+          in — and Figtree for running text. Nothing is requested from a third
+          party. The two faces the first screen needs are preloaded.
         */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap"
+        <link rel="preload" href="/fonts/fredoka-latin-wght.woff2" as="font" type="font/woff2" crossOrigin="" />
+        <link rel="preload" href="/fonts/figtree-latin-wght.woff2" as="font" type="font/woff2" crossOrigin="" />
+        {/*
+          Scroll reveals only hide content once we know script is running, so
+          crawlers and no-JS readers never meet a blank section. If the motion
+          script has not checked in after four seconds (blocked, errored), the
+          class comes off again and everything shows.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(d){d.classList.add('js');setTimeout(function(){if(!window.__obMotion)d.classList.remove('js')},4000)})(document.documentElement)",
+          }}
         />
         <meta name="theme-color" content="#1a1350" />
       </head>

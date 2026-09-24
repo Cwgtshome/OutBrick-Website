@@ -2838,8 +2838,9 @@ img {
   --maxw: 1180px;
   --gutter: 16px;
 
-  --display: 'Fredoka', ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --text: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Both families are self-hosted — see app/styles/fonts.css. */
+  --display: var(--font-display, 'Fredoka', ui-rounded, 'SF Pro Rounded', system-ui, sans-serif);
+  --text: var(--font-text, 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif);
 
   font-family: var(--text);
   font-size: 17px;
@@ -2875,6 +2876,17 @@ img {
   z-index: 200;
 }
 .ob-site .skip:focus { left: 12px; top: 12px; }
+.ob-site .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* ---------------- the brick primitive ---------------- */
 
@@ -3056,36 +3068,47 @@ img {
 
 .ob-site .lede { font-size: clamp(1.05rem, 2.3vw, 1.25rem); max-width: 60ch; }
 
-/* ---------------- header ---------------- */
+/* ---------------- header ----------------
+   Sticky, and it condenses once the page moves (`.is-condensed`, set by
+   components/home-header-motion.tsx). Under the breakpoint the links fold into
+   a <details> menu, which opens and closes with no script at all. */
 
 .ob-site header.site {
   position: sticky;
   top: 0;
   z-index: 60;
-  background: rgba(26, 19, 80, 0.86);
-  backdrop-filter: saturate(160%) blur(14px);
+  background: rgba(26, 19, 80, 0.9);
+  -webkit-backdrop-filter: saturate(150%) blur(12px);
+  backdrop-filter: saturate(150%) blur(12px);
   border-bottom: 2px solid rgba(110, 98, 230, 0.35);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 .ob-site header.site .wrap {
   display: flex;
   align-items: center;
   gap: 14px;
-  min-height: 68px;
+  min-height: 72px;
   padding-block: 10px;
+  transition: min-height 0.35s var(--ease-out, ease), padding 0.35s var(--ease-out, ease);
 }
+.ob-site header.site.is-condensed { background: rgba(20, 14, 61, 0.97); box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18); }
+.ob-site header.site.is-condensed .wrap { min-height: 58px; padding-block: 6px; }
 .ob-site .logo {
   display: flex;
   align-items: center;
   gap: 11px;
   text-decoration: none;
   flex: none;
+  border-radius: 12px;
 }
 .ob-site .logo img {
   width: 42px;
   height: 42px;
   border-radius: 11px;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+  transition: width 0.35s var(--ease-out, ease), height 0.35s var(--ease-out, ease);
 }
+.ob-site header.site.is-condensed .logo img { width: 34px; height: 34px; }
 .ob-site .logo b {
   font-family: var(--display);
   font-weight: 600;
@@ -3093,31 +3116,141 @@ img {
   color: #fff;
   letter-spacing: -0.01em;
 }
+.ob-site header.site .logo { margin-right: auto; }
 .ob-site nav.main {
-  margin-left: auto;
   display: flex;
-  gap: 4px;
+  gap: 2px;
 }
 .ob-site nav.main a {
+  position: relative;
   font-family: var(--display);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   color: var(--lilac);
   text-decoration: none;
   padding: 9px 13px;
   border-radius: 10px;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
-.ob-site nav.main a:hover,
-.ob-site nav.main a[aria-current='page'] { color: #fff; background: rgba(110, 98, 230, 0.3); }
+.ob-site nav.main a:hover { color: #fff; background: rgba(110, 98, 230, 0.26); }
+.ob-site nav.main a[aria-current] { color: #fff; }
+/* the current section gets a little brick under it, not a pill */
+.ob-site nav.main a::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 16px;
+  height: 5px;
+  margin-left: -8px;
+  border-radius: 2px;
+  background: var(--gold);
+  box-shadow: 0 2px 0 var(--gold-dark);
+  transform: scaleX(0);
+  transition: transform 0.35s var(--ease-slide, ease);
+}
+.ob-site nav.main a[aria-current]::after { transform: scaleX(1); }
 .ob-site header.site .badge { padding: 6px; flex: none; }
 .ob-site header.site .badge img { height: 40px; }
 
+/* the folded menu */
+.ob-site .menu { display: none; position: relative; order: 3; }
+.ob-site .menu > summary {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff;
+  background: var(--panel);
+  box-shadow: 0 4px 0 var(--panel-dark);
+  cursor: pointer;
+  user-select: none;
+}
+.ob-site .menu > summary::-webkit-details-marker { display: none; }
+.ob-site .menu > summary:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--panel-dark); }
+/* three bricks that stack into a cross when open */
+.ob-site .menu .bars { position: relative; width: 16px; height: 12px; }
+.ob-site .menu .bars i {
+  position: absolute;
+  left: 0;
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.3s var(--ease-slide, ease), opacity 0.2s ease;
+}
+.ob-site .menu .bars i:nth-child(1) { top: 0; }
+.ob-site .menu .bars i:nth-child(2) { top: 4.5px; width: 11px; }
+.ob-site .menu .bars i:nth-child(3) { top: 9px; }
+.ob-site .menu[open] .bars i:nth-child(1) { transform: translateY(4.5px) rotate(45deg); }
+.ob-site .menu[open] .bars i:nth-child(2) { opacity: 0; transform: translateX(8px); }
+.ob-site .menu[open] .bars i:nth-child(3) { transform: translateY(-4.5px) rotate(-45deg); }
+.ob-site .menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  width: min(300px, calc(100vw - 32px));
+  padding: 10px;
+  border-radius: 18px;
+  background: var(--panel);
+  box-shadow: 0 8px 0 var(--panel-dark), 0 24px 50px rgba(0, 0, 0, 0.45);
+  display: grid;
+  gap: 4px;
+}
+.ob-site .menu[open] .menu-panel { animation: ob-menu-drop 0.42s var(--ease-slide, ease) both; }
+@keyframes ob-menu-drop {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: none; }
+}
+.ob-site .menu-panel a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 12px;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 1.12rem;
+  color: #fff;
+  text-decoration: none;
+}
+.ob-site .menu-panel a::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--c, var(--gold));
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
+  flex: none;
+}
+.ob-site .menu-panel a:hover,
+.ob-site .menu-panel a[aria-current] { background: var(--panel-inner); }
+
 @media (max-width: 900px) {
   .ob-site nav.main { display: none; }
+  .ob-site .menu { display: block; }
+}
+@media (min-width: 901px) and (max-width: 1180px) {
+  .ob-site header.site.many nav.main { display: none; }
+  .ob-site header.site.many .menu { display: block; }
 }
 @media (max-width: 420px) {
-  .ob-site header.site .badge img { height: 34px; }
-  .ob-site .logo b { font-size: 1.1rem; }
+  .ob-site header.site .wrap { gap: 8px; }
+  .ob-site header.site .badge { padding: 4px; }
+  .ob-site header.site .badge img { height: 40px; }
+  .ob-site .logo { gap: 8px; }
+  .ob-site .logo b { font-size: 1.08rem; }
+  .ob-site .menu > summary { padding: 0 11px; }
+}
+@media (max-width: 359px) {
+  .ob-site .logo b { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 }
 
 /* ---------------- the boulevard (hero) ---------------- */
@@ -3626,12 +3759,16 @@ img {
 
 /* ---------------- reveal on scroll ---------------- */
 
-.ob-site .reveal {
+/* Hidden only once script has announced itself (the inline snippet in
+   app/layout.tsx puts `js` on <html>), so no-JS readers and crawlers always
+   get the content. */
+html.js .ob-site .reveal:not(.in) {
   opacity: 0;
   transform: translateY(22px);
-  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.3, 1);
 }
-.ob-site .reveal.in { opacity: 1; transform: none; }
+.ob-site .reveal {
+  transition: opacity 0.45s ease, transform 0.55s var(--ease-slide, cubic-bezier(0.2, 0.8, 0.3, 1));
+}
 
 /* ==================================================================
    The document pages (ported from page.css).
@@ -3994,7 +4131,7 @@ img {
     animation: none !important;
     transition: none !important;
   }
-  .ob-site .reveal { opacity: 1; transform: none; }
+  html.js .ob-site .reveal:not(.in) { opacity: 1; transform: none; }
   .ob-site .lane { animation: none !important; }
   .ob-site .boulevard { overflow-x: auto; }
   .ob-site .boulevard:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
