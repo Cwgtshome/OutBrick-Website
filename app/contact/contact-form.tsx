@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useState, type SubmitEvent } from 'react';
 
 const CONTACT_EMAIL = 'mourad.hamdi@me.com';
 
@@ -12,10 +12,13 @@ const CONTACT_EMAIL = 'mourad.hamdi@me.com';
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const values = new FormData(event.currentTarget);
-    const read = (key: string) => String(values.get(key) ?? '').trim();
+    const read = (key: string) => {
+      const value = values.get(key);
+      return typeof value === 'string' ? value.trim() : '';
+    };
     const topic = read('topic') || 'General support';
     const body = [`Name: ${read('name')}`, `Reply email: ${read('email')}`, `Topic: ${topic}`, '', read('message'), ''].join('\n');
 
@@ -52,12 +55,16 @@ export function ContactForm() {
       <div>
         <button className="btn" type="submit">Open mail app</button>
       </div>
-      {submitted && (
-        <p className="form-status" role="status">
-          If your mail app opened, review the draft and send it there. If it did not open, email{' '}
-          {CONTACT_EMAIL} directly.
-        </p>
-      )}
+      {/* Always in the DOM so screen readers are already watching it when the
+          message arrives; <output> is a polite live region (role=status). */}
+      <output className="form-status">
+        {submitted && (
+          <>
+            If your mail app opened, review the draft and send it there. If it did not open, email{' '}
+            {CONTACT_EMAIL} directly.
+          </>
+        )}
+      </output>
     </form>
   );
 }
