@@ -154,3 +154,7 @@
   .nf-brick::after { right: 5px; }
   .nf-stray { right: -22px; }
 }
+
+.nf-home { display: inline-flex; margin-bottom: 18px; border-radius: 12px; }
+.nf-home .brandmark-icon { width: 44px; height: 44px; }
+.nf-home .brandmark-word { height: 28px; }

@@ -835,3 +835,24 @@
   .pb-card .pb-card-title { font-size: 25px; margin-bottom: 6px; }
 }
 section.pb { padding: 0; }
+
+/*
+ * Translated boards (lib/i18n/board.ts). "Objetivo 3 · Movimientos 0" is
+ * twice the width of "Target 3 · Moves 0", and a flex row's min-content counts
+ * the board name and the drag tip at full width even though both truncate — so
+ * on a phone the HUD and the controls pushed the whole column wider than the
+ * screen. Here the name and the tip give up their intrinsic width (they still
+ * fill the free space and ellipsize), and the count may wrap under the pips if
+ * even that is not enough. English is left exactly as it was.
+ */
+.pb:not(:lang(en)) .pb-hud { flex-wrap: wrap; height: auto; min-height: 40px; row-gap: 4px; }
+.pb:not(:lang(en)) .pb-boards { flex: 1 1 auto; }
+.pb:not(:lang(en)) .pb-name { flex: 1 1 0; min-width: 0; contain: inline-size; }
+.pb:not(:lang(en)) .pb-tool { white-space: nowrap; }
+.pb:not(:lang(en)) .pb-tip { contain: inline-size; }
+.pb:lang(ja) .pb-count,
+.pb:lang(ja) .pb-tip { word-break: keep-all; }
+/* "Siguiente tablero", "Plateau suivant": the clear card's main button may
+   take two lines rather than push Share and Replay out of the card. */
+.pb:not(:lang(en)) .pb-card-actions > * { flex-shrink: 0; }
+.pb:not(:lang(en)) .pb-card .pb-btn-go { flex: 1 1 0; min-width: 0; white-space: normal; line-height: 1.1; text-align: center; hyphens: auto; }

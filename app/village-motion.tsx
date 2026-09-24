@@ -43,7 +43,10 @@ export function VillageMotion() {
       const toReveal = Array.from(root.querySelectorAll<HTMLElement>('[data-reveal]'));
       const counters = Array.from(root.querySelectorAll<HTMLElement>('[data-count]'));
       const finalText = new Map(counters.map((el) => [el, el.textContent ?? '']));
-      const format = new Intl.NumberFormat('en-GB');
+      // Count in the page's own number style (2,000 · 2 000 · 2.000 · 2000);
+      // the plaque's final text is the server-rendered one either way.
+      const lang = document.documentElement.lang;
+      const format = new Intl.NumberFormat(!lang || lang === 'en' ? 'en-GB' : lang);
 
       const countUp = (el: HTMLElement) => {
         const target = Number(el.dataset.count ?? '0');

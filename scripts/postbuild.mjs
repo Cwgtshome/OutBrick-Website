@@ -56,19 +56,47 @@ function gitDate(files) {
 
 const appDir = path.join(repoRoot, 'app');
 
+const isDir = (p) => fs.existsSync(p) && fs.statSync(p).isDirectory();
+
+/** `dir` plus every route group `(name)` under it, recursively: groups add no URL segment. */
+function withGroups(dir) {
+  const out = [dir];
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (e.isDirectory() && /^\(.+\)$/.test(e.name)) out.push(...withGroups(path.join(dir, e.name)));
+  }
+  return out;
+}
+
+/** The page file that renders `route`: literal segments first, then a dynamic `[param]`, as the router does. */
 function pageFileForRoute(route) {
-  let dir = appDir;
-  for (const seg of route.split('/').filter(Boolean)) {
-    const literal = path.join(dir, seg);
-    if (fs.existsSync(literal) && fs.statSync(literal).isDirectory()) { dir = literal; continue; }
-    const dynamic = fs.readdirSync(dir, { withFileTypes: true }).find((e) => e.isDirectory() && /^\[.+\]$/.test(e.name));
-    if (!dynamic) return undefined;
-    dir = path.join(dir, dynamic.name);
-  }
-  for (const name of ['page.tsx', 'page.ts', 'page.jsx', 'page.js']) {
-    if (fs.existsSync(path.join(dir, name))) return path.join(dir, name);
-  }
-  return undefined;
+  const segs = route.split('/').filter(Boolean);
+  const walk = (dir, i) => {
+    const dirs = withGroups(dir);
+    if (i === segs.length) {
+      for (const d of dirs) {
+        for (const name of ['page.tsx', 'page.ts', 'page.jsx', 'page.js']) {
+          if (fs.existsSync(path.join(d, name))) return path.join(d, name);
+        }
+      }
+      return undefined;
+    }
+    for (const d of dirs) {
+      const literal = path.join(d, segs[i]);
+      if (isDir(literal)) {
+        const found = walk(literal, i + 1);
+        if (found) return found;
+      }
+    }
+    for (const d of dirs) {
+      const dynamic = fs.readdirSync(d, { withFileTypes: true }).find((e) => e.isDirectory() && /^\[.+\]$/.test(e.name));
+      if (dynamic) {
+        const found = walk(path.join(d, dynamic.name), i + 1);
+        if (found) return found;
+      }
+    }
+    return undefined;
+  };
+  return walk(appDir, 0);
 }
 
 function resolveImport(fromFile, spec) {
@@ -100,6 +128,24 @@ function sourceClosure(entry) {
 // Sitemap
 
 const articleBySlug = new Map(articles.map((a) => [a.slug, a]));
+
+/**
+ * The page's own `<link rel="alternate" hreflang>` set, read from its built <head>. The home
+ * page and the play guide are published in several languages (lib/i18n/locales.ts), and each
+ * version names all of them; the sitemap repeats that set as `xhtml:link` so the languages are
+ * declared in both places, as Google recommends.
+ */
+function hreflangLinks(html) {
+  const head = html.slice(0, html.indexOf('</head>'));
+  const links = [];
+  for (const [tag] of head.matchAll(/<link\b[^>]*>/gi)) {
+    if (!/\srel="alternate"/i.test(tag)) continue;
+    const lang = tag.match(/\shreflang="([^"]+)"/i)?.[1];
+    const href = tag.match(/\shref="([^"]+)"/i)?.[1];
+    if (lang && href) links.push({ lang, href: href.replace(/&amp;/g, '&') });
+  }
+  return links;
+}
 const pages = indexablePages();
 if (pages.length === 0) throw new Error('[postbuild] no indexable pages found in dist/client — refusing to write an empty sitemap');
 
@@ -115,7 +161,7 @@ const entries = pages.map((page) => {
   // Pages that declare their own modified time win over either guess.
   const declared = metaContent(page.html, 'article:modified_time')[0];
   if (!articleSlug && declared && /^\d{4}-\d{2}-\d{2}/.test(declared)) lastmod = declared.slice(0, 10);
-  return { loc: page.url, lastmod };
+  return { loc: page.url, lastmod, alternates: hreflangLinks(page.html) };
 });
 
 // Home first, then by path, so diffs between builds stay readable.
@@ -123,8 +169,11 @@ entries.sort((a, b) => (a.loc === `${siteUrl}/` ? -1 : b.loc === `${siteUrl}/` ?
 
 const sitemap = [
   '<?xml version="1.0" encoding="UTF-8"?>',
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-  ...entries.map((e) => `  <url><loc>${xmlEscape(e.loc)}</loc>${e.lastmod ? `<lastmod>${e.lastmod}</lastmod>` : ''}</url>`),
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  ...entries.map((e) => {
+    const alternates = e.alternates.map((a) => `\n    <xhtml:link rel="alternate" hreflang="${xmlEscape(a.lang)}" href="${xmlEscape(a.href)}"/>`).join('');
+    return `  <url><loc>${xmlEscape(e.loc)}</loc>${e.lastmod ? `<lastmod>${e.lastmod}</lastmod>` : ''}${alternates ? `${alternates}\n  ` : ''}</url>`;
+  }),
   '</urlset>',
   '',
 ].join('\n');
