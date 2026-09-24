@@ -21,3 +21,9 @@ export function pageMetadata({ path, title, description }: { path: string; title
     twitter: { card: 'summary_large_image' as const, title, description, images: ['/og.png'] },
   };
 }
+
+/**
+ * Gameplay footage for the home hero and the press kit. `null` until a real capture exists;
+ * drop the files in public/video/ and fill this in (see docs/CAPTURES.md).
+ */
+export const GAMEPLAY_VIDEO: null | { mp4: string; webm?: string; poster: string; width: number; height: number } = null;
