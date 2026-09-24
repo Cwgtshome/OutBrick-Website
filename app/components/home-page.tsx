@@ -182,7 +182,11 @@ export function HomePage({ locale }: { locale: Locale }) {
 
             <div className="hero-stage" data-tilt="">
               <div className="stage-inner">
-                <img className="peek peek-sprout" src="/assets/friends/sprout.webp" alt="" width={180} height={180} />
+                {/* The friends peeking round the phone lean toward the pointer, and play their
+                    move when it comes close (village-motion.tsx; moves in styles/friend-moves.css). */}
+                <span className="peek peek-sprout" data-friend-move="sprout" data-peek="">
+                  <img className="fm-actor" src="/assets/friends/sprout.webp" alt="" width={180} height={180} />
+                </span>
                 <div className="phone">
                   <img
                     src="/assets/villages/garden-city.jpg"
@@ -192,8 +196,12 @@ export function HomePage({ locale }: { locale: Locale }) {
                     alt={t.hero.phoneAlt}
                   />
                 </div>
-                <img className="peek peek-bloo" src="/assets/friends/bloo.webp" alt="" width={200} height={200} />
-                <img className="peek peek-peach" src="/assets/friends/peach.webp" alt="" width={180} height={180} />
+                <span className="peek peek-bloo" data-friend-move="bloo" data-peek="">
+                  <img className="fm-actor" src="/assets/friends/bloo.webp" alt="" width={200} height={200} />
+                </span>
+                <span className="peek peek-peach" data-friend-move="peach" data-peek="">
+                  <img className="fm-actor" src="/assets/friends/peach.webp" alt="" width={180} height={180} />
+                </span>
                 <div className="stage-plinth" aria-hidden="true"><i /><i /><i /></div>
               </div>
             </div>
@@ -212,7 +220,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             <div className="rule-top">
               <div className="section-head">
                 <p className="eyebrow"><span className="idx">01</span>{t.rule.eyebrow}</p>
-                <h2>{t.rule.title}</h2>
+                <h2 data-reveal="mask"><span className="mask-line">{t.rule.title}</span></h2>
                 <p className="lede">
                   {t.rule.lede}
                 </p>
@@ -272,7 +280,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               <div className="wrap journey-head">
                 <div>
                   <p className="eyebrow"><span className="idx">02</span>{t.journey.eyebrow}</p>
-                  <h2>{t.journey.title}</h2>
+                  <h2 data-reveal="mask"><span className="mask-line">{t.journey.title}</span></h2>
                 </div>
                 <p className="lede">
                   {t.journey.lede}
@@ -363,7 +371,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           <div className="wrap fair-grid">
             <div className="fair-head">
               <p className="eyebrow"><span className="idx">04</span>{t.fair.eyebrow}</p>
-              <h2>{t.fair.title}</h2>
+              <h2 data-reveal="mask"><span className="mask-line">{t.fair.title}</span></h2>
               <p className="lede">
                 {t.fair.lede}
               </p>
@@ -402,7 +410,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             <div className="apple-head">
               <div>
                 <p className="eyebrow"><span className="idx">05</span>{t.apple.eyebrow}</p>
-                <h2>{t.apple.title}</h2>
+                <h2 data-reveal="mask"><span className="mask-line">{t.apple.title}</span></h2>
               </div>
               <p className="lede">
                 {t.apple.lede}
@@ -500,7 +508,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           <div className="wrap close-inner">
             <div>
               <BrandMark className="brandmark-lg close-mark" />
-              <h2>{t.close.title}</h2>
+              <h2 data-reveal="mask"><span className="mask-line">{t.close.title}</span></h2>
             </div>
             <div>
               <p className="lede">

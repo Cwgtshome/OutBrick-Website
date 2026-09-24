@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../../editorial-shell';
 import { friends, getAdjacentMascot, getFriend, getMascotStory, mascotStories } from '../../../../lib/mascots';
 import { siteUrl } from '../../../../lib/site';
+import { FriendMoves } from '../../../components/friend-moves-binder';
 
 type MascotPageProps = { params: Promise<{ slug: string }> };
 
@@ -96,10 +97,10 @@ export default async function MascotStoryPage({ params }: MascotPageProps) {
                   <div><dt>Favourite move</dt><dd>{story.favoriteMove}</dd></div>
                 </dl>
               </div>
-              <div className="ed-mstage">
+              <div className="ed-mstage" data-friend-move={friend.id}>
                 <Studs count={4} />
                 <p className="ed-bubble"><span className="sr-only">{story.name}’s text bubble: </span>{story.bubble}</p>
-                <img className="friend" src={friend.image} alt={friend.imageAlt} width={360} height={360} decoding="async" fetchPriority="high" />
+                <img className="friend fm-actor" src={friend.image} alt={friend.imageAlt} width={360} height={360} decoding="async" fetchPriority="high" />
               </div>
             </div>
           </div>
@@ -122,11 +123,11 @@ export default async function MascotStoryPage({ params }: MascotPageProps) {
             <div className="ed-chapters">
               {story.chapters.map((chapter) => (
                 <article className="ed-chapter ed-reveal" key={chapter.number} aria-labelledby={`chapter-${chapter.number}`}>
-                  <figure className="ed-chapter-art">
+                  <figure className="ed-chapter-art" data-friend-move={friend.id}>
                     <div className="ed-capture">
                       <img src={`/assets/villages/${chapter.village.slug}.jpg`} alt={`${chapter.village.name}, a brick-built village on the OutBrick Journey map.`} width={239} height={520} loading="lazy" decoding="async" />
                     </div>
-                    <img className="ed-friend" src={friend.image} alt="" width={360} height={360} loading="lazy" decoding="async" />
+                    <img className="ed-friend fm-actor" src={friend.image} alt="" width={360} height={360} loading="lazy" decoding="async" />
                     <figcaption>{chapter.village.name}, on the Journey</figcaption>
                   </figure>
                   <div>
@@ -169,6 +170,7 @@ export default async function MascotStoryPage({ params }: MascotPageProps) {
 
       <JsonLd data={structuredData} />
       <JsonLd data={breadcrumbData} />
+      <FriendMoves />
     </EditorialPage>
   );
 }

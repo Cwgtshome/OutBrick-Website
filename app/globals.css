@@ -4,6 +4,8 @@
 /* The journal, mascots, press kit, about, authors and research routes. All of
    it is scoped under `.ed`; see the header of that file. */
 @import './styles/editorial.css';
+/* The friends' signature moves, shared by the home page and the mascots pages. */
+@import './styles/friend-moves.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -2173,7 +2175,12 @@ img {
 /* ---------------- header ----------------
    Sticky, and it condenses once the page moves (`.is-condensed`, set by
    components/home-header-motion.tsx). Under the breakpoint the links fold into
-   a <details> menu, which opens and closes with no script at all. */
+   a <details> menu, which opens and closes with no script at all.
+
+   Condensing never changes layout: the bar keeps its height in the flow and
+   slides up under the top edge by a few pixels while its contents slide back
+   down by half that and the mark shrinks — all transforms, so nothing below
+   moves and the compositor does the work. */
 
 .ob-site header.site {
   position: sticky;
@@ -2183,7 +2190,10 @@ img {
   -webkit-backdrop-filter: saturate(150%) blur(12px);
   backdrop-filter: saturate(150%) blur(12px);
   border-bottom: 2px solid rgba(110, 98, 230, 0.35);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background-color 0.4s var(--ease-glide, ease),
+    box-shadow 0.4s var(--ease-glide, ease),
+    transform 0.5s var(--ease-glide, ease);
 }
 .ob-site header.site .wrap {
   display: flex;
@@ -2191,10 +2201,10 @@ img {
   gap: 14px;
   min-height: 72px;
   padding-block: 10px;
-  transition: min-height 0.35s var(--ease-out, ease), padding 0.35s var(--ease-out, ease);
+  transition: transform 0.5s var(--ease-glide, ease);
 }
-.ob-site header.site.is-condensed { background: rgba(20, 14, 61, 0.97); box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18); }
-.ob-site header.site.is-condensed .wrap { min-height: 58px; padding-block: 6px; }
+.ob-site header.site.is-condensed { background: rgba(20, 14, 61, 0.97); box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18); transform: translate3d(0, -12px, 0); }
+.ob-site header.site.is-condensed .wrap { transform: translate3d(0, 6px, 0); }
 .ob-site .logo {
   display: flex;
   align-items: center;
@@ -2210,17 +2220,15 @@ img {
   height: 42px;
   border-radius: 11px;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
-  transition: width 0.35s var(--ease-out, ease), height 0.35s var(--ease-out, ease);
 }
 /* The wordmark's letters alternate 3pt up and down in the app; its height is set so the
    letters' cap height lines up with the icon's optical centre. */
 .brandmark-word {
   height: 28px;
   width: auto;
-  transition: height 0.35s var(--ease-out, ease);
 }
-.ob-site header.site.is-condensed .brandmark-icon { width: 34px; height: 34px; }
-.ob-site header.site.is-condensed .brandmark-word { height: 23px; }
+.ob-site header.site .brandmark { transform-origin: 0 50%; transition: transform 0.5s var(--ease-glide, ease); }
+.ob-site header.site.is-condensed .brandmark { transform: scale(0.82); }
 .ob-site header.site .logo { margin-right: auto; }
 .ob-site nav.main {
   display: flex;

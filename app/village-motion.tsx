@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { playFriendMove } from './components/friend-moves';
 
 /**
  * The home page's motion, in the app's own manners: a brick slides, stops
@@ -11,7 +12,11 @@ import { useEffect } from 'react';
  *   unmask, ledger rows slide and stop. Content is only hidden while
  *   `html.js` is set (see app/layout.tsx), so no-JS readers see everything.
  * - Count-up on the number plaques (`[data-count]`).
- * - Hero: the phone tilts toward the pointer, clouds drift at their own rate.
+ * - Hero: the phone tilts toward the pointer, clouds drift at their own rate,
+ *   and the friends peeking round the phone lean toward the pointer and play
+ *   their move when it comes close (a tap on the phone does it on touch).
+ * - Scroll-linked fallback: where CSS has no view timelines, the device stage
+ *   gets its scroll progress as --sp (the hero already has --scroll).
  * - The Journey pins on wide, tall screens and the road runs sideways as you
  *   scroll down. Anywhere else it is a sideways-scrolling strip you can drag.
  * - The closing gate: bricks slide out as it scrolls in (CSS scroll-driven
@@ -135,20 +140,57 @@ export function VillageMotion() {
           let frame = 0;
           let px = 0;
           let py = 0;
+          let cx = Number.NaN;
+          let cy = Number.NaN;
+          /* The friends peeking round the phone look toward the pointer: the
+             nearer it is, the more they lean and edge over. Close enough and
+             they play their move (a few seconds apart, so it stays a treat). */
+          const peekers = Array.from(stage.querySelectorAll<HTMLElement>('[data-peek]'));
+          const lastMove = new Map<HTMLElement, number>();
           const apply = () => {
             frame = 0;
             stage.style.setProperty('--px', px.toFixed(3));
             stage.style.setProperty('--py', py.toFixed(3));
+            // read every box first, then write, so the frame lays out once
+            const boxes = peekers.map((el) => el.getBoundingClientRect());
+            const now = performance.now();
+            peekers.forEach((el, i) => {
+              const b = boxes[i]!;
+              const img = el.firstElementChild as HTMLElement | null;
+              if (!img) return;
+              if (Number.isNaN(cx)) {
+                img.style.removeProperty('--lr');
+                img.style.removeProperty('--lx');
+                img.style.removeProperty('--ly');
+                return;
+              }
+              const dx = cx - (b.left + b.width / 2);
+              const dy = cy - (b.top + b.height / 2);
+              const dist = Math.hypot(dx, dy);
+              const near = Math.max(0, 1 - dist / 520);
+              const side = Math.max(-1, Math.min(1, dx / 220));
+              img.style.setProperty('--lr', `${(side * near * 9).toFixed(2)}deg`);
+              img.style.setProperty('--lx', `${(side * near * 8).toFixed(1)}px`);
+              img.style.setProperty('--ly', `${(-near * near * 6).toFixed(1)}px`);
+              if (dist < Math.max(90, b.width * 0.55) && now - (lastMove.get(el) ?? -1e9) > 3200) {
+                lastMove.set(el, now);
+                playFriendMove(el);
+              }
+            });
           };
           const onMove = (event: PointerEvent) => {
             const r = hero.getBoundingClientRect();
             px = Math.max(-1, Math.min(1, ((event.clientX - r.left) / r.width) * 2 - 1));
             py = Math.max(-1, Math.min(1, ((event.clientY - r.top) / r.height) * 2 - 1));
+            cx = event.clientX;
+            cy = event.clientY;
             if (!frame) frame = window.requestAnimationFrame(apply);
           };
           const onLeave = () => {
             px = 0;
             py = 0;
+            cx = Number.NaN;
+            cy = Number.NaN;
             if (!frame) frame = window.requestAnimationFrame(apply);
           };
           hero.addEventListener('pointermove', onMove);
@@ -159,7 +201,29 @@ export function VillageMotion() {
             if (frame) window.cancelAnimationFrame(frame);
             stage.style.removeProperty('--px');
             stage.style.removeProperty('--py');
+            peekers.forEach((el) => (el.firstElementChild as HTMLElement | null)?.removeAttribute('style'));
           });
+        }
+
+        /* On a touch screen there is no pointer to follow: a tap on the phone
+           plays the move of the peeker nearest to it. */
+        if (stage) {
+          const onTap = (event: PointerEvent) => {
+            if (event.pointerType === 'mouse') return;
+            let best: HTMLElement | null = null;
+            let bestDist = Infinity;
+            for (const el of stage.querySelectorAll<HTMLElement>('[data-peek]')) {
+              const b = el.getBoundingClientRect();
+              const d = Math.hypot(event.clientX - (b.left + b.width / 2), event.clientY - (b.top + b.height / 2));
+              if (d < bestDist) {
+                bestDist = d;
+                best = el;
+              }
+            }
+            playFriendMove(best);
+          };
+          stage.addEventListener('pointerdown', onTap);
+          cleanups.push(() => stage.removeEventListener('pointerdown', onTap));
         }
       }
 
@@ -293,6 +357,45 @@ export function VillageMotion() {
         );
         io.observe(gate);
         cleanups.push(() => io.disconnect());
+      }
+
+      /* ---------------- scroll-linked fallback ----------------
+         Where CSS has no view timelines, give the device stage its progress
+         through the viewport (--sp, 0 as its top enters, 1 as its bottom
+         leaves) while it is on screen; home.css draws the rise from it. */
+      const scrubbed = Array.from(root.querySelectorAll<HTMLElement>('.device-stage'));
+      if (scrubbed.length && !still && !scrollDriven && 'IntersectionObserver' in window) {
+        const visible = new Set<HTMLElement>();
+        let frame = 0;
+        const paint = () => {
+          frame = 0;
+          const vh = window.innerHeight;
+          const tops = scrubbed.map((el) => el.getBoundingClientRect());
+          scrubbed.forEach((el, i) => {
+            const r = tops[i]!;
+            const sp = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+            el.style.setProperty('--sp', sp.toFixed(3));
+          });
+        };
+        const onScroll = () => {
+          if (!frame && visible.size) frame = window.requestAnimationFrame(paint);
+        };
+        const io = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) visible.add(entry.target as HTMLElement);
+            else visible.delete(entry.target as HTMLElement);
+          }
+          onScroll();
+        });
+        scrubbed.forEach((el) => io.observe(el));
+        paint();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        cleanups.push(() => {
+          io.disconnect();
+          window.removeEventListener('scroll', onScroll);
+          if (frame) window.cancelAnimationFrame(frame);
+          scrubbed.forEach((el) => el.style.removeProperty('--sp'));
+        });
       }
     };
 

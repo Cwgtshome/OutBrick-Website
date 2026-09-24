@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react';
 import type { Friend } from '../../lib/villages';
+import { playFriendMove } from './friend-moves';
 
 type Vars = CSSProperties & Record<`--${string}`, string | number>;
 
@@ -11,14 +12,17 @@ const plinthHeights = [18, 34, 24, 46, 16, 30, 40, 22, 28];
 const plinthFeet = ['#8e1c18', '#b8780a', '#087e84', '#4a35b0', '#1d4fa6', '#1f7f2a', '#b85a10', '#b0367e', '#087e84'];
 
 /**
- * The nine friends on a brick shelf. Pointing at one (hover, focus or a tap)
- * makes it hop and puts its line in the speech bubble, whose tail slides over
- * to whoever is talking. The whole shelf leans a little toward the pointer.
+ * The nine friends on a brick shelf. Pointing at one (hover, keyboard focus
+ * or a tap) plays that friend's own move — Bloo's jump-turn, Vio's groove at
+ * 112 bpm, Poppy's pirouette in a cloud of stars (styles/friend-moves.css) —
+ * and puts its line in the speech bubble, whose tail slides over to whoever
+ * is talking. Each friend breathes at its own pace in between, and the whole
+ * shelf leans a little toward the pointer.
  *
  * Without script every line is printed in the bubble as a list, so nothing
  * here is only reachable by interacting. Each button is described by its own
- * line for assistive tech. Under Reduce Motion nothing hops or leans; the
- * bubble still changes.
+ * line for assistive tech. Under Reduce Motion nothing moves or leans; the
+ * bubble and the raised plinth still change.
  */
 /** The words around the shelf, in the page's language (lib/i18n/home.ts). */
 export type HomeCastCopy = { eyebrow: string; title: string; lede: string; meet: string };
@@ -34,9 +38,9 @@ export function HomeCast({
   meetHrefLang?: string;
 }) {
   const [active, setActive] = useState(0);
-  const [hopping, setHopping] = useState<number | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const bodyRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const bubbleRef = useRef<HTMLDivElement>(null);
   const [place, setPlace] = useState<{ x: string; tail: string }>({ x: '0px', tail: '48px' });
   const reduced = useRef(false);
@@ -73,12 +77,9 @@ export function HomeCast({
     return () => window.removeEventListener('resize', placeTail);
   }, [placeTail]);
 
-  const pick = (index: number, hop = true) => {
+  const pick = (index: number) => {
     setActive(index);
-    if (hop && !reduced.current) {
-      setHopping(null);
-      window.requestAnimationFrame(() => setHopping(index));
-    }
+    if (!reduced.current) playFriendMove(bodyRefs.current[index]);
   };
 
   const lean = (event: ReactPointerEvent<HTMLUListElement>) => {
@@ -100,7 +101,7 @@ export function HomeCast({
       <div className="cast-head">
         <div>
           <p className="eyebrow"><span className="idx">03</span>{copy.eyebrow}</p>
-          <h2>{copy.title}</h2>
+          <h2 data-reveal="mask"><span className="mask-line">{copy.title}</span></h2>
         </div>
         <div>
         <p className="lede">
@@ -127,32 +128,48 @@ export function HomeCast({
           {friends.map((friend, index) => (
             <li
               key={friend.slug}
-              style={{ '--i': index, '--b': plinthColours[index], '--foot': plinthFeet[index], '--h': `${plinthHeights[index]}px` } as Vars}
+              style={
+                {
+                  '--i': index,
+                  '--b': plinthColours[index],
+                  '--foot': plinthFeet[index],
+                  '--h': `${plinthHeights[index]}px`,
+                  '--hs': ((plinthHeights[index]! + 10) / plinthHeights[index]!).toFixed(3),
+                } as Vars
+              }
             >
               <button
                 type="button"
                 ref={(el) => {
                   buttonRefs.current[index] = el;
                 }}
-                className={`friend-btn ${hopping === index ? 'hop' : ''}`}
+                className="friend-btn"
                 aria-pressed={index === active}
                 aria-describedby={`line-${friend.slug}`}
                 onPointerEnter={(event) => {
-                  if (event.pointerType === 'mouse' && index !== active) pick(index);
+                  if (event.pointerType === 'mouse') pick(index);
                 }}
-                onFocus={() => pick(index, false)}
+                onFocus={() => pick(index)}
                 onClick={() => pick(index)}
-                onAnimationEnd={() => setHopping(null)}
               >
-                <span className="friend-body">
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    src={`/assets/friends/${friend.slug}.webp`}
-                    width={180}
-                    height={180}
-                    alt=""
-                  />
+                <span
+                  className="friend-body"
+                  data-friend-move={friend.slug}
+                  ref={(el) => {
+                    bodyRefs.current[index] = el;
+                  }}
+                >
+                  <span className="fm-actor">
+                    <img
+                      className="fm-idle"
+                      loading="lazy"
+                      decoding="async"
+                      src={`/assets/friends/${friend.slug}.webp`}
+                      width={180}
+                      height={180}
+                      alt=""
+                    />
+                  </span>
                 </span>
                 <span className="friend-name">{friend.name}</span>
               </button>

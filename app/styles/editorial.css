@@ -1258,7 +1258,6 @@
   color: var(--ed-title);
 }
 .ed-roster a:hover .plinth { transform: translateY(-3px); box-shadow: 0 8px 0 var(--c-foot); }
-.ed-roster a:hover img { transform: translateY(-4px) rotate(-3deg); }
 
 .ed-story-trio { display: grid; gap: clamp(28px, 4vw, 44px); margin-top: clamp(36px, 4vw, 56px); }
 .ed-storycard {
@@ -1286,7 +1285,8 @@
   width: 62%;
   right: 0;
   bottom: -6%;
-  filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.35));
+  --fm-filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.35));
+  filter: var(--fm-filter);
 }
 .ed-storycard h3 { font-size: clamp(2rem, 1.3rem + 2.6vw, 3.6rem); line-height: 0.98; }
 .ed-storycard h3 a { text-decoration: none; }
@@ -1403,7 +1403,7 @@
 }
 .ed-mstage .ed-studs { left: 30px; top: -10px; gap: 14px; }
 .ed-mstage .ed-studs i { width: 30px; height: 16px; }
-.ed-mstage img.friend { width: 74%; margin-bottom: -4%; filter: drop-shadow(0 14px 14px rgba(0, 0, 0, 0.3)); }
+.ed-mstage img.friend { width: 74%; margin-bottom: -4%; --fm-filter: drop-shadow(0 14px 14px rgba(0, 0, 0, 0.3)); filter: var(--fm-filter); }
 .ed-mstage .ed-bubble { position: absolute; top: 9%; left: 7%; }
 .ed-mfacts { margin-top: 32px; }
 
@@ -1422,7 +1422,8 @@
   width: 58%;
   right: -22%;
   bottom: 12%;
-  filter: drop-shadow(0 10px 10px rgba(30, 20, 60, 0.35));
+  --fm-filter: drop-shadow(0 10px 10px rgba(30, 20, 60, 0.35));
+  filter: var(--fm-filter);
 }
 .ed-chapter-art figcaption { margin-top: 16px; font-size: 0.85rem; color: var(--ed-on-paper-2); text-align: center; }
 .ed-chapter .n { display: inline-grid; place-items: center; min-width: 56px; height: 40px; padding: 0 12px; border-radius: 10px; background: var(--c); color: var(--c-ink); box-shadow: 0 4px 0 var(--c-foot); font-family: var(--ed-display); font-weight: 600; font-size: 1.1rem; }
