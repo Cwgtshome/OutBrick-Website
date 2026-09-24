@@ -36,17 +36,38 @@ for (const [label, type, options] of targets) {
       await page.evaluate(() => window.scrollBy(0, 500));
       await page.waitForTimeout(40);
     }
-    await page.waitForTimeout(700);
+    // Let reveals finish rather than sampling at a fixed moment: a staggered fade that has only
+    // just started on a slow machine is not text that never appears. Endless idle loops (the
+    // friends' bob, clouds) never finish, so only finite animations and transitions are awaited.
+    await page.evaluate(() =>
+      Promise.race([
+        Promise.all(
+          document
+            .getAnimations()
+            .filter((a) => Number.isFinite(a.effect?.getComputedTiming().endTime ?? Infinity))
+            .map((a) => a.finished.catch(() => undefined)),
+        ),
+        new Promise((resolve) => setTimeout(resolve, 4000)),
+      ]),
+    );
+    await page.waitForTimeout(150);
     const state = await page.evaluate(() => ({
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      invisible: [...document.querySelectorAll('h1, h2, h3, p')].filter((el) => {
-        const box = el.getBoundingClientRect();
-        return box.height > 0 && box.top < innerHeight * 0.9 && box.bottom > 0 && Number(getComputedStyle(el).opacity) < 0.1;
-      }).length,
+      invisible: [...document.querySelectorAll('h1, h2, h3, p')]
+        .filter((el) => {
+          const box = el.getBoundingClientRect();
+          return box.height > 0 && box.top < innerHeight * 0.9 && box.bottom > 0 && Number(getComputedStyle(el).opacity) < 0.1;
+        })
+        .map((el) => {
+          // Say whether the reveal ever ran, which separates "slow" from "never revealed".
+          const host = el.closest('[data-reveal]');
+          const reveal = host ? ` reveal=${host.classList.contains('in') ? 'in' : 'never'}` : '';
+          return `<${el.tagName.toLowerCase()} class="${el.className}"> "${(el.textContent ?? '').trim().slice(0, 40)}"${reveal}`;
+        }),
     }));
     if (errors.length) fail(`${label} ${path}`, errors.join(' | '));
     if (state.overflow > 1) fail(`${label} ${path}`, `${state.overflow}px of sideways scroll`);
-    if (state.invisible) fail(`${label} ${path}`, `${state.invisible} text blocks still invisible after scrolling`);
+    if (state.invisible.length) fail(`${label} ${path}`, `text still invisible after scrolling: ${state.invisible.join('; ')}`);
     await page.close();
   }
   await context.close();
