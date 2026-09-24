@@ -23,6 +23,91 @@
 # so a host cannot infer it) and app-ads.txt (plain text — a host answering text/html is the
 # usual reason AdMob verification fails without saying so).
 
+# Alias routes. `app/privacy-policy`, `app/license`, `app/refund`, `app/eula-apple`,
+# `app/accessibility-support` and `app/age-suitability` re-export another page, so each is a
+# second copy of the same content at a second address. They exist because those names were
+# given out (App Store Connect fields, older links), so they have to keep answering — but with
+# a permanent redirect to the one address the footer and the sitemap use.
+#
+# `force = true` because each alias is still prerendered to a real file, and Netlify serves an
+# existing file ahead of a non-forced rule. The `.html` forms are listed too: Netlify serves
+# `/privacy-policy.html` directly otherwise. Trailing slashes (`/privacy-policy/`), the apex
+# domain and plain http are already normalised by Netlify before these rules run.
+#
+# scripts/postbuild.mjs reads these blocks and leaves every 3xx `from` path out of the sitemap,
+# so a new alias only has to be added here.
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/privacy-policy.html"
+  to = "/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/license"
+  to = "/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/license.html"
+  to = "/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/refund"
+  to = "/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/refund.html"
+  to = "/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/eula-apple"
+  to = "/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/eula-apple.html"
+  to = "/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/accessibility-support"
+  to = "/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/accessibility-support.html"
+  to = "/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/age-suitability"
+  to = "/age-rating"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/age-suitability.html"
+  to = "/age-rating"
+  status = 301
+  force = true
+
 # The path form of a challenge link.
 #
 # `BrickoutMessages/Challenge.swift` parses both `/c?lv=<n>` and `/c/<n>`, and

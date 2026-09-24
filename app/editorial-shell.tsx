@@ -1,30 +1,16 @@
 /**
- * The journal side of the domain — about, authors, research, blog, mascots and
- * the press kit — wearing the same brick chrome as the game pages.
+ * The furniture of the editorial side of the domain — the journal, its
+ * articles, the mascots, the press kit, about, authors and research.
  *
- * Only the furniture changed. The body of those routes is still their own
- * markup and their own styles: a redesign of twenty blog posts is a separate
- * job, and they are indexed content, so nothing here deletes or moves them.
- * What this does is stop them reading as a different website — one masthead,
- * one footer, one palette across every page on the domain.
- *
- * `OutBrickLogo` is kept because the article layouts still set it in running
- * text; the masthead no longer uses it.
+ * The masthead and footer are the village site's own (`VillageHeader`,
+ * `VillageFooter`), so every page on the domain wears one chrome. Everything
+ * between them is styled by app/styles/editorial.css under the `.ed` scope;
+ * the small pieces every editorial page shares live here.
  */
 
+import type { ReactNode } from 'react';
 import { editorialNav, VillageFooter, VillageHeader } from './village-shell';
-
-export function OutBrickLogo({ compact = false }: { compact?: boolean }) {
-  return (
-    <span className={`wordmark ${compact ? 'wordmark-compact' : ''}`} aria-label="OutBrick">
-      {'OUTBRICK'.split('').map((letter, index) => (
-        <span className={`wordmark-letter letter-${index}`} aria-hidden="true" key={`${letter}-${index}`}>
-          {letter}
-        </span>
-      ))}
-    </span>
-  );
-}
+import { APP_STORE_URL } from './store-badge';
 
 const currentHref: Record<string, string> = {
   about: '/about',
@@ -35,13 +21,11 @@ const currentHref: Record<string, string> = {
   'press-kit': '/press-kit',
 };
 
-export function EditorialHeader({
-  current,
-}: {
-  current?: 'about' | 'authors' | 'research' | 'blog' | 'mascots' | 'press-kit';
-}) {
+type Section = 'about' | 'authors' | 'research' | 'blog' | 'mascots' | 'press-kit';
+
+export function EditorialHeader({ current }: { current?: Section }) {
   return (
-    <div className="ob-site">
+    <div className="ob-site ed-chrome">
       <VillageHeader links={editorialNav} current={current ? currentHref[current] : undefined} label="Primary navigation" />
     </div>
   );
@@ -49,8 +33,80 @@ export function EditorialHeader({
 
 export function EditorialFooter() {
   return (
-    <div className="ob-site">
+    <div className="ob-site ed-chrome">
       <VillageFooter />
     </div>
   );
+}
+
+/** The page frame every editorial route renders: skip link, masthead, main, footer. */
+export function EditorialPage({
+  current,
+  tone,
+  className = '',
+  children,
+  before,
+}: {
+  current?: Section;
+  tone?: string;
+  className?: string;
+  children: ReactNode;
+  /** Rendered before the masthead — the reading-progress bar. */
+  before?: ReactNode;
+}) {
+  return (
+    <div className={`ed ${className}`} data-tone={tone}>
+      <a className="ed-skip" href="#main">Skip to content</a>
+      {before}
+      <EditorialHeader current={current} />
+      <main id="main">{children}</main>
+      <EditorialFooter />
+    </div>
+  );
+}
+
+export type Crumb = { href?: string; label: string };
+
+export function Crumbs({ items }: { items: Crumb[] }) {
+  return (
+    <nav className="ed-crumbs" aria-label="Breadcrumb">
+      <ol>
+        {items.map((item, index) =>
+          item.href && index < items.length - 1 ? (
+            <li key={item.label}><a href={item.href}>{item.label}</a></li>
+          ) : (
+            <li key={item.label} aria-current="page">{item.label}</li>
+          ),
+        )}
+      </ol>
+    </nav>
+  );
+}
+
+/** A running-bond course: the divider between two bands. */
+export function Bond({ thin = false }: { thin?: boolean }) {
+  return <div className={`ed-bond ${thin ? 'thin' : ''}`} aria-hidden="true" />;
+}
+
+/** Studs along the exposed top of a slab. */
+export function Studs({ count = 3 }: { count?: number }) {
+  return (
+    <span className="ed-studs" aria-hidden="true">
+      {Array.from({ length: count }, (_, index) => <i key={index} />)}
+    </span>
+  );
+}
+
+/** Apple's own badge artwork, at a size the guidelines allow. */
+export function Badge() {
+  return (
+    <a className="ed-badge" href={APP_STORE_URL} aria-label="Download OutBrick on the App Store">
+      <img src="/assets/badge/appstore-black.svg" alt="Download on the App Store" width={132} height={44} />
+    </a>
+  );
+}
+
+/** Serialise JSON-LD. `<` is escaped so a string can never close the script. */
+export function JsonLd({ data }: { data: object }) {
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, '\\u003c') }} />;
 }

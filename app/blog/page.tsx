@@ -1,116 +1,223 @@
 import type { Metadata } from 'next';
-import { EditorialFooter, EditorialHeader } from '../editorial-shell';
-import { ArrowUpRight, BookOpen, ChevronRight, Clock3, Sparkles } from 'lucide-react';
-import { articles, authors, getAuthor, type BlogArticle } from '../../lib/blog';
+import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../editorial-shell';
+import { articles, authors, getAuthor } from '../../lib/blog';
+import { siteUrl } from '../../lib/site';
+import { categorySlug, StoryCard, StoryRow } from './journal-kit';
+
+const title = 'The OutBrick Journal';
+const description =
+  'Essays from the makers of OutBrick on puzzle design, player habits, accessibility and the games that shaped the genre, with every research claim cited.';
 
 export const metadata: Metadata = {
-  title: 'The OutBrick Journal',
-  description: 'Thoughtful notes on OutBrick, puzzle design, gaming habits, accessibility, and the success stories that keep small games moving.',
+  title: { absolute: 'The OutBrick Journal — notes from around the board' },
+  description,
   alternates: { canonical: '/blog' },
   openGraph: {
     type: 'website',
-    url: '/blog',
-    title: 'The OutBrick Journal',
-    description: 'Thoughtful notes on OutBrick, puzzle design, gaming habits, accessibility, and the success stories that keep small games moving.',
-    images: [{ url: '/og.png', width: 1400, height: 710, alt: 'OutBrick mascots and home screen' }],
+    url: `${siteUrl}/blog`,
+    siteName: 'OutBrick',
+    title,
+    description,
+    images: [{ url: `${siteUrl}${articles[0]!.image}`, width: 1600, height: 900, alt: articles[0]!.imageAlt }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+    images: [`${siteUrl}${articles[0]!.image}`],
   },
 };
 
-
-
-function ArticleCard({ article, featured = false, anchorId }: { article: BlogArticle; featured?: boolean; anchorId?: string }) {
-  const author = getAuthor(article.authorId);
-  return (
-    <article id={anchorId} className={`blog-card blog-card-${article.categoryColor} ${featured ? 'blog-card-featured' : ''}`}>
-      <a className="blog-card-image" href={`/blog/${article.slug}`} aria-label={`Read ${article.title}`}>
-        <img src={article.image} alt={article.imageAlt} title={article.title} loading={featured ? 'eager' : 'lazy'} />
-        <span className="blog-card-image-label"><BookOpen size={14} /> {article.category}</span>
-      </a>
-      <div className="blog-card-body">
-        <div className="blog-card-meta"><span>{article.category}</span><span><Clock3 size={13} /> {article.readingTime}</span></div>
-        <h2><a href={`/blog/${article.slug}`}>{article.title}</a></h2>
-        <p>{article.dek}</p>
-        <div className="blog-card-bottom"><span className="blog-author-mini"><span className="blog-avatar blog-avatar-small">{author.initials}</span>{author.name}</span><a className="blog-read-link" href={`/blog/${article.slug}`}>Read story <ChevronRight size={16} /></a></div>
-      </div>
-    </article>
-  );
-}
+/** Shelf order and a one-line description of each category. */
+const shelves: { category: string; note: string }[] = [
+  { category: 'Player habits', note: 'How play fits a real day: sleep, attention, rituals and the decision to stop.' },
+  { category: 'Success stories', note: 'Games that made the medium feel larger, read from their own records.' },
+  { category: 'Game craft', note: 'Rules, friction and difficulty, from the bench.' },
+  { category: 'Inclusive design', note: 'Widening the route into a challenge without shrinking the challenge.' },
+  { category: 'Learning through play', note: 'Curiosity before explanation.' },
+  { category: 'Social play', note: 'Shared time, even when players are apart.' },
+  { category: 'OutBrick practice', note: 'Notes on how the game itself is made.' },
+];
 
 export default function BlogPage() {
-  const featured = articles[0]!;
-  const remaining = articles.slice(1);
-  const categories = Array.from(new Set(articles.map((article) => article.category)));
-  const categoryAnchor = (category: string) => `category-${category.toLowerCase().replaceAll(' ', '-')}`;
-  const firstArticleByCategory = new Map(categories.map((category) => [category, articles.find((article) => article.category === category)?.slug]));
+  const [featured, second, third] = articles as [typeof articles[0], typeof articles[0], typeof articles[0]];
+  const pinned = new Set([featured.slug, second.slug, third.slug]);
+  const featuredAuthor = getAuthor(featured.authorId);
+  const counts = new Map(shelves.map(({ category }) => [category, articles.filter((a) => a.category === category).length]));
 
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: 'The OutBrick Journal',
-    description: metadata.description,
-    url: 'https://www.outbrick.site/blog',
-    isPartOf: { '@type': 'WebSite', name: 'OutBrick', url: 'https://www.outbrick.site' },
-    mainEntity: {
-      '@type': 'ItemList',
-      itemListElement: articles.map((article, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        url: `https://www.outbrick.site/blog/${article.slug}`,
-        name: article.title,
-      })),
-    },
+    '@type': 'Blog',
+    '@id': `${siteUrl}/blog#blog`,
+    name: title,
+    description,
+    url: `${siteUrl}/blog`,
+    inLanguage: 'en',
+    isPartOf: { '@id': `${siteUrl}/#website` },
+    publisher: { '@type': 'Organization', name: 'OutBrick', url: siteUrl, logo: { '@type': 'ImageObject', url: `${siteUrl}/icon.png`, width: 1024, height: 1024 } },
+    blogPost: articles.map((article) => ({
+      '@type': 'BlogPosting',
+      headline: article.title,
+      url: `${siteUrl}/blog/${article.slug}`,
+      image: `${siteUrl}${article.image}`,
+      author: { '@type': getAuthor(article.authorId).id === 'mourad-hamdi' ? 'Person' : 'Organization', name: getAuthor(article.authorId).name },
+    })),
+  };
+  const breadcrumbData = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Journal', item: `${siteUrl}/blog` },
+    ],
   };
 
+  // Stories are numbered continuously down the shelves.
+  const shelved = shelves.flatMap(({ category }) => articles.filter((a) => a.category === category && !pinned.has(a.slug)));
+  const numberOf = new Map(shelved.map((article, index) => [article.slug, index + 1]));
+
   return (
-    <div className="blog-site">
-      <div className="site-grain" aria-hidden="true" />
-      <EditorialHeader current="blog" />
-      <main>
-        <section className="blog-landing-hero" aria-labelledby="journal-title">
-          <div className="blog-hero-copy">
-            <div className="eyebrow"><span className="eyebrow-dot" /> The OutBrick journal</div>
-            <h1 id="journal-title">Play has more <span>than one shape.</span></h1>
-            <p>Notes from the space around the board: how games fit into real lives, why tiny rules can carry a whole world, and what we are learning while we make OutBrick.</p>
-            <div className="blog-hero-actions"><a className="nav-cta" href="#stories">Read the latest <ArrowUpRight size={15} /></a><a className="blog-text-link" href="/#apple">Back to the game <ArrowUpRight size={15} /></a></div>
-            <div className="blog-hero-proof"><span><Sparkles size={15} /> 20 original essays</span><span><BookOpen size={15} /> Research + craft</span><span>Updated September 2026</span></div>
+    <EditorialPage current="blog" className="ed-journal">
+      {/* ---------------- masthead ---------------- */}
+      <header className="ed-band-ink ed-mast">
+        <div className="ed-wrap">
+          <div className="ed-mast-top">
+            <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Journal' }]} />
+            <p className="ed-meta">{articles.length} stories · Updated {featured.updatedAt.replace(/ \d+,/, '')}</p>
           </div>
-          <div className="blog-hero-card">
-            <div className="blog-hero-card-topline"><span>FEATURED NOTE</span><span>01 / 20</span></div>
-            <img src={featured.image} alt={featured.imageAlt} title={featured.title} />
-            <div className="blog-hero-card-caption"><span className="blog-kicker">{featured.category}</span><strong>{featured.title}</strong><span>{featured.readingTime} · {getAuthor(featured.authorId).name}</span></div>
+          <div className="ed-mast-grid">
+            <div>
+              <p className="ed-label">The OutBrick Journal</p>
+              <h1 className="ed-display" style={{ marginTop: 18 }}>Notes from around the <em>board.</em></h1>
+              <p className="ed-lede">
+                How games fit into real lives, why a tiny rule can carry a whole world, and what we are
+                learning while we build a puzzle out of brick. Every research claim links to its source.
+              </p>
+            </div>
+            <div className="ed-postcards" aria-hidden="true">
+              <figure className="ed-capture"><img src="/assets/villages/autumn-orchard.jpg" alt="" width={239} height={520} decoding="async" /></figure>
+              <figure className="ed-capture"><img src="/assets/villages/garden-city.jpg" alt="" width={239} height={520} decoding="async" /></figure>
+              <figure className="ed-capture"><img src="/assets/villages/snowflake-village.jpg" alt="" width={239} height={520} decoding="async" /></figure>
+              <img className="ed-friend" src="/assets/friends/sprout.webp" alt="" width={360} height={360} decoding="async" />
+            </div>
           </div>
-        </section>
+          <nav className="ed-rail" aria-label="Journal categories">
+            {shelves.map(({ category }) => {
+              const tone = articles.find((a) => a.category === category)?.categoryColor;
+              return (
+                <a key={category} className="ed-chip" data-tone={tone} href={`#${categorySlug(category)}`}>
+                  {category} <b>{counts.get(category)}</b>
+                </a>
+              );
+            })}
+          </nav>
+        </div>
+        <Bond />
+      </header>
 
-        <section className="blog-filter-row" aria-label="Journal categories">
-          <span className="blog-filter-label">Browse by</span>
-          {categories.map((category) => <a key={category} href={`#${categoryAnchor(category)}`}>{category}</a>)}
-        </section>
-
-        <section id="stories" className="blog-stories section-block" aria-labelledby="stories-title">
-          <div className="blog-section-heading section-heading-split">
-            <div><div className="eyebrow"><span className="eyebrow-dot" /> The reading shelf</div><h2 id="stories-title">Small games.<br /><span>Big questions.</span></h2></div>
-            <p>Every story starts with OutBrick, then follows the thread somewhere useful: a player habit, a design decision, or a game that made the medium feel larger.</p>
+      {/* ---------------- this issue ---------------- */}
+      <section className="ed-band-paper ed-band" aria-labelledby="lead-title">
+        <div className="ed-wrap">
+          <p className="ed-label">Lead story</p>
+          <div className="ed-feature" data-tone={featured.categoryColor} style={{ marginTop: 26 }}>
+            <div className="ed-feature-copy ed-reveal">
+              <span className="ed-chip">{featured.category}</span>
+              <h2 id="lead-title"><a href={`/blog/${featured.slug}`}>{featured.title}</a></h2>
+              <p className="ed-lede">{featured.dek}</p>
+              <div className="ed-byline">
+                <a className="ed-avatar" href={`/authors/${featuredAuthor.id}`} aria-hidden="true" tabIndex={-1}>{featuredAuthor.initials}</a>
+                <span className="ed-byline-text">
+                  <b><a href={`/authors/${featuredAuthor.id}`}>{featuredAuthor.name}</a></b>
+                  <span>{featured.readingTime} · {featured.publishedAt}</span>
+                </span>
+              </div>
+              <div className="ed-actions" style={{ marginTop: 30 }}>
+                <a className="ed-btn" href={`/blog/${featured.slug}`}>Read the story</a>
+              </div>
+            </div>
+            <div className="ed-feature-art ed-reveal">
+              <figure className="ed-frame">
+                <img src={featured.image} alt={featured.imageAlt} width={1600} height={900} decoding="async" fetchPriority="high" />
+                <figcaption>Journal illustration</figcaption>
+              </figure>
+              <img className="ed-friend" src="/assets/friends/bloo.webp" alt="" width={360} height={360} loading="lazy" decoding="async" />
+            </div>
           </div>
-          <div className="blog-feature-wrap"><ArticleCard article={featured} featured anchorId={firstArticleByCategory.get(featured.category) === featured.slug ? categoryAnchor(featured.category) : undefined} /></div>
-          <div className="blog-grid">
-            {remaining.map((article) => <ArticleCard key={article.slug} article={article} anchorId={firstArticleByCategory.get(article.category) === article.slug ? categoryAnchor(article.category) : undefined} />)}
+
+          <div className="ed-pair">
+            <div className="ed-reveal"><StoryCard article={second} /></div>
+            <div className="ed-reveal"><StoryCard article={third} /></div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="blog-research-strip" aria-labelledby="research-title">
-          <div className="blog-research-mark"><span>R</span><span>+</span><span>G</span></div>
-          <div><div className="eyebrow"><span className="eyebrow-dot" /> The editorial promise</div><h2 id="research-title">Research-backed, readable, and honest about the limits.</h2></div>
-          <p>We link out to peer-reviewed work, MIT, Harvard, accessibility guidance, and first-party game histories. The point is not to decorate a claim with a citation; it is to show what the evidence can—and cannot—say.</p>
-          <a className="blog-text-link" href="/blog/why-two-minute-puzzles-feel-good#references">See the reference trail <ArrowUpRight size={15} /></a>
-        </section>
+      {/* ---------------- the shelves ---------------- */}
+      <section className="ed-band-ink ed-band" aria-labelledby="shelves-title">
+        <div className="ed-wrap">
+          <p className="ed-label">The shelves</p>
+          <h2 id="shelves-title" className="ed-h2" style={{ marginTop: 14, maxWidth: '18ch' }}>Everything else, sorted by colour.</h2>
+          <div className="ed-shelves" style={{ marginTop: 'clamp(40px, 5vw, 64px)' }}>
+            {shelves.map(({ category, note }) => {
+              const onShelf = articles.filter((a) => a.category === category && !pinned.has(a.slug));
+              const tone = articles.find((a) => a.category === category)?.categoryColor;
+              if (!onShelf.length) return null;
+              return (
+                <section key={category} id={categorySlug(category)} data-tone={tone} aria-labelledby={`${categorySlug(category)}-title`} style={{ scrollMarginTop: 90 }}>
+                  <div className="ed-shelf-head">
+                    <span className="ed-slab" aria-hidden="true"><Studs count={2} /></span>
+                    <h2 id={`${categorySlug(category)}-title`}>{category}</h2>
+                    <p>{note}</p>
+                  </div>
+                  <div className="ed-shelf-rule" aria-hidden="true" />
+                  <ol className="ed-rows">
+                    {onShelf.map((article) => <StoryRow key={article.slug} article={article} n={numberOf.get(article.slug)!} />)}
+                  </ol>
+                </section>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
-        <section className="blog-authors section-block" aria-labelledby="authors-title">
-          <div className="blog-section-heading section-heading-split"><div><div className="eyebrow"><span className="eyebrow-dot" /> By the people behind the bricks</div><h2 id="authors-title">Meet the <span>voices.</span></h2></div><p>OutBrick is a small studio, so the journal stays close to the work. Design notes come from the maker; research notes are edited for clarity and care.</p></div>
-          <div className="blog-author-grid">{authors.map((author) => <a className="blog-author-card" href={`/authors/${author.id}`} key={author.id}><span className="blog-avatar" title={`${author.name} avatar`}>{author.initials}</span><div><h3>{author.name}</h3><span>{author.role}</span><p>{author.bio}</p><span className="blog-text-link">View author page <ArrowUpRight size={14} /></span></div></a>)}</div>
-        </section>
-      </main>
-      <EditorialFooter />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-    </div>
+      {/* ---------------- colophon ---------------- */}
+      <section className="ed-band-cream ed-band" aria-labelledby="colophon-title">
+        <div className="ed-wrap ed-colophon">
+          <div>
+            <p className="ed-label">How we write</p>
+            <h2 id="colophon-title" className="ed-h2" style={{ marginTop: 14 }}>Cited, and honest about the limits.</h2>
+            <div className="ed-prose" style={{ marginTop: 22 }}>
+              <p>
+                We link to peer-reviewed papers, university research, accessibility standards and each
+                studio’s own history. A company’s account stays labelled as a company’s account, and a
+                small sample stays a small sample.
+              </p>
+              <p>
+                When a story mentions OutBrick, it describes the game as it ships today: lives and
+                opt-in rewarded videos included, clocks not.
+              </p>
+              <a className="ed-link" href="/research">Read the research method</a>
+            </div>
+          </div>
+          <div>
+            <p className="ed-label">Who writes it</p>
+            <div className="ed-people">
+              {authors.map((author) => (
+                <a className="ed-person ed-lift" href={`/authors/${author.id}`} key={author.id}>
+                  <span className="ed-avatar" aria-hidden="true">{author.initials}</span>
+                  <div>
+                    <h3>{author.name}</h3>
+                    <p className="ed-meta">{author.role}</p>
+                    <p>{author.bio}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <JsonLd data={structuredData} />
+      <JsonLd data={breadcrumbData} />
+    </EditorialPage>
   );
 }

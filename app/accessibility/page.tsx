@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { Handoff, LegalPage, Pills } from '../legal-page';
 
-export const metadata: Metadata = {
-  title: 'Accessibility support',
-  description: 'Accessibility features and support contacts for the OutBrick game.',
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/accessibility',
+  title: 'Accessibility: colour-blind glyphs, VoiceOver, Reduce Motion',
+  description:
+    'How OutBrick plays with VoiceOver, colour-blind glyphs on by default, Larger Text and Reduce Motion — and how to get accessibility help.',
+});
 
 export default function AccessibilityPage() {
   return (
@@ -26,7 +29,7 @@ export default function AccessibilityPage() {
       <section className="brick">
         <h2>Current support</h2>
         <ul className="points">
-          <li><b>Colour-blind mode:</b> turn on Colour-blind in Settings. Bricks and gates gain readable symbols in addition to colour.</li>
+          <li><b>Colour-blind mode:</b> on by default. Bricks and gates carry readable symbols in addition to colour, and the mode can be switched off in Settings.</li>
           <li><b>Reduce Motion:</b> OutBrick respects the system Reduce Motion setting by reducing parallax, confetti, and spring-heavy transitions.</li>
           <li><b>VoiceOver labels:</b> primary controls, profile controls, Game Center, Undo, Pause, Close, and important game status elements expose descriptive labels.</li>
           <li><b>Comfort controls:</b> sound, music, haptics, and notifications can be switched off in Settings.</li>

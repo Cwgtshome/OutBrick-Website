@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { LegalPage, Pills } from '../legal-page';
 
-export const metadata: Metadata = {
-  title: 'Age rating',
-  description: 'Why OutBrick is suitable for a 4+ audience and what features are included in the game.',
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/age-rating',
+  title: 'Age rating: why OutBrick is rated 4+',
+  description:
+    'Why OutBrick is suitable for a 4+ audience and what features are included in the game.',
+});
 
 export default function AgeRatingPage() {
   return (

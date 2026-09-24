@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { LegalPage, Pills } from '../legal-page';
 
-export const metadata: Metadata = {
-  title: 'Privacy choices',
-  description: 'Manage local OutBrick data, Apple services, purchases, and privacy questions.',
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/privacy-choices',
+  title: 'Your OutBrick privacy choices',
+  description:
+    'Manage OutBrick data on your device, Apple services, purchases and advertising choices, and find out who to ask about privacy.',
+});
 
 export default function PrivacyChoicesPage() {
   return (

@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { LegalPage, Pills } from '../legal-page';
 import { facePrivacy } from '../../lib/face-privacy';
 
-export const metadata: Metadata = {
-  title: 'Privacy policy',
+export const metadata: Metadata = pageMetadata({
+  path: '/privacy',
+  title: 'OutBrick privacy policy',
   description:
     'The OutBrick privacy policy: no accounts and no analytics, what the rewarded-ad SDK collects, and how to change your advertising choices.',
-};
+});
 
 export default function PrivacyPage() {
   return (

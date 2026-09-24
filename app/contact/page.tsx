@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { LegalPage } from '../legal-page';
 import { ContactForm } from './contact-form';
 
-export const metadata: Metadata = {
-  title: 'Contact OutBrick',
+export const metadata: Metadata = pageMetadata({
+  path: '/contact',
+  title: 'Contact the OutBrick team',
   description:
     'Contact the OutBrick team for game support, accessibility help, privacy questions, and purchase troubleshooting.',
-};
+});
 
 export default function ContactPage() {
   return (
