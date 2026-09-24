@@ -10,7 +10,7 @@
 
 import type { ReactNode } from 'react';
 import { chromeCopy } from '../lib/i18n/chrome';
-import { localePath, type TranslatedLocale } from '../lib/i18n/locales';
+import { localePath, type Locale, type TranslatedLocale } from '../lib/i18n/locales';
 import { editorialNav, editorialNavFor, localeStoreUrl, VillageFooter, VillageHeader } from './village-shell';
 import { appStoreUrl } from './store-badge';
 
@@ -54,10 +54,10 @@ function TranslatedEditorialHeader({ locale, current }: { locale: TranslatedLoca
   );
 }
 
-export function EditorialFooter() {
+export function EditorialFooter({ languages }: { languages?: Partial<Record<Locale, string>> } = {}) {
   return (
     <div className="ob-site ed-chrome">
-      <VillageFooter />
+      <VillageFooter languages={languages} />
     </div>
   );
 }
@@ -70,6 +70,7 @@ export function EditorialPage({
   children,
   before,
   locale,
+  languages,
 }: {
   current?: Section;
   tone?: string;
@@ -79,6 +80,8 @@ export function EditorialPage({
   before?: ReactNode;
   /** Set on the translated journal pages: skip link, masthead and footer in that language. */
   locale?: TranslatedLocale;
+  /** The page's own versions in other languages, for the footer's language picker. */
+  languages?: Partial<Record<Locale, string>>;
 }) {
   if (locale) {
     return (
@@ -88,7 +91,7 @@ export function EditorialPage({
         <TranslatedEditorialHeader locale={locale} current={current} />
         <main id="main">{children}</main>
         <div className="ob-site ed-chrome">
-          <VillageFooter locale={locale} />
+          <VillageFooter locale={locale} languages={languages} />
         </div>
       </div>
     );
@@ -99,7 +102,7 @@ export function EditorialPage({
       {before}
       <EditorialHeader current={current} />
       <main id="main">{children}</main>
-      <EditorialFooter />
+      <EditorialFooter languages={languages} />
     </div>
   );
 }

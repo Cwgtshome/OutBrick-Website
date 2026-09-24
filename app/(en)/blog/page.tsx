@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
+import { locales } from '../../../lib/i18n/locales';
 import { articles, authors, getAuthor } from '../../../lib/blog';
-import { journalLanguages } from '../../../lib/i18n/blog';
+import { journalLanguages, journalPath } from '../../../lib/i18n/blog';
 import { siteUrl } from '../../../lib/site';
 import { byNewest, categoryPath, getShelves, startHere } from '../../../lib/journal';
 import { categorySlug, FollowJournal, StoryCard, StoryRow } from './journal-kit';
@@ -79,7 +80,7 @@ export default function BlogPage() {
   const orderOf = new Map(shelves.flatMap((shelf) => shelf.articles).map((article, index) => [article.slug, index]));
 
   return (
-    <EditorialPage current="blog" className="ed-journal">
+    <EditorialPage current="blog" className="ed-journal" languages={Object.fromEntries(locales.map((l) => [l, journalPath(l)]))}>
       {/* ---------------- masthead ---------------- */}
       <header className="ed-band-ink ed-mast">
         <div className="ed-wrap">

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { guidePath, guideUrl, journalLanguages, journalPath, journalUi, localizeArticle, translatedGuideSlugs } from '../../../lib/i18n/blog';
-import { isTranslatedLocale, localePath, ogLocales, translatedLocales, type TranslatedLocale } from '../../../lib/i18n/locales';
+import { isTranslatedLocale, localePath, locales, ogLocales, translatedLocales, type TranslatedLocale } from '../../../lib/i18n/locales';
 import { siteUrl } from '../../../lib/site';
 import { authorByline, breadcrumbNode, graph, ids, isoDateTime, ref, webPageNode } from '../../../lib/structured-data';
 import { StoryRow } from '../../(en)/blog/journal-kit';
@@ -96,7 +96,7 @@ function JournalIndex({ locale }: { locale: TranslatedLocale }) {
   );
 
   return (
-    <EditorialPage current="blog" className="ed-journal" locale={locale}>
+    <EditorialPage current="blog" className="ed-journal" locale={locale} languages={Object.fromEntries(locales.map((l) => [l, journalPath(l)]))}>
       <header className="ed-band-ink ed-mast">
         <div className="ed-wrap">
           <div className="ed-mast-top">

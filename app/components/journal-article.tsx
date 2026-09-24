@@ -268,6 +268,7 @@ export function ArticleView({
       className="ed-article"
       before={<div className="ed-progress" aria-hidden="true"><i /></div>}
       locale={tr}
+      languages={isTranslatedGuide(english.slug) ? Object.fromEntries(locales.map((l) => [l, guidePath(l, english.slug)])) : undefined}
     >
       <article>
         {/* ---------------- header ---------------- */}
