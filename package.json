@@ -21,6 +21,7 @@
     "bing": "node scripts/bing-webmaster.mjs",
     "verify:refs": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/verify-references.mjs",
     "check:links": "node scripts/check-links.mjs",
+    "check:responsive": "node scripts/check-responsive.mjs",
     "covers": "python3 scripts/make-cover.py"
   },
   "dependencies": {
