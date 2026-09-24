@@ -2,6 +2,7 @@
 //
 //   sitemap.xml — every indexable prerendered page, derived from the build output itself
 //   feed.xml    — RSS 2.0 for the journal, from lib/blog.ts
+//   whats-new/feed.xml — RSS 2.0 for the release notes, from lib/releases.ts
 //   llms.txt    — a plain-Markdown map of the site for AI assistants (llmstxt.org)
 //
 // Why not app/sitemap.ts: with `output: 'export'`, vinext compiles metadata routes into the
@@ -17,6 +18,7 @@ import path from 'node:path';
 import { decodeEntities, distDir, indexablePages, metaContent, repoRoot, siteUrl, xmlEscape } from './lib/pages.mjs';
 
 const { articles, authors } = await import('../lib/blog.ts');
+const { releases, releaseAnchor } = await import('../lib/releases.ts');
 
 // ---------------------------------------------------------------------------------------
 // Dates
@@ -244,6 +246,54 @@ fs.writeFileSync(path.join(distDir, 'feed.xml'), feed);
 console.log(`[postbuild] feed.xml: ${items.length} items`);
 
 // ---------------------------------------------------------------------------------------
+// RSS 2.0 feed of the release notes: /whats-new/feed.xml, from lib/releases.ts
+
+const releaseHtml = (r) =>
+  r.sections
+    .map((s) => `<h3>${xmlEscape(s.title)}</h3>${s.intro ? `<p>${xmlEscape(s.intro)}</p>` : ''}<ul>${s.bullets.map((b) => `<li>${xmlEscape(b)}</li>`).join('')}</ul>`)
+    .join('');
+
+const releaseItems = [...releases]
+  .sort((a, b) => b.date.localeCompare(a.date))
+  .map((r) => {
+    const url = `${siteUrl}/whats-new#${releaseAnchor(r.version)}`;
+    return [
+      '    <item>',
+      `      <title>${xmlEscape(`OutBrick ${r.version}: ${r.headline}`)}</title>`,
+      `      <link>${url}</link>`,
+      `      <guid isPermaLink="true">${url}</guid>`,
+      `      <pubDate>${rfc822(r.date)}</pubDate>`,
+      `      <description>${xmlEscape(`<p>${xmlEscape(r.headline)}</p>${releaseHtml(r)}`)}</description>`,
+      '    </item>',
+    ].join('\n');
+  });
+const newestRelease = releases.reduce((max, r) => (r.date > max ? r.date : max), '1970-01-01');
+
+const releaseFeed = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
+  '  <channel>',
+  '    <title>OutBrick release notes</title>',
+  `    <link>${siteUrl}/whats-new</link>`,
+  `    <atom:link href="${siteUrl}/whats-new/feed.xml" rel="self" type="application/rss+xml"/>`,
+  '    <description>What changed in each OutBrick update, as published on the App Store, newest first.</description>',
+  '    <language>en</language>',
+  `    <lastBuildDate>${rfc822(newestRelease)}</lastBuildDate>`,
+  '    <image>',
+  `      <url>${siteUrl}/assets/icon/icon-192.png</url>`,
+  '      <title>OutBrick release notes</title>',
+  `      <link>${siteUrl}/whats-new</link>`,
+  '    </image>',
+  ...releaseItems,
+  '  </channel>',
+  '</rss>',
+  '',
+].join('\n');
+fs.mkdirSync(path.join(distDir, 'whats-new'), { recursive: true });
+fs.writeFileSync(path.join(distDir, 'whats-new/feed.xml'), releaseFeed);
+console.log(`[postbuild] whats-new/feed.xml: ${releaseItems.length} items`);
+
+// ---------------------------------------------------------------------------------------
 // llms.txt — https://llmstxt.org
 //
 // A short Markdown index that AI assistants (ChatGPT, Claude, Perplexity, Gemini…) can read
@@ -283,6 +333,7 @@ const llms = [
   '',
   ...legalPages.map(mdLine),
   `- [RSS feed](${siteUrl}/feed.xml): every journal article, newest first`,
+  `- [Release notes RSS](${siteUrl}/whats-new/feed.xml): every OutBrick update's App Store notes, newest first`,
   `- [Sitemap](${siteUrl}/sitemap.xml): every indexable URL`,
   '',
 ].join('\n');

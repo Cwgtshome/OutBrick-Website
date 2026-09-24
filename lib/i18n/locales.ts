@@ -43,8 +43,11 @@ export const storefronts: Record<Locale, string> = {
   ja: 'jp',
 };
 
-/** The pages that exist in every language, as their English path. */
-export type LocalizedPage = '/' | '/play';
+/**
+ * The pages that exist in every language, as their English path. `/whats-new` is
+ * translated for the current release only; its older entries stay on the English page.
+ */
+export type LocalizedPage = '/' | '/play' | '/whats-new';
 
 /** The path of `page` in `locale`: `/`, `/play`, `/fr`, `/fr/play` … Never a trailing slash. */
 export function localePath(locale: Locale, page: LocalizedPage): string {

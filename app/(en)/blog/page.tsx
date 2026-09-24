@@ -3,6 +3,7 @@ import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shel
 import { articles, authors, getAuthor } from '../../../lib/blog';
 import { siteUrl } from '../../../lib/site';
 import { categorySlug, StoryCard, StoryRow } from './journal-kit';
+import { NewsletterSignup } from '../../components/newsletter-signup';
 
 const title = 'The OutBrick Journal';
 const description =
@@ -176,6 +177,21 @@ export default function BlogPage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ---------------- follow the journal ---------------- */}
+      <section id="follow" className="ed-band-ink2 ed-band-tight" aria-labelledby="follow-title">
+        <div className="ed-wrap wn-news-grid">
+          <div>
+            <p className="ed-label">Follow the journal</p>
+            <h2 id="follow-title" className="ed-h2" style={{ marginTop: 14 }}>New villages and big updates, by email.</h2>
+            <p className="ed-lede" style={{ marginTop: 16 }}>
+              About once a month, never more. Or follow the stories as they are published with the{' '}
+              <a className="ed-link" href="/feed.xml" type="application/rss+xml">journal RSS feed</a>.
+            </p>
+          </div>
+          <NewsletterSignup showHeading={false} />
         </div>
       </section>
 

@@ -3,6 +3,7 @@ import { chromeCopy } from '../../lib/i18n/chrome';
 import { localeAlternates, localePath, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { playCopy } from '../../lib/i18n/play';
 import { AppStoreBadge, Course, editorialNavFor, VillageFooter, VillageHeader } from '../village-shell';
+import { GetAppQr } from './get-app-qr';
 import { PlayBoard } from './play-board';
 import '../styles/play.css';
 
@@ -123,6 +124,7 @@ export function PlayGuide({ locale }: { locale: Locale }) {
               {t.close.lede}
             </p>
             <div className="cta-row centred"><AppStoreBadge locale={locale} /></div>
+            <GetAppQr locale={locale} centred />
           </div>
         </section>
       </main>

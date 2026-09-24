@@ -3,6 +3,7 @@ import { Badge, Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shel
 import { friends } from '../../../lib/mascots';
 import { siteUrl } from '../../../lib/site';
 import { APP_STORE_URL } from '../../store-badge';
+import '../../styles/growth.css';
 
 const description =
   'The OutBrick press kit: fact sheet, current game captures, the app icon, all nine brick friends, the words to use, and a direct press contact.';
@@ -44,6 +45,12 @@ const captures = [
   { src: '/assets/villages/garden-city.jpg', name: 'Garden City', note: 'The Journey map' },
   { src: '/assets/villages/pirate-harbor.jpg', name: 'Pirate Harbor', note: 'The Journey map' },
   { src: '/assets/shots/s-shop.jpg', name: 'The shop', note: 'Optional bundles' },
+];
+
+/** Written by scripts/generate-qr.mjs, which `pnpm build` runs. */
+const qrDownloads = [
+  { file: '/qr/outbrick-app-store.svg', name: 'App Store QR code', note: 'SVG · opens OutBrick on the App Store', alt: 'QR code that opens OutBrick on the App Store' },
+  { file: '/qr/outbrick-website.svg', name: 'Website QR code', note: 'SVG · opens www.outbrick.site', alt: 'QR code that opens www.outbrick.site' },
 ];
 
 export default function PressKitPage() {
@@ -116,6 +123,10 @@ export default function PressKitPage() {
                 spent only when an attempt ends without a clear, the first undo on every board is free,
                 and every video is one the player pressed a button to see.
               </p>
+              <p>
+                The current version is 4.2. Everything it changed is in the release notes on{' '}
+                <a className="ed-link" style={{ marginTop: 0 }} href="/whats-new">What’s new</a>.
+              </p>
             </div>
           </div>
           <dl className="ed-ledger">
@@ -180,6 +191,27 @@ export default function PressKitPage() {
           </div>
         </div>
       </section>
+
+      <section id="qr" className="ed-band-paper ed-band" aria-labelledby="qr-title" style={{ scrollMarginTop: 70 }}>
+        <div className="ed-wrap">
+          <p className="ed-label">For print</p>
+          <h2 id="qr-title" className="ed-h2" style={{ marginTop: 14 }}>QR codes for posters, flyers and slides.</h2>
+          <p className="ed-lede" style={{ marginTop: 16 }}>
+            Vector SVGs in the house colours, indigo on cream, with the quiet zone built in. Both are
+            decode-tested; print them at 2 cm across or larger, and leave the cream border on.
+          </p>
+          <div className="ed-downloads">
+            {qrDownloads.map((qr) => (
+              <a className="ed-download" key={qr.file} href={qr.file} download={qr.file.split('/').pop()}>
+                <span className="plinth qr"><img src={qr.file} alt={qr.alt} width={1024} height={1024} loading="lazy" decoding="async" /></span>
+                <b>{qr.name}</b>
+                <span>{qr.note}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+      <Bond thin />
 
       <section className="ed-band-paper ed-band" aria-labelledby="words-title">
         <div className="ed-wrap">
