@@ -40,3 +40,6 @@ next-env.d.ts
 
 # written by scripts/prebuild.mjs on every build
 /lib/generated/
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
