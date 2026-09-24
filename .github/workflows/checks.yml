@@ -50,7 +50,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/audit-tools" && cd "$RUNNER_TEMP/audit-tools"
           npm init -y >/dev/null
           npm i playwright@1.56.1 axe-core@4
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium webkit firefox
 
       - name: Accessibility, console errors and overflow
         env:
@@ -60,3 +60,11 @@ jobs:
           node scripts/serve-dist.mjs 4321 &
           sleep 1
           node scripts/audit-a11y.mjs http://127.0.0.1:4321
+
+      - name: Cross-browser smoke (WebKit desktop and iPhone, Firefox)
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/audit-tools/node_modules/playwright/index.mjs
+        run: |
+          node scripts/serve-dist.mjs 4322 &
+          sleep 1
+          node scripts/smoke-browsers.mjs http://127.0.0.1:4322
