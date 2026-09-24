@@ -1,4 +1,36 @@
+# Every crawler is welcome everywhere. The named groups below change nothing for the bots
+# (the `*` group already allows them); they are here so it is plain that search and AI
+# assistants are invited on purpose, and so a future `Disallow` cannot shut them out by accident.
+
 User-agent: *
 Allow: /
 
+# Search engines
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: DuckDuckBot
+User-agent: Applebot
+User-agent: YandexBot
+User-agent: Slurp
+Allow: /
+
+# AI search and assistants
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: ClaudeBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
+User-agent: meta-externalagent
+User-agent: Amazonbot
+User-agent: CCBot
+Allow: /
+
 Sitemap: https://www.outbrick.site/sitemap.xml
+Sitemap: https://www.outbrick.site/feed.xml
