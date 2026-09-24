@@ -1,0 +1,156 @@
+/* The 404 page. Self-contained: it does not lean on the site shells or globals.css tokens,
+   so it still looks like OutBrick if those change. */
+
+.nf-page {
+  --nf-indigo: #1a1350;
+  --nf-indigo-raised: #2a2364;
+  --nf-cream: #fff3dd;
+  --nf-cream-muted: #d9cfe9;
+  --nf-green: #3fc544;
+  --nf-green-dark: #1f7f2a;
+  --nf-display: var(--font-display, 'Fredoka', ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif);
+
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 48px 16px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+  color: var(--nf-cream);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(123, 92, 240, 0.35), transparent 55%),
+    var(--nf-indigo);
+  font-family: var(--nf-display);
+}
+
+.nf-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, 44px);
+  gap: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 18px;
+  background: var(--nf-indigo-raised);
+  box-shadow: inset 0 0 0 3px rgba(255, 243, 221, 0.08), 0 8px 0 #100b36;
+}
+
+.nf-slot {
+  width: 44px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.nf-brick {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 30px;
+  border-radius: 8px;
+  box-shadow: inset 0 -5px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Two studs on top of every brick. */
+.nf-brick::before,
+.nf-brick::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  width: 12px;
+  height: 7px;
+  border-radius: 4px 4px 2px 2px;
+  background: inherit;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.35);
+}
+.nf-brick::before { left: 7px; }
+.nf-brick::after { right: 7px; }
+
+/* The one that got away. */
+.nf-stray {
+  position: absolute;
+  right: -34px;
+  bottom: -30px;
+  transform: rotate(24deg);
+  animation: nf-wobble 3.2s ease-in-out infinite;
+}
+
+@keyframes nf-wobble {
+  0%, 100% { transform: rotate(24deg) translateY(0); }
+  50% { transform: rotate(18deg) translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-stray { animation: none; }
+}
+
+.nf-code {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #ffc53d;
+}
+
+.nf-title {
+  max-width: 17ch;
+  margin: 0;
+  font-size: clamp(32px, 7vw, 52px);
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--nf-cream);
+  text-wrap: balance;
+}
+
+.nf-copy {
+  max-width: 34rem;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--nf-cream-muted);
+}
+
+.nf-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.nf-link {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 243, 221, 0.35);
+  color: var(--nf-cream);
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.nf-link:hover { background: rgba(255, 243, 221, 0.1); transform: translateY(-2px); }
+.nf-link:focus-visible { outline: 3px solid #ffc53d; outline-offset: 3px; }
+
+.nf-link-primary {
+  border-color: transparent;
+  background: var(--nf-green);
+  color: #0e2a10;
+  box-shadow: 0 5px 0 var(--nf-green-dark);
+}
+.nf-link-primary:hover { background: #57d35c; }
+
+@media (max-width: 420px) {
+  .nf-board { grid-template-columns: repeat(6, 36px); gap: 6px; }
+  .nf-slot, .nf-brick { width: 36px; height: 26px; }
+  .nf-brick::before { left: 5px; }
+  .nf-brick::after { right: 5px; }
+  .nf-stray { right: -22px; }
+}
