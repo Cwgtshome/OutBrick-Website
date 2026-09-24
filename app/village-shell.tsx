@@ -333,14 +333,12 @@ export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?:
               {copy.blurb}
             </p>
             <ul className="social" aria-label="OutBrick on social media">
-              {/* TikTok is live and gets the handle spelled out; the rest are reserved and
-                  show as icon tiles (the name is in the link for screen readers and on hover). */}
+              {/* Icons only: the network's name is in the link for screen readers and on hover. */}
               {socialProfiles.map((profile) => (
                 <li key={profile.network} className={profile.live ? 'live' : 'soon'}>
                   <a href={profile.url} rel={profile.live ? 'me noopener' : 'noopener'} target="_blank" title={`OutBrick on ${profile.label}`}>
                     <SocialIcon network={profile.network} />
-                    {profile.live ? <span>@outbrick</span> : null}
-                    <span className="sr-only">{profile.live ? ` on ${profile.label}` : `OutBrick on ${profile.label}`}</span>
+                    <span className="sr-only">OutBrick on {profile.label}</span>
                   </a>
                 </li>
               ))}
