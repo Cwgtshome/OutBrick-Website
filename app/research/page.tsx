@@ -1,93 +1,133 @@
 import type { Metadata } from 'next';
-import { ArrowUpRight, BookOpen, ExternalLink, FlaskConical, Link2, Scale } from 'lucide-react';
-import { EditorialFooter, EditorialHeader } from '../editorial-shell';
+import { Bond, Crumbs, EditorialPage, JsonLd } from '../editorial-shell';
 import { siteUrl } from '../../lib/site';
 
+const description =
+  'How the OutBrick Journal reads game research: which sources we use, how claims are matched to evidence, and how every story cites its sources in APA 7.';
+
 export const metadata: Metadata = {
-  title: 'OutBrick research method',
-  description: 'How the OutBrick journal uses peer-reviewed game research, MIT and Harvard sources, accessibility standards, and first-party game histories with APA 7 citations.',
-  keywords: ['gaming habits research', 'APA 7 gaming citations', 'game design research', 'accessible game design', 'OutBrick research'],
+  title: 'How the OutBrick Journal reads research',
+  description,
   alternates: { canonical: '/research' },
   openGraph: {
     type: 'website',
-    url: '/research',
-    title: 'How OutBrick reads game research',
-    description: 'Our source, citation, and limitation guide for research-aware game design writing.',
-    images: [{ url: '/og.png', width: 1400, height: 710, alt: 'OutBrick mascots and home screen' }],
+    url: `${siteUrl}/research`,
+    siteName: 'OutBrick',
+    title: 'How the OutBrick Journal reads research',
+    description,
+    images: [{ url: `${siteUrl}/assets/icon/icon-512.png`, width: 512, height: 512, alt: 'The OutBrick app icon' }],
   },
+  twitter: { card: 'summary', title: 'How the OutBrick Journal reads research', description, images: [`${siteUrl}/assets/icon/icon-512.png`] },
 };
 
 const selectedSources = [
-  { label: 'World Health Organization — gaming disorder', kind: 'Clinical boundary', text: 'We use the WHO definition to distinguish impaired control and meaningful life impact from a simple hour count.', url: 'https://www.who.int/news-room/questions-and-answers/item/addictive-behaviours-gaming-disorder' },
-  { label: 'Pew Research Center — teens and video games today', kind: 'Population snapshot', text: 'A U.S. survey helps us describe how common play and social reasons for play are in one clearly labelled sample.', url: 'https://www.pewresearch.org/internet/2024/05/09/teens-and-video-games-today/' },
-  { label: 'Martinez, Froehlich, & Fogarty — Playing on Hard Mode', kind: 'Peer-reviewed HCI', text: 'CHI research keeps our accessibility writing grounded in adoption, adaptation, community knowledge, and unconventional play.', url: 'https://doi.org/10.1145/3613904.3642804' },
-  { label: 'Ryan, Rigby, & Przybylski — The motivational pull of video games', kind: 'Peer-reviewed psychology', text: 'Self-determination theory gives us language for autonomy, competence, relatedness, and enjoyment without reducing a player to retention.', url: 'https://doi.org/10.1007/s11031-006-9051-8' },
-  { label: 'Keogh & Richardson — Waiting to play', kind: 'Peer-reviewed mobile play', text: 'Qualitative mobile-game research informs our writing about fragmented attention, ambient play, and the value of resumable sessions.', url: 'https://doi.org/10.1177/1367549417705603' },
-  { label: 'W3C — Web Content Accessibility Guidelines 2.2', kind: 'Normative standard', text: 'WCAG is a practical reference for non-drag alternatives, timing, interruption tolerance, motion, and pointer targets on the web.', url: 'https://www.w3.org/TR/2024/REC-WCAG22-20241212/' },
-  { label: 'MIT News — teaching maker skills through gaming', kind: 'University research news', text: 'MIT’s account helps us discuss learning through making, testing, and sharing while keeping the distinction between a news story and a controlled study.', url: 'https://news.mit.edu/2022/3-questions-dishita-turakhia-teaching-computational-maker-skills-through-gaming-0714' },
-  { label: 'Harvard Health Publishing — brain-training claims', kind: 'University health explainer', text: 'Harvard’s explainer is a useful guardrail against promising broad cognitive benefits from a small puzzle or app.', url: 'https://www.health.harvard.edu/mind-and-mood/can-brain-training-smartphone-apps-and-computer-games-really-help-you-stay-sharp' },
+  { label: 'World Health Organization — Gaming disorder', kind: 'Clinical definition', text: 'Separates impaired control and meaningful harm from a simple count of hours.', url: 'https://www.who.int/news-room/questions-and-answers/item/addictive-behaviours-gaming-disorder' },
+  { label: 'Pew Research Center — Teens and video games today', kind: 'Survey', text: 'One clearly labelled U.S. sample of how common play is, and why teens play.', url: 'https://www.pewresearch.org/internet/2024/05/09/teens-and-video-games-today/' },
+  { label: 'Martinez, Froehlich & Fogarty — Playing on Hard Mode', kind: 'Peer-reviewed HCI', text: 'Grounds our accessibility writing in how disabled players find, judge and adapt games.', url: 'https://doi.org/10.1145/3613904.3642804' },
+  { label: 'Ryan, Rigby & Przybylski — The motivational pull of video games', kind: 'Peer-reviewed psychology', text: 'Autonomy, competence and relatedness: a vocabulary for enjoyment that is not about retention.', url: 'https://doi.org/10.1007/s11031-006-9051-8' },
+  { label: 'Keogh & Richardson — Waiting to play', kind: 'Peer-reviewed, qualitative', text: 'Informs how we write about fragmented attention and sessions that can be put down.', url: 'https://doi.org/10.1177/1367549417705603' },
+  { label: 'W3C — WCAG 2.2', kind: 'Standard', text: 'Timing, interruption, motion, pointer targets and the use of colour, on the web.', url: 'https://www.w3.org/TR/2024/REC-WCAG22-20241212/' },
+  { label: 'MIT News — Teaching maker skills through gaming', kind: 'University news', text: 'Useful on learning by making; read as a news account, not a controlled study.', url: 'https://news.mit.edu/2022/3-questions-dishita-turakhia-teaching-computational-maker-skills-through-gaming-0714' },
+  { label: 'Harvard Health Publishing — Brain-training claims', kind: 'University explainer', text: 'A guardrail against promising broad cognitive benefits from a puzzle.', url: 'https://www.health.harvard.edu/mind-and-mood/can-brain-training-smartphone-apps-and-computer-games-really-help-you-stay-sharp' },
+];
+
+const questions: [string, string][] = [
+  ['Player habits', 'How do context, sleep, perceived value and social reasons for play change what a session means?'],
+  ['Success stories', 'What do Stardew Valley, Hades, Celeste, The Sims, Pokémon GO, Minecraft, Tetris, Wordle and Monument Valley show, and what can they not prove?'],
+  ['Inclusive design', 'How can a game keep its challenge while widening the input, timing, sensory and cognitive routes into it?'],
+  ['Short sessions', 'What makes two minutes feel complete, interruptible and worth coming back to, without making the return an obligation?'],
 ];
 
 export default function ResearchPage() {
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
+    '@type': 'WebPage',
     '@id': `${siteUrl}/research#page`,
-    name: 'How OutBrick reads game research',
-    description: metadata.description,
+    name: 'How the OutBrick Journal reads research',
+    description,
     url: `${siteUrl}/research`,
-    isPartOf: { '@type': 'WebSite', name: 'OutBrick', url: siteUrl },
-    about: { '@type': 'Thing', name: 'Game design, gaming habits, accessibility, and player experience research' },
+    isPartOf: { '@id': `${siteUrl}/#website` },
+    about: { '@type': 'Thing', name: 'Game design, gaming habits, accessibility and player experience research' },
+    citation: selectedSources.map((source) => source.url),
+  };
+  const breadcrumbData = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Research method', item: `${siteUrl}/research` },
+    ],
   };
 
   return (
-    <div className="blog-site info-site research-site">
-      <div className="site-grain" aria-hidden="true" />
-      <EditorialHeader current="research" />
-      <main className="info-main" aria-labelledby="research-title">
-        <header className="info-hero">
-          <div className="eyebrow"><span className="eyebrow-dot" /> Research + game craft</div>
-          <h1 id="research-title">Curious, careful, <span>cited.</span></h1>
-          <p className="info-lede">The OutBrick journal looks at games through three lenses: what players do, what designers make, and what the evidence can responsibly support. Every research-led story includes an APA 7 reference trail and a link to the source.</p>
-          <div className="info-hero-actions"><a className="nav-cta" href="/blog">Read the journal <ArrowUpRight size={15} /></a><a className="blog-text-link" href="#sources">Browse selected sources <ArrowUpRight size={15} /></a></div>
-        </header>
-
-        <section className="research-principles" aria-labelledby="principles-title">
-          <div className="section-heading-split info-section-heading"><div><div className="eyebrow"><span className="eyebrow-dot" /> The method</div><h2 id="principles-title">Evidence with <span>edges.</span></h2></div><p>Good citations do more than make a page look authoritative. They show where a claim ends.</p></div>
-          <div className="research-principle-grid">
-            <article className="research-principle-card"><span className="info-card-icon"><FlaskConical size={20} /></span><h3>Start with the source</h3><p>We prefer primary sources, peer-reviewed papers, university research pages, recognized standards, and first-party histories for success-story details.</p></article>
-            <article className="research-principle-card"><span className="info-card-icon"><Scale size={20} /></span><h3>Match claim to evidence</h3><p>Associations stay associations. Company-reported numbers stay labelled. A small sample does not become a universal rule because the sentence sounds better that way.</p></article>
-            <article className="research-principle-card"><span className="info-card-icon"><Link2 size={20} /></span><h3>Make the trail usable</h3><p>Source markers sit beside the relevant section, and the full APA 7 citation includes a stable DOI or direct external URL whenever one is available.</p></article>
+    <EditorialPage current="research">
+      <header className="ed-band-ink ed-hero">
+        <div className="ed-wrap">
+          <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Research method' }]} />
+          <p className="ed-label" style={{ marginTop: 'clamp(28px, 4vw, 48px)' }}>Research method</p>
+          <h1 className="ed-display" style={{ marginTop: 18, maxWidth: '14ch' }}>Curious, careful, <em>cited.</em></h1>
+          <p className="ed-lede" style={{ marginTop: 24 }}>
+            The journal reads games through three lenses: what players do, what designers make, and what
+            the evidence can responsibly support. Every research-led story ends with an APA 7 reference
+            list and a link to each source.
+          </p>
+          <div className="ed-actions" style={{ marginTop: 32 }}>
+            <a className="ed-btn" href="/blog">Read the journal</a>
+            <a className="ed-link" href="#sources">Jump to the sources</a>
           </div>
-        </section>
+        </div>
+      </header>
+      <Bond />
 
-        <section className="research-scope" aria-labelledby="scope-title">
-          <div><div className="eyebrow"><span className="eyebrow-dot" /> What we research</div><h2 id="scope-title">The questions around the <span>board.</span></h2></div>
-          <div className="research-scope-list">
-            <div><strong>Player habits</strong><p>How do context, sleep, perceived value, boundaries, and social reasons for play change what a session means?</p></div>
-            <div><strong>Game success stories</strong><p>What do Stardew Valley, Hades, Celeste, The Sims, Pokémon GO, Minecraft, Tetris, Wordle, and Monument Valley reveal—and what can they not prove?</p></div>
-            <div><strong>Inclusive design</strong><p>How can a game preserve challenge while widening input, timing, sensory, and cognitive routes into the experience?</p></div>
-            <div><strong>Short-session craft</strong><p>What makes a two-minute interaction feel complete, interruptible, and worth returning to without turning return into obligation?</p></div>
+      <section className="ed-band-paper ed-band" aria-labelledby="method-title">
+        <div className="ed-wrap">
+          <p className="ed-label">The method</p>
+          <h2 id="method-title" className="ed-h2" style={{ marginTop: 14, maxWidth: '18ch' }}>A citation should show where a claim ends.</h2>
+          <ol className="ed-steps">
+            <li data-tone="blue"><h3 className="ed-h3">Start with the source</h3><p>Primary sources first: peer-reviewed papers, university research, recognised standards, and a studio’s own history for the details of its own success.</p></li>
+            <li data-tone="purple"><h3 className="ed-h3">Match claim to evidence</h3><p>Associations stay associations. Company-reported numbers stay labelled. A small sample does not become a rule because the sentence reads better.</p></li>
+            <li data-tone="teal"><h3 className="ed-h3">Make the trail usable</h3><p>Numbered markers sit under the section they support and jump to the full reference, with a DOI or a direct link wherever one exists.</p></li>
+          </ol>
+        </div>
+      </section>
+
+      <section className="ed-band-ink ed-band" aria-labelledby="questions-title">
+        <div className="ed-wrap ed-split">
+          <div>
+            <p className="ed-label">What we read about</p>
+            <h2 id="questions-title" className="ed-h2" style={{ marginTop: 14 }}>The questions around the board.</h2>
           </div>
-        </section>
+          <dl className="ed-ledger">
+            {questions.map(([term, detail]) => <div key={term}><dt>{term}</dt><dd>{detail}</dd></div>)}
+          </dl>
+        </div>
+      </section>
 
-        <section id="sources" className="research-source-section" aria-labelledby="sources-title">
-          <div className="section-heading-split info-section-heading"><div><div className="eyebrow"><span className="eyebrow-dot" /> A starting shelf</div><h2 id="sources-title">Selected <span>sources.</span></h2></div><p>These are not endorsements or a complete bibliography. They are the source families we return to when a story needs more than intuition.</p></div>
-          <div className="research-source-grid">{selectedSources.map((source) => <article className="research-source-card" key={source.url}><div className="research-source-topline"><span>{source.kind}</span><ExternalLink size={14} /></div><h3><a href={source.url} target="_blank" rel="noreferrer">{source.label}</a></h3><p>{source.text}</p><a className="blog-text-link" href={source.url} target="_blank" rel="noreferrer">Open source <ArrowUpRight size={14} /></a></article>)}</div>
-        </section>
+      <section id="sources" className="ed-band-cream ed-band" aria-labelledby="sources-title" style={{ scrollMarginTop: 70 }}>
+        <div className="ed-wrap">
+          <p className="ed-label">A starting shelf</p>
+          <h2 id="sources-title" className="ed-h2" style={{ marginTop: 14 }}>Selected sources.</h2>
+          <p className="ed-lede" style={{ marginTop: 16 }}>Not endorsements and not a full bibliography: the families of source we return to when a story needs more than intuition.</p>
+          <ul className="ed-sourcelist">
+            {selectedSources.map((source) => (
+              <li key={source.url}>
+                <p className="ed-meta" style={{ margin: 0, fontFamily: 'var(--ed-display)', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: '0.8rem' }}>{source.kind}</p>
+                <div>
+                  <h3><a href={source.url} target="_blank" rel="noreferrer">{source.label}<span className="sr-only"> (opens in a new tab)</span></a></h3>
+                  <p>{source.text}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="ed-actions" style={{ marginTop: 36 }}>
+            <a className="ed-link" href="/blog/why-two-minute-puzzles-feel-good#references">See a full reference list in context</a>
+            <a className="ed-link" href="/about">About OutBrick</a>
+          </div>
+        </div>
+      </section>
 
-        <section className="research-apa" aria-labelledby="apa-title">
-          <div className="research-apa-mark"><BookOpen size={28} /></div>
-          <div><div className="eyebrow"><span className="eyebrow-dot" /> Citation promise</div><h2 id="apa-title">APA 7, with context.</h2><p>Each article keeps a readable source marker near the claim, then lists the full reference below the story. We include author or organization, date, title, publication details where available, DOI or stable URL, and a note in the prose when the source is first-party, observational, qualitative, theoretical, or otherwise limited.</p><a className="blog-text-link" href="/blog/why-two-minute-puzzles-feel-good#references">See a complete reference trail <ArrowUpRight size={15} /></a></div>
-        </section>
-
-        <section className="info-cta" aria-labelledby="research-cta-title">
-          <div><div className="eyebrow"><span className="eyebrow-dot" /> Read with us</div><h2 id="research-cta-title">Follow a claim to its <span>source.</span></h2><p>Start with gaming habits, browse success stories, or read how we think about accessibility in a tiny puzzle.</p></div>
-          <div className="info-cta-actions"><a className="nav-cta" href="/blog">Browse all stories <ArrowUpRight size={15} /></a><a className="blog-text-link" href="/about">About OutBrick <ArrowUpRight size={15} /></a></div>
-        </section>
-      </main>
-      <EditorialFooter />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-    </div>
+      <JsonLd data={structuredData} />
+      <JsonLd data={breadcrumbData} />
+    </EditorialPage>
   );
 }

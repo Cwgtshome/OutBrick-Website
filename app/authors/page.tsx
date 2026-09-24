@@ -1,21 +1,25 @@
 import type { Metadata } from 'next';
-import { ArrowUpRight, BookOpen, ChevronRight } from 'lucide-react';
-import { EditorialFooter, EditorialHeader } from '../editorial-shell';
-import { authors, articles, getAuthor } from '../../lib/blog';
+import { Bond, Crumbs, EditorialPage, JsonLd } from '../editorial-shell';
+import { articles, authors } from '../../lib/blog';
 import { siteUrl } from '../../lib/site';
+import { StoryRow } from '../blog/journal-kit';
+
+const description =
+  'Who writes the OutBrick Journal: design notes from founder Mourad Hamdi, and research-led essays from the OutBrick Editorial Desk.';
 
 export const metadata: Metadata = {
-  title: 'OutBrick authors',
-  description: 'Meet the people behind the OutBrick journal: game-making notes from Mourad Hamdi and research-led editorial work from the OutBrick Editorial Desk.',
-  keywords: ['OutBrick authors', 'Mourad Hamdi', 'game design writing', 'gaming research writers'],
+  title: 'Authors of the OutBrick Journal',
+  description,
   alternates: { canonical: '/authors' },
   openGraph: {
     type: 'website',
-    url: '/authors',
-    title: 'OutBrick authors',
-    description: 'Meet the voices behind the OutBrick journal.',
-    images: [{ url: '/og.png', width: 1400, height: 710, alt: 'OutBrick mascots and home screen' }],
+    url: `${siteUrl}/authors`,
+    siteName: 'OutBrick',
+    title: 'Authors of the OutBrick Journal',
+    description,
+    images: [{ url: `${siteUrl}/assets/icon/icon-512.png`, width: 512, height: 512, alt: 'The OutBrick app icon' }],
   },
+  twitter: { card: 'summary', title: 'Authors of the OutBrick Journal', description, images: [`${siteUrl}/assets/icon/icon-512.png`] },
 };
 
 export default function AuthorsPage() {
@@ -23,9 +27,10 @@ export default function AuthorsPage() {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     '@id': `${siteUrl}/authors#page`,
-    name: 'OutBrick authors',
-    description: metadata.description,
+    name: 'Authors of the OutBrick Journal',
+    description,
     url: `${siteUrl}/authors`,
+    isPartOf: { '@id': `${siteUrl}/#website` },
     mainEntity: {
       '@type': 'ItemList',
       itemListElement: authors.map((author, index) => ({
@@ -36,39 +41,57 @@ export default function AuthorsPage() {
       })),
     },
   };
+  const breadcrumbData = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Authors', item: `${siteUrl}/authors` },
+    ],
+  };
 
   return (
-    <div className="blog-site info-site">
-      <div className="site-grain" aria-hidden="true" />
-      <EditorialHeader current="authors" />
-      <main className="info-main" aria-labelledby="authors-title">
-        <header className="info-hero info-hero-compact">
-          <div className="eyebrow"><span className="eyebrow-dot" /> The people behind the bricks</div>
-          <h1 id="authors-title">Meet the <span>voices.</span></h1>
-          <p className="info-lede">OutBrick is a small project, so the journal stays close to the work. Read design notes from the maker and research-led stories edited for clarity, context, and care.</p>
-        </header>
+    <EditorialPage current="authors">
+      <header className="ed-band-ink ed-hero">
+        <div className="ed-wrap">
+          <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Authors' }]} />
+          <p className="ed-label" style={{ marginTop: 'clamp(28px, 4vw, 48px)' }}>Authors</p>
+          <h1 className="ed-display" style={{ marginTop: 18, maxWidth: '13ch' }}>Two bylines, <em>one bench.</em></h1>
+          <p className="ed-lede" style={{ marginTop: 24 }}>
+            OutBrick is a small studio, so the journal is written close to the work: design notes from
+            the person making the game, and research essays edited by a desk that reads the sources
+            first.
+          </p>
+        </div>
+      </header>
+      <Bond />
 
-        <section className="author-directory" aria-label="OutBrick authors">
-          {authors.map((author) => {
-            const authorArticles = articles.filter((article) => article.authorId === author.id);
-            return (
-              <article className="author-directory-card" key={author.id}>
-                <div className="author-directory-header"><span className="blog-avatar" title={`${author.name} avatar`}>{author.initials}</span><div><div className="blog-kicker">OutBrick contributor</div><h2><a href={`/authors/${author.id}`}>{author.name}</a></h2><p className="author-role">{author.role}</p></div></div>
-                <p className="author-directory-bio">{author.bio}</p>
-                <div className="author-directory-footer"><span>{authorArticles.length} journal {authorArticles.length === 1 ? 'story' : 'stories'}</span><a className="blog-text-link" href={`/authors/${author.id}`}>View profile <ArrowUpRight size={14} /></a></div>
-                <ul className="author-story-list">{authorArticles.slice(0, 4).map((article) => <li key={article.slug}><BookOpen size={14} /><a href={`/blog/${article.slug}`}>{article.title}</a><ChevronRight size={14} /></li>)}</ul>
-              </article>
-            );
-          })}
-        </section>
+      {authors.map((author, index) => {
+        const theirs = articles.filter((article) => article.authorId === author.id);
+        return (
+          <section key={author.id} className={`${index % 2 ? 'ed-band-cream' : 'ed-band-paper'} ed-band`} aria-labelledby={`${author.id}-name`}>
+            <div className="ed-wrap ed-split">
+              <div>
+                <a className="ed-avatar big" href={`/authors/${author.id}`} aria-hidden="true" tabIndex={-1}>{author.initials}</a>
+                <h2 id={`${author.id}-name`} className="ed-h2" style={{ marginTop: 24 }}>
+                  <a href={`/authors/${author.id}`} style={{ textDecoration: 'none' }}>{author.name}</a>
+                </h2>
+                <p className="ed-meta" style={{ marginTop: 8 }}>{author.role}</p>
+                <div className="ed-prose" style={{ marginTop: 18 }}>
+                  <p>{author.bio}</p>
+                  <a className="ed-link" href={`/authors/${author.id}`}>All {theirs.length} stories</a>
+                </div>
+              </div>
+              <ol className="ed-rows">
+                {theirs.slice(0, 4).map((article, i) => <StoryRow key={article.slug} article={article} n={i + 1} />)}
+              </ol>
+            </div>
+          </section>
+        );
+      })}
 
-        <section className="info-cta" aria-labelledby="authors-cta-title">
-          <div><div className="eyebrow"><span className="eyebrow-dot" /> Keep exploring</div><h2 id="authors-cta-title">Read the whole <span>journal.</span></h2><p>Twenty stories on game design, player habits, accessibility, and the success stories that keep small games moving.</p></div>
-          <a className="nav-cta" href="/blog">Browse all stories <ArrowUpRight size={15} /></a>
-        </section>
-      </main>
-      <EditorialFooter />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-    </div>
+      <JsonLd data={structuredData} />
+      <JsonLd data={breadcrumbData} />
+    </EditorialPage>
   );
 }

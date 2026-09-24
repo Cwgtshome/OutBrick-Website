@@ -11,7 +11,7 @@ import './styles/home.css';
 export const metadata: Metadata = {
   title: 'OutBrick — a boulevard built out of brick',
   description:
-    'OutBrick is a sliding-brick colour-sort puzzle. 2,000 solver-verified boards across 100 chapters, a Journey of 167 villages built stud by stud out of brick, and nine brick friends. Free on the App Store for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch.',
+    'A sliding-brick colour-sort puzzle: 2,000 solver-verified boards, 167 brick-built villages and nine brick friends. No clock, plays offline. Free on the App Store.',
   alternates: { canonical: siteUrl },
   openGraph: {
     type: 'website',
