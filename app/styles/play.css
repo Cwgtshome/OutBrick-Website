@@ -1,0 +1,33 @@
+/* The play guide: a hero that is mostly a board, and a dictionary of board nouns. */
+.ob-site .play-hero { padding: clamp(40px, 7vw, 96px) 0; }
+.ob-site .play-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+  gap: clamp(28px, 6vw, 80px);
+  align-items: center;
+}
+.ob-site .play-hero h1 { margin: 10px 0 18px; }
+.ob-site .play-keys { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 10px; }
+.ob-site .play-keys li { color: var(--lilac); font-size: 1rem; padding-left: 22px; position: relative; }
+.ob-site .play-keys li::before {
+  content: ''; position: absolute; left: 0; top: 0.45em; width: 11px; height: 11px;
+  border-radius: 3px; background: #ffc53d; box-shadow: 0 3px 0 #b8780a;
+}
+.ob-site .play-keys b { color: #fff; font-weight: 600; }
+.ob-site .play-board-wrap { width: 100%; }
+
+.ob-site .play-nouns {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0;
+  margin: 0;
+  border-top: 2px dashed rgba(255, 255, 255, 0.14);
+}
+.ob-site .play-nouns > div { padding: 20px 20px 22px 0; border-bottom: 2px dashed rgba(255, 255, 255, 0.14); }
+.ob-site .play-nouns dt { font-family: var(--font-display, 'Fredoka', ui-rounded, sans-serif); font-weight: 600; font-size: 1.2rem; color: #fff; }
+.ob-site .play-nouns dd { margin: 6px 0 0; color: var(--lilac); }
+
+@media (max-width: 860px) {
+  .ob-site .play-hero-grid { grid-template-columns: 1fr; }
+  .ob-site .play-board-wrap { max-width: 420px; margin: 0 auto; }
+}

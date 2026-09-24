@@ -789,3 +789,17 @@
   .pb-tool,
   .pb-btn { transition: none; }
 }
+
+/*
+ * The board is dropped into pages whose stylesheet sets `section` padding and
+ * cream heading colours for every element under `.ob-site`. Those selectors
+ * carry an element type as well as a class, so they outrank a bare `.pb-*`
+ * class; restating the card's own values one class deeper keeps them.
+ */
+.pb-card .pb-card-panel { padding: 18px 18px 16px; position: static; }
+.pb-card .pb-card-title { color: var(--pb-ink); text-shadow: none; font-size: 30px; margin: 2px 0 8px; }
+@media (max-width: 360px) {
+  .pb-card .pb-card-panel { padding: 14px 14px 12px; }
+  .pb-card .pb-card-title { font-size: 25px; margin-bottom: 6px; }
+}
+section.pb { padding: 0; }

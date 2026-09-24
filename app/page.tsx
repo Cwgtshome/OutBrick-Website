@@ -6,6 +6,7 @@ import { APP_STORE_URL } from './store-badge';
 import { AppStoreBadge, Course, homeNav, VillageFooter, VillageHeader } from './village-shell';
 import { VillageMotion } from './village-motion';
 import { HomeCast } from './components/home-cast';
+import { PlayableBoard } from './components/playable-board';
 import './styles/home.css';
 
 export const metadata: Metadata = {
@@ -268,17 +269,7 @@ export default function HomePage() {
               </div>
 
               <div className="rule-board" data-slot="playable-board">
-                {/* PLAYABLE_BOARD_SLOT */}
-                <figure className="rule-board-fallback" data-reveal="unmask">
-                  <img
-                    loading="lazy"
-                    decoding="async"
-                    src="/assets/home/play-screen.jpg"
-                    width={600}
-                    height={1304}
-                    alt="An OutBrick board in play at level 12: coloured bricks packed into a frame, with coloured gates on its edges."
-                  />
-                </figure>
+                <PlayableBoard label="Try an OutBrick board: slide every brick out through its gate" />
               </div>
             </div>
 
