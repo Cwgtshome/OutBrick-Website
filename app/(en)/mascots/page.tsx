@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { friends, mascotStories } from '../../../lib/mascots';
 import { siteUrl } from '../../../lib/site';
+import { FriendMoves } from '../../components/friend-moves-binder';
 
 const description =
   'Meet the nine brick friends of OutBrick: Bloo, Peach, Sprout, Bricko, Flurry, Moss, Poppy, Vio and Zippy. Three share your Home screen at a time.';
@@ -77,9 +78,9 @@ export default function MascotsPage() {
               <ul className="ed-roster" style={{ listStyle: 'none', margin: 0 }}>
                 {friends.map((friend) => (
                   <li key={friend.id} style={{ ['--c' as string]: friend.colour, ['--c-foot' as string]: friend.foot }}>
-                    <a href={friend.hasStory ? `/mascots/${friend.id}` : `#${friend.id}`}>
-                      <span className="plinth">
-                        <img src={friend.image} alt="" width={360} height={360} decoding="async" />
+                    <a href={friend.hasStory ? `/mascots/${friend.id}` : `#${friend.id}`} data-friend-moves="">
+                      <span className="plinth" data-friend-move={friend.id}>
+                        <img className="fm-actor" src={friend.image} alt="" width={360} height={360} decoding="async" />
                       </span>
                       <b>{friend.name}</b>
                     </a>
@@ -105,13 +106,14 @@ export default function MascotsPage() {
                 <article
                   key={friend.id}
                   className="ed-storycard ed-lift ed-reveal"
+                  data-friend-moves=""
                   style={{ ['--c' as string]: friend.colour, ['--c-foot' as string]: friend.foot, ['--c-ink' as string]: friend.ink }}
                 >
-                  <div className="ed-storycard-art" aria-hidden="true">
+                  <div className="ed-storycard-art" aria-hidden="true" data-friend-move={friend.id}>
                     <figure className="ed-capture" style={{ margin: 0 }}>
                       <img src={`/assets/villages/${village.slug}.jpg`} alt="" width={239} height={520} loading="lazy" decoding="async" />
                     </figure>
-                    <img className="ed-friend" src={friend.image} alt="" width={360} height={360} loading="lazy" decoding="async" />
+                    <img className="ed-friend fm-actor" src={friend.image} alt="" width={360} height={360} loading="lazy" decoding="async" />
                   </div>
                   <div>
                     <span className="role">{friend.role}</span>
@@ -141,8 +143,8 @@ export default function MascotsPage() {
                 style={{ ['--c' as string]: friend.colour, ['--c-foot' as string]: friend.foot }}
                 aria-labelledby={`${friend.id}-name`}
               >
-                <div className="plinth">
-                  <img src={friend.image} alt={friend.imageAlt} width={360} height={360} loading="lazy" decoding="async" />
+                <div className="plinth" data-friend-move={friend.id}>
+                  <img className="fm-actor" src={friend.image} alt={friend.imageAlt} width={360} height={360} loading="lazy" decoding="async" />
                 </div>
                 <div>
                   <p className="ed-label no-mark" style={{ color: `color-mix(in srgb, ${friend.colour} 62%, #fff)` }}>{friend.role}</p>
@@ -165,6 +167,7 @@ export default function MascotsPage() {
 
       <JsonLd data={structuredData} />
       <JsonLd data={breadcrumbData} />
+      <FriendMoves />
     </EditorialPage>
   );
 }
