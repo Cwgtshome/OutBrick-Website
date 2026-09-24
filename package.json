@@ -15,6 +15,7 @@
     "indexnow": "node scripts/indexnow-submit.mjs",
     "audit:a11y": "node scripts/audit-a11y.mjs",
     "smoke:browsers": "node scripts/smoke-browsers.mjs",
+    "import:captures": "node scripts/import-captures.mjs",
     "serve:dist": "node scripts/serve-dist.mjs",
     "gsc": "node scripts/search-console.mjs",
     "bing": "node scripts/bing-webmaster.mjs"

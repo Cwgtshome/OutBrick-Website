@@ -1,5 +1,22 @@
 # Captures the website needs from the game
 
+## The quick way
+
+Run the game repo's capture pipeline on your Mac (`tools/make_store_shots.sh`,
+`tools/make_watch_shots.sh`), rename the raw PNGs to the slot names below, put them in one
+folder, and run:
+
+    pnpm import:captures ~/Desktop/outbrick-captures
+
+Each PNG becomes a 1x and 2x WebP in `public/assets/screens/` (plus the original PNG for the press
+kit). Slots: `iphone-board`, `iphone-board-shaped`, `iphone-home`, `iphone-collection`,
+`iphone-leaderboard`, `iphone-shop`, `clear-card`, `ipad-board`, `ipad-home`, `ipad-collection`,
+`ipad-pass`, `widgets`, `apple-watch`, `apple-tv`, `mac`, `vision-pro`. Pages that already show a
+slot pick the new capture up with no code change; `clear-card`, `widgets` and the Watch, TV, Mac
+and Vision Pro slots need a line of markup to place them the first time.
+
+## Details
+
 The site is built from real game art, and a few of the captures it uses are too small or out of
 date. Export these from the **current build** and drop them in at the paths below, keeping the
 file names. After you replace a file, run `pnpm build` and check the page. No code changes are
