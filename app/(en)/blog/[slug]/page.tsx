@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../../editorial-shell';
 import { articles, getArticle, getAuthor, getRelatedArticles, type BlogReference } from '../../../../lib/blog';
 import { siteUrl } from '../../../../lib/site';
+import { categoryPath, getNeighbours, tagHref } from '../../../../lib/journal';
 import { isoDate, plain, Rich, StoryCard } from '../journal-kit';
 import { ReadingAids } from './reading-aids';
 import { BrandMark } from '../../../village-shell';
@@ -51,7 +52,12 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   };
 }
 
-function SourceMarkers({ sourceIds, references }: { sourceIds?: string[]; references: BlogReference[] }) {
+/**
+ * The numbered source markers under a section. Each carries its citation in a
+ * small card that shows on hover or keyboard focus (CSS only; Escape hides it,
+ * see reading-aids.tsx) and is also its accessible description.
+ */
+function SourceMarkers({ sectionId, sourceIds, references }: { sectionId: string; sourceIds?: string[]; references: BlogReference[] }) {
   const found = (sourceIds ?? [])
     .map((id) => ({ id, n: references.findIndex((reference) => reference.id === id) + 1 }))
     .filter((entry) => entry.n > 0);
@@ -59,10 +65,31 @@ function SourceMarkers({ sourceIds, references }: { sourceIds?: string[]; refere
   return (
     <p className="ed-sources">
       <span>Sources</span>
-      {found.map(({ id, n }) => (
-        <a key={id} href={`#reference-${id}`} aria-label={`Source ${n}: ${references[n - 1]!.label}`}>{n}</a>
-      ))}
+      {found.map(({ id, n }) => {
+        const reference = references[n - 1]!;
+        const cardId = `cite-${sectionId}-${id}`;
+        return (
+          <span className="ed-cite" key={id}>
+            <a href={`#reference-${id}`} aria-label={`Source ${n}: ${reference.label}`} aria-describedby={cardId}>{n}</a>
+            <span className="ed-cite-card" id={cardId} role="tooltip">
+              <span className="ed-cite-n" aria-hidden="true">Source {n}</span>
+              {reference.citation}
+            </span>
+          </span>
+        );
+      })}
     </p>
+  );
+}
+
+/** The link icon beside a section heading: a real anchor, which reading-aids.tsx also copies. */
+function SectionLink({ id, title }: { id: string; title: string }) {
+  return (
+    <a className="ed-anchor" href={`#${id}`} data-copy-link="" aria-label={`Copy link to section: ${title}`}>
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+        <path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </a>
   );
 }
 
@@ -73,6 +100,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   const author = getAuthor(article.authorId);
   const related = getRelatedArticles(article);
+  const { previous, next } = getNeighbours(article.slug);
   const articleUrl = `${siteUrl}/blog/${article.slug}`;
   const authorUrl = `${siteUrl}/authors/${author.id}`;
   const isPerson = author.id === 'mourad-hamdi';
@@ -138,7 +166,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <Crumbs items={[{ href: '/', label: 'OutBrick' }, { href: '/blog', label: 'Journal' }, { label: article.title }]} />
             <div className="ed-ahead-grid">
               <div>
-                <a className="ed-chip" href={`/blog#category-${article.category.toLowerCase().replaceAll(' ', '-')}`}>{article.category}</a>
+                <a className="ed-chip" href={categoryPath(article.category)}>{article.category}</a>
                 <h1>{article.title}</h1>
                 <p className="ed-lede">{article.dek}</p>
                 <div className="ed-ahead-meta">
@@ -153,9 +181,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     <li>{article.readingTime}</li>
                     <li><span>Published <time dateTime={isoDate(article.publishedAt)}>{article.publishedAt}</time></span></li>
                     {article.updatedAt !== article.publishedAt ? (
-                      <li><span>Updated <time dateTime={isoDate(article.updatedAt)}>{article.updatedAt}</time></span></li>
+                      <li><span className="ed-updated"><b>Updated</b> <time dateTime={isoDate(article.updatedAt)}>{article.updatedAt}</time></span></li>
                     ) : null}
                   </ul>
+                  <button type="button" className="ed-share" data-share="" data-share-title={article.title} data-share-text={article.dek}>
+                    <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8M5 12.5V19a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-6.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    Share
+                  </button>
                 </div>
               </div>
               <figure className="ed-frame">
@@ -197,13 +229,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 {article.sections.map((section, index) => (
                   <Fragment key={section.id}>
                     <section id={section.id} aria-labelledby={`${section.id}-title`}>
-                      <h2 id={`${section.id}-title`}>{section.title}</h2>
+                      <div className="ed-h2row">
+                        <h2 id={`${section.id}-title`}>{section.title}</h2>
+                        <SectionLink id={section.id} title={section.title} />
+                      </div>
                       {section.paragraphs.map((paragraph) => <p key={paragraph}><Rich text={paragraph} /></p>)}
                       {section.bullets ? (
                         <ul className="ed-bullets">{section.bullets.map((bullet) => <li key={bullet}><Rich text={bullet} /></li>)}</ul>
                       ) : null}
                       {section.note ? <p className="ed-note"><Rich text={section.note} /></p> : null}
-                      <SourceMarkers sourceIds={section.sourceIds} references={article.references} />
+                      <SourceMarkers sectionId={section.id} sourceIds={section.sourceIds} references={article.references} />
                     </section>
                     {article.pullQuote && index === pullAfter ? (
                       <figure className="ed-pull" aria-hidden="true">
@@ -212,6 +247,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     ) : null}
                   </Fragment>
                 ))}
+              </div>
+
+              <div className="ed-filed">
+                <h2 className="ed-label no-mark">Filed under</h2>
+                <ul className="ed-tags">
+                  <li data-tone={article.categoryColor}><a className="shelf" href={categoryPath(article.category)}>{article.category}</a></li>
+                  {article.tags
+                    .filter((tag) => tag.toLowerCase() !== article.category.toLowerCase())
+                    .map((tag) => <li key={tag}><a href={tagHref(tag)}>{tag}</a></li>)}
+                </ul>
               </div>
 
               {faqs.length ? (
@@ -273,6 +318,23 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   </div>
                 </aside>
               </div>
+
+              {previous || next ? (
+                <nav className="ed-storynav" aria-label="More from the journal">
+                  {previous ? (
+                    <a className="prev" href={`/blog/${previous.slug}`} rel="prev" data-tone={previous.categoryColor}>
+                      <small>Previous story</small>
+                      <b>{previous.title}</b>
+                    </a>
+                  ) : <span />}
+                  {next ? (
+                    <a className="next" href={`/blog/${next.slug}`} rel="next" data-tone={next.categoryColor}>
+                      <small>Next story</small>
+                      <b>{next.title}</b>
+                    </a>
+                  ) : <span />}
+                </nav>
+              ) : null}
             </div>
           </div>
         </div>
@@ -280,7 +342,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       {/* ---------------- related ---------------- */}
       {related.length ? (
-        <section className="ed-band-ink2 ed-band" aria-labelledby="related-title">
+        <section className="ed-band-ink2 ed-band ed-related-band" aria-labelledby="related-title">
           <div className="ed-wrap">
             <p className="ed-label">Keep reading</p>
             <h2 id="related-title" className="ed-h2" style={{ marginTop: 14 }}>Three more from the shelves.</h2>
@@ -291,6 +353,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </section>
       ) : null}
 
+      <output className="ed-toast" aria-live="polite" aria-atomic="true" data-toast="" />
       <ReadingAids />
       <JsonLd data={postingData} />
       <JsonLd data={breadcrumbData} />

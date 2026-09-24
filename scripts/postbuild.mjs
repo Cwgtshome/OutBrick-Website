@@ -3,6 +3,8 @@
 //   sitemap.xml — every indexable prerendered page, derived from the build output itself
 //   feed.xml    — RSS 2.0 for the journal, from lib/blog.ts
 //   llms.txt    — a plain-Markdown map of the site for AI assistants (llmstxt.org)
+//   blog/category/<slug>/feed.xml — the same feed, one shelf at a time
+//   journal-index.json — the compact search index /blog loads on first use of its search field
 //
 // Why not app/sitemap.ts: with `output: 'export'`, vinext compiles metadata routes into the
 // server bundle only; nothing prerenders them into dist/client, and Netlify publishes only
@@ -28,6 +30,10 @@ function isoDate(human) {
   const pad = (n) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
+
+/** The same slug rule as lib/journal.ts `slugify`, for category and tag addresses. */
+const slugify = (text) =>
+  text.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
 function rfc822(iso) {
   return new Date(`${iso}T12:00:00Z`).toUTCString();
@@ -153,8 +159,14 @@ if (pages.length === 0) throw new Error('[postbuild] no indexable pages found in
 const entries = pages.map((page) => {
   let lastmod;
   const articleSlug = page.route.match(/^\/blog\/([^/]+)$/)?.[1];
+  const collection = page.route.match(/^\/blog\/(category|tag)\/([^/]+)$/);
   if (articleSlug && articleBySlug.has(articleSlug)) {
     lastmod = isoDate(articleBySlug.get(articleSlug).updatedAt);
+  } else if (collection) {
+    // A shelf or tag page changes when one of its stories does.
+    const [, kind, slug] = collection;
+    const members = articles.filter((a) => (kind === 'category' ? slugify(a.category) === slug : a.tags.some((t) => slugify(t) === slug)));
+    lastmod = members.map((a) => isoDate(a.updatedAt)).reduce((max, d) => (d > max ? d : max), '') || undefined;
   } else {
     const pageFile = pageFileForRoute(page.route === '/' ? '' : page.route);
     lastmod = pageFile ? gitDate(sourceClosure(pageFile)) : undefined;
@@ -194,9 +206,8 @@ const authorName = (id) => authors.find((a) => a.id === id)?.name ?? 'OutBrick';
 const mimeFor = (file) => ({ '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.avif': 'image/avif' })[path.extname(file).toLowerCase()] ?? 'application/octet-stream';
 
 const feedArticles = [...articles].sort((a, b) => isoDate(b.publishedAt).localeCompare(isoDate(a.publishedAt)) || a.title.localeCompare(b.title));
-const newest = feedArticles.reduce((max, a) => (isoDate(a.updatedAt) > max ? isoDate(a.updatedAt) : max), '1970-01-01');
 
-const items = feedArticles.map((a) => {
+function feedItem(a) {
   const url = `${siteUrl}/blog/${a.slug}`;
   const imageUrl = `${siteUrl}${a.image}`;
   const imageFile = path.join(distDir, a.image);
@@ -218,30 +229,112 @@ const items = feedArticles.map((a) => {
     '      </media:content>',
     '    </item>',
   ].join('\n');
-});
+}
 
-const feed = [
-  '<?xml version="1.0" encoding="UTF-8"?>',
-  '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/">',
-  '  <channel>',
-  '    <title>The OutBrick Journal</title>',
-  `    <link>${siteUrl}/blog</link>`,
-  `    <atom:link href="${siteUrl}/feed.xml" rel="self" type="application/rss+xml"/>`,
-  '    <description>Research-backed writing on puzzle design, calmer play, accessibility and the habits games build — from the makers of OutBrick.</description>',
-  '    <language>en</language>',
-  `    <lastBuildDate>${rfc822(newest)}</lastBuildDate>`,
-  '    <image>',
-  `      <url>${siteUrl}/assets/icon/icon-192.png</url>`,
-  '      <title>The OutBrick Journal</title>',
-  `      <link>${siteUrl}/blog</link>`,
-  '    </image>',
-  ...items,
-  '  </channel>',
-  '</rss>',
-  '',
-].join('\n');
+function rss({ title, link, self, description, stories }) {
+  const newest = stories.reduce((max, a) => (isoDate(a.updatedAt) > max ? isoDate(a.updatedAt) : max), '1970-01-01');
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/">',
+    '  <channel>',
+    `    <title>${xmlEscape(title)}</title>`,
+    `    <link>${link}</link>`,
+    `    <atom:link href="${self}" rel="self" type="application/rss+xml"/>`,
+    `    <description>${xmlEscape(description)}</description>`,
+    '    <language>en</language>',
+    `    <lastBuildDate>${rfc822(newest)}</lastBuildDate>`,
+    '    <image>',
+    `      <url>${siteUrl}/assets/icon/icon-192.png</url>`,
+    `      <title>${xmlEscape(title)}</title>`,
+    `      <link>${link}</link>`,
+    '    </image>',
+    ...stories.map(feedItem),
+    '  </channel>',
+    '</rss>',
+    '',
+  ].join('\n');
+}
+
+const feed = rss({
+  title: 'The OutBrick Journal',
+  link: `${siteUrl}/blog`,
+  self: `${siteUrl}/feed.xml`,
+  description: 'Research-backed writing on puzzle design, calmer play, accessibility and the habits games build — from the makers of OutBrick.',
+  stories: feedArticles,
+});
 fs.writeFileSync(path.join(distDir, 'feed.xml'), feed);
-console.log(`[postbuild] feed.xml: ${items.length} items`);
+console.log(`[postbuild] feed.xml: ${feedArticles.length} items`);
+
+// One feed per shelf, beside the shelf's own page.
+const categories = [...new Set(articles.map((a) => a.category))];
+for (const category of categories) {
+  const slug = slugify(category);
+  if (!builtRoutes.has(`/blog/category/${slug}`)) {
+    console.warn(`[postbuild] WARNING: /blog/category/${slug} was not prerendered; skipping its feed`);
+    continue;
+  }
+  const dir = path.join(distDir, 'blog/category', slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(
+    path.join(dir, 'feed.xml'),
+    rss({
+      title: `The OutBrick Journal: ${category}`,
+      link: `${siteUrl}/blog/category/${slug}`,
+      self: `${siteUrl}/blog/category/${slug}/feed.xml`,
+      description: `Stories from the ${category} shelf of the OutBrick Journal.`,
+      stories: feedArticles.filter((a) => a.category === category),
+    }),
+  );
+}
+console.log(`[postbuild] category feeds: ${categories.length}`);
+
+// ---------------------------------------------------------------------------------------
+// Search index for /blog (app/(en)/blog/journal-finder.tsx)
+//
+// Title, dek, shelf, tags and section headings go in as written, for display and
+// highlighting. The body goes in only as its distinct words, normalised the way the client
+// normalises a query, which keeps the file small while every word of every story stays
+// findable.
+
+// Must match STOP in journal-finder.tsx: a query drops these words, so the index can too.
+const STOP = new Set('a an and are as at be but by can do does for from how i if in is it its my of on or so the to what when why with you your'.split(' '));
+const normWords = (text) =>
+  text
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[’']/g, '')
+    .replace(/colour/g, 'color')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(' ')
+    .filter((w) => w.length >= 3 && !STOP.has(w));
+const unlink = (text) => text.replace(/\[([^\]]+)\]\([^)\s]+\)/g, '$1');
+
+const searchIndex = articles.map((a) => {
+  const shown = new Set(normWords([a.title, a.dek, a.category, ...a.tags, ...a.sections.map((s) => s.title)].join(' ')));
+  const body = [a.intro, ...a.keyTakeaways, ...a.sections.flatMap((s) => [...s.paragraphs, ...(s.bullets ?? []), s.note ?? '']), ...(a.faqs ?? []).flatMap((f) => [f.question, f.answer])]
+    .map(unlink)
+    .join(' ');
+  // Matching is by word prefix, so a word that begins another one in the same story ("sort"
+  // beside "sorting") adds nothing: in sorted order it sits directly before a word it prefixes.
+  const sorted = [...new Set(normWords(body))].filter((w) => !shown.has(w)).sort((x, y) => (x < y ? -1 : x > y ? 1 : 0));
+  const words = sorted.filter((w, i) => !sorted[i + 1]?.startsWith(w));
+  return {
+    s: a.slug,
+    t: a.title,
+    d: a.dek,
+    c: a.category,
+    n: a.categoryColor,
+    m: Number.parseInt(a.readingTime, 10) || 0,
+    g: a.tags,
+    h: a.sections.map((s) => s.title),
+    k: words.join(' '),
+  };
+});
+const indexJson = JSON.stringify(searchIndex);
+fs.writeFileSync(path.join(distDir, 'journal-index.json'), indexJson);
+console.log(`[postbuild] journal-index.json: ${searchIndex.length} stories, ${(indexJson.length / 1024).toFixed(1)} KB`);
 
 // ---------------------------------------------------------------------------------------
 // llms.txt — https://llmstxt.org

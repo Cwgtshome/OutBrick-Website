@@ -6,6 +6,8 @@
 
 import { Fragment, type ReactNode } from 'react';
 import { getAuthor, type BlogArticle } from '../../../lib/blog';
+import { getShelves, minutesOf } from '../../../lib/journal';
+import { siteUrl } from '../../../lib/site';
 
 const linkPattern = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
@@ -46,10 +48,29 @@ export function categorySlug(category: string): string {
 }
 
 /** One story on a shelf: number, headline, dek, meta, and a small framed thumbnail. */
-export function StoryRow({ article, n, eager = false }: { article: BlogArticle; n: number; eager?: boolean }) {
+export function StoryRow({
+  article,
+  n,
+  eager = false,
+  order,
+  pinned = false,
+}: {
+  article: BlogArticle;
+  n: number;
+  eager?: boolean;
+  /** Position in the default (newest-first) order, for the shelf sort on /blog. */
+  order?: number;
+  /** Already shown above as the lead or a runner-up: listed only when the shelves are filtered. */
+  pinned?: boolean;
+}) {
   const author = getAuthor(article.authorId);
   return (
-    <li className="ed-row" data-tone={article.categoryColor}>
+    <li
+      className="ed-row"
+      data-tone={article.categoryColor}
+      {...(order !== undefined ? { 'data-order': order, 'data-min': minutesOf(article) } : {})}
+      {...(pinned ? { 'data-pinned': '' } : {})}
+    >
       <span className="ed-row-n" aria-hidden="true">{String(n).padStart(2, '0')}</span>
       <div>
         <h3><a href={`/blog/${article.slug}`}>{article.title}</a></h3>
@@ -83,4 +104,77 @@ export function StoryCard({ article, headingLevel = 3 }: { article: BlogArticle;
       </div>
     </article>
   );
+}
+
+/** RSS links: the whole journal, and one feed per shelf (written by scripts/postbuild.mjs). */
+export function FollowJournal({ current }: { current?: string }) {
+  const shelves = getShelves();
+  return (
+    <section className="ed-band-ink2 ed-band-tight" aria-labelledby="follow-title">
+      <div className="ed-wrap ed-follow">
+        <div className="ed-follow-slab">
+          <span className="ed-follow-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="26" height="26"><circle cx="6" cy="18" r="2.4" fill="currentColor" /><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" /></svg>
+          </span>
+          <div>
+            <p className="ed-label">Follow the journal</p>
+            <h2 id="follow-title" className="ed-h3" style={{ marginTop: 10 }}>New stories, in your feed reader.</h2>
+            <p className="ed-follow-note">
+              No sign-up and no email: paste the address into any RSS reader and each new story arrives as it is published.
+            </p>
+            <div className="ed-actions" style={{ marginTop: 20 }}>
+              <a className="ed-btn" href="/feed.xml" type="application/rss+xml">Subscribe to every story</a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p className="ed-label no-mark">Or follow one shelf</p>
+          <ul className="ed-follow-list">
+            {shelves.map((shelf) => (
+              <li key={shelf.slug} data-tone={shelf.tone}>
+                <a href={`/blog/category/${shelf.slug}/feed.xml`} type="application/rss+xml" aria-current={current === shelf.slug ? 'true' : undefined}>
+                  <span className="ed-follow-dot" aria-hidden="true" />
+                  {shelf.category}
+                  <span className="ed-sr"> RSS feed</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** `CollectionPage` + `ItemList` for a category or tag page. */
+export function collectionData({ path, name, description, stories }: { path: string; name: string; description: string; stories: BlogArticle[] }) {
+  const url = `${siteUrl}${path}`;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${url}#page`,
+    url,
+    name,
+    description,
+    inLanguage: 'en',
+    isPartOf: { '@type': 'Blog', '@id': `${siteUrl}/blog#blog`, name: 'The OutBrick Journal' },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: stories.length,
+      itemListElement: stories.map((article, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${siteUrl}/blog/${article.slug}`,
+        name: article.title,
+      })),
+    },
+  };
+}
+
+export function breadcrumbData(items: { name: string; path: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.name, item: `${siteUrl}${item.path}` })),
+  };
 }
