@@ -18,6 +18,8 @@ export type PlayCopy = {
   /** Each key line: the bold part, then the rest. */
   keys: [[string, string], [string, string], [string, string]];
   boardLabel: string;
+  /** Pointer to the daily board (/daily, English only): the lead-in, then the link text. */
+  daily: [string, string];
   loop: { eyebrow: string; title: string; lede: string; rows: [Row, Row, Row, Row, Row] };
   meet: { eyebrow: string; title: string; lede: string; nouns: [string, string][] };
   close: { title: string; lede: string };
@@ -38,6 +40,7 @@ const en: PlayCopy = {
     ['Undo', ' is unlimited here; in the game the first one per board is free.'],
   ],
   boardLabel: 'Play an OutBrick board',
+  daily: ['Played all three? ', 'Try today’s daily board'],
   loop: {
     eyebrow: 'Around the board',
     title: 'The loop, with nothing rounded in our favour.',
@@ -100,6 +103,7 @@ const fr: PlayCopy = {
     ['Annuler', ' est illimité ici ; dans le jeu, la première annulation de chaque plateau est gratuite.'],
   ],
   boardLabel: 'Jouer un plateau OutBrick',
+  daily: ['Les trois sont faits ? ', 'Essayez le plateau du jour'],
   loop: {
     eyebrow: 'Autour du plateau',
     title: 'La boucle de jeu, sans rien arrondir en notre faveur.',
@@ -162,6 +166,7 @@ const de: PlayCopy = {
     ['Rückgängig', ' ist hier unbegrenzt; im Spiel ist die erste Zugrücknahme pro Feld gratis.'],
   ],
   boardLabel: 'Ein OutBrick-Spielfeld spielen',
+  daily: ['Alle drei geschafft? ', 'Probier das Tagesbrett'],
   loop: {
     eyebrow: 'Rund ums Spielfeld',
     title: 'Der Ablauf, ohne etwas zu unseren Gunsten zu runden.',
@@ -224,6 +229,7 @@ const es: PlayCopy = {
     ['Deshacer', ' es ilimitado aquí; en el juego, la primera vez en cada tablero es gratis.'],
   ],
   boardLabel: 'Juega un tablero de OutBrick',
+  daily: ['¿Ya jugaste los tres? ', 'Prueba el tablero del día'],
   loop: {
     eyebrow: 'Alrededor del tablero',
     title: 'El ciclo de juego, sin redondear nada a nuestro favor.',
@@ -286,6 +292,7 @@ const ja: PlayCopy = {
     ['アンドゥ', 'はここでは無制限。ゲームでは各ステージ最初の1回が無料です。'],
   ],
   boardLabel: 'OutBrickのステージを遊ぶ',
+  daily: ['3つとも遊んだら、', '今日のボードへ'],
   loop: {
     eyebrow: 'ステージのまわり',
     title: 'ゲームの流れを、都合よく丸めずに。',

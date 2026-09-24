@@ -1,7 +1,8 @@
 import { boardLevels } from '../../../../lib/board-levels';
 
 /**
- * The nine share pages, one per board and star count. A result link carries
+ * The share pages, three per board (one per star count), for every board in
+ * lib/board-levels.ts: the tour and the daily boards alike. A result link carries
  * only `<board>-<stars>` (the exact move count is in the share text, not the
  * URL), so every page is a plain static file and nothing is read at runtime.
  * The same wording feeds the page, its metadata and scripts/generate-share-images.mjs.

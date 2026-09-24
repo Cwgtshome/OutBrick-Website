@@ -38,6 +38,8 @@ export type ChromeCopy = {
     friends: string;
     costs: string;
     playGuide: string;
+    /** The daily board, /daily (published in English only). */
+    daily: string;
     journal: string;
     pressKit: string;
     help: string;
@@ -77,6 +79,7 @@ const en: ChromeCopy = {
     friends: 'The nine friends',
     costs: 'What it costs',
     playGuide: 'Play guide',
+    daily: 'Daily board',
     journal: 'Journal',
     pressKit: 'Press kit',
     help: 'Help & legal',
@@ -116,6 +119,7 @@ const fr: ChromeCopy = {
     friends: 'Les neuf amis',
     costs: 'Ce que ça coûte',
     playGuide: 'Guide du jeu',
+    daily: 'Plateau du jour',
     journal: 'Journal',
     pressKit: 'Kit presse',
     help: 'Aide et mentions légales',
@@ -155,6 +159,7 @@ const de: ChromeCopy = {
     friends: 'Die neun Freunde',
     costs: 'Was es kostet',
     playGuide: 'Spielanleitung',
+    daily: 'Tagesbrett',
     journal: 'Journal',
     pressKit: 'Pressekit',
     help: 'Hilfe & Rechtliches',
@@ -194,6 +199,7 @@ const es: ChromeCopy = {
     friends: 'Los nueve amigos',
     costs: 'Lo que cuesta',
     playGuide: 'Cómo se juega',
+    daily: 'Tablero del día',
     journal: 'Journal',
     pressKit: 'Kit de prensa',
     help: 'Ayuda y legal',
@@ -233,6 +239,7 @@ const ja: ChromeCopy = {
     friends: '9人のなかま',
     costs: '料金のこと',
     playGuide: '遊び方ガイド',
+    daily: '今日のボード',
     journal: 'Journal',
     pressKit: 'プレスキット',
     help: 'ヘルプと規約',

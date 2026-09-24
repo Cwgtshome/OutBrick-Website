@@ -1,9 +1,15 @@
 import type { Level } from './board-solver';
 
 /**
- * Three hand-made boards for the home-page toy, easiest first. Every `target`
- * is the optimal move count found by the breadth-first solver in
- * `lib/board-solver.ts`; `scripts/verify-board-levels.mjs` re-proves it.
+ * Every board the website can play, easiest first. The first `tourBoardCount`
+ * are the three-board tour on the home page and the play guide (the pips and
+ * "Next board" walk through those); the rest are the daily boards on /daily
+ * (lib/daily-board.ts picks one per UTC day). Every `target` is the optimal
+ * move count found by the breadth-first solver in `lib/board-solver.ts`;
+ * `scripts/verify-board-levels.mjs` re-proves it.
+ *
+ * A board's position is its public number: result links are
+ * /play/result/<index + 1>-<stars>, so only ever append, never reorder.
  *
  * Coordinates: x = column, y = row, both 0-based from the top-left cell.
  */
@@ -67,4 +73,300 @@ export const boardLevels: Level[] = [
       { color: 'blue', side: 'bottom', start: 3, span: 2 },
     ],
   },
+  // The daily boards (/daily), from here on. Append only: a board's position is its result link.
+  {
+    id: 'doorstep',
+    name: 'Doorstep',
+    cols: 5,
+    rows: 5,
+    target: 6,
+    bricks: [
+      { id: 'blue', color: 'blue', x: 4, y: 1, w: 1, h: 2 },
+      { id: 'green', color: 'green', x: 1, y: 2, w: 2, h: 1 },
+      { id: 'violet', color: 'violet', x: 0, y: 0, w: 2, h: 1 },
+      { id: 'red', color: 'red', x: 0, y: 4, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'blue', side: 'top', start: 2, span: 1 },
+      { color: 'green', side: 'bottom', start: 1, span: 2 },
+      { color: 'violet', side: 'right', start: 1, span: 1 },
+      { color: 'red', side: 'left', start: 4, span: 1 },
+    ],
+  },
+  {
+    id: 'corner-shop',
+    name: 'Corner shop',
+    cols: 5,
+    rows: 5,
+    target: 6,
+    bricks: [
+      { id: 'red', color: 'red', x: 1, y: 3, w: 1, h: 2 },
+      { id: 'teal', color: 'teal', x: 3, y: 2, w: 1, h: 2 },
+      { id: 'green', color: 'green', x: 1, y: 2, w: 2, h: 1 },
+      { id: 'blue', color: 'blue', x: 2, y: 3, w: 1, h: 1 },
+    ],
+    gates: [
+      { color: 'red', side: 'top', start: 0, span: 1 },
+      { color: 'teal', side: 'bottom', start: 4, span: 1 },
+      { color: 'green', side: 'right', start: 1, span: 2 },
+      { color: 'blue', side: 'bottom', start: 1, span: 2 },
+    ],
+  },
+  {
+    id: 'back-alley',
+    name: 'Back alley',
+    cols: 5,
+    rows: 5,
+    target: 7,
+    bricks: [
+      { id: 'violet', color: 'violet', x: 1, y: 2, w: 1, h: 1 },
+      { id: 'red', color: 'red', x: 3, y: 1, w: 2, h: 1 },
+      { id: 'blue', color: 'blue', x: 2, y: 0, w: 1, h: 1 },
+      { id: 'green', color: 'green', x: 2, y: 2, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'violet', side: 'top', start: 1, span: 1 },
+      { color: 'red', side: 'bottom', start: 0, span: 2 },
+      { color: 'blue', side: 'left', start: 1, span: 1 },
+      { color: 'green', side: 'left', start: 3, span: 2 },
+    ],
+  },
+  {
+    id: 'crosswind',
+    name: 'Crosswind',
+    cols: 5,
+    rows: 5,
+    target: 7,
+    bricks: [
+      { id: 'red', color: 'red', x: 3, y: 4, w: 1, h: 1 },
+      { id: 'violet', color: 'violet', x: 2, y: 2, w: 2, h: 1 },
+      { id: 'blue', color: 'blue', x: 0, y: 2, w: 2, h: 1 },
+      { id: 'green', color: 'green', x: 3, y: 1, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'red', side: 'right', start: 0, span: 1 },
+      { color: 'violet', side: 'bottom', start: 2, span: 2 },
+      { color: 'blue', side: 'left', start: 2, span: 1 },
+      { color: 'green', side: 'right', start: 3, span: 1 },
+    ],
+  },
+  {
+    id: 'stepping-stones',
+    name: 'Stepping stones',
+    cols: 5,
+    rows: 5,
+    target: 8,
+    bricks: [
+      { id: 'yellow', color: 'yellow', x: 3, y: 2, w: 2, h: 1 },
+      { id: 'teal', color: 'teal', x: 4, y: 3, w: 1, h: 2 },
+      { id: 'blue', color: 'blue', x: 0, y: 0, w: 1, h: 2 },
+      { id: 'green', color: 'green', x: 2, y: 0, w: 2, h: 1 },
+      { id: 'violet', color: 'violet', x: 1, y: 3, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'yellow', side: 'right', start: 0, span: 2 },
+      { color: 'teal', side: 'bottom', start: 1, span: 2 },
+      { color: 'blue', side: 'left', start: 3, span: 2 },
+      { color: 'green', side: 'left', start: 0, span: 1 },
+      { color: 'violet', side: 'top', start: 1, span: 2 },
+    ],
+  },
+  {
+    id: 'pinwheel',
+    name: 'Pinwheel',
+    cols: 5,
+    rows: 5,
+    target: 8,
+    bricks: [
+      { id: 'red', color: 'red', x: 2, y: 1, w: 2, h: 1 },
+      { id: 'green', color: 'green', x: 3, y: 3, w: 1, h: 1 },
+      { id: 'blue', color: 'blue', x: 1, y: 3, w: 2, h: 1 },
+      { id: 'yellow', color: 'yellow', x: 3, y: 2, w: 2, h: 1 },
+      { id: 'teal', color: 'teal', x: 0, y: 4, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'red', side: 'top', start: 2, span: 2 },
+      { color: 'green', side: 'left', start: 2, span: 2 },
+      { color: 'blue', side: 'right', start: 4, span: 1 },
+      { color: 'yellow', side: 'bottom', start: 0, span: 2 },
+      { color: 'teal', side: 'bottom', start: 3, span: 2 },
+    ],
+  },
+  {
+    id: 'long-way',
+    name: 'The long way',
+    cols: 6,
+    rows: 6,
+    target: 9,
+    bricks: [
+      { id: 'red', color: 'red', x: 0, y: 1, w: 1, h: 1 },
+      { id: 'blue', color: 'blue', x: 0, y: 4, w: 1, h: 1 },
+      { id: 'violet', color: 'violet', x: 4, y: 3, w: 1, h: 1 },
+      { id: 'yellow', color: 'yellow', x: 1, y: 3, w: 1, h: 1 },
+      { id: 'teal', color: 'teal', x: 3, y: 4, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'red', side: 'bottom', start: 2, span: 1 },
+      { color: 'blue', side: 'top', start: 5, span: 1 },
+      { color: 'violet', side: 'bottom', start: 4, span: 1 },
+      { color: 'yellow', side: 'left', start: 3, span: 1 },
+      { color: 'teal', side: 'left', start: 1, span: 1 },
+    ],
+  },
+  {
+    id: 'switchback',
+    name: 'Switchback',
+    cols: 6,
+    rows: 6,
+    target: 10,
+    bricks: [
+      { id: 'green', color: 'green', x: 3, y: 0, w: 2, h: 1 },
+      { id: 'teal', color: 'teal', x: 3, y: 3, w: 1, h: 1 },
+      { id: 'yellow', color: 'yellow', x: 4, y: 3, w: 1, h: 2 },
+      { id: 'violet', color: 'violet', x: 4, y: 5, w: 2, h: 1 },
+      { id: 'blue', color: 'blue', x: 1, y: 4, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'green', side: 'right', start: 2, span: 1 },
+      { color: 'teal', side: 'bottom', start: 3, span: 1 },
+      { color: 'yellow', side: 'top', start: 2, span: 1 },
+      { color: 'violet', side: 'right', start: 0, span: 1 },
+      { color: 'blue', side: 'left', start: 5, span: 1 },
+    ],
+  },
+  {
+    id: 'log-jam',
+    name: 'Log jam',
+    cols: 6,
+    rows: 6,
+    target: 10,
+    bricks: [
+      { id: 'yellow', color: 'yellow', x: 4, y: 2, w: 2, h: 1 },
+      { id: 'teal', color: 'teal', x: 2, y: 0, w: 2, h: 1 },
+      { id: 'blue', color: 'blue', x: 1, y: 3, w: 1, h: 2 },
+      { id: 'violet', color: 'violet', x: 2, y: 4, w: 1, h: 2 },
+      { id: 'green', color: 'green', x: 4, y: 5, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'yellow', side: 'left', start: 0, span: 1 },
+      { color: 'teal', side: 'top', start: 1, span: 2 },
+      { color: 'blue', side: 'bottom', start: 0, span: 2 },
+      { color: 'violet', side: 'bottom', start: 5, span: 1 },
+      { color: 'green', side: 'top', start: 4, span: 2 },
+    ],
+  },
+  {
+    id: 'tight-squeeze',
+    name: 'Tight squeeze',
+    cols: 6,
+    rows: 6,
+    target: 11,
+    bricks: [
+      { id: 'teal', color: 'teal', x: 1, y: 5, w: 2, h: 1 },
+      { id: 'green', color: 'green', x: 3, y: 1, w: 2, h: 1 },
+      { id: 'blue', color: 'blue', x: 3, y: 5, w: 1, h: 1 },
+      { id: 'red', color: 'red', x: 3, y: 2, w: 1, h: 2 },
+      { id: 'yellow', color: 'yellow', x: 4, y: 5, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'teal', side: 'bottom', start: 0, span: 2 },
+      { color: 'green', side: 'left', start: 5, span: 1 },
+      { color: 'blue', side: 'top', start: 0, span: 1 },
+      { color: 'red', side: 'right', start: 3, span: 2 },
+      { color: 'yellow', side: 'right', start: 0, span: 2 },
+    ],
+  },
+  {
+    id: 'relay',
+    name: 'Relay',
+    cols: 6,
+    rows: 6,
+    target: 11,
+    bricks: [
+      { id: 'red', color: 'red', x: 0, y: 0, w: 2, h: 1 },
+      { id: 'green', color: 'green', x: 4, y: 2, w: 1, h: 1 },
+      { id: 'blue', color: 'blue', x: 3, y: 0, w: 1, h: 2 },
+      { id: 'yellow', color: 'yellow', x: 1, y: 3, w: 2, h: 1 },
+      { id: 'teal', color: 'teal', x: 1, y: 4, w: 1, h: 2 },
+    ],
+    gates: [
+      { color: 'red', side: 'bottom', start: 2, span: 2 },
+      { color: 'green', side: 'top', start: 2, span: 2 },
+      { color: 'blue', side: 'left', start: 1, span: 2 },
+      { color: 'yellow', side: 'right', start: 0, span: 1 },
+      { color: 'teal', side: 'right', start: 4, span: 2 },
+    ],
+  },
+  {
+    id: 'turnstile',
+    name: 'Turnstile',
+    cols: 6,
+    rows: 6,
+    target: 12,
+    bricks: [
+      { id: 'violet', color: 'violet', x: 3, y: 2, w: 2, h: 1 },
+      { id: 'green', color: 'green', x: 5, y: 3, w: 1, h: 2 },
+      { id: 'teal', color: 'teal', x: 1, y: 1, w: 1, h: 2 },
+      { id: 'yellow', color: 'yellow', x: 3, y: 0, w: 2, h: 1 },
+      { id: 'blue', color: 'blue', x: 0, y: 3, w: 1, h: 2 },
+      { id: 'red', color: 'red', x: 0, y: 0, w: 2, h: 1 },
+    ],
+    gates: [
+      { color: 'violet', side: 'left', start: 1, span: 1 },
+      { color: 'green', side: 'right', start: 1, span: 2 },
+      { color: 'teal', side: 'top', start: 1, span: 1 },
+      { color: 'yellow', side: 'top', start: 4, span: 2 },
+      { color: 'blue', side: 'bottom', start: 5, span: 1 },
+      { color: 'red', side: 'bottom', start: 0, span: 2 },
+    ],
+  },
+  {
+    id: 'keyhole',
+    name: 'Keyhole',
+    cols: 6,
+    rows: 6,
+    target: 13,
+    bricks: [
+      { id: 'green', color: 'green', x: 2, y: 5, w: 2, h: 1 },
+      { id: 'red', color: 'red', x: 4, y: 2, w: 2, h: 1 },
+      { id: 'violet', color: 'violet', x: 3, y: 1, w: 2, h: 1 },
+      { id: 'teal', color: 'teal', x: 2, y: 0, w: 1, h: 2 },
+      { id: 'blue', color: 'blue', x: 0, y: 2, w: 1, h: 1 },
+      { id: 'yellow', color: 'yellow', x: 1, y: 2, w: 1, h: 2 },
+    ],
+    gates: [
+      { color: 'green', side: 'right', start: 0, span: 1 },
+      { color: 'red', side: 'top', start: 1, span: 2 },
+      { color: 'violet', side: 'right', start: 3, span: 2 },
+      { color: 'teal', side: 'bottom', start: 1, span: 1 },
+      { color: 'blue', side: 'left', start: 0, span: 2 },
+      { color: 'yellow', side: 'bottom', start: 4, span: 2 },
+    ],
+  },
+  {
+    id: 'gridlock',
+    name: 'Gridlock',
+    cols: 6,
+    rows: 6,
+    target: 14,
+    bricks: [
+      { id: 'teal', color: 'teal', x: 4, y: 2, w: 1, h: 2 },
+      { id: 'yellow', color: 'yellow', x: 1, y: 3, w: 1, h: 2 },
+      { id: 'green', color: 'green', x: 3, y: 3, w: 1, h: 2 },
+      { id: 'violet', color: 'violet', x: 0, y: 3, w: 1, h: 2 },
+      { id: 'blue', color: 'blue', x: 0, y: 5, w: 2, h: 1 },
+      { id: 'red', color: 'red', x: 4, y: 0, w: 1, h: 2 },
+    ],
+    gates: [
+      { color: 'teal', side: 'top', start: 2, span: 1 },
+      { color: 'yellow', side: 'bottom', start: 5, span: 1 },
+      { color: 'green', side: 'right', start: 0, span: 3 },
+      { color: 'violet', side: 'left', start: 4, span: 2 },
+      { color: 'blue', side: 'right', start: 4, span: 1 },
+      { color: 'red', side: 'bottom', start: 2, span: 1 },
+    ],
+  },
 ];
+
+/** How many of `boardLevels`, from the start, make up the home page and play guide tour. */
+export const tourBoardCount = 3;

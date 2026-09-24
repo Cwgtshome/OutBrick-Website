@@ -9,7 +9,7 @@
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
 const { webkit, firefox, devices } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
 
-const paths = ['/', '/play', '/blog', '/blog/how-to-solve-sliding-block-puzzles', '/mascots', '/support', '/play/result/2-3'];
+const paths = ['/', '/play', '/blog', '/blog/how-to-solve-sliding-block-puzzles', '/mascots', '/support', '/play/result/2-3', '/daily'];
 const targets = [
   ['webkit desktop', webkit, { viewport: { width: 1440, height: 900 } }],
   ['webkit iPhone', webkit, { ...devices['iPhone 15'] }],
