@@ -15,7 +15,7 @@
 
 import stats from './generated/app-store.json';
 import { authors } from './blog';
-import { siteUrl, socialProfiles } from './site';
+import { liveSocialUrls, siteUrl } from './site';
 import { APP_STORE_URL } from '../app/store-badge';
 
 /** Stable identifiers for the entities every page shares. */
@@ -97,7 +97,8 @@ export function organizationNode(): Node {
       availableLanguage: siteLanguages,
     },
     knowsAbout: ['puzzle game design', 'gaming habits', 'game accessibility', 'player experience'],
-    ...(socialProfiles.length ? { sameAs: socialProfiles.map((profile) => profile.url) } : {}),
+    // Only profiles that exist: `sameAs` tells search engines "this profile is us".
+    ...(liveSocialUrls().length ? { sameAs: liveSocialUrls() } : {}),
   };
 }
 

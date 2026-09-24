@@ -18,10 +18,13 @@ const currentHref: Record<string, string> = {
   research: '/research',
   blog: '/blog',
   mascots: '/mascots',
-  'press-kit': '/press-kit',
+  // The press kit and the press room share the masthead's one Press link.
+  'press-kit': '/press',
+  press: '/press',
 };
 
-type Section = 'about' | 'authors' | 'research' | 'blog' | 'mascots' | 'press-kit';
+/** The masthead link a page lights up. Careers, affiliates and creators live in the footer only. */
+type Section = 'about' | 'authors' | 'research' | 'blog' | 'mascots' | 'press-kit' | 'press';
 
 export function EditorialHeader({ current }: { current?: Section }) {
   return (
