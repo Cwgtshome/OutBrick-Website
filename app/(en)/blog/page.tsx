@@ -2,7 +2,9 @@ import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
 import { articles, authors, getAuthor } from '../../../lib/blog';
 import { siteUrl } from '../../../lib/site';
-import { categorySlug, StoryCard, StoryRow } from './journal-kit';
+import { byNewest, categoryPath, getShelves, startHere } from '../../../lib/journal';
+import { categorySlug, FollowJournal, isoDate, StoryCard, StoryRow } from './journal-kit';
+import { JournalSearch, ShelfControls } from './journal-finder';
 
 const title = 'The OutBrick Journal';
 const description =
@@ -28,22 +30,12 @@ export const metadata: Metadata = {
   },
 };
 
-/** Shelf order and a one-line description of each category. */
-const shelves: { category: string; note: string }[] = [
-  { category: 'Player habits', note: 'How play fits a real day: sleep, attention, rituals and the decision to stop.' },
-  { category: 'Success stories', note: 'Games that made the medium feel larger, read from their own records.' },
-  { category: 'Game craft', note: 'Rules, friction and difficulty, from the bench.' },
-  { category: 'Inclusive design', note: 'Widening the route into a challenge without shrinking the challenge.' },
-  { category: 'Learning through play', note: 'Curiosity before explanation.' },
-  { category: 'Social play', note: 'Shared time, even when players are apart.' },
-  { category: 'OutBrick practice', note: 'Notes on how the game itself is made.' },
-];
-
 export default function BlogPage() {
   const [featured, second, third] = articles as [typeof articles[0], typeof articles[0], typeof articles[0]];
   const pinned = new Set([featured.slug, second.slug, third.slug]);
   const featuredAuthor = getAuthor(featured.authorId);
-  const counts = new Map(shelves.map(({ category }) => [category, articles.filter((a) => a.category === category).length]));
+  const shelves = getShelves();
+  const chips = shelves.map((shelf) => ({ slug: shelf.slug, label: shelf.category, count: shelf.articles.length, tone: shelf.tone, href: categoryPath(shelf.category) }));
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -55,10 +47,15 @@ export default function BlogPage() {
     inLanguage: 'en',
     isPartOf: { '@id': `${siteUrl}/#website` },
     publisher: { '@type': 'Organization', name: 'OutBrick', url: siteUrl, logo: { '@type': 'ImageObject', url: `${siteUrl}/icon.png`, width: 1024, height: 1024 } },
-    blogPost: articles.map((article) => ({
+    blogPost: [...articles].sort(byNewest).map((article) => ({
       '@type': 'BlogPosting',
+      '@id': `${siteUrl}/blog/${article.slug}#article`,
       headline: article.title,
+      description: article.dek,
       url: `${siteUrl}/blog/${article.slug}`,
+      datePublished: isoDate(article.publishedAt),
+      dateModified: isoDate(article.updatedAt),
+      articleSection: article.category,
       image: `${siteUrl}${article.image}`,
       author: { '@type': getAuthor(article.authorId).id === 'mourad-hamdi' ? 'Person' : 'Organization', name: getAuthor(article.authorId).name },
     })),
@@ -72,9 +69,10 @@ export default function BlogPage() {
     ],
   };
 
-  // Stories are numbered continuously down the shelves.
-  const shelved = shelves.flatMap(({ category }) => articles.filter((a) => a.category === category && !pinned.has(a.slug)));
+  // Stories are numbered continuously down the shelves (the island renumbers after a filter).
+  const shelved = shelves.flatMap((shelf) => shelf.articles.filter((a) => !pinned.has(a.slug)));
   const numberOf = new Map(shelved.map((article, index) => [article.slug, index + 1]));
+  const orderOf = new Map(shelves.flatMap((shelf) => shelf.articles).map((article, index) => [article.slug, index]));
 
   return (
     <EditorialPage current="blog" className="ed-journal">
@@ -93,6 +91,9 @@ export default function BlogPage() {
                 How games fit into real lives, why a tiny rule can carry a whole world, and what we are
                 learning while we build a puzzle out of brick. Every research claim links to its source.
               </p>
+              <div className="ed-finder">
+                <JournalSearch shelves={chips} />
+              </div>
             </div>
             <div className="ed-postcards" aria-hidden="true">
               <figure className="ed-capture"><img src="/assets/villages/autumn-orchard.jpg" alt="" width={239} height={520} decoding="async" /></figure>
@@ -101,16 +102,6 @@ export default function BlogPage() {
               <img className="ed-friend" src="/assets/friends/sprout.webp" alt="" width={360} height={360} decoding="async" />
             </div>
           </div>
-          <nav className="ed-rail" aria-label="Journal categories">
-            {shelves.map(({ category }) => {
-              const tone = articles.find((a) => a.category === category)?.categoryColor;
-              return (
-                <a key={category} className="ed-chip" data-tone={tone} href={`#${categorySlug(category)}`}>
-                  {category} <b>{counts.get(category)}</b>
-                </a>
-              );
-            })}
-          </nav>
         </div>
         <Bond />
       </header>
@@ -151,26 +142,46 @@ export default function BlogPage() {
         </div>
       </section>
 
+      {/* ---------------- start here ---------------- */}
+      <section className="ed-band-cream ed-band-tight" aria-labelledby="start-title">
+        <div className="ed-wrap">
+          <div className="ed-start-head">
+            <p className="ed-label">New here?</p>
+            <h2 id="start-title" className="ed-h2" style={{ marginTop: 14 }}>Start with these four.</h2>
+          </div>
+          <ol className="ed-start">
+            {startHere.map((article, index) => (
+              <li key={article.slug} data-tone={article.categoryColor} className="ed-lift">
+                <span className="ed-start-n" aria-hidden="true">{index + 1}</span>
+                <h3><a href={`/blog/${article.slug}`}>{article.title}</a></h3>
+                <p className="ed-meta">{article.category} · {article.readingTime}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
       {/* ---------------- the shelves ---------------- */}
       <section className="ed-band-ink ed-band" aria-labelledby="shelves-title">
         <div className="ed-wrap">
           <p className="ed-label">The shelves</p>
           <h2 id="shelves-title" className="ed-h2" style={{ marginTop: 14, maxWidth: '18ch' }}>Everything else, sorted by colour.</h2>
-          <div className="ed-shelves" style={{ marginTop: 'clamp(40px, 5vw, 64px)' }}>
-            {shelves.map(({ category, note }) => {
-              const onShelf = articles.filter((a) => a.category === category && !pinned.has(a.slug));
-              const tone = articles.find((a) => a.category === category)?.categoryColor;
-              if (!onShelf.length) return null;
+          <ShelfControls shelves={chips} total={articles.length} />
+          <div className="ed-shelves" data-archive="" style={{ marginTop: 'clamp(36px, 4vw, 56px)' }}>
+            {shelves.map((shelf) => {
+              const anchor = categorySlug(shelf.category);
               return (
-                <section key={category} id={categorySlug(category)} data-tone={tone} aria-labelledby={`${categorySlug(category)}-title`} style={{ scrollMarginTop: 90 }}>
+                <section key={shelf.slug} id={anchor} data-shelf={shelf.slug} data-tone={shelf.tone} aria-labelledby={`${anchor}-title`} style={{ scrollMarginTop: 90 }}>
                   <div className="ed-shelf-head">
                     <span className="ed-slab" aria-hidden="true"><Studs count={2} /></span>
-                    <h2 id={`${categorySlug(category)}-title`}>{category}</h2>
-                    <p>{note}</p>
+                    <h2 id={`${anchor}-title`}><a href={categoryPath(shelf.category)}>{shelf.category}</a></h2>
+                    <p>{shelf.note}</p>
                   </div>
                   <div className="ed-shelf-rule" aria-hidden="true" />
                   <ol className="ed-rows">
-                    {onShelf.map((article) => <StoryRow key={article.slug} article={article} n={numberOf.get(article.slug)!} />)}
+                    {shelf.articles.map((article) => (
+                      <StoryRow key={article.slug} article={article} n={numberOf.get(article.slug) ?? 0} order={orderOf.get(article.slug)} pinned={pinned.has(article.slug)} />
+                    ))}
                   </ol>
                 </section>
               );
@@ -215,6 +226,8 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
+
+      <FollowJournal />
 
       <JsonLd data={structuredData} />
       <JsonLd data={breadcrumbData} />

@@ -195,7 +195,7 @@ export function VillageHeader({
           <details className="menu">
             <summary aria-label={copy.menuLabel(label)}>
               <span className="bars" aria-hidden="true"><i /><i /><i /></span>
-              {copy.menu}
+              <span className="menu-word">{copy.menu}</span>
             </summary>
             <nav className="menu-panel" aria-label={copy.menuPanelLabel(label)}>
               {links.map((link, index) => (

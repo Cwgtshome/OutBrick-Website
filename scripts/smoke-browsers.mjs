@@ -9,7 +9,7 @@
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
 const { webkit, firefox, devices } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
 
-const paths = ['/', '/play', '/blog', '/blog/how-to-solve-sliding-block-puzzles', '/mascots', '/support', '/play/result/2-3'];
+const paths = ['/', '/ja', '/de/play', '/play', '/blog', '/blog/how-to-solve-sliding-block-puzzles', '/mascots', '/support', '/play/result/2-3'];
 const targets = [
   ['webkit desktop', webkit, { viewport: { width: 1440, height: 900 } }],
   ['webkit iPhone', webkit, { ...devices['iPhone 15'] }],
@@ -53,6 +53,11 @@ for (const [label, type, options] of targets) {
     await page.waitForTimeout(150);
     const state = await page.evaluate(() => ({
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      // The header clips its own overflow, so a masthead item pushed off-screen never shows up
+      // as page scroll; measure its children against the viewport directly.
+      headerOverflow: [...document.querySelectorAll('header.site .wrap > *')].some(
+        (el) => el.getBoundingClientRect().width > 0 && el.getBoundingClientRect().right > document.documentElement.clientWidth + 1,
+      ),
       invisible: [...document.querySelectorAll('h1, h2, h3, p')]
         .filter((el) => {
           const box = el.getBoundingClientRect();
@@ -67,6 +72,7 @@ for (const [label, type, options] of targets) {
     }));
     if (errors.length) fail(`${label} ${path}`, errors.join(' | '));
     if (state.overflow > 1) fail(`${label} ${path}`, `${state.overflow}px of sideways scroll`);
+    if (state.headerOverflow) fail(`${label} ${path}`, 'a header item runs past the right edge');
     if (state.invisible.length) fail(`${label} ${path}`, `text still invisible after scrolling: ${state.invisible.join('; ')}`);
     await page.close();
   }

@@ -8,6 +8,12 @@
      slide   rows and steps slide in from the left and stop
      rise    tiles lift into place, quietly
      unmask  images are uncovered from the top
+     mask    section headings slide up out of a mask, like a line of type
+             set from below
+   And, tied to the scrollbar rather than fired once (CSS scroll-driven
+   animations, with a small script fallback where they are missing): the
+   hero settles back as you leave it, and the three devices in Built for
+   Apple rise into place at different rates.
    Reveal states only hide content under `html.js`; Reduce Motion turns all
    of it off (see the foot of this file and of the village stylesheet).
    ================================================================== */
@@ -167,10 +173,13 @@
   animation: ob-land var(--dur-drop) var(--ease-drop) both;
   animation-delay: calc(140ms + var(--i) * 85ms);
 }
+/* Each word drops in from a little above and a little nearer, out of focus,
+   and settles sharp: depth first, then the brick lands. */
 @keyframes ob-land {
-  0% { opacity: 0; transform: translateY(-0.85em); }
+  0% { opacity: 0; transform: translate3d(0, -0.6em, 0) scale(1.14); filter: blur(12px); }
   30% { opacity: 1; }
-  100% { opacity: 1; transform: none; }
+  65% { filter: blur(0); }
+  100% { opacity: 1; transform: none; filter: none; }
 }
 /* the one word that IS a brick: a gold slab with studs and a foot */
 .ob-home .hero-title .slab {
@@ -191,9 +200,10 @@
   animation-delay: 720ms;
 }
 @keyframes ob-land-slab {
-  0% { opacity: 0; transform: translateY(-1.4em) rotate(-8deg); }
+  0% { opacity: 0; transform: translateY(-1.4em) rotate(-8deg) scale(1.1); filter: blur(10px); }
   25% { opacity: 1; }
-  100% { opacity: 1; transform: none; }
+  60% { filter: blur(0); }
+  100% { opacity: 1; transform: none; filter: none; }
 }
 .ob-home .slab-studs {
   position: absolute;
@@ -216,12 +226,12 @@
   color: #1d2766;
   font-weight: 500;
   max-width: 36em;
-  animation: ob-fade-up 700ms var(--ease-out) 900ms both;
+  animation: ob-fade-up var(--dur-reveal) var(--ease-glide) 900ms both;
 }
-.ob-home .hero-cta { margin-top: 30px; gap: 10px 14px; animation: ob-fade-up 700ms var(--ease-out) 1.05s both; }
+.ob-home .hero-cta { margin-top: 30px; gap: 10px 14px; animation: ob-fade-up var(--dur-reveal) var(--ease-glide) 1.05s both; }
 .ob-home .hero-cta .badge { padding: 0; margin-right: 6px; }
 @keyframes ob-fade-up {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: none; }
 }
 
@@ -232,7 +242,7 @@
   display: grid;
   grid-template-columns: repeat(2, max-content);
   gap: 12px 24px;
-  animation: ob-fade-up 700ms var(--ease-out) 1.2s both;
+  animation: ob-fade-up var(--dur-reveal) var(--ease-glide) 1.2s both;
 }
 .ob-home .hero-facts li {
   display: flex;
@@ -296,11 +306,23 @@
 }
 .ob-home .peek {
   position: absolute;
+  display: block;
   height: auto;
   pointer-events: none;
   filter: drop-shadow(0 10px 8px rgba(26, 19, 80, 0.28));
   translate: calc(var(--px, 0) * var(--depth, 10px)) calc(var(--py, 0) * var(--depth, 10px) * 0.6);
   transition: translate 700ms var(--ease-out);
+}
+/* Each peeker looks toward the pointer: it leans (rotate about its feet) and
+   edges over a few pixels, set per friend as --lr / --lx / --ly by
+   village-motion.tsx. Its move plays on the image itself (.fm-actor). */
+.ob-home .peek img {
+  display: block;
+  width: 100%;
+  height: auto;
+  translate: var(--lx, 0px) var(--ly, 0px);
+  rotate: var(--lr, 0deg);
+  transition: translate 650ms var(--ease-glide), rotate 650ms var(--ease-glide);
 }
 .ob-home .peek-sprout {
   --depth: -8px;
@@ -309,7 +331,7 @@
   right: -30%;
   top: 8%;
   rotate: 14deg;
-  animation: ob-peek-right 900ms var(--ease-slide) 1.35s both, ob-bob 3.9s ease-in-out 2.3s infinite;
+  animation: ob-peek-right 900ms var(--ease-slide) 1.35s both, fm-idle var(--idle-dur) ease-in-out 2.3s infinite;
 }
 .ob-home .peek-bloo {
   --depth: 18px;
@@ -318,7 +340,7 @@
   left: -42%;
   bottom: 8%;
   rotate: -6deg;
-  animation: ob-peek-left 900ms var(--ease-slide) 1.2s both, ob-bob 3.3s ease-in-out 2.1s infinite;
+  animation: ob-peek-left 900ms var(--ease-slide) 1.2s both, fm-idle var(--idle-dur) ease-in-out 2.1s infinite;
 }
 .ob-home .peek-peach {
   --depth: 24px;
@@ -327,7 +349,7 @@
   right: -36%;
   bottom: 0%;
   rotate: 5deg;
-  animation: ob-peek-up 900ms var(--ease-slide) 1.5s both, ob-bob 2.9s ease-in-out 2.4s infinite;
+  animation: ob-peek-up 900ms var(--ease-slide) 1.5s both, fm-idle var(--idle-dur) ease-in-out 2.4s infinite;
 }
 @keyframes ob-peek-left {
   from { opacity: 0; transform: translateX(70%) scale(0.9); }
@@ -728,19 +750,21 @@
   transform: translateX(var(--bx, 0px));
   transition: transform 560ms var(--ease-slide);
 }
+/* The tail slides with a transform, not `left`, so moving it never lays
+   anything out. */
 .ob-home .bubble::after {
   content: '';
   position: absolute;
   bottom: -12px;
-  left: var(--tail, 48px);
+  left: 0;
   width: 26px;
   height: 26px;
   margin-left: -13px;
   border-radius: 0 0 6px 0;
   background: var(--cream);
   box-shadow: 5px 5px 0 #d9c49c;
-  transform: rotate(45deg);
-  transition: left 560ms var(--ease-slide);
+  transform: translateX(var(--tail, 48px)) rotate(45deg);
+  transition: transform 560ms var(--ease-slide);
 }
 .ob-home .bubble-line { margin: 0 0 14px; font-size: clamp(1.08rem, 1rem + 0.35vw, 1.3rem); line-height: 1.4; }
 .ob-home .bubble-line:last-child { margin-bottom: 0; }
@@ -805,24 +829,20 @@ html.js .ob-home .bubble-line[data-active] { margin: 0; animation: ob-say 420ms 
   max-width: 150px;
   transform-origin: 50% 100%;
   rotate: var(--lean, 0deg);
-  transition: rotate 600ms var(--ease-slide);
+  transition: rotate 600ms var(--ease-slide), translate var(--dur-slide) var(--ease-slide);
 }
+/* Each friend breathes at its own pace (.fm-idle) and plays its own move on
+   hover, focus or a tap (.fm-actor); both live in styles/friend-moves.css. */
 .ob-home .friend-body img {
+  display: block;
   width: 100%;
   height: auto;
   filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.35));
-  animation: ob-bob calc(2.6s + var(--i) * 0.29s) ease-in-out calc(var(--i) * -0.73s) infinite;
   -webkit-user-drag: none;
   user-select: none;
 }
-.ob-home .friend-btn.hop .friend-body { animation: ob-hop 640ms var(--ease-out); }
-@keyframes ob-hop {
-  0% { transform: none; }
-  18% { transform: scale(1.1, 0.88); }
-  50% { transform: translateY(-40px) scale(0.95, 1.06); }
-  78% { transform: scale(1.06, 0.93); }
-  100% { transform: none; }
-}
+/* the friend who is moving draws over its neighbours, particles and all */
+.ob-home .shelf li:has(.is-moving) { z-index: 2; }
 .ob-home .friend-btn::after {
   /* the plinth brick each friend stands on */
   content: '';
@@ -834,9 +854,14 @@ html.js .ob-home .bubble-line[data-active] { margin: 0; animation: ob-say 420ms 
   border-radius: 7px 7px 3px 3px;
   background: var(--b);
   box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.3), 0 6px 0 var(--foot);
-  transition: height var(--dur-slide) var(--ease-slide);
+  transform-origin: 50% 100%;
+  transition: transform var(--dur-slide) var(--ease-slide);
 }
-.ob-home .friend-btn[aria-pressed='true']::after { height: calc(var(--h, 20px) + 10px); }
+/* Whoever is talking stands on a plinth 10px taller. It grows by scaling
+   from its foot (--hs is its taller height over its own) and the friend
+   rises with it, so the row never reflows. */
+.ob-home .friend-btn[aria-pressed='true']::after { transform: scaleY(var(--hs, 1.4)); }
+.ob-home .friend-btn[aria-pressed='true'] .friend-body { translate: 0 -10px; }
 .ob-home .friend-name {
   order: 2;
   margin-top: 18px;
@@ -1126,10 +1151,22 @@ html.js .ob-home .bubble-line[data-active] { margin: 0; animation: ob-say 420ms 
   transition:
     opacity 380ms linear var(--d, 0ms),
     transform var(--dur-drop) var(--ease-drop) var(--d, 0ms),
-    clip-path 1000ms var(--ease-out) var(--d, 0ms);
+    clip-path var(--dur-reveal) var(--ease-glide) var(--d, 0ms);
 }
 .ob-home [data-reveal='slide'] { transition-timing-function: linear, var(--ease-slide), linear; transition-duration: 300ms, var(--dur-slide), 0ms; }
-.ob-home [data-reveal='rise'] { transition-timing-function: linear, var(--ease-out), linear; transition-duration: 500ms, 900ms, 0ms; }
+.ob-home [data-reveal='rise'] { transition-timing-function: linear, var(--ease-glide), linear; transition-duration: 500ms, var(--dur-reveal), 0ms; }
+/* Headings rise out of a mask. The clip reaches past the box on every side
+   but the bottom (ascenders, accents, the italic overhang), and a little
+   below it for descenders; the line starts further down than that. */
+.ob-home [data-reveal='mask'] { transition: none; }
+html.js .ob-home [data-reveal='mask'] { clip-path: inset(-0.4em -0.6em -0.22em -0.6em); }
+.ob-home .mask-line {
+  display: block;
+  transition:
+    transform var(--dur-settle) var(--ease-glide) var(--d, 0ms),
+    opacity 600ms linear var(--d, 0ms);
+}
+html.js .ob-home [data-reveal='mask']:not(.in) .mask-line { transform: translate3d(0, 118%, 0); opacity: 0; }
 html.js .ob-home [data-reveal='drop']:not(.in) { opacity: 0; transform: translateY(-44px); }
 html.js .ob-home [data-reveal='slide']:not(.in) { opacity: 0; transform: translateX(-56px); }
 html.js .ob-home [data-reveal='rise']:not(.in) { opacity: 0; transform: translateY(36px); }
@@ -1217,12 +1254,70 @@ html.js .ob-home [data-reveal='unmask']:not(.in) img { clip-path: inset(0 0 100%
   .ob-home .village { width: 150px; }
 }
 
+/* ============================ SCROLL-LINKED ============================
+   Tied to the scroll position, not fired once. Where the browser has
+   scroll-driven animations (Chromium, Safari 26) the compositor runs them;
+   elsewhere (Firefox today) village-motion.tsx writes one progress value per
+   frame and the same shapes are drawn from it. With neither, everything
+   simply sits at rest. None of it runs under Reduce Motion. */
+
+/* The hero settles back as you leave it: the words move off a little faster
+   than the page, the phone stays behind a moment longer and sinks back.
+   Transform only — nothing is dimmed, so the words keep their contrast. */
+@keyframes ob-hero-leave {
+  to { transform: translate3d(0, -9vh, 0); }
+}
+@keyframes ob-stage-leave {
+  to { transform: translate3d(0, -3vh, 0) scale(0.97); }
+}
+/* The three devices start low and rise to their places, each at its own
+   rate, so the stage opens up like a set coming up through the floor. */
+.ob-home .dev-ipad { --rise: 70px; }
+.ob-home .dev-phone-a { --rise: 150px; }
+.ob-home .dev-phone-b { --rise: 210px; }
+@keyframes ob-dev-rise {
+  from { transform: translate3d(0, var(--rise), 0); }
+  to { transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .ob-home .hero { view-timeline: --hero block; }
+    .ob-home .hero-copy {
+      animation: ob-hero-leave linear both;
+      animation-timeline: --hero;
+      animation-range: exit 0% exit 100%;
+    }
+    .ob-home .hero-stage {
+      animation: ob-stage-leave linear both;
+      animation-timeline: --hero;
+      animation-range: exit 0% exit 100%;
+    }
+    .ob-home .device-stage { view-timeline: --devices block; }
+    .ob-home .dev {
+      animation: ob-dev-rise linear both;
+      animation-timeline: --devices;
+      animation-range: entry 0% cover 55%;
+    }
+  }
+  @supports not (animation-timeline: view()) {
+    /* --scroll (hero) and --sp (device stage, 0 → 1 across its cover range)
+       come from village-motion.tsx; without them these are at rest. */
+    .ob-home .hero-copy {
+      transform: translate3d(0, calc(min(1, var(--scroll, 0)) * -9vh), 0);
+    }
+    .ob-home .dev { transform: translate3d(0, calc(var(--rise) * (1 - min(1, var(--sp, 1) / 0.55))), 0); }
+  }
+}
+
 /* ============================ REDUCE MOTION ============================
    The village stylesheet already stops every animation and transition under
    `.ob-site`. What is left is state: nothing may stay hidden or offset. */
 @media (prefers-reduced-motion: reduce) {
   html.js .ob-home [data-reveal]:not(.in) { opacity: 1; transform: none; clip-path: none; }
   html.js .ob-home [data-reveal] img { transform: none; clip-path: none; }
+  html.js .ob-home [data-reveal='mask'] { clip-path: none; }
+  html.js .ob-home [data-reveal='mask'] .mask-line { transform: none; opacity: 1; }
   .ob-home .stage-inner,
   .ob-home .peek { transform: none; translate: none; }
   .ob-home .lane-bricks i { transform: none; }
@@ -1271,7 +1366,7 @@ html.js .ob-home [data-reveal='unmask']:not(.in) img { clip-path: inset(0 0 100%
   padding: 10px 10px 0;
   background: #0d0a26;
   box-shadow: 0 0 0 2px #3a2f94, 0 30px 60px rgba(6, 3, 26, 0.55);
-  transition: translate 0.6s var(--ease-out, ease);
+  transition: translate var(--dur-reveal) var(--ease-glide);
 }
 .ob-home .dev img { display: block; width: 100%; height: auto; }
 .ob-home .dev-ipad {
