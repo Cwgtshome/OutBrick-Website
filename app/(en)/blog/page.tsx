@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
 import { articles, authors, getAuthor } from '../../../lib/blog';
+import { journalLanguages } from '../../../lib/i18n/blog';
 import { siteUrl } from '../../../lib/site';
 import { byNewest, categoryPath, getShelves, startHere } from '../../../lib/journal';
 import { categorySlug, FollowJournal, StoryCard, StoryRow } from './journal-kit';
@@ -15,7 +16,8 @@ const description =
 export const metadata: Metadata = {
   title: { absolute: 'The OutBrick Journal — notes from around the board' },
   description,
-  alternates: { canonical: '/blog' },
+  // The journal index in the four languages its cornerstone guides are translated into.
+  alternates: { canonical: '/blog', languages: journalLanguages() },
   openGraph: {
     type: 'website',
     url: `${siteUrl}/blog`,
