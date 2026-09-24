@@ -4,6 +4,7 @@ import { Bond, Crumbs, EditorialPage, JsonLd } from '../../../editorial-shell';
 import { getJob, hiringCountries, hiringCountriesText, jobDescriptionHtml, jobs, jobsPostedOn, jobsValidThrough, type Job } from '../../../../lib/business';
 import { friends } from '../../../../lib/mascots';
 import { pageMetadata, siteUrl } from '../../../../lib/site';
+import { breadcrumbNode, graph, ids, ref, webPageNode } from '../../../../lib/structured-data';
 import { CareersForm } from '../careers-form';
 
 type JobPageProps = { params: Promise<{ slug: string }> };
@@ -48,35 +49,30 @@ export default async function JobPage({ params }: JobPageProps) {
   if (!job) notFound();
   const url = `${siteUrl}/careers/${job.slug}`;
 
-  const jobData = {
-    '@context': 'https://schema.org',
+  const jobPosting = {
     '@type': 'JobPosting',
     title: job.title,
     description: jobDescriptionHtml(job),
     datePosted: jobsPostedOn,
     validThrough: jobsValidThrough,
     employmentType: job.employmentType,
-    hiringOrganization: {
-      '@type': 'Organization',
-      name: 'OutBrick',
-      sameAs: siteUrl,
-      logo: `${siteUrl}/icon.png`,
-    },
+    // Google reads the hiring organisation's name inline; the @id ties it to the site entity.
+    hiringOrganization: { '@type': 'Organization', '@id': ids.organization, name: 'OutBrick', url: `${siteUrl}/`, logo: `${siteUrl}/icon.png` },
     jobLocationType: 'TELECOMMUTE',
     applicantLocationRequirements: hiringCountries.map((name) => ({ '@type': 'Country', name })),
     directApply: true,
     identifier: { '@type': 'PropertyValue', name: 'OutBrick', value: job.slug },
     url,
   };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Careers', item: `${siteUrl}/careers` },
-      { '@type': 'ListItem', position: 3, name: job.title, item: url },
-    ],
-  };
+  const structuredData = graph(
+    webPageNode({ url, name: job.title, description: job.summary, mainEntity: ref(`${url}#job`) }),
+    { '@id': `${url}#job`, ...jobPosting },
+    breadcrumbNode(url, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Careers', path: '/careers' },
+      { name: job.title, path: `/careers/${job.slug}` },
+    ]),
+  );
   const others = jobs.filter((other) => other.slug !== job.slug);
   const friend = friends.find((f) => f.id === job.friend);
 
@@ -183,8 +179,7 @@ export default async function JobPage({ params }: JobPageProps) {
         </div>
       </section>
 
-      <JsonLd data={jobData} />
-      <JsonLd data={breadcrumbData} />
+      <JsonLd data={structuredData} />
     </EditorialPage>
   );
 }

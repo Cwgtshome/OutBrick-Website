@@ -3,6 +3,7 @@ import { Badge, Bond, Crumbs, EditorialPage, JsonLd } from '../../../editorial-s
 import { founderQuote, pressBoilerplate } from '../../../../lib/business';
 import { CONTACT_EMAIL, pageMetadata, siteUrl } from '../../../../lib/site';
 import { APP_STORE_URL } from '../../../store-badge';
+import { breadcrumbNode, graph, ids, ref, webPageNode } from '../../../../lib/structured-data';
 import { pressReleases } from '../releases';
 
 const release = pressReleases.find((r) => r.slug === 'outbrick-4-2')!;
@@ -26,19 +27,18 @@ const facts: [string, string][] = [
 ];
 
 export default function PressReleasePage() {
-  const articleData = {
-    '@context': 'https://schema.org',
+  const article = {
     '@type': 'NewsArticle',
     '@id': `${siteUrl}${path}#article`,
-    mainEntityOfPage: `${siteUrl}${path}`,
+    mainEntityOfPage: ref(`${siteUrl}${path}#webpage`),
     headline: release.headline.length > 110 ? release.short : release.headline,
     alternativeHeadline: release.short,
     description,
     datePublished: `${release.published}T09:00:00+00:00`,
     dateModified: `${release.published}T09:00:00+00:00`,
     image: [`${siteUrl}/og.png`],
-    author: { '@type': 'Organization', name: 'OutBrick', url: siteUrl },
-    publisher: { '@type': 'Organization', name: 'OutBrick', url: siteUrl, logo: { '@type': 'ImageObject', url: `${siteUrl}/icon.png` } },
+    author: ref(ids.organization),
+    publisher: ref(ids.organization),
     about: {
       '@type': 'MobileApplication',
       name: 'OutBrick: Block Sort Puzzle',
@@ -49,15 +49,15 @@ export default function PressReleasePage() {
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     },
   };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Press room', item: `${siteUrl}/press` },
-      { '@type': 'ListItem', position: 3, name: release.short, item: `${siteUrl}${path}` },
-    ],
-  };
+  const structuredData = graph(
+    webPageNode({ url: `${siteUrl}${path}`, name: release.headline, description, mainEntity: ref(`${siteUrl}${path}#article`) }),
+    article,
+    breadcrumbNode(`${siteUrl}${path}`, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Press room', path: '/press' },
+      { name: release.short, path },
+    ]),
+  );
 
   return (
     <EditorialPage current="press" className="bz">
@@ -147,8 +147,7 @@ export default function PressReleasePage() {
         </div>
       </article>
 
-      <JsonLd data={articleData} />
-      <JsonLd data={breadcrumbData} />
+      <JsonLd data={structuredData} />
     </EditorialPage>
   );
 }

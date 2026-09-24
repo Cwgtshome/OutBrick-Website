@@ -70,7 +70,7 @@ export type Job = {
 
 /** When the current round of roles was posted, and when it closes. Used in JobPosting data. */
 export const jobsPostedOn = '2026-09-24';
-export const jobsValidThrough = '2026-12-31T23:59';
+export const jobsValidThrough = '2026-12-31T23:59:00+00:00';
 
 /**
  * Where applicants may live. Google's JobPosting for a remote role needs at least one country;
