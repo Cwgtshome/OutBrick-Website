@@ -9,7 +9,7 @@
 // contents or a "jump to" link can never point at nothing. Links a page builds in the browser
 // are not seen here; the cross-browser smoke test clicks the menus.
 
-import { readdir, readFile, stat } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 
 const root = new URL('../dist/client/', import.meta.url).pathname;

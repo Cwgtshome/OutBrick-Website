@@ -104,7 +104,7 @@ for (const article of articles) {
   }
 }
 
-await writeFile(cachePath, `${JSON.stringify(Object.fromEntries(Object.entries(cache).sort()), null, 2)}\n`);
+await writeFile(cachePath, `${JSON.stringify(Object.fromEntries(Object.entries(cache).sort(([a], [b]) => a.localeCompare(b))), null, 2)}\n`);
 for (const note of notes) console.log(`· ${note}`);
 for (const failure of failures) console.log(`✗ ${failure}`);
 console.log(`${seen.size} DOIs across ${articles.length} articles: ${failures.length ? `${failures.length} problems` : 'all match Crossref'}`);
