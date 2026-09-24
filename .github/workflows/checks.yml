@@ -33,11 +33,12 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
-
+      # Build first: it writes lib/generated/app-store.json, which the type-aware lint reads.
       - name: Build
         run: pnpm build
+
+      - name: Lint
+        run: pnpm lint
 
       - name: SEO audit
         run: pnpm audit:seo
