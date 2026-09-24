@@ -9,6 +9,8 @@
  * what lets the new chrome sit above the old body copy without rewriting it.
  */
 
+import type { CSSProperties } from 'react';
+import { HeaderMotion } from './components/home-header-motion';
 import { APP_STORE_URL } from './store-badge';
 
 /** The six-colour running bond that separates one band from the next. */
@@ -68,6 +70,14 @@ export const editorialNav: NavLink[] = [
   { href: '/support', label: 'Support' },
 ];
 
+const menuColours = ['#e2352f', '#ffc53d', '#26b9b0', '#7b5cf0', '#3b8bf0', '#3fc544'];
+
+/**
+ * The sticky masthead. Wide screens get the links inline; narrow ones get a
+ * <details> menu, which opens and closes without any script. The small client
+ * component only adds the niceties: condensing once the page scrolls, and
+ * closing the menu after a pick, on Escape or on a click outside it.
+ */
 export function VillageHeader({
   links = docNav,
   current,
@@ -80,21 +90,45 @@ export function VillageHeader({
   label?: string;
 }) {
   return (
-    <header className="site">
+    <header className={`site ${links.length > 5 ? 'many' : ''}`} data-site-header="">
       <div className="wrap">
         <a className="logo" href={home}>
           <img src="/assets/icon/icon-192.png" alt="" width={42} height={42} />
           <b>OutBrick</b>
+          {home.startsWith('#') ? <span className="sr-only"> — back to top</span> : null}
         </a>
-        <nav className="main" aria-label={label}>
-          {links.map((link) => (
-            <a key={link.href} href={link.href} aria-current={current === link.href ? 'page' : undefined}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
+        {links.length ? (
+          <nav className="main" aria-label={label}>
+            {links.map((link) => (
+              <a key={link.href} href={link.href} aria-current={current === link.href ? 'page' : undefined}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        ) : null}
         <AppStoreBadge />
+        {links.length ? (
+          <details className="menu">
+            <summary aria-label={`${label} menu`}>
+              <span className="bars" aria-hidden="true"><i /><i /><i /></span>
+              Menu
+            </summary>
+            <nav className="menu-panel" aria-label={`${label} (menu)`}>
+              {links.map((link, index) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  aria-current={current === link.href ? 'page' : undefined}
+                  style={{ '--c': menuColours[index % menuColours.length] } as CSSProperties}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+          </details>
+        ) : null}
       </div>
+      <HeaderMotion />
     </header>
   );
 }
