@@ -8,6 +8,7 @@ import { Fragment, type ReactNode } from 'react';
 import { getAuthor, type BlogArticle } from '../../../lib/blog';
 import { getShelves, minutesOf } from '../../../lib/journal';
 import { siteUrl } from '../../../lib/site';
+import { FeedCopy } from './feed-copy';
 
 const linkPattern = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
@@ -142,11 +143,13 @@ export function FollowJournal({ current }: { current?: string }) {
             <p className="ed-label">Follow the journal</p>
             <h2 id="follow-title" className="ed-h3" style={{ marginTop: 10 }}>New stories, in your feed reader.</h2>
             <p className="ed-follow-note">
-              Rather not give an email? Paste the address into any RSS reader and each new story arrives as it is published.
+              Rather not give an email? Copy the feed address into any RSS reader (Reeder, NetNewsWire,
+              Feedly, Inoreader) and each new story arrives as it is published.
             </p>
             <div className="ed-actions" style={{ marginTop: 20 }}>
-              <a className="ed-btn" href="/feed.xml" type="application/rss+xml">Subscribe to every story</a>
+              <FeedCopy url={`${siteUrl}/feed.xml`} label="Copy the feed address" />
             </div>
+            <p className="ed-feed-url"><code>{siteUrl.replace('https://', '')}/feed.xml</code></p>
           </div>
         </div>
         <div>
@@ -154,11 +157,12 @@ export function FollowJournal({ current }: { current?: string }) {
           <ul className="ed-follow-list">
             {shelves.map((shelf) => (
               <li key={shelf.slug} data-tone={shelf.tone}>
-                <a href={`/blog/category/${shelf.slug}/feed.xml`} type="application/rss+xml" aria-current={current === shelf.slug ? 'true' : undefined}>
+                {/* The shelf name opens the shelf; the small button copies that shelf's feed. */}
+                <a href={`/blog/category/${shelf.slug}`} aria-current={current === shelf.slug ? 'page' : undefined}>
                   <span className="ed-follow-dot" aria-hidden="true" />
                   {shelf.category}
-                  <span className="ed-sr"> RSS feed</span>
                 </a>
+                <FeedCopy compact url={`${siteUrl}/blog/category/${shelf.slug}/feed.xml`} label={`Copy the ${shelf.category} feed address`} />
               </li>
             ))}
           </ul>

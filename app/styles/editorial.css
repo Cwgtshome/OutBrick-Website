@@ -1748,7 +1748,28 @@ ul.ed-rail { list-style: none; margin: 0; }
   text-decoration-color: color-mix(in srgb, var(--c) 70%, transparent);
 }
 .ed-follow-list a:hover { text-decoration-color: var(--c); }
-.ed-follow-list a[aria-current='true'] { color: var(--ed-gold); }
+.ed-follow-list a[aria-current='page'] { color: var(--ed-gold); }
+.ed-follow-list li { display: flex; align-items: center; gap: 10px; }
+.ed-feed-copy {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border: 0;
+  border-radius: 10px;
+  color: var(--ed-title);
+  background: color-mix(in srgb, var(--c, #f5851f) 28%, transparent);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--c-foot, #b85a10) 60%, transparent);
+  cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.18s;
+}
+.ed-feed-copy:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--c, #f5851f) 45%, transparent); }
+.ed-feed-copy:active { transform: translateY(2px); box-shadow: none; }
+.ed-feed-copy[data-copied] { background: #3fc544; color: #fff; }
+.ed-feed-copy:focus-visible { outline: 3px solid var(--ed-gold); outline-offset: 2px; }
+.ed-feed-url { margin-top: 12px; font-size: 0.9rem; color: var(--ed-lilac); }
+.ed-feed-url code { font-family: var(--font-mono, ui-monospace, monospace); user-select: all; overflow-wrap: anywhere; }
 .ed-follow-dot { flex: none; width: 16px; height: 11px; border-radius: 3px; background: var(--c); box-shadow: 0 3px 0 var(--c-foot); }
 
 /* ---------------- category and tag pages ---------------- */
