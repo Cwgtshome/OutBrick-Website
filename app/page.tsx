@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: 'OutBrick — a boulevard built out of brick',
     description:
       '2,000 solver-verified boards, 167 brick-built villages, nine brick friends. One finger, no clock, nothing that interrupts a board.',
-    images: [{ url: '/assets/icon/icon-512.png', width: 512, height: 512, alt: 'The OutBrick app icon' }],
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'The OutBrick Journey map in Garden City, with Bloo, Peach and Sprout' }],
   },
 };
 
@@ -484,7 +484,7 @@ export default function HomePage() {
                   <p>Live Activities on the Lock Screen and in the Dynamic Island, Home Screen widgets and Lock Screen accessories, all reading the same shared snapshot.</p>
                 </div>
                 <figure className="tile-media" data-reveal="unmask">
-                  <img loading="lazy" decoding="async" src="/assets/widgets-montage.jpg" width={1400} height={710} alt="A montage of OutBrick Home Screen widgets: current level, the daily brick, a streak, the mascot of the day, the chapter and the endless board." />
+                  <img loading="lazy" decoding="async" src="/assets/widgets-montage.webp" width={1400} height={710} alt="A montage of OutBrick Home Screen widgets: current level, the daily brick, a streak, the mascot of the day, the chapter and the endless board." />
                 </figure>
               </article>
 

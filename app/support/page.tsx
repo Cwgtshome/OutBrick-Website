@@ -71,7 +71,7 @@ export default function SupportPage() {
         <h2>Quick fixes</h2>
         <ul className="points">
           <li><b>Restore purchases:</b> open Shop, then choose Restore purchases. Apple processes the transaction through your Apple ID.</li>
-          <li><b>Colour-blind mode:</b> open Settings and switch on Colour-blind. Every brick and gate gets a readable glyph.</li>
+          <li><b>Colour-blind mode:</b> on by default, so every brick and gate already carries a readable glyph. It can be switched off, and back on, in Settings.</li>
           <li>
             <b>Out of moves:</b> every board has a move limit, shown beside your move count from the
             first tap. Reaching it is not the end of the board — the card offers five more moves for
