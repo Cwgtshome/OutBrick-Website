@@ -24,7 +24,8 @@
   --ink: #1a1350;
   --white: #f3f1fc;
   --muted: #a9a3ce;
-  --lilac: #c9c2ff;
+  /* a hair lighter than the game's #c9c2ff so it reads at 4.5:1 on --panel */
+  --lilac: #cbc4ff;
   --green: #3fc544;
   --green-dark: #1f7f2a;
   --green-light: #8cf07e;
@@ -1891,7 +1892,8 @@ img {
   --paving: #e8d5a8;
   --paving-dark: #cbb383;
   --outline: #2a1b5e;
-  --teal-dark: #087e84;
+  /* #087e84 fell just short of 4.5:1 as eyebrow text on --cream */
+  --teal-dark: #087b81;
   --cream: #fff3dd;
   --title-fill: #fff6d6;
   --ink-on-cream: #142b49;
@@ -2052,7 +2054,9 @@ img {
   font-weight: 600;
   font-size: 1.05rem;
   letter-spacing: 0.01em;
-  color: #fff;
+  /* ink on the green face, as on the board's Go button: white on --green is
+     only 2.3:1 */
+  color: var(--ink);
   text-decoration: none;
   padding: 15px 26px;
   border: 0;
@@ -2061,7 +2065,7 @@ img {
   box-shadow: 0 6px 0 var(--green-dark), 0 10px 18px rgba(0, 0, 0, 0.35);
   transition: transform 0.08s ease, box-shadow 0.08s ease;
   cursor: pointer;
-  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.22);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 .ob-site .btn:hover { filter: brightness(1.05); }
 .ob-site .btn:active {
@@ -2069,6 +2073,8 @@ img {
   box-shadow: 0 3px 0 var(--green-dark), 0 6px 12px rgba(0, 0, 0, 0.35);
 }
 .ob-site .btn.ghost {
+  color: #fff;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.22);
   background: var(--panel);
   box-shadow: 0 6px 0 var(--panel-dark), 0 10px 18px rgba(0, 0, 0, 0.35);
 }
@@ -2801,12 +2807,16 @@ img {
 @media (max-width: 760px) {
   .ob-site footer.site .cols { grid-template-columns: 1fr; }
 }
-.ob-site footer.site h4 {
+/* h2, not h4: the footer columns sit straight under the page's h1/h2 outline */
+.ob-site footer.site h2 {
   font-family: var(--display);
   font-weight: 600;
   color: #fff;
   margin: 0 0 12px;
   font-size: 1rem;
+  line-height: inherit;
+  letter-spacing: normal;
+  text-shadow: none;
 }
 .ob-site footer.site ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
 .ob-site footer.site a { color: var(--lilac); text-decoration: none; }
@@ -3019,7 +3029,7 @@ html.js .ob-site .reveal:not(.in) {
   gap: 12px;
   margin: 4px 0 24px;
 }
-.ob-site .doc .act .btn { text-decoration: none; color: #fff; }
+.ob-site .doc .act .btn { text-decoration: none; color: var(--ink); }
 
 /* a two-line call-out card at the foot of a page */
 .ob-site .doc .handoff {
@@ -3043,7 +3053,7 @@ html.js .ob-site .reveal:not(.in) {
   color: #fff;
 }
 .ob-site .doc .handoff span { color: var(--lilac); font-size: 0.95rem; }
-.ob-site .doc .handoff .btn { text-decoration: none; flex: none; color: #fff; }
+.ob-site .doc .handoff .btn { text-decoration: none; flex: none; color: var(--ink); }
 
 /* ---------------- the other-pages index ---------------- */
 
@@ -3132,6 +3142,9 @@ html.js .ob-site .reveal:not(.in) {
   font-size: 0.95rem;
   color: var(--muted-on-cream);
 }
+/* The live region stays rendered (so it is announced when filled) but takes
+   no room, and no grid gap, until there is something to say. */
+.ob-site .form-status:empty { margin-top: -16px; }
 
 /* ---------------- the challenge page ---------------- */
 

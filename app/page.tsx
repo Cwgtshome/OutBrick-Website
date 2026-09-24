@@ -122,10 +122,12 @@ const ledger = [
 ];
 
 const devices = [
-  { name: 'iPhone', b: '#e2352f' },
+  // Red and purple carry white lettering: the ink falls short of 4.5:1 on
+  // both, and on red only the deeper journal red (#d42f29) clears it in white.
+  { name: 'iPhone', b: '#d42f29', ink: '#fff' },
   { name: 'iPad', b: '#ffc53d' },
   { name: 'Mac', b: '#26b9b0' },
-  { name: 'Apple TV', b: '#7b5cf0' },
+  { name: 'Apple TV', b: '#7b5cf0', ink: '#fff' },
   { name: 'Apple Vision Pro', b: '#3b8bf0' },
   { name: 'Apple Watch', b: '#3fc544' },
 ];
@@ -326,10 +328,13 @@ export default function HomePage() {
                 </p>
               </div>
 
-              <div
+              {/* A named <section> is a region landmark. It takes focus because it
+                  scrolls sideways: without a tab stop, keyboard users could not
+                  reach the villages past the first screen (WCAG 2.1.1). */}
+              <section
                 className="journey-window"
+                // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- scrollable region must be keyboard-focusable
                 tabIndex={0}
-                role="region"
                 aria-label="The 28 village themes of the OutBrick Journey. Scroll or drag sideways to walk the road."
               >
                 <ol className="journey-track">
@@ -350,7 +355,7 @@ export default function HomePage() {
                     </li>
                   ))}
                 </ol>
-              </div>
+              </section>
 
               <div className="wrap journey-meter" aria-hidden="true">
                 <span className="meter-label">Garden City</span>
@@ -463,7 +468,7 @@ export default function HomePage() {
 
             <ul className="devices" aria-label="Platforms">
               {devices.map((device, index) => (
-                <li key={device.name} data-reveal="drop" style={{ '--b': device.b, '--d': `${index * 60}ms` } as Vars}>{device.name}</li>
+                <li key={device.name} data-reveal="drop" style={{ '--b': device.b, '--fg': device.ink, '--d': `${index * 60}ms` } as Vars}>{device.name}</li>
               ))}
             </ul>
 
@@ -481,7 +486,7 @@ export default function HomePage() {
 
               <article className="tile tile-gc" data-reveal="rise" style={{ '--d': '80ms' } as Vars}>
                 <span className="tag">Game Center</span>
-                <p className="big-num" aria-hidden="true">57</p>
+                <span className="big-num" aria-hidden="true" data-n="57" />
                 <h3>Leaderboards and 57 achievements</h3>
                 <p>Lifetime leaderboards, fifty-seven achievements, and challenges you can send to someone you actually know.</p>
               </article>

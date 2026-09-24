@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useSyncExternalStore, type CSSProperties } from 'react';
 import { AppStoreBadge, VillageFooter, VillageHeader } from '../village-shell';
 
 type Challenge = { level: number; par: number; beat: boolean };
@@ -48,14 +48,18 @@ function readChallenge(): Challenge | null {
   };
 }
 
-export function ChallengeLanding() {
-  const [challenge, setChallenge] = useState<Challenge | null>(null);
-  const [ready, setReady] = useState(false);
+// The address never changes under this page, so there is nothing to subscribe
+// to; the store only exists to read it after hydration without an effect.
+const subscribeToNothing = () => () => {};
+const readAddress = () => window.location.pathname + window.location.search;
+const readNoAddress = () => null;
 
-  useEffect(() => {
-    setChallenge(readChallenge());
-    setReady(true);
-  }, []);
+export function ChallengeLanding() {
+  // null while prerendering and hydrating, the real address straight after,
+  // so the server HTML and the first client render still match.
+  const address = useSyncExternalStore(subscribeToNothing, readAddress, readNoAddress);
+  const ready = address !== null;
+  const challenge = useMemo(() => (address === null ? null : readChallenge()), [address]);
 
   useEffect(() => {
     if (challenge) document.title = `Level ${challenge.level} — an OutBrick challenge`;

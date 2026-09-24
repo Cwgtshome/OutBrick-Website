@@ -32,6 +32,13 @@
     "next-env.d.ts"
   ],
   "rules": {
+    // Off on purpose: this site is a static export (vinext prerender ->
+    // dist/client) served as plain files by Netlify. There is no Next image
+    // optimiser at runtime for next/image to call, and next/link adds nothing
+    // to a fully prerendered multi-page site, so plain <a> and <img> (with
+    // explicit width/height, loading and decoding) are the intended output.
+    "nextjs/no-html-link-for-pages": "off",
+    "nextjs/no-img-element": "off",
     "no-array-constructor": "error",
     "no-var": "error",
     "prefer-const": "error",

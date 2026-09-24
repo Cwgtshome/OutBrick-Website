@@ -50,6 +50,9 @@
   /* category tone, overridden by [data-tone] */
   --c: #4b3fc9;
   --c-foot: #2f2696;
+  /* the tone as text on paper or cream: --c-foot, darkened where the foot
+     alone falls short of 4.5:1 (gold, yellow, teal, orange) */
+  --c-text: #2f2696;
   --c-ink: #ffffff;
   --c-soft: #e9e5ff;
 
@@ -77,23 +80,23 @@
 .ed .ed-chrome { display: contents; }
 
 .ed[data-tone='green'],
-.ed [data-tone='green'] { --c: #3fc544; --c-foot: #1f7f2a; --c-ink: #0b2a10; --c-soft: #dcf7d6; }
+.ed [data-tone='green'] { --c: #3fc544; --c-foot: #1f7f2a; --c-ink: #0b2a10; --c-soft: #dcf7d6; --c-text: #1f7f2a; }
 .ed[data-tone='blue'],
-.ed [data-tone='blue'] { --c: #3b8bf0; --c-foot: #1d4fa6; --c-ink: #0a1a3d; --c-soft: #dce9fd; }
+.ed [data-tone='blue'] { --c: #3b8bf0; --c-foot: #1d4fa6; --c-ink: #0a1a3d; --c-soft: #dce9fd; --c-text: #1d4fa6; }
 .ed[data-tone='red'],
-.ed [data-tone='red'] { --c: #d42f29; --c-foot: #8e1c18; --c-ink: #ffffff; --c-soft: #fbdcd9; }
+.ed [data-tone='red'] { --c: #d42f29; --c-foot: #8e1c18; --c-ink: #ffffff; --c-soft: #fbdcd9; --c-text: #8e1c18; }
 .ed[data-tone='pink'],
-.ed [data-tone='pink'] { --c: #f26ab8; --c-foot: #b0367e; --c-ink: #2d0a1e; --c-soft: #fde0f0; }
+.ed [data-tone='pink'] { --c: #f26ab8; --c-foot: #b0367e; --c-ink: #2d0a1e; --c-soft: #fde0f0; --c-text: #b0367e; }
 .ed[data-tone='gold'],
-.ed [data-tone='gold'] { --c: #ffc53d; --c-foot: #b8780a; --c-ink: #1a1350; --c-soft: #fff0c7; }
+.ed [data-tone='gold'] { --c: #ffc53d; --c-foot: #b8780a; --c-ink: #1a1350; --c-soft: #fff0c7; --c-text: #9b6508; }
 .ed[data-tone='purple'],
-.ed [data-tone='purple'] { --c: #7b5cf0; --c-foot: #4a35b0; --c-ink: #ffffff; --c-soft: #e6dffd; }
+.ed [data-tone='purple'] { --c: #7b5cf0; --c-foot: #4a35b0; --c-ink: #ffffff; --c-soft: #e6dffd; --c-text: #4a35b0; }
 .ed[data-tone='teal'],
-.ed [data-tone='teal'] { --c: #26b9b0; --c-foot: #087e84; --c-ink: #04292a; --c-soft: #d4f3f0; }
+.ed [data-tone='teal'] { --c: #26b9b0; --c-foot: #087e84; --c-ink: #04292a; --c-soft: #d4f3f0; --c-text: #087b81; }
 .ed[data-tone='orange'],
-.ed [data-tone='orange'] { --c: #f5851f; --c-foot: #b85a10; --c-ink: #2a1300; --c-soft: #fde5cf; }
+.ed [data-tone='orange'] { --c: #f5851f; --c-foot: #b85a10; --c-ink: #2a1300; --c-soft: #fde5cf; --c-text: #b1560f; }
 .ed[data-tone='yellow'],
-.ed [data-tone='yellow'] { --c: #f9c823; --c-foot: #a8820a; --c-ink: #1a1350; --c-soft: #fff2c2; }
+.ed [data-tone='yellow'] { --c: #f9c823; --c-foot: #a8820a; --c-ink: #1a1350; --c-soft: #fff2c2; --c-text: #8a6b08; }
 
 /* ---------------- layout ---------------- */
 
@@ -182,7 +185,7 @@
 .ed-band-cream .ed-label { color: #5a3fd4; }
 .ed-label[data-tone] { color: var(--c); }
 .ed-band-paper .ed-label[data-tone],
-.ed-band-cream .ed-label[data-tone] { color: var(--c-foot); }
+.ed-band-cream .ed-label[data-tone] { color: var(--c-text); }
 
 .ed-meta {
   font-size: 0.875rem;
@@ -190,7 +193,8 @@
   color: var(--ed-lilac-2);
 }
 .ed-band-paper .ed-meta,
-.ed-band-cream .ed-meta { color: var(--ed-on-paper-2); }
+.ed-band-cream .ed-meta,
+.ed-card .ed-meta { color: var(--ed-on-paper-2); }
 
 /* ---------------- links & buttons ---------------- */
 
@@ -634,7 +638,7 @@
 .ed-band-paper .ed-row p,
 .ed-band-cream .ed-row p { color: var(--ed-on-paper-2); }
 .ed-band-paper .ed-row-n,
-.ed-band-cream .ed-row-n { color: var(--c-foot); }
+.ed-band-cream .ed-row-n { color: var(--c-text); }
 
 /* the editorial promise + authors, on cream */
 .ed-colophon {
@@ -756,7 +760,7 @@
   display: grid;
   gap: 18px;
 }
-.ed-toc .ed-label { color: var(--c-foot); }
+.ed-toc .ed-label { color: var(--c-text); }
 .ed-toc ol {
   list-style: none;
   margin: 0;
@@ -785,7 +789,7 @@
   font-weight: 500;
   font-size: 0.8rem;
   padding-top: 2px;
-  color: var(--c-foot);
+  color: var(--c-text);
 }
 .ed-toc a:hover { background: #f4ead4; color: var(--ed-on-paper); }
 .ed-toc a[aria-current='true'] {
@@ -809,7 +813,7 @@
   font-size: 4.4em;
   line-height: 0.82;
   padding: 0.08em 0.12em 0 0;
-  color: var(--c-foot);
+  color: var(--c-text);
 }
 
 /* key takeaways: an indigo slab with three studs, one per idea */
@@ -1041,7 +1045,14 @@
   box-shadow: 0 3px 0 var(--ed-paper-edge);
 }
 .ed-refs li:target::before { background: var(--c); color: var(--c-ink); box-shadow: 0 3px 0 var(--c-foot); }
-.ed-refs a { color: #3d2aa8; overflow-wrap: anywhere; }
+.ed-refs a {
+  color: #3d2aa8;
+  overflow-wrap: anywhere;
+  /* underlined, so the link is not told apart from the citation by colour alone */
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
 
 /* the author card and the end-of-article note about the game */
 .ed-end {
@@ -1142,7 +1153,6 @@
   font-size: 0.8rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.8;
   margin-bottom: 10px;
 }
 
@@ -1288,7 +1298,6 @@
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.85;
   margin-bottom: 12px;
 }
 .ed-storycard .headline {
@@ -1437,7 +1446,7 @@
   color: var(--c-ink);
   box-shadow: 0 5px 0 var(--c-foot);
 }
-.ed-mnav a small { font-family: var(--ed-display); font-weight: 500; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+.ed-mnav a small { font-family: var(--ed-display); font-weight: 500; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .ed-mnav a b { font-family: var(--ed-display); font-weight: 600; font-size: 1.4rem; }
 .ed-mnav a.next { text-align: right; }
 .ed-mnav a.all { background: var(--ed-ink-3); color: var(--ed-title); box-shadow: 0 5px 0 #0b0730; align-content: center; text-align: center; }

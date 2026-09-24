@@ -79,6 +79,7 @@
 
 /* a moulded button that reads as a brick: violet face, dark foot, pressable */
 .ob-home .brick-btn {
+  color: #fff;
   background: var(--panel);
   box-shadow: 0 6px 0 var(--panel-dark), 0 14px 24px rgba(26, 19, 80, 0.28);
   text-shadow: none;
@@ -914,7 +915,7 @@ html.js .ob-home .bubble-line[data-active] { margin: 0; animation: ob-say 420ms 
   padding: 16px 20px 14px;
   border-radius: 10px;
   background: var(--b);
-  color: var(--ink);
+  color: var(--fg, var(--ink));
   font-family: var(--display);
   font-weight: 600;
   font-size: 1.05rem;
@@ -961,6 +962,9 @@ html.js .ob-home .bubble-line[data-active] { margin: 0; animation: ob-say 420ms 
 }
 .ob-home .tile-gc h3,
 .ob-home .tile-gc p { color: var(--ink); }
+/* A watermark, not text: the numeral is drawn from data-n by CSS so it stays
+   out of the reading order (the heading beside it already says 57). */
+.ob-home .tile-gc .big-num::before { content: attr(data-n); }
 .ob-home .tile-gc .big-num {
   position: absolute;
   right: 18px;

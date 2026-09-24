@@ -183,7 +183,7 @@ export function VillageFooter() {
             </p>
           </div>
           <div>
-            <h4>The game</h4>
+            <h2>The game</h2>
             <ul>
               <li><a href={APP_STORE_URL}>Download on the App Store</a></li>
               <li><a href="/#journey">The Journey</a></li>
@@ -195,7 +195,7 @@ export function VillageFooter() {
             </ul>
           </div>
           <div>
-            <h4>Help &amp; legal</h4>
+            <h2>Help &amp; legal</h2>
             <ul>
               <li><a href="/support">Support</a></li>
               <li><a href="/privacy">Privacy policy</a></li>
