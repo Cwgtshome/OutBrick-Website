@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useSyncExternalStore, type CSSProperties } from 'react';
+import { useEffect, useMemo, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react';
+import { PlayableBoard } from '../../components/playable-board';
 import { AppStoreBadge, VillageFooter, VillageHeader } from '../../village-shell';
 
 type Challenge = { level: number; par: number; beat: boolean };
@@ -54,7 +55,11 @@ const subscribeToNothing = () => () => {};
 const readAddress = () => window.location.pathname + window.location.search;
 const readNoAddress = () => null;
 
-export function ChallengeLanding() {
+/**
+ * `qr` is the desktop scan-to-get card, drawn on the server (app/components/get-app-qr.tsx)
+ * and passed in so its code is computed at build time, not shipped in this bundle.
+ */
+export function ChallengeLanding({ qr }: { qr?: ReactNode }) {
   // null while prerendering and hydrating, the real address straight after,
   // so the server HTML and the first client render still match.
   const address = useSyncExternalStore(subscribeToNothing, readAddress, readNoAddress);
@@ -128,9 +133,28 @@ export function ChallengeLanding() {
               <AppStoreBadge campaign="challenge" />
               <a className="btn ghost" href={appUrl}>Already have OutBrick? Open this board</a>
             </div>
+            {qr ? <div className="challenge-qr">{qr}</div> : null}
           </div>
           <div className="road" aria-hidden="true"><div className="paving" /></div>
         </div>
+
+        {/* Someone without the app can learn the rule here before the download finishes. */}
+        <section className="band-ink challenge-warmup" aria-labelledby="warmup-title">
+          <div className="wrap">
+            <div className="warmup-copy">
+              <p className="eyebrow">Warm up first</p>
+              <h2 id="warmup-title">Learn the rule in your browser.</h2>
+              <p className="lede">
+                Slide each brick out through the gate of its own colour. A brick glides until something
+                stops it, so plan the order. This is board one of the Journey; the one you were dared to
+                is waiting in the app.
+              </p>
+            </div>
+            <div className="play-board-wrap">
+              <PlayableBoard label="Warm-up OutBrick board" />
+            </div>
+          </div>
+        </section>
 
         <section className="band-cream">
           <div className="wrap">

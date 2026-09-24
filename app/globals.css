@@ -3270,6 +3270,22 @@ html.js .ob-site .reveal:not(.in) {
 .ob-site .challenge .lede { margin-inline: auto; }
 .ob-site .challenge .cta-row { justify-content: center; }
 .ob-site .challenge .facts { justify-content: center; }
+.ob-site .challenge .challenge-qr { display: flex; justify-content: center; }
+.ob-site .challenge .challenge-qr .obx-getapp { margin: 28px 0 44px; }
+
+/* the warm-up board: the rule, playable, for someone who does not have the app yet */
+.ob-site .challenge-warmup { padding: clamp(56px, 8vw, 104px) 0; }
+.ob-site .challenge-warmup .wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+.ob-site .challenge-warmup .play-board-wrap { width: 100%; }
+@media (max-width: 860px) {
+  .ob-site .challenge-warmup .wrap { grid-template-columns: minmax(0, 1fr); }
+  .ob-site .challenge-warmup .play-board-wrap { max-width: 440px; margin: 0 auto; }
+}
 .ob-site .levelplaque {
   --b: var(--gold);
   --b-foot: var(--gold-dark);

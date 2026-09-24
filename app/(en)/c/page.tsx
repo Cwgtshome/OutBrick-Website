@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { GetAppQr } from '../../components/get-app-qr';
 import { ChallengeLanding } from './challenge-landing';
 
 export const metadata: Metadata = {
@@ -10,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function ChallengePage() {
-  return <ChallengeLanding />;
+  return <ChallengeLanding qr={<GetAppQr centred />} />;
 }
