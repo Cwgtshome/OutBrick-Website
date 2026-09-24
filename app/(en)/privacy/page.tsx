@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       eyebrow="OutBrick privacy policy"
       title="Your board stays yours."
       summary="OutBrick is designed to work entirely on your device. This policy explains what the app does and does not collect, how Apple services fit in, and how to make privacy choices."
-      updated="22 September 2026"
+      updated="24 September 2026"
       current="/privacy"
     >
       <div className="brick headline">
@@ -120,11 +120,52 @@ export default function PrivacyPage() {
       <section className="brick">
         <h2>Information we receive through support</h2>
         <p>
-          Our contact form prepares an email in your mail app; it does not itself send a message. If you
-          send that email, we receive the information you choose to include, such as your name, email
-          address, device model, iOS version, level number, and a description or screenshot of a
-          problem. We use it to answer you and diagnose the issue. Please do not send passwords, payment
-          details, government identifiers, or sensitive personal information.
+          You can reach us through the contact form on this website (described in the next section) or by
+          emailing us directly. Either way, we receive the information you choose to include, such as your
+          name, email address, device model, iOS version, app version, level number, and a description or
+          screenshot of a problem. We use it to answer you and diagnose the issue. Please do not send
+          passwords, payment details, government identifiers, or sensitive personal information.
+        </p>
+      </section>
+
+      <section className="brick" id="forms">
+        <h2>Forms on this website</h2>
+        <p>
+          This section is new as of 24 September 2026. Before that date the website&rsquo;s contact form
+          only opened a draft in your own mail app and sent nothing itself; it now sends your message
+          directly, and the site gained two more forms.
+        </p>
+        <p>
+          The contact form, the <a href="/affiliates">affiliate programme</a> application and the job
+          applications on our <a href="/careers">careers</a> pages send what you type to OutBrick. They
+          are handled by Netlify, the company that hosts this website, through its Netlify Forms service:
+          Netlify receives each submission on our behalf, stores it in our account, screens it for spam
+          (using its spam-filtering provider, Akismet) and emails it to us. Netlify acts as our service
+          provider under its own <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">privacy policy</a>.
+          No other third party receives it, and nothing is sent until you press the button.
+        </p>
+        <ul className="points">
+          <li><b>Contact form:</b> the topic, your name, email address and message, and — only if you fill them in — your device, iOS version and app version.</li>
+          <li><b>Affiliate application:</b> your name, email address, the links to your channels, an audience-size range, your country, how you would promote OutBrick, your preferred handle and the code proposed from it.</li>
+          <li><b>Job application:</b> the role, your name, email address, a link to your portfolio or profile, where you live and your time zone, and your note.</li>
+          <li><b>With every form:</b> your consent tick, and the technical details Netlify records with a submission, such as the time, your IP address and your browser&rsquo;s user agent, which it uses to keep out spam.</li>
+        </ul>
+        <p>
+          We use these details only for the reason you sent them: to answer your message, to review and
+          run your affiliate application, or to consider you for a role. We do not sell them, use them
+          for advertising, or add you to a mailing list.
+        </p>
+        <p>
+          <b>How long we keep them.</b> We delete form submissions, and the emails they arrive as, within
+          12 months of our last exchange with you — unless there is an ongoing relationship that needs
+          them: a support case still open, an approved affiliate (for as long as they take part, plus
+          what tax and accounting law requires for payments), or someone we hire.
+        </p>
+        <p>
+          <b>Deleting them sooner.</b> Ask us through the <a href="/contact?topic=privacy">contact form</a>{' '}
+          with the topic set to Privacy, or by email, and we will delete your submissions from Netlify and
+          from our inbox and confirm when it is done. You can also ask for a copy of what we hold, or for
+          a correction.
         </p>
       </section>
 
@@ -161,7 +202,8 @@ export default function PrivacyPage() {
         <p>
           Apple services, App Store purchases, Game Center, iCloud sync, and iCloud backups are operated
           under their own terms and privacy policies. Google is the one advertising partner in the app,
-          described above. We do not add a third-party analytics or advertising partner without updating
+          described above. On this website, Netlify hosts the pages and handles the forms, also described
+          above. We do not add a third-party analytics or advertising partner without updating
           this policy and the relevant App Store privacy information first — which is what this revision
           is. We may update this page when the app or its practices change; the effective date above
           will show the latest revision.

@@ -28,7 +28,7 @@ export type ChromeCopy = {
   badgeAlt: string;
   /** The home page's section anchors, in order: rule, journey, cast, fair, apple. */
   homeNav: [string, string, string, string, string];
-  /** The game, Journal, Mascots, Press kit, About, Authors, Research, Support. */
+  /** The game, Journal, Mascots, Press, About, Authors, Research, Support. */
   editorialNav: [string, string, string, string, string, string, string, string];
   footer: {
     blurb: string;
@@ -51,6 +51,12 @@ export type ChromeCopy = {
     accessibility: string;
     refunds: string;
     contact: string;
+    /** The company column: press room, creators kit, affiliate programme, careers (English-only pages). */
+    company: string;
+    pressRoom: string;
+    creators: string;
+    affiliates: string;
+    careers: string;
     legal: string;
   };
   /** Heading and aria-label of the language switcher. */
@@ -68,7 +74,7 @@ const en: ChromeCopy = {
   badgeLabel: 'Download OutBrick on the App Store',
   badgeAlt: 'Download on the App Store',
   homeNav: ['The rule', 'The Journey', 'The cast', 'What it costs', 'Built for Apple'],
-  editorialNav: ['The game', 'Journal', 'Mascots', 'Press kit', 'About', 'Authors', 'Research', 'Support'],
+  editorialNav: ['The game', 'Journal', 'Mascots', 'Press', 'About', 'Authors', 'Research', 'Support'],
   footer: {
     blurb: 'OutBrick: Block Sort Puzzle. Slide, sort, clear the board. Free on the App Store.',
     game: 'The game',
@@ -90,6 +96,11 @@ const en: ChromeCopy = {
     accessibility: 'Accessibility',
     refunds: 'Refunds & purchases',
     contact: 'Contact',
+    company: 'Company',
+    pressRoom: 'Press room',
+    creators: 'Creators',
+    affiliates: 'Affiliates',
+    careers: 'Careers',
     legal:
       '© 2026 OutBrick. Apple, the Apple logo, iPhone, iPad, Mac, Apple TV, Apple Watch and Apple Vision Pro are trademarks of Apple Inc., registered in the U.S. and other countries and regions. App Store is a service mark of Apple Inc.',
   },
@@ -129,6 +140,11 @@ const fr: ChromeCopy = {
     accessibility: 'Accessibilité',
     refunds: 'Remboursements et achats',
     contact: 'Contact',
+    company: 'Entreprise',
+    pressRoom: 'Espace presse',
+    creators: 'Créateurs',
+    affiliates: 'Affiliation',
+    careers: 'Carrières',
     legal:
       '© 2026 OutBrick. Apple, le logo Apple, iPhone, iPad, Mac, Apple TV, Apple Watch et Apple Vision Pro sont des marques d’Apple Inc., déposées aux États-Unis et dans d’autres pays et régions. App Store est une marque de service d’Apple Inc.',
   },
@@ -168,6 +184,11 @@ const de: ChromeCopy = {
     accessibility: 'Barrierefreiheit',
     refunds: 'Erstattungen & Käufe',
     contact: 'Kontakt',
+    company: 'Unternehmen',
+    pressRoom: 'Presse',
+    creators: 'Creator',
+    affiliates: 'Partnerprogramm',
+    careers: 'Karriere',
     legal:
       '© 2026 OutBrick. Apple, das Apple Logo, iPhone, iPad, Mac, Apple TV, Apple Watch und Apple Vision Pro sind Marken der Apple Inc., die in den USA und weiteren Ländern und Regionen eingetragen sind. App Store ist eine Dienstleistungsmarke der Apple Inc.',
   },
@@ -207,6 +228,11 @@ const es: ChromeCopy = {
     accessibility: 'Accesibilidad',
     refunds: 'Reembolsos y compras',
     contact: 'Contacto',
+    company: 'Empresa',
+    pressRoom: 'Sala de prensa',
+    creators: 'Creadores',
+    affiliates: 'Afiliados',
+    careers: 'Empleo',
     legal:
       '© 2026 OutBrick. Apple, el logotipo de Apple, iPhone, iPad, Mac, Apple TV, Apple Watch y Apple Vision Pro son marcas comerciales de Apple Inc., registradas en EE. UU. y en otros países y regiones. App Store es una marca de servicio de Apple Inc.',
   },
@@ -246,6 +272,11 @@ const ja: ChromeCopy = {
     accessibility: 'アクセシビリティ',
     refunds: '返金と購入',
     contact: 'お問い合わせ',
+    company: '会社情報',
+    pressRoom: 'プレスルーム',
+    creators: 'クリエイター',
+    affiliates: 'アフィリエイト',
+    careers: '採用情報',
     legal:
       '© 2026 OutBrick. Apple、Appleのロゴ、iPhone、iPad、Mac、Apple TV、Apple Watch、Apple Vision Proは、米国およびその他の国や地域で登録されたApple Inc.の商標です。App StoreはApple Inc.のサービスマークです。',
   },

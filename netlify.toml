@@ -108,6 +108,23 @@
   status = 301
   force = true
 
+# Affiliate links: outbrick.site/r/<code> (see /affiliates and lib/affiliate-code.mjs).
+#
+# A 302, not a 301: the destination is a campaign-tagged App Store address that may change (a
+# provider token added, a storefront changed), and a browser caches a 301 for good. `ct=aff-<code>`
+# is the App Analytics campaign token, so App Store Connect reports downloads and proceeds per
+# affiliate. App Analytics only attributes a campaign when the link also carries the provider
+# token: once APP_STORE_PROVIDER_TOKEN in app/store-badge.tsx is filled in, append `&pt=<token>`
+# to `to` below as well. `scripts/affiliate-link.mjs <code>` prints and checks a code's links.
+#
+# There are no approved-code lists here on purpose: any code redirects, and only codes the team
+# has approved are ever paid, because only those were given out.
+[[redirects]]
+  from = "/r/:code"
+  to = "https://apps.apple.com/us/app/outbrick/id6807997465?mt=8&ct=aff-:code"
+  status = 302
+  force = true
+
 # The path form of a challenge link.
 #
 # `BrickoutMessages/Challenge.swift` parses both `/c?lv=<n>` and `/c/<n>`, and

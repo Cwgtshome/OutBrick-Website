@@ -90,6 +90,7 @@ export default function PressKitPage() {
               <div className="ed-actions">
                 <a className="ed-btn" href="mailto:mourad.hamdi@me.com?subject=OutBrick%20press">Email the developer</a>
                 <a className="ed-link" href="#assets">Go to the downloads</a>
+                <a className="ed-link" href="/press">News and releases in the press room</a>
               </div>
             </div>
             <div aria-hidden="true" style={{ display: 'grid', justifyItems: 'center', gap: 18 }}>
@@ -222,7 +223,8 @@ export default function PressKitPage() {
             <p><a className="ed-link" style={{ fontSize: '1.2rem', marginTop: 0 }} href="mailto:mourad.hamdi@me.com?subject=OutBrick%20press">mourad.hamdi@me.com</a></p>
             <div className="ed-actions" style={{ marginTop: 28 }}>
               <Badge />
-              <a className="ed-link" href="/contact">Or use the contact form</a>
+              <a className="ed-link" href="/contact?topic=press#form">Or use the contact form</a>
+              <a className="ed-link" href="/press">Press room</a>
             </div>
           </div>
         </div>

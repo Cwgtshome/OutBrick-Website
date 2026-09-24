@@ -4,6 +4,8 @@
 /* The journal, mascots, press kit, about, authors and research routes. All of
    it is scoped under `.ed`; see the header of that file. */
 @import './styles/editorial.css';
+/* Contact, affiliates, creators, press and careers, and the forms they share. */
+@import './styles/business.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -2837,9 +2839,13 @@ img {
 }
 .ob-site footer.site .cols {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
   gap: 28px;
   align-items: start;
+}
+@media (max-width: 1000px) {
+  .ob-site footer.site .cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ob-site footer.site .cols > :first-child { grid-column: 1 / -1; }
 }
 @media (max-width: 760px) {
   .ob-site footer.site .cols { grid-template-columns: 1fr; }
