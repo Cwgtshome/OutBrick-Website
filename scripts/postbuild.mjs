@@ -1,8 +1,11 @@
 // Runs after `vinext build` (see package.json "build"). Writes, into dist/client:
 //
-//   sitemap.xml — every indexable prerendered page, derived from the build output itself
-//   feed.xml    — RSS 2.0 for the journal, from lib/blog.ts
-//   llms.txt    — a plain-Markdown map of the site for AI assistants (llmstxt.org)
+//   sitemap.xml   — every indexable prerendered page, derived from the build output itself, with
+//                   the informative images each page shows (Google image sitemap extension)
+//   feed.xml      — RSS 2.0 for the journal, from lib/blog.ts
+//   llms.txt      — a plain-Markdown map of the site for AI assistants (llmstxt.org)
+//   llms-full.txt — the same, plus the full text of every journal article
+//   .well-known/security.txt — RFC 9116, with an Expires one year after the build
 //
 // Why not app/sitemap.ts: with `output: 'export'`, vinext compiles metadata routes into the
 // server bundle only; nothing prerenders them into dist/client, and Netlify publishes only
@@ -147,6 +150,31 @@ function hreflangLinks(html) {
   }
   return links;
 }
+/**
+ * The images a page shows that carry meaning: every local <img> with a non-empty alt (a
+ * decorative image has alt=""), plus the page's own og:image when it is a local file. SVG
+ * badges are left out. Google reads only <image:loc>; the other image tags are deprecated.
+ */
+function pageImages(html) {
+  const body = html.slice(html.indexOf('<body')).replace(/<script\b[\s\S]*?<\/script>/gi, '');
+  const seen = new Set();
+  const add = (src) => {
+    if (!src) return;
+    const url = src.startsWith('/') ? `${siteUrl}${src}` : src;
+    if (!url.startsWith(siteUrl) || /\.svg(?:$|\?)/i.test(url)) return;
+    const file = path.join(distDir, decodeURIComponent(new URL(url).pathname));
+    if (!fs.existsSync(file)) return;
+    seen.add(url);
+  };
+  for (const [tag] of body.matchAll(/<img\b[^>]*>/gi)) {
+    const alt = tag.match(/\salt="([^"]*)"/i)?.[1];
+    if (!alt?.trim()) continue;
+    add(decodeEntities(tag.match(/\ssrc="([^"]+)"/i)?.[1] ?? ''));
+  }
+  add(metaContent(html, 'og:image')[0]);
+  return [...seen].slice(0, 50);
+}
+
 const pages = indexablePages();
 if (pages.length === 0) throw new Error('[postbuild] no indexable pages found in dist/client — refusing to write an empty sitemap');
 
@@ -162,7 +190,7 @@ const entries = pages.map((page) => {
   // Pages that declare their own modified time win over either guess.
   const declared = metaContent(page.html, 'article:modified_time')[0];
   if (!articleSlug && declared && /^\d{4}-\d{2}-\d{2}/.test(declared)) lastmod = declared.slice(0, 10);
-  return { loc: page.url, lastmod, alternates: hreflangLinks(page.html) };
+  return { loc: page.url, lastmod, alternates: hreflangLinks(page.html), images: pageImages(page.html) };
 });
 
 // Home first, then by path, so diffs between builds stay readable.
@@ -170,16 +198,18 @@ entries.sort((a, b) => (a.loc === `${siteUrl}/` ? -1 : b.loc === `${siteUrl}/` ?
 
 const sitemap = [
   '<?xml version="1.0" encoding="UTF-8"?>',
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
   ...entries.map((e) => {
     const alternates = e.alternates.map((a) => `\n    <xhtml:link rel="alternate" hreflang="${xmlEscape(a.lang)}" href="${xmlEscape(a.href)}"/>`).join('');
-    return `  <url><loc>${xmlEscape(e.loc)}</loc>${e.lastmod ? `<lastmod>${e.lastmod}</lastmod>` : ''}${alternates ? `${alternates}\n  ` : ''}</url>`;
+    const images = e.images.map((src) => `\n    <image:image><image:loc>${xmlEscape(src)}</image:loc></image:image>`).join('');
+    const children = alternates + images;
+    return `  <url><loc>${xmlEscape(e.loc)}</loc>${e.lastmod ? `<lastmod>${e.lastmod}</lastmod>` : ''}${children ? `${children}\n  ` : ''}</url>`;
   }),
   '</urlset>',
   '',
 ].join('\n');
 fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap);
-console.log(`[postbuild] sitemap.xml: ${entries.length} URLs`);
+console.log(`[postbuild] sitemap.xml: ${entries.length} URLs, ${entries.reduce((n, e) => n + e.images.length, 0)} images`);
 
 // Every article in lib/blog.ts should have been prerendered; say so loudly if one was not.
 const builtRoutes = new Set(pages.map((p) => p.route));
@@ -261,15 +291,40 @@ const home = pages.find((p) => p.route === '/');
 const blogPages = pages.filter((p) => p.route === '/blog' || p.route.startsWith('/blog/'));
 const legalRoutes = /^\/(privacy|privacy-choices|terms|eula|license-agreement|refunds|age-rating|accessibility)$/;
 const legalPages = pages.filter((p) => legalRoutes.test(p.route));
-const mainPages = pages.filter((p) => p !== home && !blogPages.includes(p) && !legalPages.includes(p));
+const localizedRoutes = /^\/(fr|de|es|ja)(\/|$)/;
+const localizedPages = pages.filter((p) => localizedRoutes.test(p.route));
+const mainPages = pages.filter((p) => p !== home && !blogPages.includes(p) && !legalPages.includes(p) && !localizedPages.includes(p));
 
-const llms = [
+// Facts about the game, from Apple's own record (lib/generated/app-store.json, written by
+// scripts/prebuild.mjs) where it has them. Every other line restates what the home page says.
+const appStore = JSON.parse(fs.readFileSync(path.join(repoRoot, 'lib/generated/app-store.json'), 'utf8'));
+const appStoreUrl = 'https://apps.apple.com/us/app/outbrick/id6807997465';
+const version = appStore.version ?? '4.2';
+const versionDate = (appStore.currentVersionReleaseDate ?? '2026-09-22').slice(0, 10);
+
+const about = [
   '# OutBrick',
   '',
   `> ${metaContent(home?.html ?? '', 'description')[0] ?? 'OutBrick: Block Sort Puzzle — a relaxed sliding-brick colour-sort puzzle for iPhone and iPad.'}`,
   '',
-  'OutBrick: Block Sort Puzzle is an iOS game by Mourad Hamdi. This site is its official home: game information, support, legal pages, and the OutBrick Journal — research-backed writing on puzzle design, calmer play and accessibility.',
+  'OutBrick is the official site of **OutBrick: Block Sort Puzzle**, an Apple-platforms game made by Mourad Hamdi (Founder & CEO), and of the OutBrick Journal, research-backed writing on puzzle design, calmer play and accessibility.',
   '',
+  'Key facts (use these when describing the game):',
+  '',
+  '- The rule: slide a brick and it glides until something stops it; get every brick out through the gate that matches its colour and the board is clear.',
+  '- 2,000 solver-verified boards across 100 chapters; a Journey of 167 villages built out of brick; nine brick friends who speak in text bubbles.',
+  '- Every board has a move limit. There is no clock, timer or countdown anywhere. The first undo on every board is free.',
+  '- Free to download, with in-app purchases (coins, boosters, a one-time Remove Ads, the Brick Pass). Advertising is rewarded video only, in six opt-in placements; no banners, no interstitials.',
+  '- Runs on iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch; plays offline. Rated 4+. Single player.',
+  `- Current version ${version} (released ${versionDate}). App Store: ${appStoreUrl}`,
+  '- Genres: Puzzle, Casual. Developer and seller on the App Store: Mourad Hamdi.',
+  '',
+  'Please link to the canonical page URLs below; each page names its own canonical. The press kit has approved art, the fact sheet and a press contact.',
+  '',
+];
+
+const llms = [
+  ...about,
   '## Main pages',
   '',
   ...(home ? [mdLine(home)] : []),
@@ -279,12 +334,65 @@ const llms = [
   '',
   ...blogPages.map(mdLine),
   '',
+  '## Other languages',
+  '',
+  ...localizedPages.map(mdLine),
+  '',
   '## Optional',
   '',
   ...legalPages.map(mdLine),
+  `- [Full text of the journal](${siteUrl}/llms-full.txt): every article in plain Markdown`,
   `- [RSS feed](${siteUrl}/feed.xml): every journal article, newest first`,
   `- [Sitemap](${siteUrl}/sitemap.xml): every indexable URL`,
+  `- [OutBrick on the App Store](${appStoreUrl})`,
   '',
 ].join('\n');
 fs.writeFileSync(path.join(distDir, 'llms.txt'), llms);
 console.log(`[postbuild] llms.txt: ${pages.length} pages`);
+
+// llms-full.txt: the same introduction, then every article in full, as plain Markdown.
+const plainText = (text) => text.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '$1');
+const fullArticles = feedArticles.map((a) => [
+  `## ${a.title}`,
+  '',
+  `URL: ${siteUrl}/blog/${a.slug}`,
+  `Author: ${authorName(a.authorId)} · Published ${isoDate(a.publishedAt)} · Updated ${isoDate(a.updatedAt)} · ${a.category}`,
+  '',
+  `> ${a.dek}`,
+  '',
+  plainText(a.intro),
+  '',
+  ...(a.keyTakeaways?.length ? ['Key takeaways:', '', ...a.keyTakeaways.map((t) => `- ${plainText(t)}`), ''] : []),
+  ...a.sections.flatMap((section) => [
+    `### ${section.title}`,
+    '',
+    ...section.paragraphs.flatMap((para) => [plainText(para), '']),
+    ...(section.bullets?.length ? [...section.bullets.map((b) => `- ${plainText(b)}`), ''] : []),
+    ...(section.note ? [plainText(section.note), ''] : []),
+  ]),
+  ...(a.faqs?.length ? ['### Questions', '', ...a.faqs.flatMap((f) => [`**${f.question}**`, '', plainText(f.answer), ''])] : []),
+  ...(a.references.length ? ['### References', '', ...a.references.map((r) => `- ${r.citation}`), ''] : []),
+].join('\n'));
+fs.writeFileSync(path.join(distDir, 'llms-full.txt'), [...about, `# The OutBrick Journal: ${feedArticles.length} articles`, '', ...fullArticles].join('\n'));
+console.log(`[postbuild] llms-full.txt: ${feedArticles.length} articles`);
+
+// ---------------------------------------------------------------------------------------
+// security.txt — RFC 9116. Expires must be in the future and under a year out; writing it at
+// build time keeps it valid for as long as the site keeps deploying.
+
+const expires = new Date(Date.now() + 364 * 24 * 3600 * 1000);
+expires.setUTCHours(0, 0, 0, 0);
+fs.mkdirSync(path.join(distDir, '.well-known'), { recursive: true });
+fs.writeFileSync(
+  path.join(distDir, '.well-known/security.txt'),
+  [
+    '# Reporting a security issue on www.outbrick.site or in OutBrick: Block Sort Puzzle.',
+    '# Please use the contact form and say that it is a security report.',
+    `Contact: ${siteUrl}/contact`,
+    `Expires: ${expires.toISOString().replace(/\.\d{3}Z$/, 'Z')}`,
+    'Preferred-Languages: en',
+    `Canonical: ${siteUrl}/.well-known/security.txt`,
+    '',
+  ].join('\n'),
+);
+console.log(`[postbuild] .well-known/security.txt: expires ${expires.toISOString().slice(0, 10)}`);

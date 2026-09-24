@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { friends } from '../../../lib/mascots';
 import { siteUrl } from '../../../lib/site';
-import { APP_STORE_URL } from '../../store-badge';
+import { appNode, breadcrumbNode, graph, ids, ref, webPageNode } from '../../../lib/structured-data';
 
 const description =
   'The OutBrick press kit: fact sheet, current game captures, the app icon, all nine brick friends, the words to use, and a direct press contact.';
@@ -38,40 +38,31 @@ const factSheet: [string, string][] = [
 ];
 
 const captures = [
-  { src: '/assets/shots/b-early.jpg', name: 'A packed board', note: 'Start of a level' },
-  { src: '/assets/shots/b-mid.jpg', name: 'Keys, locks and gates', note: 'Mid-board' },
-  { src: '/assets/shots/b-clear.jpg', name: 'The clear card', note: 'Stars and coins' },
-  { src: '/assets/villages/garden-city.jpg', name: 'Garden City', note: 'The Journey map' },
-  { src: '/assets/villages/pirate-harbor.jpg', name: 'Pirate Harbor', note: 'The Journey map' },
-  { src: '/assets/shots/s-shop.jpg', name: 'The shop', note: 'Optional bundles' },
+  { src: '/assets/shots/b-early.jpg', name: 'A packed board', note: 'Start of a level', alt: 'An OutBrick board at the start of a level: green, blue, pink, yellow, red and purple bricks packed into the frame, 34 moves on the counter and three boosters below.' },
+  { src: '/assets/shots/b-mid.jpg', name: 'Keys, locks and gates', note: 'Mid-board', alt: 'A Super Hard OutBrick board part-way through, with keys, padlocks, a crate and coloured gates around the frame.' },
+  { src: '/assets/shots/b-clear.jpg', name: 'The clear card', note: 'Stars and coins', alt: 'The OutBrick clear card for level 214: Bloo cheering above three stars, two moves under target and 100 coins earned.' },
+  { src: '/assets/villages/garden-city.jpg', name: 'Garden City', note: 'The Journey map', alt: 'Garden City on the OutBrick Journey map: a brick road winding between toy-brick houses.' },
+  { src: '/assets/villages/pirate-harbor.jpg', name: 'Pirate Harbor', note: 'The Journey map', alt: 'Pirate Harbor on the OutBrick Journey map: a wooden road of numbered levels running past a moored pirate ship.' },
+  { src: '/assets/shots/s-shop.jpg', name: 'The shop', note: 'Optional bundles', alt: 'The OutBrick shop: a Starter Bundle, a Piggy Bank of coins and Brick Pass Season 1, each with its price.' },
 ];
 
 export default function PressKitPage() {
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    '@id': `${siteUrl}/press-kit#page`,
-    url: `${siteUrl}/press-kit`,
-    name: 'OutBrick press kit',
-    description,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    about: {
-      '@type': 'MobileApplication',
-      name: 'OutBrick: Block Sort Puzzle',
-      applicationCategory: 'GameApplication',
-      operatingSystem: 'iOS, iPadOS, macOS, tvOS, visionOS, watchOS',
-      installUrl: APP_STORE_URL,
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    },
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Press kit', item: `${siteUrl}/press-kit` },
-    ],
-  };
+  const url = `${siteUrl}/press-kit`;
+  const structuredData = graph(
+    webPageNode({
+      url,
+      name: 'OutBrick press kit',
+      description,
+      about: ref(ids.app),
+      mainEntity: ref(ids.app),
+      significantLink: [`${siteUrl}/icon.png`, `${siteUrl}/assets/logo/outbrick-wordmark.png`],
+    }),
+    breadcrumbNode(url, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Press kit', path: '/press-kit' },
+    ]),
+    appNode(),
+  );
 
   return (
     <EditorialPage current="press-kit">
@@ -134,7 +125,7 @@ export default function PressKitPage() {
               <a key={capture.src} href={capture.src} download aria-label={`Download capture: ${capture.name}`}>
                 <figure>
                   <div className="ed-capture">
-                    <img src={capture.src} alt={`${capture.name}: ${capture.note}, OutBrick.`} width={239} height={520} loading="lazy" decoding="async" />
+                    <img src={capture.src} alt={capture.alt} width={239} height={520} loading="lazy" decoding="async" />
                   </div>
                   <figcaption>{capture.name}<span>{capture.note}</span></figcaption>
                 </figure>
@@ -229,7 +220,6 @@ export default function PressKitPage() {
       </section>
 
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
     </EditorialPage>
   );
 }

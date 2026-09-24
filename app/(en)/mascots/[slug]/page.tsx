@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../../editorial-shell';
 import { friends, getAdjacentMascot, getFriend, getMascotStory, mascotStories } from '../../../../lib/mascots';
 import { siteUrl } from '../../../../lib/site';
+import { appNode, breadcrumbNode, graph, ids, ref, webPageNode } from '../../../../lib/structured-data';
 
 type MascotPageProps = { params: Promise<{ slug: string }> };
 
@@ -16,7 +17,8 @@ export async function generateMetadata({ params }: MascotPageProps): Promise<Met
   const story = getMascotStory(slug);
   const friend = getFriend(slug);
   if (!story || !friend) return {};
-  const title = `${story.name}: ${story.headline}`;
+  // "Bloo: The brave bit comes after the wobble" — the headline's closing full stop would sit against the " — OutBrick" suffix.
+  const title = `${story.name}: ${story.headline.replace(/\.$/, '')}`;
   const image = `${siteUrl}${friend.image}`;
 
   return {
@@ -47,34 +49,31 @@ export default async function MascotStoryPage({ params }: MascotPageProps) {
   const storyUrl = `${siteUrl}/mascots/${story.id}`;
   const tone = { '--c': friend.colour, '--c-foot': friend.foot, '--c-ink': friend.ink, '--c-soft': `color-mix(in srgb, ${friend.colour} 18%, #fff)` } as CSSProperties;
 
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    '@id': `${storyUrl}#page`,
-    url: storyUrl,
-    name: `${story.name}: ${story.headline}`,
-    description: story.dek,
-    image: `${siteUrl}${friend.image}`,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    about: {
-      '@type': 'Thing',
-      name: `${story.name} (OutBrick character)`,
-      description: friend.line,
-      image: `${siteUrl}${friend.image}`,
-    },
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Mascots', item: `${siteUrl}/mascots` },
-      { '@type': 'ListItem', position: 3, name: story.name, item: storyUrl },
-    ],
-  };
+  const structuredData = graph(
+    webPageNode({
+      url: storyUrl,
+      name: `${story.name}: ${story.headline}`,
+      description: story.dek,
+      primaryImageOfPage: { '@type': 'ImageObject', url: `${siteUrl}${friend.image}`, width: 360, height: 360, caption: friend.imageAlt },
+      about: {
+        '@type': 'Thing',
+        '@id': `${siteUrl}/mascots#${friend.id}`,
+        name: story.name,
+        alternateName: `${story.name} (OutBrick character)`,
+        description: friend.line,
+        image: `${siteUrl}${friend.image}`,
+        subjectOf: ref(ids.app),
+      },
+    }),
+    breadcrumbNode(storyUrl, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Mascots', path: '/mascots' },
+      { name: story.name, path: `/mascots/${story.id}` },
+    ]),
+    appNode(),
+  );
 
   const otherFriends = friends.filter((item) => item.id !== friend.id);
-
   return (
     <EditorialPage current="mascots">
       <div style={tone}>
@@ -168,7 +167,6 @@ export default async function MascotStoryPage({ params }: MascotPageProps) {
       </div>
 
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
     </EditorialPage>
   );
 }

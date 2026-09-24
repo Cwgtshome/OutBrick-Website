@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../../editorial-shell';
 import { articles, getArticle, getAuthor, getRelatedArticles, type BlogReference } from '../../../../lib/blog';
 import { siteUrl } from '../../../../lib/site';
+import { authorByline, graph, breadcrumbNode, ids, isoDateTime, ref, webPageNode } from '../../../../lib/structured-data';
 import { isoDate, plain, Rich, StoryCard } from '../journal-kit';
 import { ReadingAids } from './reading-aids';
 import { BrandMark } from '../../../village-shell';
@@ -35,8 +36,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       siteName: 'OutBrick',
       title: article.title,
       description: article.dek,
-      publishedTime: isoDate(article.publishedAt),
-      modifiedTime: isoDate(article.updatedAt),
+      publishedTime: isoDateTime(article.publishedAt),
+      modifiedTime: isoDateTime(article.updatedAt),
       authors: [`${siteUrl}/authors/${author.id}`],
       section: article.category,
       tags: article.tags,
@@ -74,53 +75,58 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const author = getAuthor(article.authorId);
   const related = getRelatedArticles(article);
   const articleUrl = `${siteUrl}/blog/${article.slug}`;
-  const authorUrl = `${siteUrl}/authors/${author.id}`;
-  const isPerson = author.id === 'mourad-hamdi';
   const faqs = article.faqs ?? [];
+  const words = [article.intro, ...article.sections.flatMap((s) => [s.title, ...s.paragraphs, ...(s.bullets ?? [])])].map(plain).join(' ');
 
-  const postingData = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    '@id': `${articleUrl}#article`,
-    mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
-    url: articleUrl,
-    headline: article.title,
-    description: article.dek,
-    image: { '@type': 'ImageObject', url: `${siteUrl}${article.image}`, width: 1600, height: 900 },
-    datePublished: isoDate(article.publishedAt),
-    dateModified: isoDate(article.updatedAt),
-    inLanguage: 'en',
-    wordCount: [article.intro, ...article.sections.flatMap((s) => [...s.paragraphs, ...(s.bullets ?? [])])].join(' ').split(/\s+/).length,
-    author: isPerson
-      ? { '@type': 'Person', name: author.name, url: authorUrl, jobTitle: author.role }
-      : { '@type': 'Organization', name: author.name, url: authorUrl },
-    publisher: {
-      '@type': 'Organization',
-      name: 'OutBrick',
-      url: siteUrl,
-      logo: { '@type': 'ImageObject', url: `${siteUrl}/icon.png`, width: 1024, height: 1024 },
+  const structuredData = graph(
+    webPageNode({
+      url: articleUrl,
+      name: article.title,
+      description: article.dek,
+      datePublished: isoDateTime(article.publishedAt),
+      dateModified: isoDateTime(article.updatedAt),
+      primaryImageOfPage: ref(`${articleUrl}#primaryimage`),
+      mainEntity: ref(`${articleUrl}#article`),
+    }),
+    {
+      '@type': 'BlogPosting',
+      '@id': `${articleUrl}#article`,
+      mainEntityOfPage: ref(`${articleUrl}#webpage`),
+      url: articleUrl,
+      headline: article.title,
+      description: article.dek,
+      // The one cover each article has: 1600 × 900 (16:9), at least 1200 px wide as Google asks.
+      image: [{ '@type': 'ImageObject', '@id': `${articleUrl}#primaryimage`, url: `${siteUrl}${article.image}`, width: 1600, height: 900, caption: article.imageAlt }],
+      thumbnailUrl: `${siteUrl}${article.image}`,
+      datePublished: isoDateTime(article.publishedAt),
+      dateModified: isoDateTime(article.updatedAt),
+      inLanguage: 'en',
+      wordCount: words.split(/\s+/).filter(Boolean).length,
+      timeRequired: `PT${Number.parseInt(article.readingTime, 10) || 1}M`,
+      author: authorByline(author.id),
+      publisher: ref(ids.organization),
+      isPartOf: { '@type': 'Blog', '@id': ids.blog, name: 'The OutBrick Journal', url: `${siteUrl}/blog` },
+      articleSection: article.category,
+      keywords: article.tags,
+      citation: article.references.map((reference) => reference.citation),
     },
-    isPartOf: { '@type': 'Blog', '@id': `${siteUrl}/blog#blog`, name: 'The OutBrick Journal' },
-    articleSection: article.category,
-    keywords: article.tags.join(', '),
-    citation: article.references.map((reference) => reference.citation),
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Journal', item: `${siteUrl}/blog` },
-      { '@type': 'ListItem', position: 3, name: article.title, item: articleUrl },
-    ],
-  };
-  const faqData = faqs.length
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: faqs.map((faq) => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: plain(faq.answer) } })),
-      }
-    : null;
+    breadcrumbNode(articleUrl, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Journal', path: '/blog' },
+      { name: article.title, path: `/blog/${article.slug}` },
+    ]),
+    ...(faqs.length
+      ? [
+          {
+            '@type': 'FAQPage',
+            '@id': `${articleUrl}#faq`,
+            url: articleUrl,
+            isPartOf: ref(`${articleUrl}#webpage`),
+            mainEntity: faqs.map((faq) => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: plain(faq.answer) } })),
+          },
+        ]
+      : []),
+  );
 
   const pullAfter = Math.min(1, article.sections.length - 1);
 
@@ -292,9 +298,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       ) : null}
 
       <ReadingAids />
-      <JsonLd data={postingData} />
-      <JsonLd data={breadcrumbData} />
-      {faqData ? <JsonLd data={faqData} /> : null}
+      <JsonLd data={structuredData} />
     </EditorialPage>
   );
 }

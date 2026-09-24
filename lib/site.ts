@@ -13,7 +13,18 @@ export const socialProfiles: { network: 'tiktok'; label: string; url: string }[]
  * `openGraph` object rather than merging into it, so the image and site name are repeated
  * here; and every page names its own canonical, because the layout's would be inherited.
  */
-export function pageMetadata({ path, title, description }: { path: string; title: string; description: string }) {
+export function pageMetadata({
+  path,
+  title,
+  description,
+  imageAlt = 'OutBrick mascots and home screen',
+}: {
+  path: string;
+  title: string;
+  description: string;
+  /** Alt text for the shared /og.png card, when a page wants to describe it in its own words. */
+  imageAlt?: string;
+}) {
   return {
     title: { absolute: title },
     description,
@@ -24,9 +35,9 @@ export function pageMetadata({ path, title, description }: { path: string; title
       url: path,
       title,
       description,
-      images: [{ url: '/og.png', width: 1200, height: 630, alt: 'OutBrick mascots and home screen' }],
+      images: [{ url: '/og.png', width: 1200, height: 630, alt: imageAlt }],
     },
-    twitter: { card: 'summary_large_image' as const, title, description, images: ['/og.png'] },
+    twitter: { card: 'summary_large_image' as const, title, description, images: [{ url: '/og.png', alt: imageAlt }] },
   };
 }
 

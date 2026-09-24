@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../../editorial-shell';
 import { articles, authors } from '../../../../lib/blog';
 import { siteUrl } from '../../../../lib/site';
-import { StoryRow } from '../../blog/journal-kit';
+import { isoDate, StoryRow } from '../../blog/journal-kit';
+import { authorNode, breadcrumbNode, graph, webPageNode } from '../../../../lib/structured-data';
 
 type AuthorPageProps = { params: Promise<{ authorId: string }> };
 
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
   const description = `${lead} ${count} stories in the OutBrick Journal.`;
 
   return {
-    title: `${author.name}, OutBrick Journal author`,
+    title: { absolute: `${author.name}, author at the OutBrick Journal` },
     description,
     alternates: { canonical: `/authors/${author.id}` },
     openGraph: {
@@ -43,29 +44,25 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
   const theirs = articles.filter((article) => article.authorId === author.id);
   const profileUrl = `${siteUrl}/authors/${author.id}`;
-  const isPerson = author.id === 'mourad-hamdi';
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'ProfilePage',
-    '@id': `${profileUrl}#page`,
-    url: profileUrl,
-    name: `${author.name} — OutBrick Journal`,
-    description: author.bio,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    mainEntity: isPerson
-      ? { '@type': 'Person', '@id': `${profileUrl}#person`, name: author.name, jobTitle: author.role, description: author.bio, url: profileUrl, worksFor: { '@type': 'Organization', name: 'OutBrick', url: siteUrl } }
-      : { '@type': 'Organization', '@id': `${profileUrl}#org`, name: author.name, description: author.bio, url: profileUrl, parentOrganization: { '@type': 'Organization', name: 'OutBrick', url: siteUrl } },
-    hasPart: theirs.map((article) => ({ '@type': 'BlogPosting', headline: article.title, url: `${siteUrl}/blog/${article.slug}` })),
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Authors', item: `${siteUrl}/authors` },
-      { '@type': 'ListItem', position: 3, name: author.name, item: profileUrl },
-    ],
-  };
+  const structuredData = graph(
+    webPageNode({
+      type: 'ProfilePage',
+      url: profileUrl,
+      name: `${author.name}, author at the OutBrick Journal`,
+      description: author.bio,
+      dateModified: theirs.map((article) => isoDate(article.updatedAt)).sort().at(-1),
+      mainEntity: {
+        ...authorNode(author.id),
+        agentInteractionStatistic: { '@type': 'InteractionCounter', interactionType: 'https://schema.org/WriteAction', userInteractionCount: theirs.length },
+      },
+      hasPart: theirs.map((article) => ({ '@type': 'BlogPosting', '@id': `${siteUrl}/blog/${article.slug}#article`, headline: article.title, url: `${siteUrl}/blog/${article.slug}` })),
+    }),
+    breadcrumbNode(profileUrl, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Authors', path: '/authors' },
+      { name: author.name, path: `/authors/${author.id}` },
+    ]),
+  );
 
   return (
     <EditorialPage current="authors">
@@ -99,7 +96,6 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
         </div>
       </section>
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
     </EditorialPage>
   );
 }

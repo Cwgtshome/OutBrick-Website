@@ -63,7 +63,7 @@ export const authors: Author[] = [
   {
     id: 'mourad-hamdi',
     name: 'Mourad Hamdi',
-    role: 'Founder & game designer',
+    role: 'Founder & CEO',
     bio: 'Mourad makes small, thoughtful games for the space between one task and the next. OutBrick is his ongoing experiment in calmer play.',
     initials: 'MH',
   },

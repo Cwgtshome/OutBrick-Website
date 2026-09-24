@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { siteUrl } from '../../../lib/site';
+import { breadcrumbNode, graph, ids, ref, webPageNode } from '../../../lib/structured-data';
 
 const description =
   'How the OutBrick Journal reads game research: which sources we use, how claims are matched to evidence, and how every story cites its sources in APA 7.';
@@ -39,25 +40,21 @@ const questions: [string, string][] = [
 ];
 
 export default function ResearchPage() {
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    '@id': `${siteUrl}/research#page`,
-    name: 'How the OutBrick Journal reads research',
-    description,
-    url: `${siteUrl}/research`,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    about: { '@type': 'Thing', name: 'Game design, gaming habits, accessibility and player experience research' },
-    citation: selectedSources.map((source) => source.url),
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Research method', item: `${siteUrl}/research` },
-    ],
-  };
+  const url = `${siteUrl}/research`;
+  const structuredData = graph(
+    webPageNode({
+      url,
+      name: 'How the OutBrick Journal reads research',
+      description,
+      about: { '@type': 'Thing', name: 'Game design, gaming habits, accessibility and player experience research' },
+      author: ref(ids.organization),
+      citation: selectedSources.map((source) => source.url),
+    }),
+    breadcrumbNode(url, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Research method', path: '/research' },
+    ]),
+  );
 
   return (
     <EditorialPage current="research">
@@ -127,7 +124,6 @@ export default function ResearchPage() {
       </section>
 
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
     </EditorialPage>
   );
 }

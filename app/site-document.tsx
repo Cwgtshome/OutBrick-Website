@@ -13,7 +13,8 @@
 import type { Metadata } from 'next';
 import './styles/fonts.css';
 import './globals.css';
-import { siteUrl, socialProfiles } from '../lib/site';
+import { siteUrl } from '../lib/site';
+import { siteGraph } from '../lib/structured-data';
 import { APP_STORE_ID } from './store-badge';
 
 export const rootMetadata: Metadata = {
@@ -24,8 +25,8 @@ export const rootMetadata: Metadata = {
   },
   description: 'OutBrick is a sliding-brick colour-sort puzzle: 2,000 solver-verified boards across 100 chapters, a Journey of 167 villages built stud by stud out of brick, and nine brick friends. One finger, no clock, and nothing that interrupts a board.',
   applicationName: 'OutBrick',
-  authors: [{ name: 'OutBrick' }],
-  creator: 'OutBrick',
+  authors: [{ name: 'Mourad Hamdi', url: `${siteUrl}/authors/mourad-hamdi` }],
+  creator: 'Mourad Hamdi',
   publisher: 'OutBrick',
   category: 'games',
   referrer: 'origin-when-cross-origin',
@@ -61,7 +62,7 @@ export const rootMetadata: Metadata = {
     card: 'summary_large_image',
     title: 'OutBrick — Slide bricks out.',
     description: 'A one-finger colour-sort puzzle with real mascots and widgets. Nothing interrupts a board, and every board comes with a free undo.',
-    images: ['/og.png'],
+    images: [{ url: '/og.png', alt: 'OutBrick mascots and home screen' }],
   },
   icons: {
     icon: [
@@ -70,6 +71,7 @@ export const rootMetadata: Metadata = {
     ],
     apple: '/assets/icon/apple-touch-icon.png',
   },
+  manifest: '/site.webmanifest',
   appleWebApp: { title: 'OutBrick' },
   // Safari on iPhone and iPad shows Apple's Smart App Banner: an Open/Get bar that knows
   // whether OutBrick is already installed. `app-argument` is left out so Open lands on the home screen.
@@ -81,27 +83,6 @@ export const rootMetadata: Metadata = {
 };
 
 export function SiteDocument({ lang, children }: { lang: string; children: React.ReactNode }) {
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'OutBrick',
-    url: siteUrl,
-    logo: `${siteUrl}/icon.png`,
-    description: 'A relaxed sliding-brick colour-sort puzzle and an independent game design journal.',
-    founder: { '@type': 'Person', name: 'Mourad Hamdi', url: `${siteUrl}/authors/mourad-hamdi` },
-    knowsAbout: ['puzzle game design', 'gaming habits', 'accessibility', 'player experience'],
-    sameAs: socialProfiles.map((profile) => profile.url),
-  };
-  const websiteData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    '@id': `${siteUrl}/#website`,
-    name: 'OutBrick',
-    url: siteUrl,
-    description: 'A relaxed sliding-brick colour-sort puzzle and an independent game design journal.',
-    publisher: { '@type': 'Organization', name: 'OutBrick', url: siteUrl },
-  };
-
   return (
     // suppressHydrationWarning: the inline script below adds `js` to <html>
     // before React hydrates, which is the whole point of it.
@@ -128,11 +109,12 @@ export function SiteDocument({ lang, children }: { lang: string; children: React
           }}
         />
         <meta name="theme-color" content="#1a1350" />
+        <link rel="author" href="/humans.txt" />
       </head>
       <body className="antialiased">
         {children}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteData) }} />
+        {/* The organisation, its founder and the website: the graph every page's own JSON-LD points into. */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteGraph()).replace(/</g, '\\u003c') }} />
       </body>
     </html>
   );

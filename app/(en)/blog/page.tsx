@@ -3,6 +3,7 @@ import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shel
 import { articles, authors, getAuthor } from '../../../lib/blog';
 import { siteUrl } from '../../../lib/site';
 import { categorySlug, StoryCard, StoryRow } from './journal-kit';
+import { authorByline, breadcrumbNode, graph, ids, isoDateTime, ref, webPageNode } from '../../../lib/structured-data';
 
 const title = 'The OutBrick Journal';
 const description =
@@ -45,32 +46,35 @@ export default function BlogPage() {
   const featuredAuthor = getAuthor(featured.authorId);
   const counts = new Map(shelves.map(({ category }) => [category, articles.filter((a) => a.category === category).length]));
 
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'Blog',
-    '@id': `${siteUrl}/blog#blog`,
-    name: title,
-    description,
-    url: `${siteUrl}/blog`,
-    inLanguage: 'en',
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    publisher: { '@type': 'Organization', name: 'OutBrick', url: siteUrl, logo: { '@type': 'ImageObject', url: `${siteUrl}/icon.png`, width: 1024, height: 1024 } },
-    blogPost: articles.map((article) => ({
-      '@type': 'BlogPosting',
-      headline: article.title,
-      url: `${siteUrl}/blog/${article.slug}`,
-      image: `${siteUrl}${article.image}`,
-      author: { '@type': getAuthor(article.authorId).id === 'mourad-hamdi' ? 'Person' : 'Organization', name: getAuthor(article.authorId).name },
-    })),
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Journal', item: `${siteUrl}/blog` },
-    ],
-  };
+  const url = `${siteUrl}/blog`;
+  const structuredData = graph(
+    webPageNode({ type: 'CollectionPage', url, name: title, description, mainEntity: ref(ids.blog) }),
+    {
+      '@type': 'Blog',
+      '@id': ids.blog,
+      name: title,
+      description,
+      url,
+      inLanguage: 'en',
+      isPartOf: ref(ids.website),
+      publisher: ref(ids.organization),
+      blogPost: articles.map((article) => ({
+        '@type': 'BlogPosting',
+        '@id': `${siteUrl}/blog/${article.slug}#article`,
+        headline: article.title,
+        url: `${siteUrl}/blog/${article.slug}`,
+        image: `${siteUrl}${article.image}`,
+        datePublished: isoDateTime(article.publishedAt),
+        dateModified: isoDateTime(article.updatedAt),
+        author: authorByline(article.authorId),
+        publisher: ref(ids.organization),
+      })),
+    },
+    breadcrumbNode(url, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Journal', path: '/blog' },
+    ]),
+  );
 
   // Stories are numbered continuously down the shelves.
   const shelved = shelves.flatMap(({ category }) => articles.filter((a) => a.category === category && !pinned.has(a.slug)));
@@ -217,7 +221,6 @@ export default function BlogPage() {
       </section>
 
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
     </EditorialPage>
   );
 }
