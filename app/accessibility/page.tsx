@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { Handoff, LegalPage, Pills } from '../legal-page';
 
-export const metadata: Metadata = {
-  title: 'Accessibility support',
-  description: 'Accessibility features and support contacts for the OutBrick game.',
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/accessibility',
+  title: 'Accessibility: colour-blind glyphs, VoiceOver, Reduce Motion',
+  description:
+    'How OutBrick plays with VoiceOver, colour-blind glyphs on by default, Larger Text and Reduce Motion — and how to get accessibility help.',
+});
 
 export default function AccessibilityPage() {
   return (

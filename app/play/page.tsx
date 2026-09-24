@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { ArrowLeft, ArrowUpRight, Check, Gamepad2 } from 'lucide-react';
 import { EditorialFooter, EditorialHeader } from '../editorial-shell';
 
-export const metadata: Metadata = {
-  title: 'Play guide',
-  description: 'Learn the OutBrick move loop: targets, move limits, stars, boosters, and what a life and an undo actually cost.',
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/play',
+  title: 'How to play OutBrick: moves, stars, lives and undos',
+  description:
+    'Learn the OutBrick move loop: targets, move limits, stars, boosters, and what a life and an undo actually cost.',
+});
 
 export default function PlayPage() {
   return (

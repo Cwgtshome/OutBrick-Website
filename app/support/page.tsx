@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { Handoff, LegalPage } from '../legal-page';
 
-export const metadata: Metadata = {
-  title: 'Support',
+export const metadata: Metadata = pageMetadata({
+  path: '/support',
+  title: 'OutBrick support: stuck boards, lives, undos, ads',
   description:
     'OutBrick support: the quickest way through a stuck level, what lives and undos actually cost, how the rewarded video works, and how to reach us.',
-};
+});
 
 export default function SupportPage() {
   return (

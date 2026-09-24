@@ -26,7 +26,10 @@ export const metadata: Metadata = {
     'gaming habits research',
     'brick village map',
   ],
-  alternates: { canonical: siteUrl },
+  alternates: {
+    canonical: '/',
+    types: { 'application/rss+xml': [{ url: '/feed.xml', title: 'The OutBrick Journal' }] },
+  },
   robots: {
     index: true,
     follow: true,
@@ -38,7 +41,7 @@ export const metadata: Metadata = {
     siteName: 'OutBrick',
     title: 'OutBrick — Slide bricks out.',
     description: 'A relaxed sliding-brick colour-sort puzzle with real mascots, widgets, and no ad you did not press a button to see.',
-    images: [{ url: '/og.png', width: 1400, height: 710, alt: 'OutBrick mascots and home screen' }],
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'OutBrick mascots and home screen' }],
   },
   twitter: {
     card: 'summary_large_image',

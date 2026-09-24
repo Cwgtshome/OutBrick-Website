@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { LegalPage, Pills } from '../legal-page';
 
-export const metadata: Metadata = {
-  title: 'Apple EULA',
-  description: "How Apple's standard licensed-application end user license agreement applies to OutBrick.",
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/eula',
+  title: 'Apple standard EULA for OutBrick',
+  description:
+    "How Apple's standard licensed-application end user license agreement applies to OutBrick.",
+});
 
 export default function EulaPage() {
   return (

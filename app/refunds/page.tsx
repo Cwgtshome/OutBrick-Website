@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { Handoff, LegalPage, Pills } from '../legal-page';
 
-export const metadata: Metadata = {
-  title: 'Refunds and purchases',
-  description: 'How to restore OutBrick purchases and request an App Store refund through Apple.',
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/refunds',
+  title: 'OutBrick refunds and restoring purchases',
+  description:
+    'How to restore OutBrick purchases and request an App Store refund through Apple.',
+});
 
 export default function RefundsPage() {
   return (

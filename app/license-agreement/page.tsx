@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site';
 import { LegalPage, Pills } from '../legal-page';
 
-export const metadata: Metadata = {
-  title: 'License agreement',
-  description: 'What you may and may not do with OutBrick, its artwork, and its platform features.',
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/license-agreement',
+  title: 'OutBrick license agreement',
+  description:
+    'What you may and may not do with OutBrick, its artwork, and its platform features.',
+});
 
 export default function LicenseAgreementPage() {
   return (
