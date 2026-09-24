@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { CONTACT_EMAIL, pageMetadata, siteUrl } from '../../../lib/site';
+import { pageMetadata, siteUrl } from '../../../lib/site';
 import { JsonLd } from '../../editorial-shell';
 import { LegalPage, Pills } from '../../legal-page';
 import { ContactForm } from './contact-form';
@@ -33,10 +33,9 @@ export default function ContactPage() {
       '@type': 'Organization',
       name: 'OutBrick',
       url: siteUrl,
-      email: CONTACT_EMAIL,
       contactPoint: [
-        { '@type': 'ContactPoint', contactType: 'customer support', email: CONTACT_EMAIL, url: `${siteUrl}/contact` },
-        { '@type': 'ContactPoint', contactType: 'press', email: CONTACT_EMAIL, url: `${siteUrl}/press` },
+        { '@type': 'ContactPoint', contactType: 'customer support', url: `${siteUrl}/contact` },
+        { '@type': 'ContactPoint', contactType: 'press', url: `${siteUrl}/press` },
       ],
     },
   };
@@ -60,8 +59,8 @@ export default function ContactPage() {
       <div className="brick headline">
         <h2>A real line to the team.</h2>
         <p>
-          The form sends your message straight to the OutBrick inbox — no mail app needed — and we reply
-          by email. Prefer your own mail app? Write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+          The form sends your message straight to the OutBrick team — no mail app needed — and a person
+          replies by email.
         </p>
       </div>
 
@@ -84,13 +83,8 @@ export default function ContactPage() {
         </ul>
       </section>
 
-      <section className="brick" aria-labelledby="direct-title">
-        <h2 id="direct-title">Direct email</h2>
-        <p>
-          If the form will not load, or you would rather write from your own mail app:{' '}
-          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Please do not send passwords,
-          payment card details or other sensitive information.
-        </p>
+      <section className="brick" aria-labelledby="refunds-title">
+        <h2 id="refunds-title">Purchases and refunds</h2>
         <p>
           Refunds for App Store purchases are handled by Apple, not by OutBrick — the{' '}
           <a href="/refunds">refunds page</a> explains how to ask Apple, and we are glad to help if a

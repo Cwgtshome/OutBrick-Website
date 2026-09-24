@@ -120,7 +120,7 @@ export function FollowJournal({ current }: { current?: string }) {
             <p className="ed-label">Follow the journal</p>
             <h2 id="follow-title" className="ed-h3" style={{ marginTop: 10 }}>New stories, in your feed reader.</h2>
             <p className="ed-follow-note">
-              No sign-up and no email: paste the address into any RSS reader and each new story arrives as it is published.
+              Rather not give an email? Paste the address into any RSS reader and each new story arrives as it is published.
             </p>
             <div className="ed-actions" style={{ marginTop: 20 }}>
               <a className="ed-btn" href="/feed.xml" type="application/rss+xml">Subscribe to every story</a>

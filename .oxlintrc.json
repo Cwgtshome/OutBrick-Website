@@ -29,7 +29,9 @@
     "build/**",
     "dist/**",
     "coverage/**",
-    "next-env.d.ts"
+    "next-env.d.ts",
+    // Third-party code kept as upstream wrote it (Project Nayuki's QR library).
+    "lib/vendor/**"
   ],
   "rules": {
     // Off on purpose: this site is a static export (vinext prerender ->

@@ -1,0 +1,399 @@
+/* ==================================================================
+   What's new, the "scan to get OutBrick" card and the newsletter form.
+
+   The card and the form are self-contained cream slabs, so they sit the same
+   on an indigo band of the village pages (`.ob-site`) and on the editorial
+   pages (`.ed`). The release timeline (`.wn-*`) only appears inside `.ed`.
+   Reduce Motion turns every transition here off.
+   ================================================================== */
+
+/* ---------------- shared ---------------- */
+
+.obx-sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------- scan to get OutBrick ----------------
+   Only where a QR code makes sense: a mouse or trackpad, on a wide screen.
+   On a phone the App Store badge alone is the shorter path. */
+
+.obx-getapp { display: none; }
+
+@media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+  .obx-getapp {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 22px;
+    max-width: 520px;
+    margin-top: 12px;
+    padding: 20px 24px 20px 20px;
+    border-radius: 18px;
+    background: #fff6e0;
+    color: #1a1350;
+    box-shadow: 0 6px 0 #d9c28a;
+    text-align: left;
+    font-family: var(--font-text, system-ui, sans-serif);
+  }
+}
+.obx-getapp.centred { margin-inline: auto; }
+
+/* two studs on the exposed top edge */
+.obx-getapp::before,
+.obx-getapp::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  width: 22px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fff6e0;
+  box-shadow: inset 0 -3px 0 #eadbb2;
+}
+.obx-getapp::before { left: 26px; }
+.obx-getapp::after { left: 58px; }
+
+.obx-getapp-code {
+  display: block;
+  width: 148px;
+  height: 148px;
+  border-radius: 10px;
+}
+.obx-getapp-copy { display: grid; gap: 8px; justify-items: start; }
+.obx-getapp-eyebrow {
+  margin: 0;
+  font-family: var(--font-display, ui-rounded, system-ui, sans-serif);
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5a3fd4;
+}
+.obx-getapp-title {
+  margin: 0;
+  font-family: var(--font-display, ui-rounded, system-ui, sans-serif);
+  font-weight: 600;
+  font-size: 1.3rem;
+  line-height: 1.15;
+  color: #1a1350;
+}
+.obx-getapp-caption { margin: 0; font-size: 0.95rem; line-height: 1.45; color: #4f4a6e; }
+.obx-getapp-badge { display: inline-block; margin-top: 4px; line-height: 0; }
+.obx-getapp-badge img { display: block; width: auto; height: 40px; }
+.obx-getapp-badge:focus-visible { outline: 3px solid #5a3fd4; outline-offset: 3px; border-radius: 8px; }
+
+/* ---------------- newsletter ---------------- */
+
+.obx-news {
+  --obx-ink: #1a1350;
+  --obx-ink-2: #4f4a6e;
+  --obx-violet: #4a35b0;
+  position: relative;
+  max-width: 560px;
+  padding: clamp(20px, 3vw, 28px);
+  border-radius: 18px;
+  background: #fff6e0;
+  color: var(--obx-ink);
+  box-shadow: 0 6px 0 #d9c28a;
+  font-family: var(--font-text, system-ui, sans-serif);
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: left;
+}
+.obx-news :focus-visible { outline: 3px solid var(--obx-violet); outline-offset: 2px; }
+.obx-news h2,
+.obx-news h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-display, ui-rounded, system-ui, sans-serif);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--obx-ink);
+}
+.obx-news-intro { margin: 0 0 16px; color: var(--obx-ink-2); }
+.obx-news form { display: grid; gap: 14px; margin: 0; }
+.obx-news-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 520px) {
+  .obx-news-row { grid-template-columns: minmax(0, 1fr); }
+}
+.obx-news-field { display: grid; gap: 6px; min-width: 0; }
+.obx-news-field label {
+  font-family: var(--font-display, ui-rounded, system-ui, sans-serif);
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--obx-ink);
+}
+.obx-news input[type='email'],
+.obx-news select {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 2px solid #b9ad8c;
+  border-radius: 12px;
+  background: #fffdf7;
+  color: var(--obx-ink);
+  font: inherit;
+  font-size: 1rem;
+}
+.obx-news input[type='email']:focus,
+.obx-news select:focus { border-color: var(--obx-violet); outline: none; box-shadow: 0 0 0 3px rgba(74, 53, 176, 0.25); }
+.obx-news-consent {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  font-size: 0.95rem;
+  color: var(--obx-ink);
+}
+.obx-news-consent input {
+  width: 22px;
+  height: 22px;
+  margin: 1px 0 0;
+  accent-color: var(--obx-violet);
+}
+.obx-news-consent a,
+.obx-news-done a { color: var(--obx-violet); text-decoration: underline; text-underline-offset: 3px; }
+.obx-news-submit {
+  justify-self: start;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 14px;
+  background: #ffc53d;
+  color: #1a1350;
+  box-shadow: 0 5px 0 #b8780a;
+  font-family: var(--font-display, ui-rounded, system-ui, sans-serif);
+  font-weight: 600;
+  font-size: 1.02rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.obx-news-submit:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #b8780a; }
+.obx-news-submit:active { transform: translateY(4px); box-shadow: 0 1px 0 #b8780a; }
+.obx-news-submit[disabled] { opacity: 0.7; cursor: progress; }
+.obx-news-status { margin: 0; min-height: 0; font-size: 0.95rem; color: #8e1c18; }
+.obx-news-status:empty { display: none; }
+.obx-news-done { display: grid; gap: 8px; }
+.obx-news-done p { margin: 0; color: var(--obx-ink-2); }
+.obx-news-done .obx-news-mark {
+  width: 44px;
+  height: 30px;
+  border-radius: 8px;
+  background: #3fc544;
+  box-shadow: 0 4px 0 #1f7f2a;
+  display: grid;
+  place-items: center;
+  color: #0b2a10;
+  font-weight: 700;
+}
+
+/* ---------------- press kit: printable QR codes ---------------- */
+
+.ed .ed-download .plinth.qr { place-items: center; min-width: 0; background: #fff6e0; --c-foot: #d9c28a; }
+.ed .ed-download:has(.plinth.qr) { grid-template-columns: minmax(0, 1fr); }
+.ed .ed-download .plinth.qr img { width: 78%; }
+
+/* ---------------- /newsletter ---------------- */
+
+.ed .nl-promises { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 22px; }
+.ed .nl-promises li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; align-items: start; }
+.ed .nl-promises .ed-slab { display: block; width: 44px; height: 30px; margin-top: 10px; border-radius: 9px; }
+.ed .nl-promises .ed-studs { top: -6px; left: 11px; }
+.ed .nl-promises .ed-studs i { width: 20px; height: 10px; }
+.ed .nl-promises p { margin-top: 4px; color: var(--ed-on-paper-2); }
+
+/* ---------------- the release timeline (/whats-new) ---------------- */
+
+.ed .wn-hero-brick {
+  --c: #ffc53d;
+  --c-foot: #b8780a;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: min(280px, 70vw);
+  margin-inline: auto;
+  padding: 34px 20px 26px;
+  text-align: center;
+  color: #1a1350;
+}
+.ed .wn-hero-brick .ed-studs { left: 50%; transform: translateX(-50%); gap: 18px; }
+.ed .wn-hero-brick .ed-studs i { width: 34px; height: 16px; }
+.ed .wn-hero-brick small {
+  font-family: var(--ed-display);
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ed .wn-hero-brick strong {
+  font-family: var(--ed-display);
+  font-weight: 600;
+  font-size: clamp(4rem, 3rem + 4vw, 6.5rem);
+  line-height: 0.9;
+}
+.ed .wn-hero-brick span { font-size: 0.95rem; }
+
+.ed .wn-list {
+  position: relative;
+  list-style: none;
+  margin: clamp(28px, 4vw, 48px) 0 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(48px, 6vw, 88px);
+}
+/* the spine: a column of bricks laid in running bond, down the rail */
+.ed .wn-list::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 64px;
+  width: 16px;
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, #e2352f 0 26px, transparent 26px 30px, #ffc53d 30px 56px, transparent 56px 60px, #26b9b0 60px 86px, transparent 86px 90px, #7b5cf0 90px 116px, transparent 116px 120px, #3b8bf0 120px 146px, transparent 146px 150px, #3fc544 150px 176px, transparent 176px 180px);
+  opacity: 0.55;
+}
+.ed .wn-release {
+  position: relative;
+  display: grid;
+  grid-template-columns: 144px minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 48px);
+  scroll-margin-top: calc(var(--ed-head) + 24px);
+}
+.ed .wn-rail { display: grid; justify-items: center; align-content: start; gap: 12px; }
+.ed .wn-chip {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  width: 128px;
+  padding: 18px 10px 14px;
+  text-decoration: none;
+  color: var(--c-ink);
+}
+.ed .wn-chip small {
+  font-family: var(--ed-display);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ed .wn-chip b { font-family: var(--ed-display); font-weight: 600; font-size: 2.4rem; line-height: 1; }
+.ed .wn-chip:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--c-foot); }
+.ed .wn-chip { transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.ed .wn-date {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--ed-paper);
+  font-family: var(--ed-display);
+  font-weight: 500;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--ed-on-paper);
+}
+.ed .wn-body h2 { font-size: clamp(1.7rem, 1.1rem + 2.2vw, 2.8rem); line-height: 1.06; }
+.ed .wn-body > .ed-meta { margin-top: 10px; }
+
+.ed .wn-groups {
+  margin-top: clamp(24px, 3vw, 36px);
+  columns: 2 330px;
+  column-gap: 22px;
+}
+.ed .wn-group {
+  break-inside: avoid;
+  margin: 0 0 22px;
+  padding: 20px 22px 18px;
+  border-radius: var(--ed-radius);
+  background: #fff;
+  box-shadow: 0 4px 0 var(--ed-paper-edge);
+  border-top: 8px solid var(--c);
+  color: var(--ed-on-paper);
+}
+.ed .wn-group h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  color: var(--ed-on-paper);
+}
+.ed .wn-group h3::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--c);
+  box-shadow: 0 3px 0 var(--c-foot);
+}
+.ed .wn-group p { margin-top: 10px; font-size: 1rem; line-height: 1.6; color: var(--ed-on-paper-2); }
+.ed .wn-group ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 10px; }
+.ed .wn-group li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.ed .wn-group li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.55em;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 2px 0 var(--c-foot);
+}
+.ed .wn-earlier .ed-prose { margin-top: 16px; }
+.ed .wn-earlier .ed-prose p { color: var(--ed-on-paper-2); }
+
+.ed .wn-cta-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+}
+.ed .wn-news-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .ed .wn-cta-grid,
+  .ed .wn-news-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .ed .wn-list::before { display: none; }
+  .ed .wn-release { grid-template-columns: minmax(0, 1fr); }
+  .ed .wn-rail { grid-auto-flow: column; justify-content: start; align-items: center; justify-items: start; }
+  .ed .wn-chip { width: auto; min-width: 104px; padding: 14px 16px 10px; }
+  .ed .wn-chip b { font-size: 1.9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .obx-news-submit,
+  .ed .wn-chip { transition: none; }
+  .obx-news-submit:hover,
+  .ed .wn-chip:hover { transform: none; }
+}
+
+/* Home close: the QR card replaces the lone badge where the card shows. */
+@media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+  .ob-site .close .close-badge { display: none; }
+  .ob-site .close .obx-getapp { margin-top: 22px; }
+}

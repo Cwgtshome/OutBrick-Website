@@ -6,6 +6,7 @@ import { byNewest, categoryPath, getShelves, startHere } from '../../../lib/jour
 import { categorySlug, FollowJournal, StoryCard, StoryRow } from './journal-kit';
 import { JournalSearch, ShelfControls } from './journal-finder';
 import { authorByline, breadcrumbNode, graph, ids, isoDateTime, ref, webPageNode } from '../../../lib/structured-data';
+import { NewsletterSignup } from '../../components/newsletter-signup';
 
 const title = 'The OutBrick Journal';
 const description =
@@ -188,6 +189,20 @@ export default function BlogPage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ---------------- the newsletter (RSS has its own block below) ---------------- */}
+      <section id="newsletter" className="ed-band-ink2 ed-band-tight" aria-labelledby="newsletter-title">
+        <div className="ed-wrap wn-news-grid">
+          <div>
+            <p className="ed-label">The newsletter</p>
+            <h2 id="newsletter-title" className="ed-h2" style={{ marginTop: 14 }}>New villages and big updates, by email.</h2>
+            <p className="ed-lede" style={{ marginTop: 16 }}>
+              About once a month, never more, and you can leave any time.
+            </p>
+          </div>
+          <NewsletterSignup showHeading={false} />
         </div>
       </section>
 

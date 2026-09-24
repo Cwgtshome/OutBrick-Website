@@ -19,8 +19,6 @@ export const socialProfiles: { network: SocialNetwork; label: string; url: strin
 /** The profiles the Organization structured data vouches for. */
 export const liveSocialUrls = () => socialProfiles.filter((profile) => profile.live).map((profile) => profile.url);
 
-/** The one inbox every form and fallback link on the site leads to. */
-export const CONTACT_EMAIL = 'mourad.hamdi@me.com';
 
 /**
  * Metadata for a single page. A page that sets `openGraph` replaces the root layout's whole

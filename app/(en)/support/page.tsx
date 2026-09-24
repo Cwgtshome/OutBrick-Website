@@ -4,6 +4,7 @@ import { Handoff, LegalPage } from '../../legal-page';
 import { JsonLd } from '../../editorial-shell';
 import { graph } from '../../../lib/structured-data';
 import { siteUrl } from '../../../lib/site';
+import { HelpSearch } from '../../components/help-search';
 
 /**
  * Short answers to the questions support hears most. Every answer restates a fact the sections
@@ -32,6 +33,26 @@ const faqs: { question: string; answer: string }[] = [
     answer: 'Open Shop, then choose Restore purchases. Apple processes the transaction through your Apple ID.',
   },
   {
+    question: 'What do the three stars mean?',
+    answer: 'One star for clearing the board, the second for clearing it at or under the target move count, and the third for doing that without an undo. The target used to be called par; it is the same number.',
+  },
+  {
+    question: 'How much do extra moves cost?',
+    answer: 'Five more moves cost 300 coins, then 500, then 900 within one attempt, or one rewarded video. The price goes back to 300 when you leave the board or clear it.',
+  },
+  {
+    question: 'How many rewarded videos can I watch a day?',
+    answer: 'Thirty-one at most across the six rewards, each capped daily. Declining never changes a reward, a board or a price.',
+  },
+  {
+    question: 'How do I turn colour-blind glyphs on or off?',
+    answer: 'Colour-blind mode is on by default, so every brick and gate carries a readable glyph. Switch it off, or back on, in Settings.',
+  },
+  {
+    question: 'How do I change my advertising choices?',
+    answer: 'In the EEA, the UK and Switzerland, Settings, then Advertising choices, reopens the consent form at any time. iOS tracking permission is in Settings, Privacy and Security, Tracking; saying no changes nothing about the game.',
+  },
+  {
     question: 'How do I contact OutBrick support?',
     answer: 'Use the contact form, and tell us the level number, device model, iOS version and what happened. We never need your Game Center login or any payment details.',
   },
@@ -50,10 +71,12 @@ export default function SupportPage() {
       eyebrow="OutBrick support"
       title="Need a hand?"
       summary="OutBrick is meant to feel calm even when the board gets knotty. Here are the quickest ways through a stuck level, what lives and undos actually cost, and the best way to reach us."
-      updated="22 September 2026"
+      updated="24 September 2026"
       current="/support"
     >
-      <div className="brick headline">
+      <div data-help-root>
+      <HelpSearch />
+      <div className="brick headline" data-help-item>
         <h2>Every board comes with a free undo.</h2>
         <p>
           The first undo on any board is free, it never comes out of your tank, and it cannot run out.
@@ -65,7 +88,7 @@ export default function SupportPage() {
         </p>
       </div>
 
-      <section className="brick">
+      <section className="brick" data-help-item>
         <h2>Lives</h2>
         <p>
           You hold five lives, eight while you hold the Brick Pass, and one comes back on its own every
@@ -82,7 +105,7 @@ export default function SupportPage() {
         </p>
       </section>
 
-      <section className="brick">
+      <section className="brick" data-help-item>
         <h2>Are there ads?</h2>
         <p>
           Yes — rewarded video, and nothing else. There are no banners, no interstitials, no ad between
@@ -102,33 +125,36 @@ export default function SupportPage() {
         </p>
       </section>
 
-      <section className="brick">
+      <section className="brick" data-help-group>
         <h2>Quick fixes</h2>
         <ul className="points">
-          <li><b>Restore purchases:</b> open Shop, then choose Restore purchases. Apple processes the transaction through your Apple ID.</li>
-          <li><b>Colour-blind mode:</b> on by default, so every brick and gate already carries a readable glyph. It can be switched off, and back on, in Settings.</li>
-          <li>
+          <li data-help-item><b>Restore purchases:</b> open Shop, then choose Restore purchases. Apple processes the transaction through your Apple ID.</li>
+          <li data-help-item><b>Colour-blind mode:</b> on by default, so every brick and gate already carries a readable glyph. It can be switched off, and back on, in Settings.</li>
+          <li data-help-item>
             <b>Out of moves:</b> every board has a move limit, shown beside your move count from the
             first tap. Reaching it is not the end of the board — the card offers five more moves for
             coins or for a video before anything else happens. The coin price climbs within one
             attempt — 300, then 500, then 900 — and goes back to 300 when you leave the board or clear
             it.
           </li>
-          <li><b>Target, not par:</b> the number you are aiming at used to be called par. It is called the target now. Same number, same rule: clear at or under it for the second star, and do that without an undo for the third.</li>
-          <li><b>Advertising choices:</b> in the EEA, the UK and Switzerland, Settings &rsaquo; Advertising choices reopens the consent form at any time. iOS tracking permission lives in Settings &rsaquo; Privacy &amp; Security &rsaquo; Tracking, and saying no changes nothing about the game.</li>
-          <li><b>Widgets:</b> add the OutBrick widget from your iPhone Home Screen and choose a size that fits your layout.</li>
+          <li data-help-item><b>Target, not par:</b> the number you are aiming at used to be called par. It is called the target now. Same number, same rule: clear at or under it for the second star, and do that without an undo for the third.</li>
+          <li data-help-item><b>Advertising choices:</b> in the EEA, the UK and Switzerland, Settings &rsaquo; Advertising choices reopens the consent form at any time. iOS tracking permission lives in Settings &rsaquo; Privacy &amp; Security &rsaquo; Tracking, and saying no changes nothing about the game.</li>
+          <li data-help-item><b>Widgets:</b> add the OutBrick widget from your iPhone Home Screen and choose a size that fits your layout.</li>
+          <li data-help-item><b>What changed in the latest update:</b> the full release notes are on <a href="/whats-new">What’s new</a>.</li>
         </ul>
       </section>
 
-      <section className="brick faq" aria-labelledby="faq-title">
+      <section className="brick faq" aria-labelledby="faq-title" data-help-group>
         <h2 id="faq-title">Common questions</h2>
         {faqs.map((faq) => (
-          <div key={faq.question}>
+          <div key={faq.question} data-help-item>
             <h3>{faq.question}</h3>
             <p>{faq.answer}</p>
           </div>
         ))}
       </section>
+
+      </div>
 
       <section className="brick">
         <h2>Still stuck?</h2>

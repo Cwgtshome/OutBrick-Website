@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd } from '../../../editorial-shell';
 import { founderQuote, pressBoilerplate } from '../../../../lib/business';
-import { CONTACT_EMAIL, pageMetadata, siteUrl } from '../../../../lib/site';
+import { pageMetadata, siteUrl } from '../../../../lib/site';
 import { APP_STORE_URL } from '../../../store-badge';
 import { breadcrumbNode, graph, ids, ref, webPageNode } from '../../../../lib/structured-data';
 import { pressReleases } from '../releases';
@@ -135,7 +135,6 @@ export default function PressReleasePage() {
             <div className="bz-sidecard">
               <h2 className="ed-label">Media contact</h2>
               <p>Mourad Hamdi, Founder &amp; CEO</p>
-              <p><a href={`mailto:${CONTACT_EMAIL}?subject=OutBrick%204.2`}>{CONTACT_EMAIL}</a></p>
               <p><a href="/contact?topic=press#form">Contact form (Press &amp; media)</a></p>
             </div>
             <div className="bz-sidecard">

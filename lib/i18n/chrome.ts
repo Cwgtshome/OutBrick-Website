@@ -38,6 +38,7 @@ export type ChromeCopy = {
     friends: string;
     costs: string;
     playGuide: string;
+    whatsNew: string;
     journal: string;
     pressKit: string;
     help: string;
@@ -83,6 +84,7 @@ const en: ChromeCopy = {
     friends: 'The nine friends',
     costs: 'What it costs',
     playGuide: 'Play guide',
+    whatsNew: 'What’s new',
     journal: 'Journal',
     pressKit: 'Press kit',
     help: 'Help & legal',
@@ -127,6 +129,7 @@ const fr: ChromeCopy = {
     friends: 'Les neuf amis',
     costs: 'Ce que ça coûte',
     playGuide: 'Guide du jeu',
+    whatsNew: 'Nouveautés',
     journal: 'Journal',
     pressKit: 'Kit presse',
     help: 'Aide et mentions légales',
@@ -171,6 +174,7 @@ const de: ChromeCopy = {
     friends: 'Die neun Freunde',
     costs: 'Was es kostet',
     playGuide: 'Spielanleitung',
+    whatsNew: 'Was ist neu',
     journal: 'Journal',
     pressKit: 'Pressekit',
     help: 'Hilfe & Rechtliches',
@@ -215,6 +219,7 @@ const es: ChromeCopy = {
     friends: 'Los nueve amigos',
     costs: 'Lo que cuesta',
     playGuide: 'Cómo se juega',
+    whatsNew: 'Novedades',
     journal: 'Journal',
     pressKit: 'Kit de prensa',
     help: 'Ayuda y legal',
@@ -259,6 +264,7 @@ const ja: ChromeCopy = {
     friends: '9人のなかま',
     costs: '料金のこと',
     playGuide: '遊び方ガイド',
+    whatsNew: '最新情報',
     journal: 'Journal',
     pressKit: 'プレスキット',
     help: 'ヘルプと規約',

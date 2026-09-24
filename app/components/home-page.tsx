@@ -6,9 +6,11 @@ import { homeCopy } from '../../lib/i18n/home';
 import { localeAlternates, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { AppStoreBadge, Course, homeNavFor, VillageFooter, VillageHeader, BrandMark } from '../village-shell';
 import { VillageMotion } from '../village-motion';
+import { GetAppQr } from './get-app-qr';
 import { HomeCast } from './home-cast';
 import { PlayableBoard } from './playable-board';
 import '../styles/home.css';
+import '../styles/seasons.css';
 
 /**
  * The home page, in any of its languages. `app/(en)/page.tsx` renders it in
@@ -114,6 +116,7 @@ export function HomePage({ locale }: { locale: Locale }) {
         {/* ============================ HERO ============================ */}
         <div id="top" className="hero" data-hero="">
           <div className="sky" aria-hidden="true">
+            <div className="season-fx" />
             <div className="cloud" data-drift="22" style={{ '--w': '190px', '--t': '64s', left: '-3%', top: '9%' } as Vars}><div className="cloud-body"><i /></div></div>
             <div className="cloud" data-drift="-14" style={{ '--w': '120px', '--t': '48s', '--dx': '-40px', right: '4%', top: '6%' } as Vars}><div className="cloud-body"><i /></div></div>
             <div className="cloud hide-sm" data-drift="10" style={{ '--w': '84px', '--t': '40s', left: '41%', top: '3%' } as Vars}><div className="cloud-body"><i /></div></div>
@@ -502,7 +505,9 @@ export function HomePage({ locale }: { locale: Locale }) {
               <p className="lede">
                 {t.close.lede}
               </p>
-              <div className="cta-row"><AppStoreBadge campaign="home-close" locale={locale} /></div>
+              {/* On a desktop the QR card (which carries its own badge) takes the badge's place. */}
+              <div className="cta-row close-badge"><AppStoreBadge campaign="home-close" locale={locale} /></div>
+              <GetAppQr locale={locale} />
             </div>
           </div>
         </section>

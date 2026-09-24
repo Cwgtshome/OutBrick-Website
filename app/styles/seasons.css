@@ -1,0 +1,59 @@
+/*
+ * Seasons on the home sky. `data-season` is set on <html> by the inline script in
+ * app/site-document.tsx: winter from 1 December to 6 January, autumn from 10 October to
+ * 2 November, nothing otherwise. The weather is one painted layer (`.season-fx`) behind the
+ * clouds: tiled radial gradients sliding down, no images and no script. Reduce Motion keeps
+ * the tint and stills the fall.
+ */
+
+.ob-home .season-fx { display: none; }
+
+html[data-season] .ob-home .season-fx {
+  display: block;
+  position: absolute;
+  inset: 0;
+  opacity: 0.9;
+  animation: ob-season-fall 18s linear infinite;
+}
+
+@keyframes ob-season-fall {
+  to { background-position: var(--fall-to); }
+}
+
+/* ---- winter: a cooler sky, frosted grass, slow snow ---- */
+html[data-season='winter'] .ob-home .hero {
+  background:
+    radial-gradient(900px 480px at 78% 58%, rgba(255, 255, 255, 0.6), transparent 70%),
+    linear-gradient(180deg, #c9e4f6 0%, #b4d8f0 44%, #e4f1f7 82%, #cfe6ee 100%);
+}
+html[data-season='winter'] .ob-home .season-fx {
+  background-image:
+    radial-gradient(7px 7px at 20px 30px, #fff 50%, transparent 56%),
+    radial-gradient(5px 5px at 90px 120px, rgba(255, 255, 255, 0.95) 50%, transparent 56%),
+    radial-gradient(9px 9px at 150px 60px, #fff 50%, transparent 56%),
+    radial-gradient(6px 6px at 60px 170px, rgba(255, 255, 255, 0.9) 50%, transparent 56%);
+  background-size: 200px 200px, 200px 200px, 260px 260px, 180px 180px;
+  --fall-to: 40px 200px, -30px 200px, 20px 260px, -20px 180px;
+  filter: drop-shadow(0 1px 1px rgba(90, 140, 180, 0.35));
+}
+
+/* ---- autumn: a warmer sky and a few leaves drifting across ---- */
+html[data-season='autumn'] .ob-home .hero {
+  background:
+    radial-gradient(900px 480px at 78% 58%, rgba(255, 232, 196, 0.6), transparent 70%),
+    linear-gradient(180deg, #c4e1f2 0%, #b6d9ee 44%, #e3dca0 82%, #c9b562 100%);
+}
+html[data-season='autumn'] .ob-home .season-fx {
+  background-image:
+    radial-gradient(12px 7px at 40px 50px, #f5851f 60%, transparent 66%),
+    radial-gradient(10px 6px at 180px 140px, #e2372f 60%, transparent 66%),
+    radial-gradient(12px 7px at 110px 230px, #f9c823 60%, transparent 66%);
+  background-size: 260px 280px, 300px 300px, 240px 320px;
+  --fall-to: 120px 280px, 80px 300px, 140px 320px;
+  animation-duration: 26s;
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-season] .ob-home .season-fx { animation: none; }
+}

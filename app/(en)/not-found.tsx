@@ -35,6 +35,7 @@ export default function NotFound() {
 
       <nav className="nf-links" aria-label="Where to next">
         <Link className="nf-link nf-link-primary" href="/">Back to OutBrick</Link>
+        <Link className="nf-link" href="/play">Play a board</Link>
         <Link className="nf-link" href="/blog">Read the journal</Link>
         <Link className="nf-link" href="/support">Get support</Link>
       </nav>

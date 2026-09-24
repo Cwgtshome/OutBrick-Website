@@ -3,6 +3,7 @@ import { Badge, Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shel
 import { friends } from '../../../lib/mascots';
 import { siteUrl } from '../../../lib/site';
 import { appNode, breadcrumbNode, graph, ids, ref, webPageNode } from '../../../lib/structured-data';
+import '../../styles/growth.css';
 
 const description =
   'The OutBrick press kit: fact sheet, current game captures, the app icon, all nine brick friends, the words to use, and a direct press contact.';
@@ -46,6 +47,12 @@ const captures = [
   { src: '/assets/shots/s-shop.jpg', name: 'The shop', note: 'Optional bundles', alt: 'The OutBrick shop: a Starter Bundle, a Piggy Bank of coins and Brick Pass Season 1, each with its price.' },
 ];
 
+/** Written by scripts/generate-qr.mjs, which `pnpm build` runs. */
+const qrDownloads = [
+  { file: '/qr/outbrick-app-store.svg', name: 'App Store QR code', note: 'SVG · opens OutBrick on the App Store', alt: 'QR code that opens OutBrick on the App Store' },
+  { file: '/qr/outbrick-website.svg', name: 'Website QR code', note: 'SVG · opens www.outbrick.site', alt: 'QR code that opens www.outbrick.site' },
+];
+
 export default function PressKitPage() {
   const url = `${siteUrl}/press-kit`;
   const structuredData = graph(
@@ -79,7 +86,7 @@ export default function PressKitPage() {
                 the facts, and the art, all current.
               </p>
               <div className="ed-actions">
-                <a className="ed-btn" href="mailto:mourad.hamdi@me.com?subject=OutBrick%20press">Email the developer</a>
+                <a className="ed-btn" href="/contact?topic=press#form">Contact the developer</a>
                 <a className="ed-link" href="#assets">Go to the downloads</a>
                 <a className="ed-link" href="/press">News and releases in the press room</a>
               </div>
@@ -107,6 +114,10 @@ export default function PressKitPage() {
                 OutBrick has lives and it has advertising, and it says exactly how both work: a life is
                 spent only when an attempt ends without a clear, the first undo on every board is free,
                 and every video is one the player pressed a button to see.
+              </p>
+              <p>
+                The current version is 4.2. Everything it changed is in the release notes on{' '}
+                <a className="ed-link" style={{ marginTop: 0 }} href="/whats-new">What’s new</a>.
               </p>
             </div>
           </div>
@@ -173,6 +184,27 @@ export default function PressKitPage() {
         </div>
       </section>
 
+      <section id="qr" className="ed-band-paper ed-band" aria-labelledby="qr-title" style={{ scrollMarginTop: 70 }}>
+        <div className="ed-wrap">
+          <p className="ed-label">For print</p>
+          <h2 id="qr-title" className="ed-h2" style={{ marginTop: 14 }}>QR codes for posters, flyers and slides.</h2>
+          <p className="ed-lede" style={{ marginTop: 16 }}>
+            Vector SVGs in the house colours, indigo on cream, with the quiet zone built in. Both are
+            decode-tested; print them at 2 cm across or larger, and leave the cream border on.
+          </p>
+          <div className="ed-downloads">
+            {qrDownloads.map((qr) => (
+              <a className="ed-download" key={qr.file} href={qr.file} download={qr.file.split('/').pop()}>
+                <span className="plinth qr"><img src={qr.file} alt={qr.alt} width={1024} height={1024} loading="lazy" decoding="async" /></span>
+                <b>{qr.name}</b>
+                <span>{qr.note}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+      <Bond thin />
+
       <section className="ed-band-paper ed-band" aria-labelledby="words-title">
         <div className="ed-wrap">
           <p className="ed-label">House style</p>
@@ -210,11 +242,10 @@ export default function PressKitPage() {
             <h2 id="contact-title" className="ed-h2" style={{ marginTop: 14 }}>Questions go to a person.</h2>
           </div>
           <div className="ed-prose">
-            <p>For interviews, review access, asset requests or accessibility questions, write to Mourad directly. Replies come from the same address.</p>
-            <p><a className="ed-link" style={{ fontSize: '1.2rem', marginTop: 0 }} href="mailto:mourad.hamdi@me.com?subject=OutBrick%20press">mourad.hamdi@me.com</a></p>
+            <p>For interviews, review access, asset requests or accessibility questions, use the contact form with the topic set to Press &amp; media. Mourad replies himself, by email.</p>
+            <p><a className="ed-btn" href="/contact?topic=press#form">Contact the press desk</a></p>
             <div className="ed-actions" style={{ marginTop: 28 }}>
               <Badge />
-              <a className="ed-link" href="/contact?topic=press#form">Or use the contact form</a>
               <a className="ed-link" href="/press">Press room</a>
             </div>
           </div>
