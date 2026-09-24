@@ -11,8 +11,12 @@ import { siteUrl } from '../../../lib/site';
 
 const linkPattern = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
-/** Render copy that may carry [label](/path) links. */
-export function Rich({ text }: { text: string }) {
+/**
+ * Render copy that may carry [label](/path) links. On a translated page
+ * (`locale` set), an internal link that does not lead into that language's
+ * own pages leads to an English page, and says so with `hreflang="en"`.
+ */
+export function Rich({ text, locale }: { text: string; locale?: string }) {
   const parts: ReactNode[] = [];
   let last = 0;
   for (const match of text.matchAll(linkPattern)) {
@@ -20,8 +24,9 @@ export function Rich({ text }: { text: string }) {
     if (index > last) parts.push(text.slice(last, index));
     const href = match[2]!;
     const external = /^https?:/.test(href);
+    const english = locale !== undefined && !external && href !== `/${locale}` && !href.startsWith(`/${locale}/`) && !href.startsWith(`/${locale}#`);
     parts.push(
-      <a key={`${href}-${index}`} href={href} {...(external ? { rel: 'noreferrer' } : {})}>
+      <a key={`${href}-${index}`} href={href} {...(external ? { rel: 'noreferrer' } : {})} {...(english ? { hrefLang: 'en' } : {})}>
         {match[1]}
       </a>,
     );
@@ -54,6 +59,7 @@ export function StoryRow({
   eager = false,
   order,
   pinned = false,
+  href = `/blog/${article.slug}`,
 }: {
   article: BlogArticle;
   n: number;
@@ -62,6 +68,8 @@ export function StoryRow({
   order?: number;
   /** Already shown above as the lead or a runner-up: listed only when the shelves are filtered. */
   pinned?: boolean;
+  /** Where the headline leads; a translated index passes the translated guide. */
+  href?: string;
 }) {
   const author = getAuthor(article.authorId);
   return (
@@ -73,7 +81,7 @@ export function StoryRow({
     >
       <span className="ed-row-n" aria-hidden="true">{String(n).padStart(2, '0')}</span>
       <div>
-        <h3><a href={`/blog/${article.slug}`}>{article.title}</a></h3>
+        <h3><a href={href}>{article.title}</a></h3>
         <p>{article.dek}</p>
         <p className="ed-meta">{author.name} · {article.readingTime}</p>
       </div>
@@ -85,22 +93,36 @@ export function StoryRow({
 }
 
 /** A story as a white card with a coloured foot. */
-export function StoryCard({ article, headingLevel = 3 }: { article: BlogArticle; headingLevel?: 2 | 3 }) {
+export function StoryCard({
+  article,
+  headingLevel = 3,
+  href = `/blog/${article.slug}`,
+  category = article.category,
+  by,
+}: {
+  article: BlogArticle;
+  headingLevel?: 2 | 3;
+  /** Where the headline leads; a translated guide passes the translated page. */
+  href?: string;
+  /** The category as shown, when it is translated. */
+  category?: string;
+  by?: (name: string) => string;
+}) {
   const author = getAuthor(article.authorId);
   const Heading = headingLevel === 2 ? 'h2' : 'h3';
   return (
     <article className="ed-card ed-lift" data-tone={article.categoryColor}>
       <div className="ed-card-top">
-        <span className="ed-chip">{article.category}</span>
+        <span className="ed-chip">{category}</span>
         <span className="ed-meta">{article.readingTime}</span>
       </div>
       <div className="ed-card-body">
         <div className="ed-thumb" aria-hidden="true">
           <img src={article.image} alt="" width={1600} height={900} loading="lazy" decoding="async" />
         </div>
-        <Heading className="ed-h3"><a href={`/blog/${article.slug}`}>{article.title}</a></Heading>
+        <Heading className="ed-h3"><a href={href}>{article.title}</a></Heading>
         <p>{article.dek}</p>
-        <p className="ed-meta">By {author.name}</p>
+        <p className="ed-meta">{by ? by(author.name) : <>By {author.name}</>}</p>
       </div>
     </article>
   );

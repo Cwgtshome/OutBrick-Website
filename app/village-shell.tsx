@@ -171,9 +171,9 @@ export const editorialNav: NavLink[] = [
 ];
 
 /**
- * The editorial masthead in `locale`. "The game" leads to that language's
- * home page; everything else is only published in English, so on a
- * translated page those links carry `hreflang="en"`.
+ * The editorial masthead in `locale`. "The game" and "Journal" lead to that
+ * language's home page and journal index; everything else is only published
+ * in English, so on a translated page those links carry `hreflang="en"`.
  */
 export function editorialNavFor(locale: Locale): NavLink[] {
   if (locale === 'en') return editorialNav;
@@ -181,7 +181,9 @@ export function editorialNavFor(locale: Locale): NavLink[] {
   return editorialNav.map((link, i) =>
     link.href === '/'
       ? { href: localePath(locale, '/'), label: labels[i] }
-      : { href: link.href, label: labels[i], hrefLang: 'en' },
+      : link.href === '/blog'
+        ? { href: `/${locale}/blog`, label: labels[i] }
+        : { href: link.href, label: labels[i], hrefLang: 'en' },
   );
 }
 
@@ -355,7 +357,8 @@ export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?:
               <li><a href={localePath(locale, '/play')}>{copy.playGuide}</a></li>
               <li><a href={localePath(locale, '/whats-new')}>{copy.whatsNew}</a></li>
               <li><a href="/daily" hrefLang={en}>{copy.daily}</a></li>
-              <li><a href="/blog" hrefLang={en}>{copy.journal}</a></li>
+              {/* The journal has an index in every language (its translated guides). */}
+              <li><a href={locale === 'en' ? '/blog' : `/${locale}/blog`}>{copy.journal}</a></li>
               <li><a href="/press-kit" hrefLang={en}>{copy.pressKit}</a></li>
             </ul>
           </div>

@@ -186,12 +186,21 @@ function pageImages(html) {
 const pages = indexablePages();
 if (pages.length === 0) throw new Error('[postbuild] no indexable pages found in dist/client — refusing to write an empty sitemap');
 
+// The guides the journal is translated into other languages (lib/i18n/blog.ts), read from what was built.
+const localizedGuideSlugs = new Set(pages.map((p) => p.route.match(/^\/(?:fr|de|es|ja)\/blog\/([^/]+)$/)?.[1]).filter(Boolean));
+
 const entries = pages.map((page) => {
   let lastmod;
-  const articleSlug = page.route.match(/^\/blog\/([^/]+)$/)?.[1];
+  // An article in English (/blog/<slug>) or translated (/fr/blog/<slug> …): its lastmod is the
+  // article's own updatedAt, which a translation shares.
+  const articleSlug = page.route.match(/^(?:\/(?:fr|de|es|ja))?\/blog\/([^/]+)$/)?.[1];
   const collection = page.route.match(/^\/blog\/(category|tag)\/([^/]+)$/);
   if (articleSlug && articleBySlug.has(articleSlug)) {
     lastmod = isoDate(articleBySlug.get(articleSlug).updatedAt);
+  } else if (/^\/(fr|de|es|ja)\/blog$/.test(page.route)) {
+    // A translated journal index changes when one of its guides does.
+    const guides = articles.filter((a) => localizedGuideSlugs.has(a.slug));
+    lastmod = guides.map((a) => isoDate(a.updatedAt)).reduce((max, d) => (d > max ? d : max), '') || undefined;
   } else if (collection) {
     // A shelf or tag page changes when one of its stories does.
     const [, kind, slug] = collection;
@@ -229,6 +238,15 @@ console.log(`[postbuild] sitemap.xml: ${entries.length} URLs, ${entries.reduce((
 const builtRoutes = new Set(pages.map((p) => p.route));
 for (const a of articles) {
   if (!builtRoutes.has(`/blog/${a.slug}`)) console.warn(`[postbuild] WARNING: /blog/${a.slug} is in lib/blog.ts but not an indexable page in dist/client`);
+}
+// Pages name their translations as hreflang alternates (the home page, the play guide, the
+// translated journal guides); each of those must have been built too, or the sitemap would
+// declare a page that 404s.
+for (const e of entries) {
+  for (const alt of e.alternates) {
+    const route = new URL(alt.href).pathname.replace(/(.)\/$/, '$1');
+    if (!builtRoutes.has(route)) console.warn(`[postbuild] WARNING: ${e.loc} lists hreflang ${alt.lang} ${alt.href}, which is not an indexable page`);
+  }
 }
 
 // ---------------------------------------------------------------------------------------
@@ -435,7 +453,9 @@ const blogPages = pages.filter((p) => p.route === '/blog' || p.route.startsWith(
 const legalRoutes = /^\/(privacy|privacy-choices|terms|eula|license-agreement|refunds|age-rating|accessibility)$/;
 const legalPages = pages.filter((p) => legalRoutes.test(p.route));
 const localizedRoutes = /^\/(fr|de|es|ja)(\/|$)/;
-const localizedPages = pages.filter((p) => localizedRoutes.test(p.route));
+// The journal's five cornerstone guides in French, German, Spanish and Japanese, and their indexes.
+const translatedBlogPages = pages.filter((p) => /^\/(fr|de|es|ja)\/blog(\/|$)/.test(p.route));
+const localizedPages = pages.filter((p) => localizedRoutes.test(p.route) && !translatedBlogPages.includes(p));
 const mainPages = pages.filter((p) => p !== home && !blogPages.includes(p) && !legalPages.includes(p) && !localizedPages.includes(p));
 
 // Facts about the game, from Apple's own record (lib/generated/app-store.json, written by
@@ -480,6 +500,12 @@ const llms = [
   '## Other languages',
   '',
   ...localizedPages.map(mdLine),
+  '',
+  '## The OutBrick Journal in other languages',
+  '',
+  'Five guides translated into French, German, Spanish and Japanese; the rest of the journal is in English.',
+  '',
+  ...translatedBlogPages.map(mdLine),
   '',
   '## Optional',
   '',

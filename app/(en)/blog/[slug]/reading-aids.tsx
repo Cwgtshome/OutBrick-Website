@@ -17,7 +17,16 @@ import { useEffect } from 'react';
  * - Source cards: Escape hides the citation card shown on hover or focus.
  * - Print: answers are opened so the FAQ prints in full.
  */
-export function ReadingAids() {
+export type ReadingAidsMessages = { copied: string; copyFailedLink: string; copyFailedShare: string };
+
+const englishMessages: ReadingAidsMessages = {
+  copied: 'Link copied',
+  copyFailedLink: 'Could not copy. The address bar now holds the link.',
+  copyFailedShare: 'Could not copy. Copy the address from the address bar.',
+};
+
+/** `messages`: what the toast says, in the page's language (English by default). */
+export function ReadingAids({ messages = englishMessages }: { messages?: ReadingAidsMessages } = {}) {
   useEffect(() => {
     const bar = document.querySelector<HTMLElement>('.ed-progress i');
     const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.ed-toc a[href^="#"]'));
@@ -82,7 +91,7 @@ export function ReadingAids() {
       if (anchor && !event.metaKey && !event.ctrlKey && !event.shiftKey) {
         const url = `${pageUrl()}${anchor.hash}`;
         void copy(url).then((ok) => {
-          say(ok ? 'Link copied' : 'Could not copy. The address bar now holds the link.');
+          say(ok ? messages.copied : messages.copyFailedLink);
           if (ok) {
             anchor.dataset.copied = '';
             window.setTimeout(() => delete anchor.dataset.copied, 1800);
@@ -96,10 +105,10 @@ export function ReadingAids() {
         const data = { title: share.dataset.shareTitle ?? document.title, text: share.dataset.shareText, url };
         if (typeof navigator.share === 'function' && (!navigator.canShare || navigator.canShare(data))) {
           navigator.share(data).catch((error: unknown) => {
-            if ((error as DOMException)?.name !== 'AbortError') void copy(url).then((ok) => ok && say('Link copied'));
+            if ((error as DOMException)?.name !== 'AbortError') void copy(url).then((ok) => ok && say(messages.copied));
           });
         } else {
-          void copy(url).then((ok) => say(ok ? 'Link copied' : 'Could not copy. Copy the address from the address bar.'));
+          void copy(url).then((ok) => say(ok ? messages.copied : messages.copyFailedShare));
         }
       }
     };
@@ -155,7 +164,7 @@ export function ReadingAids() {
       window.clearTimeout(toastTimer);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [messages]);
 
   return null;
 }
