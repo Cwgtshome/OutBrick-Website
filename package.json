@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "vinext dev",
-    "build": "node scripts/prebuild.mjs && vinext build && node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/postbuild.mjs",
+    "build": "node scripts/prebuild.mjs && node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/generate-qr.mjs && vinext build && node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/postbuild.mjs",
     "start": "wrangler dev --config dist/server/wrangler.json",
     "lint": "oxlint",
     "format": "oxfmt",

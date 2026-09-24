@@ -133,11 +133,12 @@ export default function PrivacyPage() {
         <p>
           This section is new as of 24 September 2026. Before that date the website&rsquo;s contact form
           only opened a draft in your own mail app and sent nothing itself; it now sends your message
-          directly, and the site gained two more forms.
+          directly, and the site gained three more forms.
         </p>
         <p>
-          The contact form, the <a href="/affiliates">affiliate programme</a> application and the job
-          applications on our <a href="/careers">careers</a> pages send what you type to OutBrick. They
+          The contact form, the <a href="/affiliates">affiliate programme</a> application, the job
+          applications on our <a href="/careers">careers</a> pages and the{' '}
+          <a href="/newsletter">newsletter</a> sign-up send what you type to OutBrick. They
           are handled by Netlify, the company that hosts this website, through its Netlify Forms service:
           Netlify receives each submission on our behalf, stores it in our account, screens it for spam
           (using its spam-filtering provider, Akismet) and emails it to us. Netlify acts as our service
@@ -148,12 +149,14 @@ export default function PrivacyPage() {
           <li><b>Contact form:</b> the topic, your name, email address and message, and — only if you fill them in — your device, iOS version and app version.</li>
           <li><b>Affiliate application:</b> your name, email address, the links to your channels, an audience-size range, your country, how you would promote OutBrick, your preferred handle and the code proposed from it.</li>
           <li><b>Job application:</b> the role, your name, email address, a link to your portfolio or profile, where you live and your time zone, and your note.</li>
+          <li><b>Newsletter:</b> your email address, the language you chose for the emails, and a record that you ticked the consent box. We use it only to send occasional emails about new villages and major OutBrick updates, about once a month at most. Unsubscribe at any time by replying to any newsletter email or through the <a href="/contact?topic=privacy">contact form</a>, and we delete your address from the list. Signing up or not changes nothing in the app.</li>
           <li><b>With every form:</b> your consent tick, and the technical details Netlify records with a submission, such as the time, your IP address and your browser&rsquo;s user agent, which it uses to keep out spam.</li>
         </ul>
         <p>
           We use these details only for the reason you sent them: to answer your message, to review and
-          run your affiliate application, or to consider you for a role. We do not sell them, use them
-          for advertising, or add you to a mailing list.
+          run your affiliate application, to consider you for a role, or to send the newsletter you asked
+          for. We do not sell them, use them for advertising, or add you to a mailing list you did not
+          sign up for.
         </p>
         <p>
           <b>How long we keep them.</b> We delete form submissions, and the emails they arrive as, within

@@ -16,7 +16,6 @@
  */
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode, type SubmitEvent } from 'react';
-import { CONTACT_EMAIL } from '../../lib/site';
 
 type Errors = Record<string, string>;
 type Status = 'idle' | 'sending' | 'sent' | 'failed';
@@ -220,7 +219,7 @@ export function NetlifyForm({
         {status === 'failed' ? (
           <>
             That did not send — the connection may have dropped. Your answers are still here, so
-            try again, or email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+            try again in a moment.
           </>
         ) : null}
       </p>

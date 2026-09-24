@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { contactTopics, deviceTopics } from '../../../lib/business';
-import { CONTACT_EMAIL } from '../../../lib/site';
 import { ConsentField, NetlifyForm, SelectField, SubmitRow, TextArea, TextField, useSearchParam } from '../../components/netlify-form';
 
 /**
@@ -34,7 +33,7 @@ export function ContactForm() {
             Your note about <b>{topicLabel(values.get('topic'))}</b> is with the team. A person reads every
             message and replies to <b>{values.get('email')}</b>.
           </p>
-          <p>If something is urgent or you need to add a screenshot, reply to our email when it arrives, or write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+          <p>If you need to add something, such as a screenshot, reply to our email when it arrives.</p>
         </>
       )}
     >

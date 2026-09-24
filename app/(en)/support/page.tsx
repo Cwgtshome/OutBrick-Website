@@ -117,6 +117,7 @@ export default function SupportPage() {
           <li><b>Target, not par:</b> the number you are aiming at used to be called par. It is called the target now. Same number, same rule: clear at or under it for the second star, and do that without an undo for the third.</li>
           <li><b>Advertising choices:</b> in the EEA, the UK and Switzerland, Settings &rsaquo; Advertising choices reopens the consent form at any time. iOS tracking permission lives in Settings &rsaquo; Privacy &amp; Security &rsaquo; Tracking, and saying no changes nothing about the game.</li>
           <li><b>Widgets:</b> add the OutBrick widget from your iPhone Home Screen and choose a size that fits your layout.</li>
+          <li><b>What changed in the latest update:</b> the full release notes are on <a href="/whats-new">What’s new</a>.</li>
         </ul>
       </section>
 
