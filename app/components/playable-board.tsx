@@ -1,5 +1,6 @@
 'use client';
 
+import { appStoreUrl } from '../store-badge';
 import '../styles/playable-board.css';
 import {
   useCallback,
@@ -25,7 +26,7 @@ import {
   type Placement,
 } from '../../lib/board-solver';
 
-const APP_STORE = 'https://apps.apple.com/us/app/outbrick/id6807997465';
+const APP_STORE = appStoreUrl('board-clear');
 const RESULT_URL = 'https://www.outbrick.site/play/result';
 const DRAG_THRESHOLD = 10;
 
