@@ -1,81 +1,160 @@
 import type { Metadata } from 'next';
-import { ArrowUpRight, Heart, Lightbulb, ShieldCheck, Sparkles } from 'lucide-react';
-import { EditorialFooter, EditorialHeader } from '../editorial-shell';
+import { Badge, Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../editorial-shell';
 import { authors } from '../../lib/blog';
 import { siteUrl } from '../../lib/site';
 
+const description =
+  'Who makes OutBrick, the sliding-brick colour-sort puzzle, what the game is built to respect, and why it publishes a cited journal alongside it.';
+
 export const metadata: Metadata = {
-  title: 'About OutBrick',
-  description: 'Learn how OutBrick makes calm, accessible sliding-brick puzzles and publishes thoughtful notes about games, habits, and player experience.',
-  keywords: ['about OutBrick', 'calm puzzle game', 'accessible game design', 'independent game studio'],
+  title: 'About',
+  description,
   alternates: { canonical: '/about' },
   openGraph: {
     type: 'website',
-    url: '/about',
+    url: `${siteUrl}/about`,
+    siteName: 'OutBrick',
     title: 'About OutBrick',
-    description: 'A small puzzle game and a thoughtful journal about the design choices around it.',
-    images: [{ url: '/og.png', width: 1400, height: 710, alt: 'OutBrick mascots and home screen' }],
+    description,
+    images: [{ url: `${siteUrl}/assets/icon/icon-512.png`, width: 512, height: 512, alt: 'The OutBrick app icon' }],
   },
+  twitter: { card: 'summary', title: 'About OutBrick', description, images: [`${siteUrl}/assets/icon/icon-512.png`] },
 };
 
+const facts: [string, string][] = [
+  ['The rule', 'Slide a brick and it glides until something stops it. Get every brick out through the gate that matches its colour and the board is clear.'],
+  ['The boards', '2,000, across 100 chapters of twenty. A solver cleared every one before it shipped.'],
+  ['The Journey', '167 villages built stud by stud out of brick, twelve levels each, carried by twenty-eight distinct places.'],
+  ['The cast', 'Nine brick friends. Three share your Home screen at a time; they animate and speak in text bubbles.'],
+  ['The pressure', 'A move limit on every board. No clock, timer or countdown anywhere in the game.'],
+  ['What it costs', 'Free, with lives and six opt-in rewarded video placements. No banners, no interstitials, no subscription.'],
+  ['Where it runs', 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, offline, with progress in your own iCloud.'],
+];
+
+const principles = [
+  { tone: 'green', kicker: 'Time', title: 'Respect the pause', body: 'Sessions have natural edges. Being interrupted costs nothing, the clear card is a real ending, and nothing interrupts a board.' },
+  { tone: 'blue', kicker: 'Clarity', title: 'Make the rule readable', body: 'Challenge should come from the puzzle’s idea, not from unclear controls. Every board prints its target and its limit from the first tap.' },
+  { tone: 'teal', kicker: 'Access', title: 'Build access in', body: 'Colour-blind glyphs are on by default, every brick is a VoiceOver element, and Reduce Motion is honoured everywhere.' },
+  { tone: 'gold', kicker: 'Honesty', title: 'Say what it costs', body: 'Lives and rewarded videos exist, and the home page says exactly how both work, with nothing rounded in our favour.' },
+];
+
 export default function AboutPage() {
+  const founder = authors[0]!;
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
     '@id': `${siteUrl}/about#page`,
     url: `${siteUrl}/about`,
     name: 'About OutBrick',
-    description: metadata.description,
-    isPartOf: { '@type': 'WebSite', name: 'OutBrick', url: siteUrl },
+    description,
+    isPartOf: { '@id': `${siteUrl}/#website` },
     about: {
       '@type': 'Organization',
       name: 'OutBrick',
       url: siteUrl,
       logo: `${siteUrl}/icon.png`,
-      founder: { '@type': 'Person', name: authors[0]!.name },
+      founder: { '@type': 'Person', name: founder.name, url: `${siteUrl}/authors/${founder.id}` },
     },
+  };
+  const breadcrumbData = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'About', item: `${siteUrl}/about` },
+    ],
   };
 
   return (
-    <div className="blog-site info-site">
-      <div className="site-grain" aria-hidden="true" />
-      <EditorialHeader current="about" />
-      <main className="info-main" aria-labelledby="about-title">
-        <header className="info-hero">
-          <div className="eyebrow"><span className="eyebrow-dot" /> About OutBrick</div>
-          <h1 id="about-title">A small game with <span>room to breathe.</span></h1>
-          <p className="info-lede">OutBrick is a sliding-brick colour-sort puzzle for the moments between things. We make the board readable, the challenge satisfying, and the decision to stop feel as welcome as the decision to play.</p>
-          <div className="info-hero-actions"><a className="nav-cta" href="/play">Play the web demo <ArrowUpRight size={15} /></a><a className="blog-text-link" href="/blog">Read the journal <ArrowUpRight size={15} /></a></div>
-        </header>
-
-        <section className="info-story-grid" aria-labelledby="story-title">
-          <div className="info-story-mark" aria-hidden="true"><span>O</span><span>+</span><span>B</span></div>
-          <div><div className="eyebrow"><span className="eyebrow-dot" /> The idea</div><h2 id="story-title">Play can be <span>small</span> and still matter.</h2></div>
-          <div className="info-copy"><p>Many games ask for a whole evening. OutBrick starts with a smaller promise: one board, one clear question, and one satisfying moment of progress. It is designed for a coffee break, a commute, or the quiet reset after a long task.</p><p>The journal follows the questions that sit around that promise: how games fit into real lives, how accessibility makes a board clearer, and what successful games teach us about agency, repetition, and craft.</p></div>
-        </section>
-
-        <section className="info-section" aria-labelledby="principles-title">
-          <div className="section-heading-split info-section-heading"><div><div className="eyebrow"><span className="eyebrow-dot" /> Our principles</div><h2 id="principles-title">Design with <span>care.</span></h2></div><p>These are working principles, not a claim that every player or every day is the same.</p></div>
-          <div className="info-card-grid">
-            <article className="info-card info-card-green"><span className="info-card-icon"><Heart size={20} /></span><h3>Respect the pause</h3><p>Sessions have natural edges. Progress stays legible, interruption is safe, and the game does not need pressure to make a moment enjoyable.</p></article>
-            <article className="info-card info-card-blue"><span className="info-card-icon"><Lightbulb size={20} /></span><h3>Make the rule readable</h3><p>Challenge should come from the puzzle’s idea, not from unclear controls. The board gives you enough information to form a plan.</p></article>
-            <article className="info-card info-card-teal"><span className="info-card-icon"><ShieldCheck size={20} /></span><h3>Build access in</h3><p>Colour is paired with shape and glyphs, support options stay close to the experience, and player feedback remains part of the work.</p></article>
-            <article className="info-card info-card-yellow"><span className="info-card-icon"><Sparkles size={20} /></span><h3>Keep curiosity alive</h3><p>Undo, visible feedback, and solver-verified boards help experimentation feel safer without removing the satisfaction of finding the line.</p></article>
+    <EditorialPage current="about">
+      <header className="ed-band-ink ed-hero">
+        <div className="ed-wrap">
+          <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'About' }]} />
+          <div className="ed-hero-grid">
+            <div>
+              <p className="ed-label">About OutBrick</p>
+              <h1 className="ed-display">A small game, built <em>brick by brick.</em></h1>
+              <p className="ed-lede">
+                OutBrick is a sliding-brick colour-sort puzzle for the moments between things. It is an
+                independent project by {founder.name}, and this site is where the game, the thinking
+                behind it and the journal live side by side.
+              </p>
+              <div className="ed-actions">
+                <Badge />
+                <a className="ed-link" href="/play">Read the play guide</a>
+              </div>
+            </div>
+            <figure className="ed-capture" style={{ width: 'min(100%, 250px)', justifySelf: 'center', transform: 'rotate(2deg)' }}>
+              <img src="/assets/villages/garden-city.jpg" alt="Garden City on the OutBrick Journey map: a brick road winding between toy-brick houses." width={239} height={520} decoding="async" />
+            </figure>
           </div>
-        </section>
+        </div>
+      </header>
+      <Bond />
 
-        <section className="info-split-section" aria-labelledby="making-title">
-          <div><div className="eyebrow"><span className="eyebrow-dot" /> How it is made</div><h2 id="making-title">A living little <span>workshop.</span></h2></div>
-          <div className="info-copy"><p>OutBrick is an independent project by Mourad Hamdi. The game, the visual language, and the journal grow together: a new board can prompt a design note, and a research note can change the question we ask of a feature.</p><p>We publish sources in APA 7 style when a story makes a research claim, distinguish first-party success stories from peer-reviewed evidence, and keep conclusions proportional to what the source can actually support.</p><a className="blog-text-link" href="/research">Read our research method <ArrowUpRight size={15} /></a></div>
-        </section>
+      <section className="ed-band-paper ed-band" aria-labelledby="facts-title">
+        <div className="ed-wrap ed-split">
+          <div>
+            <p className="ed-label">The game, plainly</p>
+            <h2 id="facts-title" className="ed-h2">Seven things that are true today.</h2>
+            <div className="ed-prose" style={{ marginTop: 18 }}>
+              <p>Everything on this list matches the home page, which is where the game is described in full.</p>
+              <a className="ed-link" href="/">See the game</a>
+            </div>
+          </div>
+          <dl className="ed-ledger">
+            {facts.map(([term, detail]) => (
+              <div key={term}><dt>{term}</dt><dd>{detail}</dd></div>
+            ))}
+          </dl>
+        </div>
+      </section>
 
-        <section className="info-cta" aria-labelledby="join-title">
-          <div><div className="eyebrow"><span className="eyebrow-dot" /> Come along</div><h2 id="join-title">Find a board. <span>Take your time.</span></h2><p>Start with the web demo, meet the mascots, or browse the journal when you have a little more room.</p></div>
-          <div className="info-cta-actions"><a className="nav-cta" href="/play">Try OutBrick <ArrowUpRight size={15} /></a><a className="blog-text-link" href="/contact">Contact the team <ArrowUpRight size={15} /></a></div>
-        </section>
-      </main>
-      <EditorialFooter />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-    </div>
+      <section className="ed-band-ink ed-band" aria-labelledby="principles-title">
+        <div className="ed-wrap">
+          <p className="ed-label">Working principles</p>
+          <h2 id="principles-title" className="ed-h2" style={{ marginTop: 14, maxWidth: '16ch' }}>Four things we try not to break.</h2>
+          <div className="ed-wall">
+            {principles.map((item) => (
+              <article className="ed-brickcard ed-reveal" data-tone={item.tone} key={item.title}>
+                <Studs count={3} />
+                <span className="ed-kicker">{item.kicker}</span>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="ed-band-cream ed-band" aria-labelledby="workshop-title">
+        <div className="ed-wrap ed-split">
+          <div>
+            <p className="ed-label">The workshop</p>
+            <h2 id="workshop-title" className="ed-h2">Why a puzzle game keeps a journal.</h2>
+          </div>
+          <div className="ed-prose">
+            <p>
+              The game and the writing grow together. A new board can prompt a design note, and a
+              research paper can change the question we ask of a feature. Publishing both keeps us
+              honest about why the game works the way it does.
+            </p>
+            <p>
+              When a story makes a research claim, it cites the source in APA 7 and says whether that
+              source is a study, a standard, a news account or a studio’s own history. Conclusions stay
+              the size the evidence supports.
+            </p>
+            <div className="ed-actions" style={{ marginTop: 24 }}>
+              <a className="ed-btn ghost" href="/blog">Read the journal</a>
+              <a className="ed-link" href="/research">The research method</a>
+              <a className="ed-link" href="/contact">Contact</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <JsonLd data={structuredData} />
+      <JsonLd data={breadcrumbData} />
+    </EditorialPage>
   );
 }

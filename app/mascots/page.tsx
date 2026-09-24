@@ -1,96 +1,170 @@
 import type { Metadata } from 'next';
-import type { CSSProperties } from 'react';
-import { ArrowUpRight, ChevronRight, HeartHandshake, Sparkles } from 'lucide-react';
-import { EditorialFooter, EditorialHeader, OutBrickLogo } from '../editorial-shell';
-import { mascotStories } from '../../lib/mascots';
+import { Bond, Crumbs, EditorialPage, JsonLd } from '../editorial-shell';
+import { friends, mascotStories } from '../../lib/mascots';
 import { siteUrl } from '../../lib/site';
 
+const description =
+  'Meet the nine brick friends of OutBrick: Bloo, Peach, Sprout, Bricko, Flurry, Moss, Poppy, Vio and Zippy. Three share your Home screen at a time.';
+
 export const metadata: Metadata = {
-  title: 'Meet the OutBrick mascots',
-  description: 'Meet Bloo, Peach, and Sprout—the friendly OutBrick mascots who make every clear feel like a little story.',
-  keywords: ['OutBrick mascots', 'Bloo', 'Peach', 'Sprout', 'puzzle game characters'],
+  title: 'The nine brick friends',
+  description,
+  keywords: ['OutBrick friends', 'OutBrick mascots', ...friends.map((friend) => friend.name)],
   alternates: { canonical: '/mascots' },
   openGraph: {
     type: 'website',
-    url: '/mascots',
-    title: 'Meet the OutBrick mascots',
-    description: 'Three friendly characters, three different ways to find the next move.',
-    images: [{ url: `${siteUrl}/assets/mascots-group-cheer.png`, width: 2048, height: 1393, alt: 'Bloo, Peach, and Sprout cheering together' }],
+    url: `${siteUrl}/mascots`,
+    siteName: 'OutBrick',
+    title: 'The nine brick friends of OutBrick',
+    description,
+    images: [{ url: `${siteUrl}/assets/friends/bloo.png`, width: 360, height: 360, alt: 'Bloo, a blue brick-shaped OutBrick friend.' }],
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Meet the OutBrick mascots',
-    description: 'Three friendly characters, three different ways to find the next move.',
-    images: [`${siteUrl}/assets/mascots-group-cheer.png`],
-  },
+  twitter: { card: 'summary', title: 'The nine brick friends of OutBrick', description, images: [`${siteUrl}/assets/friends/bloo.png`] },
 };
 
 export default function MascotsPage() {
+  const withStory = friends.filter((friend) => friend.hasStory);
+  const others = friends.filter((friend) => !friend.hasStory);
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     '@id': `${siteUrl}/mascots#page`,
     url: `${siteUrl}/mascots`,
-    name: 'Meet the OutBrick mascots',
-    description: metadata.description,
-    isPartOf: { '@type': 'WebSite', name: 'OutBrick', url: siteUrl },
+    name: 'The nine brick friends of OutBrick',
+    description,
+    isPartOf: { '@id': `${siteUrl}/#website` },
     mainEntity: {
       '@type': 'ItemList',
-      itemListElement: mascotStories.map((story, index) => ({
+      itemListElement: friends.map((friend, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        url: `${siteUrl}/mascots/${story.id}`,
-        name: story.name,
-        image: `${siteUrl}${story.heroImage}`,
-        description: story.dek,
+        url: friend.hasStory ? `${siteUrl}/mascots/${friend.id}` : `${siteUrl}/mascots#${friend.id}`,
+        name: friend.name,
+        image: `${siteUrl}${friend.image}`,
       })),
     },
   };
+  const breadcrumbData = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Mascots', item: `${siteUrl}/mascots` },
+    ],
+  };
 
   return (
-    <div className="blog-site mascot-story-site mascot-cast-site">
-      <div className="site-grain" aria-hidden="true" />
-      <EditorialHeader current="mascots" />
-      <main className="mascot-cast-main" aria-labelledby="mascot-cast-title">
-        <section className="mascot-cast-hero">
-          <div className="mascot-cast-copy">
-            <div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-pink" /> The cast</div>
-            <h1 id="mascot-cast-title">Meet the <span>little legends.</span></h1>
-            <p>OutBrick has three ways of looking at a board: charge at it, think it through, or ask one more question. Bloo, Peach, and Sprout bring all three to the same bright little village.</p>
-            <div className="mascot-cast-actions"><a className="nav-cta" href="/play">Play OutBrick <ArrowUpRight size={15} /></a><a className="blog-text-link" href="#stories">Read their stories <ChevronRight size={15} /></a></div>
-            <div className="mascot-cast-proof"><span><HeartHandshake size={15} /> Friendly by design</span><span><Sparkles size={15} /> Real 3D companions</span><span>Three voices, one board</span></div>
+    <EditorialPage current="mascots">
+      <header className="ed-band-ink ed-hero">
+        <div className="ed-wrap">
+          <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Mascots' }]} />
+          <div className="ed-hero-grid" style={{ alignItems: 'start' }}>
+            <div>
+              <p className="ed-label">The cast</p>
+              <h1 className="ed-display">Nine brick friends. <em>Three at a time.</em></h1>
+              <p className="ed-lede">
+                Real 3D characters built from the same bricks as the board. Three share your Home screen,
+                and the cast turns over as you play: one waves goodbye and walks off, another walks on and
+                says hello. Poke one and it reacts. Clear a board and each has a victory move of its own.
+              </p>
+              <p className="ed-meta" style={{ marginTop: 20, maxWidth: '56ch' }}>
+                The friends speak in text bubbles only. They have no voices: character vocalisations were
+                removed on 21 September 2026.
+              </p>
+            </div>
+            <nav aria-label="All nine friends">
+              <ul className="ed-roster" style={{ listStyle: 'none', margin: 0 }}>
+                {friends.map((friend) => (
+                  <li key={friend.id} style={{ ['--c' as string]: friend.colour, ['--c-foot' as string]: friend.foot }}>
+                    <a href={friend.hasStory ? `/mascots/${friend.id}` : `#${friend.id}`}>
+                      <span className="plinth">
+                        <img src={friend.image} alt="" width={360} height={360} decoding="async" />
+                      </span>
+                      <b>{friend.name}</b>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
-          <div className="mascot-cast-hero-art">
-            <span className="cast-art-label cast-art-label-left">The village</span>
-            <img src="/assets/mascots-group-cheer.png" alt="Bloo, Peach, and Sprout cheering together" title="The OutBrick mascot cast" />
-            <span className="cast-art-label cast-art-label-right">Come say hello</span>
-          </div>
-        </section>
+        </div>
+      </header>
+      <Bond />
 
-        <section id="stories" className="mascot-cast-stories" aria-labelledby="stories-title">
-          <div className="mascot-cast-section-heading">
-            <div><div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-gold" /> Choose a companion</div><h2 id="stories-title">Three hearts.<br /><span>Many good moves.</span></h2></div>
-            <p>Each mascot has a different rhythm, but none of them asks you to be perfect. Pick a story and see what they bring to the next clear.</p>
+      <section className="ed-band-paper ed-band" aria-labelledby="stories-title">
+        <div className="ed-wrap">
+          <p className="ed-label">Three stories</p>
+          <h2 id="stories-title" className="ed-h2" style={{ marginTop: 14, maxWidth: '20ch' }}>The friends who were there first.</h2>
+          <p className="ed-lede" style={{ marginTop: 16 }}>Bloo, Peach and Sprout each have a short illustrated story, set in real villages from the Journey.</p>
+          <div className="ed-story-trio">
+            {withStory.map((friend) => {
+              const story = mascotStories.find((item) => item.id === friend.id)!;
+              const village = story.chapters[0]!.village;
+              return (
+                <article
+                  key={friend.id}
+                  className="ed-storycard ed-lift ed-reveal"
+                  style={{ ['--c' as string]: friend.colour, ['--c-foot' as string]: friend.foot, ['--c-ink' as string]: friend.ink }}
+                >
+                  <div className="ed-storycard-art" aria-hidden="true">
+                    <figure className="ed-capture" style={{ margin: 0 }}>
+                      <img src={`/assets/villages/${village.slug}.jpg`} alt="" width={239} height={520} loading="lazy" decoding="async" />
+                    </figure>
+                    <img className="ed-friend" src={friend.image} alt="" width={360} height={360} loading="lazy" decoding="async" />
+                  </div>
+                  <div>
+                    <span className="role">{friend.role}</span>
+                    <h3><a href={`/mascots/${friend.id}`}>{friend.name}</a></h3>
+                    <p className="headline">{story.headline}</p>
+                    <p className="dek">{story.dek}</p>
+                    <span className="go" aria-hidden="true">Read {friend.name}’s story</span>
+                  </div>
+                </article>
+              );
+            })}
           </div>
-          <div className="mascot-cast-grid">
-            {mascotStories.map((story) => (
-              <a className={`mascot-cast-card mascot-cast-card-${story.id}`} href={`/mascots/${story.id}`} key={story.id} style={{ '--story-accent': story.accent, '--story-accent-soft': story.accentSoft } as CSSProperties}>
-                <div className="mascot-cast-card-art"><img src={story.heroImage} alt={story.imageAlt} title={`${story.name} mascot`} /><span>{story.role}</span></div>
-                <div className="mascot-cast-card-copy"><div className="mascot-cast-card-name-row"><h3>{story.name}</h3><ArrowUpRight size={19} /></div><p>{story.dek}</p><span className="mascot-cast-read">Read {story.name}’s story <ChevronRight size={16} /></span></div>
-              </a>
+        </div>
+      </section>
+
+      <section className="ed-band-ink ed-band" aria-labelledby="six-title">
+        <div className="ed-wrap">
+          <p className="ed-label">And six more</p>
+          <h2 id="six-title" className="ed-h2" style={{ marginTop: 14, maxWidth: '18ch' }}>The rest of the cast, briefly.</h2>
+          <p className="ed-lede" style={{ marginTop: 16 }}>What each friend does in the game, quoted from the cast notes, and a line of flavour from us.</p>
+          <div className="ed-profiles">
+            {others.map((friend) => (
+              <article
+                key={friend.id}
+                id={friend.id}
+                className="ed-profile ed-reveal"
+                style={{ ['--c' as string]: friend.colour, ['--c-foot' as string]: friend.foot }}
+                aria-labelledby={`${friend.id}-name`}
+              >
+                <div className="plinth">
+                  <img src={friend.image} alt={friend.imageAlt} width={360} height={360} loading="lazy" decoding="async" />
+                </div>
+                <div>
+                  <p className="ed-label no-mark" style={{ color: `color-mix(in srgb, ${friend.colour} 62%, #fff)` }}>{friend.role}</p>
+                  <h3 id={`${friend.id}-name`}>{friend.name}</h3>
+                  <p className="flavour" style={{ marginTop: 12 }}>{friend.flavour}</p>
+                </div>
+                <blockquote>
+                  <span className="ed-label">In the game</span>
+                  {friend.line}
+                </blockquote>
+              </article>
             ))}
           </div>
-        </section>
+          <div className="ed-actions" style={{ marginTop: 40 }}>
+            <a className="ed-btn" href="/#cast">See all nine on the home page</a>
+            <a className="ed-link" href="/press-kit#friends">Download the renders</a>
+          </div>
+        </div>
+      </section>
 
-        <section className="mascot-cast-collective" aria-labelledby="collective-title">
-          <div className="mascot-cast-collective-mark"><OutBrickLogo /></div>
-          <div><div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-green" /> Same board, different eyes</div><h2 id="collective-title">The answer gets better <span>when it is shared.</span></h2></div>
-          <p>Bloo brings the nerve, Peach brings the care, and Sprout brings the question nobody else thought to ask. Together, they make the game feel like a place you can return to—not a test you have to pass.</p>
-          <a className="blog-text-link" href="/#cast">See them on the Home screen <ArrowUpRight size={15} /></a>
-        </section>
-      </main>
-      <EditorialFooter />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-    </div>
+      <JsonLd data={structuredData} />
+      <JsonLd data={breadcrumbData} />
+    </EditorialPage>
   );
 }

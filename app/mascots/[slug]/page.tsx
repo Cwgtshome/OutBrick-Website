@@ -1,10 +1,8 @@
-import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, HeartHandshake, Sparkles } from 'lucide-react';
-import { EditorialFooter, EditorialHeader } from '../../editorial-shell';
-import { MascotStoryExperience } from '../mascot-story-experience';
-import { getAdjacentMascot, getMascotStory, mascotStories, type MascotStory } from '../../../lib/mascots';
+import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
+import { friends, getAdjacentMascot, getFriend, getMascotStory, mascotStories } from '../../../lib/mascots';
 import { siteUrl } from '../../../lib/site';
 
 type MascotPageProps = { params: Promise<{ slug: string }> };
@@ -16,62 +14,53 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: MascotPageProps): Promise<Metadata> {
   const { slug } = await params;
   const story = getMascotStory(slug);
-  if (!story) return {};
+  const friend = getFriend(slug);
+  if (!story || !friend) return {};
+  const title = `${story.name}: ${story.headline}`;
+  const image = `${siteUrl}${friend.image}`;
 
   return {
-    title: `${story.name} — OutBrick mascot story`,
+    title,
     description: story.dek,
-    keywords: ['OutBrick', story.name, story.role, 'mascot story', 'puzzle game characters'],
+    keywords: ['OutBrick', story.name, 'OutBrick friends', 'brick mascot'],
     alternates: { canonical: `/mascots/${story.id}` },
     openGraph: {
-      type: 'website',
-      url: `/mascots/${story.id}`,
-      title: `${story.name} — OutBrick mascot story`,
+      type: 'article',
+      url: `${siteUrl}/mascots/${story.id}`,
+      siteName: 'OutBrick',
+      title,
       description: story.dek,
-      images: [{ url: `${siteUrl}${story.heroImage}`, width: 1024, height: 1024, alt: story.imageAlt }],
+      images: [{ url: image, width: 360, height: 360, alt: friend.imageAlt }],
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${story.name} — OutBrick mascot story`,
-      description: story.dek,
-      images: [`${siteUrl}${story.heroImage}`],
-    },
+    twitter: { card: 'summary', title, description: story.dek, images: [image] },
   };
-}
-
-function MascotFacts({ story }: { story: MascotStory }) {
-  return (
-    <div className="mascot-story-facts" aria-label={`${story.name} character notes`}>
-      <div><span className="mascot-story-fact-label">Superpower</span><strong>{story.superpower}</strong></div>
-      <div><span className="mascot-story-fact-label">Tell</span><strong>{story.tells}</strong></div>
-      <div><span className="mascot-story-fact-label">Favourite move</span><strong>{story.favoriteMove}</strong></div>
-    </div>
-  );
 }
 
 export default async function MascotStoryPage({ params }: MascotPageProps) {
   const { slug } = await params;
   const story = getMascotStory(slug);
-  if (!story) notFound();
+  const friend = getFriend(slug);
+  if (!story || !friend) notFound();
 
   const previous = getAdjacentMascot(story.id, -1);
   const next = getAdjacentMascot(story.id, 1);
   const storyUrl = `${siteUrl}/mascots/${story.id}`;
+  const tone = { '--c': friend.colour, '--c-foot': friend.foot, '--c-ink': friend.ink, '--c-soft': `color-mix(in srgb, ${friend.colour} 18%, #fff)` } as CSSProperties;
+
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'ProfilePage',
+    '@type': 'WebPage',
     '@id': `${storyUrl}#page`,
     url: storyUrl,
-    name: `${story.name} — OutBrick mascot story`,
+    name: `${story.name}: ${story.headline}`,
     description: story.dek,
-    image: [`${siteUrl}${story.heroImage}`],
-    isPartOf: { '@type': 'WebSite', name: 'OutBrick', url: siteUrl },
-    mainEntity: {
-      '@type': 'Person',
-      name: story.name,
-      description: `${story.role}. ${story.voice}`,
-      image: `${siteUrl}${story.heroImage}`,
-      memberOf: { '@type': 'Organization', name: 'OutBrick', url: siteUrl },
+    image: `${siteUrl}${friend.image}`,
+    isPartOf: { '@id': `${siteUrl}/#website` },
+    about: {
+      '@type': 'Thing',
+      name: `${story.name} (OutBrick character)`,
+      description: friend.line,
+      image: `${siteUrl}${friend.image}`,
     },
   };
   const breadcrumbData = {
@@ -84,54 +73,102 @@ export default async function MascotStoryPage({ params }: MascotPageProps) {
     ],
   };
 
+  const otherFriends = friends.filter((item) => item.id !== friend.id);
+
   return (
-    <div className={`blog-site mascot-story-site mascot-story-site-${story.id}`} style={{ '--story-accent': story.accent, '--story-accent-soft': story.accentSoft } as CSSProperties}>
-      <div className="site-grain" aria-hidden="true" />
-      <EditorialHeader current="mascots" />
-      <main className="mascot-story-main">
-        <div className="mascot-story-breadcrumbs"><a href="/">OutBrick</a><ChevronRight size={14} /><a href="/mascots">Mascots</a><ChevronRight size={14} /><span>{story.name}</span></div>
-
-        <section className="mascot-story-hero" aria-labelledby={`${story.id}-title`}>
-          <div className="mascot-story-copy">
-            <a className="article-back-link" href="/mascots"><ArrowLeft size={15} /> Meet the cast</a>
-            <div className="mascot-story-role"><span className="mascot-story-role-dot" /> {story.role}</div>
-            <h1 id={`${story.id}-title`}>{story.name}: <span>{story.headline}</span></h1>
-            <p className="mascot-story-dek">{story.dek}</p>
-            <p className="mascot-story-voice"><HeartHandshake size={16} /> {story.voice}</p>
-            <div className="mascot-story-actions"><a className="nav-cta" href="/play">Play OutBrick <ArrowUpRight size={15} /></a><a className="blog-text-link" href="#chapters">Follow the story <ChevronRight size={15} /></a></div>
-            <MascotFacts story={story} />
+    <EditorialPage current="mascots">
+      <div style={tone}>
+        <header className="ed-band-ink ed-mhero">
+          <div className="ed-wrap">
+            <Crumbs items={[{ href: '/', label: 'OutBrick' }, { href: '/mascots', label: 'Mascots' }, { label: story.name }]} />
+            <div className="ed-mhero-grid">
+              <div>
+                <p className="ed-label" style={{ color: `color-mix(in srgb, ${friend.colour} 62%, #fff)` }}>{story.role}</p>
+                <h1 className="ed-display">
+                  <span className="name">{story.name}</span>
+                  <span className="headline">{story.headline}</span>
+                </h1>
+                <p className="ed-lede" style={{ marginTop: 24 }}>{story.dek}</p>
+                <dl className="ed-ledger ed-mfacts">
+                  <div><dt>In the game</dt><dd>{friend.line}</dd></div>
+                  <div><dt>Superpower</dt><dd>{story.superpower}</dd></div>
+                  <div><dt>The tell</dt><dd>{story.tells}</dd></div>
+                  <div><dt>Favourite move</dt><dd>{story.favoriteMove}</dd></div>
+                </dl>
+              </div>
+              <div className="ed-mstage">
+                <Studs count={4} />
+                <p className="ed-bubble"><span className="sr-only">{story.name}’s text bubble: </span>{story.bubble}</p>
+                <img className="friend" src={friend.image} alt={friend.imageAlt} width={360} height={360} decoding="async" fetchPriority="high" />
+              </div>
+            </div>
           </div>
-          <div className="mascot-story-portrait">
-            <span className="mascot-story-portrait-topline"><span>OutBrick / {story.name}</span><span>3D companion</span></span>
-            <div className="mascot-story-portrait-glow" aria-hidden="true" />
-            <img src={story.heroImage} alt={story.imageAlt} title={`${story.name} 3D mascot`} />
-            <div className="mascot-story-speech"><Sparkles size={15} /><span>{story.quote}</span></div>
-            <span className="mascot-story-portrait-bottomline">{story.name} · always a little alive</span>
+        </header>
+        <Bond />
+
+        <section className="ed-band-paper ed-band" aria-labelledby="opening-title">
+          <div className="ed-wrap ed-split">
+            <div>
+              <p className="ed-label">Before the next move</p>
+              <h2 id="opening-title" className="ed-h2" style={{ marginTop: 14 }}>A little more {story.name}.</h2>
+            </div>
+            <div className="ed-prose">
+              <p className="ed-intro" style={{ fontSize: 'clamp(1.15rem, 1.05rem + 0.45vw, 1.4rem)' }}>{story.opening}</p>
+              <p>{story.temperament} {story.name} is not there to solve the board for you, only to make the room friendlier while you find the way through.</p>
+            </div>
+          </div>
+
+          <div className="ed-wrap">
+            <div className="ed-chapters">
+              {story.chapters.map((chapter) => (
+                <article className="ed-chapter ed-reveal" key={chapter.number} aria-labelledby={`chapter-${chapter.number}`}>
+                  <figure className="ed-chapter-art">
+                    <div className="ed-capture">
+                      <img src={`/assets/villages/${chapter.village.slug}.jpg`} alt={`${chapter.village.name}, a brick-built village on the OutBrick Journey map.`} width={239} height={520} loading="lazy" decoding="async" />
+                    </div>
+                    <img className="ed-friend" src={friend.image} alt="" width={360} height={360} loading="lazy" decoding="async" />
+                    <figcaption>{chapter.village.name}, on the Journey</figcaption>
+                  </figure>
+                  <div>
+                    <span className="n">{chapter.number}</span>
+                    <h3 id={`chapter-${chapter.number}`}>{chapter.title}</h3>
+                    <p>{chapter.body}</p>
+                    <p className="ed-note">{chapter.note}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        <section className="mascot-story-intro" aria-labelledby={`${story.id}-intro-title`}>
-          <div className="mascot-story-intro-mark" aria-hidden="true"><span>{story.name.charAt(0)}</span><span>+</span><span>O</span></div>
-          <div><div className="eyebrow"><span className="eyebrow-dot" /> Before the next move</div><h2 id={`${story.id}-intro-title`}>A little more <span>{story.name}.</span></h2></div>
-          <div className="mascot-story-intro-copy"><p>{story.opening}</p><p>{story.name} is not here to solve the board for you. They are here to make the room feel friendly while you find your way through it.</p></div>
+        <section className="ed-band-ink ed-band-tight" aria-label="More friends">
+          <div className="ed-wrap">
+            <nav className="ed-mnav" aria-label="Other stories">
+              <a href={`/mascots/${previous.id}`} style={{ ['--c' as string]: getFriend(previous.id)!.colour, ['--c-foot' as string]: getFriend(previous.id)!.foot, ['--c-ink' as string]: getFriend(previous.id)!.ink }}>
+                <small>Previous story</small><b>{previous.name}</b>
+              </a>
+              <a className="all" href="/mascots"><small>The cast</small><b>All nine friends</b></a>
+              <a className="next" href={`/mascots/${next.id}`} style={{ ['--c' as string]: getFriend(next.id)!.colour, ['--c-foot' as string]: getFriend(next.id)!.foot, ['--c-ink' as string]: getFriend(next.id)!.ink }}>
+                <small>Next story</small><b>{next.name}</b>
+              </a>
+            </nav>
+            <p className="ed-meta" style={{ marginTop: 28 }}>
+              Also on the road:{' '}
+              {otherFriends
+                .filter((item) => !item.hasStory)
+                .map((item, index, list) => (
+                  <span key={item.id}>
+                    <a className="ed-link" style={{ fontSize: 'inherit' }} href={`/mascots#${item.id}`}>{item.name}</a>
+                    {index < list.length - 1 ? ', ' : '.'}
+                  </span>
+                ))}
+            </p>
+          </div>
         </section>
+      </div>
 
-        <div id="chapters"><MascotStoryExperience story={story} /></div>
-
-        <section className="mascot-story-lesson" aria-labelledby={`${story.id}-lesson-title`}>
-          <div className="mascot-story-lesson-image"><img src={story.idleImage} alt={`${story.name} standing in their relaxed OutBrick pose`} title={`${story.name} relaxed pose`} /></div>
-          <div className="mascot-story-lesson-copy"><div className="eyebrow"><span className="eyebrow-dot eyebrow-dot-gold" /> What they leave behind</div><h2 id={`${story.id}-lesson-title`}>A board feels different <span>after a good companion.</span></h2><p>{story.name} brings a rhythm to OutBrick that is easy to recognise: {story.voice.toLowerCase()} Their story is really a reminder that progress does not need one perfect personality.</p><div className="mascot-story-lesson-callout"><Sparkles size={17} /><span>{story.quote}</span></div></div>
-        </section>
-
-        <section className="mascot-story-cast-nav" aria-label="Browse mascot stories">
-          <a className="mascot-story-nav-card" href={`/mascots/${previous.id}`}><ChevronLeft size={17} /><span><small>Previous story</small><strong>{previous.name}</strong></span></a>
-          <a className="mascot-story-nav-center" href="/mascots"><span>All three</span><strong>Meet the cast</strong><ArrowUpRight size={16} /></a>
-          <a className="mascot-story-nav-card mascot-story-nav-card-next" href={`/mascots/${next.id}`}><span><small>Next story</small><strong>{next.name}</strong></span><ChevronRight size={17} /></a>
-        </section>
-      </main>
-      <EditorialFooter />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }} />
-    </div>
+      <JsonLd data={structuredData} />
+      <JsonLd data={breadcrumbData} />
+    </EditorialPage>
   );
 }
