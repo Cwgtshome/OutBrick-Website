@@ -3,8 +3,7 @@ import type { Metadata } from 'next';
 import { cast, passes, villages } from '../../lib/villages';
 import { chromeCopy } from '../../lib/i18n/chrome';
 import { homeCopy } from '../../lib/i18n/home';
-import { localeAlternates, localeUrl, ogLocales, storefronts, type Locale } from '../../lib/i18n/locales';
-import { appStoreStorefrontUrl } from '../store-badge';
+import { localeAlternates, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { AppStoreBadge, Course, homeNavFor, VillageFooter, VillageHeader, BrandMark } from '../village-shell';
 import { VillageMotion } from '../village-motion';
 import { HomeCast } from './home-cast';
@@ -104,17 +103,6 @@ export function HomePage({ locale }: { locale: Locale }) {
   const t = homeCopy[locale];
   const chrome = chromeCopy[locale];
   const headline = t.headline;
-  const appData = {
-    '@context': 'https://schema.org',
-    '@type': 'MobileApplication',
-    name: 'OutBrick: Block Sort Puzzle',
-    applicationCategory: 'GameApplication',
-    operatingSystem: 'iOS, iPadOS, macOS, tvOS, visionOS, watchOS',
-    ...(locale === 'en' ? {} : { inLanguage: locale }),
-    url: localeUrl(locale, '/'),
-    installUrl: appStoreStorefrontUrl(storefronts[locale]),
-    description: t.appDescription,
-  };
   const friends = cast.map((friend) => ({ ...friend, line: t.cast.lines[friend.slug] ?? friend.line }));
 
   return (
@@ -185,7 +173,7 @@ export function HomePage({ locale }: { locale: Locale }) {
                 {/* The friends peeking round the phone lean toward the pointer, and play their
                     move when it comes close (village-motion.tsx; moves in styles/friend-moves.css). */}
                 <span className="peek peek-sprout" data-friend-move="sprout" data-peek="">
-                  <img className="fm-actor" src="/assets/friends/sprout.webp" alt="" width={180} height={180} />
+                  <img className="fm-actor" src="/assets/friends/sprout.webp" alt="" width={180} height={180} fetchPriority="low" decoding="async" />
                 </span>
                 <div className="phone">
                   <img
@@ -197,10 +185,10 @@ export function HomePage({ locale }: { locale: Locale }) {
                   />
                 </div>
                 <span className="peek peek-bloo" data-friend-move="bloo" data-peek="">
-                  <img className="fm-actor" src="/assets/friends/bloo.webp" alt="" width={200} height={200} />
+                  <img className="fm-actor" src="/assets/friends/bloo.webp" alt="" width={200} height={200} fetchPriority="low" decoding="async" />
                 </span>
                 <span className="peek peek-peach" data-friend-move="peach" data-peek="">
-                  <img className="fm-actor" src="/assets/friends/peach.webp" alt="" width={180} height={180} />
+                  <img className="fm-actor" src="/assets/friends/peach.webp" alt="" width={180} height={180} fetchPriority="low" decoding="async" />
                 </span>
                 <div className="stage-plinth" aria-hidden="true"><i /><i /><i /></div>
               </div>
@@ -522,7 +510,6 @@ export function HomePage({ locale }: { locale: Locale }) {
 
       <VillageFooter locale={locale} page="/" />
       <VillageMotion />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appData) }} />
     </div>
   );
 }

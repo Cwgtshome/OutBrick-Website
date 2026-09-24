@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
 import { authors } from '../../../lib/blog';
 import { siteUrl } from '../../../lib/site';
+import { appNode, breadcrumbNode, graph, ids, ref, webPageNode } from '../../../lib/structured-data';
 
 const description =
   'Who makes OutBrick, the sliding-brick colour-sort puzzle, what the game is built to respect, and why it publishes a cited journal alongside it.';
@@ -40,30 +41,15 @@ const principles = [
 
 export default function AboutPage() {
   const founder = authors[0]!;
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'AboutPage',
-    '@id': `${siteUrl}/about#page`,
-    url: `${siteUrl}/about`,
-    name: 'About OutBrick',
-    description,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    about: {
-      '@type': 'Organization',
-      name: 'OutBrick',
-      url: siteUrl,
-      logo: `${siteUrl}/icon.png`,
-      founder: { '@type': 'Person', name: founder.name, url: `${siteUrl}/authors/${founder.id}` },
-    },
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'About', item: `${siteUrl}/about` },
-    ],
-  };
+  const url = `${siteUrl}/about`;
+  const structuredData = graph(
+    webPageNode({ type: 'AboutPage', url, name: 'About OutBrick', description, about: ref(ids.organization), mainEntity: ref(ids.organization) }),
+    breadcrumbNode(url, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'About', path: '/about' },
+    ]),
+    appNode(),
+  );
 
   return (
     <EditorialPage current="about">
@@ -85,7 +71,7 @@ export default function AboutPage() {
               </div>
             </div>
             <figure className="ed-capture" style={{ width: 'min(100%, 250px)', justifySelf: 'center', transform: 'rotate(2deg)' }}>
-              <img src="/assets/villages/garden-city.jpg" alt="Garden City on the OutBrick Journey map: a brick road winding between toy-brick houses." width={239} height={520} decoding="async" />
+              <img src="/assets/villages/garden-city.jpg" alt="Garden City on the OutBrick Journey map: a brick road winding between toy-brick houses." width={239} height={520} decoding="async" fetchPriority="high" />
             </figure>
           </div>
         </div>
@@ -154,7 +140,6 @@ export default function AboutPage() {
       </section>
 
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
     </EditorialPage>
   );
 }

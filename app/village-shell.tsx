@@ -9,8 +9,8 @@
  * what lets the new chrome sit above the old body copy without rewriting it.
  */
 
-import { socialProfiles } from '../lib/site';
-import type { CSSProperties } from 'react';
+import { socialProfiles, type SocialNetwork } from '../lib/site';
+import type { CSSProperties, ReactNode } from 'react';
 import { chromeCopy } from '../lib/i18n/chrome';
 import {
   localeNames,
@@ -81,20 +81,55 @@ export function localeStoreUrl(campaign: string, locale: Locale = 'en'): string 
   return appStoreUrl(locale === 'en' ? campaign : `${locale}-${campaign}`, storefronts[locale]);
 }
 
-/** `hrefLang` marks a link on a translated page that leads to a page only published in English. */
-/** Brand glyphs for the footer's social links, drawn inline so they cost no request. */
-function SocialIcon({ network }: { network: 'tiktok' }) {
-  if (network === 'tiktok') {
-    return (
-      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-        <path
-          fill="currentColor"
-          d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.6 2.6 0 0 1-2.6-2.6 2.6 2.6 0 0 1 3.38-2.48V9.66a5.73 5.73 0 0 0-.79-.05A5.68 5.68 0 0 0 4.17 15.3 5.69 5.69 0 0 0 9.86 21a5.69 5.69 0 0 0 5.69-5.69V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.3 4.3 0 0 1-3.25-1.48Z"
-        />
-      </svg>
-    );
-  }
-  return null;
+/**
+ * Brand glyphs for the footer's social links, drawn inline so they cost no request. Simple
+ * single-colour marks in `currentColor`, recognisable at 20px.
+ */
+const socialGlyphs: Record<SocialNetwork, ReactNode> = {
+  tiktok: (
+    <path
+      fill="currentColor"
+      d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.6 2.6 0 0 1-2.6-2.6 2.6 2.6 0 0 1 3.38-2.48V9.66a5.73 5.73 0 0 0-.79-.05A5.68 5.68 0 0 0 4.17 15.3 5.69 5.69 0 0 0 9.86 21a5.69 5.69 0 0 0 5.69-5.69V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.3 4.3 0 0 1-3.25-1.48Z"
+    />
+  ),
+  // The play button in a rounded landscape tile, the play triangle cut out.
+  youtube: (
+    <path
+      fill="currentColor"
+      fillRule="evenodd"
+      d="M21.58 7.19a2.51 2.51 0 0 0-1.77-1.78C18.25 5 12 5 12 5s-6.25 0-7.81.41A2.51 2.51 0 0 0 2.42 7.2C2 8.76 2 12 2 12s0 3.24.42 4.81a2.51 2.51 0 0 0 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42a2.51 2.51 0 0 0 1.77-1.77C22 15.24 22 12 22 12s0-3.24-.42-4.81ZM10 15V9l5.2 3L10 15Z"
+    />
+  ),
+  // The camera outline: a rounded square, the lens, and the flash dot.
+  instagram: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="5.2" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle cx="17.4" cy="6.6" r="1.25" fill="currentColor" />
+    </>
+  ),
+  // The ghost.
+  snapchat: (
+    <path
+      fill="currentColor"
+      d="M12.07 2.5c2.9 0 5.06 2.2 5.06 5.2 0 .83-.07 1.83-.13 2.52.43.2.95.05 1.37-.14.53-.24 1.25.07 1.25.62 0 .5-.5.83-1.4 1.14-.63.21-1.13.43-1.05.93.36 1.94 2.08 3.43 3.6 3.87.4.12.47.5.2.75-.6.52-1.56.64-2.26.82-.2.28-.14.97-.53 1.04-.62.1-1.4-.21-2.46.03-1.25.3-2.02 1.72-4.02 1.72-2 0-2.7-1.4-4-1.72-1.06-.24-1.84.07-2.46-.03-.4-.07-.33-.76-.53-1.04-.7-.18-1.66-.3-2.26-.82-.27-.25-.2-.63.2-.75 1.52-.44 3.24-1.93 3.6-3.87.08-.5-.42-.72-1.05-.93-.9-.31-1.4-.64-1.4-1.14 0-.55.72-.86 1.25-.62.42.19.94.34 1.37.14-.06-.69-.13-1.69-.13-2.52 0-3 2.17-5.2 5.05-5.2Z"
+    />
+  ),
+  // The X: two crossing strokes, one of them hollow.
+  x: (
+    <path
+      fill="currentColor"
+      d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.65l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23Zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64Z"
+    />
+  ),
+};
+
+function SocialIcon({ network }: { network: SocialNetwork }) {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+      {socialGlyphs[network]}
+    </svg>
+  );
 }
 
 export type NavLink = { href: string; label: string; hrefLang?: string };
@@ -128,7 +163,7 @@ export const editorialNav: NavLink[] = [
   { href: '/', label: 'The game' },
   { href: '/blog', label: 'Journal' },
   { href: '/mascots', label: 'Mascots' },
-  { href: '/press-kit', label: 'Press kit' },
+  { href: '/press', label: 'Press' },
   { href: '/about', label: 'About' },
   { href: '/authors', label: 'Authors' },
   { href: '/research', label: 'Research' },
@@ -298,12 +333,14 @@ export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?:
               {copy.blurb}
             </p>
             <ul className="social" aria-label="OutBrick on social media">
+              {/* TikTok is live and gets the handle spelled out; the rest are reserved and
+                  show as icon tiles (the name is in the link for screen readers and on hover). */}
               {socialProfiles.map((profile) => (
-                <li key={profile.network}>
-                  <a href={profile.url} rel="me noopener" target="_blank">
+                <li key={profile.network} className={profile.live ? 'live' : 'soon'}>
+                  <a href={profile.url} rel={profile.live ? 'me noopener' : 'noopener'} target="_blank" title={`OutBrick on ${profile.label}`}>
                     <SocialIcon network={profile.network} />
-                    <span>@outbrick</span>
-                    <span className="sr-only"> on {profile.label}</span>
+                    {profile.live ? <span>@outbrick</span> : null}
+                    <span className="sr-only">{profile.live ? ` on ${profile.label}` : `OutBrick on ${profile.label}`}</span>
                   </a>
                 </li>
               ))}
@@ -334,6 +371,15 @@ export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?:
               <li><a href="/age-rating" hrefLang={en}>{copy.age}</a></li>
               <li><a href="/accessibility" hrefLang={en}>{copy.accessibility}</a></li>
               <li><a href="/refunds" hrefLang={en}>{copy.refunds}</a></li>
+            </ul>
+          </div>
+          <div>
+            <h2>{copy.company}</h2>
+            <ul>
+              <li><a href="/press" hrefLang={en}>{copy.pressRoom}</a></li>
+              <li><a href="/creators" hrefLang={en}>{copy.creators}</a></li>
+              <li><a href="/affiliates" hrefLang={en}>{copy.affiliates}</a></li>
+              <li><a href="/careers" hrefLang={en}>{copy.careers}</a></li>
               <li><a href="/contact" hrefLang={en}>{copy.contact}</a></li>
             </ul>
           </div>

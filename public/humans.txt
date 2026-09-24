@@ -1,0 +1,19 @@
+/* TEAM */
+Founder & CEO: Mourad Hamdi
+Profile: https://www.outbrick.site/authors/mourad-hamdi
+Contact: https://www.outbrick.site/contact
+
+/* THANKS */
+Everyone who played a board, sent a note, or told us a level was too easy.
+
+/* GAME */
+Name: OutBrick: Block Sort Puzzle
+App Store: https://apps.apple.com/us/app/outbrick/id6807997465
+Platforms: iPhone, iPad, Mac, Apple TV, Apple Vision Pro, Apple Watch
+
+/* SITE */
+Standards: HTML, CSS, schema.org JSON-LD, RSS 2.0, WAI-ARIA
+Components: React, vinext (Next.js-compatible), Vite
+Type: Fredoka, Figtree (self-hosted)
+Hosting: Netlify
+Language: English, with the home page and play guide in French, German, Spanish and Japanese

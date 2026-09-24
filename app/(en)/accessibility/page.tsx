@@ -4,7 +4,7 @@ import { Handoff, LegalPage, Pills } from '../../legal-page';
 
 export const metadata: Metadata = pageMetadata({
   path: '/accessibility',
-  title: 'Accessibility: colour-blind glyphs, VoiceOver, Reduce Motion',
+  title: 'OutBrick accessibility: glyphs, VoiceOver, Reduce Motion',
   description:
     'How OutBrick plays with VoiceOver, colour-blind glyphs on by default, Larger Text and Reduce Motion — and how to get accessibility help.',
 });

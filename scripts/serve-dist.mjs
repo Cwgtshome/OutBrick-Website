@@ -3,6 +3,8 @@
 // Used by CI and scripts/audit-a11y.mjs; not part of the deployed site.
 //
 //   node scripts/serve-dist.mjs [port]      (default 4321)
+//
+// `/r/<code>` answers with the same 302 as netlify.toml's affiliate rule.
 
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
@@ -43,6 +45,13 @@ async function resolve(pathname) {
 
 createServer(async (req, res) => {
   const { pathname } = new URL(req.url ?? '/', 'http://localhost');
+  // Affiliate links, as netlify.toml's `/r/:code` rule answers them.
+  const affiliate = pathname.match(/^\/r\/([^/]+)\/?$/);
+  if (affiliate) {
+    res.writeHead(302, { location: `https://apps.apple.com/us/app/outbrick/id6807997465?mt=8&ct=aff-${affiliate[1]}` });
+    res.end();
+    return;
+  }
   const found = await resolve(pathname);
   const path = found ?? join(root, '404.html');
   res.writeHead(found ? 200 : 404, { 'content-type': types[extname(path)] ?? 'application/octet-stream' });

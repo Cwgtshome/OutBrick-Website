@@ -3,8 +3,9 @@ import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shel
 import { articles, authors, getAuthor } from '../../../lib/blog';
 import { siteUrl } from '../../../lib/site';
 import { byNewest, categoryPath, getShelves, startHere } from '../../../lib/journal';
-import { categorySlug, FollowJournal, isoDate, StoryCard, StoryRow } from './journal-kit';
+import { categorySlug, FollowJournal, StoryCard, StoryRow } from './journal-kit';
 import { JournalSearch, ShelfControls } from './journal-finder';
+import { authorByline, breadcrumbNode, graph, ids, isoDateTime, ref, webPageNode } from '../../../lib/structured-data';
 
 const title = 'The OutBrick Journal';
 const description =
@@ -37,37 +38,37 @@ export default function BlogPage() {
   const shelves = getShelves();
   const chips = shelves.map((shelf) => ({ slug: shelf.slug, label: shelf.category, count: shelf.articles.length, tone: shelf.tone, href: categoryPath(shelf.category) }));
 
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'Blog',
-    '@id': `${siteUrl}/blog#blog`,
-    name: title,
-    description,
-    url: `${siteUrl}/blog`,
-    inLanguage: 'en',
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    publisher: { '@type': 'Organization', name: 'OutBrick', url: siteUrl, logo: { '@type': 'ImageObject', url: `${siteUrl}/icon.png`, width: 1024, height: 1024 } },
-    blogPost: [...articles].sort(byNewest).map((article) => ({
-      '@type': 'BlogPosting',
-      '@id': `${siteUrl}/blog/${article.slug}#article`,
-      headline: article.title,
-      description: article.dek,
-      url: `${siteUrl}/blog/${article.slug}`,
-      datePublished: isoDate(article.publishedAt),
-      dateModified: isoDate(article.updatedAt),
-      articleSection: article.category,
-      image: `${siteUrl}${article.image}`,
-      author: { '@type': getAuthor(article.authorId).id === 'mourad-hamdi' ? 'Person' : 'Organization', name: getAuthor(article.authorId).name },
-    })),
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Journal', item: `${siteUrl}/blog` },
-    ],
-  };
+  const url = `${siteUrl}/blog`;
+  const structuredData = graph(
+    webPageNode({ type: 'CollectionPage', url, name: title, description, mainEntity: ref(ids.blog) }),
+    {
+      '@type': 'Blog',
+      '@id': ids.blog,
+      name: title,
+      description,
+      url,
+      inLanguage: 'en',
+      isPartOf: ref(ids.website),
+      publisher: ref(ids.organization),
+      blogPost: [...articles].sort(byNewest).map((article) => ({
+        '@type': 'BlogPosting',
+        '@id': `${siteUrl}/blog/${article.slug}#article`,
+        headline: article.title,
+        description: article.dek,
+        articleSection: article.category,
+        url: `${siteUrl}/blog/${article.slug}`,
+        image: `${siteUrl}${article.image}`,
+        datePublished: isoDateTime(article.publishedAt),
+        dateModified: isoDateTime(article.updatedAt),
+        author: authorByline(article.authorId),
+        publisher: ref(ids.organization),
+      })),
+    },
+    breadcrumbNode(url, [
+      { name: 'OutBrick', path: '/' },
+      { name: 'Journal', path: '/blog' },
+    ]),
+  );
 
   // Stories are numbered continuously down the shelves (the island renumbers after a filter).
   const shelved = shelves.flatMap((shelf) => shelf.articles.filter((a) => !pinned.has(a.slug)));
@@ -230,7 +231,6 @@ export default function BlogPage() {
       <FollowJournal />
 
       <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
     </EditorialPage>
   );
 }
