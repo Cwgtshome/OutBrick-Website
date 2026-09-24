@@ -1,9 +1,11 @@
 /**
  * The journal in the languages it is translated into.
  *
- * Five cornerstone guides are published in French, German, Spanish and
- * Japanese at `/<locale>/blog/<slug>`, beside a small index at
- * `/<locale>/blog`. Everything else in the journal is English only.
+ * Guides are published in French, German, Spanish and Japanese at
+ * `/<locale>/blog/<slug>`, beside an index at `/<locale>/blog`: the five
+ * cornerstone guides (lib/blog-l10n/<locale>.ts, typed section by section) and
+ * the journal batches (lib/blog-l10n/extra/<locale>-<n>.ts). A batch guide is
+ * published once all four languages carry it; until then it stays English only.
  *
  * - `journalUi` holds the words of the article chrome (contents, takeaways,
  *   references, author card …). `en` is the English page's original wording,
@@ -21,22 +23,32 @@ import { de } from '../blog-l10n/de';
 import { es } from '../blog-l10n/es';
 import { fr } from '../blog-l10n/fr';
 import { ja } from '../blog-l10n/ja';
+import { extraGuides } from '../blog-l10n/extra';
 import { siteUrl } from '../site';
 import type { Locale, TranslatedLocale } from './locales';
 import { translatedLocales } from './locales';
 
-/** The guides that exist in every language, in the order the localized index lists them. */
-export const translatedGuideSlugs = [
+/** The five cornerstone guides, typed section by section. */
+const cornerstoneSlugs = [
   'how-to-solve-sliding-block-puzzles',
   'colour-sort-puzzle-tips',
   'relaxing-puzzle-games-what-makes-one-calm',
   'offline-puzzle-games-iphone',
   'why-two-minute-puzzles-feel-good',
 ] as const;
-export type GuideSlug = (typeof translatedGuideSlugs)[number];
+export type GuideSlug = (typeof cornerstoneSlugs)[number];
 
-export function isTranslatedGuide(slug: string): slug is GuideSlug {
-  return (translatedGuideSlugs as readonly string[]).includes(slug);
+/**
+ * Every guide that exists in all four languages, in the order the localized index lists them:
+ * the cornerstones first, then the batch guides in journal order.
+ */
+export const translatedGuideSlugs: readonly string[] = [
+  ...cornerstoneSlugs,
+  ...Object.keys(extraGuides.fr).filter((slug) => translatedLocales.every((l) => slug in extraGuides[l])),
+];
+
+export function isTranslatedGuide(slug: string): boolean {
+  return translatedGuideSlugs.includes(slug);
 }
 
 /** Each guide's section ids, as in lib/blog.ts. A translation must cover every one. */
@@ -96,6 +108,10 @@ export type GuideTranslation<S extends GuideSlug> = {
 };
 
 export type LocaleGuides = { [S in GuideSlug]: GuideTranslation<S> };
+
+/** A batch guide in one language: the same fields, sections keyed by the English section ids. */
+export type ExtraGuideTranslation = Omit<GuideTranslation<GuideSlug>, 'sections'> & { sections: Record<string, SectionTranslation> };
+export type ExtraGuides = Record<string, ExtraGuideTranslation>;
 
 const guides: Record<TranslatedLocale, LocaleGuides> = { fr, de, es, ja };
 
@@ -505,7 +521,7 @@ export function guideUrl(locale: Locale, slug: string): string {
 }
 
 /** hreflang set for a translated guide: every language, `x-default` English. Absolute URLs. */
-export function guideLanguages(slug: GuideSlug): Record<string, string> {
+export function guideLanguages(slug: string): Record<string, string> {
   const languages: Record<string, string> = { en: guideUrl('en', slug) };
   for (const l of translatedLocales) languages[l] = guideUrl(l, slug);
   languages['x-default'] = guideUrl('en', slug);
@@ -539,10 +555,11 @@ function sameShape(what: string, english: unknown[] | undefined, translated: unk
  * the English ones; `category` stays the English key (for its link), and the
  * reading time is rewritten from the English count.
  */
-export function localizeArticle(slug: GuideSlug, locale: TranslatedLocale): BlogArticle {
+export function localizeArticle(slug: string, locale: TranslatedLocale): BlogArticle {
   const english = getArticle(slug);
   if (!english) throw new Error(`lib/i18n/blog.ts: ${slug} is not in lib/blog.ts`);
-  const t = guides[locale][slug] as GuideTranslation<GuideSlug>;
+  const t = ((guides[locale] as Record<string, unknown>)[slug] ?? extraGuides[locale][slug]) as ExtraGuideTranslation | undefined;
+  if (!t) throw new Error(`lib/blog-l10n: ${slug} has no ${locale} translation`);
   const where = `${locale}/${slug}`;
   const tSections = t.sections as Record<string, SectionTranslation>;
   const sectionIds = Object.keys(tSections);
