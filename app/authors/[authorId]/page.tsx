@@ -16,7 +16,9 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
   const author = authors.find((item) => item.id === authorId);
   if (!author) return {};
   const count = articles.filter((article) => article.authorId === author.id).length;
-  const description = `${author.bio} ${count} stories in the OutBrick Journal.`;
+  // A bio can run long; trim at a word so the description stays a whole sentence under 160.
+  const lead = author.bio.length > 120 ? `${author.bio.slice(0, author.bio.lastIndexOf(' ', 117))}…` : author.bio;
+  const description = `${lead} ${count} stories in the OutBrick Journal.`;
 
   return {
     title: `${author.name}, OutBrick Journal author`,

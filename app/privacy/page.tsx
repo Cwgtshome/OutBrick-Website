@@ -5,7 +5,7 @@ import { facePrivacy } from '../../lib/face-privacy';
 
 export const metadata: Metadata = pageMetadata({
   path: '/privacy',
-  title: 'OutBrick privacy policy',
+  title: 'OutBrick privacy policy: data, ads and choices',
   description:
     'The OutBrick privacy policy: no accounts and no analytics, what the rewarded-ad SDK collects, and how to change your advertising choices.',
 });

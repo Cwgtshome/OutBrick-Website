@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './styles/fonts.css';
 import './globals.css';
 import { siteUrl } from '../lib/site';
+import { APP_STORE_ID } from './store-badge';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -58,6 +59,9 @@ export const metadata: Metadata = {
     apple: '/assets/icon/apple-touch-icon.png',
   },
   appleWebApp: { title: 'OutBrick' },
+  // Safari on iPhone and iPad shows Apple's Smart App Banner: an Open/Get bar that knows
+  // whether OutBrick is already installed. `app-argument` is left out so Open lands on the home screen.
+  itunes: { appId: APP_STORE_ID },
 };
 
 export default function RootLayout({

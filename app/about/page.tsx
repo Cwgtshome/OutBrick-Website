@@ -7,7 +7,7 @@ const description =
   'Who makes OutBrick, the sliding-brick colour-sort puzzle, what the game is built to respect, and why it publishes a cited journal alongside it.';
 
 export const metadata: Metadata = {
-  title: 'About',
+  title: 'About OutBrick: who makes it and why',
   description,
   alternates: { canonical: '/about' },
   openGraph: {

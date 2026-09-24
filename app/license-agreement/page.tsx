@@ -4,7 +4,7 @@ import { LegalPage, Pills } from '../legal-page';
 
 export const metadata: Metadata = pageMetadata({
   path: '/license-agreement',
-  title: 'OutBrick license agreement',
+  title: 'OutBrick license agreement: what you may do',
   description:
     'What you may and may not do with OutBrick, its artwork, and its platform features.',
 });

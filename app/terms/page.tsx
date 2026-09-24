@@ -4,7 +4,7 @@ import { LegalPage, Pills } from '../legal-page';
 
 export const metadata: Metadata = pageMetadata({
   path: '/terms',
-  title: 'OutBrick terms of use',
+  title: 'OutBrick terms of use: the fair-play ground rules',
   description:
     'The ground rules for playing OutBrick and using the OutBrick website: fair play, purchases, your content, and what we are responsible for.',
 });

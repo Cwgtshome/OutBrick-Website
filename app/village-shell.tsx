@@ -11,7 +11,7 @@
 
 import type { CSSProperties } from 'react';
 import { HeaderMotion } from './components/home-header-motion';
-import { APP_STORE_URL } from './store-badge';
+import { appStoreUrl } from './store-badge';
 
 /** The six-colour running bond that separates one band from the next. */
 export function Course({ offset = false }: { offset?: boolean }) {
@@ -30,9 +30,9 @@ export function Course({ offset = false }: { offset?: boolean }) {
  * marketing guidelines, and the stylesheet keeps them: never under 40px tall,
  * and at least a quarter of the badge height of clear space on every side.
  */
-export function AppStoreBadge() {
+export function AppStoreBadge({ campaign = 'badge' }: { campaign?: string }) {
   return (
-    <a className="badge" href={APP_STORE_URL} aria-label="Download OutBrick on the App Store">
+    <a className="badge" href={appStoreUrl(campaign)} aria-label="Download OutBrick on the App Store">
       <img src="/assets/badge/appstore-black.svg" alt="Download on the App Store" width={143} height={48} />
     </a>
   );
@@ -106,7 +106,7 @@ export function VillageHeader({
             ))}
           </nav>
         ) : null}
-        <AppStoreBadge />
+        <AppStoreBadge campaign="header" />
         {links.length ? (
           <details className="menu">
             <summary aria-label={`${label} menu`}>
@@ -185,7 +185,7 @@ export function VillageFooter() {
           <div>
             <h2>The game</h2>
             <ul>
-              <li><a href={APP_STORE_URL}>Download on the App Store</a></li>
+              <li><a href={appStoreUrl('footer')}>Download on the App Store</a></li>
               <li><a href="/#journey">The Journey</a></li>
               <li><a href="/#cast">The nine friends</a></li>
               <li><a href="/#fair">What it costs</a></li>

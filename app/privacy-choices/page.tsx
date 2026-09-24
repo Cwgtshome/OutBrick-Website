@@ -4,7 +4,7 @@ import { LegalPage, Pills } from '../legal-page';
 
 export const metadata: Metadata = pageMetadata({
   path: '/privacy-choices',
-  title: 'Your OutBrick privacy choices',
+  title: 'Your OutBrick privacy choices and controls',
   description:
     'Manage OutBrick data on your device, Apple services, purchases and advertising choices, and find out who to ask about privacy.',
 });

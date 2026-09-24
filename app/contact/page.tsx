@@ -5,7 +5,7 @@ import { ContactForm } from './contact-form';
 
 export const metadata: Metadata = pageMetadata({
   path: '/contact',
-  title: 'Contact the OutBrick team',
+  title: 'Contact the OutBrick team: support and questions',
   description:
     'Contact the OutBrick team for game support, accessibility help, privacy questions, and purchase troubleshooting.',
 });

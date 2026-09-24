@@ -125,7 +125,7 @@ export function ChallengeLanding() {
             </ul>
 
             <div className="cta-row centred">
-              <AppStoreBadge />
+              <AppStoreBadge campaign="challenge" />
               <a className="btn ghost" href={appUrl}>Already have OutBrick? Open this board</a>
             </div>
           </div>

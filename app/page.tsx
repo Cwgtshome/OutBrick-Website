@@ -12,7 +12,7 @@ import './styles/home.css';
 export const metadata: Metadata = {
   title: 'OutBrick — a boulevard built out of brick',
   description:
-    'A sliding-brick colour-sort puzzle: 2,000 solver-verified boards, 167 brick-built villages and nine brick friends. No clock, plays offline. Free on the App Store.',
+    'A sliding-brick colour-sort puzzle: 2,000 solver-verified boards, 167 brick-built villages, nine brick friends. No clock, plays offline. Free on the App Store.',
   alternates: { canonical: siteUrl },
   openGraph: {
     type: 'website',
@@ -217,7 +217,7 @@ export default function HomePage() {
                 takes about five seconds to learn.
               </p>
               <div className="cta-row hero-cta">
-                <AppStoreBadge />
+                <AppStoreBadge campaign="home-hero" />
                 <a className="btn brick-btn" href="#journey">
                   Walk a village
                   <span className="arrow" aria-hidden="true" />
@@ -544,7 +544,7 @@ export default function HomePage() {
                 Offline, one-handed, about two minutes a board, and happy to wait in the corner until
                 you feel like moving one more brick.
               </p>
-              <div className="cta-row"><AppStoreBadge /></div>
+              <div className="cta-row"><AppStoreBadge campaign="home-close" /></div>
             </div>
           </div>
         </section>
