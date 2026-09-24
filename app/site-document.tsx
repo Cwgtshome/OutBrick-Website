@@ -102,10 +102,15 @@ export function SiteDocument({ lang, children }: { lang: string; children: React
           script has not checked in after four seconds (blocked, errored), the
           class comes off again and everything shows.
         */}
+        {/*
+          The same script marks the season from the visitor's own date, so the home sky can snow
+          in winter and drop leaves in autumn (app/styles/seasons.css). `?season=` overrides it
+          for checking a season out of time; nothing else depends on it.
+        */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(d){d.classList.add('js');setTimeout(function(){if(!window.__obMotion)d.classList.remove('js')},4000)})(document.documentElement)",
+              "(function(d){d.classList.add('js');setTimeout(function(){if(!window.__obMotion)d.classList.remove('js')},4000);try{var n=new Date(),v=(n.getMonth()+1)*100+n.getDate(),o=new URLSearchParams(location.search).get('season'),s=v>=1201||v<=106?'winter':v>=1010&&v<=1102?'autumn':'';if(o==='winter'||o==='autumn'||o==='none')s=o==='none'?'':o;if(s)d.dataset.season=s}catch(e){}})(document.documentElement)",
           }}
         />
         <meta name="theme-color" content="#1a1350" />
