@@ -2171,21 +2171,24 @@ img {
   flex: none;
   border-radius: 12px;
 }
-.ob-site .logo img {
+/* The brand mark: app icon + the app's own OUTBRICK wordmark (see BrandMark in village-shell). */
+.brandmark { display: inline-flex; align-items: center; gap: 10px; }
+.brandmark-icon {
   width: 42px;
   height: 42px;
   border-radius: 11px;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
   transition: width 0.35s var(--ease-out, ease), height 0.35s var(--ease-out, ease);
 }
-.ob-site header.site.is-condensed .logo img { width: 34px; height: 34px; }
-.ob-site .logo b {
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 1.3rem;
-  color: #fff;
-  letter-spacing: -0.01em;
+/* The wordmark's letters alternate 3pt up and down in the app; its height is set so the
+   letters' cap height lines up with the icon's optical centre. */
+.brandmark-word {
+  height: 28px;
+  width: auto;
+  transition: height 0.35s var(--ease-out, ease);
 }
+.ob-site header.site.is-condensed .brandmark-icon { width: 34px; height: 34px; }
+.ob-site header.site.is-condensed .brandmark-word { height: 23px; }
 .ob-site header.site .logo { margin-right: auto; }
 .ob-site nav.main {
   display: flex;
@@ -2316,11 +2319,13 @@ img {
   .ob-site header.site .badge { padding: 4px; }
   .ob-site header.site .badge img { height: 40px; }
   .ob-site .logo { gap: 8px; }
-  .ob-site .logo b { font-size: 1.08rem; }
+  .brandmark { gap: 7px; }
+  .brandmark-icon { width: 36px; height: 36px; }
+  .brandmark-word { height: 22px; }
   .ob-site .menu > summary { padding: 0 11px; }
 }
 @media (max-width: 359px) {
-  .ob-site .logo b { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .brandmark-word { height: 18px; }
 }
 
 /* ---------------- the boulevard (hero) ---------------- */
@@ -3213,3 +3218,8 @@ html.js .ob-site .reveal:not(.in) {
   .ob-site .boulevard { overflow-x: auto; }
   .ob-site .boulevard:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
 }
+
+/* Netlify injects a "Powered by Netlify" badge (an iframe from /.netlify/scripts/hud) into
+   published pages. Its inline styles carry no !important, so this keeps it off the site.
+   The owner toolbar (#nl-hud-frame) is left alone: only a signed-in site owner sees it. */
+#nl-badge-frame { display: none !important; }

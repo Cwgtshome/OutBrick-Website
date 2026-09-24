@@ -38,6 +38,28 @@ export function AppStoreBadge({ campaign = 'badge' }: { campaign?: string }) {
   );
 }
 
+/**
+ * The app icon and the OUTBRICK wordmark, side by side. The wordmark is the one the iOS app
+ * ships (Brickout/Assets.xcassets/LaunchLogo, drawn in SF Pro Rounded Black, which may not be
+ * embedded on the web), trimmed and exported to public/assets/logo/. Both images are
+ * decorative: the link or heading around the mark carries the name.
+ */
+export function BrandMark({ className = '' }: { className?: string }) {
+  return (
+    <span className={`brandmark ${className}`} aria-hidden="true">
+      <img className="brandmark-icon" src="/assets/icon/logo-96.webp" alt="" width={42} height={42} />
+      <img
+        className="brandmark-word"
+        src="/assets/logo/outbrick-wordmark-96.webp"
+        srcSet="/assets/logo/outbrick-wordmark-96.webp 1x, /assets/logo/outbrick-wordmark-192.webp 2x"
+        alt=""
+        width={489}
+        height={96}
+      />
+    </span>
+  );
+}
+
 export type NavLink = { href: string; label: string };
 
 /** The home page's own section anchors. */
@@ -93,8 +115,8 @@ export function VillageHeader({
     <header className={`site ${links.length > 5 ? 'many' : ''}`} data-site-header="">
       <div className="wrap">
         <a className="logo" href={home}>
-          <img src="/assets/icon/logo-96.webp" alt="" width={42} height={42} />
-          <b>OutBrick</b>
+          <BrandMark />
+          <span className="sr-only">OutBrick</span>
           {home.startsWith('#') ? <span className="sr-only"> — back to top</span> : null}
         </a>
         {links.length ? (
@@ -175,8 +197,8 @@ export function VillageFooter() {
         <div className="cols">
           <div>
             <a className="logo" href="/">
-              <img src="/assets/icon/logo-96.webp" alt="" width={42} height={42} />
-              <b>OutBrick</b>
+              <BrandMark />
+              <span className="sr-only">OutBrick</span>
             </a>
             <p className="blurb">
               OutBrick: Block Sort Puzzle. Slide, sort, clear the board. Free on the App Store.
