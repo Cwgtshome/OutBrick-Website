@@ -3049,6 +3049,39 @@ html.js .ob-site .reveal:not(.in) {
 }
 .ob-site .doc .faq h2 + div h3 { margin-top: 4px; }
 
+/* support's in-page search: filters the answers already on the page */
+.ob-site .doc .help-search { margin: 0 0 26px; }
+.ob-site .doc .help-search label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--ink-on-cream);
+  margin-bottom: 8px;
+}
+.ob-site .doc .help-search .field {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.ob-site .doc .help-search input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 18px;
+  font: inherit;
+  font-size: 1.05rem;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--panel-light);
+  border-radius: 14px;
+  box-shadow: 0 4px 0 var(--panel-dark);
+}
+.ob-site .doc .help-search input:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.ob-site .doc .help-search .count { min-height: 1.4em; margin: 10px 0 0; font-size: 0.95rem; color: var(--ink-on-cream); }
+.ob-site .doc [data-help-item][hidden],
+.ob-site .doc [data-help-group][hidden] { display: none; }
+
 .ob-site .doc ul.points {
   list-style: none;
   margin: 0 0 18px;

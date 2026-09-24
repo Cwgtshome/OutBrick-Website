@@ -6,6 +6,7 @@ import { homeCopy } from '../../lib/i18n/home';
 import { localeAlternates, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { AppStoreBadge, Course, homeNavFor, VillageFooter, VillageHeader, BrandMark } from '../village-shell';
 import { VillageMotion } from '../village-motion';
+import { GetAppQr } from './get-app-qr';
 import { HomeCast } from './home-cast';
 import { PlayableBoard } from './playable-board';
 import '../styles/home.css';
@@ -502,7 +503,9 @@ export function HomePage({ locale }: { locale: Locale }) {
               <p className="lede">
                 {t.close.lede}
               </p>
-              <div className="cta-row"><AppStoreBadge campaign="home-close" locale={locale} /></div>
+              {/* On a desktop the QR card (which carries its own badge) takes the badge's place. */}
+              <div className="cta-row close-badge"><AppStoreBadge campaign="home-close" locale={locale} /></div>
+              <GetAppQr locale={locale} />
             </div>
           </div>
         </section>

@@ -391,3 +391,9 @@
   .obx-news-submit:hover,
   .ed .wn-chip:hover { transform: none; }
 }
+
+/* Home close: the QR card replaces the lone badge where the card shows. */
+@media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+  .ob-site .close .close-badge { display: none; }
+  .ob-site .close .obx-getapp { margin-top: 22px; }
+}
