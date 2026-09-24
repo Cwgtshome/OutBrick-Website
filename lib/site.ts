@@ -1,6 +1,14 @@
 export const siteUrl = 'https://www.outbrick.site';
 
 /**
+ * OutBrick's social profiles: shown in the footer and listed as `sameAs` in the Organization
+ * structured data, so search engines tie the profiles to the site. Add a row per new network.
+ */
+export const socialProfiles: { network: 'tiktok'; label: string; url: string }[] = [
+  { network: 'tiktok', label: 'TikTok', url: 'https://www.tiktok.com/@outbrick' },
+];
+
+/**
  * Metadata for a single page. A page that sets `openGraph` replaces the root layout's whole
  * `openGraph` object rather than merging into it, so the image and site name are repeated
  * here; and every page names its own canonical, because the layout's would be inherited.

@@ -13,7 +13,7 @@
 import type { Metadata } from 'next';
 import './styles/fonts.css';
 import './globals.css';
-import { siteUrl } from '../lib/site';
+import { siteUrl, socialProfiles } from '../lib/site';
 import { APP_STORE_ID } from './store-badge';
 
 export const rootMetadata: Metadata = {
@@ -90,6 +90,7 @@ export function SiteDocument({ lang, children }: { lang: string; children: React
     description: 'A relaxed sliding-brick colour-sort puzzle and an independent game design journal.',
     founder: { '@type': 'Person', name: 'Mourad Hamdi', url: `${siteUrl}/authors/mourad-hamdi` },
     knowsAbout: ['puzzle game design', 'gaming habits', 'accessibility', 'player experience'],
+    sameAs: socialProfiles.map((profile) => profile.url),
   };
   const websiteData = {
     '@context': 'https://schema.org',

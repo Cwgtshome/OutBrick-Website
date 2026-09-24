@@ -9,6 +9,7 @@
  * what lets the new chrome sit above the old body copy without rewriting it.
  */
 
+import { socialProfiles } from '../lib/site';
 import type { CSSProperties } from 'react';
 import { chromeCopy } from '../lib/i18n/chrome';
 import {
@@ -81,6 +82,21 @@ export function localeStoreUrl(campaign: string, locale: Locale = 'en'): string 
 }
 
 /** `hrefLang` marks a link on a translated page that leads to a page only published in English. */
+/** Brand glyphs for the footer's social links, drawn inline so they cost no request. */
+function SocialIcon({ network }: { network: 'tiktok' }) {
+  if (network === 'tiktok') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path
+          fill="currentColor"
+          d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.6 2.6 0 0 1-2.6-2.6 2.6 2.6 0 0 1 3.38-2.48V9.66a5.73 5.73 0 0 0-.79-.05A5.68 5.68 0 0 0 4.17 15.3 5.69 5.69 0 0 0 9.86 21a5.69 5.69 0 0 0 5.69-5.69V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.3 4.3 0 0 1-3.25-1.48Z"
+        />
+      </svg>
+    );
+  }
+  return null;
+}
+
 export type NavLink = { href: string; label: string; hrefLang?: string };
 
 /** The home page's own section anchors. */
@@ -281,6 +297,17 @@ export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?:
             <p className="blurb">
               {copy.blurb}
             </p>
+            <ul className="social" aria-label="OutBrick on social media">
+              {socialProfiles.map((profile) => (
+                <li key={profile.network}>
+                  <a href={profile.url} rel="me noopener" target="_blank">
+                    <SocialIcon network={profile.network} />
+                    <span>@outbrick</span>
+                    <span className="sr-only"> on {profile.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
             {page ? <LanguageSwitcher locale={locale} page={page} /> : null}
           </div>
           <div>
