@@ -9,9 +9,19 @@
  * what lets the new chrome sit above the old body copy without rewriting it.
  */
 
+import { socialProfiles } from '../lib/site';
 import type { CSSProperties } from 'react';
+import { chromeCopy } from '../lib/i18n/chrome';
+import {
+  localeNames,
+  localePath,
+  locales,
+  storefronts,
+  type Locale,
+  type LocalizedPage,
+} from '../lib/i18n/locales';
 import { HeaderMotion } from './components/home-header-motion';
-import { APP_STORE_URL } from './store-badge';
+import { appStoreUrl } from './store-badge';
 
 /** The six-colour running bond that separates one band from the next. */
 export function Course({ offset = false }: { offset?: boolean }) {
@@ -30,15 +40,64 @@ export function Course({ offset = false }: { offset?: boolean }) {
  * marketing guidelines, and the stylesheet keeps them: never under 40px tall,
  * and at least a quarter of the badge height of clear space on every side.
  */
-export function AppStoreBadge() {
+/**
+ * The artwork is Apple's English badge in every language (the localized
+ * badges are not in the repo); its name is translated, and a translated page
+ * links to its own country's storefront with a `web-<locale>-…` campaign.
+ */
+export function AppStoreBadge({ campaign = 'badge', locale = 'en' }: { campaign?: string; locale?: Locale }) {
+  const copy = chromeCopy[locale];
   return (
-    <a className="badge" href={APP_STORE_URL} aria-label="Download OutBrick on the App Store">
-      <img src="/assets/badge/appstore-black.svg" alt="Download on the App Store" width={143} height={48} />
+    <a className="badge" href={localeStoreUrl(campaign, locale)} aria-label={copy.badgeLabel}>
+      <img src="/assets/badge/appstore-black.svg" alt={copy.badgeAlt} width={143} height={48} />
     </a>
   );
 }
 
-export type NavLink = { href: string; label: string };
+/**
+ * The app icon and the OUTBRICK wordmark, side by side. The wordmark is the one the iOS app
+ * ships (Brickout/Assets.xcassets/LaunchLogo, drawn in SF Pro Rounded Black, which may not be
+ * embedded on the web), trimmed and exported to public/assets/logo/. Both images are
+ * decorative: the link or heading around the mark carries the name.
+ */
+export function BrandMark({ className = '' }: { className?: string }) {
+  return (
+    <span className={`brandmark ${className}`} aria-hidden="true">
+      <img className="brandmark-icon" src="/assets/icon/logo-96.webp" alt="" width={42} height={42} />
+      <img
+        className="brandmark-word"
+        src="/assets/logo/outbrick-wordmark-96.webp"
+        srcSet="/assets/logo/outbrick-wordmark-96.webp 1x, /assets/logo/outbrick-wordmark-192.webp 2x"
+        alt=""
+        width={489}
+        height={96}
+      />
+    </span>
+  );
+}
+
+/** App Store link for a placement on a page in `locale`: `web-home-hero`, `web-fr-home-hero` … */
+export function localeStoreUrl(campaign: string, locale: Locale = 'en'): string {
+  return appStoreUrl(locale === 'en' ? campaign : `${locale}-${campaign}`, storefronts[locale]);
+}
+
+/** `hrefLang` marks a link on a translated page that leads to a page only published in English. */
+/** Brand glyphs for the footer's social links, drawn inline so they cost no request. */
+function SocialIcon({ network }: { network: 'tiktok' }) {
+  if (network === 'tiktok') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path
+          fill="currentColor"
+          d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.6 2.6 0 0 1-2.6-2.6 2.6 2.6 0 0 1 3.38-2.48V9.66a5.73 5.73 0 0 0-.79-.05A5.68 5.68 0 0 0 4.17 15.3 5.69 5.69 0 0 0 9.86 21a5.69 5.69 0 0 0 5.69-5.69V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.3 4.3 0 0 1-3.25-1.48Z"
+        />
+      </svg>
+    );
+  }
+  return null;
+}
+
+export type NavLink = { href: string; label: string; hrefLang?: string };
 
 /** The home page's own section anchors. */
 export const homeNav: NavLink[] = [
@@ -48,6 +107,12 @@ export const homeNav: NavLink[] = [
   { href: '#fair', label: 'What it costs' },
   { href: '#apple', label: 'Built for Apple' },
 ];
+
+/** The home page's section anchors in `locale`. */
+export function homeNavFor(locale: Locale): NavLink[] {
+  const labels = chromeCopy[locale].homeNav;
+  return homeNav.map((link, i) => ({ href: link.href, label: labels[i] }));
+}
 
 /** What a legal or support page puts in the masthead. */
 export const docNav: NavLink[] = [
@@ -70,6 +135,21 @@ export const editorialNav: NavLink[] = [
   { href: '/support', label: 'Support' },
 ];
 
+/**
+ * The editorial masthead in `locale`. "The game" leads to that language's
+ * home page; everything else is only published in English, so on a
+ * translated page those links carry `hreflang="en"`.
+ */
+export function editorialNavFor(locale: Locale): NavLink[] {
+  if (locale === 'en') return editorialNav;
+  const labels = chromeCopy[locale].editorialNav;
+  return editorialNav.map((link, i) =>
+    link.href === '/'
+      ? { href: localePath(locale, '/'), label: labels[i] }
+      : { href: link.href, label: labels[i], hrefLang: 'en' },
+  );
+}
+
 const menuColours = ['#e2352f', '#ffc53d', '#26b9b0', '#7b5cf0', '#3b8bf0', '#3fc544'];
 
 /**
@@ -83,41 +163,46 @@ export function VillageHeader({
   current,
   home = '/',
   label = 'Sections',
+  locale = 'en',
 }: {
   links?: NavLink[];
   current?: string;
   home?: string;
   label?: string;
+  /** Language of the masthead's own words (badge, menu, "back to top"). English by default. */
+  locale?: Locale;
 }) {
+  const copy = chromeCopy[locale];
   return (
     <header className={`site ${links.length > 5 ? 'many' : ''}`} data-site-header="">
       <div className="wrap">
         <a className="logo" href={home}>
-          <img src="/assets/icon/logo-96.webp" alt="" width={42} height={42} />
-          <b>OutBrick</b>
-          {home.startsWith('#') ? <span className="sr-only"> — back to top</span> : null}
+          <BrandMark />
+          <span className="sr-only">OutBrick</span>
+          {home.startsWith('#') ? <span className="sr-only">{copy.backToTop}</span> : null}
         </a>
         {links.length ? (
           <nav className="main" aria-label={label}>
             {links.map((link) => (
-              <a key={link.href} href={link.href} aria-current={current === link.href ? 'page' : undefined}>
+              <a key={link.href} href={link.href} hrefLang={link.hrefLang} aria-current={current === link.href ? 'page' : undefined}>
                 {link.label}
               </a>
             ))}
           </nav>
         ) : null}
-        <AppStoreBadge />
+        <AppStoreBadge campaign="header" locale={locale} />
         {links.length ? (
           <details className="menu">
-            <summary aria-label={`${label} menu`}>
+            <summary aria-label={copy.menuLabel(label)}>
               <span className="bars" aria-hidden="true"><i /><i /><i /></span>
-              Menu
+              {copy.menu}
             </summary>
-            <nav className="menu-panel" aria-label={`${label} (menu)`}>
+            <nav className="menu-panel" aria-label={copy.menuPanelLabel(label)}>
               {links.map((link, index) => (
                 <a
                   key={link.href}
                   href={link.href}
+                  hrefLang={link.hrefLang}
                   aria-current={current === link.href ? 'page' : undefined}
                   style={{ '--c': menuColours[index % menuColours.length] } as CSSProperties}
                 >
@@ -168,52 +253,93 @@ export function AlsoRead({ current }: { current?: string }) {
   );
 }
 
-export function VillageFooter() {
+/**
+ * The language switcher: the same page in every language it is published in.
+ * Plain links, so it works without script; each names its language in that
+ * language, with `lang` and `hreflang` to match.
+ */
+export function LanguageSwitcher({ locale, page }: { locale: Locale; page: LocalizedPage }) {
+  return (
+    <nav className="langs" aria-label={chromeCopy[locale].language}>
+      <ul>
+        {locales.map((l) => (
+          <li key={l}>
+            <a href={localePath(l, page)} lang={l} hrefLang={l} aria-current={l === locale ? 'page' : undefined}>
+              {localeNames[l]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+/**
+ * The footer. `locale` sets its language (English by default). `page` is set
+ * only on the pages published in every language (the home page and the play
+ * guide), and adds the language switcher. Links to pages only published in
+ * English carry `hreflang="en"` on a translated page.
+ */
+export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?: LocalizedPage }) {
+  const copy = chromeCopy[locale].footer;
+  const home = localePath(locale, '/');
+  // Pages only published in English: say so to the browser on translated pages.
+  const en = locale === 'en' ? undefined : 'en';
   return (
     <footer className="site">
       <div className="wrap">
         <div className="cols">
           <div>
-            <a className="logo" href="/">
-              <img src="/assets/icon/logo-96.webp" alt="" width={42} height={42} />
-              <b>OutBrick</b>
+            <a className="logo" href={home}>
+              <BrandMark />
+              <span className="sr-only">OutBrick</span>
             </a>
             <p className="blurb">
-              OutBrick: Block Sort Puzzle. Slide, sort, clear the board. Free on the App Store.
+              {copy.blurb}
             </p>
+            <ul className="social" aria-label="OutBrick on social media">
+              {socialProfiles.map((profile) => (
+                <li key={profile.network}>
+                  <a href={profile.url} rel="me noopener" target="_blank">
+                    <SocialIcon network={profile.network} />
+                    <span>@outbrick</span>
+                    <span className="sr-only"> on {profile.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {page ? <LanguageSwitcher locale={locale} page={page} /> : null}
           </div>
           <div>
-            <h2>The game</h2>
+            <h2>{copy.game}</h2>
             <ul>
-              <li><a href={APP_STORE_URL}>Download on the App Store</a></li>
-              <li><a href="/#journey">The Journey</a></li>
-              <li><a href="/#cast">The nine friends</a></li>
-              <li><a href="/#fair">What it costs</a></li>
-              <li><a href="/play">Play guide</a></li>
-              <li><a href="/blog">Journal</a></li>
-              <li><a href="/press-kit">Press kit</a></li>
+              <li><a href={localeStoreUrl('footer', locale)}>{copy.download}</a></li>
+              <li><a href={`${home}#journey`}>{copy.journey}</a></li>
+              <li><a href={`${home}#cast`}>{copy.friends}</a></li>
+              <li><a href={`${home}#fair`}>{copy.costs}</a></li>
+              <li><a href={localePath(locale, '/play')}>{copy.playGuide}</a></li>
+              <li><a href="/blog" hrefLang={en}>{copy.journal}</a></li>
+              <li><a href="/press-kit" hrefLang={en}>{copy.pressKit}</a></li>
             </ul>
           </div>
           <div>
-            <h2>Help &amp; legal</h2>
+            <h2>{copy.help}</h2>
             <ul>
-              <li><a href="/support">Support</a></li>
-              <li><a href="/privacy">Privacy policy</a></li>
-              <li><a href="/privacy-choices">Privacy choices</a></li>
-              <li><a href="/terms">Terms</a></li>
-              <li><a href="/license-agreement">License agreement</a></li>
-              <li><a href="/eula">Apple EULA</a></li>
-              <li><a href="/age-rating">Age suitability</a></li>
-              <li><a href="/accessibility">Accessibility</a></li>
-              <li><a href="/refunds">Refunds &amp; purchases</a></li>
-              <li><a href="/contact">Contact</a></li>
+              <li><a href="/support" hrefLang={en}>{copy.support}</a></li>
+              <li><a href="/privacy" hrefLang={en}>{copy.privacy}</a></li>
+              <li><a href="/privacy-choices" hrefLang={en}>{copy.privacyChoices}</a></li>
+              <li><a href="/terms" hrefLang={en}>{copy.terms}</a></li>
+              <li><a href="/license-agreement" hrefLang={en}>{copy.license}</a></li>
+              <li><a href="/eula" hrefLang={en}>{copy.eula}</a></li>
+              <li><a href="/age-rating" hrefLang={en}>{copy.age}</a></li>
+              <li><a href="/accessibility" hrefLang={en}>{copy.accessibility}</a></li>
+              <li><a href="/refunds" hrefLang={en}>{copy.refunds}</a></li>
+              <li><a href="/contact" hrefLang={en}>{copy.contact}</a></li>
             </ul>
           </div>
         </div>
         <p className="legal">
-          © 2026 OutBrick. Apple, the Apple logo, iPhone, iPad, Mac, Apple TV, Apple Watch and Apple
-          Vision Pro are trademarks of Apple Inc., registered in the U.S. and other countries and
-          regions. App Store is a service mark of Apple Inc.
+          {copy.legal}
         </p>
       </div>
     </footer>

@@ -1,9 +1,14 @@
 'use client';
 
+import { appStoreUrl } from '../store-badge';
+import { boardStrings, type BoardStrings } from '../../lib/i18n/board';
+import { storefronts, type Locale } from '../../lib/i18n/locales';
 import '../styles/playable-board.css';
 import {
   useCallback,
+  useEffect,
   useId,
+  useMemo,
   useReducer,
   useRef,
   useState,
@@ -24,28 +29,9 @@ import {
   type Placement,
 } from '../../lib/board-solver';
 
-const APP_STORE = 'https://apps.apple.com/us/app/outbrick/id6807997465';
+const RESULT_URL = 'https://www.outbrick.site/play/result';
 const DRAG_THRESHOLD = 10;
 
-const COLOR_NAME: Record<BrickColor, string> = {
-  red: 'Red',
-  yellow: 'Yellow',
-  teal: 'Teal',
-  violet: 'Violet',
-  blue: 'Blue',
-  green: 'Green',
-};
-
-const GLYPH_NAME: Record<BrickColor, string> = {
-  red: 'heart',
-  yellow: 'triangle',
-  teal: 'circle',
-  violet: 'diamond',
-  blue: 'square',
-  green: 'star',
-};
-
-const SIDE_NAME: Record<Gate['side'], string> = { top: 'top', bottom: 'bottom', left: 'left', right: 'right' };
 const VEC: Record<Dir, [number, number]> = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 const KEY_DIR: Record<string, Dir> = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
 
@@ -153,16 +139,15 @@ function starsFor(state: GameState, level: Level): number {
   return state.usedUndo ? 2 : 3;
 }
 
-const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
-
-function reducer(state: GameState, action: Action): GameState {
+/** The reducer, speaking one language: every announcement it writes comes from `t`. */
+const makeReducer = (t: BoardStrings) => function reducer(state: GameState, action: Action): GameState {
   const level = boardLevels[state.level];
   const seq = state.seq + 1;
   switch (action.type) {
     case 'move': {
       if (isClear(state.placements)) return state;
       const brick = level.bricks[action.index];
-      const name = `${COLOR_NAME[brick.color]} brick`;
+      const name = t.brick(brick.color);
       const result = slide(level, state.placements, action.index, action.dir);
       const next = applyMove(level, state.placements, action.index, action.dir);
       if (!next) {
@@ -171,7 +156,7 @@ function reducer(state: GameState, action: Action): GameState {
           seq,
           fx: state.fx.map((f, i) => (i === action.index ? { kind: 'nudge', dir: action.dir, seq, dur: 240 } : f)),
           motion: { kind: 'blocked', index: action.index, dir: action.dir },
-          message: `${name} can’t move ${action.dir}.`,
+          message: t.cantMove(name, action.dir),
         };
       }
       const moves = state.moves + 1;
@@ -180,10 +165,10 @@ function reducer(state: GameState, action: Action): GameState {
         const exitDirs = state.exitDirs.map((d, i) => (i === action.index ? action.dir : d));
         const remaining = next.filter((p) => !p.out).length;
         const done = { ...base, exitDirs };
-        let message = `${name} left the board. ${plural(remaining, 'brick remains', 'bricks remain')}.`;
+        let message = t.leftBoard(name, remaining);
         if (remaining === 0) {
           const stars = starsFor(done, level);
-          message = `${name} left the board. Board clear in ${plural(moves, 'move', 'moves')}, target ${level.target}. ${plural(stars, 'star', 'stars')}.`;
+          message = t.leftAndClear(name, moves, level.target, stars);
         }
         return {
           ...done,
@@ -203,7 +188,7 @@ function reducer(state: GameState, action: Action): GameState {
           i === action.index ? { kind: 'impact', dir: action.dir, seq, dur: slideMs(result.distance) } : f,
         ),
         motion: { kind: 'slide', index: action.index, dir: action.dir, distance: result.distance },
-        message: `${name} slid ${action.dir} ${plural(result.distance, 'space', 'spaces')}, now row ${result.y + 1} column ${result.x + 1}.`,
+        message: t.slid(name, action.dir, result.distance, result.y + 1, result.x + 1),
       };
     }
     case 'undo': {
@@ -218,12 +203,12 @@ function reducer(state: GameState, action: Action): GameState {
         fx: state.fx.map(() => null),
         motion: { kind: 'rewind' },
         seq,
-        message: `Undid the last move. Moves ${state.moves - 1}.`,
+        message: t.undid(state.moves - 1),
       };
     }
     case 'reset':
       return {
-        ...freshState(state.level, seq, 'Board reset.'),
+        ...freshState(state.level, seq, t.reset),
         exitDirs: state.exitDirs,
         motion: { kind: 'rewind' },
       };
@@ -232,28 +217,23 @@ function reducer(state: GameState, action: Action): GameState {
       return freshState(
         action.level,
         seq,
-        `Board ${action.level + 1} of ${boardLevels.length}: ${lv.name}. Target ${lv.target} moves.`,
+        t.levelChange(action.level + 1, boardLevels.length, t.levelName[lv.id] ?? lv.name, lv.target),
       );
     }
   }
-}
+};
 
 /* ------------------------------------------------------------- helpers */
 
-function describeBrick(level: Level, index: number, p: Placement): string {
+function describeBrick(t: BoardStrings, level: Level, index: number, p: Placement): string {
   const b = level.bricks[index];
-  const size = b.w > 1 ? `${b.w} wide` : b.h > 1 ? `${b.h} tall` : 'single';
-  return `${COLOR_NAME[b.color]} brick, ${size}, row ${p.y + 1} column ${p.x + 1}`;
+  return t.describeBrick(b.color, b.w, b.h, p.y + 1, p.x + 1);
 }
 
-function describeGates(level: Level): string {
+function describeGates(t: BoardStrings, level: Level): string {
   return level.gates
-    .map((g) => {
-      const along = g.side === 'top' || g.side === 'bottom' ? 'column' : 'row';
-      const where = g.span > 1 ? `${along}s ${g.start + 1} to ${g.start + g.span}` : `${along} ${g.start + 1}`;
-      return `${COLOR_NAME[g.color]} ${GLYPH_NAME[g.color]} gate on the ${SIDE_NAME[g.side]} edge, ${where}`;
-    })
-    .join('; ');
+    .map((g: Gate) => t.describeGate({ colour: g.color, side: g.side, start: g.start, span: g.span }))
+    .join(t.gatesJoin);
 }
 
 /** Duration of a brick's slide: a quick base plus a little per cell travelled. */
@@ -302,6 +282,25 @@ const CONFETTI = Array.from({ length: 30 }, (_, i) => {
   };
 });
 
+/** What "Share result" sends: a static result page (app/play/result) and a line of text. */
+function shareFor(t: BoardStrings, levelIndex: number, moves: number, stars: number) {
+  const level = boardLevels[levelIndex];
+  const board = levelIndex + 1;
+  const url = `${RESULT_URL}/${board}-${stars}`;
+  const title = t.shareTitle(board, stars);
+  const text = t.shareText(board, t.levelName[level.id] ?? level.name, moves, level.target, `${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`);
+  return { url, title, text };
+}
+
+async function copyText(value: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /* ------------------------------------------------------------ component */
 
 export interface PlayableBoardProps {
@@ -311,9 +310,17 @@ export interface PlayableBoardProps {
   startLevel?: number;
   /** Accessible name for the whole toy. */
   label?: string;
+  /**
+   * Language of every string the board shows or announces (lib/i18n/board.ts).
+   * English by default. Behaviour is the same in every language.
+   */
+  locale?: Locale;
 }
 
-export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBrick board' }: PlayableBoardProps) {
+export function PlayableBoard({ className, startLevel = 0, label, locale = 'en' }: PlayableBoardProps) {
+  const t = boardStrings[locale];
+  const reducer = useMemo(() => makeReducer(t), [t]);
+  const appStore = appStoreUrl(locale === 'en' ? 'board-clear' : `${locale}-board-clear`, storefronts[locale]);
   const initialLevel = Math.min(Math.max(0, Math.trunc(startLevel)), boardLevels.length - 1);
   const [state, dispatch] = useReducer(reducer, initialLevel, (lv: number) => freshState(lv));
   const [focused, setFocused] = useState<string | null>(null);
@@ -323,6 +330,15 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
   const brickEls = useRef(new Map<string, HTMLButtonElement>());
   const nextBtn = useRef<HTMLButtonElement>(null);
   const uid = useId();
+  const [note, setNote] = useState<{ text: string; seq: number } | null>(null);
+
+  // A note belongs to the clear it was made on (keyed by seq), and fades on its own.
+  const shareNote = note && note.seq === state.seq ? note.text : '';
+  useEffect(() => {
+    if (!note) return;
+    const t = setTimeout(() => setNote(null), 3200);
+    return () => clearTimeout(t);
+  }, [note]);
 
   const level = boardLevels[state.level];
   const clear = isClear(state.placements);
@@ -422,6 +438,21 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
     dispatch({ type: 'level', level: n });
   };
 
+  const shareResult = async () => {
+    const data = shareFor(t, state.level, state.moves, stars);
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share(data);
+        return;
+      } catch (err) {
+        // Closing the share sheet is a choice, not a failure.
+        if (err instanceof DOMException && err.name === 'AbortError') return;
+      }
+    }
+    const seq = state.seq;
+    setNote({ text: (await copyText(data.url)) ? t.copied : t.copyFailed, seq });
+  };
+
   const isLast = state.level === boardLevels.length - 1;
   const motion = state.motion;
   let clearDelay = 0;
@@ -431,17 +462,18 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
     clearDelay = slideMs(motion.distance + len + 1) * 0.8;
   }
   const over = state.moves > level.target;
-  const grabbedLabel = grabbed ? COLOR_NAME[level.bricks.find((b) => b.id === grabbed)?.color ?? 'red'] : '';
+  const grabbedColour = grabbed ? (level.bricks.find((b) => b.id === grabbed)?.color ?? 'red') : null;
+  const levelName = t.levelName[level.id] ?? level.name;
 
   return (
     <section
       className={`pb${className ? ` ${className}` : ''}`}
-      aria-label={label}
+      aria-label={label ?? t.label}
       style={{ '--cols': level.cols, '--rows': level.rows } as CSSProperties}
     >
       <div className="pb-hud">
         <div className="pb-boards">
-          <span className="pb-sr">Boards:</span>
+          <span className="pb-sr">{t.boards}</span>
           {boardLevels.map((lv, i) => (
             <button
               key={lv.id}
@@ -449,23 +481,23 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
               className="pb-pip"
               data-current={i === state.level || undefined}
               aria-current={i === state.level ? 'step' : undefined}
-              aria-label={`Board ${i + 1}: ${lv.name}`}
+              aria-label={t.pip(i + 1, t.levelName[lv.id] ?? lv.name)}
               onClick={() => goLevel(i)}
             >
               {i + 1}
             </button>
           ))}
-          <span className="pb-name">{level.name}</span>
+          <span className="pb-name">{levelName}</span>
         </div>
         <p className="pb-count" aria-live="off">
           <span>
-            Target <b>{level.target}</b>
+            {t.target}<b>{level.target}</b>
           </span>
           <span className="pb-dot" aria-hidden="true">
             ·
           </span>
           <span data-over={over || undefined}>
-            Moves <b>{state.moves}</b>
+            {t.moves}<b>{state.moves}</b>
           </span>
         </p>
       </div>
@@ -479,7 +511,7 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
             aria-describedby={`${uid}-hint ${uid}-gates`}
           >
             <legend className="pb-sr">
-              {`${level.name}, ${level.cols} by ${level.rows} board, ${plural(remaining, 'brick', 'bricks')} left`}
+              {t.legend(levelName, level.cols, level.rows, remaining)}
             </legend>
             {level.gates.map((g, i) => {
               const flash = motion.kind === 'exit' && motion.gate === i;
@@ -547,7 +579,7 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
                   tabIndex={!p.out && rovingId === id ? 0 : -1}
                   inert={p.out || undefined}
                   aria-hidden={p.out || undefined}
-                  aria-label={describeBrick(level, i, p)}
+                  aria-label={describeBrick(t, level, i, p)}
                   aria-pressed={grabbed === id}
                   onFocus={() => setFocused(id)}
                   onBlur={() => setGrabbed((g) => (g === id ? null : g))}
@@ -609,26 +641,24 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
             <div className="pb-card" style={{ '--delay': `${clearDelay}ms` } as CSSProperties}>
               <section className="pb-card-panel" aria-labelledby={`${uid}-clear`}>
                 <p className="pb-card-kicker">
-                  Board {state.level + 1} of {boardLevels.length}
+                  {t.kicker(state.level + 1, boardLevels.length)}
                 </p>
                 <h3 className="pb-card-title" id={`${uid}-clear`}>
-                  Board clear
+                  {t.clear}
                 </h3>
                 <p className="pb-stars">
-                  <span className="pb-sr">{`${plural(stars, 'star', 'stars')} of 3`}</span>
+                  <span className="pb-sr">{t.starsOf(stars)}</span>
                   {[0, 1, 2].map((s) => (
                     <Star key={s} index={s} on={s < stars} />
                   ))}
                 </p>
                 <p className="pb-card-line">
-                  {plural(state.moves, 'move', 'moves')} · target {level.target}
+                  {t.cardLine(state.moves)}{level.target}
                   {stars < 3 && (
                     <>
                       <br />
                       <span className="pb-card-hint">
-                        {stars === 1
-                          ? `Clear in ${level.target} for the second star.`
-                          : 'Clear without an undo for the third star.'}
+                        {stars === 1 ? t.secondStar(level.target) : t.thirdStar}
                       </span>
                     </>
                   )}
@@ -640,18 +670,42 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
                     className="pb-btn pb-btn-go"
                     onClick={() => goLevel(isLast ? 0 : state.level + 1)}
                   >
-                    {isLast ? 'Play from board 1' : 'Next board'}
+                    {isLast ? t.again : t.next}
                     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                       <path d="M5 12h13m-5-6 6 6-6 6" />
                     </svg>
                   </button>
-                  <button type="button" className="pb-btn pb-btn-quiet" onClick={() => dispatch({ type: 'reset' })}>
-                    Replay
+                  <button
+                    type="button"
+                    className="pb-btn pb-btn-quiet pb-btn-share"
+                    aria-label={t.shareLabel}
+                    onClick={shareResult}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M12 15V3.5m-4.5 4L12 3l4.5 4.5" />
+                      <path d="M8 10.5H6.5a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6.5a2 2 0 0 0-2-2H16" />
+                    </svg>
+                    {t.share}
                   </button>
+                  <button
+                    type="button"
+                    className="pb-btn pb-btn-quiet pb-btn-icon"
+                    aria-label={t.replay}
+                    title={t.replay}
+                    onClick={() => dispatch({ type: 'reset' })}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" />
+                      <path d="M3 4v5h5" />
+                    </svg>
+                  </button>
+                  <output className="pb-share-note" aria-live="polite" data-show={shareNote ? true : undefined}>
+                    {shareNote}
+                  </output>
                 </div>
-                <a className="pb-store" href={APP_STORE} target="_blank" rel="noopener noreferrer">
-                  Get the full game on the <span>
-                  App Store
+                <a className="pb-store" href={appStore} target="_blank" rel="noopener noreferrer">
+                  {t.store[0]}<span>
+                  {t.store[1]}
                   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                     <path d="M8 16 16 8m-6 0h6v6" />
                   </svg>
@@ -674,7 +728,7 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
             <path d="M9 14 4 9l5-5" />
             <path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" />
           </svg>
-          Undo
+          {t.undo}
         </button>
         <button
           type="button"
@@ -689,28 +743,25 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
             <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" />
             <path d="M3 4v5h5" />
           </svg>
-          Reset
+          {t.resetButton}
         </button>
         <p className="pb-tip" aria-hidden="true">
-          {grabbed ? (
-            `${grabbedLabel} lifted · arrow to slide`
+          {grabbedColour ? (
+            t.lifted(grabbedColour)
           ) : (
             <>
-              <span className="pb-tip-long">Drag a brick toward its gate</span>
-              <span className="pb-tip-short">Drag to slide</span>
+              <span className="pb-tip-long">{t.tipLong}</span>
+              <span className="pb-tip-short">{t.tipShort}</span>
             </>
           )}
         </p>
       </div>
 
       <p className="pb-sr" id={`${uid}-hint`}>
-        Drag or swipe a brick to slide it. With a keyboard, Tab to the board and use the arrow keys to choose a brick,
-        then hold Shift and press an arrow to slide it, or press Enter and then an arrow. Escape puts a lifted brick
-        down. Control or Command Z undoes a move. A brick glides until a wall, another brick or a gate of a different
-        colour stops it, and leaves through the gate that matches its colour.
+        {t.hint}
       </p>
       <p className="pb-sr" id={`${uid}-gates`}>
-        Gates: {describeGates(level)}.
+        {t.gatesPrefix}{describeGates(t, level)}.
       </p>
       <output className="pb-sr" aria-live="polite" aria-atomic="true">
         {state.message}

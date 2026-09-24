@@ -541,6 +541,8 @@
   inset: 0 0 10px;
   z-index: 6;
   display: grid;
+  /* A definite column, so the panel's min(100%, 300px) resolves against the board, not itself. */
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
   padding: 14px;
   border-radius: var(--pb-radius);
@@ -623,10 +625,35 @@
 }
 
 .pb-card-actions {
+  position: relative;
   display: flex;
   gap: 8px;
   margin-bottom: 12px;
 }
+
+.pb-btn-share { padding: 0 13px 0 11px; }
+.pb-btn-icon { width: 44px; padding: 0; flex: none; }
+.pb-btn-icon svg { width: 20px; height: 20px; }
+
+/* "Link copied": a small tag that rises over the moves line, so the card never changes size. */
+.pb-share-note {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  margin: 0;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--pb-ink);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.pb-share-note[data-show] { opacity: 1; transform: translate(-50%, 0); }
 
 .pb-btn {
   appearance: none;
@@ -701,6 +728,10 @@
   .pb-card-hint { font-size: 12px; }
   .pb-card-actions { margin-bottom: 8px; }
   .pb-btn { height: 40px; font-size: 14px; padding: 0 12px; }
+  .pb-btn-share { padding: 0 11px 0 9px; }
+  .pb-btn-icon { width: 40px; padding: 0; }
+  .pb-card-actions { gap: 6px; }
+  .pb-btn-go svg { display: none; }
   .pb-store { font-size: 12.5px; }
 }
 
@@ -788,6 +819,7 @@
   .pb-pip,
   .pb-tool,
   .pb-btn { transition: none; }
+  .pb-share-note { transition: none; }
 }
 
 /*
@@ -803,3 +835,24 @@
   .pb-card .pb-card-title { font-size: 25px; margin-bottom: 6px; }
 }
 section.pb { padding: 0; }
+
+/*
+ * Translated boards (lib/i18n/board.ts). "Objetivo 3 · Movimientos 0" is
+ * twice the width of "Target 3 · Moves 0", and a flex row's min-content counts
+ * the board name and the drag tip at full width even though both truncate — so
+ * on a phone the HUD and the controls pushed the whole column wider than the
+ * screen. Here the name and the tip give up their intrinsic width (they still
+ * fill the free space and ellipsize), and the count may wrap under the pips if
+ * even that is not enough. English is left exactly as it was.
+ */
+.pb:not(:lang(en)) .pb-hud { flex-wrap: wrap; height: auto; min-height: 40px; row-gap: 4px; }
+.pb:not(:lang(en)) .pb-boards { flex: 1 1 auto; }
+.pb:not(:lang(en)) .pb-name { flex: 1 1 0; min-width: 0; contain: inline-size; }
+.pb:not(:lang(en)) .pb-tool { white-space: nowrap; }
+.pb:not(:lang(en)) .pb-tip { contain: inline-size; }
+.pb:lang(ja) .pb-count,
+.pb:lang(ja) .pb-tip { word-break: keep-all; }
+/* "Siguiente tablero", "Plateau suivant": the clear card's main button may
+   take two lines rather than push Share and Replay out of the card. */
+.pb:not(:lang(en)) .pb-card-actions > * { flex-shrink: 0; }
+.pb:not(:lang(en)) .pb-card .pb-btn-go { flex: 1 1 0; min-width: 0; white-space: normal; line-height: 1.1; text-align: center; hyphens: auto; }

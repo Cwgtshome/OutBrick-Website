@@ -20,7 +20,19 @@ const plinthFeet = ['#8e1c18', '#b8780a', '#087e84', '#4a35b0', '#1d4fa6', '#1f7
  * line for assistive tech. Under Reduce Motion nothing hops or leans; the
  * bubble still changes.
  */
-export function HomeCast({ friends }: { friends: Friend[] }) {
+/** The words around the shelf, in the page's language (lib/i18n/home.ts). */
+export type HomeCastCopy = { eyebrow: string; title: string; lede: string; meet: string };
+
+export function HomeCast({
+  friends,
+  copy,
+  meetHrefLang,
+}: {
+  friends: Friend[];
+  copy: HomeCastCopy;
+  /** Set on translated pages: the mascots page is only published in English. */
+  meetHrefLang?: string;
+}) {
   const [active, setActive] = useState(0);
   const [hopping, setHopping] = useState<number | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -87,18 +99,15 @@ export function HomeCast({ friends }: { friends: Friend[] }) {
     <div className="cast-layout">
       <div className="cast-head">
         <div>
-          <p className="eyebrow"><span className="idx">03</span>Nine brick friends</p>
-          <h2>They live in the same material world you do.</h2>
+          <p className="eyebrow"><span className="idx">03</span>{copy.eyebrow}</p>
+          <h2>{copy.title}</h2>
         </div>
         <div>
         <p className="lede">
-          Real 3D characters, not stickers pasted over a puzzle. Three share your home screen at a
-          time and the cast turns over as you play — one waves goodbye and walks off, another walks
-          on and says hello. They react when you poke them, follow you with their eyes as you tilt
-          the phone, and each one has a victory move of its own.
+          {copy.lede}
         </p>
-        <a className="btn brick-btn cast-link" href="/mascots">
-          Meet the friends
+        <a className="btn brick-btn cast-link" href="/mascots" hrefLang={meetHrefLang}>
+          {copy.meet}
           <span className="arrow" aria-hidden="true" />
         </a>
         </div>

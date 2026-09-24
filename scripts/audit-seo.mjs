@@ -51,6 +51,15 @@ const attr = (tag, name) => {
   return m ? decodeEntities(m[1] ?? '') : undefined;
 };
 
+/**
+ * Length as a search result shows it. Google truncates titles and snippets by pixel width, and
+ * a CJK character (kana, kanji, full-width punctuation) is about twice as wide as a Latin one —
+ * so a Japanese title of 28 characters fills the line an English one of ~56 does. Counting CJK
+ * as 2 keeps one set of 30–65 / 70–160 limits meaningful for every language on the site.
+ */
+const CJK = /[\u1100-\u11ff\u2e80-\u9fff\uac00-\ud7af\uf900-\ufaff\ufe30-\ufe4f\uff00-\uff60\uffe0-\uffe6]/u;
+const displayLength = (s) => [...s].reduce((n, ch) => n + (CJK.test(ch) ? 2 : 1), 0);
+
 const report = [];
 
 for (const file of listHtmlFiles()) {
@@ -72,12 +81,13 @@ for (const file of listHtmlFiles()) {
     const titles = [...stripSvg(head).matchAll(/<title\b[^>]*>([\s\S]*?)<\/title>/gi)].map((m) => textOf(m[1]));
     if (titles.length !== 1) err(`${titles.length} <title> elements in <head> (want 1)`);
     const title = titles[0] ?? '';
-    if (title && (title.length < 30 || title.length > 65)) warn(`title length ${title.length} (want 30–65): "${title}"`);
+    const titleLength = displayLength(title);
+    if (title && (titleLength < 30 || titleLength > 65)) warn(`title length ${titleLength} (want 30–65, CJK counted as 2): "${title}"`);
 
     // meta description
     const descs = metaContent(html, 'description');
     if (descs.length !== 1) err(`${descs.length} meta descriptions (want 1)`);
-    else if (descs[0].length < 70 || descs[0].length > 160) warn(`meta description length ${descs[0].length} (want 70–160)`);
+    else if (displayLength(descs[0]) < 70 || displayLength(descs[0]) > 160) warn(`meta description length ${displayLength(descs[0])} (want 70–160, CJK counted as 2)`);
 
     // canonical
     const canonicals = linkHrefs(html, 'canonical');

@@ -10,7 +10,7 @@
 
 import type { ReactNode } from 'react';
 import { editorialNav, VillageFooter, VillageHeader } from './village-shell';
-import { APP_STORE_URL } from './store-badge';
+import { appStoreUrl } from './store-badge';
 
 const currentHref: Record<string, string> = {
   about: '/about',
@@ -100,7 +100,7 @@ export function Studs({ count = 3 }: { count?: number }) {
 /** Apple's own badge artwork, at a size the guidelines allow. */
 export function Badge() {
   return (
-    <a className="ed-badge" href={APP_STORE_URL} aria-label="Download OutBrick on the App Store">
+    <a className="ed-badge" href={appStoreUrl('journal')} aria-label="Download OutBrick on the App Store">
       <img src="/assets/badge/appstore-black.svg" alt="Download on the App Store" width={132} height={44} />
     </a>
   );

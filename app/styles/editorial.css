@@ -1606,3 +1606,9 @@
   font-weight: 600;
 }
 .ed-skip:focus { left: 12px; top: 12px; }
+
+/* The brand mark on the article's game note and the press kit's wordmark download. */
+.ed-gamenote .gamenote-mark { margin-bottom: 14px; }
+.ed-gamenote .gamenote-mark .brandmark-icon { width: 48px; height: 48px; }
+.ed-gamenote .gamenote-mark .brandmark-word { height: 30px; }
+.ed-download .plinth.icon.wordmark img { width: 84%; height: auto; border-radius: 0; box-shadow: none; }

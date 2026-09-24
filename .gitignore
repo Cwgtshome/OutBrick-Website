@@ -37,3 +37,6 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# written by scripts/prebuild.mjs on every build
+/lib/generated/
