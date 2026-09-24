@@ -18,9 +18,9 @@ export const metadata: Metadata = {
     siteName: 'OutBrick',
     title: 'OutBrick press kit',
     description,
-    images: [{ url: `${siteUrl}/assets/icon/icon-512.png`, width: 512, height: 512, alt: 'The OutBrick app icon' }],
+    images: [{ url: `${siteUrl}/og.png`, width: 1200, height: 630, alt: 'The OutBrick Journey map in Garden City, with Bloo, Peach and Sprout' }],
   },
-  twitter: { card: 'summary', title: 'OutBrick press kit', description, images: [`${siteUrl}/assets/icon/icon-512.png`] },
+  twitter: { card: 'summary_large_image', title: 'OutBrick press kit', description, images: [`${siteUrl}/og.png`] },
 };
 
 const factSheet: [string, string][] = [
@@ -163,7 +163,7 @@ export default function PressKitPage() {
               <a
                 className="ed-download"
                 key={friend.id}
-                href={friend.image}
+                href={friend.image.replace(/\.webp$/, ".png")}
                 download={`outbrick-${friend.id}.png`}
                 style={{ ['--c' as string]: friend.colour, ['--c-foot' as string]: friend.foot }}
               >

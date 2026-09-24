@@ -230,7 +230,7 @@ export default function HomePage() {
 
             <div className="hero-stage" data-tilt="">
               <div className="stage-inner">
-                <img className="peek peek-sprout" src="/assets/friends/sprout.png" alt="" width={180} height={180} />
+                <img className="peek peek-sprout" src="/assets/friends/sprout.webp" alt="" width={180} height={180} />
                 <div className="phone">
                   <img
                     src="/assets/villages/garden-city.jpg"
@@ -240,8 +240,8 @@ export default function HomePage() {
                     alt="The Journey map in Garden City: a brick-paved road winding between toy-brick houses and trees, with numbered level markers along it."
                   />
                 </div>
-                <img className="peek peek-bloo" src="/assets/friends/bloo.png" alt="" width={200} height={200} />
-                <img className="peek peek-peach" src="/assets/friends/peach.png" alt="" width={180} height={180} />
+                <img className="peek peek-bloo" src="/assets/friends/bloo.webp" alt="" width={200} height={200} />
+                <img className="peek peek-peach" src="/assets/friends/peach.webp" alt="" width={180} height={180} />
                 <div className="stage-plinth" aria-hidden="true"><i /><i /><i /></div>
               </div>
             </div>
@@ -531,7 +531,7 @@ export default function HomePage() {
           </div>
           <div className="wrap close-inner">
             <div>
-              <img className="close-icon" src="/assets/icon/icon-192.png" alt="" width={96} height={96} loading="lazy" />
+              <img className="close-icon" src="/assets/icon/logo-96.webp" alt="" width={96} height={96} loading="lazy" />
               <h2>Clear a board. Walk a little further.</h2>
             </div>
             <div>

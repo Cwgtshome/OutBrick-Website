@@ -28,9 +28,9 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
       siteName: 'OutBrick',
       title: `${author.name} — OutBrick Journal`,
       description,
-      images: [{ url: `${siteUrl}/assets/icon/icon-512.png`, width: 512, height: 512, alt: 'The OutBrick app icon' }],
+      images: [{ url: `${siteUrl}/og.png`, width: 1200, height: 630, alt: 'The OutBrick Journey map in Garden City, with Bloo, Peach and Sprout' }],
     },
-    twitter: { card: 'summary', title: `${author.name} — OutBrick Journal`, description, images: [`${siteUrl}/assets/icon/icon-512.png`] },
+    twitter: { card: 'summary_large_image', title: `${author.name} — OutBrick Journal`, description, images: [`${siteUrl}/og.png`] },
   };
 }
 

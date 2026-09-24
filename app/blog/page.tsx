@@ -98,7 +98,7 @@ export default function BlogPage() {
               <figure className="ed-capture"><img src="/assets/villages/autumn-orchard.jpg" alt="" width={239} height={520} decoding="async" /></figure>
               <figure className="ed-capture"><img src="/assets/villages/garden-city.jpg" alt="" width={239} height={520} decoding="async" /></figure>
               <figure className="ed-capture"><img src="/assets/villages/snowflake-village.jpg" alt="" width={239} height={520} decoding="async" /></figure>
-              <img className="ed-friend" src="/assets/friends/sprout.png" alt="" width={360} height={360} decoding="async" />
+              <img className="ed-friend" src="/assets/friends/sprout.webp" alt="" width={360} height={360} decoding="async" />
             </div>
           </div>
           <nav className="ed-rail" aria-label="Journal categories">
@@ -140,7 +140,7 @@ export default function BlogPage() {
                 <img src={featured.image} alt={featured.imageAlt} width={1600} height={900} decoding="async" fetchPriority="high" />
                 <figcaption>Journal illustration</figcaption>
               </figure>
-              <img className="ed-friend" src="/assets/friends/bloo.png" alt="" width={360} height={360} loading="lazy" decoding="async" />
+              <img className="ed-friend" src="/assets/friends/bloo.webp" alt="" width={360} height={360} loading="lazy" decoding="async" />
             </div>
           </div>
 

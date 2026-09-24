@@ -139,7 +139,7 @@ export function HomeCast({ friends }: { friends: Friend[] }) {
                   <img
                     loading="lazy"
                     decoding="async"
-                    src={`/assets/friends/${friend.slug}.png`}
+                    src={`/assets/friends/${friend.slug}.webp`}
                     width={180}
                     height={180}
                     alt=""

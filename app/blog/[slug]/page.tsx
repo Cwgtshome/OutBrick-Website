@@ -259,7 +259,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   </div>
                 </div>
                 <aside className="ed-gamenote" aria-labelledby="game-note-title">
-                  <img className="icon" src="/assets/icon/icon-192.png" alt="" width={56} height={56} loading="lazy" decoding="async" />
+                  <img className="icon" src="/assets/icon/logo-96.webp" alt="" width={56} height={56} loading="lazy" decoding="async" />
                   <h2 id="game-note-title">The game this journal sits beside</h2>
                   <p>
                     OutBrick is a sliding-brick colour-sort puzzle: 2,000 solver-verified boards, 167

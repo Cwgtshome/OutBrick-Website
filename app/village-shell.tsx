@@ -93,7 +93,7 @@ export function VillageHeader({
     <header className={`site ${links.length > 5 ? 'many' : ''}`} data-site-header="">
       <div className="wrap">
         <a className="logo" href={home}>
-          <img src="/assets/icon/icon-192.png" alt="" width={42} height={42} />
+          <img src="/assets/icon/logo-96.webp" alt="" width={42} height={42} />
           <b>OutBrick</b>
           {home.startsWith('#') ? <span className="sr-only"> — back to top</span> : null}
         </a>
@@ -175,7 +175,7 @@ export function VillageFooter() {
         <div className="cols">
           <div>
             <a className="logo" href="/">
-              <img src="/assets/icon/icon-192.png" alt="" width={42} height={42} />
+              <img src="/assets/icon/logo-96.webp" alt="" width={42} height={42} />
               <b>OutBrick</b>
             </a>
             <p className="blurb">

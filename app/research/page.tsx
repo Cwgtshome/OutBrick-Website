@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     siteName: 'OutBrick',
     title: 'How the OutBrick Journal reads research',
     description,
-    images: [{ url: `${siteUrl}/assets/icon/icon-512.png`, width: 512, height: 512, alt: 'The OutBrick app icon' }],
+    images: [{ url: `${siteUrl}/og.png`, width: 1200, height: 630, alt: 'The OutBrick Journey map in Garden City, with Bloo, Peach and Sprout' }],
   },
-  twitter: { card: 'summary', title: 'How the OutBrick Journal reads research', description, images: [`${siteUrl}/assets/icon/icon-512.png`] },
+  twitter: { card: 'summary_large_image', title: 'How the OutBrick Journal reads research', description, images: [`${siteUrl}/og.png`] },
 };
 
 const selectedSources = [
