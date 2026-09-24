@@ -2,6 +2,7 @@
 //
 //   sitemap.xml — every indexable prerendered page, derived from the build output itself
 //   feed.xml    — RSS 2.0 for the journal, from lib/blog.ts
+//   llms.txt    — a plain-Markdown map of the site for AI assistants (llmstxt.org)
 //
 // Why not app/sitemap.ts: with `output: 'export'`, vinext compiles metadata routes into the
 // server bundle only; nothing prerenders them into dist/client, and Netlify publishes only
@@ -13,7 +14,7 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { distDir, indexablePages, metaContent, repoRoot, siteUrl, xmlEscape } from './lib/pages.mjs';
+import { decodeEntities, distDir, indexablePages, metaContent, repoRoot, siteUrl, xmlEscape } from './lib/pages.mjs';
 
 const { articles, authors } = await import('../lib/blog.ts');
 
@@ -192,3 +193,49 @@ const feed = [
 ].join('\n');
 fs.writeFileSync(path.join(distDir, 'feed.xml'), feed);
 console.log(`[postbuild] feed.xml: ${items.length} items`);
+
+// ---------------------------------------------------------------------------------------
+// llms.txt — https://llmstxt.org
+//
+// A short Markdown index that AI assistants (ChatGPT, Claude, Perplexity, Gemini…) can read
+// in one request instead of crawling every page. Built from the same indexable pages as the
+// sitemap, using each page's own <title> and meta description, so it cannot drift from them.
+
+const pageTitle = (html) => decodeEntities(html.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1] ?? '').replace(/\s*[—|-]\s*OutBrick\s*$/, '').trim();
+const mdLine = (page) => {
+  const title = pageTitle(page.html) || page.route;
+  const desc = metaContent(page.html, 'description')[0];
+  return `- [${title}](${page.url})${desc ? `: ${desc}` : ''}`;
+};
+
+const home = pages.find((p) => p.route === '/');
+const blogPages = pages.filter((p) => p.route === '/blog' || p.route.startsWith('/blog/'));
+const legalRoutes = /^\/(privacy|privacy-choices|terms|eula|license-agreement|refunds|age-rating|accessibility)$/;
+const legalPages = pages.filter((p) => legalRoutes.test(p.route));
+const mainPages = pages.filter((p) => p !== home && !blogPages.includes(p) && !legalPages.includes(p));
+
+const llms = [
+  '# OutBrick',
+  '',
+  `> ${metaContent(home?.html ?? '', 'description')[0] ?? 'OutBrick: Block Sort Puzzle — a relaxed sliding-brick colour-sort puzzle for iPhone and iPad.'}`,
+  '',
+  'OutBrick: Block Sort Puzzle is an iOS game by Mourad Hamdi. This site is its official home: game information, support, legal pages, and the OutBrick Journal — research-backed writing on puzzle design, calmer play and accessibility.',
+  '',
+  '## Main pages',
+  '',
+  ...(home ? [mdLine(home)] : []),
+  ...mainPages.map(mdLine),
+  '',
+  '## The OutBrick Journal',
+  '',
+  ...blogPages.map(mdLine),
+  '',
+  '## Optional',
+  '',
+  ...legalPages.map(mdLine),
+  `- [RSS feed](${siteUrl}/feed.xml): every journal article, newest first`,
+  `- [Sitemap](${siteUrl}/sitemap.xml): every indexable URL`,
+  '',
+].join('\n');
+fs.writeFileSync(path.join(distDir, 'llms.txt'), llms);
+console.log(`[postbuild] llms.txt: ${pages.length} pages`);
