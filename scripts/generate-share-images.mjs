@@ -1,4 +1,4 @@
-// Draws the nine social cards for the "Share result" pages: public/share/board-<n>-<stars>.png,
+// Draws the social cards for the "Share result" pages (three per board): public/share/board-<n>-<stars>.png,
 // 1200×630, one per board (lib/board-levels.ts) and star count. Each card shows the board's
 // name, its stars, the moves line, a drawing of the board's starting layout and a friend.
 //
@@ -6,7 +6,9 @@
 // image pipeline and the build gains no dependencies. Re-run it after changing a board or the
 // wording in app/play/result/results.ts, then look at the images before committing them.
 //
-//   node --experimental-strip-types scripts/generate-share-images.mjs [--only=2-3]
+//   node --experimental-strip-types scripts/generate-share-images.mjs [--only=2-3] [--from=4]
+//
+// --from=N draws only boards N and up, e.g. the cards for boards just appended to lib/board-levels.ts.
 //
 // Needs Playwright with Chromium. It is imported from the global install by default; set
 // PLAYWRIGHT_MODULE to point somewhere else. Fonts are the site's own self-hosted files in
@@ -28,6 +30,7 @@ const { boardLevels } = await import('../lib/board-levels.ts');
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? '/opt/node22/lib/node_modules/playwright/index.mjs');
 
 const only = process.argv.find((a) => a.startsWith('--only='))?.slice(7);
+const from = Number(process.argv.find((a) => a.startsWith('--from='))?.slice(7) ?? 1);
 const file = (rel) => pathToFileURL(path.join(root, rel)).href;
 
 const PALETTE = {
@@ -51,8 +54,13 @@ const GLYPH = {
 const glyph = (color) => `<svg viewBox="0 0 24 24" fill="currentColor">${GLYPH[color]}</svg>`;
 const STAR = '<path d="m12 2.4 2.9 6 6.6.8-4.9 4.6 1.3 6.5L12 17.1l-5.9 3.2 1.3-6.5-4.9-4.6 6.6-.8z"/>';
 
-// A friend per board, in that board's lead colour.
+// A friend per board: the tour's three in each board's lead colour, then the daily boards take
+// turns through the whole cast.
 const FRIEND = ['zippy', 'bloo', 'vio'];
+const CAST = ['peach', 'sprout', 'poppy', 'bricko', 'moss', 'flurry', 'zippy', 'bloo', 'vio'];
+const friendFor = (board) => FRIEND[board - 1] ?? CAST[(board - 1 - FRIEND.length) % CAST.length];
+// The tour's cards say "Board 2 of 3"; a daily board's just "Board 12".
+const boardLabel = (board) => (board <= FRIEND.length ? `Board ${board} of ${FRIEND.length}` : `Board ${board}`);
 
 function boardSvgish(level) {
   const cell = level.cols === 5 ? 62 : 52;
@@ -163,14 +171,14 @@ h1 { margin-top: 34px; font-family: Fredoka; font-weight: 600; font-size: 92px; 
 </style></head><body>
 <div class="left">${boardSvgish(level)}</div>
 <div class="right">
-  <div class="brand"><img src="${file('public/assets/icon/logo-96.webp')}" alt="">OutBrick <small>Board ${board} of ${boardLevels.length}</small></div>
+  <div class="brand"><img src="${file('public/assets/icon/logo-96.webp')}" alt="">OutBrick <small>${boardLabel(board)}</small></div>
   <h1>${level.name}</h1>
   <div class="stars">${starRow}</div>
   <p class="line">${movesLine}</p>
   <p class="verdict">${verdict}</p>
 </div>
-<div class="play">Your turn <b>→</b> outbrick.site/play</div>
-<img class="friend" src="${file(`public/assets/friends/${FRIEND[board - 1]}.webp`)}" alt="">
+<div class="play">Your turn <b>→</b> outbrick.site/${board <= FRIEND.length ? 'play' : 'daily'}</div>
+<img class="friend" src="${file(`public/assets/friends/${friendFor(board)}.webp`)}" alt="">
 <div class="course">${course}</div>
 </body></html>`;
 }
@@ -199,7 +207,7 @@ const tmp = path.join(outDir, '.card.html');
 for (const [i, level] of boardLevels.entries()) {
   for (const stars of [1, 2, 3]) {
     const id = `${i + 1}-${stars}`;
-    if (only && only !== id) continue;
+    if ((only && only !== id) || i + 1 < from) continue;
     fs.writeFileSync(tmp, page(level, i + 1, stars));
     await tab.goto(pathToFileURL(tmp).href);
     await tab.evaluate(() => document.fonts.ready);

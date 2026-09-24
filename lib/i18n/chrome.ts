@@ -39,6 +39,8 @@ export type ChromeCopy = {
     costs: string;
     playGuide: string;
     whatsNew: string;
+    /** The daily board, /daily (published in English only). */
+    daily: string;
     journal: string;
     pressKit: string;
     help: string;
@@ -85,6 +87,7 @@ const en: ChromeCopy = {
     costs: 'What it costs',
     playGuide: 'Play guide',
     whatsNew: 'What’s new',
+    daily: 'Daily board',
     journal: 'Journal',
     pressKit: 'Press kit',
     help: 'Help & legal',
@@ -130,6 +133,7 @@ const fr: ChromeCopy = {
     costs: 'Ce que ça coûte',
     playGuide: 'Guide du jeu',
     whatsNew: 'Nouveautés',
+    daily: 'Plateau du jour',
     journal: 'Journal',
     pressKit: 'Kit presse',
     help: 'Aide et mentions légales',
@@ -175,6 +179,7 @@ const de: ChromeCopy = {
     costs: 'Was es kostet',
     playGuide: 'Spielanleitung',
     whatsNew: 'Was ist neu',
+    daily: 'Tagesbrett',
     journal: 'Journal',
     pressKit: 'Pressekit',
     help: 'Hilfe & Rechtliches',
@@ -220,6 +225,7 @@ const es: ChromeCopy = {
     costs: 'Lo que cuesta',
     playGuide: 'Cómo se juega',
     whatsNew: 'Novedades',
+    daily: 'Tablero del día',
     journal: 'Journal',
     pressKit: 'Kit de prensa',
     help: 'Ayuda y legal',
@@ -265,6 +271,7 @@ const ja: ChromeCopy = {
     costs: '料金のこと',
     playGuide: '遊び方ガイド',
     whatsNew: '最新情報',
+    daily: '今日のボード',
     journal: 'Journal',
     pressKit: 'プレスキット',
     help: 'ヘルプと規約',
