@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../lib/site';
-import { PlayableBoard } from '../components/playable-board';
 import { AppStoreBadge, Course, editorialNav, VillageFooter, VillageHeader } from '../village-shell';
+import { PlayBoard } from './play-board';
 import '../styles/play.css';
 
 export const metadata: Metadata = pageMetadata({
@@ -85,7 +85,7 @@ export default function PlayPage() {
               </ul>
             </div>
             <div className="play-board-wrap">
-              <PlayableBoard label="Play an OutBrick board" />
+              <PlayBoard label="Play an OutBrick board" />
             </div>
           </div>
         </section>

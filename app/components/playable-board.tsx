@@ -3,6 +3,7 @@
 import '../styles/playable-board.css';
 import {
   useCallback,
+  useEffect,
   useId,
   useReducer,
   useRef,
@@ -25,6 +26,7 @@ import {
 } from '../../lib/board-solver';
 
 const APP_STORE = 'https://apps.apple.com/us/app/outbrick/id6807997465';
+const RESULT_URL = 'https://www.outbrick.site/play/result';
 const DRAG_THRESHOLD = 10;
 
 const COLOR_NAME: Record<BrickColor, string> = {
@@ -302,6 +304,25 @@ const CONFETTI = Array.from({ length: 30 }, (_, i) => {
   };
 });
 
+/** What "Share result" sends: a static result page (app/play/result) and a line of text. */
+function shareFor(levelIndex: number, moves: number, stars: number) {
+  const level = boardLevels[levelIndex];
+  const board = levelIndex + 1;
+  const url = `${RESULT_URL}/${board}-${stars}`;
+  const title = `I cleared OutBrick board ${board} with ${plural(stars, 'star', 'stars')}`;
+  const text = `I cleared OutBrick board ${board}, ${level.name}, in ${plural(moves, 'move', 'moves')} (target ${level.target}) ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`;
+  return { url, title, text };
+}
+
+async function copyText(value: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /* ------------------------------------------------------------ component */
 
 export interface PlayableBoardProps {
@@ -323,6 +344,15 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
   const brickEls = useRef(new Map<string, HTMLButtonElement>());
   const nextBtn = useRef<HTMLButtonElement>(null);
   const uid = useId();
+  const [note, setNote] = useState<{ text: string; seq: number } | null>(null);
+
+  // A note belongs to the clear it was made on (keyed by seq), and fades on its own.
+  const shareNote = note && note.seq === state.seq ? note.text : '';
+  useEffect(() => {
+    if (!note) return;
+    const t = setTimeout(() => setNote(null), 3200);
+    return () => clearTimeout(t);
+  }, [note]);
 
   const level = boardLevels[state.level];
   const clear = isClear(state.placements);
@@ -420,6 +450,21 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
     setGrabbed(null);
     setFocused(null);
     dispatch({ type: 'level', level: n });
+  };
+
+  const shareResult = async () => {
+    const data = shareFor(state.level, state.moves, stars);
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share(data);
+        return;
+      } catch (err) {
+        // Closing the share sheet is a choice, not a failure.
+        if (err instanceof DOMException && err.name === 'AbortError') return;
+      }
+    }
+    const seq = state.seq;
+    setNote({ text: (await copyText(data.url)) ? 'Link copied' : 'Couldn’t copy link', seq });
   };
 
   const isLast = state.level === boardLevels.length - 1;
@@ -645,9 +690,33 @@ export function PlayableBoard({ className, startLevel = 0, label = 'Try an OutBr
                       <path d="M5 12h13m-5-6 6 6-6 6" />
                     </svg>
                   </button>
-                  <button type="button" className="pb-btn pb-btn-quiet" onClick={() => dispatch({ type: 'reset' })}>
-                    Replay
+                  <button
+                    type="button"
+                    className="pb-btn pb-btn-quiet pb-btn-share"
+                    aria-label="Share result"
+                    onClick={shareResult}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M12 15V3.5m-4.5 4L12 3l4.5 4.5" />
+                      <path d="M8 10.5H6.5a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6.5a2 2 0 0 0-2-2H16" />
+                    </svg>
+                    Share
                   </button>
+                  <button
+                    type="button"
+                    className="pb-btn pb-btn-quiet pb-btn-icon"
+                    aria-label="Replay"
+                    title="Replay"
+                    onClick={() => dispatch({ type: 'reset' })}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" />
+                      <path d="M3 4v5h5" />
+                    </svg>
+                  </button>
+                  <output className="pb-share-note" aria-live="polite" data-show={shareNote ? true : undefined}>
+                    {shareNote}
+                  </output>
                 </div>
                 <a className="pb-store" href={APP_STORE} target="_blank" rel="noopener noreferrer">
                   Get the full game on the <span>
