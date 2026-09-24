@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
 import { CopyButton } from '../../components/copy-button';
 import { founderQuote, pressBoilerplate } from '../../../lib/business';
-import { CONTACT_EMAIL, pageMetadata, siteUrl } from '../../../lib/site';
+import { pageMetadata, siteUrl } from '../../../lib/site';
 import { APP_STORE_URL } from '../../store-badge';
 import { pressReleases } from './releases';
 
@@ -141,11 +141,10 @@ export default function PressPage() {
           <div className="ed-prose">
             <p>
               Interviews, review access, asset requests or fact checks: use the contact form with the topic
-              set to Press &amp; media, or email Mourad directly. Replies come from the same address.
+              set to Press &amp; media. Mourad replies to press requests himself, by email.
             </p>
             <div className="ed-actions" style={{ marginTop: 26 }}>
               <a className="ed-btn" href="/contact?topic=press#form">Contact the press desk</a>
-              <a className="ed-link" style={{ marginTop: 0 }} href={`mailto:${CONTACT_EMAIL}?subject=OutBrick%20press`}>{CONTACT_EMAIL}</a>
             </div>
           </div>
         </div>

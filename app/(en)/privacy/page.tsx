@@ -166,7 +166,7 @@ export default function PrivacyPage() {
         </p>
         <p>
           <b>Deleting them sooner.</b> Ask us through the <a href="/contact?topic=privacy">contact form</a>{' '}
-          with the topic set to Privacy, or by email, and we will delete your submissions from Netlify and
+          with the topic set to Privacy, or by replying to any email from us, and we will delete your submissions from Netlify and
           from our inbox and confirm when it is done. You can also ask for a copy of what we hold, or for
           a correction.
         </p>
@@ -184,7 +184,7 @@ export default function PrivacyPage() {
           and Game Center data. This action does not delete screenshots or videos you chose to save to
           Photos or share. No face-data files are created by the tracking feature. For requests about
           information in a support message, use our <a href="/privacy-choices">privacy choices</a> page
-          or email us.
+          or the <a href="/contact?topic=privacy">contact form</a>.
         </p>
       </section>
 

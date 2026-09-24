@@ -62,8 +62,8 @@ export default function NewsletterPage() {
           <div>
             <NewsletterSignup headingLevel={2} heading="Sign up" intro="Your email address and a language. That is all we ask for." />
             <p className="ed-meta" style={{ marginTop: 22, maxWidth: '52ch' }}>
-              To come off the list, reply to any letter or write to{' '}
-              <a className="ed-link" href="mailto:mourad.hamdi@me.com?subject=OutBrick%20newsletter">mourad.hamdi@me.com</a>.
+              To come off the list, reply to any letter or use the{' '}
+              <a className="ed-link" href="/contact?topic=privacy#form">contact form</a> with the topic set to Privacy.
               How the address is stored is set out in the <a className="ed-link" href="/privacy">privacy policy</a>.
             </p>
           </div>

@@ -86,7 +86,7 @@ export default function PressKitPage() {
                 the facts, and the art, all current.
               </p>
               <div className="ed-actions">
-                <a className="ed-btn" href="mailto:mourad.hamdi@me.com?subject=OutBrick%20press">Email the developer</a>
+                <a className="ed-btn" href="/contact?topic=press#form">Contact the developer</a>
                 <a className="ed-link" href="#assets">Go to the downloads</a>
                 <a className="ed-link" href="/press">News and releases in the press room</a>
               </div>
@@ -242,11 +242,10 @@ export default function PressKitPage() {
             <h2 id="contact-title" className="ed-h2" style={{ marginTop: 14 }}>Questions go to a person.</h2>
           </div>
           <div className="ed-prose">
-            <p>For interviews, review access, asset requests or accessibility questions, write to Mourad directly. Replies come from the same address.</p>
-            <p><a className="ed-link" style={{ fontSize: '1.2rem', marginTop: 0 }} href="mailto:mourad.hamdi@me.com?subject=OutBrick%20press">mourad.hamdi@me.com</a></p>
+            <p>For interviews, review access, asset requests or accessibility questions, use the contact form with the topic set to Press &amp; media. Mourad replies himself, by email.</p>
+            <p><a className="ed-btn" href="/contact?topic=press#form">Contact the press desk</a></p>
             <div className="ed-actions" style={{ marginTop: 28 }}>
               <Badge />
-              <a className="ed-link" href="/contact?topic=press#form">Or use the contact form</a>
               <a className="ed-link" href="/press">Press room</a>
             </div>
           </div>
