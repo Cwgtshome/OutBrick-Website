@@ -592,3 +592,12 @@ export function localizeArticle(slug: string, locale: TranslatedLocale): BlogArt
     readingTime: journalUi[locale].readingTime(minutes),
   };
 }
+
+/*
+ * Every batch translation is checked at build time, published or not: a guide only goes live once
+ * all four languages carry it, but a missing section or a dropped paragraph in one language
+ * should fail the build the day it is written, not the day the last language lands.
+ */
+for (const l of translatedLocales) {
+  for (const slug of Object.keys(extraGuides[l])) localizeArticle(slug, l);
+}
