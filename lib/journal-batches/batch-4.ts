@@ -1153,7 +1153,7 @@ export const batch4: BlogArticle[] = [
       { question: 'Are colour meanings the same in every culture?', answer: 'Largely. A study of 4,598 people in 30 nations found very similar colour–emotion associations worldwide, with smaller differences linked to language and geography.' },
       { question: 'Why is contrast important in game interfaces?', answer: 'Contrast, especially the difference in lightness between an element and its background, makes things faster to read and find. Readers with low vision rely on lightness contrast more than on differences in hue.' },
       { question: 'What contrast ratio should game text have?', answer: 'The Web Content Accessibility Guidelines ask for at least 4.5:1 between normal text and its background, and 3:1 for large text, at their AA level. Games are not bound by them, but they are a sensible, well-tested floor.' },
-      { question: 'Can colour-blind players play OutBrick?', answer: 'Yes. Colour-blind glyphs are on by default, so every brick and gate carries a matching symbol as well as a colour, and VoiceOver is supported.' },
+      { question: 'Can colour-blind players play OutBrick?', answer: 'Yes. Colour-blind glyphs are on by default, so every brick and gate carries a matching symbol as well as a colour, and VoiceOver is supported. Our guide to [colour blindness in games](/blog/colour-blindness-in-games) covers how common it is and what else helps.' },
     ],
   },
 ];
