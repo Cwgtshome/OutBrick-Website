@@ -9,13 +9,30 @@ import { getAuthor, type BlogArticle } from '../../../lib/blog';
 import { getShelves, minutesOf } from '../../../lib/journal';
 import { siteUrl } from '../../../lib/site';
 import { FeedCopy } from './feed-copy';
+import { isTranslatedGuide } from '../../../lib/i18n/blog';
 
 const linkPattern = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
+/** Paths published in every language: the home page (and its sections), the play guide, what's new. */
+const everyLanguage = /^\/(?:play|whats-new)?(?:[#?].*)?$/;
+
 /**
- * Render copy that may carry [label](/path) links. On a translated page
- * (`locale` set), an internal link that does not lead into that language's
- * own pages leads to an English page, and says so with `hreflang="en"`.
+ * The same page in `locale`, when that language has it: `/`, `/#fair`, `/play`, `/whats-new`,
+ * `/blog` and any translated guide. Translations keep English paths in their copy; this maps
+ * them, so a link never points at a translation that has not been published.
+ */
+function localHref(href: string, locale: string): string | null {
+  if (everyLanguage.test(href)) return href === '/' ? `/${locale}` : href.startsWith('/#') || href.startsWith('/?') ? `/${locale}${href.slice(1)}` : `/${locale}${href}`;
+  if (href === '/blog') return `/${locale}/blog`;
+  const guide = href.match(/^\/blog\/([a-z0-9-]+)(#.*)?$/);
+  if (guide && isTranslatedGuide(guide[1]!)) return `/${locale}/blog/${guide[1]}${guide[2] ?? ''}`;
+  return null;
+}
+
+/**
+ * Render copy that may carry [label](/path) links. On a translated page (`locale` set), an
+ * internal link leads to that language's version of the page where one exists, and otherwise
+ * to the English page, saying so with `hreflang="en"`.
  */
 export function Rich({ text, locale }: { text: string; locale?: string }) {
   const parts: ReactNode[] = [];
@@ -23,9 +40,12 @@ export function Rich({ text, locale }: { text: string; locale?: string }) {
   for (const match of text.matchAll(linkPattern)) {
     const index = match.index ?? 0;
     if (index > last) parts.push(text.slice(last, index));
-    const href = match[2]!;
-    const external = /^https?:/.test(href);
-    const english = locale !== undefined && !external && href !== `/${locale}` && !href.startsWith(`/${locale}/`) && !href.startsWith(`/${locale}#`);
+    const raw = match[2]!;
+    const external = /^https?:/.test(raw);
+    const own = locale !== undefined && !external && (raw === `/${locale}` || raw.startsWith(`/${locale}/`) || raw.startsWith(`/${locale}#`));
+    const mapped = locale !== undefined && !external && !own ? localHref(raw, locale) : null;
+    const href = mapped ?? raw;
+    const english = locale !== undefined && !external && !own && !mapped;
     parts.push(
       <a key={`${href}-${index}`} href={href} {...(external ? { rel: 'noreferrer' } : {})} {...(english ? { hrefLang: 'en' } : {})}>
         {match[1]}
