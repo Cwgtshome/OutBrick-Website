@@ -42,7 +42,7 @@ Write a natural, idiomatic article that a native reader would take for original 
 
 ## Check before you finish
 `pnpm -s build` (localizeArticle throws on any count mismatch), `pnpm -s lint`,
-`node scripts/audit-seo.mjs` (0 errors), `node scripts/check-links.mjs` (all resolve). Pages only
-publish once all four languages carry a guide. To see yours rendered, temporarily add your
-slugs to the other three languages? No: instead, trust the build's shape checks and read your
-file once more against the English for accuracy and tone. Commit on your branch; do not push.
+`node scripts/audit-seo.mjs` (0 errors), `node scripts/check-links.mjs` (all resolve).
+A guide is only published once all four languages carry it, so your pages may not render yet;
+the build's shape checks still run on your file. Read your file once more against the English
+for accuracy and tone, then commit on your branch. Do not push.
