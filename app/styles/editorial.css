@@ -481,7 +481,8 @@
   padding-block: 26px 30px;
 }
 .ed-rail .ed-chip { min-height: 38px; padding: 9px 14px 8px; font-size: 0.85rem; }
-.ed-rail .ed-chip b { font-weight: 600; opacity: 0.75; }
+/* The count keeps full colour: faded, it fell under 4.5:1 on the purple and blue chips. */
+.ed-rail .ed-chip b { font-weight: 700; margin-left: 2px; font-variant-numeric: tabular-nums; }
 .ed-rail .ed-chip:hover { transform: translateY(-2px); box-shadow: 0 5px 0 var(--c-foot); }
 .ed-rail .ed-chip { transition: transform 0.18s ease, box-shadow 0.18s ease; }
 
@@ -1633,7 +1634,7 @@ ul.ed-rail { list-style: none; margin: 0; }
 .ed-search-none { padding: 4px 10px 12px; }
 .ed-search-none p { font-size: 0.98rem; color: var(--ed-on-paper); }
 .ed-search-none ul { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 10px; }
-.ed-search-none .ed-chip b { font-weight: 600; opacity: 0.8; }
+.ed-search-none .ed-chip b { font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /* ---------------- shelf filter + sort ---------------- */
 
@@ -1748,7 +1749,28 @@ ul.ed-rail { list-style: none; margin: 0; }
   text-decoration-color: color-mix(in srgb, var(--c) 70%, transparent);
 }
 .ed-follow-list a:hover { text-decoration-color: var(--c); }
-.ed-follow-list a[aria-current='true'] { color: var(--ed-gold); }
+.ed-follow-list a[aria-current='page'] { color: var(--ed-gold); }
+.ed-follow-list li { display: flex; align-items: center; gap: 10px; }
+.ed-feed-copy {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border: 0;
+  border-radius: 10px;
+  color: var(--ed-title);
+  background: color-mix(in srgb, var(--c, #f5851f) 28%, transparent);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--c-foot, #b85a10) 60%, transparent);
+  cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.18s;
+}
+.ed-feed-copy:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--c, #f5851f) 45%, transparent); }
+.ed-feed-copy:active { transform: translateY(2px); box-shadow: none; }
+.ed-feed-copy[data-copied] { background: #3fc544; color: #fff; }
+.ed-feed-copy:focus-visible { outline: 3px solid var(--ed-gold); outline-offset: 2px; }
+.ed-feed-url { margin-top: 12px; font-size: 0.9rem; color: var(--ed-lilac); }
+.ed-feed-url code { font-family: var(--font-mono, ui-monospace, monospace); user-select: all; overflow-wrap: anywhere; }
 .ed-follow-dot { flex: none; width: 16px; height: 11px; border-radius: 3px; background: var(--c); box-shadow: 0 3px 0 var(--c-foot); }
 
 /* ---------------- category and tag pages ---------------- */
@@ -2146,3 +2168,81 @@ p.ed-coll-more { display: block; }
 .ed-gamenote .gamenote-mark .brandmark-icon { width: 48px; height: 48px; }
 .ed-gamenote .gamenote-mark .brandmark-word { height: 30px; }
 .ed-download .plinth.icon.wordmark img { width: 84%; height: auto; border-radius: 0; box-shadow: none; }
+
+/* ==================================================================
+   TRANSLATED JOURNAL PAGES (/fr/blog, /de/blog/<slug> …)
+
+   The same rules the village pages use for their translations
+   (app/globals.css, `.ob-site:lang(…)`): Japanese keeps the Latin faces
+   first for Latin words and digits, falls back to the system's Japanese
+   faces, and breaks at phrase boundaries; German and French hyphenate by
+   the page's `lang` instead of overflowing a narrow column.
+   ================================================================== */
+
+.ed:lang(ja) {
+  --ed-display: 'Fredoka', 'Hiragino Maru Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', system-ui, sans-serif;
+  --ed-text: 'Figtree', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', Meiryo, system-ui, sans-serif;
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+@supports (word-break: auto-phrase) {
+  .ed:lang(ja) { word-break: auto-phrase; }
+}
+.ed:lang(ja) :is(h1, h2, h3, .ed-display, .ed-h2) { font-weight: 700; letter-spacing: 0.02em; line-height: 1.3; }
+.ed:lang(ja) :is(.ed-body p, .ed-bullets li, .ed-faq p, .ed-intro) { line-height: 1.85; }
+.ed:lang(ja) .ed-display { font-size: clamp(2.2rem, 1.3rem + 3.6vw, 4.2rem); }
+.ed:lang(ja) .ed-ahead h1 { font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3.2rem); max-width: 20ch; }
+.ed:lang(ja) .ed-mast h1 { max-width: 14ch; }
+/* a drop cap is a Latin convention; a Japanese intro opens plainly */
+.ed:lang(ja) .ed-intro::first-letter { float: none; font: inherit; color: inherit; padding: 0; }
+.ed:lang(ja) :is(.ed-chip, .ed-label, .ed-btn) { white-space: nowrap; }
+.ed:lang(ja) .ed-refs li > span[lang='en'] { word-break: normal; overflow-wrap: anywhere; }
+
+.ed:lang(de),
+.ed:lang(fr),
+.ed:lang(es) { overflow-wrap: break-word; }
+.ed:lang(de) :is(h1, h2, h3, p, li, summary),
+.ed:lang(fr) :is(h1, h2, h3, p, li, summary) { hyphens: auto; }
+.ed:lang(de) .ed-ahead h1,
+.ed:lang(fr) .ed-ahead h1,
+.ed:lang(es) .ed-ahead h1 { max-width: 20ch; }
+.ed:not(:lang(en)) .ed-mast h1 { max-width: 16ch; }
+
+/* the language switcher on a translated guide and on a translated index */
+.ed-langs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 22px;
+  font-family: var(--ed-display);
+  font-size: 0.9rem;
+  color: var(--ed-lilac-2);
+}
+.ed-langs ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.ed-langs a {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 2px solid rgba(201, 194, 255, 0.28);
+  color: var(--ed-lilac);
+  text-decoration: none;
+  font-weight: 500;
+}
+.ed-langs a:hover { color: #fff; border-color: var(--ed-lilac); }
+.ed-langs a[aria-current] { background: var(--ed-gold); border-color: var(--ed-gold); color: var(--ed-ink); }
+
+/* the translated index: a one-column masthead, and a line pointing to the English journal */
+.ed-mast-solo { grid-template-columns: minmax(0, 1fr); }
+.ed-mast-solo .ed-lede { max-width: 62ch; }
+.ed-more-en {
+  margin-top: clamp(32px, 4vw, 48px);
+  padding-top: 24px;
+  border-top: 2px solid rgba(201, 194, 255, 0.16);
+  color: var(--ed-lilac);
+}
+/* on paper, the language switcher is only noise */
+@media print {
+  .ed-langs { display: none; }
+}

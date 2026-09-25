@@ -1,3 +1,5 @@
+import { batchArticles } from './journal-batches/index.ts';
+
 export type Author = {
   id: string;
   name: string;
@@ -476,13 +478,13 @@ const refs = {
   aarpGamers: {
     id: 'aarp-gamers-2023',
     label: 'AARP Research (2023)',
-    citation: 'Kakulla, B. (2023). Gamers 50-plus are a growing force in the tech market. AARP Research.',
+    citation: 'Kakulla, B. (2023). The 50-plus gamer of today and tomorrow. AARP Research.',
     url: 'https://doi.org/10.26419/res.00585.001',
   },
   aarpAccessibility: {
     id: 'aarp-accessibility-2024',
     label: 'AARP Research (2024)',
-    citation: 'Kakulla, B. (2024). Games should be designed for everyone. AARP Research.',
+    citation: 'Kakulla, B. (2024). 2024 gamer accessibility survey: Annotated questionnaire. AARP Research.',
     url: 'https://doi.org/10.26419/res.00791.001',
   },
   w3cTargetSize: {
@@ -571,7 +573,7 @@ const refs = {
   },
 };
 
-export const articles: BlogArticle[] = [
+const baseArticles: BlogArticle[] = [
   {
     slug: 'why-two-minute-puzzles-feel-good',
     title: 'Why a two-minute puzzle can feel like a proper reset',
@@ -1507,7 +1509,7 @@ export const articles: BlogArticle[] = [
         sourceIds: ['pokemon-place-2019', 'gaming-fit-2025'],
       },
     ],
-    references: [refs.pokemonPlace, refs.pokemonMotivation, refs.pokemonCommunity, refs.mitSocial, refs.gamingFit],
+    references: [refs.pokemonPlace, refs.pokemonMotivation, refs.pokemonCommunity, refs.mitSocial, refs.gamingFit, refs.motivation],
     relatedSlugs: ['animal-crossing-shared-time', 'commuter-puzzle-two-minute', 'daily-rituals-that-dont-demand-you'],
     pullQuote: 'The best location-based design adds meaning to the world without pretending the screen is the whole world.',
   },
@@ -2795,6 +2797,9 @@ export const articles: BlogArticle[] = [
     ],
   },
 ];
+
+/** Every article: the originals above, then the batches in lib/journal-batches/. */
+export const articles: BlogArticle[] = [...baseArticles, ...batchArticles];
 
 export function getArticle(slug: string) {
   return articles.find((article) => article.slug === slug);

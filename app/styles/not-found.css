@@ -9,6 +9,8 @@
   --nf-green: #3fc544;
   --nf-green-dark: #1f7f2a;
   --nf-display: var(--font-display, 'Fredoka', ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif);
+  /* The stray brick hangs off the board on purpose; it must not widen the page. */
+  overflow-x: clip;
 
   box-sizing: border-box;
   min-height: 100vh;

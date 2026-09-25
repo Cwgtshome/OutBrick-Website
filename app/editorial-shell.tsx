@@ -9,7 +9,9 @@
  */
 
 import type { ReactNode } from 'react';
-import { editorialNav, VillageFooter, VillageHeader } from './village-shell';
+import { chromeCopy } from '../lib/i18n/chrome';
+import { localePath, type Locale, type TranslatedLocale } from '../lib/i18n/locales';
+import { editorialNav, editorialNavFor, localeStoreUrl, VillageFooter, VillageHeader } from './village-shell';
 import { appStoreUrl } from './store-badge';
 
 const currentHref: Record<string, string> = {
@@ -34,10 +36,28 @@ export function EditorialHeader({ current }: { current?: Section }) {
   );
 }
 
-export function EditorialFooter() {
+/**
+ * The masthead of a translated journal page (/fr/blog …): the editorial nav in
+ * that language, whose "Journal" is that language's journal index.
+ */
+function TranslatedEditorialHeader({ locale, current }: { locale: TranslatedLocale; current?: Section }) {
   return (
     <div className="ob-site ed-chrome">
-      <VillageFooter />
+      <VillageHeader
+        links={editorialNavFor(locale)}
+        current={current === 'blog' ? `/${locale}/blog` : undefined}
+        home={localePath(locale, '/')}
+        label={chromeCopy[locale].primaryNav}
+        locale={locale}
+      />
+    </div>
+  );
+}
+
+export function EditorialFooter({ languages }: { languages?: Partial<Record<Locale, string>> } = {}) {
+  return (
+    <div className="ob-site ed-chrome">
+      <VillageFooter languages={languages} />
     </div>
   );
 }
@@ -49,6 +69,8 @@ export function EditorialPage({
   className = '',
   children,
   before,
+  locale,
+  languages,
 }: {
   current?: Section;
   tone?: string;
@@ -56,23 +78,40 @@ export function EditorialPage({
   children: ReactNode;
   /** Rendered before the masthead — the reading-progress bar. */
   before?: ReactNode;
+  /** Set on the translated journal pages: skip link, masthead and footer in that language. */
+  locale?: TranslatedLocale;
+  /** The page's own versions in other languages, for the footer's language picker. */
+  languages?: Partial<Record<Locale, string>>;
 }) {
+  if (locale) {
+    return (
+      <div className={`ed ${className}`} data-tone={tone}>
+        <a className="ed-skip" href="#main">{chromeCopy[locale].skip}</a>
+        {before}
+        <TranslatedEditorialHeader locale={locale} current={current} />
+        <main id="main">{children}</main>
+        <div className="ob-site ed-chrome">
+          <VillageFooter locale={locale} languages={languages} />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={`ed ${className}`} data-tone={tone}>
       <a className="ed-skip" href="#main">Skip to content</a>
       {before}
       <EditorialHeader current={current} />
       <main id="main">{children}</main>
-      <EditorialFooter />
+      <EditorialFooter languages={languages} />
     </div>
   );
 }
 
 export type Crumb = { href?: string; label: string };
 
-export function Crumbs({ items }: { items: Crumb[] }) {
+export function Crumbs({ items, label = 'Breadcrumb' }: { items: Crumb[]; label?: string }) {
   return (
-    <nav className="ed-crumbs" aria-label="Breadcrumb">
+    <nav className="ed-crumbs" aria-label={label}>
       <ol>
         {items.map((item, index) =>
           item.href && index < items.length - 1 ? (
@@ -100,8 +139,16 @@ export function Studs({ count = 3 }: { count?: number }) {
   );
 }
 
-/** Apple's own badge artwork, at a size the guidelines allow. */
-export function Badge() {
+/** Apple's own badge artwork, at a size the guidelines allow. A translated page links to its own storefront. */
+export function Badge({ locale }: { locale?: TranslatedLocale } = {}) {
+  if (locale) {
+    const copy = chromeCopy[locale];
+    return (
+      <a className="ed-badge" href={localeStoreUrl('journal', locale)} aria-label={copy.badgeLabel}>
+        <img src="/assets/badge/appstore-black.svg" alt={copy.badgeAlt} width={132} height={44} />
+      </a>
+    );
+  }
   return (
     <a className="ed-badge" href={appStoreUrl('journal')} aria-label="Download OutBrick on the App Store">
       <img src="/assets/badge/appstore-black.svg" alt="Download on the App Store" width={132} height={44} />

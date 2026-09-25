@@ -20,6 +20,8 @@ import {
   type Locale,
   type LocalizedPage,
 } from '../lib/i18n/locales';
+import { Flag } from './components/flag';
+import { LangsCloser } from './components/langs-closer';
 import { HeaderMotion } from './components/home-header-motion';
 import { appStoreUrl } from './store-badge';
 
@@ -171,9 +173,9 @@ export const editorialNav: NavLink[] = [
 ];
 
 /**
- * The editorial masthead in `locale`. "The game" leads to that language's
- * home page; everything else is only published in English, so on a
- * translated page those links carry `hreflang="en"`.
+ * The editorial masthead in `locale`. "The game" and "Journal" lead to that
+ * language's home page and journal index; everything else is only published
+ * in English, so on a translated page those links carry `hreflang="en"`.
  */
 export function editorialNavFor(locale: Locale): NavLink[] {
   if (locale === 'en') return editorialNav;
@@ -181,7 +183,9 @@ export function editorialNavFor(locale: Locale): NavLink[] {
   return editorialNav.map((link, i) =>
     link.href === '/'
       ? { href: localePath(locale, '/'), label: labels[i] }
-      : { href: link.href, label: labels[i], hrefLang: 'en' },
+      : link.href === '/blog'
+        ? { href: `/${locale}/blog`, label: labels[i] }
+        : { href: link.href, label: labels[i], hrefLang: 'en' },
   );
 }
 
@@ -289,23 +293,35 @@ export function AlsoRead({ current }: { current?: string }) {
 }
 
 /**
- * The language switcher: the same page in every language it is published in.
- * Plain links, so it works without script; each names its language in that
- * language, with `lang` and `hreflang` to match.
+ * The language picker: a flag and the language's own name, opening onto the same page in every
+ * language it is published in. A <details> disclosure, so it opens and every choice is a plain
+ * link without script; each option names its language in that language, with `lang` and
+ * `hreflang` to match. `languages` names the page's own versions (a journal guide in each
+ * language); otherwise a page published only in English leads to each language's home page.
  */
-export function LanguageSwitcher({ locale, page }: { locale: Locale; page: LocalizedPage }) {
+export function LanguageSwitcher({ locale, page, languages }: { locale: Locale; page?: LocalizedPage; languages?: Partial<Record<Locale, string>> }) {
+  const label = chromeCopy[locale].language;
   return (
-    <nav className="langs" aria-label={chromeCopy[locale].language}>
-      <ul>
-        {locales.map((l) => (
-          <li key={l}>
-            <a href={localePath(l, page)} lang={l} hrefLang={l} aria-current={l === locale ? 'page' : undefined}>
-              {localeNames[l]}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <details className="langs">
+      <summary aria-label={`${label}: ${localeNames[locale]}`}>
+        <Flag locale={locale} />
+        <span lang={locale}>{localeNames[locale]}</span>
+        <svg className="chev" viewBox="0 0 12 8" width="12" height="8" aria-hidden="true"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      </summary>
+      <LangsCloser />
+      <nav aria-label={label}>
+        <ul>
+          {locales.map((l) => (
+            <li key={l}>
+              <a href={languages?.[l] ?? localePath(l, page ?? '/')} lang={l} hrefLang={l} aria-current={l === locale ? 'page' : undefined}>
+                <Flag locale={l} />
+                <span>{localeNames[l]}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </details>
   );
 }
 
@@ -315,7 +331,7 @@ export function LanguageSwitcher({ locale, page }: { locale: Locale; page: Local
  * guide), and adds the language switcher. Links to pages only published in
  * English carry `hreflang="en"` on a translated page.
  */
-export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?: LocalizedPage }) {
+export function VillageFooter({ locale = 'en', page, languages }: { locale?: Locale; page?: LocalizedPage; languages?: Partial<Record<Locale, string>> }) {
   const copy = chromeCopy[locale].footer;
   const home = localePath(locale, '/');
   // Pages only published in English: say so to the browser on translated pages.
@@ -343,7 +359,7 @@ export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?:
                 </li>
               ))}
             </ul>
-            {page ? <LanguageSwitcher locale={locale} page={page} /> : null}
+            <LanguageSwitcher locale={locale} page={page} languages={languages} />
           </div>
           <div>
             <h2>{copy.game}</h2>
@@ -354,7 +370,9 @@ export function VillageFooter({ locale = 'en', page }: { locale?: Locale; page?:
               <li><a href={`${home}#fair`}>{copy.costs}</a></li>
               <li><a href={localePath(locale, '/play')}>{copy.playGuide}</a></li>
               <li><a href={localePath(locale, '/whats-new')}>{copy.whatsNew}</a></li>
-              <li><a href="/blog" hrefLang={en}>{copy.journal}</a></li>
+              <li><a href="/daily" hrefLang={en}>{copy.daily}</a></li>
+              {/* The journal has an index in every language (its translated guides). */}
+              <li><a href={locale === 'en' ? '/blog' : `/${locale}/blog`}>{copy.journal}</a></li>
               <li><a href="/press-kit" hrefLang={en}>{copy.pressKit}</a></li>
             </ul>
           </div>
