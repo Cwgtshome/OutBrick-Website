@@ -1,3 +1,4 @@
+import { Flag } from './components/flag';
 import { localizedApplicationNode } from '../lib/i18n/application';
 import { localizedAsset } from '../lib/i18n/assets';
 import { APP_STORE_URL, appStoreStorefrontUrl } from '../lib/app-store-url';
@@ -144,7 +145,7 @@ export async function localizePageTree(node: ReactNode, locale: TranslatedLocale
   if (Array.isArray(node)) return Children.toArray(await Promise.all(node.map(item => localizePageTree(item, locale))));
   if (!isValidElement(node)) return node;
   const element = node as ReactElement<Record<string, unknown>>;
-  const props: Record<string,unknown> = { ...(localizedObject(element.props, locale) as Record<string, unknown>), locale };
+  const props: Record<string,unknown> = { ...(localizedObject(element.props, locale) as Record<string, unknown>), ...(element.type === Flag ? {} : { locale }) };
   const clientReference = clientIdentities.has(element.type) || (element.type as unknown as { $$typeof?: symbol }).$$typeof === Symbol.for('react.client.reference');
   const name = !clientReference && typeof element.type === 'function' ? element.type.name : '';
   if (name === 'VillageHeader' && typeof props.current === 'string' && props.current.startsWith('/')) props.current=localizedPublicHref(props.current,locale);
