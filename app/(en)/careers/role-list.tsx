@@ -1,5 +1,8 @@
 'use client';
 
+import { useLocale } from '../../components/locale-context';
+import { clientTree } from '../../../lib/i18n/client-tree';
+import { interactiveWords } from '../../../lib/i18n/interactive';
 import { useState } from 'react';
 import { useHydrated } from '../../components/netlify-form';
 import type { Job, Team } from '../../../lib/business';
@@ -9,13 +12,14 @@ import type { Job, Team } from '../../../lib/business';
  * only appears once script runs, so without it nothing is hidden and nothing is broken.
  */
 export function RoleList({ jobs, teams }: { jobs: Job[]; teams: Team[] }) {
+  const locale = useLocale();
   const ready = useHydrated();
   const [team, setTeam] = useState<Team | 'All'>('All');
 
   const shown = team === 'All' ? jobs : jobs.filter((job) => job.team === team);
   const count = (t: Team) => jobs.filter((job) => job.team === t).length;
 
-  return (
+  return clientTree((
     <>
       {ready ? (
         <fieldset className="bz-filter">
@@ -29,7 +33,7 @@ export function RoleList({ jobs, teams }: { jobs: Job[]; teams: Team[] }) {
         </fieldset>
       ) : null}
       <p className="bz-sr" aria-live="polite">
-        {ready ? `Showing ${shown.length} of ${jobs.length} roles${team === 'All' ? '' : ` in ${team}`}.` : ''}
+        {ready ? interactiveWords[locale].roles(shown.length, jobs.length, team === 'All' ? undefined : team) : ''}
       </p>
       <ul className="bz-roles">
         {shown.map((job) => (
@@ -48,5 +52,5 @@ export function RoleList({ jobs, teams }: { jobs: Job[]; teams: Team[] }) {
         ))}
       </ul>
     </>
-  );
+  ), locale);
 }

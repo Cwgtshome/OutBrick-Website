@@ -80,7 +80,7 @@ export const de5: ExtraGuides = {
     title: 'Motivieren Bestenlisten oder entmutigen sie?',
     dek: 'Bestenlisten können Einsatz steigern wie ein schweres Ziel oder unten still Motivation kosten. Was Experimente zeigen und wie man sie gut nutzt.',
     imageAlt: 'Ein grüner und ein roter Stein-Freund links und rechts von einem Handy mit der OutBrick-Reisekarte bei Cherry Blossom Town',
-    tags: ['Bestenliste', 'Rangliste', 'Gamification', 'Motivation', 'sozialer Vergleich'],
+    tags: ["Ranglisten", "Gamification", "Motivation", "sozialer Vergleich", "gemeinsam spielen"],
     intro: 'Eine Bestenliste ist die einfachste soziale Funktion, die ein Spiel haben kann: eine Liste von Namen, sortiert nach Rang. Sie ist auch eine der umstrittensten. Für manche ist sie der beste Grund für noch eine Runde, andere werfen einen einzigen Blick darauf, sehen sich auf Platz 48.112 und öffnen sie nie wieder. Psychologie und Mensch-Computer-Interaktion testen Bestenlisten seit mehr als einem Jahrzehnt, in Hörsälen, auf Crowdsourcing-Plattformen und im Labor. Die Antwort auf „Funktionieren sie?“ lautet am Ende: „Wofür, und für wen?“',
     keyTakeaways: [
       'In Experimenten kann eine Bestenliste den Einsatz etwa so stark steigern, wie wenn man jemandem ein schwieriges Ziel setzt.',
@@ -220,7 +220,7 @@ export const de5: ExtraGuides = {
     title: 'Warum ein Tagesrätsel zum gemeinsamen Ritual wird',
     dek: 'Einmal am Tag dasselbe Rätsel für alle: was die Forschung zu Ritualen, geteilter Aufmerksamkeit und geteilten Gefühlen über tägliche Spiele sagt.',
     imageAlt: 'Ein roter Stein-Freund und Sprout links und rechts von einem Handy mit dem OutBrick-Startbildschirm und einem grünen Button für Level 521',
-    tags: ['Tagesrätsel', 'tägliche Rätsel', 'Rituale', 'gemeinsam spielen', 'Wordle'],
+    tags: ["tägliche Spiele", "Rituale", "gemeinsam spielen", "Tagespuzzle", "Wordle"],
     intro: 'Es gibt eine besondere Art von Nachricht, die in Familienchats, zwischen alten Freunden und über Schreibtische hinweg hin und her geht: ein kleines Raster aus bunten Quadraten, eine Punktzahl, vielleicht ein einzelnes Wort. Es bedeutet „Ich habe das heutige Rätsel gemacht“, und die Antwort bedeutet „Ich auch“. Kreuzworträtsel in der Zeitung funktionieren seit hundert Jahren so, und eine Welle täglicher Spiele hat das weltweit gemacht. Gelöst wird das Rätsel oft allein, in einer freien Minute, und doch ist die Erfahrung auf eine Weise sozial, wie es ein aus Tausenden ausgewähltes Rätsel selten ist. Die Psychologie hat einige gute Erklärungen dafür.',
     keyTakeaways: [
       'Erlebnisse fühlen sich intensiver an, wenn wir wissen, dass jemand anderes gerade dasselbe erlebt.',
@@ -285,7 +285,7 @@ export const de5: ExtraGuides = {
     title: 'Videospiel-Nostalgie: warum alte Spiele so guttun',
     dek: 'Warum die Spiele deiner Kindheit dich noch immer ziehen, was die Nostalgieforschung über Stimmung und Verbundenheit sagt und warum Remakes sich verkaufen.',
     imageAlt: 'Ein rosa Stein-Freund mit Sternzauberstab und ein grüner Stein-Freund links und rechts von einem Handy mit der OutBrick-Reisekarte bei Bamboo Springs',
-    tags: ['Videospiel-Nostalgie', 'Retro-Spiele', 'Nostalgie', 'Wohlbefinden', 'Remakes'],
+    tags: ["Videospiel-Nostalgie", "Retro-Spiele", "Nostalgie", "Wohlbefinden", "Spielerfolg"],
     intro: 'Spiel die ersten Töne eines Spiels, das du mit zehn geliebt hast, und es passiert etwas, das wenig mit dem Spiel zu tun hat. Du erinnerst dich an den Teppich, auf dem du saßt, an den Freund mit dem zweiten Controller, an den langen Sommernachmittag, den es gefüllt hat. Nostalgie hat eine ganze Ecke der Spielebranche aufgebaut: Remaster, Retro-Konsolen, Pixel-Art-Hommagen und den steten Strom von Menschen, die Spiele neu installieren, die sie vor Jahrzehnten zum ersten Mal gespielt haben. Die Psychologie hielt Nostalgie einst für eine Art Heimweh, beinahe eine Krankheit. Die moderne Forschung erzählt eine viel wärmere Geschichte, und Spiele sind eines ihrer deutlichsten Beispiele.',
     keyTakeaways: [
       'Nostalgie ist ein häufiges, überwiegend positives Gefühl, oft ausgelöst durch gedrückte Stimmung oder Einsamkeit, das meist die Stimmung hebt und das Gefühl von Verbundenheit stärkt.',
@@ -356,7 +356,7 @@ export const de5: ExtraGuides = {
     title: 'Freunde herausfordern, ohne Druck zu machen',
     dek: 'Wettstreit unter Freunden kann Spaß machen oder zermürben. Was die Motivationsforschung über Sieger, Verlierer und Teams sagt und wie es freundlich bleibt.',
     imageAlt: 'Ein grüner und ein roter Stein-Freund links und rechts von einem Handy mit der OutBrick-Reisekarte bei Bamboo Springs',
-    tags: ['freundschaftlicher Wettstreit', 'mit Freunden spielen', 'Wettbewerb und Kooperation', 'Motivation', 'gemeinsam spielen'],
+    tags: ["freundschaftlicher Wettbewerb", "gemeinsam spielen", "Wettbewerb und Kooperation", "Motivation", "mit Freunden spielen"],
     intro: 'Einige der schönsten Momente beim Spielen kommen von Freunden: die Nachricht „Schlag das mal“, der Familienstreit ums Brettspiel, die Kollegin, die drei Sterne auf einem Level geholt hat, an dem du noch hängst. Einige der schlimmsten auch. Wettstreit mit Menschen, die wir kennen, wiegt schwerer als mit Fremden, weil er berührt, wie wir uns selbst sehen und wie wir glauben, dass sie uns sehen. Die gute Nachricht: Die Forschung hat Jahrzehnte damit verbracht herauszufinden, was Wettbewerb, der Menschen beflügelt, von dem unterscheidet, der sie zermürbt, und das meiste davon lässt sich direkt darauf übertragen, wie man einen Freund herausfordert.',
     keyTakeaways: [
       'Wir vergleichen uns mit Menschen, die uns ähnlich sind, deshalb zählt die Punktzahl eines Freundes mehr als die eines Fremden.',

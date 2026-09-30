@@ -9,6 +9,7 @@
  */
 
 import type { Locale } from './locales';
+import { additionalBoardNames } from './board-names.ts';
 
 export type BrickColour = 'red' | 'yellow' | 'teal' | 'violet' | 'blue' | 'green';
 export type Direction = 'up' | 'down' | 'left' | 'right';
@@ -373,5 +374,9 @@ const ja: BoardStrings = {
   hint: 'ブロックをドラッグまたはスワイプすると滑ります。キーボードでは、Tabでステージに移動し、矢印キーでブロックを選んでから、Shiftを押しながら矢印キーで滑らせます。Enterを押してから矢印キーでも動かせます。Escapeで持ち上げたブロックを置きます。ControlまたはCommand＋Zで1手戻せます。ブロックは壁やほかのブロック、違う色のゲートに当たるまで滑り、同じ色のゲートから外に出ます。',
   gatesPrefix: 'ゲート：',
 };
+
+for (const [locale, strings] of Object.entries({ fr, de, es, ja })) {
+  Object.assign(strings.levelName, additionalBoardNames[locale as Locale]);
+}
 
 export const boardStrings: Record<Locale, BoardStrings> = { en, fr, de, es, ja };

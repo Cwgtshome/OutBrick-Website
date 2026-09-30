@@ -1,5 +1,5 @@
 import type { ExtraGuides } from '../../i18n/blog';
-import { appStoreUrl } from '../../app-store-url';
+import { appStoreUrl } from '../../app-store-url.ts';
 
 export const ja10: ExtraGuides = {
   'puzzle-walkthrough-board-mismatch': {

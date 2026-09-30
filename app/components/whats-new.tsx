@@ -10,6 +10,8 @@
  */
 
 import type { Metadata } from 'next';
+import { releaseExtras } from '../../lib/i18n/release-extras';
+import { homeCopy } from '../../lib/i18n/home';
 import { chromeCopy } from '../../lib/i18n/chrome';
 import { localeAlternates, localePath, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { formatReleaseDate, whatsNewCopy } from '../../lib/i18n/whats-new';
@@ -34,7 +36,7 @@ export function whatsNewMetadata(locale: Locale): Metadata {
       ...localeAlternates(locale, '/whats-new'),
       // The plain string form on purpose: vinext 1.0.0-beta.5 fails to prerender the translated
       // pages when `types` takes the `[{ url, title }]` form next to `languages`.
-      types: { 'application/rss+xml': '/whats-new/feed.xml' },
+      types: { 'application/rss+xml': localePath(locale, '/whats-new/feed.xml') },
     },
     openGraph: {
       type: 'website',
@@ -43,9 +45,9 @@ export function whatsNewMetadata(locale: Locale): Metadata {
       locale: ogLocales[locale],
       title,
       description,
-      images: [{ url: '/og.png', width: 1200, height: 630, alt: 'OutBrick mascots and home screen' }],
+      images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, width: 1200, height: 630, alt: homeCopy[locale].meta.ogImageAlt }],
     },
-    twitter: { card: 'summary_large_image', title, description, images: ['/og.png'] },
+    twitter: { card: 'summary_large_image', title, description, images: [locale === 'en' ? '/og.png' : `/og/${locale}.png`] },
   };
 }
 
@@ -90,13 +92,13 @@ function ReleaseEntry({ release, locale }: { release: Release; locale: Locale })
 
 export function WhatsNewPage({ locale }: { locale: Locale }) {
   const copy = whatsNewCopy[locale];
+  const extra = releaseExtras[locale];
   const chrome = chromeCopy[locale];
   const current = currentReleaseIn(locale);
   const shown: Release[] = locale === 'en' ? releases : [current];
   const pageUrl = localeUrl(locale, '/whats-new');
   const home = localePath(locale, '/');
   const storeUrl = localeStoreUrl('whats-new', locale);
-  const en = locale === 'en' ? undefined : 'en';
 
   const structuredData = {
     '@context': 'https://schema.org',
@@ -110,7 +112,7 @@ export function WhatsNewPage({ locale }: { locale: Locale }) {
     dateModified: current.date,
     mainEntity: {
       '@type': 'ItemList',
-      name: 'OutBrick release notes',
+      name: extra.schema,
       itemListOrder: 'https://schema.org/ItemListOrderDescending',
       numberOfItems: shown.length,
       itemListElement: shown.map((release, index) => ({
@@ -147,7 +149,7 @@ export function WhatsNewPage({ locale }: { locale: Locale }) {
                 <p className="ed-lede">{copy.lede(current.version, formatReleaseDate(current.date, locale))}</p>
                 <div className="ed-actions">
                   <a className="ed-btn" href={storeUrl}>{copy.getUpdate}</a>
-                  <a className="ed-link" href="/whats-new/feed.xml" hrefLang={en} type="application/rss+xml">{copy.rss}</a>
+                  <a className="ed-link" href={localePath(locale, '/whats-new/feed.xml')} type="application/rss+xml">{copy.rss}</a>
                 </div>
               </div>
               <a className="wn-hero-brick ed-slab lit" href={`#${releaseAnchor(current.version)}`}>
@@ -167,40 +169,33 @@ export function WhatsNewPage({ locale }: { locale: Locale }) {
               {shown.map((release) => (
                 <ReleaseEntry key={release.version} release={release} locale={locale} />
               ))}
-              {locale === 'en' ? (
+              {(
                 <li>
                   <article id="earlier" className="wn-release wn-earlier" aria-labelledby="earlier-title">
                     <div className="wn-rail">
                       <span className="wn-chip ed-slab lit" data-tone="teal">
                         <Studs count={2} />
-                        <small>Version</small>
+                        <small>{copy.version}</small>
                         <b>{firstRelease.version}</b>
                       </span>
                       <p className="wn-date">
-                        <span className="obx-sr">Released </span>
-                        <time dateTime={firstRelease.date}>{formatReleaseDate(firstRelease.date, 'en')}</time>
+                        <span className="obx-sr">{copy.released} </span>
+                        <time dateTime={firstRelease.date}>{formatReleaseDate(firstRelease.date, locale)}</time>
                       </p>
                     </div>
                     <div className="wn-body">
-                      <h2 id="earlier-title" className="ed-h2">Earlier releases</h2>
+                      <h2 id="earlier-title" className="ed-h2">{extra.earlier}</h2>
                       <div className="ed-prose">
                         <p>
-                          OutBrick first went on sale on the App Store on {formatReleaseDate(firstRelease.date, 'en')},
-                          as version {firstRelease.version}. The notes for the updates between then and 4.2 aren’t
-                          reproduced here; this page starts with 4.2.
+                          {extra.history(formatReleaseDate(firstRelease.date, locale), firstRelease.version)}
                         </p>
                       </div>
                     </div>
                   </article>
                 </li>
-              ) : null}
+              )}
             </ol>
-            {copy.olderInEnglish ? (
-              <p className="ed-meta" style={{ marginTop: 40 }}>
-                {copy.olderInEnglish.note}{' '}
-                <a className="ed-link" href="/whats-new#earlier" hrefLang="en">{copy.olderInEnglish.link}</a>
-              </p>
-            ) : null}
+
           </div>
         </section>
         <Bond thin />
@@ -218,21 +213,20 @@ export function WhatsNewPage({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        {locale === 'en' ? (
+        {(
           <section id="newsletter" className="ed-band-cream ed-band" aria-labelledby="wn-news-title" style={{ scrollMarginTop: 90 }}>
             <div className="ed-wrap wn-news-grid">
               <div>
-                <p className="ed-label">Newsletter</p>
-                <h2 id="wn-news-title" className="ed-h2" style={{ marginTop: 14 }}>Hear about the next one first.</h2>
+                <p className="ed-label">{extra.newsletter}</p>
+                <h2 id="wn-news-title" className="ed-h2" style={{ marginTop: 14 }}>{extra.next}</h2>
                 <p className="ed-lede" style={{ marginTop: 16 }}>
-                  One short email when a new village opens or a big update lands. About once a month,
-                  never more. <a className="ed-link" href="/newsletter">What you’ll get</a>
+                  {extra.note}{' '}<a className="ed-link" href={localePath(locale, '/newsletter')}>{extra.get}</a>
                 </p>
               </div>
               <NewsletterSignup showHeading={false} />
             </div>
           </section>
-        ) : null}
+        )}
 
         <JsonLd data={structuredData} />
         <JsonLd data={breadcrumbData} />

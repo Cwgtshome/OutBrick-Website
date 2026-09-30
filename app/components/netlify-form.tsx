@@ -17,6 +17,10 @@
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode, type SubmitEvent } from 'react';
 
+import { formWords } from '../../lib/i18n/forms';
+import { useLocale } from './locale-context';
+import type { Locale } from '../../lib/i18n/locales';
+
 type Errors = Record<string, string>;
 type Status = 'idle' | 'sending' | 'sent' | 'failed';
 
@@ -55,30 +59,31 @@ const isField = (el: unknown): el is FieldElement =>
   !el.closest('[hidden]');
 
 /** The message for one invalid field, from its own `data-*` wording where it has some. */
-function messageFor(el: FieldElement): string {
+function messageFor(el: FieldElement, locale: Locale): string {
+  const t = formWords[locale];
   const v = el.validity;
   if (v.valid) return '';
-  const label = el.dataset.label ?? 'this field';
+  const label = el.dataset.label ?? t.field;
   if (v.valueMissing) {
     if (el.dataset.missing) return el.dataset.missing;
-    if (el instanceof HTMLInputElement && el.type === 'checkbox') return 'Please tick this box to continue.';
-    if (el instanceof HTMLSelectElement) return `Choose ${label}.`;
-    return `Enter ${label}.`;
+    if (el instanceof HTMLInputElement && el.type === 'checkbox') return t.checkbox;
+    if (el instanceof HTMLSelectElement) return t.choose(label);
+    return t.enter(label);
   }
-  if (v.typeMismatch && el.type === 'email') return 'Enter an email address in the form name@example.com.';
-  if (v.typeMismatch && el.type === 'url') return 'Enter a full web address, starting with https://';
-  if (v.tooShort && 'minLength' in el) return `Please write at least ${el.minLength} characters.`;
-  if (v.tooLong && 'maxLength' in el) return `Please keep this under ${el.maxLength} characters.`;
+  if (v.typeMismatch && el.type === 'email') return t.email;
+  if (v.typeMismatch && el.type === 'url') return t.url;
+  if (v.tooShort && 'minLength' in el) return t.short(el.minLength);
+  if (v.tooLong && 'maxLength' in el) return t.long(el.maxLength);
   if (v.patternMismatch && el.dataset.pattern) return el.dataset.pattern;
-  return el.validationMessage || `Check ${label}.`;
+  return t.check(label);
 }
 
-function validate(form: HTMLFormElement): { errors: Errors; first?: FieldElement } {
+export function validateForm(form: HTMLFormElement, locale: Locale): { errors: Errors; first?: FieldElement } {
   const errors: Errors = {};
   let first: FieldElement | undefined;
   for (const el of Array.from(form.elements)) {
     if (!isField(el)) continue;
-    const message = messageFor(el);
+    const message = messageFor(el, locale);
     if (message && !errors[el.name]) {
       errors[el.name] = message;
       first ??= el;
@@ -114,6 +119,8 @@ export function NetlifyForm({
   /** What replaces the form once the background POST succeeds. */
   success: (values: URLSearchParams) => ReactNode;
 }) {
+  const locale = useLocale();
+  const t = formWords[locale];
   // Native validation is the no-script fallback; once hydrated, the form validates itself.
   const enhanced = useHydrated();
   const [errors, setErrors] = useState<Errors>({});
@@ -139,7 +146,7 @@ export function NetlifyForm({
       // Deferred until React has handled the same event: a re-render from here, before a
       // controlled field's onChange has run, would put back its old value and eat the keystroke.
       window.setTimeout(() => {
-        const message = messageFor(target);
+        const message = messageFor(target, locale);
         setErrors((current) => {
           if ((current[target.name] ?? '') === message) return current;
           const next = { ...current };
@@ -153,17 +160,17 @@ export function NetlifyForm({
     return () => {
       for (const type of ['input', 'change', 'focusout']) form.removeEventListener(type, recheck);
     };
-  }, [sent]);
+  }, [sent, locale]);
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     attempted.current = true;
-    const result = validate(form);
+    const result = validateForm(form, locale);
     setErrors(result.errors);
     const count = Object.keys(result.errors).length;
     if (count) {
-      setSummary(count === 1 ? 'One field needs attention before this can be sent.' : `${count} fields need attention before this can be sent.`);
+      setSummary(t.summary(count));
       result.first?.focus();
       return;
     }
@@ -209,17 +216,16 @@ export function NetlifyForm({
       {/* The honeypot: people never see it; a bot that fills it in is dropped by Netlify. */}
       <div hidden>
         <label>
-          Leave this empty: <input name="bot-field" tabIndex={-1} autoComplete="off" />
+          {t.empty} <input name="bot-field" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
-      <p className="obf-note">Fields are required unless marked optional.</p>
+      <p className="obf-note">{t.required}</p>
       {children({ errors, status })}
       <p className="obf-alert" role="alert">
         {summary}
         {status === 'failed' ? (
           <>
-            That did not send — the connection may have dropped. Your answers are still here, so
-            try again in a moment.
+            {t.failed}
           </>
         ) : null}
       </p>
@@ -254,10 +260,11 @@ function describedBy(ids: ReturnType<typeof useIds>, hint: unknown, error: unkno
 }
 
 function Label({ htmlFor, label, optional }: { htmlFor: string; label: string; optional?: boolean }) {
+  const t = formWords[useLocale()];
   return (
     <label htmlFor={htmlFor}>
       {label}
-      {optional ? <span className="obf-optional"> (optional)</span> : null}
+      {optional ? <span className="obf-optional"> ({t.optional})</span> : null}
     </label>
   );
 }
@@ -425,6 +432,7 @@ export function SelectField({
 /** The consent tick every form ends with, linking the privacy policy's section on forms. */
 export function ConsentField({ error, children }: { error?: string; children: ReactNode }) {
   const ids = useIds('consent');
+  const t = formWords[useLocale()];
   return (
     <div className="obf-field obf-check" data-invalid={error ? '' : undefined}>
       <input
@@ -435,7 +443,7 @@ export function ConsentField({ error, children }: { error?: string; children: Re
         required
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? ids.error : undefined}
-        data-missing="Please tick this box so we can use your details to reply."
+        data-missing={t.consent}
       />
       <label htmlFor={ids.id}>{children}</label>
       {error ? <p className="obf-error" id={ids.error}>{error}</p> : null}
@@ -444,10 +452,11 @@ export function ConsentField({ error, children }: { error?: string; children: Re
 }
 
 export function SubmitRow({ status, label, next }: { status: Status; label: string; next: ReactNode }) {
+  const t = formWords[useLocale()];
   return (
     <div className="obf-submit">
       <button className="obf-btn" type="submit" disabled={status === 'sending'} aria-disabled={status === 'sending' || undefined}>
-        {status === 'sending' ? 'Sending…' : label}
+        {status === 'sending' ? t.sending : label}
       </button>
       <p className="obf-next">{next}</p>
     </div>

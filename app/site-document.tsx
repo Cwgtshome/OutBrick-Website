@@ -11,6 +11,11 @@
  */
 
 import type { Metadata } from 'next';
+import { LocaleProvider } from './components/locale-context';
+import { isTranslatedLocale, localePath, type Locale } from '../lib/i18n/locales';
+import { homeCopy } from '../lib/i18n/home';
+import { journalUi } from '../lib/i18n/blog';
+import { siteWords } from '../lib/i18n/site';
 import './styles/fonts.css';
 import './globals.css';
 import { siteUrl } from '../lib/site';
@@ -82,6 +87,40 @@ export const rootMetadata: Metadata = {
   verification: { google: 'yaGNGIBSmMo6k68leHcAutXwGQ4L0S6tdRR_rQH8J68' },
 };
 
+export function localizedRootMetadata(locale: Locale): Metadata {
+  const copy = homeCopy[locale].meta;
+  const { alternates: _alternates, ...shared } = rootMetadata;
+  return { ...shared, title: { default: copy.title, template: '%s — OutBrick' }, description: copy.description,
+    authors: [{ name: 'Mourad Hamdi', url: localePath(locale, '/authors/mourad-hamdi') }],
+    keywords: undefined, manifest: locale === 'en' ? '/site.webmanifest' : `/${locale}/site.webmanifest`,
+    openGraph: { ...rootMetadata.openGraph, title: copy.ogTitle, description: copy.ogDescription, images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, width: 1200, height: 630, alt: copy.ogImageAlt }] },
+    twitter: { card: 'summary_large_image', title: copy.ogTitle, description: copy.ogDescription, images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, alt: copy.ogImageAlt }] },
+  };
+}
+function localizedSiteGraph(locale: Locale) {
+  if (locale === 'en') return siteGraph();
+  const source = JSON.parse(JSON.stringify(siteGraph())) as { '@graph': Record<string, unknown>[] };
+  const t = siteWords[locale];
+  for (const node of source['@graph']) {
+    if (node['@type'] === 'Organization') {
+      node.description = t.organization;
+      const logo = node.logo as Record<string, unknown> | undefined;
+      if (logo) logo.caption = t.icon;
+      const contact = node.contactPoint as Record<string, unknown>;
+      contact.contactType = t.support; contact.url = `${siteUrl}${localePath(locale, '/contact')}`;
+    } else if (node['@type'] === 'Person') {
+      node.jobTitle = journalUi[locale].authors['mourad-hamdi'].role;
+      node.description = journalUi[locale].authors['mourad-hamdi'].bio;
+      node.url = `${siteUrl}${localePath(locale, '/authors/mourad-hamdi')}`;
+    } else if (node['@type'] === 'WebSite') {
+      node.description = t.website; node.inLanguage = locale; node.url = `${siteUrl}/${locale}`;
+      const action = node.potentialAction as { target: { urlTemplate: string } };
+      action.target.urlTemplate = `${siteUrl}/${locale}/blog?q={search_term_string}`;
+    }
+  }
+  return source;
+}
+
 export function SiteDocument({ lang, children }: { lang: string; children: React.ReactNode }) {
   return (
     // suppressHydrationWarning: the inline script below adds `js` to <html>
@@ -117,9 +156,9 @@ export function SiteDocument({ lang, children }: { lang: string; children: React
         <link rel="author" href="/humans.txt" />
       </head>
       <body className="antialiased">
-        {children}
+        <LocaleProvider locale={lang as Locale}>{children}</LocaleProvider>
         {/* The organisation, its founder and the website: the graph every page's own JSON-LD points into. */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteGraph()).replace(/</g, '\\u003c') }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localizedSiteGraph(isTranslatedLocale(lang) ? lang : 'en')).replace(/</g, '\\u003c') }} />
       </body>
     </html>
   );

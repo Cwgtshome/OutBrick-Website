@@ -1,5 +1,5 @@
 import type { ExtraGuides } from '../../i18n/blog';
-import { appStoreUrl } from '../../app-store-url';
+import { appStoreUrl } from '../../app-store-url.ts';
 export const es8: ExtraGuides = {
   'block-blast-plus-vs-outbrick': {
     title: 'Block Blast!+ y OutBrick: dos tipos de puzle de bloques',

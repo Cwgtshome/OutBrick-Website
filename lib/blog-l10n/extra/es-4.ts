@@ -6,7 +6,7 @@ export const es4: ExtraGuides = {
     title: '¿Qué hace justo un puzle? Dificultad, fracaso y confianza',
     dek: 'Difícil no es lo mismo que injusto. Lo que dice la investigación sobre el reto y el fracaso de los puzles en los que confiamos y de los que abandonamos.',
     imageAlt: 'Un tablero real de OutBrick en un iPhone, flanqueado por Moss con su cinturón de herramientas y Sprout con un brote en la cabeza, sobre una pared de ladrillo azul marino',
-    tags: ['diseño de puzles', 'dificultad en videojuegos', 'diseño de juegos', 'fracaso en los juegos', 'puzles justos'],
+    tags: ['diseño de puzles', 'diseño de dificultad', 'oficio de crear juegos', 'fracaso en los juegos', 'diseño de juegos'],
     intro: 'Quien juega a puzles conoce dos formas muy distintas de quedarse atascado. Una es la buena: ves todas las piezas, conoces las reglas y sencillamente aún no has dado con la idea. La otra es la que te hace soltar el móvil: la respuesta dependía de algo que no podías ver, el juego castigó un intento que no tenías forma de evitar o un solo despiste te costó diez minutos. Las dos son «difíciles». Solo una parece justa. Los investigadores de videojuegos llevan quince años separando una de otra, y lo que han encontrado le sirve a cualquiera que diseñe puzles y a cualquiera que esté decidiendo cuáles merecen su tarde.',
     keyTakeaways: [
       'Los jugadores viven varios tipos de reto, y un puzle parece justo cuando su reto es de los que hacen pensar, no información oculta ni castigos arbitrarios.',
@@ -74,7 +74,7 @@ export const es4: ExtraGuides = {
     title: 'Game feel y juice: por qué importa un buen deslizamiento',
     dek: 'El juice es la respuesta extra que hace que un toque se sienta bien. Estudios con miles de jugadores muestran que ayuda, hasta cierto punto; luego estorba.',
     imageAlt: 'Un tablero real de OutBrick en un iPhone entre Moss con su cinturón de herramientas y Vio con auriculares, con ladrillos flotando sobre una pared de ladrillo azul marino',
-    tags: ['game feel', 'juice en videojuegos', 'diseño de juegos', 'feedback en juegos', 'sensación de juego'],
+    tags: ['sensación de juego', 'diseño expresivo', 'diseño de juegos', 'oficio de crear juegos', 'respuesta'],
     intro: 'Coge dos versiones del mismo juego. En una, un ladrillo cruza el tablero y se para. En la otra, se desliza, frena suavemente al llegar, da un leve golpe contra la pared y levanta un poco de polvo de la puerta al salir. Las reglas son idénticas. Una parece una hoja de cálculo y la otra, un juguete. Los diseñadores llaman a esa diferencia game feel, la sensación de juego, y a la respuesta extra y prescindible que la produce la llaman «juice». Es una de las ideas más comentadas del desarrollo de videojuegos y, hasta hace poco, una de las menos puestas a prueba. La investigación que ya existe deja un mensaje claro a quien hace juegos: el juice es real, y pasarse también.',
     keyTakeaways: [
       'El juice es feedback redundante: reacciones visuales, sonoras o hápticas extra a una acción que las reglas no necesitan pero que el jugador siente.',
@@ -140,7 +140,7 @@ export const es4: ExtraGuides = {
     title: 'Cómo generan niveles de puzle los ordenadores',
     dek: 'La generación procedimental puede crear puzles sin fin, pero tener solución no basta. Cómo funcionan los generadores y dónde fallan.',
     imageAlt: 'Un tablero real de OutBrick en un iPhone, con Poppy sosteniendo una varita con una estrella a un lado y Moss al otro, entre ladrillos flotantes',
-    tags: ['generación procedimental', 'diseño de puzles', 'desarrollo de videojuegos', 'generación de niveles', 'puzles de bloques deslizantes'],
+    tags: ['generación procedimental', 'diseño de puzles', 'desarrollo de videojuegos', 'oficio de crear juegos', 'puzles de bloques deslizantes'],
     intro: 'Entre el nivel dibujado a mano y el nivel infinito está la generación procedimental de contenido: software que crea contenido de juego, desde terrenos y mazmorras hasta el puzle que juegas en el autobús. Para los puzles es especialmente tentadora. Un ordenador puede producir un tablero nuevo en milisegundos y nunca se queda sin ideas. También puede producir miles de tableros sin solución, triviales o técnicamente correctos y sin ninguna gracia. Cómo han abordado ese problema los investigadores es un buen recorrido por lo que hace que un puzle sea un puzle, y una guía útil para jugadores que se preguntan si los «niveles infinitos» de una ficha de la tienda valen algo.',
     keyTakeaways: [
       'La mayoría de los generadores de puzles funcionan por generación y prueba: proponer un candidato, evaluarlo, quedarse con los buenos y buscar otros mejores.',
@@ -198,7 +198,7 @@ export const es4: ExtraGuides = {
     title: 'Dificultad dinámica: ¿deberían adaptarse los juegos a ti?',
     dek: 'Muchos juegos se ajustan en silencio a tu habilidad. Qué dicen los estudios, por qué infla la confianza del jugador y por qué conviene preguntar.',
     imageAlt: 'Un iPhone con la clasificación semanal de OutBrick, entre Flurry con un gorro de pompón a rayas y un Zippy amarillo que guiña un ojo',
-    tags: ['ajuste dinámico de dificultad', 'dificultad adaptativa', 'diseño de juegos', 'control del jugador', 'dificultad en videojuegos'],
+    tags: ['ajuste dinámico de dificultad', 'diseño de dificultad', 'oficio de crear juegos', 'autonomía del jugador', 'diseño de juegos'],
     intro: 'Mueres tres veces en el mismo tramo de un juego y, al cuarto intento, parece un poco más fácil. ¿Iban más lentos los enemigos o por fin le pillaste el truco? A menudo no lo puedes saber, y es a propósito. El ajuste dinámico de la dificultad, o DDA por sus siglas en inglés, consiste en cambiar el reto de un juego mientras juegas, según cómo te vaya. Promete a cada jugador un juego hecho a su medida. También plantea preguntas incómodas sobre la honestidad, sobre quién decide lo difícil que debe ser un juego y sobre qué significa una victoria cuando el juego te ha echado una mano. Esto es lo que dice la investigación, y dónde nos hemos plantado con nuestros propios puzles.',
     keyTakeaways: [
       'En los estudios, la dificultad adaptativa suele mejorar la experiencia del jugador, pero los detalles importan: los jugadores pueden perder la sensación de control cuando el sistema lo decide todo.',
@@ -262,7 +262,7 @@ export const es4: ExtraGuides = {
     title: 'Tutoriales que enseñan sin explicar: qué funciona',
     dek: 'Un estudio con 45 000 jugadores vio que los tutoriales solo compensaban en juegos complejos. Qué se sabe de enseñar jugando, las pistas y la primera hora.',
     imageAlt: 'Un iPhone con el mapa del Viaje de OutBrick en Button Factory, entre Flurry con un gorro de pompón y Bloo con su reloj',
-    tags: ['tutoriales de videojuegos', 'onboarding', 'diseño de juegos', 'aprender a jugar', 'diseño de niveles'],
+    tags: ['tutoriales de videojuegos', 'introducción al juego', 'diseño de juegos', 'oficio de crear juegos', 'juegos de aprendizaje'],
     intro: 'Casi todos nos hemos saltado un tutorial. Algunos nos lo hemos saltado, nos hemos perdido y hemos vuelto a buscarlo. Unos cuantos hemos borrado un juego porque empezaba con diez pantallas de instrucciones antes de dejarnos tocar nada. Enseñar a un jugador nuevo es uno de los trabajos más difíciles del diseño de juegos: si explicas demasiado poco, se pierde; si explicas demasiado, se va antes de que empiece el juego. La buena noticia es que es uno de los rincones del diseño de juegos mejor estudiados, con experimentos en los que han participado decenas de miles de jugadores. Los resultados son sorprendentemente coherentes, y apuntan a juegos que enseñan sobre todo dejándote jugar.',
     keyTakeaways: [
       'En un estudio con más de 45 000 jugadores, los tutoriales aumentaron el tiempo de juego hasta un 29 % en el juego más complejo, pero no marcaron una diferencia significativa en dos más sencillos.',
@@ -319,7 +319,7 @@ export const es4: ExtraGuides = {
     title: 'El sonido del éxito: cómo el audio moldea la experiencia',
     dek: 'El sonido cambia la inmersión, la tensión y la competencia percibida, y la música altera la noción del tiempo. Qué dicen los estudios y cómo jugar sin él.',
     imageAlt: 'Un iPhone con el mapa del Viaje de OutBrick en Cherry Blossom Town, entre Moss con su cinturón de herramientas y un Zippy amarillo que guiña un ojo',
-    tags: ['audio en videojuegos', 'diseño de sonido', 'música de videojuegos', 'feedback sonoro', 'experiencia del jugador'],
+    tags: ['audio en videojuegos', 'diseño de sonido', 'respuesta', 'oficio de crear juegos', 'experiencia del jugador'],
     intro: 'Quita el sonido a un juego que conoces bien y pasa algo raro. Las reglas no han cambiado, pero todo parece más plano, más lento, curiosamente menos seguro. El clic de una pieza al encajar, la nota que sube cuando estás a punto de despejar el tablero, el pequeño acorde de una victoria: te decían cosas sin que notaras que te las estaban diciendo. El sonido es una de las partes más potentes y menos visibles del diseño de juegos. Los investigadores han medido sus efectos sobre la inmersión, las emociones e incluso sobre el tiempo que los jugadores creen haber jugado. Y como tanta gente juega en el móvil sin sonido, la investigación también deja una lección sobre lo que nunca se le debería pedir al sonido que haga solo.',
     keyTakeaways: [
       'En un experimento controlado, jugar con sonido mejoró todas las dimensiones medidas de la experiencia del jugador, desde la inmersión y el flow hasta la competencia y las emociones positivas.',
@@ -382,7 +382,7 @@ export const es4: ExtraGuides = {
     title: 'Cajas de botín, recompensas variables y monetización ética',
     dek: 'Gastar en cajas de botín se asocia de forma constante al juego problemático. Qué dicen los estudios, qué es la monetización depredadora y una prueba justa.',
     imageAlt: 'Un iPhone con el mapa del Viaje de OutBrick en Cloud Carnival, entre un Zippy amarillo que guiña un ojo y un Bricko rojo',
-    tags: ['cajas de botín', 'loot boxes', 'monetización', 'ética en los videojuegos', 'juegos para móvil'],
+    tags: ['cajas de botín', 'monetización', 'ética en los videojuegos', 'oficio de crear juegos', 'juegos móviles'],
     intro: 'Una caja de botín es algo sencillo: pagas, abres y recibes algo, pero no sabes qué hasta que ya es tarde para cambiar de idea. Se han convertido en una de las funciones más estudiadas de los videojuegos, y en una de las más reguladas. La investigación ya es lo bastante amplia como para afirmar algunas cosas con claridad, y para ser honestos sobre lo que todavía no puede afirmar. También da a jugadores y creadores una prueba práctica para cualquier forma en que un juego pide dinero, incluida la nuestra. OutBrick gana dinero con compras opcionales y vídeos con recompensa que solo se ven si los pides, así que al final hemos intentado aplicarnos la misma prueba.',
     keyTakeaways: [
       'En muchos estudios, gastar en cajas de botín se asocia a síntomas de juego problemático; un metaanálisis situó la correlación en torno a 0,26, pequeña pero replicable.',
@@ -445,7 +445,7 @@ export const es4: ExtraGuides = {
     title: 'Patrones oscuros en juegos para móvil: cómo detectarlos',
     dek: 'Ventanas insistentes, monedas confusas, ofertas en tu peor momento: qué dice la investigación del diseño manipulador en los juegos y cómo detectarlo.',
     imageAlt: 'Un iPhone con la tienda de OutBrick, sus ofertas especiales y el Brick Pass, entre Poppy con una varita con una estrella y Bloo con su reloj',
-    tags: ['patrones oscuros', 'dark patterns', 'ética en los videojuegos', 'juegos para móvil', 'monetización'],
+    tags: ['patrones oscuros', 'ética en los videojuegos', 'juegos móviles', 'monetización', 'juego saludable'],
     intro: 'El término «patrón oscuro» (dark pattern) se acuñó para las webs: la casilla ya marcada, el botón de cancelar en gris sobre gris, la suscripción que se contrata con un toque y se da de baja con doce. Los juegos heredaron todos esos trucos e inventaron algunos propios. Como un juego está diseñado para absorberte, desde dentro puede costar ver la línea entre lo que engancha y lo que manipula. Investigadores de interacción persona-ordenador, protección del consumidor y estudios sobre adicciones han empezado a trazar esa línea. Su trabajo da a los jugadores un vocabulario para esa sensación de que un juego juega en su contra, y a los diseñadores, un espejo. Hacemos un juego gratuito, así que también nos hemos puesto delante del espejo.',
     keyTakeaways: [
       'Los patrones oscuros son decisiones de diseño que anteponen los intereses del creador a los del usuario, mediante la insistencia, la obstrucción, el ocultamiento, la interferencia en la interfaz o la acción forzada.',
@@ -510,7 +510,7 @@ export const es4: ExtraGuides = {
     title: 'Por qué nos encariñamos con los personajes de videojuegos',
     dek: 'Admiramos a los personajes, nos preocupan y los echamos de menos. La investigación sobre el apego, los vínculos parasociales y lo adorable explica por qué.',
     imageAlt: 'Un tablero real de OutBrick en un iPhone entre Vio con auriculares y Peach con un melocotoncito en la cabeza, sobre una pared de ladrillo azul marino',
-    tags: ['personajes de videojuegos', 'mascotas de videojuegos', 'apego a personajes', 'relaciones parasociales', 'diseño de personajes'],
+    tags: ['personajes de videojuegos', 'mascotas', 'apego del jugador', 'diseño de juegos', 'oficio de crear juegos'],
     intro: 'Hay quien llora a personajes que nunca existieron. Les ponen su nombre a sus mascotas, se preocupan por ellos entre partida y partida y sienten una pequeña punzada cuando dejan atrás a un compañero. Nada de esto es nuevo: el público creaba vínculos unilaterales con los locutores de radio mucho antes de que existieran los videojuegos. Pero los juegos añaden algo que las películas y los libros no pueden, porque el personaje reacciona a ti, y a veces eres responsable de él. La investigación sobre la relación entre jugador y personaje ya es lo bastante rica como para explicar gran parte de esa atracción, incluido por qué un personaje que nunca dice una palabra puede importar igualmente. También plantea una pregunta que todo estudio con una mascota debería hacerse: ¿qué les debemos a los jugadores que acaban queriéndola?',
     keyTakeaways: [
       'Los jugadores crean varios tipos distintos de apego con los personajes, desde admirar su habilidad hasta preocuparse por su bienestar.',
@@ -567,7 +567,7 @@ export const es4: ExtraGuides = {
     title: 'El color en los juegos: contraste, significado y emoción',
     dek: 'Lo que la psicología del color puede y no puede decir al diseño de juegos, por qué el contraste pesa más que el tono y cómo hacer piezas legibles.',
     imageAlt: 'Un tablero real de OutBrick con ladrillos de colores en un iPhone, entre Moss con su cinturón de herramientas y Flurry con un gorro de pompón a rayas',
-    tags: ['color en videojuegos', 'psicología del color', 'contraste', 'daltonismo', 'diseño de juegos'],
+    tags: ['color en videojuegos', 'diseño de juegos', 'contraste', 'visión del color', 'oficio de crear juegos'],
     intro: 'El color es lo primero en lo que te fijas en casi cualquier juego y lo último en lo que piensa casi cualquier jugador. El rojo es peligro, el verde es adelante, el dorado es tesoro, y nadie tuvo que decírtelo. Los diseñadores se apoyan en el color constantemente, para crear un ambiente, para señalar lo importante y, en un puzle de ordenar colores, para transmitir las propias reglas. La divulgación sobre psicología del color está llena de afirmaciones rotundas: el azul calma, el rojo excita, el amarillo da hambre. La investigación es más interesante y más prudente. Lo que más respalda es menos vistoso que el estado de ánimo: contraste, coherencia y no depender nunca solo del color.',
     keyTakeaways: [
       'El color influye en las emociones y la conducta, pero la investigación es joven y muchas afirmaciones populares sobre colores concretos van más allá de las pruebas.',

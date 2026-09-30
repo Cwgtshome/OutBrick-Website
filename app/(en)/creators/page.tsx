@@ -67,7 +67,7 @@ export default function CreatorsPage() {
   };
 
   return (
-    <EditorialPage className="bz">
+    <EditorialPage page={'/creators'} className="bz">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Creators kit' }]} />

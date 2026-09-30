@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { siteUrl } from '../../../lib/site';
@@ -9,7 +10,7 @@ const description =
 export const metadata: Metadata = {
   title: 'How the OutBrick Journal reads research',
   description,
-  alternates: { canonical: '/research' },
+  alternates: localeAlternates('en', '/research' ),
   openGraph: {
     type: 'website',
     url: `${siteUrl}/research`,
@@ -57,7 +58,7 @@ export default function ResearchPage() {
   );
 
   return (
-    <EditorialPage current="research">
+    <EditorialPage page={'/research'} current="research">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Research method' }]} />

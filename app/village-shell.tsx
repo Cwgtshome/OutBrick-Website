@@ -11,6 +11,9 @@
 
 import { socialProfiles, type SocialNetwork } from '../lib/site';
 import type { CSSProperties, ReactNode } from 'react';
+import { publicPages } from '../lib/i18n/public-pages';
+import { legalPages } from '../lib/i18n/legal-pages';
+import { siteWords } from '../lib/i18n/site';
 import { chromeCopy } from '../lib/i18n/chrome';
 import {
   localeNames,
@@ -179,13 +182,7 @@ export const editorialNav: NavLink[] = [
 export function editorialNavFor(locale: Locale): NavLink[] {
   if (locale === 'en') return editorialNav;
   const labels = chromeCopy[locale].editorialNav;
-  return editorialNav.map((link, i) =>
-    link.href === '/'
-      ? { href: localePath(locale, '/'), label: labels[i] }
-      : link.href === '/blog'
-        ? { href: `/${locale}/blog`, label: labels[i] }
-        : { href: link.href, label: labels[i], hrefLang: 'en' },
-  );
+  return editorialNav.map((link, i) => ({ href: localePath(locale, link.href), label: labels[i] }));
 }
 
 const menuColours = ['#e2352f', '#ffc53d', '#26b9b0', '#7b5cf0', '#3b8bf0', '#3fc544'];
@@ -210,7 +207,13 @@ export function VillageHeader({
   /** Language of the masthead's own words (badge, menu, "back to top"). English by default. */
   locale?: Locale;
 }) {
+  if (home === '/' && locale !== 'en') home = localePath(locale, '/');
   const copy = chromeCopy[locale];
+  const foot = copy.footer;
+  if (links === docNav && locale !== 'en') {
+    const labels = [foot.support, foot.privacy, foot.privacyChoices, foot.terms, foot.license];
+    links = docNav.map((link, i) => ({ href: localePath(locale, link.href), label: labels[i] }));
+  }
   return (
     <header className={`site ${links.length > 5 ? 'many' : ''}`} data-site-header="">
       <div className="wrap">
@@ -270,18 +273,19 @@ const documentIndex: { href: string; label: string; note: string }[] = [
   { href: '/contact', label: 'Contact', note: 'A real line to the team' },
 ];
 
-export function AlsoRead({ current }: { current?: string }) {
+export function AlsoRead({ current, locale = 'en' }: { current?: string; locale?: Locale }) {
+  const text = (value: string) => locale === 'en' ? value : publicPages[locale][value] ?? legalPages[locale][value] ?? value;
   return (
     <section className="alsoread band-panel">
       <div className="wrap">
         <Course />
-        <p className="eyebrow">Every page on this domain</p>
+        <p className="eyebrow">{text('Every page on this domain')}</p>
         <ul>
           {documentIndex.map((entry) => (
             <li key={entry.href}>
-              <a href={entry.href} aria-current={current === entry.href ? 'page' : undefined}>
-                {entry.label}
-                <small>{entry.note}</small>
+              <a href={localePath(locale, entry.href)} aria-current={current === entry.href ? 'page' : undefined}>
+                {text(entry.label)}
+                <small>{text(entry.note)}</small>
               </a>
             </li>
           ))}
@@ -333,8 +337,6 @@ export function LanguageSwitcher({ locale, page, languages }: { locale: Locale; 
 export function VillageFooter({ locale = 'en', page, languages }: { locale?: Locale; page?: LocalizedPage; languages?: Partial<Record<Locale, string>> }) {
   const copy = chromeCopy[locale].footer;
   const home = localePath(locale, '/');
-  // Pages only published in English: say so to the browser on translated pages.
-  const en = locale === 'en' ? undefined : 'en';
   return (
     <footer className="site">
       <div className="wrap">
@@ -347,13 +349,13 @@ export function VillageFooter({ locale = 'en', page, languages }: { locale?: Loc
             <p className="blurb">
               {copy.blurb}
             </p>
-            <ul className="social" aria-label="OutBrick on social media">
+            <ul className="social" aria-label={siteWords[locale].social}>
               {/* Icons only: the network's name is in the link for screen readers and on hover. */}
               {socialProfiles.map((profile) => (
                 <li key={profile.network} className={profile.live ? 'live' : 'soon'}>
-                  <a href={profile.url} rel={profile.live ? 'me noopener' : 'noopener'} target="_blank" title={`OutBrick on ${profile.label}`}>
+                  <a href={profile.url} rel={profile.live ? 'me noopener' : 'noopener'} target="_blank" title={siteWords[locale].on(profile.label)}>
                     <SocialIcon network={profile.network} />
-                    <span className="sr-only">OutBrick on {profile.label}</span>
+                    <span className="sr-only">{siteWords[locale].on(profile.label)}</span>
                   </a>
                 </li>
               ))}
@@ -369,34 +371,34 @@ export function VillageFooter({ locale = 'en', page, languages }: { locale?: Loc
               <li><a href={`${home}#fair`}>{copy.costs}</a></li>
               <li><a href={localePath(locale, '/play')}>{copy.playGuide}</a></li>
               <li><a href={localePath(locale, '/whats-new')}>{copy.whatsNew}</a></li>
-              <li><a href="/daily" hrefLang={en}>{copy.daily}</a></li>
+              <li><a href={localePath(locale, '/daily')}>{copy.daily}</a></li>
               {/* The journal has an index in every language (its translated guides). */}
               <li><a href={locale === 'en' ? '/blog' : `/${locale}/blog`}>{copy.journal}</a></li>
-              <li><a href="/press-kit" hrefLang={en}>{copy.pressKit}</a></li>
+              <li><a href={localePath(locale, '/press-kit')}>{copy.pressKit}</a></li>
             </ul>
           </div>
           <div>
             <h2>{copy.help}</h2>
             <ul>
-              <li><a href="/support" hrefLang={en}>{copy.support}</a></li>
-              <li><a href="/privacy" hrefLang={en}>{copy.privacy}</a></li>
-              <li><a href="/privacy-choices" hrefLang={en}>{copy.privacyChoices}</a></li>
-              <li><a href="/terms" hrefLang={en}>{copy.terms}</a></li>
-              <li><a href="/license-agreement" hrefLang={en}>{copy.license}</a></li>
-              <li><a href="/eula" hrefLang={en}>{copy.eula}</a></li>
-              <li><a href="/age-rating" hrefLang={en}>{copy.age}</a></li>
-              <li><a href="/accessibility" hrefLang={en}>{copy.accessibility}</a></li>
-              <li><a href="/refunds" hrefLang={en}>{copy.refunds}</a></li>
+              <li><a href={localePath(locale, '/support')}>{copy.support}</a></li>
+              <li><a href={localePath(locale, '/privacy')}>{copy.privacy}</a></li>
+              <li><a href={localePath(locale, '/privacy-choices')}>{copy.privacyChoices}</a></li>
+              <li><a href={localePath(locale, '/terms')}>{copy.terms}</a></li>
+              <li><a href={localePath(locale, '/license-agreement')}>{copy.license}</a></li>
+              <li><a href={localePath(locale, '/eula')}>{copy.eula}</a></li>
+              <li><a href={localePath(locale, '/age-rating')}>{copy.age}</a></li>
+              <li><a href={localePath(locale, '/accessibility')}>{copy.accessibility}</a></li>
+              <li><a href={localePath(locale, '/refunds')}>{copy.refunds}</a></li>
             </ul>
           </div>
           <div>
             <h2>{copy.company}</h2>
             <ul>
-              <li><a href="/press" hrefLang={en}>{copy.pressRoom}</a></li>
-              <li><a href="/creators" hrefLang={en}>{copy.creators}</a></li>
-              <li><a href="/affiliates" hrefLang={en}>{copy.affiliates}</a></li>
-              <li><a href="/careers" hrefLang={en}>{copy.careers}</a></li>
-              <li><a href="/contact" hrefLang={en}>{copy.contact}</a></li>
+              <li><a href={localePath(locale, '/press')}>{copy.pressRoom}</a></li>
+              <li><a href={localePath(locale, '/creators')}>{copy.creators}</a></li>
+              <li><a href={localePath(locale, '/affiliates')}>{copy.affiliates}</a></li>
+              <li><a href={localePath(locale, '/careers')}>{copy.careers}</a></li>
+              <li><a href={localePath(locale, '/contact')}>{copy.contact}</a></li>
             </ul>
           </div>
         </div>

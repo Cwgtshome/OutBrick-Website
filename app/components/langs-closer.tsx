@@ -9,12 +9,28 @@ import { useEffect } from 'react';
  */
 export function LangsCloser() {
   useEffect(() => {
+    const syncLinks = () => {
+      for (const link of document.querySelectorAll<HTMLAnchorElement>('footer.site details.langs a[hreflang]')) {
+        const target = new URL(link.href, location.href);
+        if (target.origin !== location.origin) continue;
+        const language = link.hreflang;
+        if (!['en', 'fr', 'de', 'es', 'ja'].includes(language)) continue;
+        const route = location.pathname.replace(/^\/(fr|de|es|ja)(?=\/|$)/, '') || '/';
+        target.pathname = language === 'en' ? route : `/${language}${route === '/' ? '' : route}`;
+        target.search = location.search;
+        target.hash = location.hash;
+        link.href = target.href;
+      }
+    };
+    syncLinks();
     const open = () => document.querySelector<HTMLDetailsElement>('footer.site details.langs[open]');
     const onPointer = (event: PointerEvent) => {
+      syncLinks();
       const details = open();
       if (details && !details.contains(event.target as Node)) details.open = false;
     };
     const onKey = (event: KeyboardEvent) => {
+      syncLinks();
       const details = open();
       if (event.key === 'Escape' && details) {
         details.open = false;

@@ -28,7 +28,7 @@ export default function NewsletterPage() {
   );
 
   return (
-    <EditorialPage>
+    <EditorialPage page={'/newsletter'}>
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Newsletter' }]} />

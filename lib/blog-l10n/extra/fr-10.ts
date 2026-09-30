@@ -1,5 +1,5 @@
 import type { ExtraGuides } from '../../i18n/blog';
-import { appStoreUrl } from '../../app-store-url';
+import { appStoreUrl } from '../../app-store-url.ts';
 
 /** Complete French localization of journal batch 10. */
 export const fr10: ExtraGuides = {

@@ -6,7 +6,7 @@ export const de2: ExtraGuides = {
     title: 'Zocken vor dem Schlafen: Was die Forschung sagt',
     dek: 'Ruiniert ein Spiel am Abend deinen Schlaf? Was Schlaflabor, Umfragen und Forschung zum Aufschieben der Bettzeit zeigen – und was du heute testen kannst.',
     imageAlt: 'Flurry mit gestreifter Bommelmütze und Peach stehen links und rechts neben einem iPhone, das die OutBrick-Reisekarte bei Cherry Blossom Town zeigt, vor einer indigoblauen Steinwand',
-    tags: ['Schlaf', 'Zocken vor dem Schlafen', 'gesund spielen', 'Bildschirmzeit', 'Einschlafen'],
+    tags: ["Schlaf", "gesundes Spielen", "Spielgewohnheiten", "Schlafenszeit", "Bildschirmzeit"],
     intro: 'Es ist halb zwölf, das Licht ist aus, und du bist nur noch ein Spielfeld vom Schlaf entfernt. Oder drei. Die Sorge, dass ein spätes Spiel dich heimlich Erholung kostet, ist weit verbreitet, und es gibt echte Forschung dazu. Es gibt allerdings auch eine Menge Forschung, die die einfache Version komplizierter macht. Die Daten sprechen dafür, dass die Länge der Sitzung und das, was sie verdrängt, wichtiger sind als die Tatsache, dass du überhaupt zum Spiel gegriffen hast.',
     keyTakeaways: [
       'In Experimenten im Schlaflabor verzögerte eine normale Spielrunde vor dem Schlafen das Einschlafen nur leicht; eine deutlich längere kostete fast eine halbe Stunde Schlaf.',
@@ -85,7 +85,7 @@ export const de2: ExtraGuides = {
     title: 'Mikropausen im Job: Hilft ein kurzes Spiel beim Auftanken?',
     dek: 'Laut einer Metaanalyse heben Pausen bis zehn Minuten die Energie, kaum die Leistung. Wo ein kurzes Spiel passt, wo nicht, und wie Pausen besser werden.',
     imageAlt: 'Poppy mit ihrem Zauberstab mit Sternspitze und der rote Bricko neben einem iPhone, das ein OutBrick-Feld der Stufe Super Hard zeigt, davor schwebende Steine an einer indigoblauen Wand',
-    tags: ['Mikropausen', 'Pause bei der Arbeit', 'Wohlbefinden', 'Casual Games', 'Erholung'],
+    tags: ["Mikropausen", "Wohlbefinden", "kurze Runden", "Gelegenheitsspiele", "Erholung"],
     intro: 'Irgendwann gegen drei Uhr nachmittags fängt die Aufmerksamkeit an auszufransen. Du liest denselben Absatz zweimal, öffnest einen Tab und weißt nicht mehr, wozu. Viele greifen in diesem Moment zum Handy, und ein schnelles Spiel ist eines der Dinge, nach denen sie greifen. Ist das eine echte Pause oder nur eine andere Art, Aufmerksamkeit zu verbrauchen? Die Forschung zu Mikropausen, den kurzen Unterbrechungen zwischen Arbeitsaufgaben, liefert eine brauchbarere Antwort als „Spiele sind Zeitverschwendung“ oder „Spiele machen den Kopf frei“.',
     keyTakeaways: [
       'Eine Metaanalyse von 2022 fand, dass Pausen von zehn Minuten oder weniger verlässlich, wenn auch nur mäßig, die Energie steigern und Müdigkeit verringern.',
@@ -243,7 +243,7 @@ export const de2: ExtraGuides = {
     title: 'Mythen über Bildschirmzeit: Was große Studien finden',
     dek: 'Schadet Bildschirmzeit Jugendlichen wirklich? Was Studien mit Hunderttausenden jungen Menschen fanden, warum Selbstauskünfte täuschen und was mehr zählt.',
     imageAlt: 'Bloo und Poppy links und rechts neben einem iPhone, das ein hohes OutBrick-Feld der Stufe Super Hard voller bunter Steine zeigt, vor einer indigoblauen Steinwand',
-    tags: ['Bildschirmzeit', 'Jugendliche', 'Handynutzung', 'Wohlbefinden', 'Studien'],
+    tags: ["Bildschirmzeit", "Wohlbefinden", "Forschung", "Jugendliche", "gesundes Spielen"],
     intro: 'Kaum eine Frage des modernen Lebens erzeugt so viel Gewissheit auf so wenig Grundlage wie die Bildschirmzeit. Die Schlagzeilen schwanken zwischen „Bildschirme verdrahten eine ganze Generation neu“ und „Bildschirme sind harmlos“, oft unter Berufung auf dieselben Studien. Das letzte Jahrzehnt hat ungewöhnlich große und sorgfältige Forschung zu dieser Frage hervorgebracht, viel davon von Teams, die sich bewusst vorgenommen hatten, die Zahlen vor dem Zurechtbiegen in die eine oder andere Richtung zu schützen. Was sie zeigt, ist weniger dramatisch als beide Schlagzeilen, und nützlicher.',
     keyTakeaways: [
       'Bei mehr als 355.000 Jugendlichen war der Zusammenhang zwischen Techniknutzung und Wohlbefinden negativ, aber winzig: Er erklärte höchstens 0,4 % der Unterschiede.',
@@ -319,7 +319,7 @@ export const de2: ExtraGuides = {
     title: 'Digital Detox: Bringt das was? Was Experimente zeigen',
     dek: 'Eine Woche ohne Handy klingt gesund, doch Studien zum Digital Detox zeigen in verschiedene Richtungen. Was hilft, was nicht, und warum.',
     imageAlt: 'Flurry und Moss neben einem iPhone, das die OutBrick-Reisekarte zeigt, wie sie sich durch Cherry Blossom Town schlängelt, mit schwebenden Steinen an einer indigoblauen Wand',
-    tags: ['Digital Detox', 'Handy-Pause', 'Bildschirmzeit', 'Social Media', 'Wohlbefinden'],
+    tags: ["Digital Detox", "Bildschirmzeit", "Wohlbefinden", "gesundes Spielen", "Smartphones"],
     intro: 'Digital Detox ist zu einer kleinen Branche geworden: handyfreie Auszeiten, abschließbare Boxen, Apps, die andere Apps blockieren. Das Versprechen leuchtet ein. Wenn Bildschirme uns nervös und zerstreut machen, sollte Abstand uns ruhiger und konzentrierter machen. Es lässt sich auch überprüfen, und Forschende haben es überprüft, indem sie Menschen baten, für eine bestimmte Zeit auf ihr Handy oder bestimmte Apps zu verzichten, und maßen, was passiert. Die Ergebnisse sind gemischter als das Marketing, und das Muster darin verrät viel darüber, was tatsächlich hilft.',
     keyTakeaways: [
       'Eine systematische Übersichtsarbeit von 2022 über 21 Detox-Studien fand positive, keine und sogar negative Effekte auf das Wohlbefinden.',
@@ -397,7 +397,7 @@ export const de2: ExtraGuides = {
     title: 'Aufmerksamkeitserholung: Warum ruhige Szenen guttun',
     dek: 'Laut Attention Restoration Theory erholt Natur einen müden Kopf. Was belegt ist, warum Bilder keine Parks sind und was ein ruhiges Spiel lernen kann.',
     imageAlt: 'Flurry und Sprout links und rechts neben einem iPhone, das den OutBrick-Startbildschirm unter einem Nachthimmel zeigt, vor einer indigoblauen Steinwand',
-    tags: ['Aufmerksamkeitserholung', 'Konzentration', 'Natur', 'Erholung', 'ruhige Spiele'],
+    tags: ["Aufmerksamkeitserholung", "Aufmerksamkeit", "Natur", "Wohlbefinden", "ruhige Spiele"],
     intro: 'Nach einer langen Phase konzentrierter Arbeit kann sich ein Spaziergang im Park anfühlen, als nähme dir jemand eine schwere Tasche von der Schulter. Eine volle Straße im Berufsverkehr tut das nicht. Umweltpsychologen versuchen seit Jahrzehnten, diesen Unterschied zu erklären, und die bekannteste Erklärung, die Attention Restoration Theory (Theorie der Aufmerksamkeitserholung), hat alles geprägt, von Krankenhausgärten bis zur Bürogestaltung. Sie wird allerdings auch oft weit über ihre Belege hinaus gedehnt, unter anderem von Leuten, die ruhig aussehende Apps und Spiele machen. Hier steht, was sie sagt, was die Studien stützen und was sie für einen Bildschirm bedeutet und was nicht.',
     keyTakeaways: [
       'Die Attention Restoration Theory besagt, dass anstrengende Aufmerksamkeit ermüdet und dass sie sich in sanft fesselnden Umgebungen wie der Natur erholen kann.',
@@ -475,7 +475,7 @@ export const de2: ExtraGuides = {
     title: 'Belohnungen und Streaks: Wenn Anreize nach hinten losgehen',
     dek: 'Warum Belohnungen den Spaß verdrängen können, den sie steigern sollen, warum ein gerissener Streak Leute aufgeben lässt und wie Anreize dir nützen.',
     imageAlt: 'Moss und Flurry links und rechts neben einem iPhone, das ein OutBrick-Feld der Stufe Super Hard mit Zugzähler und Sternen zeigt, vor einer indigoblauen Steinwand',
-    tags: ['Motivation', 'Belohnungen', 'Streaks', 'Gamification', 'intrinsische Motivation'],
+    tags: ["Motivation", "Belohnungen", "Serien", "Gamification", "Selbstbestimmung der Spieler"],
     intro: 'Jede App auf deinem Handy scheint dich belohnen zu wollen. Sprach-Apps zählen Tage am Stück, Fitness-Apps verteilen Abzeichen, Spiele überschütten dich mit Münzen und Truhen. Manchmal hilft das: Eine sichtbare Zahl von Tagen kann dich durch eine zähe Phase tragen. Manchmal verändert es heimlich, warum du die Sache überhaupt machst, bis die Belohnung der Zweck ist und die Tätigkeit zur Pflicht wird. Psychologen untersuchen diese Verschiebung seit mehr als fünfzig Jahren. Als jemand, der ein Spiel mit Münzen macht, finde ich, dass Spielerinnen und Spieler wissen sollten, was diese Forschung sagt.',
     keyTakeaways: [
       'Erwartete, greifbare Belohnungen für etwas, das du ohnehin gern tust, können verringern, wie sehr du es noch tun willst, sobald die Belohnungen aufhören.',
@@ -551,7 +551,7 @@ export const de2: ExtraGuides = {
     title: 'Wie lange dauert es, eine Gewohnheit aufzubauen?',
     dek: 'Keine 21 Tage. Was Alltagsstudien über Dauer, verpasste Tage und Auslöser fanden – und warum Handy und Spiele nicht deine Gewohnheiten bestimmen sollten.',
     imageAlt: 'Flurry und Sprout neben einem iPhone, das die OutBrick-Reisekarte bei Button Factory zeigt, mit nummerierten Level-Stationen entlang einer kurvigen Straße',
-    tags: ['Gewohnheiten', 'Gewohnheit aufbauen', '21-Tage-Regel', 'Routinen', 'Verhaltensänderung'],
+    tags: ["Gewohnheiten", "Spielgewohnheiten", "Verhaltensänderung", "Routinen", "Wohlbefinden"],
     intro: 'Die Behauptung, dass es 21 Tage dauert, eine Gewohnheit aufzubauen, steht in unzähligen Artikeln und Apps. Sie ist ordentlich und ermutigend, und es steckt wenig Forschung dahinter. Wenn Psychologen tatsächlich Menschen begleitet haben, die im Alltag neue Gewohnheiten aufbauen wollten, war der Zeitraum länger und viel unterschiedlicher. Die gute Nachricht aus denselben Studien ist nützlicher als eine ordentliche Zahl: Ein verpasster Tag zählt weniger, als viele befürchten, und das, was Gewohnheiten festigt, kannst du selbst einrichten.',
     keyTakeaways: [
       'In der bekanntesten Studie brauchten Gewohnheiten im Median 66 Tage, bis sie fast automatisch liefen, mit einer Spanne von 18 bis 254 Tagen.',
@@ -630,7 +630,7 @@ export const de2: ExtraGuides = {
     title: 'Abschalten nach der Arbeit: Casual Games und Erholung',
     dek: 'Abschalten, Entspannung, Meistern und Kontrolle: was die Erholungsforschung über den Feierabend sagt und wo ein Casual Game hineinpasst.',
     imageAlt: 'Bloo und der rote Bricko links und rechts neben einem iPhone, das ein OutBrick-Feld der Stufe Super Hard zeigt, mit schwebenden Steinen an einer indigoblauen Wand',
-    tags: ['Erholung', 'Stress', 'Feierabend', 'Casual Games', 'Abschalten'],
+    tags: ["Erholung", "Stress", "Gelegenheitsspiele", "Wohlbefinden", "Vereinbarkeit von Arbeit und Leben"],
     intro: 'Du kommst nach Hause, lässt die Tasche fallen und greifst zum Spiel, bevor du die Jacke ausgezogen hast. Es kann sich anfühlen wie der erste Moment des Tages, der dir gehört. Ist das Erholung oder nur noch mehr Bildschirm? Arbeitspsychologen erforschen seit zwanzig Jahren, wie sich Menschen in ihrer Freizeit von der Arbeit erholen, und die Spieleforschung hat sich ihre Werkzeuge geliehen, um zu fragen, wo das Spielen hineinpasst. Die Antwort ist ermutigend, mit Bedingungen.',
     keyTakeaways: [
       'Die Erholungsforschung benennt vier Erfahrungen, die beim Abschalten helfen: gedankliche Distanz zur Arbeit, Entspannung, Meistern von Herausforderungen und ein Gefühl von Kontrolle.',
@@ -707,7 +707,7 @@ export const de2: ExtraGuides = {
     title: 'Macht Zocken gute oder schlechte Laune? Was Studien zeigen',
     dek: 'Stimmungsabfragen im Spiel, gemessene Spielzeit, eine Konsolen-Lotterie: was neue Studien über Zocken und Stimmung sagen und warum Stunden weniger zählen.',
     imageAlt: 'Vio mit Kopfhörern und Bloo links und rechts neben einem iPhone, das die OutBrick-Reisekarte bei Button Factory zeigt, vor einer indigoblauen Steinwand',
-    tags: ['Zocken und Stimmung', 'Videospiele Psychologie', 'Wohlbefinden', 'Spielzeit', 'Studien'],
+    tags: ["Spielen und Stimmung", "Wohlbefinden", "Forschung", "gesundes Spielen", "Spielgewohnheiten"],
     intro: 'Jahrelang wurde die Frage, ob Spiele Menschen glücklicher oder unglücklicher machen, mit Umfragen beantwortet, in denen Spielende schätzen sollten, wie viel sie spielten und wie es ihnen in letzter Zeit ging. Beide Schätzungen sind unzuverlässig, kein Wunder also, dass sich die Antworten widersprachen. In den letzten fünf Jahren haben Forschende begonnen, mit Spielefirmen zusammenzuarbeiten, um tatsächliches Spielen aufzuzeichnen, und Spielende im Moment nach ihrer Stimmung zu fragen, manchmal mitten in einer Sitzung. Das Bild, das sich daraus ergibt, ist beruhigender als die alten Befürchtungen und bescheidener als die alten Versprechen.',
     keyTakeaways: [
       'In mehr als 160.000 Stimmungsabfragen im Spiel fühlten sich die meisten Spielenden beim Spielen etwas besser als zu Beginn, größtenteils in den ersten 15 Minuten.',

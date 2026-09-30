@@ -6,7 +6,7 @@ export const de3: ExtraGuides = {
     title: 'Farbenblindheit in Spielen: wie häufig, was hilft',
     dek: 'Etwa jeder zwölfte Mann europäischer Herkunft hat eine Rot-Grün-Schwäche. Was das beim Spielen bedeutet und welche Einstellungen und Designs helfen.',
     imageAlt: 'Moss und Flurry links und rechts von einem Handy, das den Abschnitt Bamboo Springs auf der Karte der OutBrick-Reise zeigt, umgeben von schwebenden türkisen, orangen und roten Steinen',
-    tags: ['Farbenblindheit', 'Rot-Grün-Schwäche', 'Barrierefreiheit', 'inklusives Design', 'Puzzlespiele'],
+    tags: ["Farbsehen", "Barrierefreiheit", "Farbenblindheit", "inklusives Design", "Puzzlespiele"],
     intro: 'In jedem Raum mit fünfundzwanzig Männern europäischer Herkunft sehen wahrscheinlich zwei Rot und Grün anders als alle anderen. Die meisten Spiele werden trotzdem noch so gestaltet, als gäbe es sie nicht. Dieser Leitfaden erklärt, was eine Farbsehschwäche eigentlich ist, wie oft sie vorkommt, was sie für jemanden bedeutet, der gerade spielt, und was hilft: sowohl die Einstellungen, die du heute schon einschalten kannst, als auch die Designentscheidungen, die sie überflüssig machen.',
     keyTakeaways: [
       'Eine angeborene Rot-Grün-Schwäche betrifft etwa 8 % der Männer und 0,4 % der Frauen europäischer Herkunft sowie 4–6,5 % der chinesischen und japanischen Männer.',
@@ -70,7 +70,7 @@ export const de3: ExtraGuides = {
     title: 'Spielen mit Screenreader: wie blinde Menschen zocken',
     dek: 'Wie blinde und sehbehinderte Menschen mit VoiceOver am iPhone spielen, was Studien mit blinden Gamern zeigen und was ein Spiel per Gehör spielbar macht.',
     imageAlt: 'Zippy und Moss neben einem Handy, das den Abschnitt Button Factory auf der Karte der OutBrick-Reise zeigt, darüber schweben blaue, orange und türkise Steine',
-    tags: ['VoiceOver', 'Barrierefreiheit', 'blinde Gamer', 'Screenreader Spiele', 'inklusives Design', 'Handyspiele'],
+    tags: ['Barrierefreiheit', 'VoiceOver', 'blinde Gamer', 'inklusives Design', 'Handyspiele'],
     intro: 'Das iPhone ist eine flache Glasscheibe ohne ertastbare Tasten, und trotzdem benutzen viele blinde Menschen jeden Tag eines. Der Grund ist der eingebaute Screenreader. Viele blinde und sehbehinderte Menschen spielen damit auch, von Worträtseln über Kartenspiele bis zu Spielen, die ganz aus Klang bestehen. Hier erfährst du, wie das funktioniert, was Forschende von blinden Gamern selbst gelernt haben und was ein Spiel, das sich per Gehör spielen lässt, von einem unterscheidet, bei dem das nicht geht.',
     keyTakeaways: [
       'VoiceOver macht aus Berührung eine gesprochene, erkundbare Oberfläche: Du ziehst oder wischst, um zu hören, was auf dem Bildschirm ist, und tippst doppelt, um etwas auszulösen.',
@@ -134,7 +134,7 @@ export const de3: ExtraGuides = {
     title: 'Einhändig spielen am iPhone: motorische Barrierefreiheit',
     dek: 'Was Studien zu Touchscreens und motorischen Einschränkungen über Zielgröße, Gesten und Fehler sagen, und welche iPhone-Einstellungen einhändig helfen.',
     imageAlt: 'Bricko und Moss neben einem Handy, das den Abschnitt Celebration Square auf der Karte der OutBrick-Reise zeigt, darüber schweben türkise, blaue und rosa Steine',
-    tags: ['einhändig spielen', 'Barrierefreiheit', 'motorische Einschränkung', 'iPhone Bedienungshilfen', 'inklusives Design'],
+    tags: ["Barrierefreiheit", "motorische Barrierefreiheit", "einhändige Spiele", "mobiles Design", "inklusives Design"],
     intro: 'Viele Menschen spielen mit einer Hand. Manche immer, wegen einer Behinderung, einer Verletzung oder eines Zitterns. Noch viel mehr tun es zeitweise: mit einem Baby auf dem Arm, stehend im Zug, auf der Seite liegend. Ein Spiel, das unter solchen Bedingungen funktioniert, funktioniert für alle besser. Dieser Beitrag zeigt, was die Forschung zu Touchscreens und motorischen Einschränkungen herausgefunden hat, was das für die Gestaltung von Spielen bedeutet und welche iPhone-Einstellungen heute schon helfen.',
     keyTakeaways: [
       'Touchscreens können Menschen mit motorischen Einschränkungen viel ermöglichen, führen aber zu mehr Fehltipps und versehentlichen Berührungen als eine Maus.',
@@ -204,7 +204,7 @@ export const de3: ExtraGuides = {
     title: 'Übelkeit durch Spiele: warum „Bewegung reduzieren“ zählt',
     dek: 'Warum Bewegung auf dem Bildschirm manchen übel macht, wer besonders anfällig ist und wie „Bewegung reduzieren“ und behutsame Animation helfen.',
     imageAlt: 'Peach und Bloo links und rechts von einem Handy, das ein superschweres OutBrick-Spielfeld in Level 214 zeigt, daneben schweben türkise, rote und grüne Steine',
-    tags: ['Bewegung reduzieren', 'Reiseübelkeit Spiele', 'Cybersickness', 'Barrierefreiheit', 'Spieldesign'],
+    tags: ["Barrierefreiheit", "Bewegung reduzieren", "Bewegungsübelkeit", "inklusives Design", "Spieldesign"],
     intro: 'Die meisten Menschen denken nie über die Bewegung in einem Spiel nach, bis ihnen davon schlecht wird. Bei einer beträchtlichen Minderheit lösen eine schwenkende Kamera, ein Parallax-Hintergrund oder ein Bildschirm, der bei jedem Erfolg wackelt, Schwindel, Übelkeit oder Kopfschmerzen aus, die manchmal noch lange anhalten, nachdem das Gerät weggelegt ist. Das ist keine Zimperlichkeit. Es ist eine gut erforschte Reaktion des Gleichgewichtssystems, und es gibt eine einfache Einstellung, die genau deshalb existiert. Hier steht, was die Forschung sagt und was Spieler und Designer tun können.',
     keyTakeaways: [
       'Visuell ausgelöste Bewegungskrankheit entsteht, wenn deine Augen Bewegung melden, die dein Gleichgewichtsorgan nicht spürt.',
@@ -333,7 +333,7 @@ export const de3: ExtraGuides = {
     title: 'Mit den Enkeln spielen: warum es sich lohnt',
     dek: 'Gemeinsames Spielen nützt nachweislich beiden Generationen, wenn das Spiel gut gewählt ist. Was die Studien zeigen und wie es gelingt.',
     imageAlt: 'Poppy und Flurry links und rechts von einem Handy, das den Abschnitt Celebration Square auf der Karte der OutBrick-Reise zeigt, daneben schweben gelbe, lila und grüne Steine',
-    tags: ['mit Enkeln spielen', 'Generationen', 'Familie', 'Spiele für Senioren', 'gemeinsam spielen'],
+    tags: ["generationenübergreifendes Spielen", "gemeinsam spielen", "Familien", "Spiele für Senioren", "Lernspiele"],
     intro: 'Großeltern hören oft, die Spiele ihrer Enkel seien eine Mauer zwischen ihnen: laut, schnell, unverständlich und besser in Ruhe zu lassen. Die Forschung zum gemeinsamen Spielen legt das Gegenteil nahe. Wenn das Spiel gut gewählt ist, gehört gemeinsames Spielen zu den einfacheren Wegen, wie zwei Generationen Zeit auf Augenhöhe verbringen können, und das Kind ist dabei genauso oft Lehrer wie Schüler. Hier steht, was die Studien gefunden haben, was typischerweise schiefgeht und wie ihr Spiele auswählt und spielt, die über sechzig Jahre Abstand hinweg funktionieren.',
     keyTakeaways: [
       'Übersichtsarbeiten zum generationenübergreifenden Spielen finden Nutzen für die familiären Bindungen, Lernen in beide Richtungen und die Haltung gegenüber der anderen Generation.',
@@ -396,7 +396,7 @@ export const de3: ExtraGuides = {
     title: 'Ruhige Handyspiele für Kinder: ein Ratgeber für Eltern',
     dek: 'Die meisten Apps kleiner Kinder nutzen manipulatives Design. Eine Checkliste aus der Forschung, um Druck, Werbung und Köder zu erkennen und gut zu wählen.',
     imageAlt: 'Poppy und Bloo links und rechts von einem Handy, das ein superschweres OutBrick-Spielfeld in Level 520 zeigt, daneben schweben gelbe, orange und lila Steine',
-    tags: ['Spiele für Kinder', 'Eltern Ratgeber', 'ruhige Spiele', 'Kinder Apps', 'Bildschirmzeit'],
+    tags: ["Kinder", "Eltern", "ruhige Spiele", "gesundes Spielen", "Spieldesign"],
     intro: 'Ein Spiel für ein Kind auszusuchen hieß früher, auf Gewalt und Kraftausdrücke zu achten. Auf Handy oder Tablet geht es bei den größeren Fragen oft ums Design: ob ein Spiel ein Kind drängt, weiterzuspielen, ob seine Werbung als Spiel getarnt ist, ob eine freundliche Figur in Wahrheit etwas verkaufen will. Forschende haben diese Muster inzwischen in den Apps untersucht, die kleine Kinder tatsächlich nutzen, und die Ergebnisse geben Eltern eine praktische Checkliste an die Hand. Hier ist sie, zusammen mit den Belegen dahinter und einem ehrlichen Blick darauf, wie unser eigenes Spiel abschneidet.',
     keyTakeaways: [
       'In einer Studie zu Apps, die 3- bis 5-Jährige spielten, hatte nur eine von fünf gar keine manipulativen Designelemente.',
@@ -460,7 +460,7 @@ export const de3: ExtraGuides = {
     title: 'Spieltext bei Legasthenie: Schrift, Abstand, Sprache',
     dek: 'Helfen Legasthenie-Schriften? Was Lesestudien über Schriftart, Größe, Buchstabenabstand und Wortwahl sagen und wie Spieltext lesbarer wird.',
     imageAlt: 'Peach und Vio links und rechts von einem Handy, das den Abschnitt Cloud Carnival auf der Karte der OutBrick-Reise zeigt, daneben schweben gelbe, orange und lila Steine',
-    tags: ['Legasthenie', 'Legasthenie Schriftart', 'Lesbarkeit', 'Barrierefreiheit', 'Spieldesign'],
+    tags: ["Legasthenie", "Barrierefreiheit", "Lesbarkeit", "inklusives Design", "Spieldesign"],
     intro: 'Spiele sind voller Wörter: Tutorials, Tooltips, Menüs, Sprechblasen, das Kleingedruckte bei einer Belohnung. Für Spielerinnen und Spieler mit Legasthenie kann schlecht gesetzter Text aus einem angenehmen Spiel einen Lesetest machen. Die gute Nachricht: Die Forschung dazu, was hilft, ist ziemlich eindeutig, und manches davon widerspricht verbreiteten Annahmen. Speziell entworfene Legasthenie-Schriften etwa haben sich in Studien nicht gut bewährt. Größe, Abstände und einfache Wortwahl dagegen schon. Hier steht, was die Belege sagen und wie wir versuchen, sie umzusetzen.',
     keyTakeaways: [
       'Kontrollierte Studien fanden keinen Lesevorteil durch spezielle Legasthenie-Schriften wie OpenDyslexic und Dyslexie.',

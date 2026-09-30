@@ -1,4 +1,6 @@
 'use client';
+import { useLocale } from '../../components/locale-context';
+import { clientTree, clientText } from '../../../lib/i18n/client-tree';
 
 import { useState } from 'react';
 import { contactTopics, deviceTopics } from '../../../lib/business';
@@ -14,14 +16,15 @@ import { ConsentField, NetlifyForm, SelectField, SubmitRow, TextArea, TextField,
  * script they show only for Support and Bug report, without it they are simply optional.
  */
 export function ContactForm() {
+  const locale = useLocale();
   const wanted = useSearchParam('topic');
   const [chosen, setChosen] = useState<string | null>(null);
   const topic = chosen ?? (wanted && contactTopics.some((t) => t.value === wanted) ? wanted : 'support');
 
   const showDevice = deviceTopics.includes(topic);
-  const topicLabel = (value: string | null) => contactTopics.find((t) => t.value === value)?.label ?? 'your message';
+  const topicLabel = (value: string | null) => clientText(contactTopics.find((t) => t.value === value)?.label ?? 'your message', locale);
 
-  return (
+  return clientTree((
     <NetlifyForm
       name="contact"
       action="/contact/thanks"
@@ -31,7 +34,7 @@ export function ContactForm() {
           <h3>Message sent. Thank you.</h3>
           <p>
             Your note about <b>{topicLabel(values.get('topic'))}</b> is with the team. A person reads every
-            message and replies to <b>{values.get('email')}</b>.
+            message and replies to <b translate="no">{values.get('email')}</b>.
           </p>
           <p>If you need to add something, such as a screenshot, reply to our email when it arrives.</p>
         </>
@@ -93,5 +96,5 @@ export function ContactForm() {
         </>
       )}
     </NetlifyForm>
-  );
+  ), locale);
 }

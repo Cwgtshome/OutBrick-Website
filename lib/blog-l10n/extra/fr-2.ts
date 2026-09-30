@@ -6,7 +6,7 @@ export const fr2: ExtraGuides = {
     title: 'Jouer avant de dormir : ce que dit la science du sommeil',
     dek: 'Une partie le soir gâche-t-elle votre sommeil ? Ce que montrent les laboratoires du sommeil, les grandes enquêtes et la procrastination du coucher.',
     imageAlt: 'Flurry, bonnet rayé à pompon, et Peach de part et d’autre d’un iPhone affichant la carte du Voyage d’OutBrick à Cherry Blossom Town, sur un mur de briques indigo',
-    tags: ['sommeil', 'jeux vidéo avant de dormir', 'heure du coucher', 'temps d’écran', 'habitudes de jeu'],
+    tags: ["sommeil","pratique de jeu saine","habitudes de jeu","heure du coucher","temps d’écran"],
     intro: 'Il est onze heures et demie, la lumière est éteinte, et vous n’êtes plus qu’à un plateau du sommeil. Ou à trois. La crainte qu’une partie tardive vous coûte discrètement du repos est répandue, et elle s’appuie sur de vraies recherches. Mais bien d’autres travaux compliquent cette version simple. D’après les données, la durée de la session, et ce qu’elle repousse, compte davantage que le simple fait d’avoir pris un jeu en main.',
     keyTakeaways: [
       'En laboratoire du sommeil, une session ordinaire avant le coucher n’a retardé l’endormissement que légèrement ; une session bien plus longue a réduit le sommeil de près d’une demi-heure.',
@@ -85,7 +85,7 @@ export const fr2: ExtraGuides = {
     title: 'Micro-pauses au travail : un petit jeu pour recharger ?',
     dek: 'Les pauses de dix minutes redonnent de l’énergie sans guère changer le rendement. La place d’un petit jeu, et comment mieux faire une pause.',
     imageAlt: 'Poppy et sa baguette à étoile, avec Bricko le rouge, à côté d’un iPhone affichant un plateau OutBrick Super Hard, des briques flottant sur un mur indigo',
-    tags: ['micro-pause', 'pause au travail', 'bien-être au travail', 'jeu court', 'récupération'],
+    tags: ["micro-pauses","bien-être","courtes séances","jeu occasionnel","récupération"],
     intro: 'Vers trois heures de l’après-midi, l’attention commence à s’effilocher. Vous relisez le même paragraphe, vous ouvrez un onglet et oubliez pourquoi. Beaucoup attrapent alors leur téléphone, et un petit jeu fait partie de ce qu’ils y cherchent. Est-ce une vraie pause, ou simplement une autre façon de dépenser son attention ? La recherche sur les micro-pauses, ces courts arrêts entre deux tâches, apporte une réponse plus utile que « les jeux sont une perte de temps » ou « les jeux rafraîchissent le cerveau ».',
     keyTakeaways: [
       'Une méta-analyse de 2022 a montré que les pauses de dix minutes ou moins augmentent de façon fiable, quoique modeste, l’énergie et réduisent la fatigue.',
@@ -159,7 +159,7 @@ export const fr2: ExtraGuides = {
     title: 'Le flow dans les jeux de réflexion : ni ennui ni débordement',
     dek: 'Pourquoi les meilleures sessions de puzzle semblent faciles, ce que Tetris révèle du flow, et comment trouver votre juste niveau de défi.',
     imageAlt: 'Moss avec sa ceinture à outils et Zippy qui fait un clin d’œil, de part et d’autre d’un iPhone affichant le classement hebdomadaire d’OutBrick, sur un mur de briques indigo',
-    tags: ['flow', 'état de flow', 'jeux de réflexion', 'concentration', 'motivation'],
+    tags: ["flow","jeux de puzzle","conception de la difficulté","motivation","attention"],
     intro: 'La plupart des amateurs de jeux de réflexion connaissent cette sensation. Le plateau devient lisible, chaque coup appelle le suivant, et quand vous relevez la tête, vingt minutes ont passé. Les psychologues appellent cela le flow. L’idée vient de Mihaly Csikszentmihalyi, qui a étudié des personnes absorbées par l’escalade, les échecs, la chirurgie ou l’art, et a constaté qu’elles décrivaient le même état en des termes étonnamment proches. Les jeux sont l’un des endroits les plus sûrs pour le trouver, et les jeux de réflexion montrent particulièrement bien comment il fonctionne.',
     keyTakeaways: [
       'Le flow est un état d’absorption profonde et agréable, qui tend à apparaître quand le défi d’une tâche correspond à votre niveau.',
@@ -243,7 +243,7 @@ export const fr2: ExtraGuides = {
     title: 'Temps d’écran : idées reçues et ce que disent les études',
     dek: 'Le temps d’écran nuit-il vraiment aux ados ? Ce qu’ont trouvé des études sur des centaines de milliers de jeunes, et pourquoi l’autodéclaration trompe.',
     imageAlt: 'Bloo et Poppy de part et d’autre d’un iPhone affichant un grand plateau OutBrick Super Hard de briques colorées, sur un mur de briques indigo',
-    tags: ['temps d’écran', 'écrans et adolescents', 'bien-être', 'études scientifiques', 'idées reçues'],
+    tags: ["temps d’écran","bien-être","recherche","adolescents","pratique de jeu saine"],
     intro: 'Peu de questions de la vie moderne suscitent autant de certitudes sur aussi peu de preuves que le temps d’écran. Les gros titres oscillent entre « les écrans recâblent toute une génération » et « les écrans sont inoffensifs », en citant souvent les mêmes études. La dernière décennie a produit des recherches exceptionnellement vastes et rigoureuses sur la question, souvent menées par des équipes qui se sont délibérément efforcées d’empêcher que les chiffres soient tordus en faveur de l’un ou l’autre récit. Ce qu’elles montrent est moins spectaculaire que ces deux titres, et plus utile.',
     keyTakeaways: [
       'Sur plus de 355 000 adolescents, le lien entre usage des technologies et bien-être était négatif mais minime, expliquant au plus 0,4 % des différences.',
@@ -319,7 +319,7 @@ export const fr2: ExtraGuides = {
     title: 'La détox digitale, ça marche ? Ce que montrent les études',
     dek: 'Lâcher son téléphone une semaine semble sain, mais les essais de détox digitale vont dans des sens différents. Ce qui aide, ce qui n’aide pas, et pourquoi.',
     imageAlt: 'Flurry et Moss à côté d’un iPhone affichant la carte du Voyage d’OutBrick serpentant à travers Cherry Blossom Town, des briques flottant sur un mur indigo',
-    tags: ['détox digitale', 'déconnexion', 'temps d’écran', 'réseaux sociaux', 'bien-être'],
+    tags: ["détox numérique","temps d’écran","bien-être","pratique de jeu saine","smartphones"],
     intro: 'La détox digitale est devenue une petite industrie : retraites sans téléphone, boîtes qui se verrouillent, applications qui bloquent d’autres applications. La promesse est intuitive. Si les écrans nous rendent anxieux et distraits, s’en éloigner devrait nous rendre plus calmes et plus concentrés. C’est aussi vérifiable, et les chercheurs l’ont vérifié, en demandant à des gens de renoncer à leur téléphone ou à certaines applications pendant une période donnée et en mesurant ce qui se passe. Les résultats sont plus mitigés que le marketing, et leur schéma en dit long sur ce qui aide vraiment.',
     keyTakeaways: [
       'Une revue systématique de 2022 portant sur 21 études de détox a trouvé des effets positifs, nuls, voire négatifs, sur le bien-être.',
@@ -397,7 +397,7 @@ export const fr2: ExtraGuides = {
     title: 'Restauration de l’attention : pourquoi le calme ressource',
     dek: 'La nature reposerait l’esprit fatigué. Ce que disent les preuves, pourquoi une image n’est pas un parc, et ce qu’un jeu calme peut en tirer.',
     imageAlt: 'Flurry et Sprout de part et d’autre d’un iPhone affichant l’écran d’accueil d’OutBrick sous un ciel nocturne, sur un mur de briques indigo',
-    tags: ['restauration de l’attention', 'fatigue attentionnelle', 'nature et concentration', 'bien-être', 'jeux apaisants'],
+    tags: ["restauration de l’attention","attention","nature","bien-être","jeux calmes"],
     intro: 'Après une longue période de travail concentré, une promenade dans un parc peut donner l’impression de poser un sac trop lourd. Une rue animée à l’heure de pointe, non. Les psychologues de l’environnement cherchent depuis des décennies à expliquer cette différence, et l’explication la plus connue, la théorie de la restauration de l’attention, a inspiré aussi bien les jardins d’hôpitaux que l’aménagement des bureaux. Elle est aussi souvent étirée bien au-delà de ses preuves, y compris par ceux qui conçoivent des applications et des jeux à l’allure apaisante. Voici ce qu’elle dit, ce que les études confirment, et ce qu’elle signifie, ou non, pour un écran.',
     keyTakeaways: [
       'La théorie de la restauration de l’attention propose que l’attention soutenue se fatigue, et que des environnements qui la captent en douceur, comme la nature, lui permettent de récupérer.',
@@ -475,7 +475,7 @@ export const fr2: ExtraGuides = {
     title: 'Récompenses, séries et motivation : quand ça se retourne',
     dek: 'Pourquoi une récompense peut éteindre le plaisir qu’elle devait stimuler, pourquoi une série rompue fait abandonner, et comment s’en prémunir.',
     imageAlt: 'Moss et Flurry de part et d’autre d’un iPhone affichant un plateau OutBrick Super Hard avec son compteur de coups et ses étoiles, sur un mur de briques indigo',
-    tags: ['motivation intrinsèque', 'récompenses', 'séries quotidiennes', 'gamification', 'effet de surjustification'],
+    tags: ["motivation","récompenses","séries quotidiennes","ludification","autonomie du joueur"],
     intro: 'Chaque application de votre téléphone semble vouloir vous récompenser. Les applis de langues comptent les jours d’affilée, les applis de sport distribuent des badges, les jeux vous couvrent de pièces et de coffres. Parfois, cela aide : un compteur de jours bien visible peut vous faire passer un moment de creux. Parfois, cela change insidieusement la raison même pour laquelle vous faites la chose, jusqu’à ce que la récompense devienne le but et l’activité, la corvée. Les psychologues étudient ce glissement depuis plus de cinquante ans. Comme je fais un jeu qui contient des pièces, je pense que les joueurs méritent de savoir ce que dit cette recherche.',
     keyTakeaways: [
       'Des récompenses concrètes et attendues pour une activité que vous aimez déjà peuvent réduire votre envie de la pratiquer une fois les récompenses arrêtées.',
@@ -551,7 +551,7 @@ export const fr2: ExtraGuides = {
     title: 'Combien de temps pour prendre une habitude ? Les études',
     dek: 'Pas 21 jours. Ce que disent les études de terrain sur le délai, les jours manqués et les déclencheurs, et pourquoi votre téléphone ne doit pas les régir.',
     imageAlt: 'Flurry et Sprout à côté d’un iPhone affichant la carte du Voyage d’OutBrick à Button Factory, avec des étapes numérotées le long d’une route sinueuse',
-    tags: ['prendre une habitude', 'règle des 21 jours', 'habitudes', 'changer ses habitudes', 'routine'],
+    tags: ["habitudes","habitudes de jeu","changement de comportement","routines","bien-être"],
     intro: 'L’affirmation selon laquelle il faut 21 jours pour prendre une habitude est répétée dans d’innombrables articles et applications. Elle est nette et encourageante, et elle ne repose guère sur la recherche. Quand les psychologues ont réellement suivi des personnes cherchant à prendre de nouvelles habitudes dans la vie quotidienne, les délais se sont révélés plus longs et bien plus variables. La bonne nouvelle de ces mêmes études est plus utile qu’un chiffre rond : manquer un jour compte moins qu’on ne le craint, et ce qui fait tenir une habitude est quelque chose que vous pouvez organiser.',
     keyTakeaways: [
       'Dans l’étude la plus connue, il a fallu une médiane de 66 jours pour que les habitudes deviennent presque automatiques, avec une fourchette de 18 à 254 jours.',
@@ -630,7 +630,7 @@ export const fr2: ExtraGuides = {
     title: 'Décompresser en jouant : récupérer après le travail',
     dek: 'Détachement, détente, maîtrise et contrôle : ce que dit la recherche sur la récupération après le travail, et la place d’un jeu occasionnel.',
     imageAlt: 'Bloo et Bricko le rouge de part et d’autre d’un iPhone affichant un plateau OutBrick Super Hard, des briques flottant sur un mur indigo',
-    tags: ['décompresser après le travail', 'récupération', 'stress', 'jeux occasionnels', 'équilibre vie pro'],
+    tags: ["récupération","stress","jeu occasionnel","bien-être","équilibre vie professionnelle et personnelle"],
     intro: 'Vous rentrez, posez votre sac et prenez un jeu avant même d’avoir enlevé votre manteau. Cela peut ressembler au premier moment de la journée qui vous appartient. Est-ce de la récupération, ou juste un écran de plus ? Les psychologues du travail étudient depuis vingt ans la façon dont les gens récupèrent du travail pendant leur temps libre, et les chercheurs en jeu vidéo leur ont emprunté leurs outils pour se demander quelle place y occupe le jeu. La réponse est encourageante, sous conditions.',
     keyTakeaways: [
       'La recherche sur la récupération identifie quatre expériences qui aident à décompresser : le détachement du travail, la détente, la maîtrise et le sentiment de contrôle.',
@@ -707,7 +707,7 @@ export const fr2: ExtraGuides = {
     title: 'Les jeux vidéo, bons ou mauvais pour le moral ?',
     dek: 'Humeur mesurée en jeu, temps de jeu enregistré, loterie de consoles : ce que disent les études récentes, et pourquoi les heures comptent peu.',
     imageAlt: 'Vio avec son casque et Bloo de part et d’autre d’un iPhone affichant la carte du Voyage d’OutBrick à Button Factory, sur un mur de briques indigo',
-    tags: ['jeux vidéo et moral', 'jeux vidéo et bien-être', 'humeur', 'temps de jeu', 'études scientifiques'],
+    tags: ["jeu et humeur","bien-être","recherche","pratique de jeu saine","habitudes de jeu"],
     intro: 'Pendant des années, on a cherché à savoir si les jeux rendent plus ou moins heureux à l’aide d’enquêtes demandant aux joueurs d’estimer combien ils jouaient et comment ils s’étaient sentis ces derniers temps. Ces deux estimations étant peu fiables, il n’est pas surprenant que les réponses se contredisent. Depuis cinq ans, des chercheurs travaillent avec des éditeurs de jeux pour enregistrer le temps de jeu réel, et interrogent les joueurs sur leur humeur sur le moment, parfois en pleine session. Le tableau qui en ressort est plus rassurant que les vieilles craintes et plus modeste que les vieilles promesses.',
     keyTakeaways: [
       'Sur plus de 160 000 relevés d’humeur en jeu, la plupart des joueurs se sentaient un peu mieux pendant la partie qu’au début, surtout dans les 15 premières minutes.',

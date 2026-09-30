@@ -63,7 +63,7 @@ export default function CareersPage() {
   };
 
   return (
-    <EditorialPage className="bz">
+    <EditorialPage page={'/careers'} className="bz">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Careers' }]} />

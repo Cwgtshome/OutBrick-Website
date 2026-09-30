@@ -81,7 +81,7 @@ export const fr1: ExtraGuides = {
     title: 'Annuler un coup rend meilleur aux casse-têtes, pas paresseux',
     dek: 'Les erreurs réparables sont parmi les meilleurs maîtres d’un casse-tête. Ce que dit la recherche sur le bon usage de l’annulation, et quand s’en passer.',
     imageAlt: 'Poppy et sa baguette étoilée avec Bricko à côté d’un iPhone affichant la boutique OutBrick, sur une grille de briques indigo',
-    tags: ['apprendre de ses erreurs', 'résolution de problèmes', 'astuces casse-tête', 'planification', 'game design'],
+    tags: ["apprendre de ses erreurs","résolution de problèmes","astuces casse-tête","planification","conception de jeux"],
     intro: 'Certains joueurs vivent l’annulation comme un aveu. Ils préfèrent fixer un plateau pendant deux minutes plutôt que de reprendre un coup, comme si le bouton était réservé à ceux qui ne savent pas vraiment faire des casse-têtes. La recherche sur l’apprentissage va dans l’autre sens, avec une nuance intéressante. Les erreurs que l’on remarque et que l’on corrige comptent parmi les choses les plus utiles qui puissent arriver quand on apprend. Mais quand les erreurs ne coûtent plus rien du tout, on planifie aussi moins. Bien utiliser l’annulation, c’est obtenir le premier effet sans trop payer le second.',
     keyTakeaways: [
       'Une erreur suivie d’une correction aide généralement l’apprentissage, et le bénéfice est le plus grand quand on était sûr de soi en se trompant.',
@@ -215,7 +215,7 @@ export const fr1: ExtraGuides = {
     title: 'Bloqué sur un casse-tête ? Faire une pause, selon la science',
     dek: 'Pourquoi un casse-tête insoluble cède souvent après une pause, ce qu’a montré une méta-analyse sur l’incubation, et comment faire la pause qui aide.',
     imageAlt: 'Vio avec son casque et Sprout à côté d’un iPhone affichant la boutique OutBrick, avec quelques briques jaunes et bleues flottant sur une grille indigo',
-    tags: ['effet d’incubation', 'résolution de problèmes', 'astuces casse-tête', 'insight', 'psychologie cognitive'],
+    tags: ["effet d’incubation","résolution de problèmes","astuces casse-tête","compréhension soudaine","psychologie cognitive"],
     intro: 'Presque tous les amateurs de casse-têtes l’ont vécu. On fixe un plateau jusqu’à ce qu’il semble n’avoir aucune solution, on abandonne, on se fait un thé, et en revenant la réponse est là, sous nos yeux. Les psychologues appellent cette pause une période d’incubation, et l’amélioration qui la suit parfois un effet d’incubation. C’est l’une des plus anciennes idées de la psychologie de la résolution de problèmes, et les données modernes disent qu’elle est réelle, quoique plus modeste et plus conditionnelle que ne le suggèrent les anecdotes.',
     keyTakeaways: [
       'Une méta-analyse des études sur l’incubation a trouvé un effet positif réel à mettre un problème de côté, plus marqué quand on y avait d’abord travaillé plus longtemps.',
@@ -537,7 +537,7 @@ export const fr1: ExtraGuides = {
     title: 'Le moment eurêka : ce que fait le cerveau lors de l’insight',
     dek: 'Le déclic d’un casse-tête résolu laisse une trace dans le cerveau. L’insight, pourquoi l’eurêka voit souvent juste, et quand il se trompe.',
     imageAlt: 'Peach et Vio de part et d’autre d’un iPhone affichant l’Usine à boutons sur la carte du Voyage d’OutBrick, avec des briques jaunes et rouges flottant à côté',
-    tags: ['insight', 'moment eurêka', 'résolution de problèmes', 'psychologie cognitive', 'recherche jeux de casse-tête'],
+    tags: ["compréhension soudaine","moment eurêka","résolution de problèmes","psychologie cognitive","recherche jeux de casse-tête"],
     intro: 'Il y a deux façons de résoudre un casse-tête. Parfois, on avance vers la réponse pas à pas, avec le sentiment régulier de s’en approcher. D’autres fois, rien ne semble bouger, puis d’un coup la réponse est là, évidente et complète, accompagnée d’une décharge de plaisir. Cette seconde expérience, le moment eurêka, fascine les psychologues depuis un siècle. Depuis une vingtaine d’années, les neurosciences commencent à montrer qu’il ne s’agit pas d’un simple sentiment posé sur la pensée ordinaire, mais d’un chemin différent vers la solution.',
     keyTakeaways: [
       'Les solutions par insight arrivent soudainement, sans le sentiment progressif de s’approcher qui caractérise la résolution pas à pas.',

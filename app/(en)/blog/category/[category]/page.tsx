@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../../../editorial-shell';
@@ -32,6 +33,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     description: copy.description,
     alternates: {
       canonical: copy.path,
+      languages: localeAlternates('en', copy.path).languages,
       types: { 'application/rss+xml': `${copy.path}/feed.xml` },
     },
     openGraph: {
@@ -59,7 +61,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     .slice(0, 8);
 
   return (
-    <EditorialPage current="blog" tone={shelf.tone} className="ed-collection">
+    <EditorialPage page={`/blog/category/${shelf.slug}`} current="blog" tone={shelf.tone} className="ed-collection">
       <header className="ed-band-ink ed-coll-head">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { href: '/blog', label: 'Journal' }, { label: shelf.category }]} />

@@ -103,7 +103,7 @@ export default function AffiliatesPage() {
   };
 
   return (
-    <EditorialPage className="bz">
+    <EditorialPage page={'/affiliates'} className="bz">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Affiliate programme' }]} />

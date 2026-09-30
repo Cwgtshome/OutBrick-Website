@@ -22,6 +22,7 @@ from PIL import Image, ImageDraw, ImageFilter
 ROOT = Path(__file__).resolve().parent.parent
 PUBLIC = ROOT / 'public'
 W, H = 1600, 900
+NEUTRAL = '--neutral' in sys.argv
 
 BRICK = {
     'red': ('#e2372f', '#8e1c18'),
@@ -38,8 +39,11 @@ FRIENDS = ['bloo', 'bricko', 'flurry', 'moss', 'peach', 'poppy', 'sprout', 'vio'
 
 
 def screens():
-    shots = sorted(p for p in (PUBLIC / 'assets/screens').glob('iphone-*.png'))
-    villages = sorted((PUBLIC / 'assets/villages').glob('*.jpg'))
+    base = PUBLIC / 'assets' / 'neutral' if NEUTRAL else PUBLIC / 'assets'
+    shots = sorted(p for p in (base / 'screens').glob('iphone-*.png'))
+    villages = sorted((base / 'villages').glob('*.webp' if NEUTRAL else '*.jpg'))
+    if NEUTRAL and (len(shots) != 6 or len(villages) != 28):
+        raise ValueError('Neutral covers require all six authentic iPhone captures and 28 village variants')
     return shots, villages
 
 
@@ -98,7 +102,7 @@ def background(seed_colour, rng):
 
 
 def make(slug, colour, force=False):
-    out = PUBLIC / 'blog' / f'{slug}.webp'
+    out = PUBLIC / 'blog' / ('neutral' if NEUTRAL else '') / f'{slug}.webp'
     if out.exists() and not force:
         return False
     rng = random.Random(int(hashlib.sha256(slug.encode()).hexdigest(), 16))

@@ -6,7 +6,7 @@ export const es2: ExtraGuides = {
     title: 'Jugar antes de dormir: qué dice la ciencia sobre el sueño',
     dek: '¿Una partida por la noche te arruina el sueño? Lo que muestran los estudios de laboratorio, las grandes encuestas y la procrastinación a la hora de dormir.',
     imageAlt: 'Flurry, con un gorro de lana a rayas, y Peach a ambos lados de un iPhone que muestra el mapa del Viaje de OutBrick en Cherry Blossom Town, sobre una pared de ladrillo índigo',
-    tags: ['jugar antes de dormir', 'videojuegos y sueño', 'dormir mejor', 'hábitos de juego', 'tiempo de pantalla'],
+    tags: ['sueño', 'juego saludable', 'hábitos de juego', 'hora de acostarse', 'tiempo de pantalla'],
     intro: 'Son las once y media, las luces están apagadas y solo te separa del sueño un tablero más. O tres. Preocuparse por si una partida tardía te está robando descanso es algo muy común, y hay investigación seria detrás de esa inquietud. También hay mucha investigación que complica la versión simple. Las pruebas apuntan a que la duración de la sesión, y lo que desplaza, importa más que el hecho de haber cogido un juego.',
     keyTakeaways: [
       'En los experimentos de laboratorio del sueño, una sesión normal antes de acostarse retrasó el sueño solo un poco; una mucho más larga lo recortó en casi media hora.',
@@ -85,7 +85,7 @@ export const es2: ExtraGuides = {
     title: 'Micropausas en el trabajo: ¿recarga una partida corta?',
     dek: 'Un metaanálisis dice que las pausas de diez minutos dan energía pero apenas mejoran el rendimiento. Dónde encaja una partida corta y cómo descansar mejor.',
     imageAlt: 'Poppy, con su varita rematada en estrella, y el rojo Bricko junto a un iPhone que muestra un tablero Super Hard de OutBrick, con ladrillos sueltos flotando sobre una pared índigo',
-    tags: ['micropausas', 'pausas en el trabajo', 'bienestar laboral', 'juegos casuales', 'descanso mental'],
+    tags: ['micropausas', 'bienestar', 'sesiones breves', 'juegos casuales', 'recuperación'],
     intro: 'Hacia las tres de la tarde, la atención empieza a deshilacharse. Relees el mismo párrafo, abres una pestaña y olvidas para qué. Mucha gente coge el móvil en ese momento, y una partida rápida es una de las cosas que busca. ¿Es una pausa de verdad o solo otra forma de gastar atención? La investigación sobre las micropausas, esas pausas cortas entre tarea y tarea, da una respuesta más útil que «los juegos son una pérdida de tiempo» o «los juegos refrescan el cerebro».',
     keyTakeaways: [
       'Un metaanálisis de 2022 encontró que las pausas de diez minutos o menos elevan la energía y reducen el cansancio de forma fiable, aunque modesta.',
@@ -243,7 +243,7 @@ export const es2: ExtraGuides = {
     title: 'Mitos del tiempo de pantalla según los grandes estudios',
     dek: '¿Las pantallas dañan a los adolescentes? Lo que hallaron estudios con cientos de miles de jóvenes, por qué engañan los autoinformes y qué importa más.',
     imageAlt: 'Bloo y Poppy a ambos lados de un iPhone que muestra un tablero alto de OutBrick en Super Hard lleno de ladrillos de colores, sobre una pared de ladrillo índigo',
-    tags: ['tiempo de pantalla', 'adolescentes y pantallas', 'bienestar digital', 'salud mental', 'investigación'],
+    tags: ['tiempo de pantalla', 'bienestar', 'investigación', 'adolescentes', 'juego saludable'],
     intro: 'Pocas cuestiones de la vida moderna generan tanta certeza con tan pocas pruebas como el tiempo de pantalla. Los titulares oscilan entre «las pantallas están reprogramando a una generación» y «las pantallas son inofensivas», a menudo citando los mismos estudios. La última década ha dado investigaciones inusualmente grandes y cuidadosas sobre la cuestión, muchas de equipos que se propusieron expresamente impedir que los números se forzaran hacia uno u otro relato. Lo que muestran es menos dramático que cualquiera de los dos titulares, y más útil.',
     keyTakeaways: [
       'En más de 355 000 adolescentes, la relación entre el uso de tecnología y el bienestar fue negativa pero diminuta: explicaba como mucho el 0,4 % de las diferencias.',
@@ -319,7 +319,7 @@ export const es2: ExtraGuides = {
     title: '¿Funciona el detox digital? Lo que dicen los estudios',
     dek: 'Dejar el móvil una semana suena saludable, pero los ensayos de desintoxicación digital apuntan en direcciones distintas. Qué ayuda, qué no y por qué.',
     imageAlt: 'Flurry y Moss junto a un iPhone que muestra el mapa del Viaje de OutBrick serpenteando por Cherry Blossom Town, con ladrillos flotando sobre una pared índigo',
-    tags: ['desintoxicación digital', 'detox digital', 'tiempo de pantalla', 'dejar las redes sociales', 'bienestar digital'],
+    tags: ['desintoxicación digital', 'tiempo de pantalla', 'bienestar', 'juego saludable', 'teléfonos inteligentes'],
     intro: 'La desintoxicación digital se ha convertido en una pequeña industria: retiros sin móvil, cajas con candado, aplicaciones que bloquean otras aplicaciones. La promesa es intuitiva. Si las pantallas nos vuelven ansiosos y distraídos, alejarnos de ellas debería calmarnos y ayudarnos a concentrarnos. También se puede comprobar, y los investigadores lo han hecho: piden a las personas que renuncien al móvil o a ciertas aplicaciones durante un tiempo y miden lo que pasa. Los resultados son más dispares que el marketing, y el patrón que dibujan dice mucho sobre lo que de verdad ayuda.',
     keyTakeaways: [
       'Una revisión sistemática de 2022 con 21 estudios de desintoxicación encontró efectos positivos, nulos e incluso negativos sobre el bienestar.',
@@ -397,7 +397,7 @@ export const es2: ExtraGuides = {
     title: 'Restauración de la atención: el poder de las escenas serenas',
     dek: 'La naturaleza descansa una mente cansada, dice la teoría. Qué respaldan las pruebas, por qué una foto no es un parque y qué puede imitar un juego.',
     imageAlt: 'Flurry y Sprout a ambos lados de un iPhone que muestra la pantalla de inicio de OutBrick bajo un cielo nocturno, sobre una pared de ladrillo índigo',
-    tags: ['restauración de la atención', 'naturaleza y mente', 'fatiga mental', 'concentración', 'juegos tranquilos'],
+    tags: ['restauración de la atención', 'atención', 'naturaleza', 'bienestar', 'juegos tranquilos'],
     intro: 'Tras un largo rato de trabajo concentrado, un paseo por un parque puede sentar como quitarse una mochila pesada de los hombros. Una calle llena de tráfico en hora punta, no. Los psicólogos ambientales llevan décadas intentando explicar esa diferencia, y la explicación más conocida, la teoría de la restauración de la atención, ha influido en todo, desde los jardines de los hospitales hasta el diseño de oficinas. También se estira a menudo mucho más allá de sus pruebas, incluso por parte de quienes hacen aplicaciones y juegos de aspecto tranquilo. Esto es lo que dice, lo que respaldan los estudios y lo que significa, y lo que no, para una pantalla.',
     keyTakeaways: [
       'La teoría de la restauración de la atención propone que la atención que exige esfuerzo se cansa, y que los entornos que atraen la atención con suavidad, como la naturaleza, le permiten recuperarse.',
@@ -475,7 +475,7 @@ export const es2: ExtraGuides = {
     title: 'Recompensas, rachas y motivación: cuando el incentivo falla',
     dek: 'Por qué las recompensas pueden ahogar la diversión que debían avivar, por qué una racha rota invita a abandonar y cómo poner los incentivos de tu lado.',
     imageAlt: 'Moss y Flurry a ambos lados de un iPhone que muestra un tablero de OutBrick en Super Hard con su recuento de movimientos y sus estrellas, sobre una pared de ladrillo índigo',
-    tags: ['motivación intrínseca', 'recompensas', 'rachas', 'gamificación', 'efecto de sobrejustificación'],
+    tags: ['motivación', 'recompensas', 'rachas', 'gamificación', 'autonomía del jugador'],
     intro: 'Parece que todas las aplicaciones del móvil quieren recompensarte. Las de idiomas cuentan los días seguidos, las de deporte reparten insignias, los juegos te cubren de monedas y cofres. A veces eso ayuda: ver cuántos días llevas puede sacarte de una racha aburrida. Otras veces cambia sin hacer ruido la razón por la que haces algo, hasta que la recompensa es lo importante y la actividad, la obligación. Los psicólogos llevan más de cincuenta años estudiando ese cambio. Como alguien que hace un juego con monedas, creo que los jugadores merecen saber qué dice esa investigación.',
     keyTakeaways: [
       'Las recompensas tangibles y esperadas por hacer algo que ya te gusta pueden reducir las ganas de hacerlo cuando las recompensas se acaban.',
@@ -551,7 +551,7 @@ export const es2: ExtraGuides = {
     title: '¿Cuánto se tarda en crear un hábito? Qué dicen los estudios',
     dek: 'No son 21 días. Qué dicen los estudios reales sobre plazos, días perdidos y señales, y por qué el móvil y sus juegos no deberían mandar en tus hábitos.',
     imageAlt: 'Flurry y Sprout junto a un iPhone que muestra el mapa del Viaje de OutBrick en Button Factory, con paradas de nivel numeradas a lo largo de un camino sinuoso',
-    tags: ['crear un hábito', 'cuánto tarda un hábito', 'regla de los 21 días', 'hábitos de juego', 'rutinas'],
+    tags: ['hábitos', 'hábitos de juego', 'cambio de comportamiento', 'rutinas', 'bienestar'],
     intro: 'La afirmación de que se tardan 21 días en crear un hábito se repite en infinidad de artículos y aplicaciones. Es redonda y alentadora, y tiene poca investigación detrás. Cuando los psicólogos han seguido de verdad a personas que intentaban crear hábitos nuevos en su día a día, los plazos han sido más largos y mucho más variables. La buena noticia de esos mismos estudios es más útil que una cifra redonda: saltarse un día importa menos de lo que la gente teme, y lo que hace que un hábito arraigue es algo que puedes organizar.',
     keyTakeaways: [
       'En el estudio más conocido, los hábitos tardaron una mediana de 66 días en volverse casi automáticos, con un rango de 18 a 254 días.',
@@ -630,7 +630,7 @@ export const es2: ExtraGuides = {
     title: 'Jugar para desconectar: juegos casuales tras el trabajo',
     dek: 'Desconexión, relajación, dominio y control: lo que dice la investigación sobre cómo recuperarse después del trabajo, y dónde encaja un juego casual.',
     imageAlt: 'Bloo y el rojo Bricko a ambos lados de un iPhone que muestra un tablero de OutBrick en Super Hard, con ladrillos flotando sobre una pared índigo',
-    tags: ['desconectar del trabajo', 'estrés laboral', 'juegos casuales', 'recuperación', 'conciliación'],
+    tags: ['recuperación', 'estrés', 'juegos casuales', 'bienestar', 'conciliación'],
     intro: 'Llegas a casa, sueltas la mochila y coges un juego antes de quitarte el abrigo. Puede parecer el primer momento del día que te pertenece. ¿Eso es recuperarse o solo más pantalla? Los psicólogos del trabajo llevan veinte años estudiando cómo se recupera la gente del trabajo en su tiempo libre, y los investigadores de videojuegos han tomado prestadas sus herramientas para preguntarse dónde encaja el juego. La respuesta es alentadora, con condiciones.',
     keyTakeaways: [
       'La investigación sobre la recuperación identifica cuatro experiencias que ayudan a desconectar: distanciarse del trabajo, relajarse, dominar algo y tener sensación de control.',
@@ -707,7 +707,7 @@ export const es2: ExtraGuides = {
     title: '¿Jugar a videojuegos mejora o empeora el ánimo?',
     dek: 'Ánimo medido en plena partida, horas reales y una lotería de consolas: qué dicen los últimos estudios y por qué las horas importan menos que el encaje.',
     imageAlt: 'Vio, con auriculares, y Bloo a ambos lados de un iPhone que muestra el mapa del Viaje de OutBrick en Button Factory, sobre una pared de ladrillo índigo',
-    tags: ['videojuegos y estado de ánimo', 'videojuegos y bienestar', 'salud mental', 'investigación', 'hábitos de juego'],
+    tags: ['videojuegos y estado de ánimo', 'bienestar', 'investigación', 'juego saludable', 'hábitos de juego'],
     intro: 'Durante años, la pregunta de si los juegos hacen a la gente más feliz o más infeliz se respondió con encuestas que pedían a los jugadores adivinar cuánto jugaban y cómo se habían sentido últimamente. Las dos conjeturas son poco fiables, así que no sorprende que las respuestas no coincidieran. En los últimos cinco años, los investigadores han empezado a trabajar con empresas de videojuegos para registrar el juego real y a preguntar a los jugadores por su ánimo en el momento, a veces en mitad de una sesión. El panorama que sale de ahí es más tranquilizador que los viejos temores y más modesto que las viejas promesas.',
     keyTakeaways: [
       'En más de 160 000 informes de ánimo recogidos durante el juego, la mayoría de los jugadores se sentía algo mejor mientras jugaba que al empezar, sobre todo en los primeros 15 minutos.',

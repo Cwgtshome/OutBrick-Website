@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { withPublicMetadataSnippet } from '../../../../lib/i18n/public-metadata';
 import { notFound } from 'next/navigation';
 import { isTranslatedGuide, localizeArticle, translatedGuideSlugs } from '../../../../lib/i18n/blog';
 import { isTranslatedLocale } from '../../../../lib/i18n/locales';
@@ -21,7 +22,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: GuidePageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isTranslatedLocale(locale) || !isTranslatedGuide(slug)) return {};
-  return articleMetadata(localizeArticle(slug, locale), locale);
+  return withPublicMetadataSnippet(articleMetadata(localizeArticle(slug, locale), locale), `/blog/${slug}`, locale);
 }
 
 export default async function GuidePage({ params }: GuidePageProps) {

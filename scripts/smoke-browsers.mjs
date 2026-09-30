@@ -9,7 +9,9 @@
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
 const { webkit, firefox, devices } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
 
-const paths = ['/', '/ja', '/de/play', '/play', '/blog', '/blog/how-to-solve-sliding-block-puzzles', '/mascots', '/support', '/play/result/2-3', '/contact', '/affiliates', '/careers', '/careers/ai-ml-engineer', '/press', '/c/42?par=18', '/daily'];
+const basePaths = ['/', '/play', '/blog', '/blog/how-to-solve-sliding-block-puzzles', '/mascots', '/support', '/play/result/2-3', '/contact', '/affiliates', '/careers', '/careers/ai-ml-engineer', '/press', '/c/42?par=18', '/daily', '/privacy', '/newsletter', '/whats-new'];
+const paths = ['', '/fr', '/de', '/es', '/ja'].flatMap(prefix => basePaths.map(path => path === '/' ? prefix || '/' : prefix + path));
+
 const targets = [
   ['webkit desktop', webkit, { viewport: { width: 1440, height: 900 } }],
   ['webkit iPhone', webkit, { ...devices['iPhone 15'] }],
@@ -17,13 +19,15 @@ const targets = [
   ['firefox phone', firefox, { viewport: { width: 390, height: 844 } }],
 ];
 
+const targetIndex = process.env.SMOKE_TARGET_INDEX === undefined ? undefined : Number(process.env.SMOKE_TARGET_INDEX);
+if (targetIndex !== undefined && (!Number.isInteger(targetIndex) || targetIndex < 0 || targetIndex >= targets.length)) throw new Error('Invalid browser target');
 let failures = 0;
 const fail = (label, message) => {
   failures += 1;
   console.log(`✗ ${label}: ${message}`);
 };
 
-for (const [label, type, options] of targets) {
+for (const [label, type, options] of targets.filter((_, index) => targetIndex === undefined || index === targetIndex)) {
   const browser = await type.launch();
   const context = await browser.newContext(options);
   for (const path of paths) {
@@ -78,30 +82,36 @@ for (const [label, type, options] of targets) {
   }
   await context.close();
 
-  // Play board 1 with real pointer input (touch shares the same pointer-event path).
-  const page = await browser.newPage({ viewport: { width: label.includes('desktop') ? 1440 : 390, height: 844 } });
-  await page.goto(`${base}/play`, { waitUntil: 'load' });
-  const board = page.getByRole('region', { name: /OutBrick board/ }).first();
-  await board.scrollIntoViewIfNeeded();
-  await page.waitForTimeout(400);
-  for (const [brick, dx, dy] of [
-    ['Yellow', -60, 0],
-    ['Blue', 0, 60],
-    ['Red', 60, 0],
-  ]) {
-    const box = await board.locator(`[aria-label*="${brick}"]`).first().boundingBox();
-    const x = box.x + box.width / 2;
-    const y = box.y + box.height / 2;
-    await page.mouse.move(x, y);
-    await page.mouse.down();
-    await page.mouse.move(x + dx / 2, y + dy / 2, { steps: 4 });
-    await page.mouse.move(x + dx, y + dy, { steps: 4 });
-    await page.mouse.up();
-    await page.waitForTimeout(900);
+  // Solve and share board 1 in every locale using real pointer input.
+  const starText = { en: '3 stars of 3', fr: '3 étoiles sur 3', de: '3 Sterne von 3', es: '3 estrellas de 3', ja: 'スター3個中3個' };
+  for (const locale of ['en', 'fr', 'de', 'es', 'ja']) {
+    const prefix = locale === 'en' ? '' : `/${locale}`;
+    const page = await browser.newPage({ viewport: { width: label.includes('desktop') ? 1440 : 390, height: 844 } });
+    await page.addInitScript(() => Object.defineProperty(navigator, 'share', { configurable: true, value: async data => { window.__outbrickShared = data; } }));
+    await page.goto(`${base}${prefix}/play`, { waitUntil: 'load' });
+    const board = page.getByRole('region', { name: /OutBrick/ }).first();
+    await board.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(400);
+    for (const [colour, dx, dy] of [['yellow', -60, 0], ['blue', 0, 60], ['red', 60, 0]]) {
+      const box = await board.locator(`.pb-brick.pb-c-${colour}`).first().boundingBox();
+      if (!box) { fail(`${label} ${prefix}/play`, `missing ${colour} brick`); break; }
+      const x = box.x + box.width / 2, y = box.y + box.height / 2;
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x + dx / 2, y + dy / 2, { steps: 4 });
+      await page.mouse.move(x + dx, y + dy, { steps: 4 });
+      await page.mouse.up();
+      await page.waitForTimeout(900);
+    }
+    await page.waitForTimeout(1200);
+    if (!(await board.innerText()).includes(starText[locale])) fail(`${label} ${prefix}/play`, 'board 1 did not clear with three localized stars');
+    else {
+      await board.locator('.pb-btn-share').click();
+      const shared = await page.evaluate(() => window.__outbrickShared);
+      if (!shared?.url?.endsWith(`${prefix}/play/result/1-3`)) fail(`${label} ${prefix}/play`, `wrong locale share URL ${shared?.url}`);
+    }
+    await page.close();
   }
-  await page.waitForTimeout(1200);
-  const text = await board.innerText();
-  if (!/3 stars of 3/.test(text)) fail(`${label} /play`, 'board 1 did not clear with three stars');
   await browser.close();
   console.log(`✓ ${label} checked`);
 }

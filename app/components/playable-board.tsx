@@ -29,7 +29,7 @@ import {
   type Placement,
 } from '../../lib/board-solver';
 
-const RESULT_URL = 'https://www.outbrick.site/play/result';
+const RESULT_ORIGIN = 'https://www.outbrick.site';
 const DRAG_THRESHOLD = 10;
 
 const VEC: Record<Dir, [number, number]> = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
@@ -283,10 +283,10 @@ const CONFETTI = Array.from({ length: 30 }, (_, i) => {
 });
 
 /** What "Share result" sends: a static result page (app/play/result) and a line of text. */
-function shareFor(t: BoardStrings, levelIndex: number, moves: number, stars: number, words?: ShareWords) {
+function shareFor(t: BoardStrings, locale: Locale, levelIndex: number, moves: number, stars: number, words?: ShareWords) {
   const level = boardLevels[levelIndex];
   const board = levelIndex + 1;
-  const url = `${RESULT_URL}/${board}-${stars}`;
+  const url = `${RESULT_ORIGIN}${locale === 'en' ? '' : `/${locale}`}/play/result/${board}-${stars}`;
   const starLine = `${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`;
   if (words) return { url, ...words(moves, stars, starLine) };
   const title = t.shareTitle(board, stars);
@@ -461,7 +461,7 @@ export function PlayableBoard({
   };
 
   const shareResult = async () => {
-    const data = shareFor(t, state.level, state.moves, stars, shareWords);
+    const data = shareFor(t, locale, state.level, state.moves, stars, shareWords);
     if (typeof navigator.share === 'function') {
       try {
         await navigator.share(data);

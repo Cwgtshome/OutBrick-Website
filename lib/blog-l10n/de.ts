@@ -13,7 +13,7 @@ export const de: LocaleGuides = {
     title: 'Schiebepuzzle lösen: eine praktische Anleitung',
     dek: 'Vom Ausgang rückwärts denken, den Zug finden, der Platz schafft, erst zählen, dann ziehen: die Methode eines Spieldesigners für knifflige Schiebepuzzles.',
     imageAlt: 'Echte OutBrick-Spielfelder auf einer indigoblauen Grundplatte, vorne ein Feld im Farbenblind-Modus mit Symbolen, während gelbe Steine durch ihr Tor hinausgleiten und Bricko zuschaut',
-    tags: ['Schiebepuzzle', 'Schiebepuzzle lösen', 'Rätsel lösen Strategie', 'Puzzle-Tipps'],
+    tags: ["Schiebepuzzles", "Schiebepuzzle-Strategie", "Puzzles lösen", "Puzzle-Tipps"],
     intro: 'Ein gutes Schiebepuzzle ist so gebaut, dass es hoffnungslos aussieht. Jedes Feld ist belegt, jeder Block scheint einem anderen im Weg zu stehen, und der Ausgang liegt auf der falschen Seite. Ich baue und teste solche Spielfelder für OutBrick, und fast immer bringen mich dieselben fünf Gewohnheiten ans Ziel, egal um welches Puzzle es geht. Keine davon ist ein Trick. Es sind Arten hinzusehen, die aus einer Wand von Blöcken eine kurze Liste von Fragen machen.',
     keyTakeaways: [
       'Fang beim Ausgang an und arbeite dich rückwärts vor: Die Blöcke zwischen einem Teil und seinem Weg nach draußen sind das eigentliche Problem, und diese Liste ist meist kurz.',
@@ -86,7 +86,7 @@ export const de: LocaleGuides = {
     title: 'Farben sortieren: Tipps für Sortierpuzzles mit weniger Zügen',
     dek: 'Wie du ein Farbsortier-Puzzle liest, die richtige Farbe zuerst hinausbringst und die Zugvorgabe schlägst, samt Sterne-Regeln. Vom Entwickler von OutBrick.',
     imageAlt: 'Reihen von Noppensteinen in Rot, Gelb, Türkis, Violett, Blau und Grün auf cremefarbenem Grund, dazu ein echtes OutBrick-Spielfeld und eine Abschlusskarte mit drei Sternen',
-    tags: ['Farbsortier-Puzzle', 'Color Sort Tipps', 'Block Sort Strategie', 'Zugvorgabe'],
+    tags: ["Farbsortierpuzzle", "Tipps für Blocksortierpuzzles", "Farbsortierpuzzle-Strategie", "Zugvorgaben"],
     intro: 'Farbsortier-Puzzles gibt es in mehreren Familien: Flüssigkeiten, die von Röhrchen zu Röhrchen gegossen werden, Stapel, die auf Stäbe sortiert werden, und Blöcke, die durch Tore in ihrer eigenen Farbe hinausgeschoben werden. OutBrick gehört zur letzten Sorte, und diese Tipps sind darauf zugeschnitten, aber die Grundfähigkeit gilt für die ganze Familie. Du liest ab, welche Farbe bereit ist zu gehen, welche verschüttet ist und welche still und leise allen im Weg steht. Mit weniger Zügen auszukommen heißt vor allem, das vor deinem ersten Zug zu tun statt nach deinem zehnten.',
     keyTakeaways: [
       'Lies das ganze Feld vor dem ersten Zug: Welche Farben haben freie Bahn zum Ausgang, welche Steine blockieren mehr als eine Farbe, und wo ist der freie Platz?',
@@ -236,7 +236,7 @@ export const de: LocaleGuides = {
     title: 'Offline-Puzzlespiele fürs iPhone: für Bahn und Flugzeug',
     dek: 'Worauf es bei einem Puzzlespiel für U-Bahn, Zug oder Flug ankommt: echtes Offline-Spiel, Bedienung mit einer Hand, kurze Felder, wenig Akkuverbrauch.',
     imageAlt: 'Ein Zugwaggon aus Bausteinen, in dessen Fenstern echte OutBrick-Dörfer und -Spielfelder zu sehen sind, mit Bloo und Zippy auf dem Dach',
-    tags: ['Offline-Spiele iPhone', 'Puzzlespiele ohne Internet', 'Spiele für den Flug', 'Spiele zum Pendeln'],
+    tags: ["Offline-Puzzlespiele fürs iPhone", "Offline-Spiele", "Spiele für Flüge", "Spiele zum Pendeln"],
     intro: 'Der schlechteste Moment, um herauszufinden, dass ein Spiel eine Verbindung braucht, ist im Tunnel oder in zehn Kilometern Höhe mit abgeschaltetem WLAN. „Offline spielbar“ kann auf einer Store-Seite Verschiedenes bedeuten, und ein gutes Reisespiel muss ohnehin mehr können: mit einer Hand funktionieren, zwischen zwei Haltestellen passen und deinen Akku nicht vor der Landung leer saugen. Das ist die Checkliste, die wir benutzen. Wir machen OutBrick, deshalb nehmen wir es als Beispiel, und wir haben uns bemüht, bei Dingen zu bleiben, die du selbst prüfen kannst.',
     keyTakeaways: [
       'Teste das Offline-Spiel vor der Reise zu Hause im Flugmodus, auch einen Kaltstart und die nächsten paar Levels.',

@@ -71,6 +71,7 @@ export function EditorialPage({
   before,
   locale,
   languages,
+  page,
 }: {
   current?: Section;
   tone?: string;
@@ -82,6 +83,7 @@ export function EditorialPage({
   locale?: TranslatedLocale;
   /** The page's own versions in other languages, for the footer's language picker. */
   languages?: Partial<Record<Locale, string>>;
+  page?: string;
 }) {
   if (locale) {
     return (
@@ -91,7 +93,7 @@ export function EditorialPage({
         <TranslatedEditorialHeader locale={locale} current={current} />
         <main id="main">{children}</main>
         <div className="ob-site ed-chrome">
-          <VillageFooter locale={locale} languages={languages} />
+          <VillageFooter locale={locale} page={page} languages={languages} />
         </div>
       </div>
     );
@@ -102,7 +104,7 @@ export function EditorialPage({
       {before}
       <EditorialHeader current={current} />
       <main id="main">{children}</main>
-      <EditorialFooter languages={languages} />
+      <div className="ob-site ed-chrome"><VillageFooter page={page} languages={languages} /></div>
     </div>
   );
 }

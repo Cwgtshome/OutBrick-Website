@@ -1,3 +1,4 @@
+import { localeAlternates } from './i18n/locales.ts';
 export const siteUrl = 'https://www.outbrick.site';
 
 export type SocialNetwork = 'tiktok' | 'youtube' | 'instagram' | 'snapchat' | 'x';
@@ -40,7 +41,7 @@ export function pageMetadata({
   return {
     title: { absolute: title },
     description,
-    alternates: { canonical: path },
+    alternates: localeAlternates('en', path),
     openGraph: {
       type: 'website' as const,
       siteName: 'OutBrick',

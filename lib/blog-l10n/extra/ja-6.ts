@@ -1,5 +1,5 @@
 import type { ExtraGuides } from '../../i18n/blog';
-import { appStoreUrl } from '../../app-store-url';
+import { appStoreUrl } from '../../app-store-url.ts';
 
 const outbrick =
   'https://apps.apple.com/us/app/outbrick-block-sort-puzzle/id6807997465';

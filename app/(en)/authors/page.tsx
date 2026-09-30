@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { articles, authors } from '../../../lib/blog';
@@ -11,7 +12,7 @@ const description =
 export const metadata: Metadata = {
   title: 'Authors of the OutBrick Journal',
   description,
-  alternates: { canonical: '/authors' },
+  alternates: localeAlternates('en', '/authors' ),
   openGraph: {
     type: 'website',
     url: `${siteUrl}/authors`,
@@ -47,7 +48,7 @@ export default function AuthorsPage() {
   );
 
   return (
-    <EditorialPage current="authors">
+    <EditorialPage page={'/authors'} current="authors">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Authors' }]} />

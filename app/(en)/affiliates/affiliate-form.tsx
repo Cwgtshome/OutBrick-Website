@@ -1,4 +1,7 @@
 'use client';
+import { useLocale } from '../../components/locale-context';
+import { clientTree } from '../../../lib/i18n/client-tree';
+import type { Locale } from '../../../lib/i18n/locales';
 
 import { useEffect, useState } from 'react';
 import { affiliateLink, codeStem, proposeCode } from '../../../lib/affiliate-code.mjs';
@@ -13,6 +16,22 @@ const audienceSizes = [
   { value: 'over-1m', label: 'Over 1 million' },
 ];
 
+/** Only labels change; the values posted to the affiliate form remain stable. */
+function localizedAudienceSizes(locale: Locale) {
+  if (locale === 'en') return audienceSizes;
+  const number = new Intl.NumberFormat(locale);
+  const bounds = [[1_000], [1_000, 10_000], [10_000, 50_000], [50_000, 250_000], [250_000, 1_000_000], [1_000_000]];
+  const under = { fr: 'Moins de ', de: 'Unter ', es: 'Menos de ', ja: '' }[locale];
+  const over = { fr: 'Plus de ', de: 'Über ', es: 'Más de ', ja: '' }[locale];
+  return audienceSizes.map((option, index) => {
+    const [lower, upper] = bounds[index];
+    const label = upper !== undefined
+      ? `${number.format(lower)} – ${number.format(upper)}`
+      : `${index === 0 ? under : over}${number.format(lower)}${locale === 'ja' ? (index === 0 ? '未満' : '超') : ''}`;
+    return { ...option, label };
+  });
+}
+
 /**
  * The affiliate application (Netlify form `affiliate`). As the applicant types a handle — or,
  * failing that, their name — it proposes a code (lib/affiliate-code.mjs: MOURAD27) and shows
@@ -23,6 +42,7 @@ const audienceSizes = [
  * under the applicant's fingers and the prerendered HTML stays deterministic.
  */
 export function AffiliateForm() {
+  const locale = useLocale();
   const [name, setName] = useState('');
   const [handle, setHandle] = useState('');
   const [suffix, setSuffix] = useState<number | null>(null);
@@ -53,7 +73,7 @@ export function AffiliateForm() {
     }
   }
 
-  return (
+  return clientTree((
     <NetlifyForm
       name="affiliate"
       action="/affiliates/thanks"
@@ -69,8 +89,8 @@ export function AffiliateForm() {
               <>
                 <p>Your proposed code and link — they start working once we approve your application:</p>
                 <div className="aff-issued">
-                  <span className="aff-code-big">{sentCode}</span>
-                  <span className="aff-link-text">{sentLink.replace('https://www.', '')}</span>
+                  <span translate="no" className="aff-code-big">{sentCode}</span>
+                  <span translate="no" className="aff-link-text">{sentLink.replace('https://www.', '')}</span>
                   <button type="button" className="obf-btn ghost" onClick={() => copy(sentLink)}>
                     {copied ? 'Copied' : 'Copy link'}
                   </button>
@@ -79,7 +99,7 @@ export function AffiliateForm() {
               </>
             ) : null}
             <p>
-              We review every application and reply by email to <b>{values.get('email')}</b>. If the code
+              We review every application and reply by email to <b translate="no">{values.get('email')}</b>. If the code
               is already taken, we will suggest the nearest one. Please don’t share the link until we
               confirm it: until then it is only a proposal and earns nothing.
             </p>
@@ -121,7 +141,7 @@ export function AffiliateForm() {
               spoken="an audience size"
               hint="Followers or monthly readers, across all your channels."
               placeholder="Choose a range"
-              options={audienceSizes}
+              options={localizedAudienceSizes(locale)}
               error={errors.audience}
             />
             <TextField name="country" label="Country you live in" spoken="your country" autoComplete="country-name" error={errors.country} maxLength={80} />
@@ -155,9 +175,9 @@ export function AffiliateForm() {
               {code ? (
                 <>
                   <span className="aff-proposal-label">Your proposed code</span>
-                  <span className="aff-code">{code}</span>
+                  <span translate="no" className="aff-code">{code}</span>
                   <span className="aff-proposal-link">
-                    Your link will be <b>outbrick.site/r/{code.toLowerCase()}</b>
+                    Your link will be <b translate="no">outbrick.site/r/{code.toLowerCase()}</b>
                   </span>
                 </>
               ) : (
@@ -180,5 +200,5 @@ export function AffiliateForm() {
         </>
       )}
     </NetlifyForm>
-  );
+  ), locale);
 }

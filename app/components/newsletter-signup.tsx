@@ -1,5 +1,10 @@
 'use client';
 
+import { useLocale } from './locale-context';
+import { formWords } from '../../lib/i18n/forms';
+import { validateForm, useHydrated } from './netlify-form';
+import { newsletterWords } from '../../lib/i18n/newsletter';
+import { localePath } from '../../lib/i18n/locales';
 import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
 import '../styles/growth.css';
 
@@ -34,7 +39,7 @@ export function NewsletterSignup({
   heading = 'Get a letter when there’s a new village',
   headingLevel = 2,
   intro = 'New villages, big updates and the odd note from the bench. About once a month, never more than that.',
-  defaultLanguage = 'en',
+  defaultLanguage,
   showHeading = true,
 }: {
   heading?: string;
@@ -44,7 +49,13 @@ export function NewsletterSignup({
   /** Off where the surrounding block already says what the form is for. */
   showHeading?: boolean;
 }) {
+  const locale = useLocale();
+  const t = newsletterWords[locale];
+  defaultLanguage ??= locale;
   const id = useId();
+  const ready = useHydrated();
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [summary, setSummary] = useState('');
   const [state, setState] = useState<'idle' | 'sending' | 'done'>('idle');
   const doneRef = useRef<HTMLHeadingElement>(null);
   const Heading = headingLevel === 2 ? 'h2' : 'h3';
@@ -59,6 +70,11 @@ export function NewsletterSignup({
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
+    const validation = validateForm(form, locale);
+    setErrors(validation.errors);
+    const count = Object.keys(validation.errors).length;
+    if (count) { setSummary(formWords[locale].summary(count)); validation.first?.focus(); return; }
+    setSummary('');
     const body = new URLSearchParams();
     for (const [key, value] of new FormData(form)) if (typeof value === 'string') body.append(key, value);
     setState('sending');
@@ -73,7 +89,7 @@ export function NewsletterSignup({
     } catch {
       // Let the browser post it the old way: /newsletter/thanks still records it.
       setState('idle');
-      form.submit();
+      setSummary(formWords[locale].failed);
     }
   }
 
@@ -82,10 +98,9 @@ export function NewsletterSignup({
       <div className="obx-news" data-newsletter-state="done">
         <output className="obx-news-done">
           <span className="obx-news-mark" aria-hidden="true">✓</span>
-          <Heading ref={doneRef} tabIndex={-1}>You’re on the list.</Heading>
+          <Heading ref={doneRef} tabIndex={-1}>{t.done}</Heading>
           <p>
-            Thank you. The next letter comes when there’s a new village or a big update, about once a
-            month at most. To come off the list, reply to any letter. <a href="/privacy">How we look after your email</a>.
+            {t.thanks}{' '}<a href={localePath(locale, '/privacy')}>{t.privacyNote}</a>.
           </p>
         </output>
       </div>
@@ -94,31 +109,33 @@ export function NewsletterSignup({
 
   return (
     <div className="obx-news" data-newsletter-state={state}>
-      {showHeading ? <Heading id={headingId}>{heading}</Heading> : null}
-      {showHeading && intro ? <p className="obx-news-intro">{intro}</p> : null}
+      {showHeading ? <Heading id={headingId}>{locale === 'en' ? heading : t.heading}</Heading> : null}
+      {showHeading && intro ? <p className="obx-news-intro">{locale === 'en' ? intro : t.intro}</p> : null}
       <form
         name="newsletter"
         method="POST"
-        action="/newsletter/thanks"
+        action={localePath(locale, '/newsletter/thanks')}
         data-netlify="true"
         netlify-honeypot="bot-field"
         aria-labelledby={showHeading ? headingId : undefined}
-        aria-label={showHeading ? undefined : 'Newsletter sign-up'}
+        aria-label={showHeading ? undefined : t.label}
         onSubmit={handleSubmit}
+        noValidate={ready}
       >
         <input type="hidden" name="form-name" value="newsletter" />
         <p hidden>
           <label>
-            Leave this empty: <input name="bot-field" tabIndex={-1} autoComplete="off" />
+            {t.empty} <input name="bot-field" tabIndex={-1} autoComplete="off" />
           </label>
         </p>
         <div className="obx-news-row">
           <div className="obx-news-field">
-            <label htmlFor={`${id}-email`}>Email address</label>
-            <input id={`${id}-email`} name="email" type="email" required autoComplete="email" inputMode="email" spellCheck={false} />
+            <label htmlFor={`${id}-email`}>{t.email}</label>
+            <input id={`${id}-email`} name="email" type="email" required autoComplete="email" inputMode="email" spellCheck={false} data-label={t.email} aria-invalid={!!errors.email} aria-describedby={errors.email ? `${id}-email-error` : undefined} />
+            {errors.email ? <p id={`${id}-email-error`} className="obf-error">{errors.email}</p> : null}
           </div>
           <div className="obx-news-field">
-            <label htmlFor={`${id}-language`}>Language</label>
+            <label htmlFor={`${id}-language`}>{t.language}</label>
             <select id={`${id}-language`} name="language" defaultValue={defaultLanguage}>
               {languages.map((language) => (
                 <option key={language.value} value={language.value} lang={language.value}>
@@ -129,14 +146,16 @@ export function NewsletterSignup({
           </div>
         </div>
         <div className="obx-news-consent">
-          <input id={`${id}-consent`} name="consent" type="checkbox" value="yes" required />
+          <input id={`${id}-consent`} name="consent" type="checkbox" value="yes" required data-missing={formWords[locale].checkbox} aria-invalid={!!errors.consent} aria-describedby={errors.consent ? `${id}-consent-error` : undefined} />
           <span>
-            <label htmlFor={`${id}-consent`}>Email me about OutBrick updates. Unsubscribe any time.</label>{' '}
-            <a href="/privacy">Privacy policy</a>
+            <label htmlFor={`${id}-consent`}>{t.consent}</label>{' '}
+            <a href={localePath(locale, '/privacy')}>{t.privacy}</a>
           </span>
         </div>
+        {errors.consent ? <p id={`${id}-consent-error`} className="obf-error">{errors.consent}</p> : null}
+        <p className="obf-alert" role="alert">{summary}</p>
         <button className="obx-news-submit" type="submit" disabled={state === 'sending'}>
-          {state === 'sending' ? 'Signing you up…' : 'Sign me up'}
+          {state === 'sending' ? t.sending : t.submit}
         </button>
       </form>
     </div>

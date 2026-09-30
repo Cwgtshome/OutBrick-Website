@@ -1,5 +1,5 @@
 import type { ExtraGuides } from '../../i18n/blog';
-import { appStoreUrl } from '../../app-store-url';
+import { appStoreUrl } from '../../app-store-url.ts';
 export const es10: ExtraGuides = {
   'puzzle-walkthrough-board-mismatch': {
     title: 'Por qué una guía de puzle no coincide con tu tablero',

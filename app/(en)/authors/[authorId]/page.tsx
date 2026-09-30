@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../../editorial-shell';
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
   return {
     title: { absolute: `${author.name}, author at the OutBrick Journal` },
     description,
-    alternates: { canonical: `/authors/${author.id}` },
+    alternates: localeAlternates('en', `/authors/${author.id}`),
     openGraph: {
       type: 'profile',
       url: `${siteUrl}/authors/${author.id}`,
@@ -65,7 +66,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   );
 
   return (
-    <EditorialPage current="authors">
+    <EditorialPage page={`/authors/${author.id}`} current="authors">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { href: '/authors', label: 'Authors' }, { label: author.name }]} />

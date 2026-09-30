@@ -11,6 +11,7 @@
 
 import { readdir, readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
+import { readNetlifyRedirects } from './lib/pages.mjs';
 
 const root = new URL('../dist/client/', import.meta.url).pathname;
 const external = process.argv.includes('--external');
@@ -30,8 +31,7 @@ const fileSet = new Set(files.map((f) => `/${relative(root, f)}`));
 const htmlFiles = files.filter((f) => f.endsWith('.html'));
 
 // netlify.toml redirect and rewrite sources, as patterns
-const toml = await readFile(new URL('../netlify.toml', import.meta.url), 'utf8');
-const rules = [...toml.matchAll(/from\s*=\s*"([^"]+)"/g)].map(([, from]) =>
+const rules = readNetlifyRedirects().filter(({ status }) => status >= 200 && status < 400).map(({ from }) =>
   new RegExp(`^${from.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\\\*$|\*$/, '.*').replace(/:[a-z]+/gi, '[^/]+')}/?$`),
 );
 

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { isTranslatedLocale, translatedLocales } from '../../lib/i18n/locales';
-import { rootMetadata, SiteDocument } from '../site-document';
+import { localizedRootMetadata, SiteDocument } from '../site-document';
 
 /**
  * Root layout for the translated pages: /fr, /de, /es, /ja and their /play.
@@ -17,8 +17,10 @@ export function generateStaticParams() {
 
 // Every page under here names its own canonical and hreflang set. The layout
 // leaves `alternates` out: the RSS `types` entry is for the English journal.
-const { alternates: _englishAlternates, ...shared } = rootMetadata;
-export const metadata: Metadata = shared;
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  return localizedRootMetadata(isTranslatedLocale(locale) ? locale : 'en');
+}
 
 export default async function LocaleLayout({
   children,

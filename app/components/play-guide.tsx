@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { homeCopy } from '../../lib/i18n/home';
 import { chromeCopy } from '../../lib/i18n/chrome';
 import { localeAlternates, localePath, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { playCopy } from '../../lib/i18n/play';
@@ -30,9 +31,9 @@ export function playMetadata(locale: Locale): Metadata {
       locale: ogLocales[locale],
       title,
       description,
-      images: [{ url: '/og.png', width: 1200, height: 630, alt: 'OutBrick mascots and home screen' }],
+      images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, width: 1200, height: 630, alt: homeCopy[locale].meta.ogImageAlt }],
     },
-    twitter: { card: 'summary_large_image', title, description, images: ['/og.png'] },
+    twitter: { card: 'summary_large_image', title, description, images: [locale === 'en' ? '/og.png' : `/og/${locale}.png`] },
   };
 }
 
@@ -69,7 +70,7 @@ export function PlayGuide({ locale }: { locale: Locale }) {
               </ul>
               <p className="play-daily">
                 {t.daily[0]}
-                <a className="daily-link" href="/daily" hrefLang={locale === 'en' ? undefined : 'en'}>{t.daily[1]}</a>
+                <a className="daily-link" href={localePath(locale, '/daily')}>{t.daily[1]}</a>
               </p>
             </div>
             <div className="play-board-wrap">

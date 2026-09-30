@@ -6,7 +6,7 @@ export const de4: ExtraGuides = {
     title: 'Faire Puzzles: Schwierigkeit, Scheitern und Vertrauen',
     dek: 'Schwer ist nicht gleich unfair. Was die Forschung zu Herausforderung und Scheitern sagt: welchen Puzzles wir trauen und welche wir entnervt abbrechen.',
     imageAlt: 'Ein echtes OutBrick-Spielfeld auf einem iPhone, links Moss mit Werkzeuggürtel, rechts Sprout mit einem Keimling auf dem Kopf, vor einer marineblauen Wand aus Steinen',
-    tags: ['Puzzle-Design', 'Schwierigkeitsgrad', 'Spieldesign', 'Scheitern in Spielen', 'faire Rätsel'],
+    tags: ["Puzzledesign", "Schwierigkeitsgestaltung", "Spielentwicklung", "Scheitern in Spielen", "Spieldesign"],
     intro: 'Wer Puzzles spielt, kennt zwei ganz verschiedene Arten, festzustecken. Die eine ist die gute: Du siehst jedes Teil, du kennst die Regeln, und dir ist die Idee einfach noch nicht gekommen. Die andere bringt dich dazu, das Handy wegzulegen: Die Lösung hing an etwas, das du nicht sehen konntest, das Spiel hat ein Experiment bestraft, dem du gar nicht ausweichen konntest, oder ein einziger Ausrutscher hat dich zehn Minuten gekostet. Beides ist „schwer“. Nur eines fühlt sich fair an. Spieleforscher haben die letzten fünfzehn Jahre damit verbracht, diese beiden Fälle auseinanderzuhalten, und was sie herausgefunden haben, ist nützlich für alle, die Puzzles bauen, und für alle, die entscheiden, welche davon ihren Abend verdienen.',
     keyTakeaways: [
       'Spieler erleben mehrere Arten von Herausforderung. Ein Puzzle fühlt sich fair an, wenn seine Herausforderung im Denken liegt und nicht in verborgenen Informationen oder willkürlichen Strafen.',
@@ -74,7 +74,7 @@ export const de4: ExtraGuides = {
     title: 'Game Feel und Juice: warum ein guter Schub zählt',
     dek: 'Juice ist das Extra-Feedback, das ein Tippen gut anfühlen lässt. Studien mit Tausenden Spielern zeigen: Es hilft bis zu einem Punkt, dann schadet es.',
     imageAlt: 'Ein echtes OutBrick-Spielfeld auf einem iPhone zwischen Moss mit Werkzeuggürtel und Vio mit Kopfhörern, dazu schwebende Steine vor einer marineblauen Wand aus Steinen',
-    tags: ['Game Feel', 'Juice Spieldesign', 'Spieldesign', 'Feedback in Spielen', 'Spielgefühl'],
+    tags: ["Spielgefühl", "Juice-Design", "Spieldesign", "Spielentwicklung", "Rückmeldung"],
     intro: 'Nimm zwei Versionen desselben Spiels in die Hand. In der einen gleitet ein Stein über das Feld und hält an. In der anderen gleitet er, bremst sanft ab, stößt ganz leicht gegen die Wand, und beim Hinausgleiten wirbelt ein wenig Staub am Tor auf. Die Regeln sind identisch. Die eine fühlt sich an wie eine Tabellenkalkulation, die andere wie ein Spielzeug. Designer nennen diesen Unterschied Game Feel, und das zusätzliche, nicht notwendige Feedback, das ihn erzeugt, heißt „Juice“. Es ist eine der meistdiskutierten Ideen der Spieleentwicklung und war bis vor Kurzem eine der am wenigsten geprüften. Die Forschung, die es inzwischen gibt, hat eine klare Botschaft für alle, die Spiele machen: Juice wirkt, und zu viel davon auch.',
     keyTakeaways: [
       'Juice ist redundantes Feedback: zusätzliche visuelle, akustische oder haptische Reaktionen auf eine Aktion, die die Regeln nicht brauchen, der Spieler aber spürt.',
@@ -140,7 +140,7 @@ export const de4: ExtraGuides = {
     title: 'Wie Computer Puzzle-Level erzeugen und warum Prüfen zählt',
     dek: 'Prozedurale Generierung erzeugt endlos Puzzles, doch ein bloß lösbares Feld ist noch kein gutes. Wie Generatoren arbeiten und wo ihre Grenzen liegen.',
     imageAlt: 'Ein echtes OutBrick-Spielfeld auf einem iPhone, auf der einen Seite Poppy mit einem Zauberstab mit Sternspitze, auf der anderen Moss, zwischen schwebenden Steinen',
-    tags: ['prozedurale Generierung', 'Level-Generierung', 'Puzzle-Design', 'Spieleentwicklung', 'Schiebepuzzle'],
+    tags: ["prozedurale Generierung", "Puzzledesign", "Spieleentwicklung", "Spielentwicklung", "Schiebepuzzles"],
     intro: 'Irgendwo zwischen dem handgezeichneten Level und dem unendlichen liegt die prozedurale Content-Generierung: Software, die Spielinhalte erzeugt, von Landschaften und Dungeons bis zu dem Puzzle, das du im Bus spielst. Für Puzzles ist sie besonders verlockend. Ein Computer erzeugt ein neues Feld in Millisekunden, und die Ideen gehen ihm nie aus. Er kann aber auch Tausende Felder erzeugen, die unlösbar, trivial oder technisch in Ordnung und völlig freudlos sind. Wie die Forschung dieses Problem angegangen ist, ist ein guter Rundgang durch die Frage, was ein Puzzle zum Puzzle macht, und eine nützliche Orientierung für Spieler, die sich fragen, ob die „endlosen Level“ auf einer Store-Seite etwas taugen.',
     keyTakeaways: [
       'Die meisten Puzzle-Generatoren arbeiten nach dem Prinzip Erzeugen und Testen: einen Kandidaten vorschlagen, ihn bewerten, die guten behalten und nach besseren suchen.',
@@ -198,7 +198,7 @@ export const de4: ExtraGuides = {
     title: 'Dynamische Schwierigkeit: Sollen Spiele sich anpassen?',
     dek: 'Viele Spiele passen sich still an dein Können an. Was Studien über adaptive Schwierigkeit sagen, warum sie übermütig macht und warum Fragen besser ist.',
     imageAlt: 'Ein iPhone mit der Wochenrangliste von OutBrick, zwischen Flurry mit gestreifter Bommelmütze und einem zwinkernden gelben Zippy',
-    tags: ['dynamische Schwierigkeitsanpassung', 'adaptive Schwierigkeit', 'Schwierigkeitsgrad', 'Spieldesign', 'Spielerautonomie'],
+    tags: ["dynamische Schwierigkeitsanpassung", "Schwierigkeitsgestaltung", "Spielentwicklung", "Selbstbestimmung der Spieler", "Spieldesign"],
     intro: 'Du stirbst dreimal an derselben Stelle eines Spiels, und beim vierten Versuch wirkt es ein bisschen leichter. Waren die Gegner langsamer, oder hast du es endlich kapiert? Oft kannst du es nicht sagen, und das ist Absicht. Dynamische Schwierigkeitsanpassung, kurz DDA (Dynamic Difficulty Adjustment), bedeutet, die Herausforderung eines Spiels während des Spielens zu verändern, je nachdem, wie du dich schlägst. Sie verspricht jedem Spieler ein Spiel, das genau passt. Sie wirft aber auch unbequeme Fragen auf: nach Ehrlichkeit, danach, wer entscheiden darf, wie schwer ein Spiel sein soll, und danach, was ein Sieg bedeutet, wenn das Spiel geholfen hat. Hier steht, was die Forschung sagt und wo wir bei unseren eigenen Puzzles gelandet sind.',
     keyTakeaways: [
       'Adaptive Schwierigkeit verbessert in Studien oft das Spielerlebnis, aber die Details zählen: Spieler können das Gefühl von Kontrolle verlieren, wenn das System alles entscheidet.',
@@ -262,7 +262,7 @@ export const de4: ExtraGuides = {
     title: 'Tutorials, die ohne Worte lehren: was funktioniert',
     dek: 'Laut einer Studie mit 45.000 Spielern lohnten sich Tutorials nur in komplexen Spielen. Was die Forschung über Lernen im Spiel und die erste Stunde sagt.',
     imageAlt: 'Ein iPhone mit der Reisekarte von OutBrick bei der Button Factory, zwischen Flurry mit Bommelmütze und Bloo mit seiner Uhr',
-    tags: ['Spiel-Tutorials', 'Onboarding', 'Spieldesign', 'Tutorial-Design', 'Lernen im Spiel'],
+    tags: ["Spiel-Tutorials", "Einstieg", "Spieldesign", "Spielentwicklung", "Lernspiele"],
     intro: 'Die meisten von uns haben schon ein Tutorial übersprungen. Manche haben ein Tutorial übersprungen, sich verirrt und sind zurückgegangen. Einige haben ein Spiel gelöscht, weil der Einstieg aus zehn Bildschirmen voller Anweisungen bestand, bevor man überhaupt etwas anfassen durfte. Neue Spieler anzulernen ist eine der schwersten Aufgaben im Spieldesign: Erklärst du zu wenig, schwimmen sie; erklärst du zu viel, gehen sie, bevor das Spiel überhaupt anfängt. Die gute Nachricht: Das ist einer der besser erforschten Winkel des Spieldesigns, mit Experimenten an Zehntausenden Spielern. Die Ergebnisse sind erstaunlich einheitlich, und sie weisen auf Spiele hin, die vor allem dadurch lehren, dass sie dich spielen lassen.',
     keyTakeaways: [
       'In einer Studie mit mehr als 45.000 Spielern steigerten Tutorials die Spielzeit im komplexesten Spiel um bis zu 29 %, machten in zwei einfacheren aber keinen signifikanten Unterschied.',
@@ -319,7 +319,7 @@ export const de4: ExtraGuides = {
     title: 'Der Klang des Erfolgs: wie Sound das Spielerlebnis prägt',
     dek: 'Sound verändert, wie gefesselt, angespannt und kompetent sich Spieler fühlen, und Musik kann sogar das Zeitgefühl verbiegen. Was die Forschung zeigt.',
     imageAlt: 'Ein iPhone mit der Reisekarte von OutBrick in Cherry Blossom Town, zwischen Moss mit Werkzeuggürtel und einem zwinkernden gelben Zippy',
-    tags: ['Game Audio', 'Sounddesign', 'Spielmusik', 'Feedback in Spielen', 'Spielerlebnis'],
+    tags: ["Spielaudio", "Sounddesign", "Rückmeldung", "Spielentwicklung", "Spielerlebnis"],
     intro: 'Schalte in einem Spiel, das du gut kennst, den Ton aus, und etwas Seltsames passiert. An den Regeln hat sich nichts geändert, und doch wirkt es flacher, langsamer, merkwürdig unsicherer. Das Klicken, wenn ein Teil landet, der aufsteigende Ton, wenn du kurz vor der Lösung stehst, der kleine Akkord bei einem Sieg: Sie haben dir Dinge gesagt, ohne dass du gemerkt hast, dass dir etwas gesagt wird. Sound ist einer der wirkungsvollsten und unsichtbarsten Teile des Spieldesigns. Forscher haben seine Wirkung auf Immersion, Gefühle und sogar darauf gemessen, wie lange Spieler glauben, gespielt zu haben. Und weil so viele Menschen auf dem Handy ohne Ton spielen, steckt in der Forschung auch eine Lehre darüber, was Sound nie allein leisten sollte.',
     keyTakeaways: [
       'In einem kontrollierten Experiment verbesserte eingeschalteter Spielsound jede gemessene Dimension des Spielerlebnisses, von Immersion und Flow bis zu Kompetenz und positiven Gefühlen.',
@@ -382,7 +382,7 @@ export const de4: ExtraGuides = {
     title: 'Lootboxen, variable Belohnungen und faire Monetarisierung',
     dek: 'Lootbox-Ausgaben hängen durchgängig mit Glücksspielproblemen zusammen. Was Studien zeigen, was Monetarisierung räuberisch macht, und ein fairer Test.',
     imageAlt: 'Ein iPhone mit der Reisekarte von OutBrick beim Cloud Carnival, zwischen einem zwinkernden gelben Zippy und einem roten Bricko',
-    tags: ['Lootboxen', 'Monetarisierung', 'Ethik in Spielen', 'Handyspiele', 'Glücksspiel in Spielen'],
+    tags: ["Lootboxen", "Monetarisierung", "Ethik in Spielen", "Spielentwicklung", "Handyspiele"],
     intro: 'Eine Lootbox ist eine einfache Sache: bezahlen, öffnen, etwas bekommen, aber was, weißt du erst, wenn es zu spät ist, es dir anders zu überlegen. Lootboxen gehören inzwischen zu den am besten erforschten Elementen von Spielen und zu den am stärksten regulierten. Die Forschung ist mittlerweile umfangreich genug, um manches klar zu sagen und ehrlich zu sein, was sie noch nicht sagen kann. Sie liefert Spielern und Entwicklern außerdem einen praktischen Test für jede Art, wie ein Spiel um Geld bittet, auch für unsere. OutBrick verdient Geld mit optionalen Käufen und freiwilligen Belohnungsvideos, deshalb haben wir am Ende versucht, denselben Test auf uns selbst anzuwenden.',
     keyTakeaways: [
       'Über viele Studien hinweg hängen Ausgaben für Lootboxen mit Symptomen problematischen Glücksspiels zusammen; eine Metaanalyse bezifferte die Korrelation auf etwa 0,26, klein, aber reproduzierbar.',
@@ -445,7 +445,7 @@ export const de4: ExtraGuides = {
     title: 'Dark Patterns in Handyspielen erkennen',
     dek: 'Nervige Pop-ups, verwirrende Währungen, Angebote im schlechtesten Moment: was die Forschung über manipulatives Design in Spielen sagt, plus Checkliste.',
     imageAlt: 'Ein iPhone mit dem OutBrick-Shop samt Sonderangeboten und Brick Pass, zwischen Poppy mit einem Zauberstab mit Sternspitze und Bloo mit seiner Uhr',
-    tags: ['Dark Patterns', 'manipulatives Design', 'Handyspiele', 'Monetarisierung', 'Ethik in Spielen'],
+    tags: ["Dark Patterns", "Ethik in Spielen", "Mobile Gaming", "Monetarisierung", "gesundes Spielen"],
     intro: 'Der Begriff „Dark Pattern“ wurde für Websites geprägt: das vorab angekreuzte Kästchen, der Abbrechen-Knopf in Grau auf Grau, das Abo, das man mit einem Tippen abschließt und mit zwölf kündigt. Spiele haben all das geerbt und einiges Eigene erfunden. Weil ein Spiel darauf ausgelegt ist, einen zu fesseln, ist die Grenze zwischen mitreißend und manipulativ von innen oft schwer zu erkennen. Forscher aus Mensch-Computer-Interaktion, Verbraucherschutz und Suchtforschung haben begonnen, diese Grenze zu kartieren. Ihre Arbeit gibt Spielern Worte für das Gefühl, dass ein Spiel gegen sie arbeitet, und hält Designern einen Spiegel vor. Wir machen ein Free-to-Play-Spiel, also haben wir uns den Spiegel auch selbst vorgehalten.',
     keyTakeaways: [
       'Dark Patterns sind Designentscheidungen, die die Interessen des Anbieters über die des Nutzers stellen, durch Nörgeln, Behindern, Verschleiern, Eingriffe in die Oberfläche oder erzwungene Handlungen.',
@@ -510,7 +510,7 @@ export const de4: ExtraGuides = {
     title: 'Warum wir an Spielfiguren hängen, auch an stummen',
     dek: 'Spieler bewundern Spielfiguren, sorgen sich um sie und vermissen sie. Forschung zu Bindung, parasozialen Beziehungen und Niedlichkeit erklärt, warum.',
     imageAlt: 'Ein echtes OutBrick-Spielfeld auf einem iPhone zwischen Vio mit Kopfhörern und Peach mit einem kleinen Pfirsich auf dem Kopf, vor einer marineblauen Wand aus Steinen',
-    tags: ['Spielfiguren', 'Maskottchen', 'emotionale Bindung', 'parasoziale Beziehung', 'Spieldesign'],
+    tags: ["Spielfiguren", "Maskottchen", "Spielerbindung an Figuren", "Spieldesign", "Spielentwicklung"],
     intro: 'Menschen trauern um Figuren, die es nie gab. Sie benennen Haustiere nach ihnen, sorgen sich zwischen zwei Spielsitzungen um sie und spüren einen kleinen Stich, wenn ein Begleiter zurückbleibt. Neu ist das nicht: Das Publikum ging einseitige Bindungen zu Radiomoderatoren ein, lange bevor es Spiele gab. Aber Spiele fügen etwas hinzu, was Filme und Bücher nicht können, denn die Figur reagiert auf dich, und manchmal bist du für sie verantwortlich. Die Forschung zu Beziehungen zwischen Spielern und Figuren ist inzwischen reich genug, um einen großen Teil dieser Anziehung zu erklären, auch, warum eine Figur, die nie ein Wort sagt, trotzdem wichtig sein kann. Sie wirft auch eine Frage auf, die sich jedes Studio mit einem Maskottchen stellen sollte: Was schulden wir Spielern, denen etwas an ihr liegt?',
     keyTakeaways: [
       'Spieler entwickeln mehrere verschiedene Arten von Bindung an Figuren, von der Bewunderung ihres Könnens bis zur Sorge um ihr Wohlergehen.',
@@ -567,7 +567,7 @@ export const de4: ExtraGuides = {
     title: 'Farbe im Spieldesign: Kontrast, Bedeutung und Gefühl',
     dek: 'Was Farbpsychologie Spieldesignern sagen kann und was nicht, warum Kontrast mehr zählt als Farbton und wie farbige Spielsteine für alle lesbar werden.',
     imageAlt: 'Ein echtes OutBrick-Spielfeld mit farbigen Steinen auf einem iPhone, zwischen Moss mit Werkzeuggürtel und Flurry mit gestreifter Bommelmütze',
-    tags: ['Farbe in Spielen', 'Farbpsychologie', 'Spieldesign', 'Kontrast', 'Farbsehen'],
+    tags: ["Farbe in Spielen", "Spieldesign", "Kontrast", "Farbsehen", "Spielentwicklung"],
     intro: 'Farbe ist das Erste, was dir an den meisten Spielen auffällt, und das Letzte, worüber die meisten Spieler nachdenken. Rot heißt Gefahr, Grün heißt los, Gold heißt Schatz, und niemand musste es dir sagen. Designer stützen sich ständig auf Farbe, um eine Stimmung zu setzen, um zu zeigen, was wichtig ist, und in einem Farbsortier-Puzzle, um die Regeln selbst zu tragen. Populäre Texte über Farbpsychologie sind voller selbstbewusster Behauptungen: Blau beruhigt, Rot regt an, Gelb macht hungrig. Die Forschung ist interessanter und vorsichtiger. Am stärksten stützt sie etwas, das weniger glamourös ist als Stimmung: Kontrast, Beständigkeit und dass man sich nie allein auf Farbe verlässt.',
     keyTakeaways: [
       'Farbe wirkt sich auf Gefühle und Verhalten aus, aber die Forschung ist jung, und viele populäre Behauptungen über bestimmte Farben gehen über die Belege hinaus.',

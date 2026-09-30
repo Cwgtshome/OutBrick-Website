@@ -1,0 +1,4638 @@
+[
+  {
+    "text": "Who makes OutBrick, the sliding-brick colour-sort puzzle, what the game is built to respect, and why it publishes a cited journal alongside it.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "About OutBrick: who makes it and why",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "OutBrick",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "About OutBrick",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The OutBrick Journey map in Garden City, with Bloo, Peach and Sprout",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The rule",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Slide a brick and it glides until something stops it. Get every brick out through the gate that matches its colour and the board is clear.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The boards",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The Journey",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The cast",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Nine brick friends. Three share your Home screen at a time; they animate and speak in text bubbles.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The pressure",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "A move limit on every board. No clock, timer or countdown anywhere in the game.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "What it costs",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Free, with lives and six opt-in rewarded video placements. No banners, no interstitials, no subscription.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Where it runs",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, offline, with progress in your own iCloud.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Time",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Respect the pause",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Sessions have natural edges. Being interrupted costs nothing, the clear card is a real ending, and nothing interrupts a board.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Clarity",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Make the rule readable",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Challenge should come from the puzzle’s idea, not from unclear controls. Every board prints its target and its limit from the first tap.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Access",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Build access in",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Colour-blind glyphs are on by default, every brick is a VoiceOver element, and Reduce Motion is honoured everywhere.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Honesty",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Say what it costs",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Lives and rewarded videos exist, and the home page says exactly how both work, with nothing rounded in our favour.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "About",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "A small game, built",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "brick by brick.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "OutBrick is a sliding-brick colour-sort puzzle for the moments between things. It is an independent project by",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": ", and this site is where the game, the thinking behind it and the journal live side by side.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Read the play guide",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "min(100%, 250px)",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "rotate(2deg)",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Garden City on the OutBrick Journey map: a brick road winding between toy-brick houses.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The game, plainly",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Seven things that are true today.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Everything on this list matches the home page, which is where the game is described in full.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "See the game",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Working principles",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Four things we try not to break.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The workshop",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Why a puzzle game keeps a journal.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The game and the writing grow together. A new board can prompt a design note, and a research paper can change the question we ask of a feature. Publishing both keeps us honest about why the game works the way it does.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "When a story makes a research claim, it cites the source in APA 7 and says whether that source is a study, a standard, a news account or a studio’s own history. Conclusions stay the size the evidence supports.",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Read the journal",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "The research method",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "Contact",
+    "file": "app/(en)/about/page.tsx"
+  },
+  {
+    "text": "OutBrick affiliate programme: earn 30% as a creator",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Promote OutBrick: Block Sort Puzzle with your own link and earn 30% of our net proceeds from the in-app purchases Apple attributes to you, for 12 months.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Apply and get your code",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Tell us where you post and how you would show the game. If it is a fit, we confirm a personal code — MOURAD27, say — and the link that goes with it.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Share your link",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "outbrick.site/r/<your code> opens OutBrick on the App Store, carrying an App Store campaign tag that is yours alone. Put it in your bio, your description or your post, with a clear “affiliate link” note.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Earn",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "% of what follows",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "When App Store Connect attributes in-app purchases to your campaign — Brick Pass, Remove Ads, coins — you earn",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "% of OutBrick’s net proceeds from them, for",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "months from each download.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Customers attributed to your link spend",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Apple’s commission (example: 15%)",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "OutBrick’s proceeds",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Refunds in the month (example)",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Net proceeds",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Short video",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "TikTok, Shorts, Reels and Spotlight",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Board challenges, near-misses, the clear card and the friends’ victory moves — OutBrick reads well in fifteen seconds.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Long form",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "YouTubers and streamers",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Let-me-think-out-loud runs through a chapter, and the 167 villages of the Journey coming together stud by stud.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Writers",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Puzzle and mobile-game writers",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Blogs, newsletters and review sites that care about fair design: no clock, a free first undo, opt-in ads only.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Communities",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Puzzle clubs and community hosts",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Discord servers, subreddits and group chats of adult puzzle fans, posting within each community’s own rules.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Why a link, and not a discount code?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Every purchase in OutBrick is an Apple in-app purchase: Apple takes the payment and later pays OutBrick its proceeds, so there is no checkout of ours where a code could be typed. Your link carries an App Store campaign tag instead, and App Store Connect’s App Analytics tells us which downloads, and which purchases after them, came through it.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "How do you know which purchases came from me?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "From Apple. App Analytics reports downloads and proceeds per campaign, and your campaign is named after your code (aff-yourcode). It only counts people who agreed to share analytics with app developers, and it reports totals, not individuals — we never learn who your viewers are, and neither do you.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Why could my numbers look lower than my clicks?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Because Apple only attributes people who share analytics with developers, and only when the download follows your link. Someone who taps your link and installs days later from a search, or on another device, may not be attributed. We pay on what Apple reports — we do not estimate or extrapolate, in either direction.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "When and how am I paid?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Monthly. Once Apple has paid OutBrick for a month’s sales, we pay your",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "% of the net proceeds attributed to you in that month. Balances under",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "roll over to the next month. We agree the payment method with you when you are approved, and you are responsible for any tax due on what you earn.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "What counts, and for how long?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "All in-app purchases App Analytics attributes to your campaign — the Brick Pass, Remove Ads and coin bundles — for",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "months from each referred download, and only as far as App Analytics attributes them. Refunded purchases are taken back out. Downloads themselves earn nothing, because OutBrick is free.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Do I need a big following?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "No. We look at fit more than size: an audience that enjoys puzzles, and posts that show the game as it is. Small, engaged channels are welcome.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Can I run ads to my link?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "You may promote your own posts on your own channels. You may not bid on “OutBrick” or close variants in Apple Search Ads, or buy installs in any form.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Do I have to say it is an affiliate link?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Yes, every time, clearly and up front: #ad or “affiliate link” in the caption or on screen, or the platform’s own paid-partnership label. It is the law in many places — the FTC’s rules in the US, the ASA and CAP Code in the UK — and it is a rule of this programme everywhere.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "@context",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "@type",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "WebPage",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "@id",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "The OutBrick affiliate programme",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Organization",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "FAQPage",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Question",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Answer",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "BreadcrumbList",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "ListItem",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Affiliate programme",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Share the puzzle.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Earn from what follows.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Creators and writers who love a good puzzle get a personal link to OutBrick on the App Store, and",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "% of our net proceeds from the in-app purchases Apple attributes to it, for",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "months. Plain rules, Apple’s numbers, no tricks.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Apply now",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "How it works",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Your code",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "YOURCODE27",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "outbrick.site/r/yourcode27",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Three steps, and Apple keeps the score.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "What you earn",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "% of our net, for",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "months.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Commission",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "% of OutBrick’s net proceeds — what Apple pays us after its commission and any taxes it collects, less refunds.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "What counts",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "In-app purchases that App Store Connect’s App Analytics attributes to your campaign: the Brick Pass, Remove Ads and coin bundles.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "How long",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "months from each referred download, as far as App Analytics attributes the purchases.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Payouts",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Monthly, once Apple has paid us for the month. Balances under",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "roll over.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Example",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "A hypothetical month",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "These numbers are made up to show the arithmetic. They are not a forecast, and not OutBrick’s prices.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "You earn",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Apple’s commission is 15% or 30% depending on the developer’s programme, and in many countries sales tax or VAT comes out first. Your statement uses the real figures Apple reports.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Said plainly",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "What Apple can and can’t count.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "There is no analytics SDK in OutBrick, and this programme adds nothing to the app. Attribution comes entirely from App Store Connect’s App Analytics, so its limits are ours too:",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Apple only counts people who have agreed to share analytics with app developers. Many people have not, and their purchases cannot be attributed to anyone.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "A download is attributed when it follows a tap on your link. Someone who installs later from a search, or on another device, may not be.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "App Analytics reports totals per campaign, and Apple’s own figures can take a few days to settle. We pay on what Apple reports, reconciled with what Apple pays us.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "We never see who your viewers are. Nor do you.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Who it’s for",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "People whose audience likes a good puzzle.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "OutBrick is rated 4+, but this programme is for adults promoting to adults: promotion must not be directed at children under 13.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "The rules",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Fair to players, fair to you.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Always",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Disclose every post, up front: #ad, “affiliate link”, or the platform’s paid-partnership label (FTC in the US, ASA and CAP Code in the UK)",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Use your own link, outbrick.site/r/your-code, exactly as we give it",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Show real gameplay you recorded yourself",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Describe the game as it is — the",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "press kit",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "has the right words",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Never",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Pay, reward or incentivise anyone to install — no prizes, giveaways for downloads, or reward apps",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Fake clicks, installs or purchases: no bots, click farms or misleading redirects",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Bid on “OutBrick” or close variants in Apple Search Ads",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Aim promotion at children under 13",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Say “no ads”, “no lives” or that there is a timer; make money or health claims; or pose as OutBrick",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Approval is at OutBrick’s discretion. We may pause or end an affiliate’s participation, and withhold commission linked to a breach of these rules. If the terms change, we tell approved affiliates by email before the change applies.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Not sure what to post?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "The creators kit has ideas that work, the brand dos and don’ts, hashtags and the art.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Open the creators kit",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Questions",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Affiliate FAQ",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Apply",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Tell us about your channels.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "It takes about three minutes. We read every application, and reply by email either way.",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Questions first?",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Ask us",
+    "file": "app/(en)/affiliates/page.tsx"
+  },
+  {
+    "text": "Application received — the OutBrick affiliate programme",
+    "file": "app/(en)/affiliates/thanks/page.tsx"
+  },
+  {
+    "text": "Your application to the OutBrick affiliate programme arrived. We review every one and reply by email.",
+    "file": "app/(en)/affiliates/thanks/page.tsx"
+  },
+  {
+    "text": "Application received",
+    "file": "app/(en)/affiliates/thanks/page.tsx"
+  },
+  {
+    "text": "Thanks — we’ll take a look.",
+    "file": "app/(en)/affiliates/thanks/page.tsx"
+  },
+  {
+    "text": "Read the creators kit",
+    "file": "app/(en)/affiliates/thanks/page.tsx"
+  },
+  {
+    "text": "We review every application and reply by email. If you are approved, we confirm your code and your link, outbrick.site/r/your-code. It starts counting from the day it is approved; until then it is only a proposal.",
+    "file": "app/(en)/affiliates/thanks/page.tsx"
+  },
+  {
+    "text": "stories in the OutBrick Journal.",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": ", author at the OutBrick Journal",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "}, openGraph: { type: 'profile', url:",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": ", siteName: 'OutBrick', title:",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": ", description, images: [{ url:",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "— OutBrick Journal",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "InteractionCounter",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "BlogPosting",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "Authors",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "In the journal",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "stories so far.",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "The whole journal",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "Both authors",
+    "file": "app/(en)/authors/[authorId]/page.tsx"
+  },
+  {
+    "text": "Who writes the OutBrick Journal: design notes from founder Mourad Hamdi, and research-led essays from the OutBrick Editorial Desk.",
+    "file": "app/(en)/authors/page.tsx"
+  },
+  {
+    "text": "Authors of the OutBrick Journal",
+    "file": "app/(en)/authors/page.tsx"
+  },
+  {
+    "text": "ItemList",
+    "file": "app/(en)/authors/page.tsx"
+  },
+  {
+    "text": "clamp(28px, 4vw, 48px)",
+    "file": "app/(en)/authors/page.tsx"
+  },
+  {
+    "text": "Two bylines,",
+    "file": "app/(en)/authors/page.tsx"
+  },
+  {
+    "text": "one bench.",
+    "file": "app/(en)/authors/page.tsx"
+  },
+  {
+    "text": "OutBrick is a small studio, so the journal is written close to the work: design notes from the person making the game, and research essays edited by a desk that reads the sources first.",
+    "file": "app/(en)/authors/page.tsx"
+  },
+  {
+    "text": "All",
+    "file": "app/(en)/authors/page.tsx"
+  },
+  {
+    "text": "Your OutBrick challenge",
+    "file": "app/(en)/c/page.tsx"
+  },
+  {
+    "text": "Someone dared you to an OutBrick board. Get the game and clear it.",
+    "file": "app/(en)/c/page.tsx"
+  },
+  {
+    "text": "— remote job at OutBrick",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "at OutBrick",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Remote,",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "JobPosting",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "TELECOMMUTE",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Country",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "PropertyValue",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Careers",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Role details",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Location",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Remote",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Type",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Team",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Apply by",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Apply for this role",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "All open roles",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "About the role",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "What you’ll do",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "What you’ll bring",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Nice to have",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Don’t tick every box? Apply anyway. We would rather meet someone who can grow into this than miss them.",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Role summary",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "At a glance",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Remote, for people living in",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Employment",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Posted",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Closes",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Pay",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Depends on level and location; shared openly in the first call",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "How to apply",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Use the form below: your name, email, a link to your work, where you are, and a short note. We reply by email.",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "How we hire, step by step",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Apply for this role.",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Ten minutes, no account, no CV upload. A link to your work says more than a CV.",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Other open roles",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "· Remote ·",
+    "file": "app/(en)/careers/[slug]/page.tsx"
+  },
+  {
+    "text": "Careers at OutBrick: remote jobs in calm games",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Join OutBrick, the small, remote-first team behind OutBrick: Block Sort Puzzle. Five open roles in marketing, community, design and AI engineering.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Small",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Every person changes the game",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "OutBrick is a small company. What you make ships to players on six Apple platforms, and you will be able to point at it.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Calm",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "A calm game, made calmly",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "We make a puzzle with no clock, and we try to work the same way: steady weeks, honest planning, no crunch culture.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Honest",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "We say how it works",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Our players are told exactly how lives, ads and purchases work. We are as plain with each other, and with you in hiring.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Remote-first, from day one",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "We work from home, in writing, across time zones — with a few hours of overlap agreed with each person rather than imposed.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "The form on each role: a link to your work and a short note. No cover-letter theatre.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Intro call",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Thirty minutes on video with Mourad Hamdi, our founder: the role, you, and your questions.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "A practical step",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "A small exercise close to the real work, scoped to a few hours — or a walkthrough of something you have already made, if you prefer.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Meet the team",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "A conversation with the people you would work with most.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Offer",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "A written offer with the terms spelled out. Pay is discussed openly, early, not sprung at the end.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Fully remote, in any of the six countries we hire in",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Flexible hours around a short, agreed overlap",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Pay discussed openly from the first call",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Time and room to do careful work",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "The tools and software the job needs",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "CollectionPage",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Careers at OutBrick",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Build calm games",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "with us.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "OutBrick is a small, remote-first team making a puzzle game that respects the people who play it. We are hiring for",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "roles.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "See open roles",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "How we hire",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Open roles",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Five places at the table.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "All remote, open to people living in",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Why OutBrick",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "How we work.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Hiring process",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Five steps, no surprises.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "A person reads every application, and we tell you where you stand at each step.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "What we offer",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Kept honest.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Pay and terms depend on the role, the level and where you live; we share them in the first call rather than print numbers here we have not agreed with anyone yet.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Not quite your role?",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Tell us what you do anyway. Use the contact form with the topic set to Careers.",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Get in touch",
+    "file": "app/(en)/careers/page.tsx"
+  },
+  {
+    "text": "Application received — careers at OutBrick",
+    "file": "app/(en)/careers/thanks/page.tsx"
+  },
+  {
+    "text": "Your job application reached OutBrick. A person reads every application and replies by email.",
+    "file": "app/(en)/careers/thanks/page.tsx"
+  },
+  {
+    "text": "Thank you for applying.",
+    "file": "app/(en)/careers/thanks/page.tsx"
+  },
+  {
+    "text": "See all open roles",
+    "file": "app/(en)/careers/thanks/page.tsx"
+  },
+  {
+    "text": "A person reads every application. If it is a match, the next step is a short video call; either way, we will write to the email address you gave.",
+    "file": "app/(en)/careers/thanks/page.tsx"
+  },
+  {
+    "text": "Contact the OutBrick team about game support, bugs, accessibility, privacy, purchases, press, partnerships, affiliates or careers. A person replies.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Contact OutBrick: support, press and partnerships",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Stuck on a board?",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "The support page answers the common questions straight away.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Writing about OutBrick?",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "The press room has the release, the boilerplate and the facts.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Want to promote the game?",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "The affiliate programme has its own application.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Looking for a job?",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Each open role has its own page and application.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "ContactPage",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Contact OutBrick",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "ContactPoint",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "customer support",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Let’s untangle it.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Game support, a bug, accessibility, privacy, a purchase that did not arrive, press, partnerships, affiliates or a job — pick a topic and tell us. A person reads every message.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "A real line to the team.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "The form sends your message straight to the OutBrick team — no mail app needed — and a person replies by email.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Send a message",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "You might be looking for",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Purchases and refunds",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Refunds for App Store purchases are handled by Apple, not by OutBrick — the",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "refunds page",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "explains how to ask Apple, and we are glad to help if a purchase did not arrive.",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "A person replies",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Never sold or shared",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "No mail app needed",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Message sent — thank you for contacting OutBrick",
+    "file": "app/(en)/contact/thanks/page.tsx"
+  },
+  {
+    "text": "Your message reached the OutBrick team. A person reads every message and replies by email.",
+    "file": "app/(en)/contact/thanks/page.tsx"
+  },
+  {
+    "text": "Message sent",
+    "file": "app/(en)/contact/thanks/page.tsx"
+  },
+  {
+    "text": "Thank you — it’s with the team.",
+    "file": "app/(en)/contact/thanks/page.tsx"
+  },
+  {
+    "text": "Browse support answers",
+    "file": "app/(en)/contact/thanks/page.tsx"
+  },
+  {
+    "text": "A person reads every message and replies to the email address you gave. If you need to add something, reply to our email when it arrives.",
+    "file": "app/(en)/contact/thanks/page.tsx"
+  },
+  {
+    "text": "OutBrick creators kit: ideas, art, hashtags and rules",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Making videos or posts about OutBrick? Ideas that work, the brand dos and don’ts, downloadable art, suggested hashtags and how to disclose partnerships.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Board challenge",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Which brick goes first?",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Film a packed board, stop before the first move, and let your audience call it. Every board was cleared by a solver before it shipped, so there is always an answer to reveal.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Clip",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "“Can you beat the target?”",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Every board shows its move target and move limit from the first tap. Clear it on target without an undo for three stars — a natural fifteen-second challenge.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Share link",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Play on the web, share the result",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "The play guide on this site has real boards you can play in a browser. Finish one and the share link opens a page that previews your result — perfect for a bio or a reply.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Open the play guide",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Stickers",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "The friends, in Messages",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "OutBrick has an iMessage app with stickers and challenges. React with Bloo, Peach and Sprout, or send a board to a friend without leaving the thread.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "OutBrick creators kit",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Creators kit",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Make something",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "with the bricks.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Videos, posts, challenges and write-ups about OutBrick are welcome — no permission needed for honest content. Here is what works, the few rules that matter, and the art to use.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Get ideas",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Download the art",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "-160.webp",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "-160.webp 1x, /assets/stickers/",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "-320.webp 2x",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "What to make",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Four ideas that suit the game.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Brand dos and don’ts",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Show it as it is.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Do",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Write OutBrick as one word, capital O and B",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Record real gameplay yourself, on your own device",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Call the friends by name: Bloo, Peach, Sprout, Bricko, Flurry, Moss, Poppy, Vio and Zippy",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Use the art as supplied, at any size",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Say what it costs honestly: free, with optional purchases and opt-in rewarded videos",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Don’t",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Recolour, redraw or merge the friends, or give them voices — in the game they speak in text bubbles",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Say “no ads”, “no lives”, or that there is a timer or countdown",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Make brain-training, health or money-making claims",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Use the app icon or wordmark as your own avatar, or post as if you were OutBrick",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Suggest that Apple sponsors or endorses your content",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Assets",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "The art, ready to use.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "The",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "has the app icon, the wordmark, all nine friends as transparent PNGs and current",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "game captures",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "-320.webp",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "WebP sticker, 320 × 320",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "PNG, 360 × 360",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Hashtags and handles",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Tag it so we can find it.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Copy hashtags",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Use both on every post. Add your platform’s own puzzle or cosy-games tags if they fit your audience.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Tag",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "@outbrick on TikTok",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "and $1",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "as @outbrick, too — those profiles are not open yet.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Disclosure",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "If anything was given, say so.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "If you use an affiliate link, were paid, or received anything from OutBrick — a promo code, the Brick Pass, early access — say so clearly at the start of the post, not buried in hashtags. It is required by the FTC in the US, the ASA and CAP Code in the UK, and similar rules elsewhere.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Use your platform’s paid-partnership or branded-content label where it has one",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Or say it in words, on screen and in the caption: “#ad — affiliate link, I earn a commission”",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Say it out loud in a video, too: many people watch without reading the caption",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Just playing because you like it? Then there is nothing to disclose — enjoy it.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Posting regularly? Earn from it.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "The affiliate programme pays 30% of our net proceeds from purchases Apple attributes to your link.",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "See the affiliate programme",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "Pitch a partnership",
+    "file": "app/(en)/creators/page.tsx"
+  },
+  {
+    "text": "OutBrick daily board: one free puzzle a day, the same for all",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Play today’s OutBrick board free in your browser: the same solver-checked sliding-brick puzzle for everyone, new every day at midnight UTC.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "The same board for everyone",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "The board is picked from the date in UTC, so a friend on the other side of the world plays exactly the one you did.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "A new one every day at midnight UTC",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "The daily boards take turns,",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "of them from a gentle warm-up to a proper gridlock, and every one was cleared by a solver before it went up.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Three stars, said plainly",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "A clear earns one star. Clearing inside the solver’s own move target earns two. Doing that without a single undo earns three.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Share the stars, not the answer",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Share from the clear card and your friends get a link to the same board with your stars on it. The moves you made stay yours.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Take as long as you like",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "There is no clock here, and none in the game. Undo as often as you want; only the third star asks you not to.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "OutBrick daily board",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "MobileApplication",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "OutBrick: Block Sort Puzzle",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Play guide",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Daily board",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Skip to content",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Primary navigation",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "One board a day,",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "the same for everyone.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Everyone who opens this page today gets the same OutBrick board. Slide every brick out through the gate of its own colour; a brick glides until something stops it. Clear it in the target number of moves without an undo for three stars, then share your result and see who can match it.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "M3.5 10h17M8 3v4M16 3v4",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "A new board every day at midnight UTC.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Drag",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "a brick in any direction.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Keyboard:",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Tab to a brick, then Shift + an arrow key.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Share",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "your stars from the clear card.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Today’s board",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "How the daily board works",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Five small rules, and no clock.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "It is the same puzzle as the game, one board at a time: no lives, no limit, nothing to sign up for.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "Cleared today’s? There are 2,000 more.",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "OutBrick on the App Store has 2,000 solver-verified boards across 100 chapters, with keys, locks and frozen bricks. Or learn the rest of the loop in the",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "play guide",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "\\u003c",
+    "file": "app/(en)/daily/page.tsx"
+  },
+  {
+    "text": "OutBrick friends",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "brick mascot",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "}, openGraph: { type: 'article', url:",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": ", siteName: 'OutBrick', title, description: story.dek, images: [{ url: image, width: 360, height: 360, alt: friend.imageAlt }], }, twitter: { card: 'summary', title, description: story.dek, images: [image] }, }; } export default async function MascotStoryPage({ params }: MascotPageProps) { const { slug } = await params; const story = getMascotStory(slug); const friend = getFriend(slug); if (!story || !friend) notFound(); const previous = getAdjacentMascot(story.id, -1); const next = getAdjacentMascot(story.id, 1); const storyUrl =",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "; const tone = { '--c': friend.colour, '--c-foot': friend.foot, '--c-ink': friend.ink, '--c-soft':",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "} as CSSProperties; const structuredData = graph( webPageNode({ url: storyUrl, name:",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": ", description: story.dek, primaryImageOfPage: { '@type': 'ImageObject', url:",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": ", width: 360, height: 360, caption: friend.imageAlt }, about: { '@type': 'Thing', '@id':",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "(OutBrick character)",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "Mascots",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "color-mix(in srgb,",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "In the game",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "Superpower",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "The tell",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "Favourite move",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "’s text bubble:",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "Before the next move",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "A little more",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "clamp(1.15rem, 1.05rem + 0.45vw, 1.4rem)",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "is not there to solve the board for you, only to make the room friendlier while you find the way through.",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": ", a brick-built village on the OutBrick Journey map.",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": ", on the Journey",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "More friends",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "Other stories",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "Previous story",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "All nine friends",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "Next story",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "Also on the road:",
+    "file": "app/(en)/mascots/[slug]/page.tsx"
+  },
+  {
+    "text": "Meet the nine brick friends of OutBrick: Bloo, Peach, Sprout, Bricko, Flurry, Moss, Poppy, Vio and Zippy. Three share your Home screen at a time.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "The nine brick friends",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "OutBrick mascots",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "The nine brick friends of OutBrick",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "Bloo, a blue brick-shaped OutBrick friend.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "Thing",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "Nine brick friends.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "Three at a time.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "Real 3D characters built from the same bricks as the board. Three share your Home screen, and the cast turns over as you play: one waves goodbye and walks off, another walks on and says hello. Poke one and it reacts. Clear a board and each has a victory move of its own.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "The friends speak in text bubbles only. They have no voices: character vocalisations were removed on 21 September 2026.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "Three stories",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "The friends who were there first.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "Bloo, Peach and Sprout each have a short illustrated story, set in real villages from the Journey.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "Read",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "’s story",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "And six more",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "The rest of the cast, briefly.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "What each friend does in the game, quoted from the cast notes, and a line of flavour from us.",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "See all nine on the home page",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "Download the renders",
+    "file": "app/(en)/mascots/page.tsx"
+  },
+  {
+    "text": "The OutBrick newsletter: new villages and big updates",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "One short email when OutBrick opens a new village or ships a big update, about once a month. No spam, five languages, unsubscribe any time.",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "New villages",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "When the Journey grows, you hear where the road goes next.",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Big updates",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "The release notes that matter, in plain words: what changed on the board and why.",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "About once a month",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Only when there is something to say, and never more than roughly monthly.",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "No spam",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Your address is used for this letter and nothing else. It is never sold, and never used for advertising.",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Newsletter",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Letters from",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "the boulevard.",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "A short email when a new village opens on the Journey or a big update reaches the App Store. Pick the language you would like it in; everything else is on this page.",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "What you’ll get",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Four promises, kept short.",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Sign up",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Your email address and a language. That is all we ask for.",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "To come off the list, reply to any letter or use the",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "contact form",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "with the topic set to Privacy. How the address is stored is set out in the",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "privacy policy",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "In the meantime",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Read what’s new in 4.2",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Browse the journal",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Journal RSS",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Thanks — you’re on the OutBrick newsletter list",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "Your sign-up for the OutBrick newsletter was received.",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "You’re on",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "the list.",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "Thank you. The next letter comes when there’s a new village or a big update, about once a month at most. To come off the list, reply to any letter.",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "Read what’s new",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "Back to OutBrick",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "outbrick-4-2",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "OutBrick 4.2 arrives on the App Store — press release",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "OutBrick 4.2 is on the App Store: 2,000 solver-verified boards, 167 brick villages and nine brick friends, on iPhone, iPad, Mac, Apple TV, Vision Pro and Watch.",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "article:published_time",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "article:modified_time",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Version",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Platforms",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "iPhone, iPad, Mac, Apple TV, Apple Vision Pro, and a standalone Apple Watch game",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Price",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Free, with optional in-app purchases: coins, boosters, Remove Ads and the Brick Pass. No subscription.",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Content",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Age rating",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Developer",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "OutBrick, founded by Mourad Hamdi",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "NewsArticle",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "T09:00:00+00:00",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Press room",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "OutBrick 4.2",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Press release · For immediate release",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "· OutBrick",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Press release text",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "— OutBrick 4.2, the current version of",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": ", is available now on the App Store. It was released on 22 September 2026 for iPhone, iPad, Mac, Apple TV and Apple Vision Pro, with a standalone game for Apple Watch.",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "OutBrick is a sliding-brick colour-sort puzzle. Slide a brick and it glides until something stops it; get every brick out through the gate that matches its colour and the board is clear. There are 2,000 boards across 100 chapters, and a solver cleared every one of them before it shipped, so no board a player meets is a dead end.",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Between boards, the Journey is a boulevard of 167 villages built entirely from brick, and nine brick friends — Bloo, Peach, Sprout, Bricko, Flurry, Moss, Poppy, Vio and Zippy — take turns on the home screen, each with a victory move of their own.",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Pressure without a clock",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Every board shows a move target and a move limit from the first tap; there is no timer or countdown anywhere in the game. The first undo on every board is free. Players hold five lives, eight with the Brick Pass, and a life is spent only when an attempt ends without a clear.",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "OutBrick is free. Advertising is rewarded video only, in six opt-in placements, each capped daily; there are no banners or interstitials and nothing interrupts a board. Remove Ads switches advertising off for good, and the Brick Pass turns it off while it is held. There is no subscription.",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Built for Apple, built for everyone",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Colour-blind glyphs are on by default, every brick is a VoiceOver element, and Larger Text and Reduce Motion are honoured. OutBrick supports Live Activities, widgets, Game Center with 57 achievements, iMessage stickers and challenges, Siri and Shortcuts, and iCloud sync, so progress follows a player from one device to the next.",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Mourad Hamdi",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Founder & CEO, OutBrick",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Availability",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "OutBrick: Block Sort Puzzle is available now, free, on the",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "App Store",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "www.outbrick.site",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Release facts and contacts",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Fact sheet",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Media contact",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Mourad Hamdi, Founder & CEO",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "Contact form (Press & media)",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "App icon, wordmark, the nine friends and current captures are in the",
+    "file": "app/(en)/press/outbrick-4-2/page.tsx"
+  },
+  {
+    "text": "OutBrick press room: news, boilerplate and contacts",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "News and press releases from OutBrick, the About OutBrick boilerplate, a word from founder Mourad Hamdi, how to cite the game, and the press contact.",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "OutBrick press room",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "News from",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "the brick village.",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Releases, the paragraph to paste, a word from the founder and the right way to cite the game. For logos, art and captures, the press kit has everything.",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Open the press kit",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Press contact",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Latest release ·",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Read the release",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Releases",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "News",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "· Press release",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Boilerplate",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Use it as is, or trim from the end.",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Copy paragraph",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "From the founder",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Citing OutBrick",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Name it, link it.",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Name",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "— one word, capital O and B. On first mention, the App Store name:",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Company",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "OutBrick, founded by Mourad Hamdi (Founder & CEO)",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Website",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Describe it as",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "A sliding-brick colour-sort puzzle. More wording, and what to avoid, is in the",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Questions go to a person.",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Interviews, review access, asset requests or fact checks: use the contact form with the topic set to Press & media. Mourad replies to press requests himself, by email.",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "Contact the press desk",
+    "file": "app/(en)/press/page.tsx"
+  },
+  {
+    "text": "The OutBrick press kit: fact sheet, current game captures, the app icon, all nine brick friends, the words to use, and a direct press contact.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "OutBrick press kit: logos, art and fact sheet",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "OutBrick press kit",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "OutBrick screenshots",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "OutBrick app icon",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "sliding-brick puzzle",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Title",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "OutBrick (App Store listing: OutBrick: Block Sort Puzzle)",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Genre",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Sliding-brick colour-sort puzzle",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Mourad Hamdi, independent",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Free. Optional coins, boosters, Remove Ads and the Brick Pass. No subscription.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Lives",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Five (eight with the Brick Pass), one back every thirty minutes. A life is spent only when an attempt ends without a clear.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Ads",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Rewarded video only, in six opt-in placements, each capped daily. No banners, no interstitials, nothing interrupts a board.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Pressure",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "A move limit per board. No clock, timer or countdown anywhere.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Accessibility",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Colour-blind glyphs on by default; every brick a VoiceOver element; Larger Text; Reduce Motion honoured",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Apple features",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Live Activities, widgets, Game Center (57 achievements), iMessage stickers and challenges, Siri and Shortcuts, iCloud sync",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "A packed board",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Start of a level",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "An OutBrick board at the start of a level: green, blue, pink, yellow, red and purple bricks packed into the frame, 34 moves on the counter and three boosters below.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Keys, locks and gates",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Mid-board",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "A Super Hard OutBrick board part-way through, with keys, padlocks, a crate and coloured gates around the frame.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The clear card",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Stars and coins",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The OutBrick clear card for level 214: Bloo cheering above three stars, two moves under target and 100 coins earned.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Garden City",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The Journey map",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Pirate Harbor",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Pirate Harbor on the OutBrick Journey map: a wooden road of numbered levels running past a moored pirate ship.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The shop",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Optional bundles",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The OutBrick shop: a Starter Bundle, a Piggy Bank of coins and Brick Pass Season 1, each with its price.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "App Store QR code",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "SVG · opens OutBrick on the App Store",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "QR code that opens OutBrick on the App Store",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Website QR code",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "SVG · opens www.outbrick.site",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "QR code that opens www.outbrick.site",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Press kit",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Everything you need to write about",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "OutBrick.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "A one-finger puzzle about sliding bricks out through the gate that matches their colour, set on a boulevard of 167 villages built entirely from brick. Here is the short version, the facts, and the art, all current.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Contact the developer",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Go to the downloads",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "News and releases in the press room",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "min(200px, 50vw)",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The short version",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "A board looks impossible, and isn’t.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Slide a brick and it glides until something stops it. Get every brick out through the gate that matches its colour and the board is clear. A solver cleared all 2,000 boards before any of them shipped, so nothing a player meets is a dead end.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "OutBrick has lives and it has advertising, and it says exactly how both work: a life is spent only when an attempt ends without a clear, the first undo on every board is free, and every video is one the player pressed a button to see.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The current version is 4.2. Everything it changed is in the release notes on",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "What’s new",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Current captures",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The game as it ships.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Boards and Journey villages captured from the current build. Select one to open the file.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Download capture:",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "These are web-sized. For full-resolution captures of any screen, email the developer and say which device you need them for.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Icon and cast",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The app icon, the wordmark and all nine friends.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Transparent PNGs of the current brick-shaped cast. Please don’t recolour them or give them voices: in the game they speak in text bubbles.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "outbrick-app-icon.png",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "App icon",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "PNG, 1024 × 1024",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "outbrick-wordmark.png",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Wordmark",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "PNG, transparent, 881 × 173",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "For print",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "QR codes for posters, flyers and slides.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Vector SVGs in the house colours, indigo on cream, with the quiet zone built in. Both are decode-tested; print them at 2 cm across or larger, and leave the cream border on.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "House style",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "The right words.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Please write",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "OutBrick, one word, capital O and B",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Nine brick friends (Bloo, Peach, Sprout, Bricko, Flurry, Moss, Poppy, Vio, Zippy)",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "A move limit, not a clock",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Opt-in rewarded videos; nothing interrupts a board",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Please don’t write",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "“No ads” or “no lives”: both were true once and are not now",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "That the friends talk or have voices",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "That there is a timer, a Rush mode or a countdown",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "That OutBrick has a subscription",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "Brain-training or health claims of any kind",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "For interviews, review access, asset requests or accessibility questions, use the contact form with the topic set to Press & media. Mourad replies himself, by email.",
+    "file": "app/(en)/press-kit/page.tsx"
+  },
+  {
+    "text": "How the OutBrick Journal reads game research: which sources we use, how claims are matched to evidence, and how every story cites its sources in APA 7.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "How the OutBrick Journal reads research",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "World Health Organization — Gaming disorder",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Clinical definition",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Separates impaired control and meaningful harm from a simple count of hours.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Pew Research Center — Teens and video games today",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Survey",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "One clearly labelled U.S. sample of how common play is, and why teens play.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Martinez, Froehlich & Fogarty — Playing on Hard Mode",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Peer-reviewed HCI",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Grounds our accessibility writing in how disabled players find, judge and adapt games.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Ryan, Rigby & Przybylski — The motivational pull of video games",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Peer-reviewed psychology",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Autonomy, competence and relatedness: a vocabulary for enjoyment that is not about retention.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Keogh & Richardson — Waiting to play",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Peer-reviewed, qualitative",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Informs how we write about fragmented attention and sessions that can be put down.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "W3C — WCAG 2.2",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Standard",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Timing, interruption, motion, pointer targets and the use of colour, on the web.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "MIT News — Teaching maker skills through gaming",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "University news",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Useful on learning by making; read as a news account, not a controlled study.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Harvard Health Publishing — Brain-training claims",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "University explainer",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "A guardrail against promising broad cognitive benefits from a puzzle.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Player habits",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "How do context, sleep, perceived value and social reasons for play change what a session means?",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Success stories",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "What do Stardew Valley, Hades, Celeste, The Sims, Pokémon GO, Minecraft, Tetris, Wordle and Monument Valley show, and what can they not prove?",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Inclusive design",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "How can a game keep its challenge while widening the input, timing, sensory and cognitive routes into it?",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Short sessions",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "What makes two minutes feel complete, interruptible and worth coming back to, without making the return an obligation?",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Game design, gaming habits, accessibility and player experience research",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Research method",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Curious, careful,",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "cited.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "The journal reads games through three lenses: what players do, what designers make, and what the evidence can responsibly support. Every research-led story ends with an APA 7 reference list and a link to each source.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Jump to the sources",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "The method",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "A citation should show where a claim ends.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Start with the source",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Primary sources first: peer-reviewed papers, university research, recognised standards, and a studio’s own history for the details of its own success.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Match claim to evidence",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Associations stay associations. Company-reported numbers stay labelled. A small sample does not become a rule because the sentence reads better.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Make the trail usable",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Numbered markers sit under the section they support and jump to the full reference, with a DOI or a direct link wherever one exists.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "What we read about",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "The questions around the board.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "A starting shelf",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Selected sources.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Not endorsements and not a full bibliography: the families of source we return to when a story needs more than intuition.",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "var(--ed-display)",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "(opens in a new tab)",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "See a full reference list in context",
+    "file": "app/(en)/research/page.tsx"
+  },
+  {
+    "text": "Is the first undo on a board really free?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Yes. The first undo on every board is free, never comes out of your tank and cannot run out. After that, undos come from a tank of five that refills one every twenty-five minutes, or five for 250 coins, or two for a rewarded video.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "How many lives do I get, and when is one spent?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Five, or eight while you hold the Brick Pass, and one comes back every thirty minutes. A life is spent only when you run out of moves and choose Try again, or leave a board you have already made a move on.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Does OutBrick show ads?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Only rewarded video, and only when you press a button asking for something. There are no banners, no interstitials and no ad when the app opens. Remove Ads is a one-time $4.99 purchase.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Is there a timer?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "No. Every board has a move limit, shown beside your move count from the first tap, but there is no clock or countdown. Reaching the limit offers five more moves for coins or a video before anything else happens.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "How do I restore a purchase?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Open Shop, then choose Restore purchases. Apple processes the transaction through your Apple ID.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "What do the three stars mean?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "One star for clearing the board, the second for clearing it at or under the target move count, and the third for doing that without an undo. The target used to be called par; it is the same number.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "How much do extra moves cost?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Five more moves cost 300 coins, then 500, then 900 within one attempt, or one rewarded video. The price goes back to 300 when you leave the board or clear it.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "How many rewarded videos can I watch a day?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Thirty-one at most across the six rewards, each capped daily. Declining never changes a reward, a board or a price.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "How do I turn colour-blind glyphs on or off?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Colour-blind mode is on by default, so every brick and gate carries a readable glyph. Switch it off, or back on, in Settings.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "How do I change my advertising choices?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "In the EEA, the UK and Switzerland, Settings, then Advertising choices, reopens the consent form at any time. iOS tracking permission is in Settings, Privacy and Security, Tracking; saying no changes nothing about the game.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "How do I contact OutBrick support?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Use the contact form, and tell us the level number, device model, iOS version and what happened. We never need your Game Center login or any payment details.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "OutBrick support: stuck boards, lives, undos, ads",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "OutBrick support: the quickest way through a stuck level, what lives and undos actually cost, how the rewarded video works, and how to reach us.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "OutBrick support",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Need a hand?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "OutBrick is meant to feel calm even when the board gets knotty. Here are the quickest ways through a stuck level, what lives and undos actually cost, and the best way to reach us.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Every board comes with a free undo.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "The first undo on any board is free, it never comes out of your tank, and it cannot run out. After that, undos come from a tank of five that fills itself back up one every twenty-five minutes — or five for 250 coins, or two for a rewarded video. The undo on the “Wedged!” sheet is free as well, and outside the tank too: that sheet only appears when no clear is reachable from the current position, and getting out of a board the game wedged is never charged for.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "You hold five lives, eight while you hold the Brick Pass, and one comes back on its own every thirty minutes whether the app is open or not. Waiting always works, and the card that tells you the tank is empty runs a live countdown to the next one.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "A life is spent in two situations, and only two: you ran out of moves on a board and chose Try again instead of taking more moves, or you walked away from a board you had already made a move on. Playing costs nothing, clearing costs nothing, undoing costs nothing, and opening a level to look at it and backing out costs nothing. When leaving would cost one, the pause card’s Home button says so first — with the cost and the lives you have left — and lets you go back to the board instead.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Are there ads?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Yes — rewarded video, and nothing else. There are no banners, no interstitials, no ad between levels and no ad when the app opens. A video plays only when you press a button asking for something: one life, five more moves at the limit, two undos, a booster armed for the board you are about to start, the clear card’s coins paid again, or a second spin of the Brick Wheel. Each of the six is capped daily — eight, six, eight, four, four and one — so thirty-one rewarded videos a day is the most the game will ever pay for.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Declining costs you nothing at all. Every reward, every board and every price is identical whether you watch or not, and lives, undos and moves can always be had another way — coins, or simply waiting. If you would rather never be offered one, Remove Ads is a one-time $4.99 purchase, and the Brick Pass does the same for as long as you hold it. Either one stops OutBrick requesting ads entirely and still pays you the rewards those videos would have given, so the purchase never takes anything away from you.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Quick fixes",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Restore purchases:",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "open Shop, then choose Restore purchases. Apple processes the transaction through your Apple ID.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Colour-blind mode:",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "on by default, so every brick and gate already carries a readable glyph. It can be switched off, and back on, in Settings.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Out of moves:",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "every board has a move limit, shown beside your move count from the first tap. Reaching it is not the end of the board — the card offers five more moves for coins or for a video before anything else happens. The coin price climbs within one attempt — 300, then 500, then 900 — and goes back to 300 when you leave the board or clear it.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Target, not par:",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "the number you are aiming at used to be called par. It is called the target now. Same number, same rule: clear at or under it for the second star, and do that without an undo for the third.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Advertising choices:",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "in the EEA, the UK and Switzerland, Settings › Advertising choices reopens the consent form at any time. iOS tracking permission lives in Settings › Privacy & Security › Tracking, and saying no changes nothing about the game.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Widgets:",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "add the OutBrick widget from your iPhone Home Screen and choose a size that fits your layout.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "What changed in the latest update:",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "the full release notes are on",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Common questions",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Still stuck?",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Tell us the level number, device model, iOS version, and what happened. A screenshot is always useful. We do not need your Game Center login or any payment details.",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Real contact form",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Open the contact form",
+    "file": "app/(en)/support/page.tsx"
+  },
+  {
+    "text": "Support",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Bug report",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Privacy",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Purchases & refunds",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Press & media",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Marketing & partnerships",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Other",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "US$50",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Marketing",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Community",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Design",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Engineering",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "FULL_TIME",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "PART_TIME",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "CONTRACTOR",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "United Kingdom",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "France",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Germany",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Spain",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "United States",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Canada",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "United",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Content Marketing Lead",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Full-time",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Own the words and the stories around OutBrick: the Journal, the App Store copy, launch notes and the press room, all in a voice that tells players the truth.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "OutBrick already says unusual things out loud: that it has lives and ads, exactly how both work, and that every board was cleared by a solver before it shipped. You will keep that voice and take it further — into the Journal, the App Store listing, release notes, the press room and every page a player or a journalist reads.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "This is a hands-on lead role. You will write a lot yourself, set the editorial calendar, and work closely with the community and growth roles so that what we post, what we pitch and what the store page says all tell the same story.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Plan and run the OutBrick Journal: research-backed articles on puzzle design, calmer play and accessibility, written or edited by you",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Write App Store copy, in-app event text and release notes for each version, with the growth specialist testing what works",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Draft press releases and pitches, keep the press room and press kit current, and look after incoming press requests",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Keep a house style that is honest about lives, ads and purchases — and hold every channel to it",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Brief creators and affiliates on what to say (and what not to say) about the game",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Several years writing and editing for a consumer product, a game, or a publication, with published work you can show",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "A clear, warm, plain-English voice, and the discipline to cut a claim you cannot back up",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Experience running a content calendar and measuring what content actually did",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Comfort working remotely and asynchronously, in writing, with a small team",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "A feel for puzzle games and the people who play them",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Experience writing App Store product pages or in-app events",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Working French, German, Spanish or Japanese (the home page and play guide are published in all four)",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Player Experience (Game UX) Designer",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Shape how OutBrick feels in the hand — from the first board to the 2,000th — across iPhone, iPad, Mac, Apple TV, Vision Pro and Apple Watch.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "OutBrick is a one-finger game: slide a brick and it glides until something stops it. Everything around that gesture — the clear card, the shop, lives, undos, the Journey map of 167 villages — has to feel calm, fair and obvious. That is your job.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "You will design flows and screens, prototype them, watch real people play, and turn what you see into changes that ship. Accessibility is not a pass at the end here: colour-blind glyphs are on by default and every brick is a VoiceOver element, and you will keep it that way.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Design and prototype new features and improvements across all six Apple platforms the game runs on",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Run lightweight playtests and usability sessions, and write up what players actually did",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Own the clarity of monetisation screens: lives, the shop, Brick Pass and Remove Ads must be understood at a glance, never pushed",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Work with engineering on onboarding and difficulty, using the solver data behind every board",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Keep accessibility first-class: VoiceOver, Larger Text, Reduce Motion and colour-blind play",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "A portfolio of shipped interaction or UX design work on mobile — games especially welcome",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Strong prototyping skills (Figma, or code, or both)",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Working knowledge of Apple’s Human Interface Guidelines and iOS accessibility features",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Evidence that you test your ideas with real people and change your mind when they show you something",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Experience designing for iPad, Mac, Apple TV, visionOS or watchOS",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Motion design skills, and restraint in using them",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Experience with casual-game economies designed to be fair rather than aggressive",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "AI/ML Engineer — Level Generation & Solver",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Build the systems behind OutBrick’s boards: procedural level generation, the solver that verifies every board, and gentle, on-device personalisation.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Every one of OutBrick’s 2,000 boards was cleared by a solver before it shipped, so no player ever meets a dead end. You will own that pipeline and push it further: generating boards that are interesting as well as solvable, grading their difficulty, and setting move targets that feel fair.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "You will also explore personalisation — pacing difficulty to the player in front of the board — under one firm constraint: OutBrick has no analytics SDK and does not collect gameplay data, so anything that adapts to a player has to run on the device.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Own and extend the board solver and its verification of every shipped board",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Build procedural generation for new chapters, with difficulty grading and move-target setting",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Research on-device personalisation of pacing and hints that needs no data to leave the device",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Build tooling so designers can generate, inspect and tune boards themselves",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Keep the pipeline reproducible and the results explainable to a non-specialist",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Strong software engineering in Swift, Python, C++ or Rust — and willingness to work across them",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Experience with search and planning (A*, IDA*, BFS/DFS with pruning, constraint solving) or combinatorial optimisation",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Practical machine-learning experience, from data to evaluation",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "The judgement to choose a simple heuristic over a model when the heuristic is better",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Experience with procedural content generation for games",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "On-device ML on Apple platforms (Core ML, Create ML, Metal)",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "A published paper, talk or open-source project on puzzles, search or PCG",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Community & Social Media Manager",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Start and grow OutBrick’s community on TikTok, YouTube, Instagram and Snapchat, and look after the creators who make things with the game.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "OutBrick is live on TikTok, with YouTube, Instagram, Snapchat and X to follow under the same @outbrick handle. You will launch them and turn all five into places people enjoy: board challenges, “can you beat the target?” clips, the nine brick friends, and the stories behind the game.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "You will also be the first person creators and affiliates talk to — helping them make good things, making sure they disclose what they should, and bringing what the community says back to the team.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Plan, make and post short-form video and social content across TikTok, YouTube, Instagram and Snapchat",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Launch the profiles that are not open yet, and keep one consistent voice across all of them",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Reply to comments and messages, and route support questions to the right place",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Look after creators and affiliates: onboarding, briefs, and checking disclosure",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Report what worked and what did not, honestly, every month",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Hands-on experience growing a brand or creator account on at least two of these platforms",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "You can shoot and edit short vertical video yourself",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "A friendly, patient voice in public — including with people who are cross",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Good judgement about what not to post",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Experience in games or with a gaming audience",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Experience running a creator or ambassador programme",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "A second language among French, German, Spanish or Japanese",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Growth & App Store Optimisation (ASO) Specialist",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Contract",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Help more of the right players find OutBrick: App Store product pages, keywords, custom product pages, in-app events and campaign measurement.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "OutBrick is on the App Store as OutBrick: Block Sort Puzzle. You will make it easier to find and easier to say yes to — keywords, screenshots, the product page and its tests — and help us measure where players come from without adding tracking to the game.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Measurement here uses what Apple provides: App Store Connect’s App Analytics, campaign links and product page optimisation. You will set that up properly, including the campaign links behind the affiliate programme.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Research keywords and optimise the listing in every storefront we focus on",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Plan and run product page optimisation tests and custom product pages",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Set up and maintain App Analytics campaign links for the site, creators and affiliates",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Plan in-app events and feature pitches with the content lead",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Advise on Apple Search Ads, and report results monthly",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Proven ASO results for iOS apps or games, with examples",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Fluency in App Store Connect, App Analytics and product page optimisation",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Comfort with spreadsheets and turning numbers into a clear recommendation",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "An understanding of privacy-respecting measurement (no fingerprinting, no third-party tracking SDKs)",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Apple Search Ads campaign management",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Experience with a localised game in several storefronts",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Creative skills for screenshots and app previews",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "<ul>",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "<li>",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "</li>",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "</ul>",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "<p>",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "</p>",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "<h3>What you’ll do</h3>",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "<h3>What you’ll bring</h3>",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "<h3>Nice to have</h3>",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Remote. Open to applicants living in",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "OutBrick is an independent games company founded by Mourad Hamdi. Its game, OutBrick: Block Sort Puzzle, is a sliding-brick colour-sort puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch: 2,000 solver-verified boards across 100 chapters, a Journey of 167 brick-built villages, and nine brick friends. It is free on the App Store, with optional in-app purchases and no subscription. More at outbrick.site.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "We wanted a puzzle that respects the person holding the phone. A solver cleared every board in OutBrick before it shipped, so when a board looks impossible, it isn’t — the way out is there, and finding it is yours. There is no clock anywhere in the game, and we say plainly how lives and ads work, because a calm game shouldn’t need small print.",
+    "file": "lib/business.ts"
+  },
+  {
+    "text": "Bloo",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The one with the watch",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "First to wave, first to try the bold move, and quite sure he meant to do that.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Bloo, a blue brick-shaped OutBrick friend wearing a wristwatch on a lanyard.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Peach",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The careful planner",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Counts the moves twice and keeps a backup plan. When the pile opens, she is the happiest brick on the road.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Peach, a peach-coloured brick-shaped OutBrick friend with a little peach on top.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Sprout",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The one with questions",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Notices the gap everyone walked past and wants to know why the gate is there at all.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Sprout, a small green brick-shaped OutBrick friend with a seedling on top.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Bricko",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The one doing reps",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Treats every board like a set at the gym. A clear gets a thumbs-up and a flex, in that order.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Bricko, a red brick-shaped OutBrick friend with big red boots.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Flurry",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The one in the scarf",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Never in a hurry, which suits a game with no clock. Watch the scarf: it always arrives a beat after Flurry does.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Flurry, a pale blue brick-shaped OutBrick friend in a striped bobble hat and scarf.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Moss",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The farmhand",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Tool belt on, boots muddy, a saying for every weather. The slow clap is rare, so it counts.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Moss, a dark green brick-shaped OutBrick friend wearing a tool belt and work boots.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Poppy",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The storyteller",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Every board is the middle of a fairy tale to Poppy. The ending is when the wand goes off.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Poppy, a pink brick-shaped OutBrick friend holding a star-tipped wand.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Vio",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The critic with headphones",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Hears a rhythm in a good run of moves and nods along. A tidy clear is a five-star track.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Vio, a purple brick-shaped OutBrick friend wearing headphones.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Zippy",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The one who drifts off",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Starts a thought, wanders off, comes back for the win. Poke Zippy and see what happens.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Zippy, a yellow brick-shaped OutBrick friend giving a wink.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The brave bit comes after the wobble.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Bloo is first to wave, first to volunteer, and now and then first to slide the wrong brick with tremendous confidence.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Every morning, when the village gates click awake, Bloo is already on the brightest square of the road, checking his wristwatch. He calls it a starting line. Peach calls it a perfectly avoidable place to trip. Sprout calls it exciting. Bloo calls it Tuesday.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "One nudge. Then we see what happens.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Cheerful, brave, always ready for a high five.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Turning “maybe” into “let’s look.”",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "When he is nervous he checks the watch. When he is very nervous he checks it twice.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "A confident slide, followed by an even more confident spin.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The first hello",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Bloo believes a good day starts with a wave and a board that looks just a little bit impossible. He likes the first move best, because it turns a frame full of bricks into one small question.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "His opening ritual: wave first, look second, celebrate early.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "A very brave wobble",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "One afternoon a brick refuses to budge. Bloo tries a heroic move, a dramatic move, and a move he describes as advanced. The brick says no to all three. Nobody laughs. The free undo puts the board back, and his friends simply make room for another try.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Getting stuck is not the ending. It is just the middle.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Make room for the cheer",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Bloo finds out that courage travels. When he cheers for Peach’s careful plan and Sprout’s odd little experiment, the whole village feels bigger. The next clear belongs to everyone who made room for it, and he spins for all of them.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "His best move is the one that leaves a little confidence behind.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Celebration Square",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "She brought a plan. And a backup plan.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Peach notices the corner nobody else saw, counts the moves twice, and keeps a spare deep breath tucked behind her smile.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Peach arrives at the board with a list, then a second list in case the first one gets overwhelmed. She knows where every brick is, which is comforting right up until one of them moves. She is learning that a plan can be a soft place to start rather than a cage to stay inside.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Careful is not the same as afraid.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Thoughtful, loyal, and only slightly flustered when the board gets interesting.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Seeing the quiet route through a crowded board.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Her bubble says “this is fine” exactly when things are becoming exciting.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "A tidy setup, a measured slide, and one relieved little cheer.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The inventory",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Before the first slide, Peach studies the board as if it has a secret. She notes the colours, the edges, the gaps, and the one brick that looks suspiciously pleased with itself.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Her rule: if you can name what you see, you can find a way through.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Autumn Orchard",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Deep breath, small move",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "A board changes the moment a brick moves. Peach used to think that meant the plan had failed. Now she treats it as new information, takes one breath, and draws a smaller circle around the next useful choice.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Her backup plan is becoming a kinder plan: look, adjust, carry on.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Lavender Hills",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The tidy way home",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "When the final brick slips through its gate, Peach lets out the cheer she has been saving the whole board. Then she checks the frame one last time, just to be sure, and adds the clear to her list. The good kind of list.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "She makes a clear feel like a warm lamp left on for everyone.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Cherry Blossom Town",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Every brick is a question.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Sprout spots the odd gap, asks why the gate is there, and finds the long way round before anyone has finished saying “please be careful.”",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Sprout does not walk past a puzzle. Sprout investigates it. Why does this brick have studs? Why does that gate match? What happens if we try the thing Peach just asked us not to try? The answers are not always useful, but they are nearly always interesting.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "What if the answer is hiding behind that brick?",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Wide-eyed, warm, and always one discovery away from two hops and a spin.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Keeping wonder in the room after the rule is understood.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Counts everything, including the things everyone else thought were decoration.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The unexpected route that works for a reason Sprout is still explaining.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The question",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Sprout begins with the part everyone else is tempted to skip: looking closely. A colour, a shape, a gap, a single stud. Any of them might be a clue, and Sprout is delighted to meet all of them.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Sprout’s rule: a good question gives the next move somewhere to go.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Mushroom Forest",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The long way round",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "The obvious route is blocked, so Sprout tries the one nobody labelled. It takes longer. It also reveals a corner, a colour match, and a way to help the next brick out. Sometimes a board rewards patience that looks a lot like curiosity.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "A wrong turn can still point at something worth noticing.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Bamboo Springs",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Grow together",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Sprout learns that a discovery is more fun shared. A new trick becomes a group celebration, a tricky board becomes a story, and the smallest question can turn into somebody else’s brave first move.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Sprout keeps the village playful, even when the solution is serious business.",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "Sunflower Railway",
+    "file": "lib/mascots.ts"
+  },
+  {
+    "text": "NFKD",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "How play fits a real day: sleep, attention, rituals and the decision to stop.",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "Games that made the medium feel larger, read from their own records.",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "Game craft",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "Rules, friction and difficulty, from the bench.",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "Widening the route into a challenge without shrinking the challenge.",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "Learning through play",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "Curiosity before explanation.",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "Social play",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "Shared time, even when players are apart.",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "OutBrick practice",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "Notes on how the game itself is made.",
+    "file": "lib/journal.ts"
+  },
+  {
+    "text": "use client",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "your message",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Message sent. Thank you.",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Your note about",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "is with the team. A person reads every message and replies to",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "If you need to add something, such as a screenshot, reply to our email when it arrives.",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "What is it about?",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "a topic",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Your name",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "your name",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Email for our reply",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "your email address",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Your device",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "(optional, helps with support and bugs)",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Device",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "e.g. iPhone 15",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "iOS version",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "e.g. 26.0",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Settings › General › About",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "App version",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "e.g. 4.2",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Your message",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "For a stuck board, include the level number. Please leave out passwords and card details.",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "I agree that OutBrick may use these details to reply to me, as described in the",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Send message",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "What happens next: your message goes straight to the OutBrick team, and a person replies by email.",
+    "file": "app/(en)/contact/contact-form.tsx"
+  },
+  {
+    "text": "Under 1,000",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Over 1 million",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Proposed code",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Apply to the OutBrick affiliate programme",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Application received.",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Your proposed code and link — they start working once we approve your application:",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Copied",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Copy link",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Link copied to the clipboard.",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "We review every application and reply by email to",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Email",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Your channels",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "at least one channel",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Links to where you post — TikTok, YouTube, Instagram, Snapchat, a blog or newsletter. One per line.",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Add at least one link to where you post.",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Audience size",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "an audience size",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Followers or monthly readers, across all your channels.",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Choose a range",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Country you live in",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "your country",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "How would you promote OutBrick?",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "how you would promote OutBrick",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "A sentence or two is plenty: the kind of posts, and who watches or reads them.",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Preferred code",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "a preferred code",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Your handle or a word you like. Letters and numbers; we add two digits.",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Your proposed code",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Your link will be",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "outbrick.site/r/",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Type your name or a handle to see your proposed code.",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "I agree to the programme rules on this page, including disclosing every post, and that OutBrick may use these details to review my application, as described in the",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Apply to the programme",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "What happens next: we review your channels and reply by email. If approved, we confirm your code and link — they start counting from that day.",
+    "file": "app/(en)/affiliates/affiliate-form.tsx"
+  },
+  {
+    "text": "Apply for",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "Application sent. Thank you.",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "Your application for",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "is with the team. A person reads every application and will write to",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "If it is a match, the next step is a short video call.",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "Applying for",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "Portfolio or LinkedIn",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "a link to your work",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "Whatever shows your work best: a portfolio, GitHub, a channel, a LinkedIn profile.",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "Where you live, and your time zone",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "where you live",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "e.g. Lyon, France — CET",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "A short note",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "a short note",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "Why this role, and one thing you have made that you are proud of. A few paragraphs is plenty — no formal cover letter needed.",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "I agree that OutBrick may use these details to consider my application, as described in the",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "Send application",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "What happens next: a person reads your application and replies by email. If it is a match, we set up a short video call.",
+    "file": "app/(en)/careers/careers-form.tsx"
+  },
+  {
+    "text": "Filter roles by team",
+    "file": "app/(en)/careers/role-list.tsx"
+  },
+  {
+    "text": "All teams",
+    "file": "app/(en)/careers/role-list.tsx"
+  },
+  {
+    "text": "Showing",
+    "file": "app/(en)/careers/role-list.tsx"
+  },
+  {
+    "text": "h2",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "h3",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "By",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "currentColor",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "Follow the journal",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "New stories, in your feed reader.",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "Rather not give an email? Copy the feed address into any RSS reader (Reeder, NetNewsWire, Feedly, Inoreader) and each new story arrives as it is published.",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "Copy the feed address",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "Or follow one shelf",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "Copy the",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "feed address",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "Blog",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "The OutBrick Journal",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "— The OutBrick Journal",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "from the OutBrick Journal, every research claim cited.",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "application/rss+xml",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "Journal",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "A shelf of the journal",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": ", newest first ·",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "RSS feed for this shelf",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "Stories on this shelf",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "Topics on this shelf",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "Other shelves",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "Whole journal",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": ": the OutBrick Journal",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "” and “",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "Stories tagged “",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "” — The OutBrick Journal",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "OutBrick Journal stories on",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": ", including",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "Tagged “",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "Tagged",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "stories from the journal share this topic, across",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "one shelf",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "Shelves these stories sit on",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "Stories tagged",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "Related topics",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "Search the journal for “",
+    "file": "app/(en)/blog/tag/[tag]/page.tsx"
+  },
+  {
+    "text": "one star",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "two stars",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "three stars",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "moves without an undo",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "moves, right on target",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "a few moves over its target of",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "Someone cleared",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "moves, no undo. Your turn.",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "moves. Can you do it without an undo?",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "moves.",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "I cleared OutBrick board",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "Board",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": ", cleared",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "OutBrick board",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": ", cleared with",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "of 3 stars. Target",
+    "file": "app/(en)/play/result/results.ts"
+  },
+  {
+    "text": "m12 2.4 2.9 6 6.6.8-4.9 4.6 1.3 6.5L12 17.1l-5.9 3.2 1.3-6.5-4.9-4.6 6.6-.8z",
+    "file": "app/(en)/play/result/[id]/page.tsx"
+  },
+  {
+    "text": "A result to beat",
+    "file": "app/(en)/play/result/[id]/page.tsx"
+  },
+  {
+    "text": "of 3 stars",
+    "file": "app/(en)/play/result/[id]/page.tsx"
+  },
+  {
+    "text": "Target",
+    "file": "app/(en)/play/result/[id]/page.tsx"
+  },
+  {
+    "text": "moves. Slide every brick out through the gate of its own colour; a brick glides until something stops it.",
+    "file": "app/(en)/play/result/[id]/page.tsx"
+  },
+  {
+    "text": "How the stars work",
+    "file": "app/(en)/play/result/[id]/page.tsx"
+  },
+  {
+    "text": "Today’s daily board",
+    "file": "app/(en)/play/result/[id]/page.tsx"
+  },
+  {
+    "text": "Play OutBrick board",
+    "file": "app/(en)/play/result/[id]/page.tsx"
+  },
+  {
+    "text": "Founder & CEO",
+    "file": "lib/blog.ts"
+  },
+  {
+    "text": "Player experience & design research",
+    "file": "lib/blog.ts"
+  },
+  {
+    "text": "Mourad makes small, thoughtful games for the space between one task and the next. OutBrick is his ongoing experiment in calmer play.",
+    "file": "lib/blog.ts"
+  },
+  {
+    "text": "The OutBrick Editorial Desk turns player research, accessibility practice, and game-making lessons into useful, readable notes.",
+    "file": "lib/blog.ts"
+  },
+  {
+    "text": "OutBrick mascots and home screen",
+    "file": "lib/site.ts"
+  },
+  {
+    "text": "story",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "stories",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "stories, newest first ·",
+    "file": "app/(en)/blog/category/[category]/page.tsx"
+  },
+  {
+    "text": "min read",
+    "file": "app/(en)/blog/journal-kit.tsx"
+  }
+]

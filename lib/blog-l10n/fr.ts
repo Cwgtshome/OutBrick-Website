@@ -13,7 +13,7 @@ export const fr: LocaleGuides = {
     title: 'Comment résoudre un puzzle de blocs coulissants : la méthode',
     dek: 'Partir de la sortie, trouver le coup qui libère de la place, compter avant d’agir : la méthode d’un concepteur pour les puzzles de blocs coulissants.',
     imageAlt: 'De vrais plateaux OutBrick sur une plaque indigo, en tête un plateau en mode daltonien avec ses symboles, pendant que des briques jaunes sortent par leur porte sous le regard de Bricko',
-    tags: ['puzzle de blocs coulissants', 'taquin', 'stratégie casse-tête', 'astuces puzzle'],
+    tags: ["puzzles de blocs coulissants","stratégie de puzzle coulissant","comment résoudre les puzzles","astuces de puzzle"],
     intro: 'Un bon puzzle de blocs coulissants est conçu pour avoir l’air désespéré. Toutes les cases sont prises, chaque bloc semble gêner le voisin, et la sortie est du mauvais côté. Je conçois et teste ce genre de plateaux pour OutBrick, et les cinq mêmes réflexes me permettent d’en venir à bout presque à chaque fois, quel que soit le puzzle. Aucun n’est une astuce. Ce sont des façons de regarder qui transforment un mur de blocs en une courte liste de questions.',
     keyTakeaways: [
       'Partez de la sortie et remontez : les blocs qui séparent une pièce de sa sortie sont le vrai problème, et la liste est généralement courte.',
@@ -86,7 +86,7 @@ export const fr: LocaleGuides = {
     title: 'Puzzle de tri par couleur : nos astuces pour moins de coups',
     dek: 'Lire un plateau de tri par couleur, choisir la couleur à sortir en premier, battre l’objectif de coups et gagner les étoiles. Par le créateur d’OutBrick.',
     imageAlt: 'Des rangées de briques à tenons rouges, jaunes, turquoise, violettes, bleues et vertes sur fond crème, avec un vrai plateau OutBrick et un écran de victoire à trois étoiles',
-    tags: ['puzzle de tri par couleur', 'jeu de tri de couleurs', 'astuces block sort', 'objectif de coups'],
+    tags: ["puzzle de tri par couleur","astuces de tri de blocs","stratégie de tri par couleur","objectifs de coups"],
     intro: 'Les puzzles de tri par couleur forment plusieurs familles : des liquides à verser d’un tube à l’autre, des piles à trier sur des tiges, et des blocs à faire glisser vers la sortie par une porte de leur couleur. OutBrick appartient à cette dernière, et ces astuces sont écrites pour lui, mais l’essentiel vaut pour toute la famille. Il s’agit de voir quelle couleur est prête à sortir, laquelle est enfouie, et laquelle gêne discrètement tout le monde. Finir en moins de coups, c’est surtout faire cette lecture avant votre premier coup plutôt qu’après le dixième.',
     keyTakeaways: [
       'Lisez tout le plateau avant le premier coup : quelles couleurs ont la voie libre jusqu’à leur sortie, quelles briques en bloquent plusieurs, et où se trouve l’espace vide.',
@@ -160,7 +160,7 @@ export const fr: LocaleGuides = {
     title: 'Jeux de puzzle relaxants : ce qui rend un jeu vraiment calme',
     dek: 'Des couleurs douces ne suffisent pas. Limite de coups ou chrono, vies équitables, aucune interruption : comment savoir si un jeu de puzzle restera calme.',
     imageAlt: 'Trois fenêtres cintrées dans un mur de briques indigo montrent de vrais villages OutBrick, Lavender Hills, Firefly Wetlands et Cherry Blossom Town, avec Flurry et Sprout sur le rebord',
-    tags: ['jeux de puzzle relaxants', 'jeux sans chrono', 'jeux calmes', 'game design'],
+    tags: ["jeux de puzzle relaxants","jeux de puzzle sans minuteur","jeux calmes","conception de jeux"],
     intro: 'Beaucoup de fiches sur l’App Store qualifient leur jeu de puzzle de « relaxant ». Certains méritent le mot. D’autres posent des couleurs pastel et une musique douce sur la même pression qu’ailleurs : un compte à rebours dans un coin, un système de vies qui se vide juste au moment où vous prenez vos marques, une pub entre chaque niveau. Voici ce que nous regardons pour juger si un jeu de puzzle est calme, et où se situe OutBrick sur chaque point, y compris là où il vous demande quelque chose.',
     keyTakeaways: [
       'Le calme est surtout une question de pression : d’où elle vient, si vous la voyez venir, et si vous l’avez choisie.',
