@@ -10,6 +10,7 @@
 
 import type { ReactNode } from 'react';
 import { chromeCopy } from '../lib/i18n/chrome';
+import { journalUi } from '../lib/i18n/blog';
 import { localePath, type Locale, type TranslatedLocale } from '../lib/i18n/locales';
 import { editorialNav, editorialNavFor, localeStoreUrl, VillageFooter, VillageHeader } from './village-shell';
 import { appStoreUrl } from './store-badge';
@@ -111,7 +112,7 @@ export function EditorialPage({
 
 export type Crumb = { href?: string; label: string };
 
-export function Crumbs({ items, label = 'Breadcrumb' }: { items: Crumb[]; label?: string }) {
+export function Crumbs({ items, locale = 'en', label = journalUi[locale].breadcrumb }: { items: Crumb[]; locale?: Locale; label?: string }) {
   return (
     <nav className="ed-crumbs" aria-label={label}>
       <ol>

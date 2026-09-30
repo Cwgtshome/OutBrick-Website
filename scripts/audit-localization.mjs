@@ -4,6 +4,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { decodeEntities, distDir, fileToRoute, listHtmlFiles, metaContent, readNetlifyRedirects, repoRoot, siteUrl } from './lib/pages.mjs';
 const locales=['fr','de','es','ja'];
+const { chromeCopy } = await import('../lib/i18n/chrome.ts');
+const breadcrumbLabels = {fr:'Fil d’Ariane',de:'Brotkrumennavigation',es:'Ruta de navegación',ja:'パンくずリスト'};
+const editorialRoutes=['/','/blog','/mascots','/press','/about','/authors','/research','/support'];
 const publicPages=(await import('../lib/i18n/public-pages.ts')).publicPages;
 const inventory=JSON.parse(fs.readFileSync(path.join(repoRoot,'lib/i18n/public-source-inventory.json'),'utf8'));
 const pages=new Map(listHtmlFiles().map(file=>[fileToRoute(file),fs.readFileSync(path.join(distDir,file),'utf8')]));
@@ -50,6 +53,22 @@ for(const locale of locales) {
    if(value&&englishValue&&value===englishValue&&value.length>30)problems.push(`${translated}: unchanged English ${key}`);
   }
   const visible=html.replace(/<script\b[\s\S]*?<\/script>/gi,'');
+  // Check actual shared chrome on every rendered counterpart, including all
+  // daily/result pages. This is independent of the source phrase inventory.
+  const englishHeader=pages.get(route).match(/<header\b[^>]*data-site-header=""[^>]*>[\s\S]*?<\/header>/)?.[0]??'';
+  const translatedHeader=visible.match(/<header\b[^>]*data-site-header=""[^>]*>[\s\S]*?<\/header>/)?.[0]??'';
+  const englishMain=englishHeader.match(/<nav\b[^>]*class="main"[^>]*>([\s\S]*?)<\/nav>/)?.[1]??'';
+  const englishLinks=[...englishMain.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
+  if(englishLinks.length===editorialRoutes.length&&englishLinks.every((link,i)=>link[1]===editorialRoutes[i])) {
+    for(const menu of translatedHeader.matchAll(/<nav\b[^>]*>([\s\S]*?)<\/nav>/g)) {
+      const links=[...menu[1].matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
+      if(links.length!==editorialRoutes.length)problems.push(`${translated}: incomplete shared editorial menu`);
+      links.forEach((link,i)=>{if(link[1]!==`/${locale}${editorialRoutes[i]==='/'?'':editorialRoutes[i]}`||normalize(link[2])!==chromeCopy[locale].editorialNav[i])problems.push(`${translated}: untranslated or incorrect shared editorial menu item ${i}`);});
+    }
+  }
+  for(const crumbs of visible.matchAll(/<nav\b[^>]*class="ed-crumbs"[^>]*>/g)) {
+    if(crumbs[0].match(/aria-label="([^"]+)"/)?.[1]!==breadcrumbLabels[locale])problems.push(`${translated}: untranslated breadcrumb accessible label`);
+  }
   for(const match of visible.matchAll(/<(?:a|form|button)\b[^>]*>/gi)) {
    const tag=match[0];if(/(?:lang|hreflang)="en"/i.test(tag))continue;
    for(const dest of tag.matchAll(/(?:href|action|formaction)="([^"]+)"/gi)) {
@@ -89,3 +108,6 @@ fs.mkdirSync(path.join(repoRoot,'outputs'),{recursive:true});
 fs.writeFileSync(path.join(repoRoot,'outputs/localization-url-manifest.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({...report,urls:undefined},null,2));
 if(problems.length)process.exitCode=1;
+// Inventory completeness cannot detect prose imported from data or text split
+// around inline elements. Compare the actual rendered documents as well.
+await import('./audit-rendered-copy.mjs');

@@ -175,9 +175,7 @@ export const editorialNav: NavLink[] = [
 ];
 
 /**
- * The editorial masthead in `locale`. "The game" and "Journal" lead to that
- * language's home page and journal index; everything else is only published
- * in English, so on a translated page those links carry `hreflang="en"`.
+ * The editorial masthead's labels and destinations in `locale`.
  */
 export function editorialNavFor(locale: Locale): NavLink[] {
   if (locale === 'en') return editorialNav;
@@ -210,6 +208,13 @@ export function VillageHeader({
   if (home === '/' && locale !== 'en') home = localePath(locale, '/');
   const copy = chromeCopy[locale];
   const foot = copy.footer;
+  // Shared page rendering clones navigation arrays, so identify the editorial
+  // menu by its destinations rather than relying on array identity.
+  if (locale !== 'en' && links.length === editorialNav.length && links.every((link, i) =>
+    link.href === editorialNav[i].href || link.href === localePath(locale, editorialNav[i].href)
+  )) links = editorialNavFor(locale);
+  if (locale !== 'en' && label === 'Primary navigation') label = copy.primaryNav;
+  if (locale !== 'en' && label === 'Sections') label = copy.sections;
   if (links === docNav && locale !== 'en') {
     const labels = [foot.support, foot.privacy, foot.privacyChoices, foot.terms, foot.license];
     links = docNav.map((link, i) => ({ href: localePath(locale, link.href), label: labels[i] }));

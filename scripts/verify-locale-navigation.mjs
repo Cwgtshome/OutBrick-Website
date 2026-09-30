@@ -2,16 +2,37 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { extractRenderedCopy, extractMetadataCopy, findCarryovers } from './lib/rendered-copy.mjs';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
 const outDir = fileURLToPath(new URL('../outputs/', import.meta.url));
 fs.mkdirSync(outDir, { recursive: true });
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
 const locales = ['en', 'fr', 'de', 'es', 'ja'];
+const editorialLabels = {
+  en: ['The game','Journal','Mascots','Press','About','Authors','Research','Support'],
+  fr: ['Le jeu','Journal','Mascottes','Presse','À propos','Auteurs','Recherche','Assistance'],
+  de: ['Das Spiel','Journal','Maskottchen','Presse','Über uns','Autoren','Forschung','Hilfe'],
+  es: ['El juego','Revista','Mascotas','Prensa','Quiénes somos','Autores','Investigación','Soporte'],
+  ja: ['ゲーム','記事','マスコット','プレス','OutBrickについて','著者','リサーチ','サポート'],
+};
+const breadcrumbLabels = { en: 'Breadcrumb', fr: 'Fil d’Ariane', de: 'Brotkrumennavigation', es: 'Ruta de navegación', ja: 'パンくずリスト' };
+const editorialRoutes = ['/', '/blog', '/mascots', '/press', '/about', '/authors', '/research', '/support'];
+async function verifyChrome(page, locale) {
+  for (const nav of await page.locator('header.site nav').all()) {
+    const links = await nav.locator('a').evaluateAll(anchors => anchors.map(a => ({ href: new URL(a.href).pathname, label: a.textContent.trim() })));
+    if (links.length === editorialRoutes.length && links.every((link, i) => link.href === localized(locale, editorialRoutes[i]))) {
+      assert.deepEqual(links.map(link => link.label), editorialLabels[locale], `${locale}: shared editorial navigation labels`);
+    }
+  }
+  for (const crumbs of await page.locator('nav.ed-crumbs').all()) {
+    assert.equal(await crumbs.getAttribute('aria-label'), breadcrumbLabels[locale], `${locale}: breadcrumb accessible label`);
+  }
+}
 const flagColours = { en: '#012169', fr: '#0055a4', de: '#dd0000', es: '#aa151b', ja: '#bc002d' };
 function verifyFlags(links) {
   for (const link of links) assert.ok(link.flag.includes(flagColours[link.locale]), `Incorrect flag for ${link.locale}`);
 }
-const routes = ['/', '/blog', '/blog/designing-for-real-life-play', '/blog/category/inclusive-design', '/blog/tag/mobile-games', '/authors/mourad-hamdi', '/careers/content-marketing-lead', '/mascots/bloo', '/play/result/17-3', '/daily', '/c', '/c/42', '/privacy', '/contact/thanks', '/affiliates/thanks', '/careers/thanks', '/newsletter/thanks'];
+const routes = ['/', '/blog', '/blog/designing-for-real-life-play', '/blog/category/inclusive-design', '/blog/tag/mobile-games', '/authors/mourad-hamdi', '/careers/content-marketing-lead', '/mascots', '/mascots/bloo', '/about', '/press', '/press/outbrick-4-2', '/press-kit', '/creators', '/whats-new', '/play/result/1-3', '/play/result/17-3', '/daily', '/c', '/c/42', '/privacy', '/contact/thanks', '/affiliates/thanks', '/careers/thanks', '/newsletter/thanks'];
 const localized = (locale, route) => locale === 'en' ? route : `/${locale}${route === '/' ? '' : route}`;
 const evidence = { base, matrix: [], clicks: [], internalNavigation: [], noScriptLanguages: [], notFound: [], errors: [] };
 const browser = await chromium.launch({ headless: true });
@@ -33,10 +54,16 @@ async function languageLinks() {
 }
 try {
   for (const route of routes) {
+    let englishCopy;
     for (const locale of locales) {
       const suffix = /^\/c(?:\/|$)/.test(route) ? (route === '/c' ? '?lv=42&par=8&beat=0#main' : '?par=8&beat=0#main') : '?navqa=1#main';
       const response = await page.goto(`${base}${localized(locale, route)}${suffix}`, { waitUntil: 'networkidle' });
       await identity(locale, response);
+      await verifyChrome(page, locale);
+      const html = await page.content();
+      const renderedCopy = [...extractRenderedCopy(html, {localized:locale !== 'en'}), ...extractMetadataCopy(html)];
+      if(locale === 'en') englishCopy = renderedCopy;
+      else assert.deepEqual(findCarryovers(englishCopy, renderedCopy, locale), [], `${locale}${route}: hydrated English carryover`);
       const links = await languageLinks();
       assert.equal(links.length, 5);
       for (const target of locales) {
@@ -98,6 +125,7 @@ try {
     for (const route of routes.filter(route => route !== '/c/42')) {
       const response = await plain.goto(`${base}${localized(locale, route)}`, { waitUntil: 'domcontentloaded' });
       assert.equal(response.status(), 200);
+      await verifyChrome(plain, locale);
       const links = await plain.locator('footer.site details.langs a[hreflang]').evaluateAll(anchors => anchors.map(anchor => ({ locale: anchor.hreflang, href: anchor.href, flag: anchor.querySelector('svg.flag')?.innerHTML ?? '' })));
       verifyFlags(links);
       assert.equal(links.length, 5);

@@ -7,6 +7,12 @@ import { localePath, type Locale } from './locales';
 export function clientText(text: string, locale: Locale): string {
   if (locale === 'en') return text;
   const key = text.replace(/\s+/g, ' ').trim();
+  const level = key.match(/^Head to Level (\d+) and play it\.(.*)$/);
+  if (level) {
+    const n = level[1];
+    const instruction = {fr:`Rendez-vous au niveau ${n} et jouez.`,de:`Öffne Stufe ${n} und spiele sie.`,es:`Ve al nivel ${n} y juega.`,ja:`ステージ${n}を開いてプレイしましょう。`}[locale];
+    return instruction + (level[2] ? ' ' + clientText(level[2].trim(), locale) : '');
+  }
   const value = formExtraWords[locale][key] ?? publicPages[locale][key] ?? formDynamicText(text, locale);
   if (!value) return text;
   return `${/^\s/.test(text) ? ' ' : ''}${value}${/\s$/.test(text) ? ' ' : ''}`;
@@ -32,7 +38,10 @@ export function clientTree(node: ReactNode, locale: Locale): ReactNode {
   for (const [key, value] of Object.entries(element.props)) {
     if (key === 'children' || key === 'success') {
       props[key] = typeof value === 'function' ? (...args: unknown[]) => clientTree(value(...args), locale) : clientTree(value as ReactNode, locale);
-    } else if (['label', 'spoken', 'placeholder', 'missing', 'patternMessage', 'title', 'aria-label', 'hint', 'next'].includes(key)) {
+    } else if (isValidElement(value) || (Array.isArray(value) && value.some(isValidElement))) {
+      // Any element-valued slot can contain localized UI, including `qr`.
+      props[key] = clientTree(value as ReactNode, locale);
+    } else if (['label', 'spoken', 'placeholder', 'missing', 'patternMessage', 'title', 'aria-label', 'alt', 'hint', 'next'].includes(key)) {
       props[key] = typeof value === 'string' ? clientText(value, locale) : clientTree(value as ReactNode, locale);
     } else if ((key === 'href' || key === 'action') && typeof value === 'string' && value.startsWith('/') && !value.startsWith('//') && !/^\/(fr|de|es|ja)(?:[/?#]|$)/.test(value) && !/\.[a-z0-9]+(?:[?#]|$)/i.test(value)) {
       props[key] = localePath(locale, value);

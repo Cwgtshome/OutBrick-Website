@@ -93,6 +93,7 @@ export function localizedRootMetadata(locale: Locale): Metadata {
   return { ...shared, title: { default: copy.title, template: '%s — OutBrick' }, description: copy.description,
     authors: [{ name: 'Mourad Hamdi', url: localePath(locale, '/authors/mourad-hamdi') }],
     keywords: undefined, manifest: locale === 'en' ? '/site.webmanifest' : `/${locale}/site.webmanifest`,
+    category: {en:'games',fr:'jeux',de:'Spiele',es:'juegos',ja:'ゲーム'}[locale],
     openGraph: { ...rootMetadata.openGraph, title: copy.ogTitle, description: copy.ogDescription, images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, width: 1200, height: 630, alt: copy.ogImageAlt }] },
     twitter: { card: 'summary_large_image', title: copy.ogTitle, description: copy.ogDescription, images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, alt: copy.ogImageAlt }] },
   };
@@ -104,6 +105,12 @@ function localizedSiteGraph(locale: Locale) {
   for (const node of source['@graph']) {
     if (node['@type'] === 'Organization') {
       node.description = t.organization;
+      node.knowsAbout = {
+        fr:['conception de jeux de puzzle','habitudes de jeu','accessibilité des jeux','expérience des joueurs'],
+        de:['Puzzle-Spieldesign','Spielgewohnheiten','Barrierefreiheit in Spielen','Spielerlebnis'],
+        es:['diseño de juegos de puzles','hábitos de juego','accesibilidad de los juegos','experiencia de quienes juegan'],
+        ja:['パズルゲームの設計','プレイ習慣','ゲームのアクセシビリティ','プレイヤー体験'],
+      }[locale];
       const logo = node.logo as Record<string, unknown> | undefined;
       if (logo) logo.caption = t.icon;
       const contact = node.contactPoint as Record<string, unknown>;

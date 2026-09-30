@@ -387,7 +387,7 @@ const deUi: JournalUi = {
 
 const esUi: JournalUi = {
   breadcrumb: 'Ruta de navegación',
-  journal: 'Journal',
+  journal: 'Revista',
   readingTime: (minutes) => `${minutes} min de lectura`,
   published: 'Publicado el',
   updated: 'Actualizado el',
@@ -459,11 +459,11 @@ const esUi: JournalUi = {
 
 const jaUi: JournalUi = {
   breadcrumb: 'パンくずリスト',
-  journal: 'Journal',
+  journal: '記事',
   readingTime: (minutes) => `${minutes}分で読めます`,
   published: '公開日',
   updated: '更新日',
-  figcaption: 'Journalのイラスト',
+  figcaption: 'ジャーナルのイラスト',
   inThisStory: 'この記事の内容',
   toc: '目次',
   allStories: '日本語のガイド一覧',
@@ -478,7 +478,7 @@ const jaUi: JournalUi = {
   newTab: '（新しいタブで開きます）',
   writtenBy: '執筆',
   moreFrom: (name) => (name.startsWith('OutBrick') ? '編集部のほかの記事' : `${name.split(' ')[0]}のほかの記事`),
-  gameNoteTitle: 'このJournalのとなりにあるゲーム',
+  gameNoteTitle: 'このジャーナルのとなりにあるゲーム',
   gameNoteBody:
     'OutBrickは、ブロックをスライドして色分けするパズルです。ソルバーで検証済みの2,000ステージ、ブロックでできた167の村、9人のブロックのなかま。App Storeで無料。ライフと任意のリワード動画があり、時間制限はどこにもありません。',
   costsLink: 'あなたが払うもの',
@@ -492,7 +492,7 @@ const jaUi: JournalUi = {
   copySectionLink: (title) => `「${title}」へのリンクをコピー`,
   sourceCard: (n) => `出典${n}`,
   filedUnder: 'カテゴリーとタグ',
-  storyNav: 'Journalのほかのガイド',
+  storyNav: 'ジャーナルのほかのガイド',
   previousStory: '前のガイド',
   nextStory: '次のガイド',
   categories: {
@@ -516,11 +516,11 @@ const jaUi: JournalUi = {
   },
   languages: 'ほかの言語で読む',
   index: {
-    title: 'OutBrick Journal：日本語で読めるパズルガイド',
+    title: 'OutBrickジャーナル：日本語で読めるパズルガイド',
     description:
-      'OutBrick Journalのガイドを日本語で。スライドパズルの解き方、色分けパズルのコツ、癒されるパズルゲーム、オフラインで遊べるゲームを紹介します。',
-    label: 'OutBrick Journal',
-    h1: 'OutBrick Journal 日本語版',
+      'OutBrick ジャーナルのガイドを日本語で。スライドパズルの解き方、色分けパズルのコツ、癒されるパズルゲーム、オフラインで遊べるゲームを紹介します。',
+    label: 'OutBrickジャーナル',
+    h1: 'OutBrickジャーナル 日本語版',
     lede: 'OutBrickの開発チームによる実践ガイドを、英語から翻訳しました。ステージの読み方、手数を減らすコツ、本当に落ち着けるパズルゲームの見分け方、電車や飛行機で遊ぶゲームの選び方。研究にもとづく記述には、すべて出典へのリンクがついています。',
     count: (n) => `${n}本のガイド`,
     guides: 'ガイド',

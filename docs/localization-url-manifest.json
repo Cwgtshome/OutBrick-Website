@@ -18259,25 +18259,25 @@
       "status": 404
     }
   ],
-  "generatedAt": "2026-09-30T20:41:29.732Z",
+  "generatedAt": "2026-09-30T22:32:41.168Z",
   "englishPublicUrls": 264,
   "englishTemplates": 44,
   "localizedTemplateCoverage": 44,
   "locales": {
     "fr": {
-      "dictionaryKeys": 1159,
+      "dictionaryKeys": 1230,
       "publicCounterparts": 264
     },
     "de": {
-      "dictionaryKeys": 1159,
+      "dictionaryKeys": 1230,
       "publicCounterparts": 264
     },
     "es": {
-      "dictionaryKeys": 1159,
+      "dictionaryKeys": 1230,
       "publicCounterparts": 264
     },
     "ja": {
-      "dictionaryKeys": 1159,
+      "dictionaryKeys": 1230,
       "publicCounterparts": 264
     }
   },

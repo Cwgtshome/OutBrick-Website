@@ -350,7 +350,7 @@ export const fr: LocaleGuides = {
         title: 'Repartez avec le meilleur',
         paragraphs: [
           'Une bonne partie de deux minutes vous donne un petit sentiment de progrès, puis vous laisse décider de la suite. Si vous avez le temps pour un autre plateau, il y en a toujours un autre. S’il faut partir, le jeu peut attendre.',
-          'C’est pourquoi OutBrick traite le calme comme une donnée de conception. La recherche ne dit pas que tous les joueurs en profitent de la même façon, et elle ne prouve pas d’effet universel. Elle indique en revanche une direction utile : faire un jeu qui respecte l’autonomie, rend la progression lisible et laisse au joueur plus de choix qu’il n’en avait avant. Nous suivons le même fil dans [Designing a game for the life players actually have](/blog/designing-for-real-life-play) (en anglais).',
+          'C’est pourquoi OutBrick traite le calme comme une donnée de conception. La recherche ne dit pas que tous les joueurs en profitent de la même façon, et elle ne prouve pas d’effet universel. Elle indique en revanche une direction utile : faire un jeu qui respecte l’autonomie, rend la progression lisible et laisse au joueur plus de choix qu’il n’en avait avant. Nous suivons le même fil dans [Concevoir un jeu pour la vraie vie des joueurs](/blog/designing-for-real-life-play).',
         ],
       },
     },

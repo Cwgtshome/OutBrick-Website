@@ -350,7 +350,7 @@ export const es: LocaleGuides = {
         title: 'Llévate lo bueno contigo',
         paragraphs: [
           'Una buena partida de dos minutos te da una pequeña sensación de progreso y luego te deja decidir qué viene después. Si tienes tiempo para otro tablero, siempre hay otro tablero. Si tienes que irte, el juego puede esperar.',
-          'Por eso OutBrick trata la calma como un requisito de diseño. La investigación no dice que todos los jugadores se beneficien igual, ni demuestra un efecto universal. Sí señala una dirección útil: hacer un juego que respete la autonomía, haga visible el progreso y deje al jugador con más opciones de las que tenía antes. Seguimos el mismo hilo en [Designing a game for the life players actually have](/blog/designing-for-real-life-play) (en inglés).',
+          'Por eso OutBrick trata la calma como un requisito de diseño. La investigación no dice que todos los jugadores se beneficien igual, ni demuestra un efecto universal. Sí señala una dirección útil: hacer un juego que respete la autonomía, haga visible el progreso y deje al jugador con más opciones de las que tenía antes. Seguimos el mismo hilo en [Diseñar un juego para la vida real de quienes juegan](/blog/designing-for-real-life-play).',
         ],
       },
     },

@@ -141,7 +141,7 @@ export function WhatsNewPage({ locale }: { locale: Locale }) {
       <main id="main">
         <header className="ed-band-ink ed-hero">
           <div className="ed-wrap">
-            <Crumbs items={[{ href: home, label: 'OutBrick' }, { label: copy.crumb }]} />
+            <Crumbs locale={locale} items={[{ href: home, label: 'OutBrick' }, { label: copy.crumb }]} />
             <div className="ed-hero-grid">
               <div>
                 <p className="ed-label">{copy.label}</p>

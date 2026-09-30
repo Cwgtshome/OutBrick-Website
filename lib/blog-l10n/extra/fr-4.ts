@@ -445,7 +445,7 @@ export const fr4: ExtraGuides = {
     title: 'Dark patterns dans les jeux mobiles : comment les repérer',
     dek: 'Pop-ups insistants, monnaies confuses, offres calées sur vos pires moments : ce que dit la recherche sur le design manipulateur, et comment le repérer.',
     imageAlt: 'Un iPhone affichant la boutique d’OutBrick avec ses offres spéciales et le Brick Pass, entre Poppy avec sa baguette étoilée et Bloo avec sa montre',
-    tags: ['dark patterns', 'éthique du jeu vidéo', 'jeux mobiles', 'monétisation', 'jouer sainement'],
+    tags: ['interfaces trompeuses', 'éthique du jeu vidéo', 'jeux mobiles', 'monétisation', 'jouer sainement'],
     intro: 'L’expression « dark pattern » a été forgée pour les sites web : la case précochée, le bouton d’annulation gris sur gris, l’abonnement qui se souscrit en une touche et se résilie en douze. Les jeux ont hérité de tout cela et ont inventé leurs propres variantes. Comme un jeu est conçu pour être absorbant, la frontière entre captivant et manipulateur peut être difficile à voir de l’intérieur. Des chercheurs en interaction humain-machine, en protection des consommateurs et en addictologie ont commencé à tracer cette frontière. Leurs travaux donnent aux joueurs un vocabulaire pour ce sentiment qu’un jeu travaille contre eux, et tendent un miroir aux concepteurs. Nous faisons un jeu gratuit, alors nous nous sommes aussi regardés dans ce miroir.',
     keyTakeaways: [
       'Les dark patterns sont des choix de conception qui font passer les intérêts du concepteur avant ceux de l’utilisateur, par le harcèlement, l’obstruction, la dissimulation, l’interférence d’interface ou l’action forcée.',

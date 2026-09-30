@@ -9,6 +9,7 @@
 
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
+import { extractRenderedCopy, extractMetadataCopy, findCarryovers } from './lib/rendered-copy.mjs';
 
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
 const require = createRequire(import.meta.url);
@@ -28,6 +29,20 @@ const shardPaths = [...new Set(paths)].filter((_, index) => index % shardCount =
 
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 let failures = 0;
+const englishCopy = new Map();
+async function hydratedCarryovers(page, pagePath) {
+  const locale = pagePath.match(/^\/(fr|de|es|ja)(?:\/|$)/)?.[1];
+  if (!locale) return [];
+  const route = new URL(pagePath, base).pathname.replace(/^\/(fr|de|es|ja)(?=\/|$)/, '') || '/';
+  if (!englishCopy.has(route)) {
+    const file = route === '/' ? 'index.html' : route.slice(1) + '.html';
+    const html = await readFile(new URL('../dist/client/' + file, import.meta.url), 'utf8');
+    englishCopy.set(route, [...extractRenderedCopy(html), ...extractMetadataCopy(html)]);
+  }
+  const html = await page.content();
+  return findCarryovers(englishCopy.get(route), [...extractRenderedCopy(html, {localized:true}), ...extractMetadataCopy(html)], locale)
+    .map(entry => `English ${entry.kind}: ${entry.text}`);
+}
 
 for (const [width, height] of [
   [1440, 900],
@@ -61,7 +76,7 @@ for (const [width, height] of [
       const overflow = document.documentElement.scrollWidth - document.documentElement.clientWidth;
       return { violations: violations.map((v) => `${v.impact} ${v.id} ×${v.nodes.length} (${v.nodes[0]?.target})`), overflow };
     });
-    const problems = [...result.violations, ...errors.map((e) => `console: ${e}`)];
+    const problems = [...result.violations, ...errors.map((e) => `console: ${e}`), ...await hydratedCarryovers(page, path)];
     if (result.overflow > 1) problems.push(`page is ${result.overflow}px wider than the viewport`);
     if (problems.length) {
       failures += 1;

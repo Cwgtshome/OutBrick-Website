@@ -350,7 +350,7 @@ export const de: LocaleGuides = {
         title: 'Nimm das Gute mit',
         paragraphs: [
           'Eine gute Zwei-Minuten-Runde gibt dir ein kleines Gefühl von Fortschritt und lässt dich dann entscheiden, wie es weitergeht. Wenn du Zeit für ein weiteres Feld hast, gibt es immer ein weiteres Feld. Wenn du losmusst, kann das Spiel warten.',
-          'Deshalb behandelt OutBrick Ruhe als Designvorgabe. Die Forschung sagt nicht, dass alle Spieler gleich davon profitieren, und sie beweist keinen allgemeingültigen Effekt. Sie zeigt aber in eine nützliche Richtung: ein Spiel bauen, das Autonomie respektiert, Fortschritt lesbar macht und dir mehr Wahlmöglichkeiten lässt, als du vorher hattest. Denselben Faden verfolgen wir in [Designing a game for the life players actually have](/blog/designing-for-real-life-play) (auf Englisch).',
+          'Deshalb behandelt OutBrick Ruhe als Designvorgabe. Die Forschung sagt nicht, dass alle Spieler gleich davon profitieren, und sie beweist keinen allgemeingültigen Effekt. Sie zeigt aber in eine nützliche Richtung: ein Spiel bauen, das Autonomie respektiert, Fortschritt lesbar macht und dir mehr Wahlmöglichkeiten lässt, als du vorher hattest. Denselben Faden verfolgen wir in [Ein Spiel für das wirkliche Leben gestalten](/blog/designing-for-real-life-play).',
         ],
       },
     },

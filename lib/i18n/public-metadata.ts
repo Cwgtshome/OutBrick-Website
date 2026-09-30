@@ -36,7 +36,8 @@ const copy: Record<TranslatedLocale, Record<string, Snippet>> = {
     '/authors/outbrick-editorial': { description: 'Die OutBrick-Redaktion untersucht Puzzles, Spiele-Design und Spielgewohnheiten. Forschungsaussagen in ihren Artikeln nennen die jeweiligen Quellen.' },
     '/blog/category/player-habits': { description: 'OutBrick-Artikel über Spielgewohnheiten: kurze Sitzungen, Routinen, Aufmerksamkeit und Pausen. Forschungsaussagen werden mit Quellen belegt.' },
     '/careers': { description: 'Entdecken Sie OutBricks Remote-Stellen in Entwicklung, Design, Marketing und Community. Lesen Sie Aufgaben, Anforderungen und Bewerbungshinweise.' },
-    '/careers/ai-ml-engineer': { title: 'KI-/ML-Entwicklung — Remote-Karriere bei OutBrick' },
+    '/careers/ai-ml-engineer': { title: 'KI-/ML-Entwicklung — Remote-Karriere bei OutBrick', description: 'Arbeiten Sie ortsunabhängig an OutBricks Levelgenerierung und Solver. Lesen Sie Aufgaben, Anforderungen und Hinweise zur Bewerbung.' },
+    '/careers/community-social-media-manager': { description: 'Betreuen Sie OutBricks Community und soziale Medien ortsunabhängig. Lesen Sie Aufgaben, Anforderungen und Hinweise zur Bewerbung.' },
     '/careers/content-marketing-lead': { description: 'Gestalten Sie OutBricks Inhalte und Kommunikation in einer Remote-Stelle. Erfahren Sie mehr über Aufgaben, Anforderungen und die Bewerbung.' },
     '/careers/growth-aso-specialist': { title: 'Wachstum und ASO — Remote-Karriere bei OutBrick', description: 'Arbeiten Sie bei OutBrick an Wachstum und App-Store-Optimierung. Entdecken Sie Aufgaben, benötigte Kenntnisse und die Bewerbung für die Remote-Stelle.' },
     '/careers/player-experience-designer': { description: 'Gestalten Sie OutBricks Spielerlebnis in einer Remote-Stelle. Lesen Sie die Aufgaben, Design-Anforderungen und Hinweise zur Bewerbung.' },
@@ -125,6 +126,10 @@ export function withPublicSchemaSnippets(value: unknown, locale: TranslatedLocal
   const node=value as Record<string,unknown>;
   const result=Object.fromEntries(Object.entries(node).map(([key,item])=>[key,withPublicSchemaSnippets(item,locale)]));
   const types=Array.isArray(node['@type'])?node['@type']:[node['@type']];
+  const nodeUrl=typeof node.url==='string'?node.url:typeof node['@id']==='string'?node['@id']:'';
+  if(types.includes('NewsArticle') && nodeUrl && new URL(nodeUrl,'https://www.outbrick.site').pathname===`/${locale}/press/outbrick-4-2`) {
+    result.headline={fr:'OutBrick 4.2 arrive sur l’App Store',de:'OutBrick 4.2 ist im App Store erhältlich',es:'OutBrick 4.2 llega al App Store',ja:'OutBrick 4.2がApp Storeに登場'}[locale];
+  }
   if(types.some(type=>['WebPage','CollectionPage','AboutPage','ContactPage','BlogPosting'].includes(String(type)))&&typeof node.url==='string') {
     const path=new URL(node.url,'https://www.outbrick.site').pathname;
     if(path===`/${locale}`||path.startsWith(`/${locale}/`)) {

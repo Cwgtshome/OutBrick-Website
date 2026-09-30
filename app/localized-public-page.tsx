@@ -22,6 +22,7 @@ import type { Metadata } from 'next';
 import { withPublicMetadataSnippet, withPublicSchemaSnippets } from '../lib/i18n/public-metadata';
 import { notFound } from 'next/navigation';
 import { hiringCountriesText } from '../lib/business';
+import { friends } from '../lib/mascots';
 import { siteUrl } from '../lib/site';
 import { isTranslatedLocale, localeAlternates, localePath, ogLocales, translatedLocales, type TranslatedLocale } from '../lib/i18n/locales';
 import { localizeArticle } from '../lib/i18n/blog';
@@ -57,6 +58,19 @@ function localizedUsdAmount(text: string, locale: TranslatedLocale): string | un
 
 export function translatedText(text: string, locale: TranslatedLocale): string {
   const normalized = norm(text);
+  const friendDescription = friends.find(friend => normalized === norm(`${friend.role}. ${friend.line}`));
+  if (friendDescription) return translatedText(friendDescription.role,locale) + (locale==='ja'?'。':'. ') + translatedText(friendDescription.line,locale);
+  if (normalized === 'press') return {fr:'presse',de:'Presse',es:'prensa',ja:'報道関係のお問い合わせ'}[locale];
+  const tagged = normalized.match(/^Tagged “(.+)”$/);
+  if (tagged) {
+    const label = journalTextTranslations(locale)[tagged[1]] ?? tagged[1];
+    return {fr:`Articles sur « ${label} »`,de:`Artikel zu „${label}“`,es:`Artículos sobre «${label}»`,ja:`「${label}」の記事`}[locale];
+  }
+  const shelves = normalized.match(/^(\d+) shelves$/);
+  if (shelves) {
+    const n = shelves[1];
+    return {fr:`${n} rubriques`,de:`${n} Rubriken`,es:`${n} secciones`,ja:`${n}つのカテゴリ`}[locale];
+  }
   const usdAmount = localizedUsdAmount(normalized, locale);
   if (usdAmount !== undefined) return usdAmount;
   if (/^(?:\d{1,2} [A-Z][a-z]+ \d{4}|[A-Z][a-z]+ \d{1,2}, \d{4})$/.test(normalized)) {
@@ -145,7 +159,13 @@ export async function localizePageTree(node: ReactNode, locale: TranslatedLocale
   if (Array.isArray(node)) return Children.toArray(await Promise.all(node.map(item => localizePageTree(item, locale))));
   if (!isValidElement(node)) return node;
   const element = node as ReactElement<Record<string, unknown>>;
-  const props: Record<string,unknown> = { ...(localizedObject(element.props, locale) as Record<string, unknown>), ...(element.type === Flag ? {} : { locale }) };
+  const props: Record<string,unknown> = { ...(localizedObject(element.props, locale) as Record<string, unknown>), ...(element.type === Flag || typeof element.type === 'string' ? {} : { locale }) };
+  // Server-rendered slots such as challenge QR cards and editorial `before`
+  // content are React nodes too, even when they are not named `children`.
+  const hasElement = (value: unknown): boolean => isValidElement(value) || (Array.isArray(value) && value.some(hasElement));
+  for (const [key, value] of Object.entries(props)) {
+    if (key !== 'children' && hasElement(value)) props[key] = await localizePageTree(value as ReactNode, locale);
+  }
   const clientReference = clientIdentities.has(element.type) || (element.type as unknown as { $$typeof?: symbol }).$$typeof === Symbol.for('react.client.reference');
   const name = !clientReference && typeof element.type === 'function' ? element.type.name : '';
   if (name === 'VillageHeader' && typeof props.current === 'string' && props.current.startsWith('/')) props.current=localizedPublicHref(props.current,locale);
@@ -155,7 +175,7 @@ export async function localizePageTree(node: ReactNode, locale: TranslatedLocale
     const render = element.type as (props: Record<string, unknown>) => ReactNode | Promise<ReactNode>;
     return localizePageTree(await render(props), locale);
   }
-  const translated = localizedObject(element.props, locale) as Record<string, unknown>;
+  const translated = props;
   if (typeof element.type === 'function' || (typeof element.type === 'object' && element.type !== null)) translated.locale = locale;
   // Explicit language destinations already identify their target locale.
   if (element.type === 'a' && ['en','fr','de','es','ja'].includes(String(element.props.hrefLang))) translated.href = element.props.href;
