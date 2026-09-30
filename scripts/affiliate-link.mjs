@@ -23,8 +23,8 @@ if (!input || input === '--help' || input === '-h') {
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const code = input.trim().toUpperCase();
 
-// The provider token lives in app/store-badge.tsx; read it rather than repeat it.
-const badge = fs.readFileSync(path.join(repoRoot, 'app/store-badge.tsx'), 'utf8');
+// The provider token lives in lib/app-store-url.ts; read it rather than repeat it.
+const badge = fs.readFileSync(path.join(repoRoot, 'lib/app-store-url.ts'), 'utf8');
 const providerToken = badge.match(/APP_STORE_PROVIDER_TOKEN\s*=\s*'([^']*)'/)?.[1] ?? '';
 
 const rule = readNetlifyRedirects().find((r) => r.from === '/r/:code');
@@ -47,7 +47,7 @@ console.log(`Share link       ${affiliateLink(code)}`);
 console.log(`Redirects to     ${affiliateStoreUrl(code, providerToken)}`);
 console.log(`Campaign         aff-${code.toLowerCase()}  (App Analytics → Sources → Campaigns)`);
 if (!providerToken) {
-  console.log('\nNote: APP_STORE_PROVIDER_TOKEN is empty in app/store-badge.tsx. Until it is set (and');
+  console.log('\nNote: APP_STORE_PROVIDER_TOKEN is empty in lib/app-store-url.ts. Until it is set (and');
   console.log('`&pt=<token>` added to the /r/:code rule in netlify.toml), App Analytics does not attribute campaigns.');
 }
 console.log('');

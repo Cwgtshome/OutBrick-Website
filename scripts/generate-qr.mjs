@@ -22,12 +22,12 @@ const { siteUrl } = await import('../lib/site.ts');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(root, 'public/qr');
 
-// Same address as appStoreUrl('qr-print') in app/store-badge.tsx. A .mjs script cannot import
+// Same address as appStoreUrl('qr-print') in lib/app-store-url.ts. A .mjs script cannot import
 // TSX, so the app id and provider token are read out of that file's source instead of copied.
-const badgeSource = fs.readFileSync(path.join(root, 'app/store-badge.tsx'), 'utf8');
+const badgeSource = fs.readFileSync(path.join(root, 'lib/app-store-url.ts'), 'utf8');
 const APP_STORE_ID = badgeSource.match(/APP_STORE_ID = '(\d+)'/)?.[1];
 const APP_STORE_PROVIDER_TOKEN = badgeSource.match(/APP_STORE_PROVIDER_TOKEN = '([^']*)'/)?.[1] ?? '';
-if (!APP_STORE_ID) throw new Error('[qr] could not read APP_STORE_ID from app/store-badge.tsx');
+if (!APP_STORE_ID) throw new Error('[qr] could not read APP_STORE_ID from lib/app-store-url.ts');
 const APP_STORE_URL = `https://apps.apple.com/us/app/outbrick/id${APP_STORE_ID}`;
 const params = new URLSearchParams({ mt: '8', ct: 'web-qr-print' });
 if (APP_STORE_PROVIDER_TOKEN) params.set('pt', APP_STORE_PROVIDER_TOKEN);

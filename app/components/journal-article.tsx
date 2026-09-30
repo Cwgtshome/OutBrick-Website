@@ -113,6 +113,19 @@ export function articleMetadata(article: BlogArticle, locale: Locale): Metadata 
  * see reading-aids.tsx) and is also its accessible description. Citations stay
  * in their original language (English), and say so on a translated page.
  */
+function CitationText({ reference }: { reference: BlogReference }) {
+  const spans = (reference.italicParts ?? []).map((text) => ({ text, at: reference.citation.indexOf(text) }))
+    .filter(({ at }) => at >= 0).sort((a, b) => a.at - b.at);
+  let cursor = 0;
+  const parts = [];
+  for (const { text, at } of spans) {
+    if (at < cursor) continue;
+    parts.push(<Fragment key={at}>{reference.citation.slice(cursor, at)}<em>{text}</em></Fragment>);
+    cursor = at + text.length;
+  }
+  return <>{parts}{reference.citation.slice(cursor)}</>;
+}
+
 function SourceMarkers({ sectionId, sourceIds, references, ui, tr }: { sectionId: string; sourceIds?: string[]; references: BlogReference[]; ui: JournalUi; tr?: TranslatedLocale }) {
   const found = (sourceIds ?? [])
     .map((id) => ({ id, n: references.findIndex((reference) => reference.id === id) + 1 }))
@@ -129,7 +142,7 @@ function SourceMarkers({ sectionId, sourceIds, references, ui, tr }: { sectionId
             <a href={`#reference-${id}`} aria-label={ui.source(n, reference.label)} aria-describedby={cardId}>{n}</a>
             <span className="ed-cite-card" id={cardId} role="tooltip">
               <span className="ed-cite-n" aria-hidden="true">{ui.sourceCard(n)}</span>
-              {tr ? <span lang="en">{reference.citation}</span> : reference.citation}
+              {tr ? <span lang="en"><CitationText reference={reference} /></span> : <CitationText reference={reference} />}
             </span>
           </span>
         );
@@ -396,7 +409,7 @@ export function ArticleView({
                   {article.references.map((reference) => (
                     <li id={`reference-${reference.id}`} key={reference.id}>
                       <span lang={en}>
-                        {reference.citation}{' '}
+                        <CitationText reference={reference} />{' '}
                         <a href={reference.url} target="_blank" rel="noreferrer">
                           {reference.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
                           <span className="sr-only" lang={tr}>{ui.newTab}</span>

@@ -9,6 +9,8 @@ export type Author = {
 };
 
 export type BlogReference = {
+  /** Exact citation spans to italicise for APA 7; plain citation stays in JSON-LD. */
+  italicParts?: string[];
   id: string;
   label: string;
   citation: string;
