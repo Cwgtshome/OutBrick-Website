@@ -503,7 +503,7 @@ const llms = [
   '',
   '## The OutBrick Journal in other languages',
   '',
-  'Five guides translated into French, German, Spanish and Japanese; the rest of the journal is in English.',
+  'Journal articles translated into French, German, Spanish and Japanese; further articles are available in English.',
   '',
   ...translatedBlogPages.map(mdLine),
   '',

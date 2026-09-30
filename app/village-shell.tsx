@@ -43,15 +43,14 @@ export function Course({ offset = false }: { offset?: boolean }) {
  * and at least a quarter of the badge height of clear space on every side.
  */
 /**
- * The artwork is Apple's English badge in every language (the localized
- * badges are not in the repo); its name is translated, and a translated page
+ * Apple's localized artwork matches the page language. Each translated page
  * links to its own country's storefront with a `web-<locale>-…` campaign.
  */
 export function AppStoreBadge({ campaign = 'badge', locale = 'en' }: { campaign?: string; locale?: Locale }) {
   const copy = chromeCopy[locale];
   return (
     <a className="badge" href={localeStoreUrl(campaign, locale)} aria-label={copy.badgeLabel}>
-      <img src="/assets/badge/appstore-black.svg" alt={copy.badgeAlt} width={143} height={48} />
+      <img src={locale === 'en' ? '/assets/badge/appstore-black.svg' : `/assets/badge/appstore-black-${locale}.svg`} alt={copy.badgeAlt} width={143} height={48} />
     </a>
   );
 }

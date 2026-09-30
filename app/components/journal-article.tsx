@@ -271,8 +271,8 @@ export function ArticleView({
 
   const pullAfter = Math.min(1, article.sections.length - 1);
   // The category and tag pages are English only: a translated page shows the category in its
-  // own language and the tags as the English pages name them, all marked as leading to English.
-  const tags = english.tags.filter((tag) => tag.toLowerCase() !== english.category.toLowerCase());
+  // own language and translated tag labels, with links marked as leading to English.
+  const tags = english.tags.map((tag, index) => ({ key: tag, label: article.tags[index] ?? tag })).filter((tag) => tag.key.toLowerCase() !== english.category.toLowerCase());
 
   return (
     <EditorialPage
@@ -382,7 +382,7 @@ export function ArticleView({
                 <h2 className="ed-label no-mark">{ui.filedUnder}</h2>
                 <ul className="ed-tags">
                   <li data-tone={article.categoryColor}><a className="shelf" href={categoryPath(article.category)} hrefLang={en}>{category}</a></li>
-                  {tags.map((tag) => <li key={tag}><a href={tagHref(tag)} hrefLang={en} lang={en}>{tag}</a></li>)}
+                  {tags.map((tag) => <li key={tag.key}><a href={tagHref(tag.key)} hrefLang={en}>{tag.label}</a></li>)}
                 </ul>
               </div>
 

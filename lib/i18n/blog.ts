@@ -275,6 +275,8 @@ const frUi: JournalUi = {
   nextStory: 'Guide suivant',
   categories: {
     'Game craft': 'Conception de jeux',
+    'Inclusive design': 'Conception inclusive',
+    'Social play': 'Jouer ensemble',
     'OutBrick practice': 'OutBrick en pratique',
     'Player habits': 'Habitudes de jeu',
   },
@@ -292,10 +294,10 @@ const frUi: JournalUi = {
   index: {
     title: 'Le journal OutBrick : guides de puzzle en français',
     description:
-      'Cinq guides du journal OutBrick traduits en français : résoudre un puzzle de blocs coulissants, trier par couleur, jouer au calme et hors ligne.',
+      'Des guides du journal OutBrick traduits en français : résoudre un puzzle de blocs coulissants, trier par couleur, jouer au calme et hors ligne.',
     label: 'Le journal OutBrick',
     h1: 'Le journal OutBrick, en français',
-    lede: 'Cinq guides pratiques des créateurs d’OutBrick, traduits de l’anglais : comment lire un plateau, dépenser moins de coups, repérer un jeu vraiment reposant et bien choisir un jeu pour le train ou l’avion. Chaque affirmation tirée de la recherche renvoie à sa source.',
+    lede: 'Des guides pratiques des créateurs d’OutBrick, traduits de l’anglais : comment lire un plateau, dépenser moins de coups, repérer un jeu vraiment reposant et bien choisir un jeu pour le train ou l’avion. Chaque affirmation tirée de la recherche renvoie à sa source.',
     count: (n) => `${n} guides`,
     guides: 'Les guides',
     more: 'Le reste du journal est en anglais.',
@@ -343,6 +345,8 @@ const deUi: JournalUi = {
   nextStory: 'Nächster Ratgeber',
   categories: {
     'Game craft': 'Spieldesign',
+    'Inclusive design': 'Inklusives Design',
+    'Social play': 'Gemeinsam spielen',
     'OutBrick practice': 'OutBrick in der Praxis',
     'Player habits': 'Spielgewohnheiten',
   },
@@ -360,10 +364,10 @@ const deUi: JournalUi = {
   index: {
     title: 'Das OutBrick-Journal: Puzzle-Ratgeber auf Deutsch',
     description:
-      'Fünf Ratgeber aus dem OutBrick-Journal auf Deutsch: Schiebepuzzles lösen, Farben sortieren, entspannte Puzzlespiele finden und offline spielen.',
+      'Ratgeber aus dem OutBrick-Journal auf Deutsch: Schiebepuzzles lösen, Farben sortieren, entspannte Puzzlespiele finden und offline spielen.',
     label: 'Das OutBrick-Journal',
     h1: 'Das OutBrick-Journal auf Deutsch',
-    lede: 'Fünf praktische Ratgeber von den Machern von OutBrick, aus dem Englischen übersetzt: wie du ein Spielfeld liest, mit weniger Zügen auskommst, ein wirklich entspanntes Puzzlespiel erkennst und das richtige Spiel für Zug und Flugzeug findest. Jede Aussage aus der Forschung verlinkt ihre Quelle.',
+    lede: 'Praktische Ratgeber von den Machern von OutBrick, aus dem Englischen übersetzt: wie du ein Spielfeld liest, mit weniger Zügen auskommst, ein wirklich entspanntes Puzzlespiel erkennst und das richtige Spiel für Zug und Flugzeug findest. Jede Aussage aus der Forschung verlinkt ihre Quelle.',
     count: (n) => `${n} Ratgeber`,
     guides: 'Die Ratgeber',
     more: 'Der Rest des Journals ist auf Englisch.',
@@ -411,6 +415,8 @@ const esUi: JournalUi = {
   nextStory: 'Guía siguiente',
   categories: {
     'Game craft': 'Diseño de juegos',
+    'Inclusive design': 'Diseño inclusivo',
+    'Social play': 'Juego social',
     'OutBrick practice': 'OutBrick en la práctica',
     'Player habits': 'Hábitos de juego',
   },
@@ -428,10 +434,10 @@ const esUi: JournalUi = {
   index: {
     title: 'El journal de OutBrick: guías de puzles en español',
     description:
-      'Cinco guías del journal de OutBrick en español: resolver rompecabezas de bloques deslizantes, ordenar colores, juegos relajantes y juegos sin conexión.',
+      'Guías del journal de OutBrick en español: resolver rompecabezas de bloques deslizantes, ordenar colores, juegos relajantes y juegos sin conexión.',
     label: 'El journal de OutBrick',
     h1: 'El journal de OutBrick, en español',
-    lede: 'Cinco guías prácticas de los creadores de OutBrick, traducidas del inglés: cómo leer un tablero, gastar menos movimientos, reconocer un juego de verdad relajante y elegir bien un juego para el tren o el avión. Cada dato de investigación enlaza a su fuente.',
+    lede: 'Guías prácticas de los creadores de OutBrick, traducidas del inglés: cómo leer un tablero, gastar menos movimientos, reconocer un juego de verdad relajante y elegir bien un juego para el tren o el avión. Cada dato de investigación enlaza a su fuente.',
     count: (n) => `${n} guías`,
     guides: 'Las guías',
     more: 'El resto del journal está en inglés.',
@@ -479,6 +485,8 @@ const jaUi: JournalUi = {
   nextStory: '次のガイド',
   categories: {
     'Game craft': 'ゲームデザイン',
+    'Inclusive design': 'インクルーシブデザイン',
+    'Social play': '一緒に遊ぶ',
     'OutBrick practice': 'OutBrick実践',
     'Player habits': '遊び方と習慣',
   },
@@ -496,10 +504,10 @@ const jaUi: JournalUi = {
   index: {
     title: 'OutBrick Journal：日本語で読めるパズルガイド',
     description:
-      'OutBrick Journalのガイド5本を日本語で。スライドパズルの解き方、色分けパズルのコツ、癒されるパズルゲーム、オフラインで遊べるゲームを紹介します。',
+      'OutBrick Journalのガイドを日本語で。スライドパズルの解き方、色分けパズルのコツ、癒されるパズルゲーム、オフラインで遊べるゲームを紹介します。',
     label: 'OutBrick Journal',
     h1: 'OutBrick Journal 日本語版',
-    lede: 'OutBrickの開発チームによる実践ガイド5本を、英語から翻訳しました。ステージの読み方、手数を減らすコツ、本当に落ち着けるパズルゲームの見分け方、電車や飛行機で遊ぶゲームの選び方。研究にもとづく記述には、すべて出典へのリンクがついています。',
+    lede: 'OutBrickの開発チームによる実践ガイドを、英語から翻訳しました。ステージの読み方、手数を減らすコツ、本当に落ち着けるパズルゲームの見分け方、電車や飛行機で遊ぶゲームの選び方。研究にもとづく記述には、すべて出典へのリンクがついています。',
     count: (n) => `${n}本のガイド`,
     guides: 'ガイド',
     more: 'ほかの記事は英語のみです。',
