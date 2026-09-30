@@ -17,7 +17,18 @@ const editorialLabels = {
 };
 const breadcrumbLabels = { en: 'Breadcrumb', fr: 'Fil d’Ariane', de: 'Brotkrumennavigation', es: 'Ruta de navegación', ja: 'パンくずリスト' };
 const editorialRoutes = ['/', '/blog', '/mascots', '/press', '/about', '/authors', '/research', '/support'];
+const firstUndoRule = {
+  fr:'Sur chaque plateau, la première annulation est gratuite et ne consomme pas votre réserve.',
+  de:'Auf jedem Spielfeld ist das erste Rückgängigmachen kostenlos und wird nicht von deinem Vorrat abgezogen.',
+  es:'En cada tablero, la primera acción de deshacer es gratuita y no consume tu reserva.',
+  ja:'各盤面では最初の1回の「元に戻す」が無料で、ストックを消費しません。',
+};
 async function verifyChrome(page, locale) {
+  if(locale !== 'en' && new URL(page.url()).pathname.match(/^\/(fr|de|es|ja)\/c(?:\/|$)/)) {
+    const appCopy=await page.locator('.challenge .lede,.challenge .facts,.grid.g3 .card:nth-child(2) p').allTextContents();
+    assert.ok(appCopy.join(' ').includes(firstUndoRule[locale]), `${locale}: first undo consumes no reserve`);
+    assert.doesNotMatch(appCopy.join(' '), /sans limite|unbegrenzt|ilimitada|何度でも/);
+  }
   for (const nav of await page.locator('header.site nav').all()) {
     const links = await nav.locator('a').evaluateAll(anchors => anchors.map(a => ({ href: new URL(a.href).pathname, label: a.textContent.trim() })));
     if (links.length === editorialRoutes.length && links.every((link, i) => link.href === localized(locale, editorialRoutes[i]))) {

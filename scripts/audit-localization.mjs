@@ -11,6 +11,11 @@ const publicPages=(await import('../lib/i18n/public-pages.ts')).publicPages;
 const inventory=JSON.parse(fs.readFileSync(path.join(repoRoot,'lib/i18n/public-source-inventory.json'),'utf8'));
 const pages=new Map(listHtmlFiles().map(file=>[fileToRoute(file),fs.readFileSync(path.join(distDir,file),'utf8')]));
 const redirects=readNetlifyRedirects();
+for(const locale of locales) {
+ const challenge=redirects.findIndex(rule=>rule.from===`/${locale}/c/*`&&rule.to===`/${locale}/c`&&rule.status===200);
+ const fallback=redirects.findIndex(rule=>rule.from===`/${locale}/*`&&rule.status===404);
+ if(challenge<0||fallback<0||challenge>=fallback)throw new Error(`${locale}: challenge rewrite must precede the localized 404 fallback`);
+}
 const aliasRoutes=new Set(redirects.filter(r=>r.status>=300&&r.status<400).map(r=>r.from.replace(/\.html$/,'')));
 const normalize=text=>decodeEntities(text).replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
 const problems=[];

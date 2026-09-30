@@ -430,6 +430,28 @@
   status = 301
   force = true
 
+# Challenge path-form links retain their level, query and language. These
+# rewrites must precede each locale's unknown-page fallback.
+[[redirects]]
+  from = "/fr/c/*"
+  to = "/fr/c"
+  status = 200
+
+[[redirects]]
+  from = "/de/c/*"
+  to = "/de/c"
+  status = 200
+
+[[redirects]]
+  from = "/es/c/*"
+  to = "/es/c"
+  status = 200
+
+[[redirects]]
+  from = "/ja/c/*"
+  to = "/ja/c"
+  status = 200
+
 # Existing localized files take priority; unknown paths retain their language.
 [[redirects]]
   from = "/fr/*"
