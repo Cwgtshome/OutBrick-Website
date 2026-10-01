@@ -292,7 +292,7 @@ const fr: HomeCopy = {
     ogTitle: 'OutBrick — un boulevard bâti tout en brique',
     ogDescription:
       '2 000 plateaux vérifiés par un solveur, 167 villages en briques, neuf amis en briques. Un seul doigt, aucun chrono, rien qui interrompe un plateau.',
-    ogImageAlt: 'La carte du Voyage d’OutBrick à Garden City, avec Bloo, Peach et Sprout',
+    ogImageAlt: 'Bricko, Peach et Sprout près de briques colorées sur une illustration OutBrick',
   },
   appDescription:
     'Un puzzle de briques à faire glisser et à trier par couleur : 2 000 plateaux vérifiés par un solveur, répartis en 100 chapitres, un Voyage à travers 167 villages en briques, et neuf amis en briques.',
@@ -484,7 +484,7 @@ const de: HomeCopy = {
     ogTitle: 'OutBrick – ein Boulevard, Stein auf Stein gebaut',
     ogDescription:
       '2.000 per Solver geprüfte Spielfelder, 167 Dörfer aus Bausteinen, neun Freunde aus Steinen. Ein Finger, keine Uhr, nichts, was ein Spielfeld unterbricht.',
-    ogImageAlt: 'Die Karte der OutBrick-Reise in Garden City, mit Bloo, Peach und Sprout',
+    ogImageAlt: 'Bricko, Peach und Sprout neben bunten Bausteinen auf einer OutBrick-Grafik',
   },
   appDescription:
     'Ein Schiebepuzzle, bei dem du Steine nach Farben sortierst: 2.000 per Solver geprüfte Spielfelder in 100 Kapiteln, eine Reise durch 167 Dörfer aus Bausteinen und neun Freunde aus Steinen.',
@@ -675,7 +675,7 @@ const es: HomeCopy = {
     ogTitle: 'OutBrick — un bulevar hecho de ladrillo',
     ogDescription:
       '2000 tableros verificados por un solucionador, 167 pueblos de ladrillo, nueve amigos de ladrillo. Un dedo, sin reloj y nada que interrumpa un tablero.',
-    ogImageAlt: 'El mapa del Viaje de OutBrick en Garden City, con Bloo, Peach y Sprout',
+    ogImageAlt: 'Bricko, Peach y Sprout junto a bloques de colores en una imagen de OutBrick',
   },
   appDescription:
     'Un puzle de ladrillos deslizantes para ordenar por colores: 2000 tableros verificados por un solucionador en 100 capítulos, un Viaje por 167 pueblos de ladrillo y nueve amigos de ladrillo.',
@@ -865,7 +865,7 @@ const ja: HomeCopy = {
     ogTitle: 'OutBrick — ブロックでできた街をめぐるスライドパズル',
     ogDescription:
       'ソルバーで検証済みの2,000ステージ、ブロックでできた167の村、9人のなかま。指1本で、時間制限なし。ステージの邪魔をするものは何もありません。',
-    ogImageAlt: 'Garden CityにあるOutBrickのジャーニーマップと、Bloo、Peach、Sprout',
+    ogImageAlt: 'OutBrickの紹介画像。カラフルなブロックのそばにBricko、Peach、Sproutがいる',
   },
   appDescription:
     'ブロックをスライドして色分けするパズル。100チャプターに収めたソルバー検証済みの2,000ステージ、ブロックでできた167の村をめぐるジャーニー、そして9人のブロックのなかま。',

@@ -1,5 +1,7 @@
 'use client';
 
+import { useLocale } from './locale-context';
+import { searchWords } from '../../lib/i18n/search';
 import { useState } from 'react';
 import { useHydrated } from './netlify-form';
 
@@ -9,6 +11,7 @@ import { useHydrated } from './netlify-form';
  * refused — nothing is lost: the button simply is not rendered until hydration.
  */
 export function CopyButton({ text, label, className = '' }: { text: string; label: string; className?: string }) {
+  const t = searchWords[useLocale()];
   const ready = useHydrated();
   const [copied, setCopied] = useState(false);
 
@@ -27,9 +30,9 @@ export function CopyButton({ text, label, className = '' }: { text: string; labe
   return (
     <span className="bz-copy">
       <button type="button" className={`ed-btn ghost ${className}`} onClick={copy}>
-        {copied ? 'Copied' : label}
+        {copied ? t.copied : label}
       </button>
-      <span className="bz-sr" aria-live="polite">{copied ? 'Copied to the clipboard.' : ''}</span>
+      <span className="bz-sr" aria-live="polite">{copied ? t.clipboard : ''}</span>
     </span>
   );
 }

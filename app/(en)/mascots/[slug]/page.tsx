@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../../lib/i18n/locales';
 import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: MascotPageProps): Promise<Met
     title,
     description: story.dek,
     keywords: ['OutBrick', story.name, 'OutBrick friends', 'brick mascot'],
-    alternates: { canonical: `/mascots/${story.id}` },
+    alternates: localeAlternates('en', `/mascots/${story.id}`),
     openGraph: {
       type: 'article',
       url: `${siteUrl}/mascots/${story.id}`,
@@ -76,7 +77,7 @@ export default async function MascotStoryPage({ params }: MascotPageProps) {
 
   const otherFriends = friends.filter((item) => item.id !== friend.id);
   return (
-    <EditorialPage current="mascots">
+    <EditorialPage page={`/mascots/${story.id}`} current="mascots">
       <div style={tone}>
         <header className="ed-band-ink ed-mhero">
           <div className="ed-wrap">

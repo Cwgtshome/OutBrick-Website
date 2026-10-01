@@ -1,4 +1,7 @@
 'use client';
+import { useLocale } from '../../components/locale-context';
+import { interactiveWords } from '../../../lib/i18n/interactive';
+import { clientText, clientTree } from '../../../lib/i18n/client-tree';
 
 import { ConsentField, NetlifyForm, SubmitRow, TextArea, TextField } from '../../components/netlify-form';
 
@@ -8,17 +11,18 @@ import { ConsentField, NetlifyForm, SubmitRow, TextArea, TextField } from '../..
  * role it is for.
  */
 export function CareersForm({ role }: { role: string }) {
-  return (
+  const locale = useLocale();
+  return clientTree((
     <NetlifyForm
       name="careers"
       action="/careers/thanks"
-      label={`Apply for ${role}`}
+      label={interactiveWords[locale].apply(clientText(role, locale))}
       success={(values) => (
         <>
           <h3>Application sent. Thank you.</h3>
           <p>
             Your application for <b>{values.get('role')}</b> is with the team. A person reads every
-            application and will write to <b>{values.get('email')}</b>.
+            application and will write to <b translate="no">{values.get('email')}</b>.
           </p>
           <p>If it is a match, the next step is a short video call.</p>
         </>
@@ -88,5 +92,5 @@ export function CareersForm({ role }: { role: string }) {
         </>
       )}
     </NetlifyForm>
-  );
+  ), locale);
 }

@@ -14,6 +14,7 @@
  */
 
 import type { Metadata } from 'next';
+import { publicMetadataSnippet } from '../../lib/i18n/public-metadata';
 import { Fragment } from 'react';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../editorial-shell';
 import { getArticle, getAuthor, type BlogArticle, type BlogReference } from '../../lib/blog';
@@ -53,7 +54,7 @@ export function articleMetadata(article: BlogArticle, locale: Locale): Metadata 
       title: article.title.length > 54 ? { absolute: article.title } : article.title,
       description: article.dek,
       keywords: article.tags,
-      authors: [{ name: author.name, url: `${siteUrl}/authors/${author.id}` }],
+      authors: [{ name: author.name, url: `${siteUrl}${localePath(locale, `/authors/${author.id}`)}` }],
       alternates: languages ? { canonical: `/blog/${article.slug}`, languages } : { canonical: `/blog/${article.slug}` },
       openGraph: {
         type: 'article',
@@ -63,7 +64,7 @@ export function articleMetadata(article: BlogArticle, locale: Locale): Metadata 
         description: article.dek,
         publishedTime: isoDateTime(article.publishedAt),
         modifiedTime: isoDateTime(article.updatedAt),
-        authors: [`${siteUrl}/authors/${author.id}`],
+        authors: [`${siteUrl}${localePath(locale, `/authors/${author.id}`)}`],
         section: article.category,
         tags: article.tags,
         images: [{ url: image, width: 1600, height: 900, alt: article.imageAlt }],
@@ -82,7 +83,7 @@ export function articleMetadata(article: BlogArticle, locale: Locale): Metadata 
     title: displayLength(article.title) > 54 ? { absolute: article.title } : article.title,
     description: article.dek,
     keywords: article.tags,
-    authors: [{ name: author.name, url: `${siteUrl}/authors/${author.id}` }],
+    authors: [{ name: author.name, url: `${siteUrl}${localePath(locale, `/authors/${author.id}`)}` }],
     alternates: { canonical: url, languages },
     openGraph: {
       type: 'article',
@@ -93,7 +94,7 @@ export function articleMetadata(article: BlogArticle, locale: Locale): Metadata 
       description: article.dek,
       publishedTime: isoDateTime(article.publishedAt),
       modifiedTime: isoDateTime(article.updatedAt),
-      authors: [`${siteUrl}/authors/${author.id}`],
+      authors: [`${siteUrl}${localePath(locale, `/authors/${author.id}`)}`],
       section: journalUi[locale].categories[article.category] ?? article.category,
       tags: article.tags,
       images: [{ url: image, width: 1600, height: 900, alt: article.imageAlt }],
@@ -207,11 +208,12 @@ export function ArticleView({
   const faqs = article.faqs ?? [];
   const words = [article.intro, ...article.sections.flatMap((s) => [s.title, ...s.paragraphs, ...(s.bullets ?? [])])].map(plain).join(' ');
 
+  const schemaDescription = tr ? publicMetadataSnippet(`/blog/${article.slug}`, tr)?.description ?? article.dek : article.dek;
   const structuredData = graph(
     webPageNode({
       url: articleUrl,
       name: article.title,
-      description: article.dek,
+      description: schemaDescription,
       ...(tr ? { inLanguage: tr } : {}),
       datePublished: isoDateTime(article.publishedAt),
       dateModified: isoDateTime(article.updatedAt),
@@ -224,7 +226,7 @@ export function ArticleView({
       mainEntityOfPage: ref(`${articleUrl}#webpage`),
       url: articleUrl,
       headline: article.title,
-      description: article.dek,
+      description: schemaDescription,
       // The one cover each article has: 1600 × 900 (16:9), at least 1200 px wide as Google asks.
       image: [{ '@type': 'ImageObject', '@id': `${articleUrl}#primaryimage`, url: `${siteUrl}${article.image}`, width: 1600, height: 900, caption: article.imageAlt }],
       thumbnailUrl: `${siteUrl}${article.image}`,
@@ -294,14 +296,14 @@ export function ArticleView({
             )}
             <div className="ed-ahead-grid">
               <div>
-                <a className="ed-chip" href={categoryPath(article.category)} hrefLang={en}>{category}</a>
+                <a className="ed-chip" href={localePath(locale, categoryPath(article.category))}>{category}</a>
                 <h1>{article.title}</h1>
                 <p className="ed-lede">{article.dek}</p>
                 <div className="ed-ahead-meta">
                   <div className="ed-byline">
-                    <a className="ed-avatar" href={`/authors/${author.id}`} hrefLang={en} aria-hidden="true" tabIndex={-1}>{author.initials}</a>
+                    <a className="ed-avatar" href={localePath(locale, `/authors/${author.id}`)} aria-hidden="true" tabIndex={-1}>{author.initials}</a>
                     <span className="ed-byline-text">
-                      <b><a href={`/authors/${author.id}`} hrefLang={en}>{author.name}</a></b>
+                      <b><a href={localePath(locale, `/authors/${author.id}`)}>{author.name}</a></b>
                       <span>{authorCopy.role}</span>
                     </span>
                   </div>
@@ -381,8 +383,8 @@ export function ArticleView({
               <div className="ed-filed">
                 <h2 className="ed-label no-mark">{ui.filedUnder}</h2>
                 <ul className="ed-tags">
-                  <li data-tone={article.categoryColor}><a className="shelf" href={categoryPath(article.category)} hrefLang={en}>{category}</a></li>
-                  {tags.map((tag) => <li key={tag.key}><a href={tagHref(tag.key)} hrefLang={en}>{tag.label}</a></li>)}
+                  <li data-tone={article.categoryColor}><a className="shelf" href={localePath(locale, categoryPath(article.category))}>{category}</a></li>
+                  {tags.map((tag) => <li key={tag.key}><a href={localePath(locale, tagHref(tag.key))}>{tag.label}</a></li>)}
                 </ul>
               </div>
 
@@ -422,12 +424,12 @@ export function ArticleView({
 
               <div className="ed-end">
                 <div className="ed-authorcard">
-                  <a className="ed-avatar big" href={`/authors/${author.id}`} hrefLang={en} aria-hidden="true" tabIndex={-1}>{author.initials}</a>
+                  <a className="ed-avatar big" href={localePath(locale, `/authors/${author.id}`)} aria-hidden="true" tabIndex={-1}>{author.initials}</a>
                   <div>
                     <p className="ed-label no-mark">{ui.writtenBy}</p>
                     <h2>{author.name}</h2>
                     <p>{authorCopy.bio}</p>
-                    <a className="ed-link" href={`/authors/${author.id}`} hrefLang={en}>{ui.moreFrom(author.name)}</a>
+                    <a className="ed-link" href={localePath(locale, `/authors/${author.id}`)}>{ui.moreFrom(author.name)}</a>
                   </div>
                 </div>
                 <aside className="ed-gamenote" aria-labelledby="game-note-title">

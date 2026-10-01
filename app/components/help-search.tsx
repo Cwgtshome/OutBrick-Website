@@ -1,5 +1,7 @@
 'use client';
 
+import { useLocale } from './locale-context';
+import { searchWords } from '../../lib/i18n/search';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useHydrated } from './netlify-form';
 
@@ -11,6 +13,7 @@ import { useHydrated } from './netlify-form';
  * match. `?q=` in the URL pre-fills the box, so a search can be linked to.
  */
 export function HelpSearch() {
+  const t = searchWords[useLocale()];
   const ready = useHydrated();
   const id = useId();
   const box = useRef<HTMLElement>(null);
@@ -42,13 +45,13 @@ export function HelpSearch() {
 
   return (
     <search className="help-search" ref={box}>
-      <label htmlFor={id}>Search help</label>
+      <label htmlFor={id}>{t.help}</label>
       <div className="field">
         <input
           id={id}
           type="search"
           value={query}
-          placeholder="Lives, undo, ads, restore…"
+          placeholder={t.helpPlaceholder}
           autoComplete="off"
           enterKeyHint="search"
           onChange={(event) => setQuery(event.target.value)}
@@ -58,8 +61,8 @@ export function HelpSearch() {
         {count === null
           ? ''
           : count === 0
-            ? 'No answer matches that yet. The contact form at the foot of the page reaches a person.'
-            : `${count} ${count === 1 ? 'answer matches' : 'answers match'}.`}
+            ? t.helpEmpty
+            : t.helpCount(count)}
       </p>
     </search>
   );

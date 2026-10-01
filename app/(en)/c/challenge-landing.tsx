@@ -1,5 +1,8 @@
 'use client';
 
+import { useLocale } from '../../components/locale-context';
+import { clientTree } from '../../../lib/i18n/client-tree';
+import { interactiveWords } from '../../../lib/i18n/interactive';
 import { useEffect, useMemo, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react';
 import { PlayableBoard } from '../../components/playable-board';
 import { AppStoreBadge, VillageFooter, VillageHeader } from '../../village-shell';
@@ -38,7 +41,8 @@ function readChallenge(): Challenge | null {
   if (typeof window === 'undefined') return null;
   const query = new URLSearchParams(window.location.search);
   const segments = window.location.pathname.replace(/^\/+|\/+$/g, '').split('/');
-  const fromPath = segments[0] === 'c' ? segments[1] : undefined;
+  const cIndex = segments.indexOf('c');
+  const fromPath = cIndex >= 0 ? segments[cIndex + 1] : undefined;
   const level = Number.parseInt(query.get('lv') ?? fromPath ?? '', 10);
   if (!Number.isFinite(level) || level < 1 || level > 100000) return null;
   const par = Number.parseInt(query.get('par') ?? '', 10);
@@ -60,6 +64,8 @@ const readNoAddress = () => null;
  * and passed in so its code is computed at build time, not shipped in this bundle.
  */
 export function ChallengeLanding({ qr }: { qr?: ReactNode }) {
+  const locale = useLocale();
+  const t = interactiveWords[locale];
   // null while prerendering and hydrating, the real address straight after,
   // so the server HTML and the first client render still match.
   const address = useSyncExternalStore(subscribeToNothing, readAddress, readNoAddress);
@@ -67,24 +73,24 @@ export function ChallengeLanding({ qr }: { qr?: ReactNode }) {
   const challenge = useMemo(() => (address === null ? null : readChallenge()), [address]);
 
   useEffect(() => {
-    if (challenge) document.title = `Level ${challenge.level} — an OutBrick challenge`;
-  }, [challenge]);
+    if (challenge) document.title = t.title(challenge.level);
+  }, [challenge, t]);
 
-  const plaque = challenge ? `Level ${challenge.level}` : ready ? 'OutBrick' : 'Level';
+  const plaque = challenge ? t.level(challenge.level) : ready ? 'OutBrick' : t.level();
   const subtitle = challenge
     ? challenge.par > 0
-      ? `Journey · target ${challenge.par}`
-      : 'Journey'
+      ? t.target(challenge.par)
+      : t.journey
     : ready
-      ? 'a sliding-brick puzzle'
-      : 'a board of OutBrick';
+      ? t.puzzle
+      : t.board;
   const dare = challenge
     ? challenge.par > 0
       ? challenge.beat
-        ? `Beat their ${challenge.par} moves.`
-        : `Clear it in ${challenge.par} moves.`
-      : 'Can you clear it?'
-    : 'Clear the board.';
+        ? t.beat(challenge.par)
+        : t.clear(challenge.par)
+      : t.question
+    : t.clearBoard;
 
   /**
    * Offered as a button, never as an automatic redirect: firing a custom scheme
@@ -97,7 +103,7 @@ export function ChallengeLanding({ qr }: { qr?: ReactNode }) {
     ? `outbrick://level/${challenge.level}?par=${challenge.par}&beat=${challenge.beat ? '1' : '0'}`
     : 'outbrick://play';
 
-  return (
+  return clientTree((
     <div className="ob-site">
       <a className="skip" href="#main">Skip to content</a>
       <VillageHeader links={[]} label="OutBrick" />
@@ -193,7 +199,7 @@ export function ChallengeLanding({ qr }: { qr?: ReactNode }) {
         </section>
       </main>
 
-      <VillageFooter />
+      <VillageFooter locale={locale} page="/c" />
     </div>
-  );
+  ), locale);
 }

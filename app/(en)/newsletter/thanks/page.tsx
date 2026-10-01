@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { Bond, EditorialPage } from '../../../editorial-shell';
 
@@ -9,13 +10,13 @@ import { Bond, EditorialPage } from '../../../editorial-shell';
 export const metadata: Metadata = {
   title: { absolute: 'Thanks — you’re on the OutBrick newsletter list' },
   description: 'Your sign-up for the OutBrick newsletter was received.',
-  alternates: { canonical: '/newsletter/thanks' },
+  alternates: localeAlternates('en', '/newsletter/thanks' ),
   robots: { index: false, follow: true },
 };
 
 export default function NewsletterThanksPage() {
   return (
-    <EditorialPage>
+    <EditorialPage page={'/newsletter/thanks'}>
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <p className="ed-label">Newsletter</p>

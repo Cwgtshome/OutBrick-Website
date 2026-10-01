@@ -6,7 +6,7 @@ export const fr3: ExtraGuides = {
     title: 'Daltonisme et jeux vidéo : fréquence et solutions',
     dek: 'Environ un homme d’origine européenne sur douze confond le rouge et le vert. Ce que cela change en jeu, et les réglages et choix de design qui aident.',
     imageAlt: 'Moss et Flurry de part et d’autre d’un téléphone affichant l’étape Bamboo Springs de la carte du Voyage d’OutBrick, avec des briques turquoise, orange et rouges qui flottent',
-    tags: ['daltonisme', 'jeux vidéo daltonien', 'accessibilité', 'vision des couleurs', 'conception inclusive', 'jeux de puzzle'],
+    tags: ['vision des couleurs', 'accessibilité', 'daltonisme', 'conception inclusive', 'jeux de puzzle'],
     intro: 'Dans une pièce où se trouvent vingt-cinq hommes d’origine européenne, deux voient sans doute le rouge et le vert autrement que les autres. La plupart des jeux sont pourtant encore conçus comme s’ils n’existaient pas. Voici ce qu’est vraiment un trouble de la vision des couleurs, à quelle fréquence on le rencontre, ce qu’il change pour un joueur en pleine partie, et ce qui aide : les réglages que vous pouvez activer dès aujourd’hui comme les choix de conception qui les rendent inutiles.',
     keyTakeaways: [
       'Le daltonisme rouge-vert héréditaire touche environ 8 % des hommes et 0,4 % des femmes d’origine européenne, et de 4 à 6,5 % des hommes chinois et japonais.',
@@ -70,7 +70,7 @@ export const fr3: ExtraGuides = {
     title: 'Jouer avec un lecteur d’écran : comment jouent les aveugles',
     dek: 'Comment les joueurs aveugles et malvoyants jouent sur iPhone avec VoiceOver, ce que la recherche a appris d’eux, et ce qui rend un jeu jouable à l’oreille.',
     imageAlt: 'Zippy et Moss à côté d’un téléphone affichant l’étape Button Factory de la carte du Voyage d’OutBrick, avec des briques bleues, orange et turquoise qui flottent au-dessus',
-    tags: ['VoiceOver', 'jeux pour aveugles', 'lecteur d’écran', 'accessibilité', 'jeux mobiles'],
+    tags: ["accessibilité","VoiceOver","joueurs aveugles","conception inclusive","jeu mobile"],
     intro: 'L’iPhone est une plaque de verre lisse, sans bouton à sentir sous le doigt, et pourtant de nombreuses personnes aveugles s’en servent chaque jour. La raison, c’est le lecteur d’écran qui y est intégré. Beaucoup de personnes aveugles ou malvoyantes l’utilisent aussi pour jouer, des jeux de lettres aux jeux de cartes en passant par des jeux faits uniquement de sons. Voici comment cela fonctionne, ce que les chercheurs ont appris des joueurs aveugles eux-mêmes, et ce qui distingue un jeu jouable à l’oreille d’un jeu qui ne l’est pas.',
     keyTakeaways: [
       'VoiceOver transforme l’écran tactile en une interface parlée que l’on explore : vous faites glisser le doigt ou balayez pour entendre ce qui est affiché, et touchez deux fois pour agir.',
@@ -134,7 +134,7 @@ export const fr3: ExtraGuides = {
     title: 'Jouer d’une main sur iPhone : jeux et accessibilité motrice',
     dek: 'Taille des cibles, gestes, erreurs : ce que dit la recherche sur le tactile et les troubles moteurs, et les réglages iPhone pour jouer d’une main.',
     imageAlt: 'Bricko et Moss à côté d’un téléphone affichant l’étape Celebration Square de la carte du Voyage d’OutBrick, avec des briques turquoise, bleues et roses qui flottent au-dessus',
-    tags: ['jouer d’une main', 'accessibilité motrice', 'jeux iPhone', 'accessibilité', 'conception inclusive'],
+    tags: ["accessibilité","accessibilité motrice","jeux à une main","conception mobile","conception inclusive"],
     intro: 'Beaucoup de gens jouent d’une seule main. Certains le font toujours, en raison d’un handicap, d’une blessure ou d’un tremblement. Bien plus nombreux sont ceux qui le font de temps en temps : un bébé dans les bras, debout dans le train, allongés sur le côté. Un jeu qui fonctionne dans ces conditions fonctionne mieux pour tout le monde. Cet article fait le point sur ce que la recherche a établi sur les écrans tactiles et les troubles moteurs, sur ce que cela implique pour la conception des jeux, et sur les réglages de l’iPhone qui aident dès aujourd’hui.',
     keyTakeaways: [
       'Les écrans tactiles peuvent rendre autonomes les personnes ayant un trouble moteur, mais ils entraînent plus de touchers ratés et accidentels qu’une souris.',
@@ -204,7 +204,7 @@ export const fr3: ExtraGuides = {
     title: 'Cinétose et jeux vidéo : pourquoi réduire les animations',
     dek: 'Pourquoi le mouvement à l’écran donne le tournis à certains joueurs, qui y est le plus sensible, et comment Réduire les animations rend un jeu confortable.',
     imageAlt: 'Peach et Bloo de part et d’autre d’un téléphone affichant un plateau OutBrick super difficile au niveau 214, avec des briques turquoise, rouges et vertes qui flottent à côté',
-    tags: ['mal des transports jeux vidéo', 'cinétose', 'Réduire les animations', 'accessibilité', 'conception de jeux'],
+    tags: ["accessibilité","Réduire les animations","cinétose","conception inclusive","conception de jeux"],
     intro: 'La plupart des gens ne pensent jamais au mouvement dans un jeu, jusqu’au jour où il les rend malades. Pour une minorité non négligeable, une caméra qui plonge, un arrière-plan en parallaxe ou un écran qui tremble à chaque réussite provoque vertiges, nausées ou maux de tête, parfois longtemps après avoir posé l’appareil. Ce n’est pas de la sensiblerie. C’est une réaction bien étudiée du système de l’équilibre, et un réglage tout simple existe précisément pour cette raison. Voici ce que dit la recherche, et ce que joueurs et concepteurs peuvent faire.',
     keyTakeaways: [
       'Le mal des transports d’origine visuelle survient quand vos yeux signalent un mouvement que vos organes de l’équilibre ne ressentent pas.',
@@ -268,7 +268,7 @@ export const fr3: ExtraGuides = {
     title: 'Puzzles et fonctions exécutives de l’enfant : les preuves',
     dek: 'Planifier, se maîtriser : ce que les puzzles peuvent ou non apporter aux fonctions exécutives des enfants selon les études, et comment jouer utilement.',
     imageAlt: 'Sprout et Vio de part et d’autre d’un téléphone affichant l’étape Bamboo Springs de la carte du Voyage d’OutBrick, avec des briques jaunes, vertes et bleues qui flottent à côté',
-    tags: ['fonctions exécutives', 'fonctions exécutives enfant', 'jeux éducatifs', 'puzzles et cerveau', 'entraînement cérébral'],
+    tags: ["fonctions exécutives","jeux d’apprentissage","enfants","recherche sur les puzzles","entraînement cérébral"],
     intro: 'Les fonctions exécutives sont devenues l’une des notions les plus en vogue du développement de l’enfant, et l’une des plus exploitées par le marketing. Applis, jouets et puzzles promettent de les développer. La recherche est vraiment encourageante sur certains points et vraiment décevante sur d’autres, et les parents méritent d’entendre les deux. Voici ce que sont les fonctions exécutives, ce que disent les meilleures données sur leur entraînement, quelle place tiennent les puzzles, et comment jouer avec un enfant de la façon la plus susceptible de l’aider.',
     keyTakeaways: [
       'Les fonctions exécutives recouvrent le fait de garder une information en tête, de résister à ses impulsions et de passer d’une idée à l’autre. Elles peuvent progresser avec la pratique.',
@@ -333,7 +333,7 @@ export const fr3: ExtraGuides = {
     title: 'Jouer avec ses petits-enfants : pourquoi ça vaut le coup',
     dek: 'Bien choisi, le jeu intergénérationnel profite aux deux générations selon la recherche. Ce que montrent les études, et comment s’y prendre.',
     imageAlt: 'Poppy et Flurry de part et d’autre d’un téléphone affichant l’étape Celebration Square de la carte du Voyage d’OutBrick, avec des briques jaunes, violettes et vertes qui flottent à côté',
-    tags: ['jouer avec ses petits-enfants', 'jeu intergénérationnel', 'grands-parents', 'jeux en famille', 'jeux pour seniors'],
+    tags: ["jeu intergénérationnel","jouer ensemble","familles","jeux pour seniors","jeux d’apprentissage"],
     intro: 'On dit souvent aux grands-parents que les jeux de leurs petits-enfants sont un mur entre eux : bruyants, rapides, incompréhensibles, mieux vaut ne pas s’en mêler. La recherche sur le jeu partagé suggère l’inverse. Quand le jeu est bien choisi, jouer ensemble est l’un des moyens les plus simples pour deux générations de passer du temps d’égal à égal, l’enfant étant aussi souvent le professeur que l’élève. Voici ce que les études ont montré, ce qui coince souvent, et comment choisir des jeux et y jouer par-delà soixante ans d’écart.',
     keyTakeaways: [
       'Les synthèses sur le jeu intergénérationnel relèvent des bienfaits pour les liens familiaux, un apprentissage dans les deux sens et un meilleur regard sur l’autre génération.',
@@ -396,7 +396,7 @@ export const fr3: ExtraGuides = {
     title: 'Choisir des jeux mobiles calmes pour enfants : le guide',
     dek: 'La plupart des applis des jeunes enfants sont conçues pour manipuler. Une liste fondée sur la recherche pour repérer pressions, pubs et appâts.',
     imageAlt: 'Poppy et Bloo de part et d’autre d’un téléphone affichant un plateau OutBrick super difficile au niveau 520, avec des briques jaunes, orange et violettes qui flottent à côté',
-    tags: ['jeux pour enfants', 'applis pour enfants', 'parents', 'jeux calmes', 'écrans et enfants'],
+    tags: ["enfants","parents","jeux calmes","pratique de jeu saine","conception de jeux"],
     intro: 'Choisir un jeu pour un enfant, autrefois, c’était vérifier l’absence de violence et de gros mots. Sur un téléphone ou une tablette, les grandes questions portent souvent sur la conception : le jeu pousse-t-il l’enfant à continuer de jouer, ses publicités se déguisent-elles en jeu, un personnage sympathique est-il en réalité un vendeur ? Les chercheurs ont désormais étudié ces mécanismes dans les applis qu’utilisent vraiment les jeunes enfants, et leurs résultats offrent aux parents une liste de vérification concrète. La voici, avec les données qui la fondent et un regard honnête sur la façon dont notre propre jeu s’en sort.',
     keyTakeaways: [
       'Dans une étude portant sur des applis utilisées par des enfants de 3 à 5 ans, seule une sur cinq ne présentait aucun élément de conception manipulatrice.',
@@ -460,7 +460,7 @@ export const fr3: ExtraGuides = {
     title: 'Dyslexie et jeux vidéo : polices, espacement, mots simples',
     dek: 'Les polices pour dyslexiques marchent-elles ? Ce que disent les études sur police, taille, espacement et mots, et comment rendre un jeu plus lisible.',
     imageAlt: 'Peach et Vio de part et d’autre d’un téléphone affichant l’étape Cloud Carnival de la carte du Voyage d’OutBrick, avec des briques jaunes, orange et violettes qui flottent à côté',
-    tags: ['dyslexie', 'police dyslexie', 'lisibilité', 'accessibilité', 'conception de jeux'],
+    tags: ["dyslexie","accessibilité","lisibilité","conception inclusive","conception de jeux"],
     intro: 'Les jeux sont pleins de mots : tutoriels, infobulles, menus, bulles de dialogue, petites lignes sous une récompense. Pour les joueurs dyslexiques, un texte mal composé peut transformer un jeu agréable en épreuve de lecture. Bonne nouvelle : la recherche sur ce qui aide est assez claire, et une partie contredit les idées reçues. Les polices spécialement conçues pour la dyslexie, par exemple, n’ont pas vraiment convaincu dans les études. La taille, l’espacement et la simplicité des mots, si. Voici ce que disent les données et comment nous essayons de les appliquer.',
     keyTakeaways: [
       'Les études contrôlées n’ont trouvé aucun bénéfice pour la lecture aux polices spécialisées pour la dyslexie comme OpenDyslexic et Dyslexie.',
@@ -526,7 +526,7 @@ export const fr3: ExtraGuides = {
     title: 'Concevoir des jeux pour seniors : lisibles et indulgents',
     dek: 'Vue, toucher et réflexes évoluent avec l’âge : ce que cela implique pour le contraste, les cibles et le rythme, et des principes valables à 80 ans.',
     imageAlt: 'Zippy et Bloo de part et d’autre d’un téléphone affichant l’étape Autumn Orchard de la carte du Voyage d’OutBrick, avec des briques bleues, jaunes et turquoise qui flottent à côté',
-    tags: ['jeux pour seniors', 'conception de jeux', 'accessibilité', 'vieillissement et vision', 'conception inclusive'],
+    tags: ["conception de jeux","accessibilité","jeux pour seniors","conception inclusive","conception mobile"],
     intro: 'Nous avons déjà expliqué comment un joueur âgé peut choisir un bon jeu de puzzle. Cet article s’adresse à l’autre côté de l’écran : aux designers et développeurs qui veulent que leur jeu fonctionne pour des personnes de soixante-dix ou quatre-vingts ans. Il s’appuie sur la recherche consacrée à l’évolution de la vue, du mouvement et de la vitesse avec l’âge, et la traduit en quelques principes. Aucun n’est exotique. La plupart améliorent le jeu pour tout le monde, ce qui est le meilleur argument pour les appliquer.',
     keyTakeaways: [
       'Le vieillissement touche la sensibilité aux contrastes, la vision en faible lumière et la vitesse de traitement, pas seulement la netteté. La taille seule ne règle pas le problème.',
@@ -590,7 +590,7 @@ export const fr3: ExtraGuides = {
     title: 'Jeux adaptés aux sensibilités sensorielles et à l’autisme',
     dek: 'Beaucoup de joueurs autistes et neuroatypiques sont sensibles au son, à la lumière et à la surprise. Ce que dit la recherche, et le design qui aide.',
     imageAlt: 'Moss et Poppy de part et d’autre d’un téléphone affichant un plateau OutBrick super difficile au niveau 520, avec des briques turquoise, vertes et bleues qui flottent à côté',
-    tags: ['autisme', 'neurodiversité', 'hypersensibilité sensorielle', 'jeux calmes', 'conception inclusive'],
+    tags: ["neurodiversité","autisme","traitement sensoriel","conception inclusive","jeux calmes"],
     intro: 'Pour beaucoup de personnes autistes, et pour beaucoup d’autres qui traitent les sensations différemment, le jeu vidéo moderne, c’est beaucoup. Une musique qu’on ne peut pas baisser séparément, des effets sonores soudains, des célébrations qui clignotent, une notification qui tombe au milieu d’une pensée, un menu qui change sans prévenir. Rien de tout cela n’est conçu pour exclure qui que ce soit, et pourtant tout cela peut le faire. Cet article fait le point sur ce que dit la recherche sur les particularités sensorielles et le jeu, et sur les choix de conception qui rendent un jeu prévisible, calme et sans pression, sans le rendre ennuyeux.',
     keyTakeaways: [
       'Les particularités sensorielles, hyper- comme hyporéactivité, sont fréquentes chez les personnes autistes et varient beaucoup d’une personne à l’autre.',

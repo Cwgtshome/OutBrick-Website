@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { friends } from '../../../lib/mascots';
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: 'OutBrick press kit: logos, art and fact sheet',
   description,
   keywords: ['OutBrick press kit', 'OutBrick screenshots', 'OutBrick app icon', 'sliding-brick puzzle'],
-  alternates: { canonical: '/press-kit' },
+  alternates: localeAlternates('en', '/press-kit' ),
   openGraph: {
     type: 'website',
     url: `${siteUrl}/press-kit`,
@@ -72,7 +73,7 @@ export default function PressKitPage() {
   );
 
   return (
-    <EditorialPage current="press-kit">
+    <EditorialPage page={'/press-kit'} current="press-kit">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Press kit' }]} />

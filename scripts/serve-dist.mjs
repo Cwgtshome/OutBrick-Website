@@ -26,6 +26,7 @@ const types = {
   '.webp': 'image/webp',
   '.woff2': 'font/woff2',
   '.rsc': 'text/x-component',
+  '.webmanifest': 'application/manifest+json',
 };
 
 async function file(path) {
@@ -37,7 +38,8 @@ async function file(path) {
 }
 
 async function resolve(pathname) {
-  if (pathname.startsWith('/c/')) return join(root, 'c.html');
+  const challenge = pathname.match(/^(?:\/(fr|de|es|ja))?\/c\//);
+  if (challenge) return join(root, challenge[1] ? `${challenge[1]}/c.html` : 'c.html');
   const clean = normalize(decodeURIComponent(pathname)).replace(/^(\.\.[/\\])+/, '');
   const base = join(root, clean).replace(/\/$/, '');
   return (await file(`${base}.html`)) ?? (await file(join(base, 'index.html'))) ?? (await file(base));
@@ -52,8 +54,14 @@ createServer(async (req, res) => {
     res.end();
     return;
   }
+  const alias = pathname.match(/^(?:\/(fr|de|es|ja))?\/(accessibility-support|age-suitability|eula-apple|license|privacy-policy|refund)\/?$/);
+  if (alias) {
+    const destinations = { 'accessibility-support': 'accessibility', 'age-suitability': 'age-rating', 'eula-apple': 'eula', license: 'license-agreement', 'privacy-policy': 'privacy', refund: 'refunds' };
+    res.writeHead(301, { location: `${alias[1] ? `/${alias[1]}` : ''}/${destinations[alias[2]]}` }); res.end(); return;
+  }
   const found = await resolve(pathname);
-  const path = found ?? join(root, '404.html');
+  const locale = pathname.match(/^\/(fr|de|es|ja)(?:\/|$)/)?.[1];
+  const path = found ?? join(root, locale ? `${locale}/404.html` : '404.html');
   res.writeHead(found ? 200 : 404, { 'content-type': types[extname(path)] ?? 'application/octet-stream' });
   res.end(await readFile(path));
 }).listen(port, '127.0.0.1', () => console.log(`dist/client on http://127.0.0.1:${port}`));

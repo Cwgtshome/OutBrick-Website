@@ -6,7 +6,7 @@ export const es3: ExtraGuides = {
     title: 'Daltonismo en los videojuegos: frecuencia y qué ayuda',
     dek: 'Uno de cada doce hombres de origen europeo tiene una deficiencia rojo-verde. Qué supone al jugar y qué ajustes y decisiones de diseño ayudan.',
     imageAlt: 'Moss y Flurry a ambos lados de un teléfono que muestra el tramo de Bamboo Springs en el mapa del Viaje de OutBrick, con ladrillos turquesa, naranjas y rojos flotando',
-    tags: ['daltonismo', 'visión del color', 'accesibilidad en videojuegos', 'modo daltónico', 'diseño inclusivo', 'juegos de puzles'],
+    tags: ['visión del color', 'accesibilidad', 'daltonismo', 'diseño inclusivo', 'juegos de puzles'],
     intro: 'En cualquier sala con veinticinco hombres de origen europeo, lo más probable es que dos vean el rojo y el verde de forma distinta al resto. La mayoría de los juegos se siguen diseñando como si no estuvieran. Esta guía explica qué es de verdad la deficiencia en la visión del color, con qué frecuencia aparece, qué le hace a quien tiene el mando en las manos y qué ayuda: tanto los ajustes que puedes activar hoy como las decisiones de diseño que los hacen innecesarios.',
     keyTakeaways: [
       'La deficiencia rojo-verde hereditaria afecta a cerca del 8 % de los hombres y del 0,4 % de las mujeres de origen europeo, y a entre el 4 y el 6,5 % de los hombres chinos y japoneses.',
@@ -71,7 +71,7 @@ export const es3: ExtraGuides = {
     title: 'Jugar con lector de pantalla: así juegan las personas ciegas',
     dek: 'Cómo juegan con VoiceOver en iPhone las personas ciegas y con baja visión, qué dice la investigación y qué hace que un juego se pueda jugar de oído.',
     imageAlt: 'Zippy y Moss junto a un teléfono que muestra el tramo de Button Factory en el mapa del Viaje de OutBrick, con ladrillos azules, naranjas y turquesa flotando encima',
-    tags: ['VoiceOver', 'lector de pantalla', 'jugadores ciegos', 'accesibilidad en videojuegos', 'juegos accesibles iPhone'],
+    tags: ['accesibilidad', 'VoiceOver', 'jugadores ciegos', 'diseño inclusivo', 'juegos móviles'],
     intro: 'El iPhone es una lámina de cristal lisa, sin botones que palpar, y aun así muchas personas ciegas lo usan a diario. El motivo es el lector de pantalla que lleva integrado. Muchas personas ciegas y con baja visión también lo usan para jugar, desde puzles de palabras hasta juegos de cartas o juegos hechos solo de sonido. Aquí te contamos cómo funciona, qué han aprendido los investigadores de los propios jugadores ciegos y qué separa un juego que se puede jugar de oído de uno que no.',
     keyTakeaways: [
       'VoiceOver convierte el tacto en una interfaz hablada que se puede explorar: arrastras o deslizas el dedo para oír lo que hay en pantalla y tocas dos veces para actuar.',
@@ -136,7 +136,7 @@ export const es3: ExtraGuides = {
     title: 'Juegos con una mano en iPhone: diseño y accesibilidad motora',
     dek: 'Qué dice la investigación sobre pantallas táctiles y discapacidad motora: tamaño de botones, gestos, errores y los ajustes del iPhone que ayudan.',
     imageAlt: 'Bricko y Moss junto a un teléfono que muestra el tramo de Celebration Square en el mapa del Viaje de OutBrick, con ladrillos turquesa, azules y rosas flotando encima',
-    tags: ['juegos con una mano', 'accesibilidad motora', 'accesibilidad iPhone', 'diseño móvil', 'diseño inclusivo'],
+    tags: ['accesibilidad', 'accesibilidad motora', 'juegos con una mano', 'diseño móvil', 'diseño inclusivo'],
     intro: 'Mucha gente juega con una sola mano. Algunas personas siempre, por una discapacidad, una lesión o un temblor. Muchas más, a ratos: con un bebé en brazos, de pie en el tren, tumbadas de lado. Un juego que funciona en esas condiciones funciona mejor para todo el mundo. Este artículo repasa lo que ha descubierto la investigación sobre pantallas táctiles y discapacidad motora, qué implica para la forma de construir juegos y qué ajustes del iPhone ayudan hoy.',
     keyTakeaways: [
       'Las pantallas táctiles pueden dar autonomía a las personas con discapacidad motora, pero producen más toques fallidos y accidentales que un ratón.',
@@ -207,7 +207,7 @@ export const es3: ExtraGuides = {
     title: 'Mareo con videojuegos: por qué importa Reducir movimiento',
     dek: 'Por qué el movimiento en pantalla marea a algunos jugadores, quién es más propenso y cómo Reducir movimiento y una animación cuidada ayudan.',
     imageAlt: 'Peach y Bloo a ambos lados de un teléfono que muestra un tablero superdifícil de OutBrick en el nivel 214, con ladrillos turquesa, rojos y verdes flotando cerca',
-    tags: ['Reducir movimiento', 'mareo con videojuegos', 'cinetosis', 'accesibilidad en videojuegos', 'diseño de juegos'],
+    tags: ['accesibilidad', 'Reducir movimiento', 'cinetosis', 'diseño inclusivo', 'diseño de juegos'],
     intro: 'La mayoría de la gente no se para a pensar en el movimiento de un juego hasta que le sienta mal. Para una minoría considerable, una cámara que da bandazos, un fondo con paralaje o una pantalla que tiembla con cada acierto provocan mareo, náuseas o dolor de cabeza, a veces mucho después de dejar el dispositivo. No es remilgo. Es una respuesta bien estudiada del sistema del equilibrio, y existe un ajuste sencillo precisamente por ella. Esto es lo que dice la investigación y lo que pueden hacer jugadores y diseñadores.',
     keyTakeaways: [
       'El mareo inducido visualmente aparece cuando tus ojos registran un movimiento que tus órganos del equilibrio no perciben.',
@@ -272,7 +272,7 @@ export const es3: ExtraGuides = {
     title: '¿Los puzles desarrollan las funciones ejecutivas en niños?',
     dek: 'Las funciones ejecutivas sostienen la planificación y el autocontrol. Qué pueden y qué no pueden hacer los puzles por los niños, y cómo jugar.',
     imageAlt: 'Sprout y Vio a ambos lados de un teléfono que muestra el tramo de Bamboo Springs en el mapa del Viaje de OutBrick, con ladrillos amarillos, verdes y azules flotando cerca',
-    tags: ['funciones ejecutivas', 'niños', 'juegos educativos', 'puzles para niños', 'entrenamiento cerebral'],
+    tags: ['funciones ejecutivas', 'juegos de aprendizaje', 'niños', 'investigación sobre juegos de puzles', 'entrenamiento cerebral'],
     intro: 'Las funciones ejecutivas se han convertido en una de las ideas más comentadas del desarrollo infantil, y en una de las más usadas en publicidad. Apps, juguetes y puzles prometen desarrollarlas. La investigación es de verdad alentadora en algunos puntos y de verdad aleccionadora en otros, y las familias merecen conocer ambas mitades. Aquí explicamos qué son las funciones ejecutivas, qué dicen las mejores pruebas sobre entrenarlas, qué papel tienen los puzles y cómo jugar con un niño de la forma que más probabilidades tiene de ayudar.',
     keyTakeaways: [
       'Las funciones ejecutivas abarcan mantener información en mente, resistir los impulsos y pasar de una idea a otra. Pueden mejorar con la práctica.',
@@ -338,7 +338,7 @@ export const es3: ExtraGuides = {
     title: 'Jugar a videojuegos con tus nietos: por qué vale la pena',
     dek: 'Jugar entre generaciones trae beneficios reales a ambas cuando el juego se elige bien. Qué muestran los estudios y cómo hacer que funcione.',
     imageAlt: 'Poppy y Flurry a ambos lados de un teléfono que muestra el tramo de Celebration Square en el mapa del Viaje de OutBrick, con ladrillos amarillos, morados y verdes flotando cerca',
-    tags: ['jugar con los nietos', 'juego intergeneracional', 'juegos en familia', 'juegos para mayores', 'abuelos y nietos'],
+    tags: ['juego intergeneracional', 'juego social', 'familias', 'juegos para mayores', 'juegos de aprendizaje'],
     intro: 'A los abuelos se les dice a menudo que los juegos de sus nietos son un muro entre ellos: ruidosos, rápidos, incomprensibles y mejor dejarlos estar. La investigación sobre jugar juntos sugiere lo contrario. Cuando el juego se elige bien, jugar juntos es una de las formas más sencillas de que dos generaciones pasen tiempo de igual a igual, con el niño tantas veces de maestro como de alumno. Esto es lo que han encontrado los estudios, lo que suele fallar y cómo elegir y jugar juegos que funcionen a pesar de sesenta años de diferencia.',
     keyTakeaways: [
       'Las revisiones sobre el juego intergeneracional hallan beneficios para los lazos familiares, un aprendizaje en ambas direcciones y mejores actitudes hacia la otra generación.',
@@ -402,7 +402,7 @@ export const es3: ExtraGuides = {
     title: 'Juegos tranquilos para niños: guía para madres y padres',
     dek: 'Casi todas las apps de niños pequeños usan diseño manipulador. Una lista basada en la investigación para detectar presiones, anuncios y ganchos.',
     imageAlt: 'Poppy y Bloo a ambos lados de un teléfono que muestra un tablero superdifícil de OutBrick en el nivel 520, con ladrillos amarillos, naranjas y morados flotando cerca',
-    tags: ['juegos para niños', 'juegos tranquilos', 'apps infantiles', 'crianza y pantallas', 'diseño de juegos'],
+    tags: ['niños', 'padres', 'juegos tranquilos', 'juego saludable', 'diseño de juegos'],
     intro: 'Elegir un juego para un niño solía consistir en comprobar si había violencia o palabrotas. En un teléfono o una tableta, las preguntas más importantes suelen tener que ver con el diseño: si un juego presiona al niño para que siga jugando, si sus anuncios se disfrazan de juego, si un personaje simpático es en realidad un vendedor. Los investigadores ya han estudiado estos patrones en las apps que usan de verdad los niños pequeños, y sus resultados dan a las familias una lista práctica. Aquí la tienes, junto con las pruebas en las que se basa y una mirada honesta a cómo sale parado nuestro propio juego.',
     keyTakeaways: [
       'En un estudio de las apps que usaban niños de 3 a 5 años, solo una de cada cinco no tenía ningún elemento de diseño manipulador.',
@@ -467,7 +467,7 @@ export const es3: ExtraGuides = {
     title: 'Dislexia y texto en juegos: fuentes, espaciado y claridad',
     dek: '¿Funcionan las fuentes para dislexia? Qué dicen los estudios de lectura sobre tipografía, tamaño, espaciado y redacción, y cómo aplicarlo en juegos.',
     imageAlt: 'Peach y Vio a ambos lados de un teléfono que muestra el tramo de Cloud Carnival en el mapa del Viaje de OutBrick, con ladrillos amarillos, naranjas y morados flotando cerca',
-    tags: ['dislexia', 'fuentes para dislexia', 'legibilidad', 'accesibilidad en videojuegos', 'diseño inclusivo'],
+    tags: ['dislexia', 'accesibilidad', 'legibilidad', 'diseño inclusivo', 'diseño de juegos'],
     intro: 'Los juegos están llenos de palabras: tutoriales, descripciones emergentes, menús, bocadillos, la letra pequeña de una recompensa. Para los jugadores con dislexia, un texto mal compuesto puede convertir un juego agradable en un examen de lectura. La buena noticia es que la investigación sobre lo que ayuda es bastante clara, y en parte contradice la creencia popular. Las fuentes diseñadas específicamente para la dislexia, por ejemplo, no han salido bien paradas en los estudios. El tamaño, el espaciado y una redacción sencilla, sí. Esto es lo que dicen las pruebas y cómo intentamos aplicarlo.',
     keyTakeaways: [
       'Los estudios controlados no han encontrado ningún beneficio para la lectura en fuentes especializadas para la dislexia como OpenDyslexic y Dyslexie.',
@@ -534,7 +534,7 @@ export const es3: ExtraGuides = {
     title: 'Diseñar juegos para personas mayores: legibles e indulgentes',
     dek: 'Cómo cambian con la edad la vista, el tacto y los reflejos, qué implica para contraste, botones y ritmo, y cómo hacer juegos amables a los 80.',
     imageAlt: 'Zippy y Bloo a ambos lados de un teléfono que muestra el tramo de Autumn Orchard en el mapa del Viaje de OutBrick, con ladrillos azules, amarillos y turquesa flotando cerca',
-    tags: ['diseño de juegos', 'juegos para mayores', 'accesibilidad en videojuegos', 'diseño inclusivo', 'diseño móvil'],
+    tags: ['diseño de juegos', 'accesibilidad', 'juegos para mayores', 'diseño inclusivo', 'diseño móvil'],
     intro: 'Ya hemos escrito sobre cómo puede elegir una persona mayor un buen juego de puzles. Este artículo es para el otro lado de la pantalla: diseñadores y desarrolladores que quieren que su juego funcione para gente de setenta y ochenta años. Se basa en la investigación sobre cómo cambian con la edad la vista, el movimiento y la velocidad, y la convierte en un pequeño conjunto de principios. Ninguno es exótico. La mayoría mejoran el juego para todo el mundo, que es el mejor argumento para aplicarlos.',
     keyTakeaways: [
       'El envejecimiento afecta a la sensibilidad al contraste, a la visión con poca luz y a la velocidad de procesamiento, no solo a la nitidez. El tamaño por sí solo no lo resuelve.',

@@ -27,7 +27,7 @@ export const es1: ExtraGuides = {
         paragraphs: [
           'En un estudio clásico, Michelene Chi, Paul Feltovich y Robert Glaser pidieron a expertos y principiantes en física que agruparan problemas de un libro de texto. Los principiantes los agrupaban por su aspecto: los de planos inclinados juntos, los de muelles juntos. Los expertos los agrupaban por el principio que los resolvía, como la conservación de la energía, aunque los problemas no se parecieran en nada. Los expertos no veían más. Veían otras cosas.',
           'Los tableros de puzle invitan a la misma división. La superficie de un tablero de ordenar colores son colores y formas, y es tentador leerlo así: ahí están los rojos, ahí los azules. La estructura es otra cosa: qué pieza se interpone entre qué otra pieza y su salida, dónde está el espacio vacío, qué deslizamiento abre un carril y cuál lo cierra. Quien lee la estructura ve una cadena corta de dependencias. Quien lee la superficie ve una multitud.',
-          'No hacen falta años de práctica para tomar prestada la pregunta del experto. Antes de mover, pregúntate qué tipo de problema es este tablero. ¿Un atasco, donde todo espera a una sola pieza? ¿Una falta de espacio, donde lo primero es hacer sitio? ¿Un problema de orden, donde los colores tienen que salir en una secuencia concreta? Ponerle nombre al tipo es un pequeño acto de representación, y cambia qué movimientos parecen prometedores. Con el tiempo, esos tipos se convierten en patrones que reconoces de un vistazo, que es lo que describe el [chunking](/blog/chunking-how-expert-puzzlers-see-patterns).',
+          'No hacen falta años de práctica para tomar prestada la pregunta del experto. Antes de mover, pregúntate qué tipo de problema es este tablero. ¿Un atasco, donde todo espera a una sola pieza? ¿Una falta de espacio, donde lo primero es hacer sitio? ¿Un problema de orden, donde los colores tienen que salir en una secuencia concreta? Ponerle nombre al tipo es un pequeño acto de representación, y cambia qué movimientos parecen prometedores. Con el tiempo, esos tipos se convierten en patrones que reconoces de un vistazo, que es lo que describe la [agrupación de información](/blog/chunking-how-expert-puzzlers-see-patterns).',
         ],
       },
       'plan-where-choices-compete': {
@@ -148,7 +148,7 @@ export const es1: ExtraGuides = {
     title: 'El chunking: cómo ven patrones los expertos en puzles',
     dek: 'Los maestros de ajedrez recuerdan tableros por patrones, no pieza a pieza. Qué muestra la investigación sobre el chunking y cómo crear tus propios chunks.',
     imageAlt: 'Moss con su cinturón de herramientas y Bricko a ambos lados de un iPhone que muestra un tablero real y muy apretado de OutBrick marcado como Super Hard',
-    tags: ['chunking', 'pericia', 'puzles y memoria', 'psicología cognitiva', 'investigación sobre juegos de puzles'],
+    tags: ['agrupación de información', 'pericia', 'puzles y memoria', 'psicología cognitiva', 'investigación sobre juegos de puzles'],
     intro: 'Si observas a un buen jugador de puzles, parece que ve la respuesta antes de haber mirado. No se ha saltado el razonamiento. Lo ha hecho en gran parte por adelantado, a lo largo de cientos de tableros anteriores, y lo ha guardado en forma de patrones. Los psicólogos llaman a esos patrones chunks, o bloques. La investigación sobre el chunking empezó con el ajedrez y explica bastante bien qué implica mejorar en cualquier puzle, y qué no.',
     keyTakeaways: [
       'Los expertos recuerdan y leen los tableros en grupos de piezas con sentido, lo que les permite captar de un vistazo mucho más que un principiante.',
@@ -215,7 +215,7 @@ export const es1: ExtraGuides = {
     title: '¿Atascado en un puzle? La ciencia de tomarse un respiro',
     dek: 'Por qué un puzle sin resolver suele ceder tras una pausa, qué halló un metaanálisis sobre la incubación y cómo hacer el tipo de pausa que ayuda.',
     imageAlt: 'Vio con auriculares y Sprout junto a un iPhone que muestra la tienda de OutBrick, con algunos ladrillos amarillos y azules flotando sobre una cuadrícula índigo',
-    tags: ['efecto de incubación', 'resolución de problemas', 'trucos de puzles', 'insight', 'psicología cognitiva'],
+    tags: ['efecto de incubación', 'resolución de problemas', 'trucos de puzles', 'comprensión repentina', 'psicología cognitiva'],
     intro: 'A casi todo el que hace puzles le ha pasado. Miras un tablero hasta que parece no tener solución, te rindes, te preparas un té y, al volver, la respuesta está ahí, a la vista. Los psicólogos llaman a esa pausa periodo de incubación, y a la mejora que a veces la sigue, efecto de incubación. Es una de las ideas más antiguas de la psicología de la resolución de problemas, y las pruebas actuales dicen que es real, aunque más pequeño y más condicionado de lo que cuentan las anécdotas.',
     keyTakeaways: [
       'Un metaanálisis de estudios sobre la incubación encontró un efecto positivo real al apartar un problema, y mayor cuando antes se había trabajado más en él.',
@@ -387,7 +387,7 @@ export const es1: ExtraGuides = {
           'En conjunto, las pruebas respaldan una afirmación modesta y honesta. Mover y girar formas en la cabeza es una habilidad, y los puzles que la exigen te dan práctica. Mejorarás en el puzle, y quizá mejores en tareas espaciales que se le parezcan. Quien prometa más que eso va por delante de la investigación.',
           'Los rompecabezas de bloques deslizantes como OutBrick se apoyan en una habilidad espacial concreta: predecir dónde acabará una pieza cuando se desliza hasta que algo la detiene, y cómo cambia eso el espacio a su alrededor. Se parece más a razonar sobre trayectorias y obstáculos que a girar formas, y no conocemos ningún estudio que haya comprobado si se transfiere. No afirmamos nada parecido sobre el juego. Es una forma agradable de ejercitar la habilidad que el propio juego enseña, y con eso basta.',
           'Si lo que buscas es la habilidad espacial en sí, los estudios de entrenamiento sugieren buscar tareas que te pidan directamente girar, plegar u orientarte, a un nivel que te exija. Un juego de puzles puede formar parte de esa mezcla. Es poco probable que sea toda la mezcla.',
-          'Para ver qué hábitos espaciales pide un tablero deslizante, prueba el [tablero en el navegador](/play). Nuestro artículo sobre el [chunking](/blog/chunking-how-expert-puzzlers-see-patterns) explica cómo esos hábitos se convierten en patrones que lees de un vistazo, y [juegos como Tetris](/blog/games-like-tetris) analiza qué mantiene interesantes los juegos de encajar formas.',
+          'Para ver qué hábitos espaciales pide un tablero deslizante, prueba el [tablero en el navegador](/play). Nuestro artículo sobre la [agrupación de información](/blog/chunking-how-expert-puzzlers-see-patterns) explica cómo esos hábitos se convierten en patrones que lees de un vistazo, y [juegos como Tetris](/blog/games-like-tetris) analiza qué mantiene interesantes los juegos de encajar formas.',
         ],
       },
     },
@@ -520,7 +520,7 @@ export const es1: ExtraGuides = {
         title: 'Que siga siendo un juego',
         paragraphs: [
           'Todo esto tiene un riesgo. La práctica deliberada, tal como la definieron Ericsson y sus colegas, no es agradable en sí misma; es trabajo. Un juego de puzles convertido en un régimen de entrenamiento puede dejar de ser aquello que te encantaba. A la mayoría de los jugadores ocasionales les va mejor una versión ligera: disfrutar de la mayoría de los tableros y practicar con unos pocos.',
-          'Es más o menos como está pensado para jugarse OutBrick. Sus 2000 tableros se reparten en 100 capítulos, una forma de plantear el reto que comentamos en [cómo construir una curva de dificultad más amable](/blog/kinder-difficulty-curve). El objetivo de movimientos y las estrellas te dan retroalimentación si la quieres y no estorban si no la quieres. Y los patrones que vas construyendo por el camino, descritos en nuestro artículo sobre el [chunking](/blog/chunking-how-expert-puzzlers-see-patterns), son el verdadero resultado de la práctica: no un número, sino una forma de ver el tablero.',
+          'Es más o menos como está pensado para jugarse OutBrick. Sus 2000 tableros se reparten en 100 capítulos, una forma de plantear el reto que comentamos en [cómo construir una curva de dificultad más amable](/blog/kinder-difficulty-curve). El objetivo de movimientos y las estrellas te dan retroalimentación si la quieres y no estorban si no la quieres. Y los patrones que vas construyendo por el camino, descritos en nuestro artículo sobre la [agrupación de información](/blog/chunking-how-expert-puzzlers-see-patterns), son el verdadero resultado de la práctica: no un número, sino una forma de ver el tablero.',
         ],
       },
     },
@@ -537,7 +537,7 @@ export const es1: ExtraGuides = {
     title: 'El momento eureka: cómo es el insight en el cerebro',
     dek: 'El clic de un puzle resuelto deja huella en el cerebro. Qué dice la investigación sobre el insight, por qué el eureka suele acertar y cuándo no.',
     imageAlt: 'Peach y Vio a ambos lados de un iPhone que muestra Button Factory en el mapa del Viaje de OutBrick, con ladrillos amarillos y rojos flotando cerca',
-    tags: ['insight', 'momento eureka', 'resolución de problemas', 'psicología cognitiva', 'investigación sobre juegos de puzles'],
+    tags: ['comprensión repentina', 'momento eureka', 'resolución de problemas', 'psicología cognitiva', 'investigación sobre juegos de puzles'],
     intro: 'Hay dos formas de resolver un puzle. A veces avanzas hacia la respuesta paso a paso, con la sensación constante de que te acercas. Otras veces nada parece moverse y, de golpe, la respuesta simplemente está ahí, evidente y completa, con una sacudida de placer. Esa segunda experiencia, el momento eureka, fascina a los psicólogos desde hace un siglo. En los últimos veinte años, la neurociencia ha empezado a mostrar que no es solo una sensación que se superpone al pensamiento corriente, sino un camino distinto hacia una solución.',
     keyTakeaways: [
       'Las soluciones por insight llegan de repente, sin la sensación gradual de acercarse que caracteriza a la resolución paso a paso.',
@@ -564,7 +564,7 @@ export const es1: ExtraGuides = {
         title: 'Cómo se produce el insight: cambiar la representación',
         paragraphs: [
           'Los psicólogos cognitivos explican el insight como un cambio en la forma de representar un problema. Günther Knoblich, Stellan Ohlsson y sus colegas lo pusieron a prueba con aritmética de cerillas: ecuaciones falsas hechas con cerillas que se vuelven ciertas al mover una sola. Los problemas se volvían mucho más difíciles cuando la solución exigía relajar una regla que la gente había dado por hecha sin darse cuenta, o descomponer un chunk conocido, como ver una X como dos cerillas separadas y no como un solo símbolo.',
-          'Esto relaciona el insight con el [chunking](/blog/chunking-how-expert-puzzlers-see-patterns). Los chunks que hacen rápidos a los expertos son los mismos que a veces hay que romper para que aparezca una solución nueva. Un callejón sin salida en un tablero suele significar que estás tratando como fijo algo que no lo es: un ladrillo que has decidido que tiene que salir el último, o un carril que has decidido que tiene que quedar libre.',
+          'Esto relaciona el insight con la [agrupación de información](/blog/chunking-how-expert-puzzlers-see-patterns). Los chunks que hacen rápidos a los expertos son los mismos que a veces hay que romper para que aparezca una solución nueva. Un callejón sin salida en un tablero suele significar que estás tratando como fijo algo que no lo es: un ladrillo que has decidido que tiene que salir el último, o un carril que has decidido que tiene que quedar libre.',
           'También sugiere por qué ayudan las pausas. Alejarse puede aflojar una suposición lo suficiente como para que la representación cambie, y por eso tantos momentos eureka llegan después de una pausa. Lo vemos en [¿atascado en un puzle? La ciencia de tomarse un respiro](/blog/stuck-on-a-puzzle-incubation-effect).',
         ],
       },

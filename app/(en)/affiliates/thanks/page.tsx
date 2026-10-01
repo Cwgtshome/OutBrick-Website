@@ -8,7 +8,7 @@ export const metadata = thanksMetadata(
 
 export default function AffiliateThanksPage() {
   return (
-    <ThanksPage eyebrow="Application received" title="Thanks — we’ll take a look." back={{ href: '/creators', label: 'Read the creators kit' }}>
+    <ThanksPage page={'/affiliates/thanks'} eyebrow="Application received" title="Thanks — we’ll take a look." back={{ href: '/creators', label: 'Read the creators kit' }}>
       <p className="lede">
         We review every application and reply by email. If you are approved, we confirm your code and
         your link, outbrick.site/r/your-code. It starts counting from the day it is approved; until then

@@ -1,5 +1,7 @@
 'use client';
 
+import { useLocale } from '../../components/locale-context';
+import { searchWords } from '../../../lib/i18n/search';
 import { useState } from 'react';
 import { useHydrated } from '../../components/netlify-form';
 
@@ -10,6 +12,7 @@ import { useHydrated } from '../../components/netlify-form';
  * the feed, so the address is always reachable.
  */
 export function FeedCopy({ url, label, compact = false }: { url: string; label: string; compact?: boolean }) {
+  const t = searchWords[useLocale()];
   const ready = useHydrated();
   const [copied, setCopied] = useState(false);
 
@@ -42,9 +45,9 @@ export function FeedCopy({ url, label, compact = false }: { url: string; label: 
         title={compact ? label : undefined}
         data-copied={copied || undefined}
       >
-        {compact ? <FeedGlyph copied={copied} /> : copied ? 'Feed address copied' : label}
+        {compact ? <FeedGlyph copied={copied} /> : copied ? t.feedCopied : label}
       </button>
-      <span className="ed-sr" aria-live="polite">{copied ? 'Feed address copied to the clipboard.' : ''}</span>
+      <span className="ed-sr" aria-live="polite">{copied ? t.feedClipboard : ''}</span>
     </>
   );
 }

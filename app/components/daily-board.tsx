@@ -1,5 +1,8 @@
 'use client';
 
+import { dailyWords } from '../../lib/i18n/daily';
+import { boardStrings } from '../../lib/i18n/board';
+import { useLocale } from './locale-context';
 import { useSyncExternalStore } from 'react';
 import { boardLevels } from '../../lib/board-levels';
 import { dailyBoardForDay, dailyDay, formatDailyDate, type DailyBoard } from '../../lib/daily-board';
@@ -29,22 +32,24 @@ const fallback = dailyBoardForDay(0);
 
 /** "Daily board #12" and the date, above the page heading. */
 export function DailyStamp() {
+  const locale = useLocale();
+  const t = dailyWords[locale];
   const daily = useDailyBoard();
   const level = boardLevels[(daily ?? fallback).levelIndex];
   return (
     <div className="daily-stamp">
-      <p className="eyebrow">{daily ? `Daily board #${daily.number}` : 'Daily board'}</p>
+      <p className="eyebrow">{t.board(daily?.number)}</p>
       <p className="daily-date">
         {daily ? (
           <>
-            <time dateTime={daily.isoDate}>{formatDailyDate(daily)}</time>
+            <time dateTime={daily.isoDate}>{formatDailyDate(daily, locale)}</time>
             <span className="daily-sep" aria-hidden="true">·</span>
             <span className="daily-level">
-              {level.name}, target {level.target}
+              {boardStrings[locale].levelName[level.id] ?? level.name}, {t.target(level.target)}
             </span>
           </>
         ) : (
-          'Today’s board'
+          t.today
         )}
       </p>
     </div>
@@ -53,12 +58,14 @@ export function DailyStamp() {
 
 /** Today's board, played on its own, with a share line that names the day. */
 export function DailyPlay() {
+  const locale = useLocale();
+  const t = dailyWords[locale];
   const daily = useDailyBoard() ?? fallback;
   const level = boardLevels[daily.levelIndex];
   const n = daily.number;
   const shareWords: ShareWords = (moves, stars, starLine) => ({
-    title: `I cleared OutBrick daily board #${n} with ${stars} ${stars === 1 ? 'star' : 'stars'}`,
-    text: `OutBrick daily board #${n}, ${level.name}: cleared in ${moves} ${moves === 1 ? 'move' : 'moves'} (target ${level.target}) ${starLine}`,
+    title: t.title(n, stars),
+    text: t.text(n, boardStrings[locale].levelName[level.id] ?? level.name, moves, level.target, starLine),
   });
   return (
     <PlayableBoard
@@ -66,9 +73,10 @@ export function DailyPlay() {
       key={`${n}-${daily.levelIndex}`}
       startLevel={daily.levelIndex}
       single
-      kicker={`Daily board #${n}`}
+      locale={locale}
+      kicker={t.board(n)}
       shareWords={shareWords}
-      label={`Play OutBrick daily board #${n}, ${level.name}`}
+      label={t.play(n, boardStrings[locale].levelName[level.id] ?? level.name)}
     />
   );
 }

@@ -10,6 +10,7 @@
 
 import type { ReactNode } from 'react';
 import { chromeCopy } from '../lib/i18n/chrome';
+import { journalUi } from '../lib/i18n/blog';
 import { localePath, type Locale, type TranslatedLocale } from '../lib/i18n/locales';
 import { editorialNav, editorialNavFor, localeStoreUrl, VillageFooter, VillageHeader } from './village-shell';
 import { appStoreUrl } from './store-badge';
@@ -71,6 +72,7 @@ export function EditorialPage({
   before,
   locale,
   languages,
+  page,
 }: {
   current?: Section;
   tone?: string;
@@ -82,6 +84,7 @@ export function EditorialPage({
   locale?: TranslatedLocale;
   /** The page's own versions in other languages, for the footer's language picker. */
   languages?: Partial<Record<Locale, string>>;
+  page?: string;
 }) {
   if (locale) {
     return (
@@ -91,7 +94,7 @@ export function EditorialPage({
         <TranslatedEditorialHeader locale={locale} current={current} />
         <main id="main">{children}</main>
         <div className="ob-site ed-chrome">
-          <VillageFooter locale={locale} languages={languages} />
+          <VillageFooter locale={locale} page={page} languages={languages} />
         </div>
       </div>
     );
@@ -102,14 +105,14 @@ export function EditorialPage({
       {before}
       <EditorialHeader current={current} />
       <main id="main">{children}</main>
-      <EditorialFooter languages={languages} />
+      <div className="ob-site ed-chrome"><VillageFooter page={page} languages={languages} /></div>
     </div>
   );
 }
 
 export type Crumb = { href?: string; label: string };
 
-export function Crumbs({ items, label = 'Breadcrumb' }: { items: Crumb[]; label?: string }) {
+export function Crumbs({ items, locale = 'en', label = journalUi[locale].breadcrumb }: { items: Crumb[]; locale?: Locale; label?: string }) {
   return (
     <nav className="ed-crumbs" aria-label={label}>
       <ol>

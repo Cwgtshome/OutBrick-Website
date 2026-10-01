@@ -7,14 +7,15 @@
 import { Fragment, type ReactNode } from 'react';
 import { getAuthor, type BlogArticle } from '../../../lib/blog';
 import { getShelves, minutesOf } from '../../../lib/journal';
+import { localePath, type Locale } from '../../../lib/i18n/locales';
+import { journalUi } from '../../../lib/i18n/blog';
 import { siteUrl } from '../../../lib/site';
 import { FeedCopy } from './feed-copy';
-import { isTranslatedGuide } from '../../../lib/i18n/blog';
+
 
 const linkPattern = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
 /** Paths published in every language: the home page (and its sections), the play guide, what's new. */
-const everyLanguage = /^\/(?:play|whats-new)?(?:[#?].*)?$/;
 
 /**
  * The same page in `locale`, when that language has it: `/`, `/#fair`, `/play`, `/whats-new`,
@@ -22,11 +23,9 @@ const everyLanguage = /^\/(?:play|whats-new)?(?:[#?].*)?$/;
  * them, so a link never points at a translation that has not been published.
  */
 function localHref(href: string, locale: string): string | null {
-  if (everyLanguage.test(href)) return href === '/' ? `/${locale}` : href.startsWith('/#') || href.startsWith('/?') ? `/${locale}${href.slice(1)}` : `/${locale}${href}`;
-  if (href === '/blog') return `/${locale}/blog`;
-  const guide = href.match(/^\/blog\/([a-z0-9-]+)(#.*)?$/);
-  if (guide && isTranslatedGuide(guide[1]!)) return `/${locale}/blog/${guide[1]}${guide[2] ?? ''}`;
-  return null;
+  if (!href.startsWith('/') || href.startsWith('//') || /^\/(fr|de|es|ja)(?:[/?#]|$)/.test(href)) return href;
+  if (/\.[a-z0-9]+(?:[?#]|$)/i.test(href)) return href;
+  return href === '/' ? `/${locale}` : href.startsWith('/#') || href.startsWith('/?') ? `/${locale}${href.slice(1)}` : `/${locale}${href}`;
 }
 
 /**
@@ -150,7 +149,12 @@ export function StoryCard({
 }
 
 /** RSS links: the whole journal, and one feed per shelf (written by scripts/postbuild.mjs). */
-export function FollowJournal({ current }: { current?: string }) {
+export function FollowJournal({ current, locale = 'en' }: { current?: string; locale?: Locale }) {
+  const feedPath = localePath(locale, '/feed.xml');
+  const feedLabel = (category?: string) => {
+    const c = category ? journalUi[locale].categories[category] ?? category : '';
+    return { en: category ? `Copy the ${c} feed address` : 'Copy the feed address', fr: category ? `Copier l’adresse du flux « ${c} »` : 'Copier l’adresse du flux', de: category ? `Feed-Adresse für ${c} kopieren` : 'Feed-Adresse kopieren', es: category ? `Copiar la dirección del canal de ${c}` : 'Copiar la dirección del canal', ja: category ? `「${c}」のフィードアドレスをコピー` : 'フィードのアドレスをコピー' }[locale];
+  };
   const shelves = getShelves();
   return (
     <section className="ed-band-ink2 ed-band-tight" aria-labelledby="follow-title">
@@ -167,9 +171,9 @@ export function FollowJournal({ current }: { current?: string }) {
               Feedly, Inoreader) and each new story arrives as it is published.
             </p>
             <div className="ed-actions" style={{ marginTop: 20 }}>
-              <FeedCopy url={`${siteUrl}/feed.xml`} label="Copy the feed address" />
+              <FeedCopy url={`${siteUrl}${feedPath}`} label={feedLabel()} />
             </div>
-            <p className="ed-feed-url"><code>{siteUrl.replace('https://', '')}/feed.xml</code></p>
+            <p className="ed-feed-url"><code>{siteUrl.replace('https://', '')}{feedPath}</code></p>
           </div>
         </div>
         <div>
@@ -178,11 +182,11 @@ export function FollowJournal({ current }: { current?: string }) {
             {shelves.map((shelf) => (
               <li key={shelf.slug} data-tone={shelf.tone}>
                 {/* The shelf name opens the shelf; the small button copies that shelf's feed. */}
-                <a href={`/blog/category/${shelf.slug}`} aria-current={current === shelf.slug ? 'page' : undefined}>
+                <a href={localePath(locale, `/blog/category/${shelf.slug}`)} aria-current={current === shelf.slug ? 'page' : undefined}>
                   <span className="ed-follow-dot" aria-hidden="true" />
                   {shelf.category}
                 </a>
-                <FeedCopy compact url={`${siteUrl}/blog/category/${shelf.slug}/feed.xml`} label={`Copy the ${shelf.category} feed address`} />
+                <FeedCopy compact url={`${siteUrl}${localePath(locale, `/blog/category/${shelf.slug}/feed.xml`)}`} label={feedLabel(shelf.category)} />
               </li>
             ))}
           </ul>

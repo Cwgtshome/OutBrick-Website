@@ -25,7 +25,17 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const outDir = path.join(root, 'public/share');
+const locale = process.argv.find((a) => a.startsWith('--locale='))?.slice(9) ?? 'en';
+if (!['en', 'fr', 'de', 'es', 'ja'].includes(locale)) throw new Error('Unsupported locale');
+const outDir = path.join(root, 'public/share', locale === 'en' ? '' : locale);
+const { boardStrings } = await import('../lib/i18n/board.ts');
+const cardCopy = {
+ en: { board: (b) => `Board ${b}`, cleared: 'Cleared', target: 'target', moves: 'moves', noUndo: 'No undo. Not one.', onTarget: 'Right on target.', try: (t) => `Now try it in ${t}.`, turn: 'Your turn' },
+ fr: { board: (b) => `Plateau ${b}`, cleared: 'Terminé', target: 'objectif', moves: 'coups', noUndo: 'Sans annuler. Pas une fois.', onTarget: 'Exactement l’objectif.', try: (t) => `Essayez en ${t} coups.`, turn: 'À vous' },
+ de: { board: (b) => `Spielfeld ${b}`, cleared: 'Gelöst', target: 'Ziel', moves: 'Züge', noUndo: 'Ohne Rückgängig. Kein einziges Mal.', onTarget: 'Genau im Ziel.', try: (t) => `Versuche es in ${t} Zügen.`, turn: 'Du bist dran' },
+ es: { board: (b) => `Tablero ${b}`, cleared: 'Completado', target: 'objetivo', moves: 'movimientos', noUndo: 'Sin deshacer. Ni una vez.', onTarget: 'Justo en el objetivo.', try: (t) => `Inténtalo en ${t} movimientos.`, turn: 'Te toca' },
+ ja: { board: (b) => `ステージ${b}`, cleared: 'クリア', target: '目標', moves: '手', noUndo: '「戻す」を一度も使わずに。', onTarget: '目標どおり。', try: (t) => `${t}手で挑戦しましょう。`, turn: '次はあなたの番' },
+}[locale];
 const { boardLevels } = await import('../lib/board-levels.ts');
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? '/opt/node22/lib/node_modules/playwright/index.mjs');
 
@@ -60,7 +70,7 @@ const FRIEND = ['zippy', 'bloo', 'vio'];
 const CAST = ['peach', 'sprout', 'poppy', 'bricko', 'moss', 'flurry', 'zippy', 'bloo', 'vio'];
 const friendFor = (board) => FRIEND[board - 1] ?? CAST[(board - 1 - FRIEND.length) % CAST.length];
 // The tour's cards say "Board 2 of 3"; a daily board's just "Board 12".
-const boardLabel = (board) => (board <= FRIEND.length ? `Board ${board} of ${FRIEND.length}` : `Board ${board}`);
+const boardLabel = (board) => locale === 'en' && board <= FRIEND.length ? `Board ${board} of ${FRIEND.length}` : cardCopy.board(board);
 
 function boardSvgish(level) {
   const cell = level.cols === 5 ? 62 : 52;
@@ -96,16 +106,18 @@ function boardSvgish(level) {
 }
 
 function page(level, board, stars) {
+  const displayName = boardStrings[locale].levelName[level.id] ?? level.name;
+  const headingSize = Array.from(displayName).length > 17 ? 56 : Array.from(displayName).length > 12 ? 68 : 92;
   const movesLine =
     stars === 1
-      ? `Cleared <span>·</span> target ${level.target}`
-      : `${level.target} moves <span>·</span> target ${level.target}`;
-  const verdict = stars === 3 ? 'No undo. Not one.' : stars === 2 ? 'Right on target.' : `Now try it in ${level.target}.`;
+      ? `${cardCopy.cleared} <span>·</span> ${cardCopy.target} ${level.target}`
+      : `${level.target} ${cardCopy.moves} <span>·</span> ${cardCopy.target} ${level.target}`;
+  const verdict = stars === 3 ? cardCopy.noUndo : stars === 2 ? cardCopy.onTarget : cardCopy.try(level.target);
   const starRow = [0, 1, 2].map((i) => `<svg class="star${i < stars ? ' on' : ''}" viewBox="0 0 24 24">${STAR}</svg>`).join('');
   const course = ['#e2352f', '#ffc53d', '#26b9b0', '#7b5cf0', '#3b8bf0', '#3fc544']
     .map((c) => `<span style="background:${c}"></span>`)
     .join('');
-  return `<!doctype html><html><head><meta charset="utf-8"><style>
+  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><style>
 @font-face { font-family: Fredoka; src: url('${file('public/fonts/fredoka-latin-wght.woff2')}') format('woff2'); font-weight: 300 700; }
 @font-face { font-family: Figtree; src: url('${file('public/fonts/figtree-latin-wght.woff2')}') format('woff2'); font-weight: 300 900; }
 * { box-sizing: border-box; margin: 0; }
@@ -157,27 +169,27 @@ body::before {
 .brand { display: flex; align-items: center; gap: 14px; font-family: Fredoka; font-weight: 600; font-size: 25px; letter-spacing: 0.01em; }
 .brand img { width: 46px; height: 46px; border-radius: 12px; box-shadow: 0 4px 0 #0d0930; }
 .brand small { font-family: Figtree; font-weight: 800; font-size: 17px; letter-spacing: 0.14em; text-transform: uppercase; color: #ffc53d; margin-left: 6px; }
-h1 { margin-top: 34px; font-family: Fredoka; font-weight: 600; font-size: 92px; line-height: 0.95; letter-spacing: -0.02em; color: #fff6e0; text-shadow: 0 5px 0 rgba(8,4,36,0.6); }
+h1 { margin-top: 34px; font-family: Fredoka; font-weight: 600; font-size: ${headingSize}px; min-height: 90px; line-height: 0.95; letter-spacing: -0.02em; color: #fff6e0; text-shadow: 0 5px 0 rgba(8,4,36,0.6); }
 .stars { display: flex; gap: 14px; margin-top: 30px; }
 .star { width: 96px; height: 96px; fill: #2f2696; stroke: #4a3fb8; stroke-width: 1.1; stroke-linejoin: round; filter: drop-shadow(0 6px 0 #120d3a); }
 .star:nth-child(2) { transform: translateY(-12px); }
 .star.on { fill: #ffc53d; stroke: #b8780a; filter: drop-shadow(0 6px 0 #b8780a) drop-shadow(0 0 22px rgba(255,197,61,0.35)); }
-.line { margin-top: 26px; font-family: Fredoka; font-weight: 500; font-size: 40px; color: #fff6e0; font-variant-numeric: tabular-nums; }
+.line { margin-top: 26px; font-family: Fredoka; font-weight: 500; font-size: 34px; color: #fff6e0; font-variant-numeric: tabular-nums; }
 .line span { color: #7d73c9; margin: 0 6px; }
-.verdict { margin-top: 8px; font-size: 24px; font-weight: 700; color: #cbc4ff; }
+.verdict { margin-top: 8px; font-size: 21px; font-weight: 700; color: #cbc4ff; }
 .friend { position: absolute; right: 26px; bottom: 6px; width: 212px; height: 212px; filter: drop-shadow(0 14px 18px rgba(5,2,24,0.5)); }
-.play { position: absolute; left: 580px; bottom: 60px; display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px 12px 20px; border-radius: 16px; background: #fff6e0; color: #1a1350; font-family: Fredoka; font-weight: 600; font-size: 24px; box-shadow: 0 6px 0 #d8c58f; }
+.play { position: absolute; left: 580px; bottom: 60px; display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px 12px 20px; border-radius: 16px; background: #fff6e0; color: #1a1350; font-family: Fredoka; font-weight: 600; font-size: 20px; box-shadow: 0 6px 0 #d8c58f; }
 .play b { color: #e2352f; }
 </style></head><body>
 <div class="left">${boardSvgish(level)}</div>
 <div class="right">
   <div class="brand"><img src="${file('public/assets/icon/logo-96.webp')}" alt="">OutBrick <small>${boardLabel(board)}</small></div>
-  <h1>${level.name}</h1>
+  <h1>${displayName}</h1>
   <div class="stars">${starRow}</div>
   <p class="line">${movesLine}</p>
   <p class="verdict">${verdict}</p>
 </div>
-<div class="play">Your turn <b>→</b> outbrick.site/${board <= FRIEND.length ? 'play' : 'daily'}</div>
+<div class="play">${cardCopy.turn} <b>→</b> outbrick.site/${locale === 'en' ? '' : locale + '/'}${board <= FRIEND.length ? 'play' : 'daily'}</div>
 <img class="friend" src="${file(`public/assets/friends/${friendFor(board)}.webp`)}" alt="">
 <div class="course">${course}</div>
 </body></html>`;

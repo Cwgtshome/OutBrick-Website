@@ -157,7 +157,7 @@ export default function DailyPage() {
         </section>
       </main>
 
-      <VillageFooter />
+      <VillageFooter page="/daily" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pageData).replace(/</g, '\\u003c') }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData).replace(/</g, '\\u003c') }} />
     </div>

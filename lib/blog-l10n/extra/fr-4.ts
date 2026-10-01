@@ -6,7 +6,7 @@ export const fr4: ExtraGuides = {
     title: 'Qu’est-ce qu’un puzzle juste ? Difficulté, échec, confiance',
     dek: 'Difficile ne veut pas dire injuste. Ce que la recherche sur le défi et l’échec dit des puzzles auxquels on se fie, et de ceux qu’on abandonne, agacé.',
     imageAlt: 'Un vrai plateau OutBrick sur un iPhone, entouré de Moss avec sa ceinture à outils et de Sprout coiffé d’une jeune pousse, devant un mur de briques bleu marine',
-    tags: ['conception de puzzles', 'difficulté jeu vidéo', 'game design', 'échec dans les jeux', 'casse-tête'],
+    tags: ["conception de puzzles","conception de la difficulté","création de jeux","échec dans les jeux","conception de jeux"],
     intro: 'Tout amateur de puzzles connaît deux manières très différentes d’être bloqué. La première est la bonne : vous voyez toutes les pièces, vous connaissez les règles, simplement l’idée ne vous est pas encore venue. La seconde vous fait poser le téléphone : la réponse dépendait de quelque chose que vous ne pouviez pas voir, le jeu a puni une expérience que rien ne vous permettait d’éviter, ou une seule erreur vous a coûté dix minutes. Dans les deux cas, c’est « difficile ». Un seul des deux paraît juste. Depuis une quinzaine d’années, les chercheurs en jeu vidéo s’emploient à distinguer ces deux situations, et leurs conclusions servent à quiconque conçoit des puzzles, comme à quiconque se demande lesquels méritent sa soirée.',
     keyTakeaways: [
       'Les joueurs vivent plusieurs sortes de défi, et un puzzle paraît juste quand son défi relève de la réflexion, pas d’informations cachées ni de sanctions arbitraires.',
@@ -74,7 +74,7 @@ export const fr4: ExtraGuides = {
     title: 'Game feel et « juice » : pourquoi un bon glissement compte',
     dek: 'Le « juice », ce retour en plus qui rend un geste agréable. Des études sur des milliers de joueurs montrent qu’il aide, jusqu’à un point, puis nuit.',
     imageAlt: 'Un vrai plateau OutBrick sur un iPhone entre Moss avec sa ceinture à outils et Vio avec son casque, parmi des briques flottantes sur un mur de briques bleu marine',
-    tags: ['game feel', 'juice jeu vidéo', 'game design', 'retour visuel', 'conception de jeux'],
+    tags: ["sensations de jeu","conception expressive","conception de jeux","création de jeux","retours"],
     intro: 'Prenez deux versions du même jeu. Dans l’une, une brique traverse le plateau et s’arrête. Dans l’autre, elle glisse, ralentit en se posant, cogne à peine contre le mur, et un peu de poussière s’élève de la porte quand elle sort. Les règles sont identiques. L’une donne l’impression d’un tableur, l’autre celle d’un jouet. Les concepteurs appellent cette différence le game feel, et le retour supplémentaire, non indispensable, qui la produit, le « juice ». C’est l’une des idées les plus discutées du développement de jeux, et jusqu’à récemment l’une des moins testées. La recherche qui existe désormais adresse un message clair à ceux qui font des jeux : le juice est bien réel, l’excès de juice aussi.',
     keyTakeaways: [
       'Le juice est un retour redondant : des réactions visuelles, sonores ou haptiques supplémentaires dont les règles n’ont pas besoin, mais que le joueur ressent.',
@@ -140,7 +140,7 @@ export const fr4: ExtraGuides = {
     title: 'Génération procédurale de puzzles : pourquoi vérifier compte',
     dek: 'La génération procédurale crée des puzzles sans fin, mais un plateau soluble n’est pas forcément bon. Comment marchent les générateurs, et leurs limites.',
     imageAlt: 'Un vrai plateau OutBrick sur un iPhone, avec d’un côté Poppy tenant une baguette étoilée et de l’autre Moss, parmi des briques flottantes',
-    tags: ['génération procédurale', 'conception de puzzles', 'développement de jeux', 'game design', 'puzzle de blocs coulissants'],
+    tags: ["génération procédurale","conception de puzzles","développement de jeux","création de jeux","puzzles de blocs coulissants"],
     intro: 'Entre le niveau dessiné à la main et le niveau infini se trouve la génération procédurale de contenu : des logiciels qui fabriquent du contenu de jeu, des terrains et donjons jusqu’au puzzle que vous faites dans le bus. Pour les puzzles, la tentation est particulièrement forte. Un ordinateur produit un nouveau plateau en quelques millisecondes, et il n’est jamais à court d’idées. Il peut aussi produire des milliers de plateaux insolubles, triviaux, ou techniquement corrects et parfaitement ennuyeux. La façon dont les chercheurs ont abordé ce problème est une bonne visite de ce qui fait un puzzle, et un guide utile pour les joueurs qui se demandent si les « niveaux infinis » d’une fiche de boutique d’applications valent quelque chose.',
     keyTakeaways: [
       'La plupart des générateurs de puzzles fonctionnent par génération et test : proposer un candidat, l’évaluer, garder les bons et chercher mieux.',
@@ -198,7 +198,7 @@ export const fr4: ExtraGuides = {
     title: 'Difficulté dynamique : un jeu doit-il s’adapter à vous ?',
     dek: 'Beaucoup de jeux s’ajustent en douce à votre niveau. Ce que disent les études sur la difficulté adaptative, l’excès de confiance, et l’intérêt de demander.',
     imageAlt: 'Un iPhone affichant le classement hebdomadaire d’OutBrick, entre Flurry coiffé d’un bonnet à pompon rayé et un Zippy jaune qui fait un clin d’œil',
-    tags: ['difficulté dynamique', 'difficulté adaptative', 'game design', 'choix du joueur', 'conception de jeux'],
+    tags: ["ajustement dynamique de la difficulté","conception de la difficulté","création de jeux","autonomie du joueur","conception de jeux"],
     intro: 'Vous mourez trois fois au même passage d’un jeu et, au quatrième essai, il vous semble un peu plus facile. Les ennemis étaient-ils plus lents, ou avez-vous enfin compris ? Souvent, impossible de le dire, et c’est voulu. L’ajustement dynamique de la difficulté, ou DDA, consiste à modifier le défi d’un jeu pendant que vous jouez, selon la manière dont vous vous en sortez. Il promet à chaque joueur un jeu parfaitement à sa mesure. Il soulève aussi des questions gênantes : sur l’honnêteté, sur qui décide de la difficulté d’un jeu, et sur ce que vaut une victoire quand le jeu vous a aidé. Voici ce que dit la recherche, et le choix que nous avons fait pour nos propres puzzles.',
     keyTakeaways: [
       'Dans les études, la difficulté adaptative améliore souvent l’expérience de jeu, mais les détails comptent : les joueurs peuvent perdre le sentiment de contrôle quand le système décide de tout.',
@@ -262,7 +262,7 @@ export const fr4: ExtraGuides = {
     title: 'Des tutoriels qui enseignent sans expliquer : ce qui marche',
     dek: 'Une étude sur 45 000 joueurs : tutoriels utiles seulement dans le jeu complexe. La recherche sur l’apprentissage par le jeu, les indices et la 1re heure.',
     imageAlt: 'Un iPhone affichant la carte du Voyage d’OutBrick à Button Factory, entre Flurry coiffé d’un bonnet à pompon et Bloo avec sa montre',
-    tags: ['tutoriel jeu vidéo', 'prise en main', 'game design', 'onboarding', 'apprendre en jouant'],
+    tags: ["tutoriels de jeu","prise en main","conception de jeux","création de jeux","jeux d’apprentissage"],
     intro: 'Nous avons presque tous sauté un tutoriel. Certains d’entre nous ont sauté un tutoriel, se sont perdus, puis sont revenus le chercher. Quelques-uns ont supprimé un jeu parce qu’il s’ouvrait sur dix écrans d’instructions avant de nous laisser toucher à quoi que ce soit. Apprendre à jouer à un nouveau venu est l’une des tâches les plus difficiles du game design : expliquez trop peu, il patauge ; expliquez trop, il part avant que le jeu commence. Bonne nouvelle : c’est l’un des recoins les mieux étudiés du game design, avec des expériences portant sur des dizaines de milliers de joueurs. Les résultats sont étonnamment cohérents, et ils plaident pour des jeux qui enseignent surtout en laissant jouer.',
     keyTakeaways: [
       'Dans une étude portant sur plus de 45 000 joueurs, les tutoriels ont augmenté le temps de jeu jusqu’à 29 % dans le jeu le plus complexe, sans différence significative dans deux jeux plus simples.',
@@ -319,7 +319,7 @@ export const fr4: ExtraGuides = {
     title: 'Le son de la réussite : l’audio et l’expérience de jeu',
     dek: 'Le son change l’immersion, la tension et le sentiment de compétence, et la musique peut même tordre la perception du temps. Ce que montre la recherche.',
     imageAlt: 'Un iPhone affichant la carte du Voyage d’OutBrick à Cherry Blossom Town, entre Moss avec sa ceinture à outils et un Zippy jaune qui fait un clin d’œil',
-    tags: ['son jeu vidéo', 'sound design', 'musique de jeu', 'retour sonore', 'expérience de jeu'],
+    tags: ["audio de jeu","conception sonore","retours","création de jeux","expérience joueur"],
     intro: 'Coupez le son d’un jeu que vous connaissez bien et il se passe quelque chose d’étrange. Les règles n’ont pas changé, et pourtant tout paraît plus plat, plus lent, curieusement moins sûr. Le clic d’une pièce qui se pose, la note qui monte quand vous approchez du but, le petit accord d’une victoire : ils vous disaient des choses sans que vous remarquiez qu’on vous les disait. Le son est l’une des parties les plus puissantes et les moins visibles du game design. Les chercheurs ont mesuré ses effets sur l’immersion, l’émotion et même la durée que les joueurs croient avoir passée à jouer. Et comme tant de gens jouent sur téléphone le son coupé, la recherche porte aussi une leçon sur ce qu’on ne devrait jamais demander au son de faire seul.',
     keyTakeaways: [
       'Dans une expérience contrôlée, activer le son du jeu a amélioré toutes les dimensions mesurées de l’expérience, de l’immersion et du flow à la compétence et aux émotions positives.',
@@ -382,7 +382,7 @@ export const fr4: ExtraGuides = {
     title: 'Loot boxes, récompenses aléatoires et monétisation éthique',
     dek: 'Les études lient constamment les dépenses en loot boxes au jeu problématique. Ce qu’elles montrent, ce qui rend une monétisation prédatrice, et un test.',
     imageAlt: 'Un iPhone affichant la carte du Voyage d’OutBrick à Cloud Carnival, entre un Zippy jaune qui fait un clin d’œil et un Bricko rouge',
-    tags: ['loot box', 'monétisation', 'éthique du jeu vidéo', 'jeux mobiles', 'microtransactions'],
+    tags: ["coffres à butin","monétisation","éthique dans les jeux","création de jeux","jeux mobiles"],
     intro: 'Une loot box, c’est simple : on paie, on ouvre, on obtient quelque chose, mais on ne sait pas quoi avant qu’il soit trop tard pour changer d’avis. C’est devenu l’un des mécanismes de jeu les plus étudiés, et l’un des plus réglementés. La recherche est désormais assez fournie pour affirmer certaines choses clairement, et pour être honnête sur ce qu’elle ne peut pas encore affirmer. Elle donne aussi aux joueurs et aux studios un test pratique pour toute manière dont un jeu demande de l’argent, y compris la nôtre. OutBrick gagne de l’argent grâce à des achats facultatifs et à des vidéos récompensées que l’on choisit de regarder ; nous avons donc essayé, à la fin, de nous appliquer le même test.',
     keyTakeaways: [
       'Dans de nombreuses études, les dépenses en loot boxes sont liées aux symptômes de jeu problématique ; une méta-analyse a estimé la corrélation à environ 0,26, faible mais reproductible.',
@@ -445,7 +445,7 @@ export const fr4: ExtraGuides = {
     title: 'Dark patterns dans les jeux mobiles : comment les repérer',
     dek: 'Pop-ups insistants, monnaies confuses, offres calées sur vos pires moments : ce que dit la recherche sur le design manipulateur, et comment le repérer.',
     imageAlt: 'Un iPhone affichant la boutique d’OutBrick avec ses offres spéciales et le Brick Pass, entre Poppy avec sa baguette étoilée et Bloo avec sa montre',
-    tags: ['dark patterns', 'éthique du jeu vidéo', 'jeux mobiles', 'monétisation', 'jouer sainement'],
+    tags: ['interfaces trompeuses', 'éthique du jeu vidéo', 'jeux mobiles', 'monétisation', 'jouer sainement'],
     intro: 'L’expression « dark pattern » a été forgée pour les sites web : la case précochée, le bouton d’annulation gris sur gris, l’abonnement qui se souscrit en une touche et se résilie en douze. Les jeux ont hérité de tout cela et ont inventé leurs propres variantes. Comme un jeu est conçu pour être absorbant, la frontière entre captivant et manipulateur peut être difficile à voir de l’intérieur. Des chercheurs en interaction humain-machine, en protection des consommateurs et en addictologie ont commencé à tracer cette frontière. Leurs travaux donnent aux joueurs un vocabulaire pour ce sentiment qu’un jeu travaille contre eux, et tendent un miroir aux concepteurs. Nous faisons un jeu gratuit, alors nous nous sommes aussi regardés dans ce miroir.',
     keyTakeaways: [
       'Les dark patterns sont des choix de conception qui font passer les intérêts du concepteur avant ceux de l’utilisateur, par le harcèlement, l’obstruction, la dissimulation, l’interférence d’interface ou l’action forcée.',
@@ -510,7 +510,7 @@ export const fr4: ExtraGuides = {
     title: 'Pourquoi on s’attache aux personnages de jeu, même muets',
     dek: 'Les joueurs admirent leurs personnages, s’inquiètent pour eux, les regrettent. Attachement, liens parasociaux et mignonnerie expliquent pourquoi.',
     imageAlt: 'Un vrai plateau OutBrick sur un iPhone entre Vio avec son casque et Peach coiffée d’une petite pêche, devant un mur de briques bleu marine',
-    tags: ['personnages de jeu vidéo', 'mascottes', 'attachement', 'game design', 'relation parasociale'],
+    tags: ["personnages de jeu","mascottes","attachement des joueurs","conception de jeux","création de jeux"],
     intro: 'Des gens pleurent des personnages qui n’ont jamais existé. Ils donnent leur nom à leurs animaux, s’inquiètent pour eux entre deux parties, et ressentent un petit pincement quand un acolyte reste en arrière. Rien de nouveau : le public nouait des liens à sens unique avec les animateurs de radio bien avant les jeux vidéo. Mais les jeux ajoutent ce que les films et les livres ne peuvent pas offrir, car le personnage réagit à vous, et parfois vous en êtes responsable. La recherche sur la relation entre joueurs et personnages est désormais assez riche pour expliquer une bonne part de cette attraction, y compris pourquoi un personnage qui ne dit pas un mot peut compter. Elle soulève aussi une question que tout studio doté d’une mascotte devrait se poser : que devons-nous aux joueurs qui finissent par s’attacher ?',
     keyTakeaways: [
       'Les joueurs nouent plusieurs sortes d’attachement aux personnages, de l’admiration pour leur habileté à l’inquiétude pour leur bien-être.',
@@ -567,7 +567,7 @@ export const fr4: ExtraGuides = {
     title: 'La couleur dans les jeux : contraste, sens et émotion',
     dek: 'Ce que la psychologie des couleurs apprend, ou non, aux concepteurs, pourquoi le contraste prime sur la teinte, et des pièces lisibles par tous.',
     imageAlt: 'Un vrai plateau OutBrick de briques colorées sur un iPhone, entre Moss avec sa ceinture à outils et Flurry coiffé d’un bonnet à pompon rayé',
-    tags: ['couleurs jeu vidéo', 'game design', 'contraste', 'psychologie des couleurs', 'daltonisme'],
+    tags: ["couleurs dans les jeux","conception de jeux","contraste","vision des couleurs","création de jeux"],
     intro: 'La couleur est la première chose qu’on remarque dans la plupart des jeux, et la dernière à laquelle la plupart des joueurs pensent. Le rouge signifie danger, le vert veut dire go, l’or évoque un trésor, et personne n’a eu besoin de vous le dire. Les concepteurs s’appuient sans cesse sur la couleur, pour installer une ambiance, signaler ce qui compte et, dans un puzzle de tri par couleur, porter les règles elles-mêmes. Les articles grand public sur la psychologie des couleurs regorgent d’affirmations assurées : le bleu apaise, le rouge excite, le jaune donne faim. La recherche est plus intéressante et plus prudente que cela. Ce qu’elle soutient le plus solidement est moins glamour que l’humeur : le contraste, la cohérence, et ne jamais compter sur la couleur seule.',
     keyTakeaways: [
       'La couleur influe bien sur les émotions et le comportement, mais la recherche est jeune et beaucoup d’affirmations populaires sur des couleurs précises vont au-delà des preuves.',

@@ -27,7 +27,7 @@ export const fr1: ExtraGuides = {
         paragraphs: [
           'Dans une étude classique, Michelene Chi, Paul Feltovich et Robert Glaser ont demandé à des experts et à des novices en physique de trier des problèmes de manuel par groupes. Les novices les regroupaient selon leur apparence : les plans inclinés ensemble, les ressorts ensemble. Les experts les regroupaient selon le principe qui permettait de les résoudre, comme la conservation de l’énergie, même quand les problèmes ne se ressemblaient en rien. Les experts ne voyaient pas plus de choses. Ils voyaient d’autres choses.',
           'Les plateaux de casse-tête invitent au même partage. La surface d’un plateau de tri de couleurs, ce sont des couleurs et des formes, et on est tenté de le lire ainsi : voilà les rouges, voilà les bleus. La structure est autre chose : quelle pièce se trouve entre telle autre et sa sortie, où est l’espace libre, quel glissement ouvre un couloir et lequel le ferme. Qui lit la structure voit une courte chaîne de dépendances. Qui lit la surface voit une foule.',
-          'Pas besoin d’années de pratique pour emprunter la question de l’expert. Avant de jouer, demandez-vous à quel genre de problème vous avez affaire. Un embouteillage, où tout attend une seule pièce ? Un manque de place, où la première tâche est d’en faire ? Un problème d’ordre, où les couleurs doivent sortir dans une séquence précise ? Nommer le type est un petit acte de représentation, et il change les coups qui paraissent prometteurs. Avec le temps, ces types deviennent des motifs que vous reconnaissez d’un coup d’œil, ce que décrit le [chunking](/blog/chunking-how-expert-puzzlers-see-patterns).',
+          'Pas besoin d’années de pratique pour emprunter la question de l’expert. Avant de jouer, demandez-vous à quel genre de problème vous avez affaire. Un embouteillage, où tout attend une seule pièce ? Un manque de place, où la première tâche est d’en faire ? Un problème d’ordre, où les couleurs doivent sortir dans une séquence précise ? Nommer le type est un petit acte de représentation, et il change les coups qui paraissent prometteurs. Avec le temps, ces types deviennent des motifs que vous reconnaissez d’un coup d’œil, ce que décrit le [regroupement d’informations](/blog/chunking-how-expert-puzzlers-see-patterns).',
         ],
       },
       'plan-where-choices-compete': {
@@ -81,7 +81,7 @@ export const fr1: ExtraGuides = {
     title: 'Annuler un coup rend meilleur aux casse-têtes, pas paresseux',
     dek: 'Les erreurs réparables sont parmi les meilleurs maîtres d’un casse-tête. Ce que dit la recherche sur le bon usage de l’annulation, et quand s’en passer.',
     imageAlt: 'Poppy et sa baguette étoilée avec Bricko à côté d’un iPhone affichant la boutique OutBrick, sur une grille de briques indigo',
-    tags: ['apprendre de ses erreurs', 'résolution de problèmes', 'astuces casse-tête', 'planification', 'game design'],
+    tags: ["apprendre de ses erreurs","résolution de problèmes","astuces casse-tête","planification","conception de jeux"],
     intro: 'Certains joueurs vivent l’annulation comme un aveu. Ils préfèrent fixer un plateau pendant deux minutes plutôt que de reprendre un coup, comme si le bouton était réservé à ceux qui ne savent pas vraiment faire des casse-têtes. La recherche sur l’apprentissage va dans l’autre sens, avec une nuance intéressante. Les erreurs que l’on remarque et que l’on corrige comptent parmi les choses les plus utiles qui puissent arriver quand on apprend. Mais quand les erreurs ne coûtent plus rien du tout, on planifie aussi moins. Bien utiliser l’annulation, c’est obtenir le premier effet sans trop payer le second.',
     keyTakeaways: [
       'Une erreur suivie d’une correction aide généralement l’apprentissage, et le bénéfice est le plus grand quand on était sûr de soi en se trompant.',
@@ -148,7 +148,7 @@ export const fr1: ExtraGuides = {
     title: 'Le chunking : comment les experts voient les motifs',
     dek: 'Les maîtres d’échecs retiennent un échiquier par motifs, pas pièce par pièce. Ce que dit la recherche sur le chunking, et comment bâtir vos propres motifs.',
     imageAlt: 'Moss et sa ceinture à outils avec Bricko de part et d’autre d’un iPhone affichant un vrai plateau OutBrick très serré, marqué Super difficile',
-    tags: ['chunking', 'expertise', 'casse-tête et mémoire', 'psychologie cognitive', 'recherche jeux de casse-tête'],
+    tags: ['regroupement d’informations', 'expertise', 'casse-tête et mémoire', 'psychologie cognitive', 'recherche jeux de casse-tête'],
     intro: 'Regardez un bon joueur de casse-têtes : il semble voir la réponse avant même d’avoir regardé. Il n’a pas sauté la réflexion. Il l’a en grande partie faite à l’avance, sur des centaines de plateaux précédents, et l’a stockée sous forme de motifs. Les psychologues appellent ces motifs des chunks, des « blocs » d’information. La recherche sur le chunking est née aux échecs, et elle explique bien ce que suppose le fait de progresser à n’importe quel casse-tête, et ce que cela ne suppose pas.',
     keyTakeaways: [
       'Les experts retiennent et lisent les plateaux par groupes de pièces qui ont un sens, ce qui leur permet d’embrasser bien plus d’un coup d’œil que les débutants.',
@@ -215,7 +215,7 @@ export const fr1: ExtraGuides = {
     title: 'Bloqué sur un casse-tête ? Faire une pause, selon la science',
     dek: 'Pourquoi un casse-tête insoluble cède souvent après une pause, ce qu’a montré une méta-analyse sur l’incubation, et comment faire la pause qui aide.',
     imageAlt: 'Vio avec son casque et Sprout à côté d’un iPhone affichant la boutique OutBrick, avec quelques briques jaunes et bleues flottant sur une grille indigo',
-    tags: ['effet d’incubation', 'résolution de problèmes', 'astuces casse-tête', 'insight', 'psychologie cognitive'],
+    tags: ["effet d’incubation","résolution de problèmes","astuces casse-tête","compréhension soudaine","psychologie cognitive"],
     intro: 'Presque tous les amateurs de casse-têtes l’ont vécu. On fixe un plateau jusqu’à ce qu’il semble n’avoir aucune solution, on abandonne, on se fait un thé, et en revenant la réponse est là, sous nos yeux. Les psychologues appellent cette pause une période d’incubation, et l’amélioration qui la suit parfois un effet d’incubation. C’est l’une des plus anciennes idées de la psychologie de la résolution de problèmes, et les données modernes disent qu’elle est réelle, quoique plus modeste et plus conditionnelle que ne le suggèrent les anecdotes.',
     keyTakeaways: [
       'Une méta-analyse des études sur l’incubation a trouvé un effet positif réel à mettre un problème de côté, plus marqué quand on y avait d’abord travaillé plus longtemps.',
@@ -387,7 +387,7 @@ export const fr1: ExtraGuides = {
           'Mises bout à bout, les données soutiennent une affirmation modeste et honnête. Déplacer et faire tourner des formes dans sa tête est une compétence, et les casse-têtes qui la sollicitent vous y entraînent. Vous deviendrez meilleur au casse-tête, et peut-être à des tâches spatiales qui lui ressemblent. Quiconque promet davantage devance la recherche.',
           'Les puzzles de blocs coulissants comme OutBrick font appel à une capacité spatiale particulière : prévoir où une pièce s’arrêtera quand elle glisse jusqu’à ce que quelque chose l’arrête, et comment cela modifie l’espace autour d’elle. C’est plus proche du raisonnement sur les trajets et les obstacles que de la rotation de formes, et nous ne connaissons aucune étude ayant vérifié si cela se transfère. Nous ne revendiquons rien de tel pour le jeu. C’est une façon agréable d’exercer la compétence que le jeu enseigne lui-même, et cela suffit.',
           'Si c’est la capacité spatiale elle-même que vous recherchez, les études d’entraînement invitent à chercher des tâches qui vous demandent directement de faire tourner, de plier ou de vous orienter, à un niveau qui vous pousse un peu. Un jeu de casse-tête peut faire partie de ce mélange. Il y a peu de chances qu’il en soit le tout.',
-          'Pour voir quelles habitudes spatiales un plateau coulissant demande, essayez le [plateau dans le navigateur](/play). Notre article sur le [chunking](/blog/chunking-how-expert-puzzlers-see-patterns) explique comment ces habitudes deviennent des motifs lus d’un coup d’œil, et [les jeux comme Tetris](/blog/games-like-tetris) examine ce qui rend les jeux d’emboîtement spatial intéressants.',
+          'Pour voir quelles habitudes spatiales un plateau coulissant demande, essayez le [plateau dans le navigateur](/play). Notre article sur le [regroupement d’informations](/blog/chunking-how-expert-puzzlers-see-patterns) explique comment ces habitudes deviennent des motifs lus d’un coup d’œil, et [les jeux comme Tetris](/blog/games-like-tetris) examine ce qui rend les jeux d’emboîtement spatial intéressants.',
         ],
       },
     },
@@ -520,7 +520,7 @@ export const fr1: ExtraGuides = {
         title: 'Que cela reste un jeu',
         paragraphs: [
           'Tout cela comporte un risque. La pratique délibérée, telle qu’Ericsson et ses collègues l’ont définie, n’est pas agréable en soi : c’est du travail. Un jeu de casse-tête transformé en programme d’entraînement peut cesser d’être ce que vous aimiez. La plupart des joueurs occasionnels s’en tirent mieux avec une version légère : profitez de la plupart des plateaux, et entraînez-vous sur quelques-uns.',
-          'C’est à peu près ainsi qu’OutBrick est fait pour être joué. Ses 2 000 plateaux sont répartis en 100 chapitres, une forme de progression dont nous avons parlé dans [comment construire une courbe de difficulté plus bienveillante](/blog/kinder-difficulty-curve). L’objectif de coups et les étoiles vous donnent un retour si vous le souhaitez, et se font oublier sinon. Et les motifs que vous construisez en chemin, décrits dans notre article sur le [chunking](/blog/chunking-how-expert-puzzlers-see-patterns), sont le vrai fruit de la pratique : pas un chiffre, mais une façon de voir le plateau.',
+          'C’est à peu près ainsi qu’OutBrick est fait pour être joué. Ses 2 000 plateaux sont répartis en 100 chapitres, une forme de progression dont nous avons parlé dans [comment construire une courbe de difficulté plus bienveillante](/blog/kinder-difficulty-curve). L’objectif de coups et les étoiles vous donnent un retour si vous le souhaitez, et se font oublier sinon. Et les motifs que vous construisez en chemin, décrits dans notre article sur le [regroupement d’informations](/blog/chunking-how-expert-puzzlers-see-patterns), sont le vrai fruit de la pratique : pas un chiffre, mais une façon de voir le plateau.',
         ],
       },
     },
@@ -537,7 +537,7 @@ export const fr1: ExtraGuides = {
     title: 'Le moment eurêka : ce que fait le cerveau lors de l’insight',
     dek: 'Le déclic d’un casse-tête résolu laisse une trace dans le cerveau. L’insight, pourquoi l’eurêka voit souvent juste, et quand il se trompe.',
     imageAlt: 'Peach et Vio de part et d’autre d’un iPhone affichant l’Usine à boutons sur la carte du Voyage d’OutBrick, avec des briques jaunes et rouges flottant à côté',
-    tags: ['insight', 'moment eurêka', 'résolution de problèmes', 'psychologie cognitive', 'recherche jeux de casse-tête'],
+    tags: ["compréhension soudaine","moment eurêka","résolution de problèmes","psychologie cognitive","recherche jeux de casse-tête"],
     intro: 'Il y a deux façons de résoudre un casse-tête. Parfois, on avance vers la réponse pas à pas, avec le sentiment régulier de s’en approcher. D’autres fois, rien ne semble bouger, puis d’un coup la réponse est là, évidente et complète, accompagnée d’une décharge de plaisir. Cette seconde expérience, le moment eurêka, fascine les psychologues depuis un siècle. Depuis une vingtaine d’années, les neurosciences commencent à montrer qu’il ne s’agit pas d’un simple sentiment posé sur la pensée ordinaire, mais d’un chemin différent vers la solution.',
     keyTakeaways: [
       'Les solutions par insight arrivent soudainement, sans le sentiment progressif de s’approcher qui caractérise la résolution pas à pas.',
@@ -564,7 +564,7 @@ export const fr1: ExtraGuides = {
         title: 'Comment naît l’insight : changer de représentation',
         paragraphs: [
           'Les psychologues cognitifs expliquent l’insight comme un changement dans la façon de se représenter un problème. Günther Knoblich, Stellan Ohlsson et leurs collègues l’ont testé avec l’arithmétique des allumettes : des égalités fausses, formées d’allumettes, qui deviennent vraies en déplaçant une seule allumette. Les problèmes devenaient bien plus difficiles quand la solution exigeait d’assouplir une règle que l’on avait supposée sans s’en rendre compte, ou de défaire un chunk familier, par exemple voir un X comme deux allumettes distinctes plutôt que comme un seul symbole.',
-          'Cela relie l’insight au [chunking](/blog/chunking-how-expert-puzzlers-see-patterns). Les chunks qui rendent les experts rapides sont ceux-là mêmes qu’il faut parfois briser pour qu’une nouvelle solution apparaisse. Une impasse sur un plateau signifie souvent que vous traitez comme fixe quelque chose qui ne l’est pas : une brique dont vous avez décidé qu’elle devait sortir en dernier, ou un couloir dont vous avez décidé qu’il devait rester libre.',
+          'Cela relie l’insight au [regroupement d’informations](/blog/chunking-how-expert-puzzlers-see-patterns). Les chunks qui rendent les experts rapides sont ceux-là mêmes qu’il faut parfois briser pour qu’une nouvelle solution apparaisse. Une impasse sur un plateau signifie souvent que vous traitez comme fixe quelque chose qui ne l’est pas : une brique dont vous avez décidé qu’elle devait sortir en dernier, ou un couloir dont vous avez décidé qu’il devait rester libre.',
           'Cela suggère aussi pourquoi les pauses aident. S’éloigner peut desserrer suffisamment une hypothèse pour que la représentation bascule, ce qui explique que tant de moments eurêka surviennent après une pause. Nous abordons cela dans [bloqué sur un casse-tête ? Faire une pause, selon la science](/blog/stuck-on-a-puzzle-incubation-effect).',
         ],
       },

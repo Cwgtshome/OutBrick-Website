@@ -42,7 +42,7 @@ export default function PressPage() {
   const latest = pressReleases[0];
 
   return (
-    <EditorialPage current="press" className="bz">
+    <EditorialPage page={'/press'} current="press" className="bz">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Press room' }]} />

@@ -18,15 +18,21 @@
  * - References (citations) stay in their original language.
  */
 
-import { getArticle, type BlogArticle, type BlogSection } from '../blog';
-import { de } from '../blog-l10n/de';
-import { es } from '../blog-l10n/es';
-import { fr } from '../blog-l10n/fr';
-import { ja } from '../blog-l10n/ja';
-import { extraGuides } from '../blog-l10n/extra';
-import { siteUrl } from '../site';
-import type { Locale, TranslatedLocale } from './locales';
-import { translatedLocales } from './locales';
+import { articles, getArticle, type BlogArticle, type BlogSection } from '../blog.ts';
+import { de } from '../blog-l10n/de.ts';
+import { es } from '../blog-l10n/es.ts';
+import { fr } from '../blog-l10n/fr.ts';
+import { ja } from '../blog-l10n/ja.ts';
+import { extraGuides } from '../blog-l10n/extra/index.ts';
+import { remainingFr } from '../blog-l10n/remaining/fr.ts';
+import { remainingDe } from '../blog-l10n/remaining/de.ts';
+import { remainingEs } from '../blog-l10n/remaining/es.ts';
+import { remainingJa } from '../blog-l10n/remaining/ja.ts';
+const remainingGuides = { fr: remainingFr, de: remainingDe, es: remainingEs, ja: remainingJa };
+import { siteUrl } from '../site.ts';
+import { localizedAsset } from './assets.ts';
+import type { Locale, TranslatedLocale } from './locales.ts';
+import { translatedLocales } from './locales.ts';
 
 /** The five cornerstone guides, typed section by section. */
 const cornerstoneSlugs = [
@@ -44,7 +50,7 @@ export type GuideSlug = (typeof cornerstoneSlugs)[number];
  */
 export const translatedGuideSlugs: readonly string[] = [
   ...cornerstoneSlugs,
-  ...Object.keys(extraGuides.fr).filter((slug) => translatedLocales.every((l) => slug in extraGuides[l])),
+  ...articles.map(a => a.slug).filter(slug => !(cornerstoneSlugs as readonly string[]).includes(slug)),
 ];
 
 export function isTranslatedGuide(slug: string): boolean {
@@ -274,6 +280,8 @@ const frUi: JournalUi = {
   previousStory: 'Guide précédent',
   nextStory: 'Guide suivant',
   categories: {
+    "Success stories": "Réussites marquantes",
+    "Learning through play": "Apprendre en jouant",
     'Game craft': 'Conception de jeux',
     'Inclusive design': 'Conception inclusive',
     'Social play': 'Jouer ensemble',
@@ -344,6 +352,8 @@ const deUi: JournalUi = {
   previousStory: 'Vorheriger Ratgeber',
   nextStory: 'Nächster Ratgeber',
   categories: {
+    "Success stories": "Erfolgsgeschichten",
+    "Learning through play": "Spielerisch lernen",
     'Game craft': 'Spieldesign',
     'Inclusive design': 'Inklusives Design',
     'Social play': 'Gemeinsam spielen',
@@ -377,7 +387,7 @@ const deUi: JournalUi = {
 
 const esUi: JournalUi = {
   breadcrumb: 'Ruta de navegación',
-  journal: 'Journal',
+  journal: 'Revista',
   readingTime: (minutes) => `${minutes} min de lectura`,
   published: 'Publicado el',
   updated: 'Actualizado el',
@@ -414,6 +424,8 @@ const esUi: JournalUi = {
   previousStory: 'Guía anterior',
   nextStory: 'Guía siguiente',
   categories: {
+    "Success stories": "Historias de éxito",
+    "Learning through play": "Aprender jugando",
     'Game craft': 'Diseño de juegos',
     'Inclusive design': 'Diseño inclusivo',
     'Social play': 'Juego social',
@@ -447,11 +459,11 @@ const esUi: JournalUi = {
 
 const jaUi: JournalUi = {
   breadcrumb: 'パンくずリスト',
-  journal: 'Journal',
+  journal: '記事',
   readingTime: (minutes) => `${minutes}分で読めます`,
   published: '公開日',
   updated: '更新日',
-  figcaption: 'Journalのイラスト',
+  figcaption: 'ジャーナルのイラスト',
   inThisStory: 'この記事の内容',
   toc: '目次',
   allStories: '日本語のガイド一覧',
@@ -466,7 +478,7 @@ const jaUi: JournalUi = {
   newTab: '（新しいタブで開きます）',
   writtenBy: '執筆',
   moreFrom: (name) => (name.startsWith('OutBrick') ? '編集部のほかの記事' : `${name.split(' ')[0]}のほかの記事`),
-  gameNoteTitle: 'このJournalのとなりにあるゲーム',
+  gameNoteTitle: 'このジャーナルのとなりにあるゲーム',
   gameNoteBody:
     'OutBrickは、ブロックをスライドして色分けするパズルです。ソルバーで検証済みの2,000ステージ、ブロックでできた167の村、9人のブロックのなかま。App Storeで無料。ライフと任意のリワード動画があり、時間制限はどこにもありません。',
   costsLink: 'あなたが払うもの',
@@ -480,10 +492,12 @@ const jaUi: JournalUi = {
   copySectionLink: (title) => `「${title}」へのリンクをコピー`,
   sourceCard: (n) => `出典${n}`,
   filedUnder: 'カテゴリーとタグ',
-  storyNav: 'Journalのほかのガイド',
+  storyNav: 'ジャーナルのほかのガイド',
   previousStory: '前のガイド',
   nextStory: '次のガイド',
   categories: {
+    "Success stories": "成功事例",
+    "Learning through play": "遊びを通じた学び",
     'Game craft': 'ゲームデザイン',
     'Inclusive design': 'インクルーシブデザイン',
     'Social play': '一緒に遊ぶ',
@@ -502,11 +516,11 @@ const jaUi: JournalUi = {
   },
   languages: 'ほかの言語で読む',
   index: {
-    title: 'OutBrick Journal：日本語で読めるパズルガイド',
+    title: 'OutBrickジャーナル：日本語で読めるパズルガイド',
     description:
-      'OutBrick Journalのガイドを日本語で。スライドパズルの解き方、色分けパズルのコツ、癒されるパズルゲーム、オフラインで遊べるゲームを紹介します。',
-    label: 'OutBrick Journal',
-    h1: 'OutBrick Journal 日本語版',
+      'OutBrick ジャーナルのガイドを日本語で。スライドパズルの解き方、色分けパズルのコツ、癒されるパズルゲーム、オフラインで遊べるゲームを紹介します。',
+    label: 'OutBrickジャーナル',
+    h1: 'OutBrickジャーナル 日本語版',
     lede: 'OutBrickの開発チームによる実践ガイドを、英語から翻訳しました。ステージの読み方、手数を減らすコツ、本当に落ち着けるパズルゲームの見分け方、電車や飛行機で遊ぶゲームの選び方。研究にもとづく記述には、すべて出典へのリンクがついています。',
     count: (n) => `${n}本のガイド`,
     guides: 'ガイド',
@@ -566,12 +580,13 @@ function sameShape(what: string, english: unknown[] | undefined, translated: unk
 export function localizeArticle(slug: string, locale: TranslatedLocale): BlogArticle {
   const english = getArticle(slug);
   if (!english) throw new Error(`lib/i18n/blog.ts: ${slug} is not in lib/blog.ts`);
-  const t = ((guides[locale] as Record<string, unknown>)[slug] ?? extraGuides[locale][slug]) as ExtraGuideTranslation | undefined;
+  const t = ((guides[locale] as Record<string, unknown>)[slug] ?? extraGuides[locale][slug] ?? remainingGuides[locale][slug]) as ExtraGuideTranslation | undefined;
   if (!t) throw new Error(`lib/blog-l10n: ${slug} has no ${locale} translation`);
   const where = `${locale}/${slug}`;
   const tSections = t.sections as Record<string, SectionTranslation>;
   const sectionIds = Object.keys(tSections);
   if (sectionIds.length !== english.sections.length) throw new Error(`lib/blog-l10n: ${where} has ${sectionIds.length} sections, the English has ${english.sections.length}`);
+  sameShape(`${where} tags`, english.tags, t.tags);
   sameShape(`${where} keyTakeaways`, english.keyTakeaways, t.keyTakeaways);
   sameShape(`${where} faqs`, english.faqs, t.faqs);
 
@@ -590,6 +605,7 @@ export function localizeArticle(slug: string, locale: TranslatedLocale): BlogArt
     ...english,
     title: t.title,
     dek: t.dek,
+    image: localizedAsset(english.image, locale),
     imageAlt: t.imageAlt,
     tags: t.tags,
     intro: t.intro,
@@ -606,6 +622,19 @@ export function localizeArticle(slug: string, locale: TranslatedLocale): BlogArt
  * all four languages carry it, but a missing section or a dropped paragraph in one language
  * should fail the build the day it is written, not the day the last language lands.
  */
-for (const l of translatedLocales) {
-  for (const slug of Object.keys(extraGuides[l])) localizeArticle(slug, l);
+export function assertCompleteArticleTranslations() {
+  const expected = new Set(articles.map(a => a.slug));
+  if (expected.size !== articles.length) throw new Error('Duplicate English article slugs');
+  for (const locale of translatedLocales) {
+    const supplied: ExtraGuides = { ...guides[locale], ...extraGuides[locale], ...remainingGuides[locale] };
+    const missing = [...expected].filter(slug => !supplied[slug]);
+    const orphan = Object.keys(supplied).filter(slug => !expected.has(slug));
+    if (missing.length || orphan.length) throw new Error(`Article coverage ${locale}: missing ${missing.join(', ')}; orphan ${orphan.join(', ')}`);
+    for (const slug of expected) {
+      const article = localizeArticle(slug, locale);
+      const strings = [article.title, article.dek, article.imageAlt, article.intro, ...article.tags, ...article.keyTakeaways, ...article.sections.flatMap(s => [s.title, ...s.paragraphs, ...(s.bullets ?? []), ...(s.note ? [s.note] : [])]), ...(article.faqs ?? []).flatMap(f => [f.question, f.answer])];
+      if (strings.some(text => !text?.trim())) throw new Error(`Empty translated article field ${locale}/${slug}`);
+    }
+  }
 }
+assertCompleteArticleTranslations();

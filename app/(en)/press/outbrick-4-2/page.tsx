@@ -60,7 +60,7 @@ export default function PressReleasePage() {
   );
 
   return (
-    <EditorialPage current="press" className="bz">
+    <EditorialPage page={'/press/outbrick-4-2'} current="press" className="bz">
       <header className="ed-band-ink ed-hero bz-releasehead">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { href: '/press', label: 'Press room' }, { label: 'OutBrick 4.2' }]} />

@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { tourBoardCount } from '../../../../../lib/board-levels';
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: ResultPageProps): Promise<Met
   return {
     title: { absolute: result.title },
     description: result.description,
-    alternates: { canonical: path },
+    alternates: localeAlternates('en', path ),
     robots: { index: false, follow: true },
     openGraph: {
       type: 'website',
@@ -103,7 +104,7 @@ export default async function ResultPage({ params }: ResultPageProps) {
         </section>
       </main>
 
-      <VillageFooter />
+      <VillageFooter page={`/play/result/${result.id}`} />
     </div>
   );
 }

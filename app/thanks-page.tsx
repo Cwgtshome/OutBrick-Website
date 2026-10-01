@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { localePath, type Locale } from '../lib/i18n/locales';
 import type { ReactNode } from 'react';
 import { pageMetadata } from '../lib/site';
 import { Course, docNav, VillageFooter, VillageHeader } from './village-shell';
@@ -18,16 +19,21 @@ export function ThanksPage({
   title,
   children,
   back,
+  locale = 'en',
+  page,
 }: {
+  locale?: Locale;
+  page?: string;
   eyebrow: string;
   title: string;
   children: ReactNode;
   back: { href: string; label: string };
 }) {
+  const ui = { en: ['Skip to content', 'Help and legal', 'Back to OutBrick'], fr: ['Aller au contenu', 'Aide et informations juridiques', 'Retour à OutBrick'], de: ['Zum Inhalt springen', 'Hilfe und Rechtliches', 'Zurück zu OutBrick'], es: ['Ir al contenido', 'Ayuda e información legal', 'Volver a OutBrick'], ja: ['本文へ移動', 'ヘルプと法的情報', 'OutBrickに戻る'] }[locale];
   return (
     <div className="ob-site">
-      <a className="skip" href="#main">Skip to content</a>
-      <VillageHeader links={docNav} label="Help and legal" />
+      <a className="skip" href="#main">{ui[0]}</a>
+      <VillageHeader links={docNav} label={ui[1]} locale={locale} />
       <main id="main">
         <div className="doc-head thanks-head">
           <div className="wrap">
@@ -37,13 +43,13 @@ export function ThanksPage({
             <div className="thanks-body">{children}</div>
             <p className="thanks-actions">
               <a className="btn" href={back.href}>{back.label}</a>
-              <a className="thanks-home" href="/">Back to OutBrick</a>
+              <a className="thanks-home" href={localePath(locale, '/')}>{ui[2]}</a>
             </p>
           </div>
           <div className="road" aria-hidden="true" />
         </div>
       </main>
-      <VillageFooter />
+      <VillageFooter locale={locale} page={page} />
     </div>
   );
 }

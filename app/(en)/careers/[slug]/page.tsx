@@ -77,7 +77,7 @@ export default async function JobPage({ params }: JobPageProps) {
   const friend = friends.find((f) => f.id === job.friend);
 
   return (
-    <EditorialPage className="bz" tone={job.tone}>
+    <EditorialPage page={`/careers/${job.slug}`} className="bz" tone={job.tone}>
       <header className="ed-band-ink ed-hero bz-jobhead">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { href: '/careers', label: 'Careers' }, { label: job.title }]} />

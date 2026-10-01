@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { cast, passes, villages } from '../../lib/villages';
 import { chromeCopy } from '../../lib/i18n/chrome';
 import { homeCopy } from '../../lib/i18n/home';
+import { localizedAsset } from '../../lib/i18n/assets';
 import { localeAlternates, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { AppStoreBadge, Course, homeNavFor, VillageFooter, VillageHeader, BrandMark } from '../village-shell';
 import { VillageMotion } from '../village-motion';
@@ -25,6 +26,7 @@ export function homeMetadata(locale: Locale): Metadata {
     title: locale === 'en' ? copy.title : { absolute: copy.title },
     description: copy.description,
     alternates: localeAlternates(locale, '/'),
+    twitter: { card: 'summary_large_image', title: copy.ogTitle, description: copy.ogDescription, images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, alt: copy.ogImageAlt }] },
     openGraph: {
       type: 'website',
       url,
@@ -32,7 +34,7 @@ export function homeMetadata(locale: Locale): Metadata {
       locale: ogLocales[locale],
       title: copy.ogTitle,
       description: copy.ogDescription,
-      images: [{ url: '/og.png', width: 1200, height: 630, alt: copy.ogImageAlt }],
+      images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, width: 1200, height: 630, alt: copy.ogImageAlt }],
     },
   };
 }
@@ -180,7 +182,7 @@ export function HomePage({ locale }: { locale: Locale }) {
                 </span>
                 <div className="phone">
                   <img
-                    src="/assets/villages/garden-city.jpg"
+                    src={localizedAsset("/assets/villages/garden-city.jpg", locale)}
                     width={520}
                     height={1131}
                     fetchPriority="high"
@@ -228,7 +230,7 @@ export function HomePage({ locale }: { locale: Locale }) {
                 return (
                   <li className="step" key={shot.n} data-reveal="slide" style={{ '--d': `${(shot.n - 1) * 110}ms` } as Vars}>
                     <figure className="step-shot">
-                      <img loading="lazy" decoding="async" src={shot.src} srcSet={shot.srcSet} sizes="(max-width: 760px) 80vw, 320px" width={shot.w} height={shot.h} alt={step.alt} />
+                      <img loading="lazy" decoding="async" src={localizedAsset(shot.src, locale)} srcSet={shot.srcSet ? localizedAsset(shot.srcSet, locale) : undefined} sizes="(max-width: 760px) 80vw, 320px" width={shot.w} height={shot.h} alt={step.alt} />
                     </figure>
                     <div className="step-copy">
                       <span className="step-n" aria-hidden="true">{shot.n}</span>
@@ -294,7 +296,7 @@ export function HomePage({ locale }: { locale: Locale }) {
                         <img
                           loading="lazy"
                           decoding="async"
-                          src={`/assets/villages/${village.slug}.jpg`}
+                          src={localizedAsset(`/assets/villages/${village.slug}.jpg`, locale)}
                           width={520}
                           height={1131}
                           alt={t.journey.villageAlt(village.name)}
@@ -417,13 +419,13 @@ export function HomePage({ locale }: { locale: Locale }) {
             {/* Current iPad and iPhone screens, cut from the store frames (public/assets/screens). */}
             <figure className="device-stage" aria-label={t.apple.showcase.label} data-reveal="rise">
               <div className="dev dev-ipad">
-                <img loading="lazy" decoding="async" src="/assets/screens/ipad-home-520.webp" srcSet="/assets/screens/ipad-home-520.webp 520w, /assets/screens/ipad-home-1040.webp 1040w" sizes="(max-width: 760px) 86vw, 560px" width={990} height={1296} alt={t.apple.showcase.ipad} />
+                <img loading="lazy" decoding="async" src={localizedAsset("/assets/screens/ipad-home-520.webp", locale)} srcSet={localizedAsset("/assets/screens/ipad-home-520.webp 520w, /assets/screens/ipad-home-1040.webp 1040w", locale)} sizes="(max-width: 760px) 86vw, 560px" width={990} height={1296} alt={t.apple.showcase.ipad} />
               </div>
               <div className="dev dev-phone dev-phone-a">
-                <img loading="lazy" decoding="async" src="/assets/screens/iphone-board-360.webp" srcSet="/assets/screens/iphone-board-360.webp 360w, /assets/screens/iphone-board-720.webp 720w" sizes="(max-width: 760px) 40vw, 250px" width={737} height={1564} alt={t.apple.showcase.iphone} />
+                <img loading="lazy" decoding="async" src={localizedAsset("/assets/screens/iphone-board-360.webp", locale)} srcSet={localizedAsset("/assets/screens/iphone-board-360.webp 360w, /assets/screens/iphone-board-720.webp 720w", locale)} sizes="(max-width: 760px) 40vw, 250px" width={737} height={1564} alt={t.apple.showcase.iphone} />
               </div>
               <div className="dev dev-phone dev-phone-b">
-                <img loading="lazy" decoding="async" src="/assets/screens/iphone-collection-360.webp" srcSet="/assets/screens/iphone-collection-360.webp 360w, /assets/screens/iphone-collection-720.webp 720w" sizes="(max-width: 760px) 40vw, 250px" width={737} height={1564} alt={t.apple.showcase.iphone2} />
+                <img loading="lazy" decoding="async" src={localizedAsset("/assets/screens/iphone-collection-360.webp", locale)} srcSet={localizedAsset("/assets/screens/iphone-collection-360.webp 360w, /assets/screens/iphone-collection-720.webp 720w", locale)} sizes="(max-width: 760px) 40vw, 250px" width={737} height={1564} alt={t.apple.showcase.iphone2} />
               </div>
             </figure>
 
@@ -453,7 +455,7 @@ export function HomePage({ locale }: { locale: Locale }) {
                 <ul className="stickers" aria-hidden="true">
                   {stickers.map((name, index) => (
                     <li key={name} style={{ '--k': index } as Vars}>
-                      <img loading="lazy" decoding="async" src={`/assets/stickers/${name}-160.webp`} srcSet={`/assets/stickers/${name}-160.webp 1x, /assets/stickers/${name}-320.webp 2x`} width={160} height={160} alt="" />
+                      <img loading="lazy" decoding="async" src={localizedAsset(`/assets/stickers/${name}-160.webp`, locale)} srcSet={localizedAsset(`/assets/stickers/${name}-160.webp 1x, /assets/stickers/${name}-320.webp 2x`, locale)} width={160} height={160} alt="" />
                     </li>
                   ))}
                 </ul>

@@ -8,7 +8,7 @@ export const metadata = thanksMetadata(
 
 export default function CareersThanksPage() {
   return (
-    <ThanksPage eyebrow="Application received" title="Thank you for applying." back={{ href: '/careers', label: 'See all open roles' }}>
+    <ThanksPage page={'/careers/thanks'} eyebrow="Application received" title="Thank you for applying." back={{ href: '/careers', label: 'See all open roles' }}>
       <p className="lede">
         A person reads every application. If it is a match, the next step is a short video call; either
         way, we will write to the email address you gave.

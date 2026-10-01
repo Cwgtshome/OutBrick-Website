@@ -6,7 +6,7 @@ export const fr5: ExtraGuides = {
     title: 'Jeux vidéo et confinement : rester liés à distance',
     dek: 'Ce que les enquêtes et entretiens menés pendant les confinements ont appris sur les jeux, la solitude et les familles, et ce qu’on en retient aujourd’hui.',
     imageAlt: 'Bloo et une brique verte de part et d’autre d’un téléphone affichant la carte du Voyage d’OutBrick à Celebration Square, sur un mur de briques bleu marine',
-    tags: ['jouer ensemble', 'jeux vidéo et confinement', 'solitude', 'jeux en ligne', 'lien social'],
+    tags: ["jouer ensemble","COVID-19 et jeux","solitude","communauté","jeux en ligne"],
     intro: 'Au printemps 2020, écoles fermées et pays entiers priés de rester chez eux, beaucoup de gens ont fait quelque chose qu’on aurait jadis qualifié d’asocial : ils ont joué davantage aux jeux vidéo. Des parents qui rationnaient les écrans depuis des années se sont installés sur le canapé avec leurs enfants et une console. Des amis qui ne pouvaient plus se retrouver au café se sont donné rendez-vous sur une île d’Animal Crossing. Les chercheurs l’ont remarqué et, dans les deux années qui ont suivi, ont publié un petit corpus d’études évaluées par les pairs sur ce que ce jeu avait réellement apporté. Les résultats sont plus nuancés que les gros titres enjoués de l’époque, et plus intéressants.',
     keyTakeaways: [
       'De grandes enquêtes menées pendant le confinement montrent que la plupart des joueurs estimaient que les jeux aidaient leur bien-être, surtout en leur offrant un moyen de garder le contact.',
@@ -150,7 +150,7 @@ export const fr5: ExtraGuides = {
     title: 'La gamification fonctionne-t-elle ? Les méta-analyses',
     dek: 'Points, badges et classements devaient rendre tout captivant. Ce qu’ont trouvé les synthèses de centaines d’études, et où les preuves se font rares.',
     imageAlt: 'Sprout et une brique jaune qui fait un clin d’œil de part et d’autre d’un téléphone affichant la carte du Voyage d’OutBrick à Autumn Orchard',
-    tags: ['gamification', 'ludification', 'motivation', 'game design', 'recherche'],
+    tags: ["ludification","la ludification fonctionne-t-elle","motivation","conception de jeux","recherche"],
     intro: 'Vers 2010, la gamification devait tout changer. Ajoutez des points, des badges et des classements aux devoirs, au sport, à la banque ou à la déclaration d’impôts, disait-on, et les gens s’y mettraient avec l’enthousiasme qu’ils mettent dans les jeux. Quinze ans plus tard, on compte des centaines d’études et plusieurs synthèses rigoureuses qui les rassemblent. Le verdict honnête n’est ni l’engouement ni le rejet. La gamification tend à produire des effets positifs faibles à modérés, ces effets dépendent fortement du contexte, et une part surprenante de la recherche n’est pas assez solide pour conclure grand-chose.',
     keyTakeaways: [
       'Les synthèses penchent du côté positif : la plupart des études trouvent un bénéfice, mais une large part rapporte des résultats mitigés ou nuls.',
@@ -223,7 +223,7 @@ export const fr5: ExtraGuides = {
     title: 'Puzzle quotidien : pourquoi il devient un rituel partagé',
     dek: 'Le même puzzle pour tous, une fois par jour : ce que la recherche sur les rituels, l’attention partagée et le partage des émotions dit des jeux quotidiens.',
     imageAlt: 'Une brique rouge et Sprout de part et d’autre d’un téléphone affichant l’écran d’accueil d’OutBrick avec un bouton vert Niveau 521',
-    tags: ['jeu quotidien', 'puzzle du jour', 'rituel', 'jouer entre amis', 'Wordle'],
+    tags: ["jeux quotidiens","rituels","jouer ensemble","puzzle quotidien","Wordle"],
     intro: 'Il y a un type de message qui circule dans les groupes de famille, entre vieux amis et d’un bureau à l’autre : une petite grille de carrés colorés, un score, parfois un seul mot. Il signifie « j’ai fait le puzzle du jour », et la réponse signifie « moi aussi ». Les mots croisés des journaux fonctionnent ainsi depuis un siècle, et une vague de jeux quotidiens a rendu la chose planétaire. On résout souvent le puzzle seul, dans une minute de libre, et pourtant l’expérience est sociale comme l’est rarement un puzzle choisi dans une liste de milliers. La psychologie en offre quelques bonnes explications.',
     keyTakeaways: [
       'Une expérience paraît plus intense quand on sait que quelqu’un d’autre vit la même au même moment.',
@@ -289,7 +289,7 @@ export const fr5: ExtraGuides = {
     title: 'Nostalgie des jeux vidéo : pourquoi les vieux jeux plaisent',
     dek: 'Pourquoi les jeux de votre enfance vous attirent encore, l’effet de la nostalgie sur l’humeur et le lien social, et pourquoi le rétro se vend si bien.',
     imageAlt: 'Une brique rose tenant une baguette étoilée et une brique verte de part et d’autre d’un téléphone affichant la carte du Voyage d’OutBrick à Bamboo Springs',
-    tags: ['nostalgie jeux vidéo', 'jeux rétro', 'nostalgie', 'bien-être', 'remake'],
+    tags: ["nostalgie des jeux vidéo","jeux rétro","nostalgie","bien-être","succès d’un jeu"],
     intro: 'Faites entendre les premières notes d’un jeu que vous adoriez à dix ans et il se passe quelque chose qui n’a pas grand-chose à voir avec le jeu. Vous revoyez la moquette où vous étiez assis, l’ami qui avait la deuxième manette, le long après-midi d’été qu’il a rempli. La nostalgie a bâti tout un pan de l’industrie du jeu vidéo : remasters, consoles rétro, hommages en pixel art et ce flot régulier de gens qui réinstallent des jeux découverts il y a des décennies. Les psychologues ont longtemps vu la nostalgie comme une forme de mal du pays, presque une maladie. La recherche moderne raconte une histoire bien plus chaleureuse, et les jeux en sont l’un des exemples les plus clairs.',
     keyTakeaways: [
       'La nostalgie est une émotion courante et surtout positive, souvent déclenchée par un moral en berne ou la solitude, qui tend à remonter l’humeur et à renforcer le sentiment de lien.',
@@ -361,7 +361,7 @@ export const fr5: ExtraGuides = {
     title: 'Compétition amicale : défier ses amis sans pression',
     dek: 'Rivaliser entre amis peut amuser ou miner en silence. Ce que dit la recherche sur gagnants, perdants et équipes, et comment garder un défi amical.',
     imageAlt: 'Une brique verte et une brique rouge de part et d’autre d’un téléphone affichant la carte du Voyage d’OutBrick à Bamboo Springs',
-    tags: ['compétition amicale', 'jouer entre amis', 'compétition et coopération', 'motivation', 'défi entre amis'],
+    tags: ["compétition amicale","jouer ensemble","compétition et coopération","motivation","jouer avec des amis"],
     intro: 'Certains des meilleurs moments de jeu viennent d’un ami : le texto qui dit « bats ça », la dispute familiale autour d’un jeu de société, la collègue qui a eu trois étoiles sur un niveau où vous bloquez encore. Certains des pires aussi. La compétition avec des proches pèse plus lourd que la compétition avec des inconnus, parce qu’elle touche à l’image que nous avons de nous-mêmes et à celle que nous pensons leur renvoyer. La bonne nouvelle, c’est que les chercheurs ont passé des décennies à comprendre ce qui distingue la compétition qui stimule de celle qui use, et que l’essentiel s’applique directement à la façon de défier un ami.',
     keyTakeaways: [
       'Nous nous comparons aux gens qui nous ressemblent : voilà pourquoi le score d’un ami compte plus que celui d’un inconnu.',
@@ -434,7 +434,7 @@ export const fr5: ExtraGuides = {
     title: 'Mots croisés, puzzles, taquins : pourquoi ils durent',
     dek: 'Les casse-tête ont survécu à toutes les modes. Ce que la recherche sur les cruciverbistes, les amateurs de puzzles et le déclic dit de leur longévité.',
     imageAlt: 'Peach et Bloo de part et d’autre d’un téléphone affichant la carte du Voyage d’OutBrick à Button Factory, entourés de briques à tenons flottantes',
-    tags: ['histoire des casse-tête', 'mots croisés', 'puzzle', 'taquin', 'jeux de réflexion'],
+    tags: ["histoire des puzzles","mots croisés","puzzles à assembler","puzzles de blocs coulissants","jeux de puzzle"],
     intro: 'La plupart des engouements s’éteignent. Les casse-tête ont l’étrange habitude de ne pas s’éteindre. Le puzzle est né au XVIIIe siècle pour enseigner la géographie et se vend encore par millions. Les mots croisés sont apparus dans un journal new-yorkais juste avant la Première Guerre mondiale, ont été raillés comme une mode passagère dans les années 1920 et paraissent aujourd’hui dans les journaux et les applis du monde entier. Les puzzles de blocs coulissants ont déferlé sur les États-Unis en 1880 et l’on en conçoit encore de nouveaux. Chacune de ces formes a changé maintes fois de matériau tout en gardant le même plaisir de base. La recherche sur ceux qui les résolvent aide à comprendre ce qu’est ce plaisir.',
     keyTakeaways: [
       'Chaque casse-tête classique fait appel à un esprit différent : les mots croisés au savoir, les mots croisés cryptiques au décryptage, le puzzle aux capacités visuelles et spatiales.',
@@ -574,7 +574,7 @@ export const fr5: ExtraGuides = {
     title: 'Succès et collections : pourquoi on veut tout compléter',
     dek: 'Pourquoi le dernier badge, autocollant ou niveau attire tant, ce que montre vraiment l’effet Zeigarnik, et comment collectionner sans se laisser mener.',
     imageAlt: 'Vio avec son casque et Sprout de part et d’autre d’un téléphone affichant un écran d’OutBrick, entourés de briques à tenons flottantes sur un mur bleu marine',
-    tags: ['succès', 'collection', 'motivation', 'effet Zeigarnik', 'game design'],
+    tags: ["succès","collection","motivation","effet Zeigarnik","conception de jeux"],
     intro: 'Neuf autocollants sur dix dans l’album. Quarante-neuf succès sur cinquante. Un dernier village sur la carte. Peu de choses dans les jeux attirent autant que le dernier élément d’une série, et bien des joueurs se sont surpris à s’acharner sur une tâche qui ne leur plaisait pas vraiment, simplement parce qu’elle compléterait la collection. Cette attraction est réelle, et la psychologie en propose plusieurs explications. Certaines sont solides, d’autres ont été répétées bien au-delà de leurs preuves, et l’une des plus célèbres se révèle, à y regarder de près, être en grande partie un mythe.',
     keyTakeaways: [
       'On accélère à l’approche d’un objectif, et une série qui paraît déjà en partie complète se termine plus vite.',
@@ -642,7 +642,7 @@ export const fr5: ExtraGuides = {
     title: 'Jouer sur plusieurs appareils : ce que dit la recherche',
     dek: 'Téléphone dans le train, tablette sur le canapé, télé le soir : la recherche sur la continuité entre appareils, et comment OutBrick relie six plateformes.',
     imageAlt: 'Une brique rose avec une baguette étoilée et Bloo de part et d’autre d’un téléphone affichant la carte du Voyage d’OutBrick à Button Factory',
-    tags: ['jeu multi-appareils', 'synchronisation iCloud', 'appareils Apple', 'game design', 'jeux mobiles'],
+    tags: ["jeu multi-appareils","synchronisation iCloud","appareils Apple","conception de jeux","jeux mobiles"],
     intro: 'Beaucoup d’entre nous vivent désormais entre plusieurs écrans. Un jeu commencé sur le téléphone dans les transports se poursuit le soir sur une tablette, et peut-être le week-end sur la télévision. Quand ça marche, on le remarque à peine. Quand ça ne marche pas, on connaît cet agacement particulier d’un niveau qu’on sait avoir réussi et qui apparaît verrouillé, ou d’une progression coincée sur un appareil resté dans une autre pièce. Les chercheurs en interaction humain-machine étudient la vie multi-appareils depuis bien plus de dix ans, surtout en contexte professionnel, et leurs résultats s’appliquent parfaitement au jeu. Nous faisons OutBrick pour six plateformes Apple : c’est donc aussi l’occasion d’expliquer nos choix.',
     keyTakeaways: [
       'On utilise ses appareils les uns après les autres bien plus que tous à la fois, ce qui fait de la continuité le principal problème à résoudre.',

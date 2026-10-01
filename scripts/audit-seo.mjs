@@ -40,6 +40,7 @@ function resolves(pathname) {
   let p = decodeURIComponent(pathname);
   if (p.length > 1) p = p.replace(/\/$/, '');
   for (const r of redirects) {
+    if (r.status >= 400) continue;
     if (r.from === p) return true;
     if (r.from.endsWith('/*') && p.startsWith(r.from.slice(0, -1))) return true;
   }

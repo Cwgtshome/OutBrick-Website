@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react';
 import type { Friend } from '../../lib/villages';
+import { useLocale } from './locale-context';
 import { playFriendMove } from './friend-moves';
 
 type Vars = CSSProperties & Record<`--${string}`, string | number>;
@@ -30,13 +31,13 @@ export type HomeCastCopy = { eyebrow: string; title: string; lede: string; meet:
 export function HomeCast({
   friends,
   copy,
-  meetHrefLang,
 }: {
   friends: Friend[];
   copy: HomeCastCopy;
   /** Set on translated pages: the mascots page is only published in English. */
   meetHrefLang?: string;
 }) {
+  const locale = useLocale();
   const [active, setActive] = useState(0);
   const stageRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -107,7 +108,7 @@ export function HomeCast({
         <p className="lede">
           {copy.lede}
         </p>
-        <a className="btn brick-btn cast-link" href="/mascots" hrefLang={meetHrefLang}>
+        <a className="btn brick-btn cast-link" href={locale === 'en' ? '/mascots' : `/${locale}/mascots`}>
           {copy.meet}
           <span className="arrow" aria-hidden="true" />
         </a>

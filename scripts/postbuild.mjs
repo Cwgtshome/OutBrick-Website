@@ -20,10 +20,14 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { decodeEntities, distDir, indexablePages, metaContent, repoRoot, siteUrl, xmlEscape } from './lib/pages.mjs';
+import { decodeEntities, distDir, indexablePages, listHtmlFiles, fileToRoute, metaContent, repoRoot, siteUrl, xmlEscape } from './lib/pages.mjs';
 
 const { articles, authors } = await import('../lib/blog.ts');
-const { releases, releaseAnchor } = await import('../lib/releases.ts');
+const { localizeArticle, journalUi, assertCompleteArticleTranslations } = await import('../lib/i18n/blog.ts');
+const { homeCopy } = await import('../lib/i18n/home.ts');
+const { translatedLocales, storefronts } = await import('../lib/i18n/locales.ts');
+assertCompleteArticleTranslations();
+const { releases, releaseAnchor, currentReleaseIn } = await import('../lib/releases.ts');
 
 // ---------------------------------------------------------------------------------------
 // Dates
@@ -194,7 +198,7 @@ const entries = pages.map((page) => {
   // An article in English (/blog/<slug>) or translated (/fr/blog/<slug> …): its lastmod is the
   // article's own updatedAt, which a translation shares.
   const articleSlug = page.route.match(/^(?:\/(?:fr|de|es|ja))?\/blog\/([^/]+)$/)?.[1];
-  const collection = page.route.match(/^\/blog\/(category|tag)\/([^/]+)$/);
+  const collection = page.route.match(/^(?:\/(fr|de|es|ja))?\/blog\/(category|tag)\/([^/]+)$/);
   if (articleSlug && articleBySlug.has(articleSlug)) {
     lastmod = isoDate(articleBySlug.get(articleSlug).updatedAt);
   } else if (/^\/(fr|de|es|ja)\/blog$/.test(page.route)) {
@@ -203,7 +207,7 @@ const entries = pages.map((page) => {
     lastmod = guides.map((a) => isoDate(a.updatedAt)).reduce((max, d) => (d > max ? d : max), '') || undefined;
   } else if (collection) {
     // A shelf or tag page changes when one of its stories does.
-    const [, kind, slug] = collection;
+    const [, , kind, slug] = collection;
     const members = articles.filter((a) => (kind === 'category' ? slugify(a.category) === slug : a.tags.some((t) => slugify(t) === slug)));
     lastmod = members.map((a) => isoDate(a.updatedAt)).reduce((max, d) => (d > max ? d : max), '') || undefined;
   } else {
@@ -235,9 +239,9 @@ fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap);
 console.log(`[postbuild] sitemap.xml: ${entries.length} URLs, ${entries.reduce((n, e) => n + e.images.length, 0)} images`);
 
 // Every article in lib/blog.ts should have been prerendered; say so loudly if one was not.
-const builtRoutes = new Set(pages.map((p) => p.route));
+const builtRoutes = new Set(listHtmlFiles().map(fileToRoute));
 for (const a of articles) {
-  if (!builtRoutes.has(`/blog/${a.slug}`)) console.warn(`[postbuild] WARNING: /blog/${a.slug} is in lib/blog.ts but not an indexable page in dist/client`);
+  if (!builtRoutes.has(`/blog/${a.slug}`)) (() => { throw new Error(`[postbuild] Missing English article /blog/${a.slug}`); })();
 }
 // Pages name their translations as hreflang alternates (the home page, the play guide, the
 // translated journal guides); each of those must have been built too, or the sitemap would
@@ -245,7 +249,7 @@ for (const a of articles) {
 for (const e of entries) {
   for (const alt of e.alternates) {
     const route = new URL(alt.href).pathname.replace(/(.)\/$/, '$1');
-    if (!builtRoutes.has(route)) console.warn(`[postbuild] WARNING: ${e.loc} lists hreflang ${alt.lang} ${alt.href}, which is not an indexable page`);
+    if (!builtRoutes.has(route)) (() => { throw new Error(`[postbuild] Missing hreflang target ${alt.lang} ${alt.href} from ${e.loc}`); })();
   }
 }
 
@@ -257,8 +261,8 @@ const mimeFor = (file) => ({ '.webp': 'image/webp', '.png': 'image/png', '.jpg':
 
 const feedArticles = [...articles].sort((a, b) => isoDate(b.publishedAt).localeCompare(isoDate(a.publishedAt)) || a.title.localeCompare(b.title));
 
-function feedItem(a) {
-  const url = `${siteUrl}/blog/${a.slug}`;
+function feedItem(a, locale = 'en') {
+  const url = `${siteUrl}${locale === 'en' ? '' : `/${locale}`}/blog/${a.slug}`;
   const imageUrl = `${siteUrl}${a.image}`;
   const imageFile = path.join(distDir, a.image);
   const length = fs.existsSync(imageFile) ? fs.statSync(imageFile).size : 0;
@@ -281,7 +285,7 @@ function feedItem(a) {
   ].join('\n');
 }
 
-function rss({ title, link, self, description, stories }) {
+function rss({ title, link, self, description, stories, locale = 'en' }) {
   const newest = stories.reduce((max, a) => (isoDate(a.updatedAt) > max ? isoDate(a.updatedAt) : max), '1970-01-01');
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -291,14 +295,14 @@ function rss({ title, link, self, description, stories }) {
     `    <link>${link}</link>`,
     `    <atom:link href="${self}" rel="self" type="application/rss+xml"/>`,
     `    <description>${xmlEscape(description)}</description>`,
-    '    <language>en</language>',
+    `    <language>${locale}</language>`,
     `    <lastBuildDate>${rfc822(newest)}</lastBuildDate>`,
     '    <image>',
     `      <url>${siteUrl}/assets/icon/icon-192.png</url>`,
     `      <title>${xmlEscape(title)}</title>`,
     `      <link>${link}</link>`,
     '    </image>',
-    ...stories.map(feedItem),
+    ...stories.map(a => feedItem(a, locale)),
     '  </channel>',
     '</rss>',
     '',
@@ -355,13 +359,13 @@ const normWords = (text) =>
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[’']/g, '')
     .replace(/colour/g, 'color')
-    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/[^\p{L}\p{N}\p{M}]+/gu, ' ')
     .trim()
     .split(' ')
-    .filter((w) => w.length >= 3 && !STOP.has(w));
+    .filter((w) => w.length >= 1 && !STOP.has(w));
 const unlink = (text) => text.replace(/\[([^\]]+)\]\([^)\s]+\)/g, '$1');
 
-const searchIndex = articles.map((a) => {
+function makeSearchIndex(stories) { return stories.map((a) => {
   const shown = new Set(normWords([a.title, a.dek, a.category, ...a.tags, ...a.sections.map((s) => s.title)].join(' ')));
   const body = [a.intro, ...a.keyTakeaways, ...a.sections.flatMap((s) => [...s.paragraphs, ...(s.bullets ?? []), s.note ?? '']), ...(a.faqs ?? []).flatMap((f) => [f.question, f.answer])]
     .map(unlink)
@@ -382,9 +386,29 @@ const searchIndex = articles.map((a) => {
     k: words.join(' '),
   };
 });
+}
+const searchIndex = makeSearchIndex(articles);
 const indexJson = JSON.stringify(searchIndex);
 fs.writeFileSync(path.join(distDir, 'journal-index.json'), indexJson);
 console.log(`[postbuild] journal-index.json: ${searchIndex.length} stories, ${(indexJson.length / 1024).toFixed(1)} KB`);
+
+// Each language has a complete searchable journal, independent feed, and category feeds.
+for (const locale of translatedLocales) {
+  const ui = journalUi[locale];
+  const localized = feedArticles.map(article => ({ ...localizeArticle(article.slug, locale), category: ui.categories[article.category] ?? article.category }));
+  const dir = path.join(distDir, locale);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'journal-index.json'), JSON.stringify(makeSearchIndex(localized)));
+  fs.writeFileSync(path.join(dir, 'feed.xml'), rss({ title: ui.index.label, link: `${siteUrl}/${locale}/blog`, self: `${siteUrl}/${locale}/feed.xml`, description: ui.index.description, stories: localized, locale }));
+  for (const category of categories) {
+    const slug = slugify(category);
+    const categoryDir = path.join(dir, 'blog/category', slug);
+    fs.mkdirSync(categoryDir, { recursive: true });
+    const label = ui.categories[category] ?? category;
+    fs.writeFileSync(path.join(categoryDir, 'feed.xml'), rss({ title: `${ui.index.label}: ${label}`, link: `${siteUrl}/${locale}/blog/category/${slug}`, self: `${siteUrl}/${locale}/blog/category/${slug}/feed.xml`, description: `${ui.index.label}: ${label}`, stories: feedArticles.filter(a => a.category === category).map(a => ({ ...localizeArticle(a.slug, locale), category: label })), locale }));
+  }
+  console.log(`[postbuild] ${locale}: ${localized.length} search entries and feed items, ${categories.length} category feeds`);
+}
 
 // ---------------------------------------------------------------------------------------
 // RSS 2.0 feed of the release notes: /whats-new/feed.xml, from lib/releases.ts
@@ -433,6 +457,18 @@ const releaseFeed = [
 fs.mkdirSync(path.join(distDir, 'whats-new'), { recursive: true });
 fs.writeFileSync(path.join(distDir, 'whats-new/feed.xml'), releaseFeed);
 console.log(`[postbuild] whats-new/feed.xml: ${releaseItems.length} items`);
+
+for (const locale of translatedLocales) {
+  const release = currentReleaseIn(locale);
+  const url = `${siteUrl}/${locale}/whats-new`;
+  const content = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${xmlEscape(release.headline)}</title><link>${url}</link><atom:link href="${url}/feed.xml" rel="self" type="application/rss+xml"/><description>${xmlEscape(release.headline)}</description><language>${locale}</language><lastBuildDate>${rfc822(release.date)}</lastBuildDate><item><title>${xmlEscape(`OutBrick ${release.version}: ${release.headline}`)}</title><link>${url}#${releaseAnchor(release.version)}</link><guid isPermaLink="true">${url}#${releaseAnchor(release.version)}</guid><pubDate>${rfc822(release.date)}</pubDate><description>${xmlEscape(releaseHtml(release))}</description></item></channel></rss>`;
+  fs.mkdirSync(path.join(distDir, locale, 'whats-new'), { recursive: true });
+  fs.writeFileSync(path.join(distDir, locale, 'whats-new/feed.xml'), content);
+  const manifest = JSON.parse(fs.readFileSync(path.join(distDir, 'site.webmanifest'), 'utf8'));
+  for (const app of manifest.related_applications ?? []) if (app.platform === 'itunes') app.url = app.url.replace('/us/app/', `/${storefronts[locale]}/app/`);
+  manifest.lang = locale; manifest.start_url = `/${locale}`; manifest.description = homeCopy[locale].meta.description;
+  fs.writeFileSync(path.join(distDir, locale, 'site.webmanifest'), JSON.stringify(manifest));
+}
 
 // ---------------------------------------------------------------------------------------
 // llms.txt — https://llmstxt.org
@@ -566,3 +602,9 @@ fs.writeFileSync(
   ].join('\n'),
 );
 console.log(`[postbuild] .well-known/security.txt: expires ${expires.toISOString().slice(0, 10)}`);
+
+// A public commit marker makes production verification unambiguous after deployment.
+const buildCommit = process.env.COMMIT_REF ?? execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8' }).trim();
+if (!/^[a-f\d]{40}$/i.test(buildCommit)) throw new Error('Invalid deployment commit');
+fs.writeFileSync(path.join(distDir, 'build-info.json'), JSON.stringify({ commit: buildCommit, builtAt: new Date().toISOString() }, null, 2) + '\n');
+console.log(`[postbuild] build-info.json: ${buildCommit}`);

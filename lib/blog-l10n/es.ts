@@ -13,7 +13,7 @@ export const es: LocaleGuides = {
     title: 'Cómo resolver rompecabezas de bloques deslizantes',
     dek: 'Empieza por la salida, busca el movimiento que abre hueco y cuenta antes de mover: el método de un diseñador para los rompecabezas de bloques deslizantes.',
     imageAlt: 'Tableros reales de OutBrick sobre una base índigo, encabezados por uno en modo para daltónicos con sus símbolos, mientras unos ladrillos amarillos salen por su puerta y Bricko mira',
-    tags: ['rompecabezas de bloques deslizantes', 'puzle deslizante', 'estrategia para puzles', 'trucos de puzles'],
+    tags: ['rompecabezas de bloques deslizantes', 'estrategia para puzles deslizantes', 'cómo resolver puzles', 'trucos de puzles'],
     intro: 'Un buen rompecabezas de bloques deslizantes está hecho para parecer imposible. Todas las casillas están ocupadas, cada bloque parece estorbar a otro y la salida está en el lado equivocado. Diseño y pruebo tableros así para OutBrick, y los mismos cinco hábitos me sacan de casi todos, sea cual sea el rompecabezas. Ninguno es un truco. Son formas de mirar que convierten un muro de bloques en una lista corta de preguntas.',
     keyTakeaways: [
       'Empieza por la salida y trabaja hacia atrás: los bloques que separan una pieza de su salida son el verdadero problema, y esa lista suele ser corta.',
@@ -86,7 +86,7 @@ export const es: LocaleGuides = {
     title: 'Puzles de ordenar colores: trucos para ahorrar movimientos',
     dek: 'Cómo leer un tablero de ordenar colores, qué color sacar primero y cómo superar el objetivo de movimientos, con las reglas de las estrellas de OutBrick.',
     imageAlt: 'Filas de ladrillos con espigas en rojo, amarillo, turquesa, violeta, azul y verde sobre fondo crema, con un tablero real de OutBrick y una tarjeta de victoria de tres estrellas',
-    tags: ['puzle de ordenar colores', 'juego de ordenar por colores', 'trucos block sort', 'objetivo de movimientos'],
+    tags: ['puzle de ordenar colores', 'trucos para puzles de ordenar bloques', 'estrategia para puzles de ordenar colores', 'objetivo de movimientos'],
     intro: 'Los puzles de ordenar colores se dividen en varias familias: líquidos que se trasvasan de un tubo a otro, pilas que se ordenan en varillas y bloques que se deslizan hacia fuera por puertas de su propio color. OutBrick es de este último tipo y estos trucos están pensados para él, pero la habilidad básica sirve para toda la familia. Se trata de leer qué color está listo para salir, cuál está enterrado y cuál estorba a todos sin que se note. Hacerlo en menos movimientos consiste sobre todo en hacer esa lectura antes del primer movimiento y no después del décimo.',
     keyTakeaways: [
       'Lee todo el tablero antes del primer movimiento: qué colores tienen vía libre hasta su salida, qué ladrillos bloquean más de un color y dónde está el espacio vacío.',
@@ -350,7 +350,7 @@ export const es: LocaleGuides = {
         title: 'Llévate lo bueno contigo',
         paragraphs: [
           'Una buena partida de dos minutos te da una pequeña sensación de progreso y luego te deja decidir qué viene después. Si tienes tiempo para otro tablero, siempre hay otro tablero. Si tienes que irte, el juego puede esperar.',
-          'Por eso OutBrick trata la calma como un requisito de diseño. La investigación no dice que todos los jugadores se beneficien igual, ni demuestra un efecto universal. Sí señala una dirección útil: hacer un juego que respete la autonomía, haga visible el progreso y deje al jugador con más opciones de las que tenía antes. Seguimos el mismo hilo en [Designing a game for the life players actually have](/blog/designing-for-real-life-play) (en inglés).',
+          'Por eso OutBrick trata la calma como un requisito de diseño. La investigación no dice que todos los jugadores se beneficien igual, ni demuestra un efecto universal. Sí señala una dirección útil: hacer un juego que respete la autonomía, haga visible el progreso y deje al jugador con más opciones de las que tenía antes. Seguimos el mismo hilo en [Diseñar un juego para la vida real de quienes juegan](/blog/designing-for-real-life-play).',
         ],
       },
     },

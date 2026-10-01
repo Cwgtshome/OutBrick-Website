@@ -1,3 +1,4 @@
+import { localePath, type Locale } from '../lib/i18n/locales';
 import type { ReactNode } from 'react';
 import { siteUrl } from '../lib/site';
 import { breadcrumbNode, graph, isoDay, ref, ids, webPageNode } from '../lib/structured-data';
@@ -38,10 +39,14 @@ type LegalPageProps = {
   /** The route's own path, so the masthead and the index below can mark it. */
   current?: string;
   children: ReactNode;
+  locale?: Locale;
 };
 
-export function LegalPage({ eyebrow, title, summary, updated, current, children }: LegalPageProps) {
-  const url = current ? `${siteUrl}${current}` : undefined;
+export function LegalPage({ eyebrow, title, summary, updated, current, children, locale = 'en' }: LegalPageProps) {
+  const url = current ? `${siteUrl}${localePath(locale, current)}` : undefined;
+  const ui = { en: ['Skip to content', 'Help and legal', 'Back to OutBrick', 'Updated'], fr: ['Aller au contenu', 'Aide et informations juridiques', 'Retour à OutBrick', 'Mis à jour le'], de: ['Zum Inhalt springen', 'Hilfe und Rechtliches', 'Zurück zu OutBrick', 'Aktualisiert am'], es: ['Ir al contenido', 'Ayuda e información legal', 'Volver a OutBrick', 'Actualizado el'], ja: ['本文へ移動', 'ヘルプと法的情報', 'OutBrickに戻る', '更新日'] }[locale];
+  const day = isoDay(updated);
+  const stamp = locale === 'en' ? updated : new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(day + 'T12:00:00Z'));
   const doc = current ? documents[current] : undefined;
   const structuredData = url
     ? graph(
@@ -54,25 +59,25 @@ export function LegalPage({ eyebrow, title, summary, updated, current, children 
           about: ref(ids.organization),
         }),
         breadcrumbNode(url, [
-          { name: 'OutBrick', path: '/' },
-          { name: doc?.crumb ?? eyebrow, path: current! },
+          { name: 'OutBrick', path: localePath(locale, '/') },
+          { name: doc?.crumb ?? eyebrow, path: localePath(locale, current!) },
         ]),
       )
     : null;
   return (
     <div className="ob-site">
-      <a className="skip" href="#main">Skip to content</a>
-      <VillageHeader links={docNav} current={current} label="Help and legal" />
+      <a className="skip" href="#main">{ui[0]}</a>
+      <VillageHeader links={docNav} current={current} label={ui[1]} locale={locale} />
 
       <main id="main">
         <div className="doc-head">
           <div className="wrap">
-            <a className="backlink" href="/">Back to OutBrick</a>
+            <a className="backlink" href={localePath(locale, '/')}>{ui[2]}</a>
             <Course />
             <p className="eyebrow">{eyebrow}</p>
             <h1>{title}</h1>
             <p className="lede">{summary}</p>
-            <p className="stamp">Updated {updated}</p>
+            <p className="stamp">{ui[3]} {stamp}</p>
           </div>
           <div className="road" aria-hidden="true" />
         </div>
@@ -83,10 +88,10 @@ export function LegalPage({ eyebrow, title, summary, updated, current, children 
           </div>
         </div>
 
-        <AlsoRead current={current} />
+        <AlsoRead current={current} locale={locale} />
       </main>
 
-      <VillageFooter />
+      <VillageFooter locale={locale} page={current} />
       {structuredData ? <JsonLd data={structuredData} /> : null}
     </div>
   );

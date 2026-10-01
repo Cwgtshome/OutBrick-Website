@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
 import { authors } from '../../../lib/blog';
@@ -10,7 +11,7 @@ const description =
 export const metadata: Metadata = {
   title: 'About OutBrick: who makes it and why',
   description,
-  alternates: { canonical: '/about' },
+  alternates: localeAlternates('en', '/about' ),
   openGraph: {
     type: 'website',
     url: `${siteUrl}/about`,
@@ -52,7 +53,7 @@ export default function AboutPage() {
   );
 
   return (
-    <EditorialPage current="about">
+    <EditorialPage page={'/about'} current="about">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'About' }]} />

@@ -46,7 +46,8 @@ export function dailyBoardForDay(day: number): DailyBoard {
 }
 
 /** "Thursday 24 September 2026", read in UTC so it names the same day everywhere. */
-export function formatDailyDate(board: DailyBoard): string {
+export function formatDailyDate(board: DailyBoard, locale = 'en-GB'): string {
+  if (locale !== 'en-GB' && locale !== 'en') return new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(board.start);
   // Assembled from parts: some ICU versions put a comma after the weekday, the site's dates never do.
   const parts = new Intl.DateTimeFormat('en-GB', {
     weekday: 'long',

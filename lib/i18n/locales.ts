@@ -1,4 +1,4 @@
-import { siteUrl } from '../site';
+import { siteUrl } from '../site.ts';
 
 /**
  * The languages the home page and the play guide are published in. English
@@ -47,7 +47,7 @@ export const storefronts: Record<Locale, string> = {
  * The pages that exist in every language, as their English path. `/whats-new` is
  * translated for the current release only; its older entries stay on the English page.
  */
-export type LocalizedPage = '/' | '/play' | '/whats-new';
+export type LocalizedPage = string;
 
 /** The path of `page` in `locale`: `/`, `/play`, `/fr`, `/fr/play` … Never a trailing slash. */
 export function localePath(locale: Locale, page: LocalizedPage): string {

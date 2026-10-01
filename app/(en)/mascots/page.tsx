@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
 import { friends, mascotStories } from '../../../lib/mascots';
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: 'The nine brick friends',
   description,
   keywords: ['OutBrick friends', 'OutBrick mascots', ...friends.map((friend) => friend.name)],
-  alternates: { canonical: '/mascots' },
+  alternates: localeAlternates('en', '/mascots' ),
   openGraph: {
     type: 'website',
     url: `${siteUrl}/mascots`,
@@ -66,7 +67,7 @@ export default function MascotsPage() {
   );
 
   return (
-    <EditorialPage current="mascots">
+    <EditorialPage page={'/mascots'} current="mascots">
       <header className="ed-band-ink ed-hero">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Mascots' }]} />

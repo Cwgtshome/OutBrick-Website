@@ -13,6 +13,9 @@
  *   the chips filter in place and the choice is kept in ?category=.
  */
 
+import { useLocale } from '../../components/locale-context';
+import { searchWords } from '../../../lib/i18n/search';
+import { localePath, type Locale } from '../../../lib/i18n/locales';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
 
 // --------------------------------------------------------------------------------------------
@@ -42,7 +45,7 @@ function norm(text: string): string {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[’']/g, '')
     .replace(/colour/g, 'color')
-    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/[^\p{L}\p{N}\p{M}]+/gu, ' ')
     .trim();
   return ` ${flat} `;
 }
@@ -98,19 +101,12 @@ function highlighter(terms: string[]) {
     text.split(pattern).map((part, index) => (index % 2 ? <mark key={index}>{part}</mark> : part));
 }
 
-let pending: Promise<Prepared[]> | undefined;
-function loadIndex(): Promise<Prepared[]> {
-  pending ??= fetch('/journal-index.json')
-    .then((response) => {
-      if (!response.ok) throw new Error(String(response.status));
-      return response.json() as Promise<Entry[]>;
-    })
-    .then(prepare)
-    .catch((error: unknown) => {
-      pending = undefined;
-      throw error;
-    });
-  return pending;
+const pending = new Map<Locale, Promise<Prepared[]>>();
+function loadIndex(locale: Locale): Promise<Prepared[]> {
+  if (!pending.has(locale)) pending.set(locale, fetch(`${locale === 'en' ? '' : `/${locale}`}/journal-index.json`)
+    .then(response => { if (!response.ok) throw new Error(String(response.status)); return response.json() as Promise<Entry[]>; })
+    .then(prepare).catch((error: unknown) => { pending.delete(locale); throw error; }));
+  return pending.get(locale)!;
 }
 
 /** Keep one query parameter in the address without adding history entries. */
@@ -136,6 +132,8 @@ const useAddressParams = () => new URLSearchParams(useSyncExternalStore(subscrib
 type Shelf = { slug: string; label: string; count: number; tone: string; href: string };
 
 export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
+  const locale = useLocale();
+  const t = searchWords[locale];
   const [query, setQuery] = useState('');
   const [index, setIndex] = useState<Prepared[] | null>(null);
   const [failed, setFailed] = useState(false);
@@ -147,8 +145,8 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
 
   const ensureIndex = useCallback(() => {
     if (index) return;
-    loadIndex().then(setIndex, () => setFailed(true));
-  }, [index]);
+    loadIndex(locale).then(setIndex, () => setFailed(true));
+  }, [index, locale]);
 
   const terms = useMemo(() => termsOf(query), [query]);
   const hits = useMemo(() => (index && terms.length ? search(index, terms) : []), [index, terms]);
@@ -166,7 +164,7 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
       setQuery(initial);
       setOpen(true);
     };
-    loadIndex().then(
+    loadIndex(locale).then(
       (loaded) => {
         setIndex(loaded);
         show();
@@ -176,7 +174,7 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
         show();
       },
     );
-  }, []);
+  }, [locale]);
 
   // "/" focuses the field from anywhere that is not itself a text field.
   useEffect(() => {
@@ -210,15 +208,15 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
   useEffect(() => {
     if (!expanded) return;
     const timer = window.setTimeout(() => {
-      if (failed) setAnnouncement('Search could not load.');
-      else if (!index) setAnnouncement('Loading search…');
-      else setAnnouncement(hits.length ? `${hits.length} ${hits.length === 1 ? 'story' : 'stories'} found. Use the arrow keys to move through them.` : 'No stories found.');
+      if (failed) setAnnouncement(t.failed);
+      else if (!index) setAnnouncement(t.loading);
+      else setAnnouncement(hits.length ? t.results(hits.length) : t.empty);
     }, 450);
     return () => window.clearTimeout(timer);
-  }, [expanded, failed, index, hits.length]);
+  }, [expanded, failed, index, hits.length, t]);
 
   const openStory = (entry: Entry, newTab = false) => {
-    const href = `/blog/${entry.s}`;
+    const href = localePath(locale, `/blog/${entry.s}`);
     if (newTab) window.open(href, '_blank', 'noopener');
     else window.location.assign(href);
   };
@@ -259,8 +257,8 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
       }}
     >
       <search>
-      <form action="/blog" method="get" onSubmit={(event) => event.preventDefault()}>
-        <label className="ed-search-label" htmlFor="journal-q">Search the journal</label>
+      <form action={localePath(locale, '/blog')} method="get" onSubmit={(event) => event.preventDefault()}>
+        <label className="ed-search-label" htmlFor="journal-q">{t.label}</label>
         <div className="ed-search-field">
           <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="2.6" /><path d="m15.5 15.5 5 5" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" /></svg>
           <input
@@ -277,7 +275,7 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
             autoComplete="off"
             spellCheck={false}
             enterKeyHint="go"
-            placeholder="Tetris, colour, undo…"
+            placeholder={t.placeholder}
             value={query}
             onFocus={() => {
               ensureIndex();
@@ -294,7 +292,7 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
           />
           <kbd aria-hidden="true">/</kbd>
         </div>
-        <span id="journal-q-hint" className="ed-sr">Results appear as you type. Press slash to come back here from anywhere on the page.</span>
+        <span id="journal-q-hint" className="ed-sr">{t.hint}</span>
       </form>
       </search>
 
@@ -302,17 +300,17 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
           The panel grows with its results rather than scrolling inside itself; the page scrolls instead. */}
       <div className="ed-search-panel" hidden={!expanded} tabIndex={-1}>
         {failed ? (
-          <p className="ed-search-empty">Search could not load. Every story is on the shelves below.</p>
+          <p className="ed-search-empty">{t.failureDetail}</p>
         ) : !index ? (
-          <p className="ed-search-empty">Loading…</p>
+          <p className="ed-search-empty">{t.loading}</p>
         ) : (
           <p className="ed-search-count" aria-hidden="true">
-            {hits.length ? `${hits.length} ${hits.length === 1 ? 'story' : 'stories'}` : 'No stories'} for “{query.trim()}”
+            {t.query(hits.length, query.trim())}
           </p>
         )}
         {/* A native <select>/<datalist> cannot carry a headline, shelf and dek per option: this is the ARIA 1.2 combobox + listbox pattern. */}
         {/* oxlint-disable-next-line jsx-a11y/prefer-tag-over-role */}
-        <div id="journal-results" role="listbox" aria-label="Stories" hidden={!hits.length}>
+        <div id="journal-results" role="listbox" aria-label={t.stories} hidden={!hits.length}>
           {hits.map(({ entry, heading, mention }, i) => (
             // Options are never focused: focus stays on the input, which owns the keys (arrows, Enter)
             // and points at the current option with aria-activedescendant, as the pattern requires.
@@ -325,16 +323,16 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
               <span className="ed-search-title">{mark(entry.t)}</span>
               <span className="ed-search-meta">
                 <span className="ed-chip">{entry.c}</span>
-                <span>{entry.m} min read</span>
+                <span>{t.readingTime(entry.m)}</span>
               </span>
               <span className="ed-search-dek">{mark(entry.d)}</span>
-              {heading ? <span className="ed-search-where">Section: {mark(heading)}</span> : mention ? <span className="ed-search-where">Mentions “<mark>{spelled(mention)}</mark>” in the story</span> : null}
+              {heading ? <span className="ed-search-where">{t.section} {mark(heading)}</span> : mention ? <span className="ed-search-where">{t.mention(spelled(mention))}</span> : null}
             </div>
           ))}
         </div>
         {index && !hits.length ? (
           <div className="ed-search-none">
-            <p>Try fewer words, or browse a shelf:</p>
+            <p>{t.try}</p>
             <ul>
               {shelves.map((shelf) => (
                 <li key={shelf.slug}>
@@ -356,6 +354,8 @@ export function JournalSearch({ shelves }: { shelves: Shelf[] }) {
 type Sort = 'newest' | 'shortest';
 
 export function ShelfControls({ shelves, total }: { shelves: Shelf[]; total: number }) {
+  const locale = useLocale();
+  const t = searchWords[locale];
   const params = useAddressParams();
   const wanted = params.get('category') ?? '';
   const category = shelves.some((shelf) => shelf.slug === wanted) ? wanted : '';
@@ -387,8 +387,7 @@ export function ShelfControls({ shelves, total }: { shelves: Shelf[]; total: num
 
   const describe = (nextCategory: string, nextSort: Sort) => {
     const shelf = shelves.find((entry) => entry.slug === nextCategory);
-    const order = nextSort === 'shortest' ? 'shortest read first' : 'newest first';
-    setStatus(shelf ? `Showing ${shelf.count} ${shelf.count === 1 ? 'story' : 'stories'} in ${shelf.label}, ${order}.` : `Showing every shelf, ${order}.`);
+    setStatus(shelf ? t.showing(shelf.count, shelf.label, nextSort === 'shortest') : t.showingAll(nextSort === 'shortest'));
   };
   const choose = (slug: string) => {
     setParam('category', slug);
@@ -402,11 +401,11 @@ export function ShelfControls({ shelves, total }: { shelves: Shelf[]; total: num
 
   return (
     <div className="ed-controls">
-      <nav aria-label="Filter the shelves by category">
+      <nav aria-label={t.filter}>
         <ul className="ed-rail">
           <li>
-            <a className="ed-chip all" href="/blog" aria-current={category === '' ? 'true' : undefined} onClick={(event) => follow(event, '')}>
-              All <b>{total}</b>
+            <a className="ed-chip all" href={localePath(locale, '/blog')} aria-current={category === '' ? 'true' : undefined} onClick={(event) => follow(event, '')}>
+              {t.all} <b>{total}</b>
             </a>
           </li>
           {shelves.map((shelf) => (
@@ -425,7 +424,7 @@ export function ShelfControls({ shelves, total }: { shelves: Shelf[]; total: num
         </ul>
       </nav>
       <fieldset className="ed-sort">
-        <legend>Sort</legend>
+        <legend>{t.sort}</legend>
         {(['newest', 'shortest'] as const).map((value) => (
           <button
             key={value}
@@ -436,7 +435,7 @@ export function ShelfControls({ shelves, total }: { shelves: Shelf[]; total: num
               describe(category, value);
             }}
           >
-            {value === 'newest' ? 'Newest' : 'Shortest read'}
+            {value === 'newest' ? t.newest : t.shortest}
           </button>
         ))}
       </fieldset>

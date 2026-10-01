@@ -1,3 +1,4 @@
+import { localeAlternates } from '../../../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../../../editorial-shell';
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
   return {
     title: { absolute: copy.title },
     description: copy.description,
-    alternates: { canonical: copy.path },
+    alternates: localeAlternates('en', copy.path ),
     openGraph: {
       type: 'website',
       url: `${siteUrl}${copy.path}`,
@@ -65,7 +66,7 @@ export default async function TagPage({ params }: TagPageProps) {
   const tone = tag.articles[0]!.categoryColor;
 
   return (
-    <EditorialPage current="blog" tone={tone} className="ed-collection">
+    <EditorialPage page={`/blog/tag/${tag.slug}`} current="blog" tone={tone} className="ed-collection">
       <header className="ed-band-ink ed-coll-head">
         <div className="ed-wrap">
           <Crumbs items={[{ href: '/', label: 'OutBrick' }, { href: '/blog', label: 'Journal' }, { label: `Tagged “${tag.label}”` }]} />

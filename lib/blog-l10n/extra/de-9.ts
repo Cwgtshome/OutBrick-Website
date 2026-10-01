@@ -1,5 +1,5 @@
 import type { ExtraGuides } from '../../i18n/blog';
-import { appStoreUrl } from '../../app-store-url';
+import { appStoreUrl } from '../../app-store-url.ts';
 export const de9: ExtraGuides = {
   'water-sort-vs-block-sort': {
     title: 'Wasser oder Blöcke sortieren: Welches Puzzle passt?',

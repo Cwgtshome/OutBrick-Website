@@ -16,14 +16,21 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright')
 
 const sitemap = await readFile(new URL('../dist/client/sitemap.xml', import.meta.url), 'utf8');
 const paths = [...new Set([...sitemap.matchAll(/<loc>https:\/\/www\.outbrick\.site([^<]*)<\/loc>/g)].map((m) => m[1] || '/'))];
-paths.push('/c/42?par=18', '/contact/thanks', '/does-not-exist');
+for (const prefix of ['', '/fr', '/de', '/es', '/ja']) {
+  paths.push(`${prefix}/c/42?par=18`, `${prefix}/contact/thanks`, `${prefix}/affiliates/thanks`, `${prefix}/careers/thanks`, `${prefix}/newsletter/thanks`, `${prefix}/does-not-exist`);
+  for (let board = 1; board <= 17; board += 1) for (let stars = 1; stars <= 3; stars += 1) paths.push(`${prefix}/play/result/${board}-${stars}`);
+}
+const shardIndex = Number(process.env.RESPONSIVE_SHARD_INDEX ?? 0);
+const shardCount = Number(process.env.RESPONSIVE_SHARD_COUNT ?? 1);
+if (!Number.isInteger(shardIndex) || !Number.isInteger(shardCount) || shardCount < 1 || shardIndex < 0 || shardIndex >= shardCount) throw new Error('Invalid responsive shard');
+const shardPaths = [...new Set(paths)].filter((_, index) => index % shardCount === shardIndex);
 
 const browser = await chromium.launch();
 const failures = [];
 for (const width of widths) {
   const context = await browser.newContext({ viewport: { width, height: width < 800 ? 844 : 900 }, reducedMotion: 'reduce' });
   const page = await context.newPage();
-  for (const path of paths) {
+  for (const path of shardPaths) {
     await page.goto(base + path, { waitUntil: 'domcontentloaded' });
     await page.evaluate(async () => {
       for (let y = 0; y < document.body.scrollHeight; y += innerHeight) {
@@ -64,9 +71,9 @@ for (const width of widths) {
     }
   }
   await context.close();
-  console.log(`✓ ${width}px: ${paths.length} pages checked`);
+  console.log(`✓ ${width}px: ${shardPaths.length} pages checked`);
 }
 await browser.close();
 for (const f of failures) console.log(`✗ ${f}`);
-console.log(failures.length ? `${failures.length} responsive problems` : `responsive: ${paths.length} pages × ${widths.length} widths clean`);
+console.log(failures.length ? `${failures.length} responsive problems` : `responsive: ${shardPaths.length} pages × ${widths.length} widths clean`);
 process.exit(failures.length ? 1 : 0);

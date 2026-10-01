@@ -5,6 +5,8 @@
  */
 
 import { homeCopy } from '../lib/i18n/home';
+import { localizedAsset } from '../lib/i18n/assets';
+import { localizedApplicationNode } from '../lib/i18n/application';
 import { playCopy } from '../lib/i18n/play';
 import { chromeCopy } from '../lib/i18n/chrome';
 import { localeUrl, type Locale } from '../lib/i18n/locales';
@@ -25,7 +27,7 @@ export function HomeStructuredData({ locale }: { locale: Locale }) {
     breadcrumb: false,
     about: ref(ids.app),
     mainEntity: ref(ids.app),
-    primaryImageOfPage: { '@type': 'ImageObject', url: `https://www.outbrick.site${HOME_HERO_IMAGE}`, width: 520, height: 1131, caption: t.hero.phoneAlt },
+    primaryImageOfPage: { '@type': 'ImageObject', url: `https://www.outbrick.site${localizedAsset(HOME_HERO_IMAGE, locale)}`, width: 520, height: 1131, caption: t.hero.phoneAlt },
   });
   return (
     <>
@@ -34,8 +36,8 @@ export function HomeStructuredData({ locale }: { locale: Locale }) {
         hoists a <link> rendered anywhere into the head. The <img> itself already carries
         fetchpriority="high", but React's own automatic image preloads do not include it.
       */}
-      <link rel="preload" as="image" href={HOME_HERO_IMAGE} fetchPriority="high" />
-      <JsonLd data={graph(page, appNode({ description: t.appDescription, url: localeUrl('en', '/') }))} />
+      <link rel="preload" as="image" href={localizedAsset(HOME_HERO_IMAGE, locale)} fetchPriority="high" />
+      <JsonLd data={graph(page, localizedApplicationNode(appNode({ description: t.appDescription, url: localeUrl('en', '/') }), locale))} />
     </>
   );
 }
@@ -54,5 +56,5 @@ export function PlayStructuredData({ locale }: { locale: Locale }) {
     { name: 'OutBrick', path: localeUrl(locale, '/') },
     { name: chromeCopy[locale].footer.playGuide, path: url },
   ]);
-  return <JsonLd data={graph(page, crumbs, appNode({ description: homeCopy[locale].appDescription, url: localeUrl('en', '/') }))} />;
+  return <JsonLd data={graph(page, crumbs, localizedApplicationNode(appNode({ description: homeCopy[locale].appDescription, url: localeUrl('en', '/') }), locale))} />;
 }

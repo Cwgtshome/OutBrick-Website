@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
-import { locales } from '../../../lib/i18n/locales';
-import { articles, authors, getAuthor } from '../../../lib/blog';
-import { journalLanguages, journalPath } from '../../../lib/i18n/blog';
+import { locales, localePath, type Locale } from '../../../lib/i18n/locales';
+import { articles as englishArticles, authors, getAuthor } from '../../../lib/blog';
+import { journalLanguages, journalPath, localizeArticle, journalUi } from '../../../lib/i18n/blog';
 import { siteUrl } from '../../../lib/site';
 import { byNewest, categoryPath, getShelves, startHere } from '../../../lib/journal';
 import { categorySlug, FollowJournal, StoryCard, StoryRow } from './journal-kit';
@@ -25,22 +25,25 @@ export const metadata: Metadata = {
     siteName: 'OutBrick',
     title,
     description,
-    images: [{ url: `${siteUrl}${articles[0]!.image}`, width: 1600, height: 900, alt: articles[0]!.imageAlt }],
+    images: [{ url: `${siteUrl}${englishArticles[0]!.image}`, width: 1600, height: 900, alt: englishArticles[0]!.imageAlt }],
   },
   twitter: {
     card: 'summary_large_image',
     title,
     description,
-    images: [`${siteUrl}${articles[0]!.image}`],
+    images: [`${siteUrl}${englishArticles[0]!.image}`],
   },
 };
 
-export default function BlogPage() {
+export default function BlogPage({ locale = 'en' }: { locale?: Locale } = {}) {
+  const articles = locale === 'en' ? englishArticles : englishArticles.map(a => localizeArticle(a.slug, locale));
+  const categoryLabel = (category: string) => journalUi[locale].categories[category] ?? category;
+  const formatDate = (date: string) => locale === 'en' ? date : new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date} 12:00:00 UTC`));
   const [featured, second, third] = articles as [typeof articles[0], typeof articles[0], typeof articles[0]];
   const pinned = new Set([featured.slug, second.slug, third.slug]);
   const featuredAuthor = getAuthor(featured.authorId);
-  const shelves = getShelves();
-  const chips = shelves.map((shelf) => ({ slug: shelf.slug, label: shelf.category, count: shelf.articles.length, tone: shelf.tone, href: categoryPath(shelf.category) }));
+  const shelves = getShelves().map(s => ({ ...s, articles: locale === 'en' ? s.articles : s.articles.map(a => localizeArticle(a.slug, locale)) }));
+  const chips = shelves.map((shelf) => ({ slug: shelf.slug, label: categoryLabel(shelf.category), count: shelf.articles.length, tone: shelf.tone, href: localePath(locale, categoryPath(shelf.category)) }));
 
   const url = `${siteUrl}/blog`;
   const structuredData = graph(
@@ -80,13 +83,13 @@ export default function BlogPage() {
   const orderOf = new Map(shelves.flatMap((shelf) => shelf.articles).map((article, index) => [article.slug, index]));
 
   return (
-    <EditorialPage current="blog" className="ed-journal" languages={Object.fromEntries(locales.map((l) => [l, journalPath(l)]))}>
+    <EditorialPage page={'/blog'} locale={locale === 'en' ? undefined : locale} current="blog" className="ed-journal" languages={Object.fromEntries(locales.map((l) => [l, journalPath(l)]))}>
       {/* ---------------- masthead ---------------- */}
       <header className="ed-band-ink ed-mast">
         <div className="ed-wrap">
           <div className="ed-mast-top">
             <Crumbs items={[{ href: '/', label: 'OutBrick' }, { label: 'Journal' }]} />
-            <p className="ed-meta">{articles.length} stories · Updated {featured.updatedAt.replace(/ \d+,/, '')}</p>
+            <p className="ed-meta">{locale === 'en' ? <>{articles.length} stories · Updated {featured.updatedAt.replace(/ \d+,/, '')}</> : <>{journalUi[locale].index.count(articles.length)} · {journalUi[locale].updated} {formatDate(featured.updatedAt)}</>}</p>
           </div>
           <div className="ed-mast-grid">
             <div>
@@ -117,14 +120,14 @@ export default function BlogPage() {
           <p className="ed-label">Lead story</p>
           <div className="ed-feature" data-tone={featured.categoryColor} style={{ marginTop: 26 }}>
             <div className="ed-feature-copy ed-reveal">
-              <span className="ed-chip">{featured.category}</span>
+              <span className="ed-chip">{categoryLabel(featured.category)}</span>
               <h2 id="lead-title"><a href={`/blog/${featured.slug}`}>{featured.title}</a></h2>
               <p className="ed-lede">{featured.dek}</p>
               <div className="ed-byline">
                 <a className="ed-avatar" href={`/authors/${featuredAuthor.id}`} aria-hidden="true" tabIndex={-1}>{featuredAuthor.initials}</a>
                 <span className="ed-byline-text">
                   <b><a href={`/authors/${featuredAuthor.id}`}>{featuredAuthor.name}</a></b>
-                  <span>{featured.readingTime} · {featured.publishedAt}</span>
+                  <span>{featured.readingTime} · {formatDate(featured.publishedAt)}</span>
                 </span>
               </div>
               <div className="ed-actions" style={{ marginTop: 30 }}>
@@ -141,8 +144,8 @@ export default function BlogPage() {
           </div>
 
           <div className="ed-pair">
-            <div className="ed-reveal"><StoryCard article={second} /></div>
-            <div className="ed-reveal"><StoryCard article={third} /></div>
+            <div className="ed-reveal"><StoryCard article={second} category={categoryLabel(second.category)} by={journalUi[locale].by} /></div>
+            <div className="ed-reveal"><StoryCard article={third} category={categoryLabel(third.category)} by={journalUi[locale].by} /></div>
           </div>
         </div>
       </section>
@@ -155,11 +158,11 @@ export default function BlogPage() {
             <h2 id="start-title" className="ed-h2" style={{ marginTop: 14 }}>Start with these four.</h2>
           </div>
           <ol className="ed-start">
-            {startHere.map((article, index) => (
+            {startHere.map(a => locale === 'en' ? a : localizeArticle(a.slug, locale)).map((article, index) => (
               <li key={article.slug} data-tone={article.categoryColor} className="ed-lift">
                 <span className="ed-start-n" aria-hidden="true">{index + 1}</span>
                 <h3><a href={`/blog/${article.slug}`}>{article.title}</a></h3>
-                <p className="ed-meta">{article.category} · {article.readingTime}</p>
+                <p className="ed-meta">{categoryLabel(article.category)} · {article.readingTime}</p>
               </li>
             ))}
           </ol>
@@ -179,7 +182,7 @@ export default function BlogPage() {
                 <section key={shelf.slug} id={anchor} data-shelf={shelf.slug} data-tone={shelf.tone} aria-labelledby={`${anchor}-title`} style={{ scrollMarginTop: 90 }}>
                   <div className="ed-shelf-head">
                     <span className="ed-slab" aria-hidden="true"><Studs count={2} /></span>
-                    <h2 id={`${anchor}-title`}><a href={categoryPath(shelf.category)}>{shelf.category}</a></h2>
+                    <h2 id={`${anchor}-title`}><a href={categoryPath(shelf.category)}>{categoryLabel(shelf.category)}</a></h2>
                     <p>{shelf.note}</p>
                   </div>
                   <div className="ed-shelf-rule" aria-hidden="true" />

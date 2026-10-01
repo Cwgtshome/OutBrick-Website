@@ -80,7 +80,7 @@ export const es5: ExtraGuides = {
     title: 'Clasificaciones: ¿motivan o desaniman? Lo que se sabe',
     dek: 'Una clasificación puede aumentar el esfuerzo como un objetivo difícil o minar la motivación de los últimos. Qué muestran los experimentos y cómo usarlas.',
     imageAlt: 'Un amigo de ladrillo verde y otro rojo a ambos lados de un teléfono que muestra el mapa del Viaje de OutBrick en el Pueblo de los Cerezos en Flor',
-    tags: ['clasificaciones', 'ranking', 'gamificación', 'motivación', 'comparación social', 'juego social'],
+    tags: ['clasificaciones', 'gamificación', 'motivación', 'comparación social', 'juego social'],
     intro: 'Una clasificación es la función social más sencilla que puede tener un juego: una lista de nombres, ordenada. También es una de las más discutidas. Hay quien encuentra en ella la mejor razón para jugar una ronda más; otros la miran una vez, se ven en el puesto 48 112 y no vuelven a abrirla. Psicólogos e investigadores de interacción persona-ordenador llevan más de una década poniendo a prueba las clasificaciones, en aulas, en plataformas de crowdsourcing y en el laboratorio. La respuesta a «¿funcionan?» resulta ser «¿para qué y para quién?».',
     keyTakeaways: [
       'En los experimentos, una clasificación puede aumentar el esfuerzo más o menos tanto como proponer a alguien un objetivo difícil.',
@@ -148,7 +148,7 @@ export const es5: ExtraGuides = {
     title: '¿Funciona la gamificación? Lo que dicen los metaanálisis',
     dek: 'Puntos, insignias y clasificaciones iban a hacerlo todo atractivo. Lo que hallaron las revisiones de cientos de estudios, y dónde flaquean las pruebas.',
     imageAlt: 'Sprout y un amigo de ladrillo amarillo que guiña un ojo a ambos lados de un teléfono que muestra el mapa del Viaje de OutBrick en el Huerto de Otoño',
-    tags: ['gamificación', '¿funciona la gamificación?', 'ludificación', 'motivación', 'diseño de juegos', 'investigación'],
+    tags: ['gamificación', '¿funciona la gamificación?', 'motivación', 'diseño de juegos', 'investigación'],
     intro: 'Hacia 2010, la gamificación iba a cambiarlo todo. Bastaba con añadir puntos, insignias y clasificaciones a los deberes, el ejercicio, la banca o la declaración de la renta, decía el argumento, y la gente los haría con el entusiasmo que pone en los juegos. Quince años después hay cientos de estudios y varias revisiones cuidadosas que los reúnen. El veredicto honesto no es ni el bombo ni el rechazo. La gamificación suele producir efectos positivos de pequeños a moderados, esos efectos dependen mucho del contexto y una parte sorprendente de la investigación no es lo bastante sólida para decir gran cosa.',
     keyTakeaways: [
       'Las revisiones se inclinan hacia lo positivo: la mayoría de los estudios encuentra algún beneficio, pero una parte importante da resultados mixtos o nulos.',
@@ -220,7 +220,7 @@ export const es5: ExtraGuides = {
     title: 'Por qué un puzle diario se convierte en un ritual compartido',
     dek: 'El mismo puzle para todos, una vez al día: qué dice la investigación sobre rituales, atención compartida y emociones, y por qué los juegos diarios unen.',
     imageAlt: 'Un amigo de ladrillo rojo y Sprout a ambos lados de un teléfono que muestra la pantalla de inicio de OutBrick con un botón verde del nivel 521',
-    tags: ['juegos diarios', 'rompecabezas diario', 'puzle del día', 'rituales', 'juego social', 'Wordle'],
+    tags: ['juegos diarios', 'rituales', 'juego social', 'puzle diario', 'Wordle'],
     intro: 'Hay un tipo de mensaje muy concreto que va y viene en los grupos familiares, entre viejos amigos y de mesa en mesa en la oficina: una pequeña cuadrícula de cuadrados de colores, una puntuación, quizá una sola palabra. Significa «he hecho el rompecabezas de hoy», y la respuesta significa «yo también». Los crucigramas del periódico llevan un siglo funcionando así, y una oleada de juegos diarios lo ha vuelto global. El rompecabezas suele resolverse a solas, en un minuto libre, y sin embargo la experiencia es social de un modo que rara vez lo es un rompecabezas elegido de una lista de miles. La psicología tiene buenas explicaciones de por qué.',
     keyTakeaways: [
       'Las experiencias se sienten más intensas cuando sabemos que otra persona está viviendo la misma al mismo tiempo.',
@@ -285,7 +285,7 @@ export const es5: ExtraGuides = {
     title: 'Nostalgia de videojuegos: por qué los juegos de antes gustan',
     dek: 'Por qué aún te atraen los juegos de tu infancia, qué dice la investigación sobre nostalgia, ánimo y conexión, y por qué los remakes y lo retro venden.',
     imageAlt: 'Un amigo de ladrillo rosa con una varita de estrella y un amigo de ladrillo verde a ambos lados de un teléfono que muestra el mapa del Viaje de OutBrick en los Manantiales de Bambú',
-    tags: ['nostalgia de videojuegos', 'juegos retro', 'nostalgia', 'bienestar', 'remakes'],
+    tags: ['nostalgia de videojuegos', 'juegos retro', 'nostalgia', 'bienestar', 'éxito de juegos'],
     intro: 'Pon las primeras notas de un juego que te encantaba a los diez años y pasa algo que tiene poco que ver con el juego. Recuerdas la alfombra en la que te sentabas, el amigo que tenía el segundo mando, la larga tarde de verano que ocupaba. La nostalgia ha levantado todo un rincón de la industria del videojuego: remasterizaciones, consolas retro, homenajes en pixel art y el goteo constante de gente que vuelve a instalar juegos que probó por primera vez hace décadas. Los psicólogos trataron en su día la nostalgia como una especie de añoranza del hogar, casi una enfermedad. La investigación moderna cuenta una historia mucho más cálida, y los videojuegos resultan ser uno de sus ejemplos más claros.',
     keyTakeaways: [
       'La nostalgia es una emoción común y sobre todo positiva, que a menudo despiertan el bajo ánimo o la soledad, y que suele mejorar el ánimo y reforzar la sensación de conexión.',

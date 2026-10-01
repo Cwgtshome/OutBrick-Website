@@ -141,3 +141,337 @@
   from = "/c/*"
   to = "/c"
   status = 200
+
+[[redirects]]
+  from = "/fr/privacy-policy"
+  to = "/fr/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/privacy-policy.html"
+  to = "/fr/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/license"
+  to = "/fr/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/license.html"
+  to = "/fr/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/refund"
+  to = "/fr/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/refund.html"
+  to = "/fr/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/eula-apple"
+  to = "/fr/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/eula-apple.html"
+  to = "/fr/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/accessibility-support"
+  to = "/fr/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/accessibility-support.html"
+  to = "/fr/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/age-suitability"
+  to = "/fr/age-rating"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/age-suitability.html"
+  to = "/fr/age-rating"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/privacy-policy"
+  to = "/de/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/privacy-policy.html"
+  to = "/de/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/license"
+  to = "/de/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/license.html"
+  to = "/de/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/refund"
+  to = "/de/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/refund.html"
+  to = "/de/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/eula-apple"
+  to = "/de/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/eula-apple.html"
+  to = "/de/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/accessibility-support"
+  to = "/de/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/accessibility-support.html"
+  to = "/de/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/age-suitability"
+  to = "/de/age-rating"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/age-suitability.html"
+  to = "/de/age-rating"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/privacy-policy"
+  to = "/es/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/privacy-policy.html"
+  to = "/es/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/license"
+  to = "/es/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/license.html"
+  to = "/es/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/refund"
+  to = "/es/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/refund.html"
+  to = "/es/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/eula-apple"
+  to = "/es/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/eula-apple.html"
+  to = "/es/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/accessibility-support"
+  to = "/es/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/accessibility-support.html"
+  to = "/es/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/age-suitability"
+  to = "/es/age-rating"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/age-suitability.html"
+  to = "/es/age-rating"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/privacy-policy"
+  to = "/ja/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/privacy-policy.html"
+  to = "/ja/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/license"
+  to = "/ja/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/license.html"
+  to = "/ja/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/refund"
+  to = "/ja/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/refund.html"
+  to = "/ja/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/eula-apple"
+  to = "/ja/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/eula-apple.html"
+  to = "/ja/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/accessibility-support"
+  to = "/ja/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/accessibility-support.html"
+  to = "/ja/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/age-suitability"
+  to = "/ja/age-rating"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/age-suitability.html"
+  to = "/ja/age-rating"
+  status = 301
+  force = true
+
+# Challenge path-form links retain their level, query and language. These
+# rewrites must precede each locale's unknown-page fallback.
+[[redirects]]
+  from = "/fr/c/*"
+  to = "/fr/c"
+  status = 200
+
+[[redirects]]
+  from = "/de/c/*"
+  to = "/de/c"
+  status = 200
+
+[[redirects]]
+  from = "/es/c/*"
+  to = "/es/c"
+  status = 200
+
+[[redirects]]
+  from = "/ja/c/*"
+  to = "/ja/c"
+  status = 200
+
+# Existing localized files take priority; unknown paths retain their language.
+[[redirects]]
+  from = "/fr/*"
+  to = "/fr/404"
+  status = 404
+
+# Existing localized files take priority; unknown paths retain their language.
+[[redirects]]
+  from = "/de/*"
+  to = "/de/404"
+  status = 404
+
+# Existing localized files take priority; unknown paths retain their language.
+[[redirects]]
+  from = "/es/*"
+  to = "/es/404"
+  status = 404
+
+# Existing localized files take priority; unknown paths retain their language.
+[[redirects]]
+  from = "/ja/*"
+  to = "/ja/404"
+  status = 404
