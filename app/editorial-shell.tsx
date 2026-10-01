@@ -46,7 +46,7 @@ function TranslatedEditorialHeader({ locale, current }: { locale: TranslatedLoca
     <div className="ob-site ed-chrome">
       <VillageHeader
         links={editorialNavFor(locale)}
-        current={current === 'blog' ? `/${locale}/blog` : undefined}
+        current={current ? localePath(locale, currentHref[current]) : undefined}
         home={localePath(locale, '/')}
         label={chromeCopy[locale].primaryNav}
         locale={locale}

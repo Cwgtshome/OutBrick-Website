@@ -45,7 +45,7 @@ function verifyFlags(links) {
 }
 const routes = ['/', '/blog', '/blog/designing-for-real-life-play', '/blog/category/inclusive-design', '/blog/tag/mobile-games', '/authors/mourad-hamdi', '/careers/content-marketing-lead', '/mascots', '/mascots/bloo', '/about', '/press', '/press/outbrick-4-2', '/press-kit', '/creators', '/whats-new', '/play/result/1-3', '/play/result/17-3', '/daily', '/c', '/c/42', '/privacy', '/contact/thanks', '/affiliates/thanks', '/careers/thanks', '/newsletter/thanks'];
 const localized = (locale, route) => locale === 'en' ? route : `/${locale}${route === '/' ? '' : route}`;
-const evidence = { base, matrix: [], clicks: [], internalNavigation: [], noScriptLanguages: [], notFound: [], errors: [] };
+const evidence = { base, matrix: [], clicks: [], internalNavigation: [], noScriptLanguages: [], notFound: [], editorialCurrent: [], errors: [] };
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
@@ -64,6 +64,27 @@ async function languageLinks() {
   return links;
 }
 try {
+  // Every editorial current section must select the same masthead link in
+  // server-rendered and hydrated desktop/mobile navigation. Press Kit shares Press.
+  const currentSections = { about: '/about', authors: '/authors', research: '/research', blog: '/blog', mascots: '/mascots', press: '/press', 'press-kit': '/press' };
+  for (const javaScriptEnabled of [false, true]) {
+    const currentContext = await browser.newContext({ javaScriptEnabled });
+    const currentPage = await currentContext.newPage();
+    try {
+      for (const locale of locales) for (const [section, destination] of Object.entries(currentSections)) {
+        const response = await currentPage.goto(`${base}${localized(locale, `/${section}`)}`, { waitUntil: 'networkidle' });
+        assert.equal(response.status(), 200);
+        const navs = currentPage.locator('header.site nav');
+        assert.equal(await navs.count(), 2, `${locale}/${section}: desktop and mobile navigation`);
+        for (const nav of await navs.all()) {
+          const active = nav.locator('a[aria-current="page"]');
+          assert.equal(await active.count(), 1, `${locale}/${section}: exactly one current section`);
+          assert.equal(await active.getAttribute('href'), localized(locale, destination), `${locale}/${section}: current destination`);
+        }
+        evidence.editorialCurrent.push({ locale, section, javaScriptEnabled, destination: localized(locale, destination), desktopAndMobile: true });
+      }
+    } finally { await currentContext.close(); }
+  }
   for (const route of routes) {
     let englishCopy;
     for (const locale of locales) {
