@@ -4,6 +4,11 @@
  */
 import type { Locale } from './locales.ts';
 const neutralAssets: Record<string, string> = {
+  "/blog/outbrick-accessibility-commitment.webp": "/blog/neutral/outbrick-accessibility-commitment.webp",
+  "/blog/outbrick-voiceover-spatial-board.webp": "/blog/neutral/outbrick-voiceover-spatial-board.webp",
+  "/blog/outbrick-voiceover-slide-actions.webp": "/blog/neutral/outbrick-voiceover-slide-actions.webp",
+  "/blog/outbrick-untimed-puzzle-challenge.webp": "/blog/neutral/outbrick-untimed-puzzle-challenge.webp",
+  "/blog/outbrick-accessibility-beyond-board.webp": "/blog/neutral/outbrick-accessibility-beyond-board.webp",
   "/assets/stickers/cleared-160.webp": "/assets/neutral/stickers/cleared-160.webp",
   "/assets/stickers/cleared-320.webp": "/assets/neutral/stickers/cleared-320.webp",
   "/assets/stickers/beat-the-target-160.webp": "/assets/neutral/stickers/beat-the-target-160.webp",
