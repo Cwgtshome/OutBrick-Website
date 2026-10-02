@@ -6,6 +6,12 @@ import { fileURLToPath } from 'node:url';
 const outDir = fileURLToPath(new URL('../outputs/', import.meta.url));
 fs.mkdirSync(outDir, { recursive: true });
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
+// The journal grows with each publication. Require the exact current English
+// slug set rather than a stale article count, catching omissions and duplicates.
+const englishIndex = JSON.parse(fs.readFileSync(new URL('../dist/client/journal-index.json', import.meta.url), 'utf8'));
+const expectedSlugs = englishIndex.map(article => article.s).sort();
+assert.ok(expectedSlugs.length > 0, 'The English journal index must not be empty');
+assert.equal(new Set(expectedSlugs).size, expectedSlugs.length, 'English article slugs must be unique');
 const browser = await chromium.launch({ headless: true });
 const configs = [
  { locale:'fr', query:'accessibilité', minutes:/\d+ min de lecture/, loading:'Chargement…', failed:'La recherche n’a pas pu se charger. Tous les articles figurent dans les rubriques ci-dessous.', empty:'Essayez moins de mots ou parcourez une rubrique' },
@@ -35,7 +41,8 @@ try {
   await input.fill(c.query);
   const response=await indexResponse;
   assert.equal(response.status(),200);
-  const index=await response.json(); assert.equal(index.length,94);
+  const index=await response.json();
+  assert.deepEqual(index.map(article => article.s).sort(), expectedSlugs, `${c.locale} index must contain every English article exactly once`);
   await page.locator('[role=option]').first().waitFor();
   const hits=await page.locator('[role=option]').count();assert.ok(hits>0);
   const firstTitle=await page.locator('.ed-search-title').first().innerText();
@@ -94,7 +101,7 @@ try {
    } else await p.getByText(c.failed,{exact:true}).waitFor();
    evidence.locales.at(-1)[state]='passed';await context.close();
   }
-  console.log(`PASS ${c.locale}: ${hits} Unicode-query hits,94 index entries, click/filter/sort/empty/loading/error`);
+  console.log(`PASS ${c.locale}: ${hits} Unicode-query hits,${index.length} index entries, click/filter/sort/empty/loading/error`);
  }
 } catch (error) { evidence.errors.push(String(error.stack??error));console.error(error);process.exitCode=1; }
 finally { fs.writeFileSync(path.join(outDir, 'journal-unicode-qa.json'),JSON.stringify(evidence,null,2));await browser.close(); }
