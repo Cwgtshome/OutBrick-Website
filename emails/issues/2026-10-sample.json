@@ -1,0 +1,387 @@
+{
+  "id": "2026-10-sample",
+  "name": "OutBrick News — sample issue (October 2026)",
+  "note": "A worked example of the issue format, drawn from the 4.2 release notes. It is what the email previews render. Copy it to a new file for a real issue.",
+  "locales": {
+    "en": {
+      "subject": "The Journey is built out of brick",
+      "preheader": "167 villages, no clock anywhere, and friends who come when you call them by name.",
+      "hero": {
+        "eyebrow": "OutBrick News · October 2026",
+        "title": "A harder game, on a Journey rebuilt in brick.",
+        "body": "You told us every level was too easy. You were right. This letter is about the release that starts to answer it, and about the road it runs on.\n\nEvery board is still **proven solvable**, and every board can still be cleared without spending anything.",
+        "image": {
+          "src": "/og.png",
+          "alt": "“A boulevard built out of brick. 2,000 boards · 167 brick villages · nine friends.” Bloo, Peach and Sprout beside an iPhone showing the Journey map",
+          "width": 1200,
+          "height": 630
+        }
+      },
+      "stories": [
+        {
+          "title": "167 villages, stud by stud",
+          "body": "Nothing on the map is a painted picture any more. All 167 villages build their ground, roads, props and landmarks out of brick as you travel, from twenty-eight designed places.",
+          "image": {
+            "src": "/assets/friends/bloo.png",
+            "alt": "Bloo, the blue brick friend, wearing a pocket watch",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Meet the villages",
+            "href": "/whats-new"
+          }
+        },
+        {
+          "title": "No clock anywhere",
+          "body": "Rush is withdrawn from the whole game. Nothing in OutBrick is timed any more: the move limit on each board is the only rope.",
+          "image": {
+            "src": "/assets/friends/peach.png",
+            "alt": "Peach, the peach-coloured brick friend, smiling",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "How the boards work",
+            "href": "/play"
+          }
+        },
+        {
+          "title": "Ask for a friend by name",
+          "body": "Siri and Shortcuts can bring any of the nine brick friends onto the Home stage by name.",
+          "image": {
+            "src": "/assets/friends/sprout.png",
+            "alt": "Sprout, the green brick friend, with a seedling on top",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Meet all nine friends",
+            "href": "/mascots"
+          }
+        }
+      ],
+      "release": {
+        "version": "4.2",
+        "title": "A harder game, on a Journey rebuilt in brick.",
+        "items": [
+          "1,301 of the 2,000 boards carry new layouts, rebuilt against a bar that rises with the chapter.",
+          "Counted gates and iced gates no longer look alike.",
+          "Secondary text on dark panels is lighter, measured to clear 4.5:1 contrast."
+        ],
+        "link": {
+          "label": "Read the full release notes",
+          "href": "/whats-new"
+        }
+      },
+      "cta": {
+        "label": "Get OutBrick on the App Store",
+        "href": "https://apps.apple.com/us/app/outbrick/id6807997465?mt=8&ct=web-email-newsletter"
+      }
+    },
+    "fr": {
+      "subject": "Le Voyage est construit en briques",
+      "preheader": "167 villages, aucune horloge nulle part, et des amis qui viennent quand vous les appelez par leur nom.",
+      "hero": {
+        "eyebrow": "Les nouvelles d’OutBrick · octobre 2026",
+        "title": "Un jeu plus exigeant, sur un Voyage reconstruit en briques.",
+        "body": "Vous nous avez dit que tous les niveaux étaient trop faciles. Vous aviez raison. Cette lettre parle de la version qui commence à y répondre, et de la route sur laquelle elle se joue.\n\nChaque plateau reste **prouvé résoluble**, et chacun peut toujours être terminé sans rien dépenser.",
+        "image": {
+          "src": "/og/fr.png",
+          "alt": "« Un boulevard construit en briques. 2 000 grilles · 167 villages de briques · neuf amis. » Bricko, Peach et Sprout, les amis en briques d’OutBrick",
+          "width": 1200,
+          "height": 630
+        }
+      },
+      "stories": [
+        {
+          "title": "167 villages, tenon par tenon",
+          "body": "Plus rien sur la carte n’est une image peinte. Les 167 villages construisent leur sol, leurs routes, leurs décors et leurs monuments en briques à mesure que vous avancez, à partir de vingt-huit lieux conçus pour le jeu.",
+          "image": {
+            "src": "/assets/friends/bloo.png",
+            "alt": "Bloo, l’ami en briques bleu, avec sa montre à gousset",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Découvrir les villages",
+            "href": "/fr/whats-new"
+          }
+        },
+        {
+          "title": "Aucune horloge nulle part",
+          "body": "Le mode Rush est retiré de tout le jeu. Plus rien n’est chronométré dans OutBrick : la limite de coups de chaque plateau est la seule contrainte.",
+          "image": {
+            "src": "/assets/friends/peach.png",
+            "alt": "Peach, l’amie en briques couleur pêche, qui sourit",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Comment fonctionnent les plateaux",
+            "href": "/fr/play"
+          }
+        },
+        {
+          "title": "Appelez un ami par son nom",
+          "body": "Siri et Raccourcis peuvent faire venir n’importe lequel des neuf amis en briques sur la scène de l’accueil, simplement par son nom.",
+          "image": {
+            "src": "/assets/friends/sprout.png",
+            "alt": "Sprout, l’ami en briques vert, une jeune pousse sur la tête",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Rencontrer les neuf amis",
+            "href": "/fr/mascots"
+          }
+        }
+      ],
+      "release": {
+        "version": "4.2",
+        "title": "Un jeu plus exigeant, sur un Voyage reconstruit en briques.",
+        "items": [
+          "1 301 des 2 000 plateaux ont une nouvelle disposition, reconstruite selon une exigence qui augmente avec le chapitre.",
+          "Les portes à compteur et les portes gelées ne se ressemblent plus.",
+          "Le texte secondaire sur les panneaux sombres est plus clair, mesuré pour dépasser un contraste de 4,5:1."
+        ],
+        "link": {
+          "label": "Lire toutes les notes de version",
+          "href": "/fr/whats-new"
+        }
+      },
+      "cta": {
+        "label": "Télécharger OutBrick sur l’App Store",
+        "href": "https://apps.apple.com/fr/app/outbrick/id6807997465?mt=8&ct=web-email-newsletter"
+      }
+    },
+    "de": {
+      "subject": "Die Reise ist aus Steinen gebaut",
+      "preheader": "167 Dörfer, nirgends eine Uhr und Freunde, die kommen, wenn Sie sie beim Namen rufen.",
+      "hero": {
+        "eyebrow": "OutBrick News · Oktober 2026",
+        "title": "Ein anspruchsvolleres Spiel auf einer Reise, neu gebaut aus Steinen.",
+        "body": "Sie haben uns gesagt, dass jedes Level zu leicht war. Sie hatten recht. In dieser Ausgabe geht es um das Update, das darauf zu antworten beginnt, und um die Straße, auf der es spielt.\n\nJedes Spielfeld ist weiterhin **nachweislich lösbar**, und jedes lässt sich weiterhin lösen, ohne etwas auszugeben.",
+        "image": {
+          "src": "/og/de.png",
+          "alt": "„Ein Boulevard, gebaut aus Bausteinen. 2.000 Spielfelder · 167 Bausteindörfer · neun Freunde.“ Bricko, Peach und Sprout, die Steinfreunde von OutBrick",
+          "width": 1200,
+          "height": 630
+        }
+      },
+      "stories": [
+        {
+          "title": "167 Dörfer, Noppe für Noppe",
+          "body": "Nichts auf der Karte ist mehr ein gemaltes Bild. Alle 167 Dörfer bauen Boden, Straßen, Requisiten und Wahrzeichen aus Steinen, während Sie reisen – aus achtundzwanzig gestalteten Orten.",
+          "image": {
+            "src": "/assets/friends/bloo.png",
+            "alt": "Bloo, der blaue Steinfreund, mit seiner Taschenuhr",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Die Dörfer entdecken",
+            "href": "/de/whats-new"
+          }
+        },
+        {
+          "title": "Nirgends eine Uhr",
+          "body": "Rush ist aus dem ganzen Spiel entfernt. In OutBrick läuft keine Zeit mehr ab: Das Zuglimit jedes Spielfelds ist die einzige Grenze.",
+          "image": {
+            "src": "/assets/friends/peach.png",
+            "alt": "Peach, die pfirsichfarbene Steinfreundin, lächelt",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "So funktionieren die Spielfelder",
+            "href": "/de/play"
+          }
+        },
+        {
+          "title": "Freunde beim Namen rufen",
+          "body": "Siri und Kurzbefehle holen jeden der neun Steinfreunde beim Namen auf die Bühne des Startbildschirms.",
+          "image": {
+            "src": "/assets/friends/sprout.png",
+            "alt": "Sprout, der grüne Steinfreund, mit einem Keimling auf dem Kopf",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Alle neun Freunde kennenlernen",
+            "href": "/de/mascots"
+          }
+        }
+      ],
+      "release": {
+        "version": "4.2",
+        "title": "Ein anspruchsvolleres Spiel auf einer Reise, neu gebaut aus Steinen.",
+        "items": [
+          "1.301 der 2.000 Spielfelder haben neue Layouts, neu gebaut nach einem Maßstab, der mit dem Kapitel steigt.",
+          "Zählertore und vereiste Tore sehen nicht mehr gleich aus.",
+          "Sekundärtext auf dunklen Flächen ist heller und erreicht nachgemessen einen Kontrast von mindestens 4,5:1."
+        ],
+        "link": {
+          "label": "Alle Versionshinweise lesen",
+          "href": "/de/whats-new"
+        }
+      },
+      "cta": {
+        "label": "OutBrick im App Store laden",
+        "href": "https://apps.apple.com/de/app/outbrick/id6807997465?mt=8&ct=web-email-newsletter"
+      }
+    },
+    "es": {
+      "subject": "El Viaje está hecho de ladrillos",
+      "preheader": "167 pueblos, ningún reloj en ninguna parte y amigos que vienen cuando los llamas por su nombre.",
+      "hero": {
+        "eyebrow": "Noticias de OutBrick · octubre de 2026",
+        "title": "Un juego más exigente, en un Viaje reconstruido con ladrillos.",
+        "body": "Nos dijiste que todos los niveles eran demasiado fáciles. Tenías razón. Esta carta habla de la versión que empieza a responder a eso, y del camino por el que discurre.\n\nCada tablero sigue estando **comprobado como resoluble**, y todos se pueden completar sin gastar nada.",
+        "image": {
+          "src": "/og/es.png",
+          "alt": "«Un bulevar construido con bloques. 2.000 tableros · 167 pueblos de bloques · nueve amigos.» Bricko, Peach y Sprout, los amigos de ladrillo de OutBrick",
+          "width": 1200,
+          "height": 630
+        }
+      },
+      "stories": [
+        {
+          "title": "167 pueblos, pieza a pieza",
+          "body": "Nada en el mapa es ya una imagen pintada. Los 167 pueblos construyen su suelo, sus caminos, sus objetos y sus monumentos con ladrillos a medida que avanzas, a partir de veintiocho lugares diseñados.",
+          "image": {
+            "src": "/assets/friends/bloo.png",
+            "alt": "Bloo, el amigo de ladrillo azul, con su reloj de bolsillo",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Conocer los pueblos",
+            "href": "/es/whats-new"
+          }
+        },
+        {
+          "title": "Ningún reloj en ninguna parte",
+          "body": "El modo Rush desaparece de todo el juego. En OutBrick ya nada tiene tiempo límite: el límite de movimientos de cada tablero es la única cuerda.",
+          "image": {
+            "src": "/assets/friends/peach.png",
+            "alt": "Peach, la amiga de ladrillo color melocotón, sonriendo",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Cómo funcionan los tableros",
+            "href": "/es/play"
+          }
+        },
+        {
+          "title": "Llama a un amigo por su nombre",
+          "body": "Siri y Atajos pueden traer a cualquiera de los nueve amigos de ladrillo al escenario de inicio con solo decir su nombre.",
+          "image": {
+            "src": "/assets/friends/sprout.png",
+            "alt": "Sprout, el amigo de ladrillo verde, con un brote en la cabeza",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Conocer a los nueve amigos",
+            "href": "/es/mascots"
+          }
+        }
+      ],
+      "release": {
+        "version": "4.2",
+        "title": "Un juego más exigente, en un Viaje reconstruido con ladrillos.",
+        "items": [
+          "1301 de los 2000 tableros tienen una nueva disposición, reconstruida según un listón que sube con cada capítulo.",
+          "Las puertas con contador y las puertas heladas ya no se parecen.",
+          "El texto secundario sobre paneles oscuros es más claro, medido para superar un contraste de 4,5:1."
+        ],
+        "link": {
+          "label": "Leer las notas de la versión",
+          "href": "/es/whats-new"
+        }
+      },
+      "cta": {
+        "label": "Descargar OutBrick en la App Store",
+        "href": "https://apps.apple.com/es/app/outbrick/id6807997465?mt=8&ct=web-email-newsletter"
+      }
+    },
+    "ja": {
+      "subject": "Journeyはブロックでできています",
+      "preheader": "167の村、どこにも時計なし、そして名前を呼ぶと来てくれる仲間たち。",
+      "hero": {
+        "eyebrow": "OutBrickニュース · 2026年10月",
+        "title": "ブロックで作り直したJourneyで、手ごたえのあるゲームに。",
+        "body": "「どのステージも簡単すぎる」という声をいただきました。そのとおりでした。今回のお便りでは、それに応え始めたアップデートと、その舞台となる道についてお伝えします。\n\nすべてのステージは引き続き**クリアできることを証明済み**で、何も購入しなくてもクリアできます。",
+        "image": {
+          "src": "/og/ja.png",
+          "alt": "「ブロックでつくる大通り。2,000の盤面 · 167のブロックの村 · 9人の仲間」OutBrickのブロックの仲間、Bricko、Peach、Sprout",
+          "width": 1200,
+          "height": 630
+        }
+      },
+      "stories": [
+        {
+          "title": "167の村を、ひとつずつ",
+          "body": "マップに描かれた絵はもうありません。167の村はすべて、進むにつれて地面、道、小物、名所をブロックで組み上げます。もとになるのは28のデザインされた場所です。",
+          "image": {
+            "src": "/assets/friends/bloo.png",
+            "alt": "懐中時計を下げた青いブロックの仲間、Bloo",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "村を見る",
+            "href": "/ja/whats-new"
+          }
+        },
+        {
+          "title": "どこにも時計なし",
+          "body": "Rushはゲーム全体から廃止しました。OutBrickに制限時間はもうありません。各ステージの手数制限だけがルールです。",
+          "image": {
+            "src": "/assets/friends/peach.png",
+            "alt": "ほほえむピーチ色のブロックの仲間、Peach",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "ステージの遊び方",
+            "href": "/ja/play"
+          }
+        },
+        {
+          "title": "仲間を名前で呼ぶ",
+          "body": "SiriとショートカットでBlooたち9人のブロックの仲間を、名前でホームのステージに呼べます。",
+          "image": {
+            "src": "/assets/friends/sprout.png",
+            "alt": "頭に芽をのせた緑のブロックの仲間、Sprout",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "9人の仲間に会う",
+            "href": "/ja/mascots"
+          }
+        }
+      ],
+      "release": {
+        "version": "4.2",
+        "title": "ブロックで作り直したJourneyで、手ごたえのあるゲームに。",
+        "items": [
+          "2,000ステージのうち1,301ステージを、章が進むほど高くなる基準で作り直しました。",
+          "カウント付きのゲートと凍ったゲートが見分けやすくなりました。",
+          "暗いパネル上の補足テキストを明るくし、コントラスト比4.5:1以上を実測で確認しました。"
+        ],
+        "link": {
+          "label": "リリースノートを読む",
+          "href": "/ja/whats-new"
+        }
+      },
+      "cta": {
+        "label": "App StoreでOutBrickを入手",
+        "href": "https://apps.apple.com/jp/app/outbrick/id6807997465?mt=8&ct=web-email-newsletter"
+      }
+    }
+  }
+}

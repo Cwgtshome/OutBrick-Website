@@ -77,3 +77,11 @@
 /site.webmanifest
   Content-Type: application/manifest+json; charset=utf-8
   Cache-Control: public, max-age=86400
+
+# Email template previews exist only on Deploy Previews and branch deploys
+# (scripts/build-email-previews.mjs); never indexed, wherever they appear.
+/email-previews/*
+  X-Robots-Tag: noindex, nofollow
+
+/email-previews/*.txt
+  Content-Type: text/plain; charset=utf-8
