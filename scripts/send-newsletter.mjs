@@ -31,6 +31,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { newsletterCampaign, emailLocales, isEmailLocale, PLACEHOLDER_ADDRESS } = await import('../emails/index.ts');
 const { SENDERS, resend, sendEmail } = await import('../emails/resend.ts');
+const { toText } = await import('../emails/core.ts');
 const { unsubscribeUrl, normalizeEmail } = await import('../emails/links.ts');
 const { listUnsubscribeHeaders } = await import('../emails/newsletter.ts');
 
@@ -96,7 +97,7 @@ if (testTo !== undefined) {
       headers: listUnsubscribeHeaders(unsub),
       tags: [{ name: 'form', value: 'newsletter-test' }, { name: 'locale', value: locale }],
     });
-    console.log(result.ok ? `${locale}: test sent (${result.data?.id})` : `${locale}: ${result.error}`);
+    console.log(result.ok ? `${locale}: test sent (${toText(result.data?.id)})` : `${locale}: ${result.error}`);
     if (!result.ok) process.exitCode = 1;
   }
   process.exit();
@@ -132,7 +133,7 @@ for (const locale of locales) {
     process.exitCode = 1;
     continue;
   }
-  const id = created.data?.id;
+  const id = toText(created.data?.id);
   if (!send) {
     console.log(`${locale}: draft broadcast ${id} created — review it in Resend, then rerun with --send`);
     continue;

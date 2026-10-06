@@ -18,7 +18,7 @@ export function linkKey(apiKey: string): Buffer {
 
 /** Lower-cased, trimmed, and plausible; anything else is rejected before it reaches Resend. */
 export function normalizeEmail(value: unknown): string | null {
-  const email = String(value ?? '').trim().toLowerCase();
+  const email = (typeof value === 'string' ? value : '').trim().toLowerCase();
   if (email.length < 6 || email.length > 254) return null;
   if (!/^[^\s@<>()",;:\\[\]]+@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/.test(email)) return null;
   return email;

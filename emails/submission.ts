@@ -9,7 +9,7 @@ import { isEmailLocale, type EmailLocale } from './i18n.ts';
 import { addressTag, confirmUrl, normalizeEmail } from './links.ts';
 import { SENDERS, sendEmail } from './resend.ts';
 import { affiliateAcknowledgement, careersAcknowledgement, contactAcknowledgement, newsletterConfirm, type Rendered } from './templates.ts';
-import { SITE } from './core.ts';
+import { SITE, toText } from './core.ts';
 
 export type SubmissionPayload = {
   id?: string;
@@ -24,7 +24,7 @@ export type SubmissionPayload = {
 
 export type Outcome = { id: string; form: string; status: 'sent' | 'skipped' | 'failed'; reason?: string; locale?: EmailLocale };
 
-const str = (v: unknown, max = 5000) => (typeof v === 'string' ? v : v == null ? '' : String(v)).slice(0, max);
+const str = (v: unknown, max = 5000) => toText(v).slice(0, max);
 
 /** The language of the page the form was on: a `locale` field, else the path of the referring page, else English. */
 export function submissionLocale(data: Record<string, unknown>, formName: string): EmailLocale {
@@ -105,5 +105,5 @@ export async function handleSubmission(payload: SubmissionPayload | undefined, e
     `submission-${id}-${addressTag(apiKey, to)}`,
   );
   if (!result.ok) return done('failed', result.error, locale);
-  return done('sent', `resend id ${String(result.data?.id ?? '?')}`, locale);
+  return done('sent', `resend id ${toText(result.data?.id) || '?'}`, locale);
 }

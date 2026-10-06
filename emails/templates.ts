@@ -369,7 +369,7 @@ export type CampaignInput = {
 };
 
 function img(ctx: Ctx, image: IssueImage, width: number, cls: string): string {
-  const src = /^https:\/\//.test(image.src) ? image.src : `${ctx.assetBase}${image.src.startsWith('/') ? '' : '/'}${image.src}`;
+  const src = image.src.startsWith('https://') ? image.src : `${ctx.assetBase}${image.src.startsWith('/') ? '' : '/'}${image.src}`;
   const height = Math.round((width * image.height) / image.width);
   return `<img class="${cls}" src="${esc(src)}" width="${width}" height="${height}" alt="${esc(image.alt)}" style="display:block;width:${width}px;max-width:100%;height:auto;border:0;border-radius:14px;">`;
 }

@@ -63,13 +63,20 @@ export function fonts(locale: EmailLocale) {
 
 const entities: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 
+/** A visitor-supplied value as text: strings, numbers and booleans as written, anything else empty. */
+export function toText(value: unknown): string {
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') return String(value);
+  return '';
+}
+
 export function esc(value: unknown): string {
-  return String(value ?? '').replace(/[&<>"']/g, (ch) => entities[ch]);
+  return toText(value).replace(/[&<>"']/g, (ch) => entities[ch]);
 }
 
 /** Escaped, with line breaks kept as <br> (white-space: pre-wrap is not safe in Outlook). */
 export function escLines(value: unknown): string {
-  return esc(String(value ?? '').replace(/\r\n?/g, '\n')).replace(/\n/g, '<br>');
+  return esc(toText(value).replace(/\r\n?/g, '\n')).replace(/\n/g, '<br>');
 }
 
 /** Only http(s) URLs and site-relative paths survive; anything else (javascript:, data:) becomes the home page. */
@@ -84,7 +91,7 @@ export function safeUrl(value: string, base = SITE): string {
  * A deliberately tiny inline Markdown for issue files: **bold**, *italic* and [text](url),
  * applied after escaping, so an issue file can never inject markup.
  */
-export function inlineMarkdown(value: string, linkColor = color.link): string {
+export function inlineMarkdown(value: string, linkColor: string = color.link): string {
   return esc(value)
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')

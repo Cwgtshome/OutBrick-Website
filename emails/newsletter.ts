@@ -14,9 +14,12 @@ const sitePath = (locale: EmailLocale, path: string) => (locale === 'en' ? path 
 
 function redirect(req: Request, locale: EmailLocale, path: string): Response {
   const origin = new URL(req.url).origin;
+  // Netlify copies the request's query string onto a function's redirect when the Location has
+  // none of its own, which would carry the signed address and token onto the landing page. A
+  // query of our own (which the static pages ignore) stops that.
   return new Response(null, {
     status: 303,
-    headers: { Location: `${origin}${sitePath(locale, path)}`, 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' },
+    headers: { Location: `${origin}${sitePath(locale, path)}?from=email`, 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' },
   });
 }
 
