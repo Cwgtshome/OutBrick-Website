@@ -82,7 +82,11 @@ const EMAIL = /\b[A-Z0-9._%+-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)*\.[A-Z]{2,}\b/gi;
   });
   for (const full of walk(distDir)) {
     if (!/\.(txt|xml|json|rsc|webmanifest)$/.test(full) || full.includes(`${path.sep}_next${path.sep}`)) continue;
-    const found = [...new Set(fs.readFileSync(full, 'utf8').match(EMAIL) ?? [])];
+    // The contact page's own RSC payload repeats the one address it is allowed to show (below).
+    const rel = path.relative(distDir, full).split(path.sep).join('/');
+    const contactPayload = /^(?:(?:fr|de|es|ja)\/)?contact\.rsc$/.test(rel);
+    const text = fs.readFileSync(full, 'utf8');
+    const found = [...new Set((contactPayload ? text.replaceAll('support@outbrick.site', '') : text).match(EMAIL) ?? [])];
     if (found.length) {
       console.log(`${path.relative(distDir, full)}\n  ERROR  publishes an email address (${found.join(', ')}) — use the contact form instead\n`);
       process.exitCode = 1;
