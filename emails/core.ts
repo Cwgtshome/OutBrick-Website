@@ -184,9 +184,9 @@ export function rule(): string {
 /** The brick course as a row of six cells: the same stripe as the site's header. */
 export function courseStripe(height = 10): string {
   const cells = course
-    .map((c) => `<td width="100" height="${height}" bgcolor="${c}" style="background:${c};height:${height}px;font-size:0;line-height:0;mso-line-height-rule:exactly;">&nbsp;</td>`)
+    .map((c) => `<td width="16.66%" height="${height}" bgcolor="${c}" style="width:16.66%;background:${c};height:${height}px;font-size:0;line-height:0;mso-line-height-rule:exactly;">&nbsp;</td>`)
     .join('');
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${cells}</tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed;"><tr>${cells}</tr></table>`;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -252,7 +252,7 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
 }
 @media (prefers-color-scheme:dark){
   .ob-page{background:${color.darkPage} !important;}
-  .ob-paper{background:${color.darkPaper} !important;}
+  .ob-paper{background:${color.darkPaper} !important;border-color:${color.ink2} !important;}
   .ob-h{color:${color.title} !important;}
   .ob-text{color:${color.darkText} !important;}
   .ob-muted,.ob-eyebrow{color:${color.darkMuted} !important;}
@@ -262,7 +262,7 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
   .ob-card{background:${color.ink} !important;border-color:#3a3190 !important;}
 }
 [data-ogsc] .ob-page{background:${color.darkPage} !important;}
-[data-ogsc] .ob-paper{background:${color.darkPaper} !important;}
+[data-ogsc] .ob-paper{background:${color.darkPaper} !important;border-color:${color.ink2} !important;}
 [data-ogsc] .ob-h{color:${color.title} !important;}
 [data-ogsc] .ob-text{color:${color.darkText} !important;}
 [data-ogsc] .ob-muted,[data-ogsc] .ob-eyebrow{color:${color.darkMuted} !important;}

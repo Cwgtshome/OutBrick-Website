@@ -33,8 +33,11 @@
   Cache-Control: public, max-age=31536000, immutable
 
 # Self-hosted fonts, if any are added: names are stable per face and the files never change.
+# The OutBrick emails (emails/core.ts) load Fredoka and Figtree from here, and a web font from
+# another origin only loads with CORS, so these two OFL font files are open to any origin.
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
 
 # Artwork and screenshots keep stable names, so they are not immutable: a day fresh, then
 # served stale for up to a week while the CDN revalidates in the background.
