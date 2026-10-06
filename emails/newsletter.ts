@@ -2,13 +2,18 @@
 // and scripts can import the same code. See netlify/functions/newsletter-confirm.mts and
 // newsletter-unsubscribe.mts for what each URL does.
 
-import type { EmailLocale } from './i18n.ts';
+import { isEmailLocale, type EmailLocale } from './i18n.ts';
 import { addressTag, unsubscribeUrl, verifyConfirm, verifyUnsubscribe } from './links.ts';
 import { SENDERS, newsletterSegments, sendEmail, subscribeContact, unsubscribeContact } from './resend.ts';
 import { newsletterWelcome, unsubscribePage } from './templates.ts';
 import { SITE } from './core.ts';
 
 type Env = Record<string, string | undefined>;
+
+const askedLocale = (req: Request): EmailLocale => {
+  const l = new URL(req.url).searchParams.get('l');
+  return isEmailLocale(l) ? l : 'en';
+};
 
 const sitePath = (locale: EmailLocale, path: string) => (locale === 'en' ? path : `/${locale}${path}`);
 
@@ -38,7 +43,7 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
   const apiKey = env.RESEND_API_KEY;
   if (!apiKey) {
     console.error('[newsletter] confirm: RESEND_API_KEY is not set');
-    return redirect(req, 'en', '/newsletter/link-expired');
+    return redirect(req, askedLocale(req), '/newsletter/link-expired');
   }
   const verified = verifyConfirm(params, apiKey);
   if (!verified.ok) {
@@ -83,7 +88,7 @@ export async function handleUnsubscribe(req: Request, env: Env): Promise<Respons
   const apiKey = env.RESEND_API_KEY;
   if (!apiKey) {
     console.error('[newsletter] unsubscribe: RESEND_API_KEY is not set');
-    return req.method === 'POST' ? new Response('Unavailable', { status: 503 }) : redirect(req, 'en', '/newsletter/link-expired');
+    return req.method === 'POST' ? new Response('Unavailable', { status: 503 }) : redirect(req, askedLocale(req), '/newsletter/link-expired');
   }
   const verified = verifyUnsubscribe(url.searchParams, apiKey);
   if (!verified.ok) {
