@@ -62,6 +62,10 @@ export default function ContactPage() {
           The form sends your message straight to the OutBrick team — no mail app needed — and a person
           replies by email.
         </p>
+        <p>
+          Prefer email?{' '}
+          <a href="mailto:support@outbrick.site" translate="no">support@outbrick.site</a>
+        </p>
       </div>
 
       <section className="brick" id="form" aria-labelledby="form-title">

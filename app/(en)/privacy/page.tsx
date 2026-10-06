@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       eyebrow="OutBrick privacy policy"
       title="Your board stays yours."
       summary="OutBrick is designed to work entirely on your device. This policy explains what the app does and does not collect, how Apple services fit in, and how to make privacy choices."
-      updated="24 September 2026"
+      updated="6 October 2026"
       current="/privacy"
     >
       <div className="brick headline">
@@ -143,14 +143,16 @@ export default function PrivacyPage() {
           Netlify receives each submission on our behalf, stores it in our account, screens it for spam
           (using its spam-filtering provider, Akismet) and emails it to us. Netlify acts as our service
           provider under its own <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">privacy policy</a>.
-          No other third party receives it, and nothing is sent until you press the button.
+          The acknowledgement and newsletter emails described below are sent through Resend; no other
+          third party receives it, and nothing is sent until you press the button.
         </p>
         <ul className="points">
           <li><b>Contact form:</b> the topic, your name, email address and message, and — only if you fill them in — your device, iOS version and app version.</li>
           <li><b>Affiliate application:</b> your name, email address, the links to your channels, an audience-size range, your country, how you would promote OutBrick, your preferred handle and the code proposed from it.</li>
           <li><b>Job application:</b> the role, your name, email address, a link to your portfolio or profile, where you live and your time zone, and your note.</li>
-          <li><b>Newsletter:</b> your email address, the language you chose for the emails, and a record that you ticked the consent box. We use it only to send occasional emails about new villages and major OutBrick updates, about once a month at most. Unsubscribe at any time by replying to any newsletter email or through the <a href="/contact?topic=privacy">contact form</a>, and we delete your address from the list. Signing up or not changes nothing in the app.</li>
-          <li><b>With every form:</b> your consent tick, and the technical details Netlify records with a submission, such as the time, your IP address and your browser&rsquo;s user agent, which it uses to keep out spam.</li>
+          <li><b>Newsletter:</b> your email address, the language you chose for the emails, and a record that you ticked the consent box. We use it only to send occasional emails about new villages and major OutBrick updates, about once a month at most. Sign-up is double opt-in: your address joins the list only when you press the button in the confirmation email, which works for 7 days. Every newsletter email has a one-click unsubscribe link that stops them at once; you can also unsubscribe by replying to any newsletter email or through the <a href="/contact?topic=privacy">contact form</a>, and we delete your address from the list. Signing up or not changes nothing in the app.</li>
+          <li><b>Emails we send you:</b> after the contact form, an affiliate application or a job application, one acknowledgement email to the address you gave, with a copy of what you sent; for the newsletter, the confirmation email and then a welcome email. They are sent through Resend, our email delivery provider, which acts as our processor under its own <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>. Resend receives the address, the language and the content of each email and keeps a delivery log; for newsletter subscribers it also stores the address, the date you confirmed and whether you have unsubscribed. Open and click tracking are switched off, and our Resend account sends from the EU (Ireland).</li>
+          <li><b>With every form:</b> your consent tick, the language of the page you used, and the technical details Netlify records with a submission, such as the time, your IP address and your browser&rsquo;s user agent, which it uses to keep out spam.</li>
         </ul>
         <p>
           We use these details only for the reason you sent them: to answer your message, to review and
@@ -205,8 +207,8 @@ export default function PrivacyPage() {
         <p>
           Apple services, App Store purchases, Game Center, iCloud sync, and iCloud backups are operated
           under their own terms and privacy policies. Google is the one advertising partner in the app,
-          described above. On this website, Netlify hosts the pages and handles the forms, also described
-          above. We do not add a third-party analytics or advertising partner without updating
+          described above. On this website, Netlify hosts the pages and handles the forms, and Resend sends the
+          emails that answer them, both described above. We do not add a third-party analytics or advertising partner without updating
           this policy and the relevant App Store privacy information first — which is what this revision
           is. We may update this page when the app or its practices change; the effective date above
           will show the latest revision.

@@ -1996,10 +1996,6 @@
     "file": "app/(en)/newsletter/page.tsx"
   },
   {
-    "text": "To come off the list, reply to any letter or use the",
-    "file": "app/(en)/newsletter/page.tsx"
-  },
-  {
     "text": "contact form",
     "file": "app/(en)/newsletter/page.tsx"
   },
@@ -2026,26 +2022,6 @@
   {
     "text": "Journal RSS",
     "file": "app/(en)/newsletter/page.tsx"
-  },
-  {
-    "text": "Thanks — you’re on the OutBrick newsletter list",
-    "file": "app/(en)/newsletter/thanks/page.tsx"
-  },
-  {
-    "text": "Your sign-up for the OutBrick newsletter was received.",
-    "file": "app/(en)/newsletter/thanks/page.tsx"
-  },
-  {
-    "text": "You’re on",
-    "file": "app/(en)/newsletter/thanks/page.tsx"
-  },
-  {
-    "text": "the list.",
-    "file": "app/(en)/newsletter/thanks/page.tsx"
-  },
-  {
-    "text": "Thank you. The next letter comes when there’s a new village or a big update, about once a month at most. To come off the list, reply to any letter.",
-    "file": "app/(en)/newsletter/thanks/page.tsx"
   },
   {
     "text": "Read what’s new",
@@ -4634,5 +4610,101 @@
   {
     "text": "min read",
     "file": "app/(en)/blog/journal-kit.tsx"
+  },
+  {
+    "text": "Prefer email?",
+    "file": "app/(en)/contact/page.tsx"
+  },
+  {
+    "text": "Every letter ends with a one-click unsubscribe link; you can also reply to any letter or use the",
+    "file": "app/(en)/newsletter/page.tsx"
+  },
+  {
+    "text": "Check your inbox to confirm your OutBrick newsletter sign-up",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "Your OutBrick newsletter sign-up was received. Confirm it with the button in the email we have just sent you.",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "Check your",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "inbox.",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "Thank you. We’ve sent you an email with a button in it: press it within 7 days to confirm, and you’re on the list. Until then, nothing is added. The letters come about once a month at most, and every one has a one-click unsubscribe link.",
+    "file": "app/(en)/newsletter/thanks/page.tsx"
+  },
+  {
+    "text": "You’re subscribed to OutBrick News",
+    "file": "app/(en)/newsletter/confirmed/page.tsx"
+  },
+  {
+    "text": "Your OutBrick newsletter subscription is confirmed. A short letter arrives when a new village opens or a big update ships.",
+    "file": "app/(en)/newsletter/confirmed/page.tsx"
+  },
+  {
+    "text": "Welcome to",
+    "file": "app/(en)/newsletter/confirmed/page.tsx"
+  },
+  {
+    "text": "OutBrick News.",
+    "file": "app/(en)/newsletter/confirmed/page.tsx"
+  },
+  {
+    "text": "Your subscription is confirmed, and a welcome email is on its way. The next letter comes when there’s a new village or a big update, about once a month at most. Every letter has a one-click unsubscribe link.",
+    "file": "app/(en)/newsletter/confirmed/page.tsx"
+  },
+  {
+    "text": "You’re unsubscribed from OutBrick News",
+    "file": "app/(en)/newsletter/unsubscribed/page.tsx"
+  },
+  {
+    "text": "This address will no longer receive the OutBrick newsletter. You can sign up again at any time from the newsletter page.",
+    "file": "app/(en)/newsletter/unsubscribed/page.tsx"
+  },
+  {
+    "text": "You’re",
+    "file": "app/(en)/newsletter/unsubscribed/page.tsx"
+  },
+  {
+    "text": "unsubscribed.",
+    "file": "app/(en)/newsletter/unsubscribed/page.tsx"
+  },
+  {
+    "text": "This address won’t receive OutBrick News any more. Thank you for reading. If that was a mistake, you can sign up again at any time.",
+    "file": "app/(en)/newsletter/unsubscribed/page.tsx"
+  },
+  {
+    "text": "Sign up again",
+    "file": "app/(en)/newsletter/unsubscribed/page.tsx"
+  },
+  {
+    "text": "That OutBrick newsletter link has expired",
+    "file": "app/(en)/newsletter/link-expired/page.tsx"
+  },
+  {
+    "text": "Newsletter links from OutBrick work for 7 days. Sign up again below and we will send a fresh confirmation email straight away.",
+    "file": "app/(en)/newsletter/link-expired/page.tsx"
+  },
+  {
+    "text": "That link has",
+    "file": "app/(en)/newsletter/link-expired/page.tsx"
+  },
+  {
+    "text": "run out.",
+    "file": "app/(en)/newsletter/link-expired/page.tsx"
+  },
+  {
+    "text": "Confirmation links work for 7 days, and this one has expired or did not arrive in one piece. Sign up again below and we’ll send a fresh one straight away. If you were trying to unsubscribe, reply to any letter and we’ll take you off the list.",
+    "file": "app/(en)/newsletter/link-expired/page.tsx"
+  },
+  {
+    "text": "Newsletter sign-up",
+    "file": "app/(en)/newsletter/link-expired/page.tsx"
   }
 ]
