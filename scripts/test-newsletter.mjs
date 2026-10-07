@@ -26,7 +26,7 @@ test('scanners cannot subscribe; deliberate POST subscribes and sends welcome in
       const html = await get.text();
       assert.match(html, /<form method="post"/);
       assert.ok(html.includes(`lang="${locale}"`));
-      assert.equal(get.headers.get('Referrer-Policy'), 'no-referrer');
+      assert.equal(get.headers.get('Referrer-Policy'), 'same-origin');
       assert.equal(calls.length, 0);
       const crossOrigin = await handleConfirm(new Request(url, { method: 'POST', headers: { Origin: 'https://example.org' } }), env);
       assert.equal(crossOrigin.status, 403);
