@@ -1,4 +1,5 @@
-// The team's own copy of every form submission, sent to support@outbrick.site in the same
+// The team's own copy of every form submission, sent to support@outbrick.site (newsletter
+// sign-ups to news@outbrick.site) in the same
 // design as the visitor's acknowledgement. It replaces Netlify's plain notification: the
 // visitor's message first, every field they filled in, where they came from, whether their
 // acknowledgement went out, and a reply button. Reply-To is the visitor, so answering the email

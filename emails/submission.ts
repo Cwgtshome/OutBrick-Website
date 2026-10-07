@@ -1,7 +1,7 @@
 // What happens after a Netlify Forms submission is verified: which email goes to whom.
 //
 // Two emails per submission: the visitor's own (an acknowledgement, or the newsletter's
-// confirm-your-subscription), then the team's copy to support@ (emails/team.ts), which says
+// confirm-your-subscription), then the team's copy to support@, or news@ for the newsletter (emails/team.ts), which says
 // whether the first one went out.
 //
 // Called by netlify/functions/submission-created.mts with the event payload. It never throws:
@@ -29,8 +29,8 @@ export type SubmissionPayload = {
 
 export type Outcome = { id: string; form: string; status: 'sent' | 'skipped' | 'failed'; reason?: string; locale?: EmailLocale; team?: 'sent' | 'skipped' | 'failed' };
 
-/** Where the team's copy goes. TEAM_INBOX overrides it (a test inbox, say). */
-export const TEAM_INBOX = 'support@outbrick.site';
+/** Where the team's copy goes: newsletter sign-ups to news@, everything else to support@. TEAM_INBOX overrides both (a test inbox, say). */
+export const TEAM_INBOX = { support: 'support@outbrick.site', news: 'news@outbrick.site' } as const;
 
 const str = (v: unknown, max = 5000) => toText(v).slice(0, max);
 
@@ -133,14 +133,16 @@ export async function handleSubmission(payload: SubmissionPayload | undefined, e
   const locale = outcome.locale ?? submissionLocale(data, form);
   const acknowledgement = outcome.status === 'sent' ? 'sent' : (outcome.reason ?? outcome.status).replace(/^POST \/emails -> /, 'Resend refused it, ');
   const visitor = normalizeEmail(data.email);
+  const team = form === 'newsletter' ? SENDERS.newsTeam : SENDERS.supportTeam;
+  const inbox = form === 'newsletter' ? TEAM_INBOX.news : TEAM_INBOX.support;
   try {
     const rendered = teamNotification({ form, data, locale, submissionId: outcome.id, createdAt: str(payload.created_at, 40), acknowledgement });
     const result = await sendEmail(
       apiKey,
       {
-        from: SENDERS.forms.from,
-        replyTo: visitor || SENDERS.forms.replyTo,
-        to: normalizeEmail(env.TEAM_INBOX) || TEAM_INBOX,
+        from: team.from,
+        replyTo: visitor || team.replyTo,
+        to: normalizeEmail(env.TEAM_INBOX) || inbox,
         subject: rendered.subject,
         html: rendered.html,
         text: rendered.text,

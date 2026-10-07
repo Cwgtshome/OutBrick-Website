@@ -10,8 +10,11 @@ const API = 'https://api.resend.com';
 export const SENDERS = {
   support: { from: 'OutBrick Support <support@outbrick.site>', replyTo: 'support@outbrick.site' },
   news: { from: 'OutBrick News <news@outbrick.site>', replyTo: 'news@outbrick.site' },
-  // The team's copy of a submission; its Reply-To is the visitor whenever they gave an address.
-  forms: { from: 'OutBrick Forms <forms@outbrick.site>', replyTo: 'support@outbrick.site' },
+  // The team's copy of a submission, from and to the inbox that handles that form: support@ for
+  // contact, careers and affiliate, news@ for newsletter sign-ups. Its Reply-To is the visitor
+  // whenever they gave an address.
+  supportTeam: { from: 'OutBrick Forms <support@outbrick.site>', replyTo: 'support@outbrick.site' },
+  newsTeam: { from: 'OutBrick News sign-ups <news@outbrick.site>', replyTo: 'news@outbrick.site' },
 } as const;
 
 export type ResendResult = { ok: boolean; status: number; data: Record<string, unknown> | null; error?: string };
