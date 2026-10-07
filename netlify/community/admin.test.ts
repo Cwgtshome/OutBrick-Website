@@ -297,3 +297,31 @@ void test('five language admin UI dictionaries have complete labels', () => {
     assert.equal(c.roles.length, 5);
   }
 });
+
+void test('editorial pagination reaches older entries and preserves the shell JSON-LD element', async () => {
+  const owner = await member(pg, { role: 'admin' });
+  await pg.query(`INSERT INTO editorial_content(locale,kind,slug,title,body_md,body_html,author_id,editor_id)
+    SELECT 'en','blog','pagination-' || n,'Pagination article ' || n,'Body','<p>Body</p>',$1,$1 FROM generate_series(1,101) n`, [owner.id]);
+  const first = await api('GET', '/admin?contentPage=1', { cookie: owner.cookie });
+  const second = await api('GET', '/admin?contentPage=2', { cookie: owner.cookie });
+  assert.equal(first.body.content.length, 100);
+  assert.equal(first.body.contentPages, 2);
+  assert.equal(second.body.contentPage, 2);
+  const visibleIds = new Set([...first.body.content, ...second.body.content].map((c: { id: number }) => c.id));
+  const allRows = await pg.query<{ id: number }>('SELECT id::int FROM editorial_content');
+  assert.equal(visibleIds.size, allRows.rows.length);
+  const older = second.body.content[0];
+  const edited = await api('PATCH', `/admin/content/${older.id}`, { cookie: owner.cookie, body: { ...older, title: 'Older draft is still editable' } });
+  assert.equal(edited.status, 200);
+  const shell = '<head><title>Home</title></head><main><script type="application/ld+json">{"@id":"https://www.outbrick.site/community#webpage"}</script>' + homeStaticHtml('en') + '</main>';
+  const library = contentPage(shell, 'en', []);
+  assert.equal((library.match(/<script type="application\/ld\+json">/g) ?? []).length, 1);
+  assert.ok(library.includes('<main><script type="application/ld+json">'));
+  assert.ok(library.includes('CollectionPage'));
+  const article = contentPage(shell, 'en', { ...older, kind: 'blog', title: 'A <safe> title' });
+  assert.ok(article.includes('<main><script type="application/ld+json">'));
+  const payload = article.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(payload);
+  assert.equal(JSON.parse(payload).headline, 'A <safe> title');
+  assert.ok(!payload.includes('<safe>'));
+});

@@ -47,6 +47,7 @@ export const dashboard: Handler = async (req) => {
     1,
     Math.min(100000, Number(new URL(req.url).searchParams.get('page')) || 1),
   );
+  const contentPage = Math.max(1, Math.min(100000, Math.floor(Number(new URL(req.url).searchParams.get('contentPage')) || 1)));
   const [counts] = await run(
     `SELECT (SELECT count(*)::int FROM members WHERE deleted_at IS NULL) members,(SELECT count(*)::int FROM threads WHERE deleted_at IS NULL) threads,(SELECT count(*)::int FROM reports WHERE resolved_at IS NULL) reports,(SELECT count(*)::int FROM posts WHERE pending AND deleted_at IS NULL) pending,(SELECT count(*)::int FROM editorial_content WHERE state='draft') drafts,(SELECT count(*)::int FROM editorial_content WHERE state='published') published`,
   );
@@ -58,7 +59,8 @@ export const dashboard: Handler = async (req) => {
         )
       : [];
   const content = await run(
-    `SELECT ${columns} FROM editorial_content ORDER BY updated_at DESC LIMIT 100`,
+    `SELECT ${columns} FROM editorial_content ORDER BY updated_at DESC, id DESC LIMIT 100 OFFSET $1`,
+    [(contentPage - 1) * 100],
   );
   const audit = await run(
     `SELECT id::int,action,target_id::int,created_at FROM mod_log ORDER BY id DESC LIMIT 30`,
@@ -79,6 +81,8 @@ export const dashboard: Handler = async (req) => {
     memberPage: Math.floor(page),
     memberPages: Math.max(1, Math.ceil(Number(counts.members) / 50)),
     content: content.map(view),
+    contentPage,
+    contentPages: Math.max(1, Math.ceil((Number(counts.drafts) + Number(counts.published)) / 100)),
     audit: audit.map((r) => ({
       id: r.id,
       action: r.action,

@@ -33,6 +33,8 @@ export type AdminSnapshot = {
   memberPage: number;
   memberPages: number;
   content: EditorialContent[];
+  contentPage: number;
+  contentPages: number;
   audit: { id: number; action: string; targetId: number; createdAt: string }[];
   watchingAll: boolean;
 };

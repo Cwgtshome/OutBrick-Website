@@ -68,28 +68,31 @@ export function contentPage(
       '</head>',
       '<meta name="robots" content="noindex"/></head>',
     );
-  // Remove the shell's home-page structured data; it describes a different address.
-  html = html.replace(
-    /<script type="application\/ld\+json">[\s\S]*?<\/script>/gi,
-    '',
-  );
-  if (content && !list) {
-    const ld = {
-      '@context': 'https://schema.org',
-      '@type': content.kind === 'blog' ? 'BlogPosting' : 'WebPage',
-      headline: content.title,
-      description: content.summary,
-      inLanguage: locale,
-      datePublished: content.publishedAt,
-      dateModified: content.updatedAt,
-      url: `https://www.outbrick.site${path}`,
-      author: { '@type': 'Organization', name: 'OutBrick' },
-    };
-    html = html.replace(
-      '</head>',
-      `<script type="application/ld+json">${JSON.stringify(ld).replaceAll('<', '\\u003c')}</script></head>`,
-    );
-  }
+  // Preserve the shell's script element: React hydrates it outside the static-content slot.
+  const ld = content && !list ? {
+    '@context': 'https://schema.org',
+    '@type': content.kind === 'blog' ? 'BlogPosting' : 'WebPage',
+    headline: content.title,
+    description: content.summary,
+    inLanguage: locale,
+    datePublished: content.publishedAt,
+    dateModified: content.updatedAt,
+    url: `https://www.outbrick.site${path}`,
+    author: { '@type': 'Organization', name: 'OutBrick' },
+  } : {
+    '@context': 'https://schema.org', '@type': 'CollectionPage',
+    name: w.library, inLanguage: locale, url: `https://www.outbrick.site${path}`,
+  };
+  const payload = JSON.stringify(ld).replaceAll('<', '\\u003c');
+  const shellId = `https://www.outbrick.site${communityPath(locale)}#webpage`;
+  let replaced = false;
+  html = html.replace(/(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/g,
+    (block, open: string, data: string, close: string) => {
+      if (replaced || !data.includes(shellId)) return block;
+      replaced = true;
+      return open + payload + close;
+    });
+  if (!replaced) html = html.replace('</head>', `<script type="application/ld+json">${payload}</script></head>`);
   return html;
 }
 export default async function editorialContent(

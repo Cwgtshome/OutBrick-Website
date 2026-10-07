@@ -49,7 +49,8 @@ function Dashboard() {
   const { locale, session, copy, path, announce } = useApp(),
     w = adminWords[locale];
   const [page, setPage] = useState(1),
-    load = useLoad(`admin:${page}`, () => api.dashboard(page));
+    [contentPage, setContentPage] = useState(1),
+    load = useLoad(`admin:${page}:${contentPage}`, () => api.dashboard(page, contentPage));
   const [editing, setEditing] = useState<EditorialContent | null>(null),
     [formOn, setFormOn] = useState(false),
     [busy, setBusy] = useState(false),
@@ -186,6 +187,11 @@ function Dashboard() {
           ))}
         </ul>
         {!data.content.length ? <p>{w.empty}</p> : null}
+        <div className="cm-toolbar">
+          <button className="cm-act" disabled={contentPage <= 1 || load.loading} onClick={() => setContentPage((p) => p - 1)}>{w.previous}</button>
+          <span>{contentPage} / {data.contentPages}</span>
+          <button className="cm-act" disabled={contentPage >= data.contentPages || load.loading} onClick={() => setContentPage((p) => p + 1)}>{w.next}</button>
+        </div>
       </section>
       <section className="cm-section" aria-labelledby="cm-admin-audit">
         <h2 id="cm-admin-audit">{w.audit}</h2>

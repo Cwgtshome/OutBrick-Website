@@ -191,7 +191,7 @@ const query = (params: Record<string, string | number | null | undefined>) => {
 };
 
 export const api = {
-  dashboard: (page = 1) => get<AdminSnapshot>(`/admin?page=${page}`, true),
+  dashboard: (page = 1, contentPage = 1) => get<AdminSnapshot>(`/admin?page=${page}&contentPage=${contentPage}`, true),
   watchAll: (enabled: boolean) =>
     write<{ ok: true }>('POST', '/admin/watch', { enabled }),
   setMemberRole: (id: number, role: string) =>

@@ -31,7 +31,7 @@ admin on a later verified sign-in; remove the address from the environment to re
 ## Dashboard and content
 
 `/community/admin` (and each language-prefixed equivalent) provides counts, moderation links,
-member role management for admins, editorial drafts, Markdown preview, publish/unpublish,
+member role management for admins, paginated editorial drafts, Markdown preview, publish/unpublish,
 revision checks and an activity log. `/community/library` lists published content. Individual
 pages/articles use `/community/content/{page|blog}/{slug}`. Public content is rendered at the edge
 for readers without JavaScript, with canonical URLs and structured metadata. Drafts return 404
