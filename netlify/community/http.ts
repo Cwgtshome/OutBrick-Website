@@ -8,13 +8,14 @@
 export const SITE = 'https://www.outbrick.site';
 
 export class ApiError extends Error {
-  constructor(
-    public status: number,
-    public code: string,
-    message: string,
-    public fields?: Record<string, string>,
-  ) {
+  status: number;
+  code: string;
+  fields?: Record<string, string>;
+  constructor(status: number, code: string, message: string, fields?: Record<string, string>) {
     super(message);
+    this.status = status;
+    this.code = code;
+    this.fields = fields;
   }
 }
 
