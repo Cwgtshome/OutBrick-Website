@@ -6,12 +6,14 @@
 // the result for HTML and use it as is in the text/plain part.
 
 import type { EmailLocale } from './i18n.ts';
+// community-fx: the 'badge' kind and the ideas status in_progress.
+import { badgeEmailCopy, type BadgeEmailCopy } from './community-fx-i18n.ts';
 
-export type CommunityKind = 'reply' | 'mention' | 'watched' | 'status' | 'solved' | 'release' | 'moderation';
+export type CommunityKind = 'reply' | 'mention' | 'watched' | 'status' | 'solved' | 'release' | 'moderation' | 'badge';
 /** What an unsubscribe link can switch off: one kind, or every community email. */
 export type UnsubscribeKind = CommunityKind | 'all';
 
-export const communityKinds: readonly CommunityKind[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation'];
+export const communityKinds: readonly CommunityKind[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation', 'badge'];
 
 type Item = { title: string; body: string };
 
@@ -72,6 +74,7 @@ export type CommunityCopy = {
     solved: { subject: (title: string) => string; intro: string; cta: string };
     release: { subject: (version: string) => string; intro: (version: string) => string; cta: string };
     moderation: { subject: (title: string) => string; heading: string; intro: (title: string) => string; reason: string; appeal: string; cta: string };
+    badge: BadgeEmailCopy['kind'];
   };
   /** One line per item in the grouped email. */
   digestLine: Record<CommunityKind, (actor: string, title: string, extra: string) => string>;
@@ -112,6 +115,7 @@ const en: CommunityCopy = {
     status: 'status changes',
     solved: 'solved answers',
     release: 'new releases',
+    badge: badgeEmailCopy.en.kindName,
     moderation: 'moderation notices',
     all: 'anything at all',
   },
@@ -172,6 +176,7 @@ const en: CommunityCopy = {
     },
     solved: { subject: (title) => `Your answer in “${title}” was marked Solved`, intro: 'Thank you! Your answer is now the solution, so the next person with the same question will find it straight away.', cta: 'See your answer' },
     release: { subject: (version) => `OutBrick ${version} is out`, intro: (version) => `Version ${version} has just reached the App Store. Here’s what’s new:`, cta: 'Read the release notes' },
+    badge: badgeEmailCopy.en.kind,
     moderation: {
       subject: (title) => `About your post in “${title}”`,
       heading: 'A moderator has hidden one of your posts.',
@@ -188,6 +193,7 @@ const en: CommunityCopy = {
     status: (_actor, title, status) => `“${title}” is now ${status}`,
     solved: (_actor, title) => `Your answer in “${title}” was marked Solved`,
     release: (_actor, _title, version) => `OutBrick ${version} is out`,
+    badge: (_actor, _title, badge) => badgeEmailCopy.en.digestLine(badge),
     moderation: (_actor, title) => `A moderator hid your post in “${title}”`,
   },
   digest: {
@@ -212,6 +218,7 @@ const en: CommunityCopy = {
     planned: 'Planned',
     shipped: 'Shipped',
     declined: 'Declined',
+    in_progress: badgeEmailCopy.en.inProgress,
   },
   pages: {
     signin: {
@@ -256,6 +263,7 @@ const fr: CommunityCopy = {
     status: 'les changements de statut',
     solved: 'les réponses marquées comme solution',
     release: 'les nouvelles versions',
+    badge: badgeEmailCopy.fr.kindName,
     moderation: 'les avis de modération',
     all: 'quoi que ce soit',
   },
@@ -316,6 +324,7 @@ const fr: CommunityCopy = {
     },
     solved: { subject: (title) => `Votre réponse dans « ${title} » a été marquée comme solution`, intro: 'Merci ! Votre réponse est désormais la solution : la prochaine personne qui se pose la même question la trouvera tout de suite.', cta: 'Voir votre réponse' },
     release: { subject: (version) => `OutBrick ${version} est disponible`, intro: (version) => `La version ${version} vient d’arriver sur l’App Store. Voici les nouveautés :`, cta: 'Lire les notes de version' },
+    badge: badgeEmailCopy.fr.kind,
     moderation: {
       subject: (title) => `À propos de votre message dans « ${title} »`,
       heading: 'Un modérateur a masqué l’un de vos messages.',
@@ -332,6 +341,7 @@ const fr: CommunityCopy = {
     status: (_actor, title, status) => `« ${title} » : nouveau statut ${status}`,
     solved: (_actor, title) => `Votre réponse dans « ${title} » a été marquée comme solution`,
     release: (_actor, _title, version) => `OutBrick ${version} est disponible`,
+    badge: (_actor, _title, badge) => badgeEmailCopy.fr.digestLine(badge),
     moderation: (_actor, title) => `Un modérateur a masqué votre message dans « ${title} »`,
   },
   digest: {
@@ -356,6 +366,7 @@ const fr: CommunityCopy = {
     planned: 'Prévue',
     shipped: 'Disponible',
     declined: 'Refusée',
+    in_progress: badgeEmailCopy.fr.inProgress,
   },
   pages: {
     signin: {
@@ -400,6 +411,7 @@ const de: CommunityCopy = {
     status: 'Statusänderungen',
     solved: 'als Lösung markierten Antworten',
     release: 'neuen Versionen',
+    badge: badgeEmailCopy.de.kindName,
     moderation: 'Moderationshinweisen',
     all: 'allem',
   },
@@ -460,6 +472,7 @@ const de: CommunityCopy = {
     },
     solved: { subject: (title) => `Ihre Antwort in „${title}“ wurde als Lösung markiert`, intro: 'Vielen Dank! Ihre Antwort ist jetzt die Lösung, sodass die Nächsten mit derselben Frage sie sofort finden.', cta: 'Ihre Antwort ansehen' },
     release: { subject: (version) => `OutBrick ${version} ist da`, intro: (version) => `Version ${version} ist gerade im App Store erschienen. Das ist neu:`, cta: 'Versionshinweise lesen' },
+    badge: badgeEmailCopy.de.kind,
     moderation: {
       subject: (title) => `Zu Ihrem Beitrag in „${title}“`,
       heading: 'Ein Moderator hat einen Ihrer Beiträge ausgeblendet.',
@@ -476,6 +489,7 @@ const de: CommunityCopy = {
     status: (_actor, title, status) => `„${title}“ hat jetzt den Status ${status}`,
     solved: (_actor, title) => `Ihre Antwort in „${title}“ wurde als Lösung markiert`,
     release: (_actor, _title, version) => `OutBrick ${version} ist da`,
+    badge: (_actor, _title, badge) => badgeEmailCopy.de.digestLine(badge),
     moderation: (_actor, title) => `Ein Moderator hat Ihren Beitrag in „${title}“ ausgeblendet`,
   },
   digest: {
@@ -500,6 +514,7 @@ const de: CommunityCopy = {
     planned: 'Geplant',
     shipped: 'Umgesetzt',
     declined: 'Abgelehnt',
+    in_progress: badgeEmailCopy.de.inProgress,
   },
   pages: {
     signin: {
@@ -544,6 +559,7 @@ const es: CommunityCopy = {
     status: 'los cambios de estado',
     solved: 'las respuestas marcadas como solución',
     release: 'las nuevas versiones',
+    badge: badgeEmailCopy.es.kindName,
     moderation: 'los avisos de moderación',
     all: 'nada en absoluto',
   },
@@ -604,6 +620,7 @@ const es: CommunityCopy = {
     },
     solved: { subject: (title) => `Tu respuesta en «${title}» se ha marcado como solución`, intro: '¡Gracias! Tu respuesta es ahora la solución, así que la próxima persona con la misma pregunta la encontrará enseguida.', cta: 'Ver tu respuesta' },
     release: { subject: (version) => `Ya está aquí OutBrick ${version}`, intro: (version) => `La versión ${version} acaba de llegar a la App Store. Estas son las novedades:`, cta: 'Leer las notas de la versión' },
+    badge: badgeEmailCopy.es.kind,
     moderation: {
       subject: (title) => `Sobre tu mensaje en «${title}»`,
       heading: 'Un moderador ha ocultado uno de tus mensajes.',
@@ -620,6 +637,7 @@ const es: CommunityCopy = {
     status: (_actor, title, status) => `«${title}» ahora está en estado ${status}`,
     solved: (_actor, title) => `Tu respuesta en «${title}» se ha marcado como solución`,
     release: (_actor, _title, version) => `Ya está aquí OutBrick ${version}`,
+    badge: (_actor, _title, badge) => badgeEmailCopy.es.digestLine(badge),
     moderation: (_actor, title) => `Un moderador ha ocultado tu mensaje en «${title}»`,
   },
   digest: {
@@ -644,6 +662,7 @@ const es: CommunityCopy = {
     planned: 'Prevista',
     shipped: 'Disponible',
     declined: 'Descartada',
+    in_progress: badgeEmailCopy.es.inProgress,
   },
   pages: {
     signin: {
@@ -688,6 +707,7 @@ const ja: CommunityCopy = {
     status: 'ステータスの変更',
     solved: '解決済みになった回答',
     release: '新しいバージョン',
+    badge: badgeEmailCopy.ja.kindName,
     moderation: 'モデレーションのお知らせ',
     all: 'すべて',
   },
@@ -748,6 +768,7 @@ const ja: CommunityCopy = {
     },
     solved: { subject: (title) => `「${title}」でのあなたの回答が解決済みになりました`, intro: 'ありがとうございます。あなたの回答が解決策になったので、同じ疑問を持つ次の人もすぐに見つけられます。', cta: '回答を見る' },
     release: { subject: (version) => `OutBrick ${version}が登場しました`, intro: (version) => `バージョン${version}がApp Storeに登場しました。新しくなった点はこちらです：`, cta: 'リリースノートを読む' },
+    badge: badgeEmailCopy.ja.kind,
     moderation: {
       subject: (title) => `「${title}」でのあなたの投稿について`,
       heading: 'モデレーターがあなたの投稿を非表示にしました。',
@@ -764,6 +785,7 @@ const ja: CommunityCopy = {
     status: (_actor, title, status) => `「${title}」のステータスが「${status}」になりました`,
     solved: (_actor, title) => `「${title}」でのあなたの回答が解決済みになりました`,
     release: (_actor, _title, version) => `OutBrick ${version}が登場しました`,
+    badge: (_actor, _title, badge) => badgeEmailCopy.ja.digestLine(badge),
     moderation: (_actor, title) => `モデレーターが「${title}」でのあなたの投稿を非表示にしました`,
   },
   digest: {
@@ -788,6 +810,7 @@ const ja: CommunityCopy = {
     planned: '予定あり',
     shipped: '実装済み',
     declined: '見送り',
+    in_progress: badgeEmailCopy.ja.inProgress,
   },
   pages: {
     signin: {

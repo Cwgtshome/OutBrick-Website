@@ -22,7 +22,7 @@ import type {
   ThreadSummary,
   AssistiveTech,
 } from '../../lib/community/contract.ts';
-import { bugStatuses, communityLocales, ideaStatuses } from '../../lib/community/contract.ts';
+import { badgeKeys, bugStatuses, communityLocales, ideaStatuses, type BadgeKey } from '../../lib/community/contract.ts';
 import { sql, type Query } from './db.ts';
 import { ApiError, badRequest, forbidden, notFound } from './http.ts';
 import { renderMarkdown, mentionCandidates, type MentionTarget } from './markdown.ts';
@@ -80,7 +80,11 @@ const FORMER = 'Former member';
 /** A member as anyone may see them, from columns `<prefix>id`, `<prefix>name`, `<prefix>role`, `<prefix>deleted`. */
 export function publicMember(row: Row, prefix: string): PublicMember {
   if (row[`${prefix}deleted`]) return { id: num(row[`${prefix}id`]), displayName: FORMER, role: 'member' };
-  return { id: num(row[`${prefix}id`]), displayName: String(row[`${prefix}name`]), role: row[`${prefix}role`] as MemberRole };
+  const member: PublicMember = { id: num(row[`${prefix}id`]), displayName: String(row[`${prefix}name`]), role: row[`${prefix}role`] as MemberRole };
+  // `<prefix>badge` (members.top_badge), when the query selected it.
+  const badge = row[`${prefix}badge`];
+  if (typeof badge === 'string' && (badgeKeys as readonly string[]).includes(badge)) member.topBadge = badge as BadgeKey;
+  return member;
 }
 
 export const isModerator = (viewer: Viewer | null) => hasRole(viewer, 'moderator');
@@ -130,6 +134,8 @@ export function threadColumns(p: Params, viewer: Viewer | null): string {
   return `t.id::int AS id, t.slug, t.title, t.language, t.status, t.status_note, t.pinned, t.locked, t.hidden, t.pending,
     t.solved_post_id::int AS solved_post_id, t.vote_count, t.reply_count, t.view_count, t.last_post_at, t.created_at,
     t.release_version, t.bug, t.category_id::int AS category_id, t.deleted_at,
+    t.shipped_version, t.status_changed_at, EXISTS (SELECT 1 FROM polls pl WHERE pl.thread_id = t.id) AS has_poll,
+    a.top_badge AS a_badge, l.top_badge AS l_badge,
     c.slug AS category_slug, c.kind AS category_kind,
     a.id::int AS a_id, a.display_name AS a_name, a.role AS a_role, (a.deleted_at IS NOT NULL) AS a_deleted,
     l.id::int AS l_id, l.display_name AS l_name, l.role AS l_role, (l.deleted_at IS NOT NULL) AS l_deleted,
@@ -169,6 +175,8 @@ export function threadSummary(row: Row, viewer: Viewer | null): ThreadSummary {
     lastPostAt: iso(row.last_post_at),
     createdAt: iso(row.created_at),
     releaseVersion: (row.release_version as string | null) ?? null,
+    shippedVersion: (row.shipped_version as string | null) ?? null,
+    hasPoll: Boolean(row.has_poll),
   };
   if (viewer) {
     summary.voted = Boolean(row.voted);
@@ -308,7 +316,7 @@ export async function needsReview(viewer: Viewer, hasLink: boolean): Promise<boo
 
 export const postColumns = `p.id::int AS id, p.thread_id::int AS thread_id, p.number, p.body_md, p.body_html, p.reply_to, p.hidden, p.hidden_reason,
   p.pending, p.has_link, p.created_at, p.edited_at, p.deleted_at,
-  m.id::int AS m_id, m.display_name AS m_name, m.role AS m_role, (m.deleted_at IS NOT NULL) AS m_deleted`;
+  m.id::int AS m_id, m.display_name AS m_name, m.role AS m_role, (m.deleted_at IS NOT NULL) AS m_deleted, m.top_badge AS m_badge`;
 
 export type PostContext = {
   viewer: Viewer | null;

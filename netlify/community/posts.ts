@@ -26,6 +26,9 @@ import {
 } from './forum.ts';
 import { notifyMentions, notifyNewPost } from './notifications.ts';
 import { rateLimitOrThrow } from './threads.ts';
+// Feature board and interactive features (community-fx).
+import { onVisiblePost } from './badges.ts';
+import { decoratePosts } from './reactions.ts';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL) => Promise<Response>;
 
@@ -38,7 +41,8 @@ export async function loadPost(id: number, viewer: Viewer | null): Promise<Post>
   if (!row) throw notFound('That post does not exist.');
   const thread = await visibleThread(num(row.thread_id), viewer);
   const [replies] = await run(`SELECT EXISTS (SELECT 1 FROM posts WHERE thread_id = $1 AND number > 1 AND deleted_at IS NULL) AS yes`, [thread.id]);
-  return postView(row, { viewer, locked: thread.locked, solvedPostId: thread.solved_post_id, hasReplies: Boolean(replies?.yes) });
+  const [post] = await decoratePosts([postView(row, { viewer, locked: thread.locked, solvedPostId: thread.solved_post_id, hasReplies: Boolean(replies?.yes) })], viewer);
+  return post;
 }
 
 /** The page of the thread on which the viewer sees post `number`. */
@@ -121,6 +125,7 @@ export const postReply: Handler = async (req, params) => {
         replyTo,
         mentionedIds: rendered.mentionedIds,
       });
+      await onVisiblePost(q, viewer.id);
     }
     return { postId, number };
   });
