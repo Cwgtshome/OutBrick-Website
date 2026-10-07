@@ -495,7 +495,7 @@ export function ErrorSummary({ errors, ids, summaryRef, general }: { errors: Fie
 export function fieldMessages(copy: CommunityCopy, fields: Record<string, string> | undefined): FieldErrors {
   const out: FieldErrors = {};
   for (const [key, code] of Object.entries(fields ?? {})) {
-    const label = copy.form.fields[key] ?? key;
+    const label = copy.form.fields[key.replace(/^bug\./, '')] ?? copy.form.fields[key] ?? key;
     out[key] = (copy.form.codes[code] ?? copy.form.codes.invalid)(label);
   }
   return out;
@@ -545,6 +545,24 @@ export function Honeypot({ value, onChange }: { value: string; onChange: (v: str
       <label htmlFor={id}>{copy.form.honeypot}</label>
       <input id={id} name="website" type="text" tabIndex={-1} autoComplete="off" value={value} onChange={(e) => onChange(e.target.value)} />
     </div>
+  );
+}
+
+/** The placeholder a sentence template is built with, so a name or date inside it can stay an element. */
+export const MARK = '\u0000';
+
+/** Render a translated sentence made with MARK placeholders, putting `parts` in their places in order. */
+export function Fill({ template, parts }: { template: string; parts: ReactNode[] }) {
+  const pieces = template.split(MARK);
+  return (
+    <>
+      {pieces.map((piece, i) => (
+        <span key={i}>
+          {piece}
+          {i < pieces.length - 1 ? parts[i] : null}
+        </span>
+      ))}
+    </>
   );
 }
 

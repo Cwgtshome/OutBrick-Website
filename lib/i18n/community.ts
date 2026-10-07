@@ -82,6 +82,7 @@ export type CommunityCopy = {
     empty: string;
     emptyFiltered: string;
     showing: (from: string, to: string, total: string) => string;
+    pages: string;
   };
   follow: {
     legend: string;
@@ -440,6 +441,7 @@ const en: CommunityCopy = {
     empty: 'No threads here yet. Be the first to start one.',
     emptyFiltered: 'No threads match these filters. Try all languages or any status.',
     showing: (from, to, total) => `Threads ${from} to ${to} of ${total}`,
+    pages: 'Pages of threads',
   },
   follow: {
     legend: 'Email me about this',
@@ -602,7 +604,7 @@ const en: CommunityCopy = {
     category: 'Category',
     chooseCategory: 'Choose a category',
     titleLabel: 'Title',
-    titleHint: 'A short sentence, for example “Level 214: is there a way past the iced gate?”. 8 to 120 characters.',
+    titleHint: 'A short sentence, for example “Level 214: is there a way past the iced gate?”. 4 to 140 characters.',
     language: 'Language of your post',
     languageHint: 'So people who read this language find it. Lists show your language and English by default.',
     body: 'Your post',
@@ -954,6 +956,7 @@ const fr: CommunityCopy = {
     empty: 'Aucune discussion pour l’instant. Lancez la première !',
     emptyFiltered: 'Aucune discussion ne correspond à ces filtres. Essayez toutes les langues ou tous les statuts.',
     showing: (from, to, total) => `Discussions ${from} à ${to} sur ${total}`,
+    pages: 'Pages de discussions',
   },
   follow: {
     legend: 'Me prévenir par e-mail',
@@ -1116,7 +1119,7 @@ const fr: CommunityCopy = {
     category: 'Catégorie',
     chooseCategory: 'Choisissez une catégorie',
     titleLabel: 'Titre',
-    titleHint: 'Une phrase courte, par exemple « Niveau 214 : comment passer la porte gelée ? ». De 8 à 120 caractères.',
+    titleHint: 'Une phrase courte, par exemple « Niveau 214 : comment passer la porte gelée ? ». De 4 à 140 caractères.',
     language: 'Langue de votre message',
     languageHint: 'Pour que les lecteurs de cette langue le trouvent. Les listes montrent votre langue et l’anglais par défaut.',
     body: 'Votre message',
@@ -1468,6 +1471,7 @@ const de: CommunityCopy = {
     empty: 'Hier gibt es noch keine Themen. Starte das erste!',
     emptyFiltered: 'Keine Themen passen zu diesen Filtern. Versuch es mit allen Sprachen oder jedem Status.',
     showing: (from, to, total) => `Themen ${from} bis ${to} von ${total}`,
+    pages: 'Seiten der Themenliste',
   },
   follow: {
     legend: 'Per E-Mail benachrichtigen',
@@ -1630,7 +1634,7 @@ const de: CommunityCopy = {
     category: 'Kategorie',
     chooseCategory: 'Kategorie wählen',
     titleLabel: 'Titel',
-    titleHint: 'Ein kurzer Satz, zum Beispiel „Level 214: Wie komme ich am vereisten Tor vorbei?“. 8 bis 120 Zeichen.',
+    titleHint: 'Ein kurzer Satz, zum Beispiel „Level 214: Wie komme ich am vereisten Tor vorbei?“. 4 bis 140 Zeichen.',
     language: 'Sprache deines Beitrags',
     languageHint: 'Damit ihn Leute finden, die diese Sprache lesen. Listen zeigen standardmäßig deine Sprache und Englisch.',
     body: 'Dein Beitrag',
@@ -1982,6 +1986,7 @@ const es: CommunityCopy = {
     empty: 'Aún no hay temas. ¡Abre el primero!',
     emptyFiltered: 'Ningún tema coincide con estos filtros. Prueba con todos los idiomas o cualquier estado.',
     showing: (from, to, total) => `Temas del ${from} al ${to} de ${total}`,
+    pages: 'Páginas de temas',
   },
   follow: {
     legend: 'Avisarme por correo',
@@ -2144,7 +2149,7 @@ const es: CommunityCopy = {
     category: 'Categoría',
     chooseCategory: 'Elige una categoría',
     titleLabel: 'Título',
-    titleHint: 'Una frase corta, por ejemplo «Nivel 214: ¿cómo paso la puerta helada?». De 8 a 120 caracteres.',
+    titleHint: 'Una frase corta, por ejemplo «Nivel 214: ¿cómo paso la puerta helada?». De 4 a 140 caracteres.',
     language: 'Idioma de tu mensaje',
     languageHint: 'Para que lo encuentre quien lee ese idioma. Las listas muestran tu idioma y el inglés por defecto.',
     body: 'Tu mensaje',
@@ -2496,6 +2501,7 @@ const ja: CommunityCopy = {
     empty: 'まだスレッドはありません。最初のスレッドを作ってみませんか。',
     emptyFiltered: 'この条件に合うスレッドはありません。すべての言語やすべての状況でお試しください。',
     showing: (from, to, total) => `全${total}件中${from}〜${to}件目のスレッド`,
+    pages: 'スレッド一覧のページ',
   },
   follow: {
     legend: 'メールで通知',
@@ -2658,7 +2664,7 @@ const ja: CommunityCopy = {
     category: 'カテゴリ',
     chooseCategory: 'カテゴリを選んでください',
     titleLabel: 'タイトル',
-    titleHint: '短い一文で。例：「レベル214：凍ったゲートを抜ける方法は？」8〜120文字。',
+    titleHint: '短い一文で。例：「レベル214：凍ったゲートを抜ける方法は？」4〜140文字。',
     language: '投稿の言語',
     languageHint: 'その言語を読む人が見つけやすくなります。一覧には最初、あなたの言語と英語が表示されます。',
     body: 'あなたの投稿',

@@ -10,7 +10,7 @@ import { localeNames } from '../../../lib/i18n/locales';
 import { pageOfPost } from '../../../lib/community/static-html';
 import { dayDate } from '../../../lib/community/format';
 import { api } from './api';
-import { ErrorNotice, Member, Pagination, Pending, StatusBadge, Time, View, errorText, useApp, useLoad, type Route } from './core';
+import { ErrorNotice, Fill, MARK, Member, Pagination, Pending, StatusBadge, Time, View, errorText, useApp, useLoad, type Route } from './core';
 
 /** "fr,en" for "my language and English"; nothing for all languages; one code for one. */
 export function languageParam(locale: CommunityLocale, choice: string): string | undefined {
@@ -78,16 +78,10 @@ export function ThreadList({ threads, headingLevel = 3 }: { threads: ThreadSumma
 function ByLine({ kind, member, iso }: { kind: 'started' | 'last'; member: ThreadSummary['author'] | null; iso: string }) {
   const { copy } = useApp();
   // The sentence is built from translated parts so the name stays a link.
-  const marker = '\u0000';
-  const sentence = kind === 'started' ? copy.list.startedBy(marker, marker) : copy.list.lastReply(marker, marker);
-  const [before, middle, after] = sentence.split(marker);
+  const sentence = kind === 'started' ? copy.list.startedBy(MARK, MARK) : copy.list.lastReply(MARK, MARK);
   return (
     <span>
-      {before}
-      <Member member={member} />
-      {middle}
-      <Time iso={iso} relative />
-      {after}
+      <Fill template={sentence} parts={[<Member key="m" member={member} />, <Time key="t" iso={iso} relative />]} />
     </span>
   );
 }
@@ -111,7 +105,7 @@ function CategoryList({ categories, compact = false }: { categories: Category[];
                 <p className="cm-stats">
                   <span>{copy.stats.threads(c.threadCount, n(c.threadCount))}</span>
                   <span>{copy.stats.posts(c.postCount, n(c.postCount))}</span>
-                  <span>{c.lastPostAt ? <>{copy.lastActivity('')}<Time iso={c.lastPostAt} relative /></> : copy.noActivity}</span>
+                  <span>{c.lastPostAt ? <Fill template={copy.lastActivity(MARK)} parts={[<Time key="t" iso={c.lastPostAt} relative />]} /> : copy.noActivity}</span>
                 </p>
               </>
             )}
@@ -346,7 +340,7 @@ export function CategoryView({ route }: { route: Extract<Route, { name: 'categor
               {copy.category.showing(n((data.page - 1) * 30 + 1), n((data.page - 1) * 30 + data.threads.length), n(data.total))}
             </p>
             <ThreadList threads={data.threads} headingLevel={2} />
-            <Pagination page={data.page} pages={data.pages} href={(page) => href({ page })} label={copy.category.sortLabel === '' ? '' : copy.thread.pages.replace(/.*/, copy.category.showing('', '', '').trim() ? copy.thread.pages : copy.thread.pages)} />
+            <Pagination page={data.page} pages={data.pages} href={(page) => href({ page })} label={copy.category.pages} />
           </>
         ) : (
           <p className="cm-empty">{filtered ? copy.category.emptyFiltered : copy.category.empty}</p>

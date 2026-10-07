@@ -333,3 +333,10 @@ export type FaqWriteRequest = {
   threadId?: number | null;
   position?: number;
 };
+
+/**
+ * The `language` filter of GET /threads and GET /search, as the pages send it: one code ("ja"),
+ * or a comma-separated list for "my language and English" ("fr,en"); absent means every language.
+ * (Added by the community pages.)
+ */
+export type LanguageFilter = string;
