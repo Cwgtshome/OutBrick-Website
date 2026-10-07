@@ -7,7 +7,7 @@ import { locales } from '../../lib/i18n/locales.ts';
 import { homeStaticHtml } from '../../lib/community/static-html.ts';
 import { guideWords } from '../../lib/community/player-guides.ts';
 
-test('all five languages: team guides resolve every internal thread link, survive replay, and notify nobody', async () => {
+void test('all five languages: team guides resolve every internal thread link, survive replay, and notify nobody', async () => {
   const pg = await freshDatabase();
   try {
     const { rows } = await pg.query<{
