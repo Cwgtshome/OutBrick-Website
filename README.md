@@ -94,6 +94,18 @@ limit); a broken template fails the build. On Deploy Previews and branch deploys
 publishes them at `/email-previews/` (noindex, never on production, never in the sitemap). Locally,
 `pnpm emails:preview` writes them to `outputs/email-previews/`.
 
+### The team's copy of every submission
+
+After the visitor's email, `submission-created` sends the team its own copy, from
+`OutBrick Forms <forms@outbrick.site>` to `support@outbrick.site` (or `TEAM_INBOX`), in the same
+design (`emails/team.ts`). It leads with the visitor's message or cover note, lists every field they
+filled in (never their IP address), shows the page they were on, their language, the time and
+whether their acknowledgement went out, and has a Reply button. Reply-To is the visitor, so
+replying from Mail answers them. It is always English, and it is skipped for the honeypot and for
+spam, like the visitor's email. Previews: `team-*.<lang>.html` under `/email-previews/`, where
+the language is the visitor's. Netlify's own plain notification emails are now redundant and can
+be removed under Project configuration → Notifications.
+
 ### Sending a newsletter issue
 
 An issue is a JSON file in `emails/issues/` (see `2026-10-sample.json`): per language a subject,
