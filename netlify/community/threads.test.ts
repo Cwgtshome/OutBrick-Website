@@ -49,8 +49,9 @@ void test('start a thread, list it, open it, page through replies', async () => 
 
   const list = await api('GET', '/threads?category=help');
   assert.equal(list.status, 200);
-  assert.equal(list.body.threads[0].id, thread.id);
-  assert.equal(list.body.threads[0].unread, undefined);
+  const listedThread = list.body.threads.find((t: { id: number }) => t.id === thread.id);
+  assert.ok(listedThread, 'the new thread appears alongside pinned editorial guides');
+  assert.equal(listedThread.unread, undefined);
 
   for (let i = 0; i < 27; i++) {
     if (i % 25 === 0) await resetRates(pg);
@@ -81,7 +82,7 @@ void test('start a thread, list it, open it, page through replies', async () => 
   // Reading position and unread counts.
   assert.equal((await api('POST', `/threads/${thread.id}/read`, { cookie: ada.cookie, body: { number: 20 } })).status, 200);
   const listed = await api('GET', `/threads?category=help`, { cookie: ada.cookie });
-  assert.equal(listed.body.threads[0].unread, 8);
+  assert.equal(listed.body.threads.find((t: { id: number }) => t.id === thread.id)?.unread, 8);
   const again = await api('GET', `/threads/${thread.id}`, { cookie: ada.cookie });
   assert.equal(again.body.firstUnread, 21);
 
