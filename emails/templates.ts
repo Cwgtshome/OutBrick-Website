@@ -494,3 +494,26 @@ export function unsubscribePage(locale: EmailLocale, actionUrl: string): string 
     head: '<meta name="robots" content="noindex, nofollow">\n',
   });
 }
+
+/** A scanner may read this page; only the reader's POST subscribes them. */
+export function confirmPage(locale: EmailLocale, actionUrl: string): string {
+  const ctx = ctxOf(locale);
+  const t = emailCopy[locale];
+  const p = t.confirm;
+  const f = fonts(locale);
+  return shell({
+    ctx,
+    title: p.subject,
+    preheader: p.intro,
+    logoAlt: t.logoAlt,
+    body: [
+      eyebrow(ctx, esc(p.eyebrow)),
+      heading(ctx, esc(p.subject)),
+      para(ctx, esc(p.intro)),
+      `<form method="post" action="${esc(actionUrl)}" style="margin:8px 0 22px;"><button type="submit" class="ob-btn" style="cursor:pointer;background:${color.gold};color:${color.ink};font-family:${f.display};font-size:18px;line-height:22px;font-weight:600;padding:15px 30px 13px;border:0;border-radius:14px;border-bottom:4px solid ${color.goldFoot};">${esc(p.cta)}</button></form>`,
+      para(ctx, esc(p.ignore)),
+    ].join('\n'),
+    footer: footerBlock(ctx, { links: [[esc(t.news.privacy), sitePath(locale, '/privacy')]], lines: [`${esc(t.tagline)} · www.outbrick.site`] }),
+    head: '<meta name="robots" content="noindex, nofollow">\n',
+  });
+}
