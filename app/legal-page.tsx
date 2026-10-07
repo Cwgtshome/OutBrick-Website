@@ -97,6 +97,14 @@ export function LegalPage({ eyebrow, title, summary, updated, current, children,
   );
 }
 
+/**
+ * A link to a page the localized page tree does not prefix by itself (the community lives outside
+ * the public-page roots). `locale` is supplied when the page is rendered in another language.
+ */
+export function SiteLink({ path, children, locale = 'en' }: { path: string; children: ReactNode; locale?: Locale }) {
+  return <a href={localePath(locale, path)}>{children}</a>;
+}
+
 /** The assurance strip a document closes a section with. */
 export function Pills({ items }: { items: string[] }) {
   return (

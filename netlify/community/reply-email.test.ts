@@ -126,6 +126,8 @@ void test('Svix signatures: right secret, any listed v1 signature, five-minute t
 
 void test('a single-item notification email carries the signed Reply-To and says so; grouped and release emails do not', async () => {
   const { ada, note } = await setup();
+  // Only the reply notice, so it goes out on its own (other kinds, such as badges, would group with it).
+  await pg.query(`DELETE FROM notifications WHERE kind <> 'reply'`);
   await pg.query(`UPDATE notifications SET created_at = now() - interval '5 minutes' WHERE member_id = $1`, [ada.id]);
   const sent: OutgoingEmail[] = [];
   const send: Sender = async (_k, email) => {
@@ -142,6 +144,7 @@ void test('a single-item notification email carries the signed Reply-To and says
   const off = withEnv({ COMMUNITY_REPLY_DOMAIN: undefined });
   try {
     const { ada: ada2 } = await setup();
+    await pg.query(`DELETE FROM notifications WHERE kind <> 'reply'`);
     await pg.query(`UPDATE notifications SET created_at = now() - interval '5 minutes' WHERE member_id = $1`, [ada2.id]);
     sent.length = 0;
     await runNotify({ apiKey: TEST_RESEND_KEY, send });

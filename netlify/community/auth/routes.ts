@@ -14,6 +14,7 @@ import { oauthCallback, oauthProviders, startOAuth, type OAuthProvider } from '.
 // Phase 2 (community-p2)
 import { deletePasskey, listPasskeys, login as passkeyLogin, loginOptions as passkeyLoginOptions, register as passkeyRegister, registerOptions as passkeyRegisterOptions } from './passkeys.ts';
 import { inboundEmail } from '../reply-email.ts';
+import { listBookmarks } from '../reactions.ts';
 
 const provider = (name: string): OAuthProvider => {
   if (!(oauthProviders as readonly string[]).includes(name)) throw notFound();
@@ -40,6 +41,8 @@ export const routes: Route[] = [
   { method: 'PATCH', pattern: '/api/community/me', run: (req) => updateMe(req) },
   { method: 'DELETE', pattern: '/api/community/me', run: (req) => deleteMe(req) },
   { method: 'GET', pattern: '/api/community/me/export', run: (req) => exportMe(req) },
+  // community-fx: the member's bookmarks (the handler is netlify/community/reactions.ts).
+  { method: 'GET', pattern: '/api/community/me/bookmarks', run: (req, _p, url) => listBookmarks(req, url) },
   { method: 'GET', pattern: '/api/community/notifications', run: (req, _p, url) => listNotifications(req, url) },
   { method: 'POST', pattern: '/api/community/notifications/read', run: (req) => markRead(req) },
   { method: 'GET', pattern: '/api/community/email/unsubscribe', run: (req, _p, url) => unsubscribePage(req, url) },

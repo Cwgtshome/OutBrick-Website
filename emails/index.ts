@@ -49,6 +49,7 @@ export type CommunityTemplateName =
   | 'community-solved'
   | 'community-release'
   | 'community-moderation'
+  | 'community-badge'
   | 'community-digest'
   // Phase 2 (community-p2)
   | 'community-merged'
@@ -70,6 +71,7 @@ export const communityTemplateNames: CommunityTemplateName[] = [
   'community-solved',
   'community-release',
   'community-moderation',
+  'community-badge',
   'community-digest',
   // Phase 2 (community-p2)
   'community-merged',
@@ -99,6 +101,7 @@ export const templateTitles: Record<TemplateName, string> = {
   'community-solved': 'Community: your answer was marked Solved',
   'community-release': 'Community: release announcement (from news@)',
   'community-moderation': 'Community: moderation notice',
+  'community-badge': 'Community: you earned a badge (Helpful, 10 solved answers)',
   'community-digest': 'Community: several notifications grouped',
   'community-merged': 'Community: your post moved in a thread merge',
   'community-reply-by-email': 'Community: reply notification with the reply-by-email hint',
@@ -145,6 +148,7 @@ function sampleItem(locale: EmailLocale, kind: NotificationItem['kind']): Notifi
     version: kind === 'release' ? '5.1' : null,
     reason: kind === 'moderation' ? `${sampleReasons[locale]} <b>Not bold</b>` : null,
     fromTitle: kind === 'merged' ? `${sampleTitles[locale]} <b>Not bold</b>` : null,
+    ...(kind === 'badge' ? { actorName: null, threadTitle: '', url: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/community/u/7`, excerpt: '', badge: 'helpful', level: 10 } : {}),
   };
 }
 
@@ -179,7 +183,8 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
     case 'community-status':
     case 'community-solved':
     case 'community-release':
-    case 'community-moderation': {
+    case 'community-moderation':
+    case 'community-badge': {
       const kind = name.slice('community-'.length) as NotificationItem['kind'];
       return communityNotification({
         locale,

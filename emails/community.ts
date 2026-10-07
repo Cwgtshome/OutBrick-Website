@@ -11,6 +11,7 @@ import { emailCopy, type EmailLocale } from './i18n.ts';
 import { communityCopy, type CommunityKind, type UnsubscribeKind } from './community-i18n.ts';
 import type { Rendered } from './templates.ts';
 import { replyHints } from './community-p2-i18n.ts';
+import { badgeEmailCopy } from './community-fx-i18n.ts';
 
 export { communityCopy, communityKinds, type CommunityKind, type UnsubscribeKind } from './community-i18n.ts';
 
@@ -220,7 +221,13 @@ export type NotificationItem = {
   reason?: string | null;
   /** Phase 2: for 'merged', the title of the thread the post came from. */
   fromTitle?: string | null;
+  /** kind 'badge': the badge key (contract BadgeKey) and its level. */
+  badge?: string | null;
+  level?: number | null;
 };
+
+/** A badge item's name in words, with its level ("Helpful (10 solved answers)"). */
+const badgeName = (locale: EmailLocale, item: NotificationItem) => badgeEmailCopy[locale].named(item.badge, item.level);
 
 const statusLabel = (locale: EmailLocale, status: string | null | undefined) => (status ? (communityCopy[locale].statuses[status] ?? status) : '');
 
@@ -245,6 +252,8 @@ function subjectOf(locale: EmailLocale, item: NotificationItem): string {
       return k.moderation.subject(title);
     case 'merged':
       return k.merged.subject(title);
+    case 'badge':
+      return k.badge.subject(badgeName(locale, item));
   }
 }
 
@@ -273,6 +282,11 @@ function itemParts(locale: EmailLocale, item: NotificationItem): { intro: string
       return { intro: k.moderation.intro(clip(item.threadTitle, 140)), cta: k.moderation.cta, note: item.reason ? [k.moderation.reason, item.reason] : undefined };
     case 'merged':
       return { intro: k.merged.intro(clip(item.fromTitle || item.threadTitle, 140)), cta: k.merged.cta };
+    case 'badge': {
+      const b = badgeEmailCopy[locale];
+      const known = item.badge && Object.hasOwn(b.badges, item.badge) ? b.badges[item.badge as keyof typeof b.badges] : null;
+      return { intro: k.badge.intro(badgeName(locale, item)), cta: k.badge.cta, note: known ? [k.badge.what, known.description] : undefined };
+    }
   }
 }
 
@@ -349,7 +363,11 @@ export function communityDigest(input: DigestEmailInput): Rendered {
   const shown = input.items.slice(0, DIGEST_LIMIT);
   const rest = count - shown.length;
   const line = (item: NotificationItem) =>
-    c.digestLine[item.kind](item.actorName || c.someone, clip(item.threadTitle, 90), item.kind === 'status' ? statusLabel(locale, item.status) : item.version || '');
+    c.digestLine[item.kind](
+      item.actorName || c.someone,
+      clip(item.threadTitle, 90),
+      item.kind === 'status' ? statusLabel(locale, item.status) : item.kind === 'badge' ? badgeName(locale, item) : item.version || '',
+    );
   const isNews = input.items.every((item) => item.kind === 'release');
   const cards = shown
     .map((item) => {

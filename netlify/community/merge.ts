@@ -11,8 +11,7 @@
 //     source's solution becomes the target's.
 //   - Follows of the source become follows of the target, unless the member already has a level
 //     on the target (a mute there stays a mute).
-//   - Votes: combineVotes(), the feature board's hook (community-fx); then the target's count
-//     is recounted from the votes table.
+//   - Votes: combineVotes() from ideas.ts (community-fx) moves them, one per member, and recounts.
 //   - Notifications, FAQ entries and release records that pointed at the source point at the
 //     target.
 //   - The source becomes a hidden, locked stub with `merged_into` = target. GET /threads/:id of
@@ -25,18 +24,10 @@ import { transaction, type Query } from './db.ts';
 import { badRequest, json, notFound, readJson } from './http.ts';
 import { requireRole } from './session.ts';
 import { idParam, modLog, num, refreshThreadCounters, summaryById } from './forum.ts';
+// The feature board's vote combiner (community-fx): moves the source's votes onto the target.
+import { combineVotes } from './ideas.ts';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL) => Promise<Response>;
-
-// Phase 2 (community-p2) HOOK — community-fx's vote combiner. Until the branches are merged
-// this is a no-op (the source's votes stay on the stub); replace the body with
-//   await theirCombineVotes(fromThreadId, intoThreadId, q)
-// when wiring. It runs inside the merge transaction, before the target's vote_count is recounted.
-export async function combineVotes(fromThreadId: number, intoThreadId: number, q: Query): Promise<void> {
-  void fromThreadId;
-  void intoThreadId;
-  void q;
-}
 
 /** How many redirects a merged URL follows (a thread merged into one later merged elsewhere). */
 const MAX_HOPS = 5;
@@ -123,8 +114,8 @@ export async function mergeThreads(actorId: number, sourceId: number, targetId: 
     );
     await q(`DELETE FROM follows WHERE target_type = 'thread' AND target_id = $1`, [sourceId]);
 
+    // Votes move (one per member; never the target author's own), and both counts are recounted.
     await combineVotes(sourceId, targetId, q);
-    await q(`UPDATE threads SET vote_count = (SELECT count(*) FROM votes WHERE thread_id = $1) WHERE id = $1`, [targetId]);
 
     // One release notice per member per thread: drop the source's where the target has one.
     await q(

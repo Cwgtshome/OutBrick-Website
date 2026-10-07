@@ -192,7 +192,7 @@ export default function PrivacyPage() {
           <li><b>What you do in the community:</b> your threads and posts, including earlier versions of a post you have edited, your votes, the threads and categories you follow, how far you have read each thread, your notifications, the reports you make, and any moderation action taken on your posts or your account.</li>
           <li><b>Bug reports:</b> a bug report can also include your device model, iOS version, app version and the assistive technologies you use. Each of these is optional, and only what you choose to fill in is stored.</li>
           <li><b>Signed-in sessions:</b> for each browser you sign in on, when the session started, when it expires and the browser&rsquo;s user agent, so the sign-in can be recognised. The token that keeps you signed in is stored only as a one-way hash.</li>
-          <li><b>IP addresses:</b> we do not store them. To slow down spam and abuse, the community briefly keeps a salted one-way hash of your IP address to count requests, and records older than two days are deleted.</li>
+          <li><b>IP addresses:</b> the community&rsquo;s database does not store them. To slow down spam and abuse, the community briefly keeps a salted one-way hash of your IP address to count requests, and records older than two days are deleted.</li>
           <li><b>Public posts:</b> everything you post — threads, replies, your display name and your bio — is public. Anyone can read it without an account, and search engines index it. Please do not post your own or anyone else&rsquo;s personal information.</li>
         </ul>
         <p>
@@ -203,6 +203,13 @@ export default function PrivacyPage() {
           handles the sign-in under its own privacy policy and shares with us only the user id and
           email address described above. Nobody else receives community data, and we do not sell it
           or use it for advertising.
+        </p>
+        <p>
+          <b>Netlify&rsquo;s request logs.</b> Like any web host, Netlify records technical details of
+          the requests made to this website and its functions — such as the time, the address
+          requested, your IP address and your browser&rsquo;s user agent — to deliver the site, keep it
+          secure and investigate problems. These logs are kept by Netlify for a limited period under its
+          own policy. We read them only to diagnose errors, and never to identify or profile visitors.
         </p>
         <p>
           <b>Emails.</b> We email you sign-in links when you ask for one, a confirmation when you add or
@@ -229,10 +236,33 @@ export default function PrivacyPage() {
           or reply to any community email, and we will remove them and confirm when it is done.
         </p>
         <p>
+          <b>What stays after deletion.</b> Your votes, the reports you made and the edit history of
+          your posts stay attached to the blanked Former member account. Removing them would change
+          vote counts and leave gaps in threads, and moderators need the record of what was reported and
+          changed to handle disputes and repeated abuse fairly. None of it is linked to your name or
+          email address any more.
+        </p>
+        <p>
           <b>Who can join.</b> You must be at least 16 to create a community account, or older if the
           age of digital consent where you live is higher. The game itself is rated 4+ and needs no
           account.
         </p>
+      </section>
+
+      <section className="brick" id="community-next">
+        <h2>Coming to the community</h2>
+        <p>
+          These features are planned for the OutBrick Community. They are described here now so that
+          this policy is accurate on the day each one arrives; until a feature is live, none of the data
+          below is collected.
+        </p>
+        <ul className="points">
+          <li><b>Images in posts:</b> images you attach to a post are stored with Netlify Blobs, Netlify&rsquo;s file storage. Each image needs a text description (alt text) for people who cannot see it, and the location and other metadata embedded in the file are removed when you upload it. An image is public, like the post it belongs to.</li>
+          <li><b>Reply by email:</b> you will be able to answer a notification email to post your reply. Resend receives and processes the incoming email on our behalf, and we post its text as your reply, under your account.</li>
+          <li><b>Passkeys:</b> if you sign in with a passkey, we store only its public key and a credential id. The private key never leaves your device or password manager, and no fingerprint or face data is ever sent to us.</li>
+          <li><b>Translation on request:</b> if you ask for a post to be translated, the text of that post is sent to an AI translation provider through Netlify&rsquo;s AI Gateway, and the translation is shown to you. Nothing is sent unless someone asks for a translation, and your account details are never part of it.</li>
+          <li><b>Weekly digest:</b> an optional weekly email summarising what happened in the community. It is off unless you switch it on, and it has the same one-click unsubscribe as every notification email.</li>
+        </ul>
       </section>
 
       <section className="brick" id="cookies">

@@ -407,3 +407,19 @@ void test('translate a post on request: cached per revision, rendered safely, li
     else process.env.ANTHROPIC_BASE_URL = saved.base;
   }
 });
+
+void test('merging two ideas moves the votes through the feature board’s combiner', async () => {
+  const ada = await member(pg);
+  const bob = await member(pg);
+  const cat = await member(pg);
+  const mod = await member(pg, { role: 'moderator' });
+  const target = await newThread(ada.cookie, { categorySlug: 'ideas', title: 'A no-graphics mode' });
+  const source = await newThread(bob.cookie, { categorySlug: 'ideas', title: 'Audio-only play' });
+  await api('POST', `/threads/${target.id}/vote`, { cookie: bob.cookie, body: { on: true } });
+  await api('POST', `/threads/${source.id}/vote`, { cookie: cat.cookie, body: { on: true } });
+  await api('POST', `/threads/${source.id}/vote`, { cookie: ada.cookie, body: { on: true } }); // the target's own author
+  const res = await api('POST', `/mod/threads/${source.id}/merge`, { cookie: mod.cookie, body: { intoThreadId: target.id } });
+  assert.equal(res.status, 200, JSON.stringify(res.body));
+  assert.equal(res.body.thread.voteCount, 2, 'Bob’s and Cat’s; Ada cannot vote for her own idea');
+  assert.equal((await pg.query<any>(`SELECT vote_count FROM threads WHERE id = $1`, [source.id])).rows[0].vote_count, 0);
+});

@@ -449,7 +449,8 @@ void test('notifications: reply, mention, watched, de-duplicated, never to yours
   const thread = await newThread(author.cookie, { categorySlug: 'accessibility', title: 'VoiceOver order on Home', body: 'Hello @Banned Person' });
   // Category watchers hear about the new thread; the author does not hear about their own post.
   assert.equal((await notificationsFor(pg, watcher.id)).filter((n) => n.kind === 'watched').length, 1);
-  assert.equal((await notificationsFor(pg, author.id)).length, 0);
+  // (Their first post earns the first_post badge, which is a notification of its own.)
+  assert.equal((await notificationsFor(pg, author.id)).filter((n) => n.kind !== 'badge').length, 0);
 
   await api('POST', `/threads/${thread.id}/follow`, { cookie: muter.cookie, body: { level: 'mute' } });
   await pg.query(`UPDATE members SET banned_until = now() + interval '1 day' WHERE id = $1`, [banned.id]);

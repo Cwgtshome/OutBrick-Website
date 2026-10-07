@@ -6,7 +6,8 @@
 //   mention     everyone @named in the post
 //   watched     everyone watching the thread or its category (a muted thread overrides a
 //               watched category)
-//   status      the thread's author, when a moderator changes a bug's or idea's status
+//   status      the thread's author, when a moderator changes a bug's or idea's status, and
+//               everyone who voted for the idea (unless they muted the thread)
 //   solved      the author of the post marked as the solution
 //   release     everyone, unless they muted Announcements (the default is on)
 //   moderation  the author of a post a moderator hid
@@ -20,7 +21,10 @@
 //   reply       { replyTo: number | null }        the post number answered, if any
 //   mention     {}
 //   watched     { via: 'thread' | 'category' }
-//   status      { status, statusNote, previous }  ThreadStatus | null, string | null, ThreadStatus | null
+//   status      { status, statusNote, previous }  ThreadStatus | null, string | null, ThreadStatus | null;
+//               to a voter also { as: 'voter' }
+//   badge       { badge, level }                  BadgeKey, number (no thread; netlify/community/badges.ts)
+//   release     on an idea: { version, ideaId }   to its voters and author (netlify/community/ideas.ts)
 //   solved      {}
 //   release     { version }
 //   moderation  { action: 'hidden', reason }
@@ -101,6 +105,15 @@ export async function notifyStatus(
     actorId: e.actorId,
     data: { status: e.status, statusNote: e.statusNote, previous: e.previous },
     respectThreadMute: false,
+  });
+  // The idea's voters (never its author twice, never the moderator who changed it).
+  const voters = await q(`SELECT member_id::int AS id FROM votes WHERE thread_id = $1 AND member_id <> $2`, [e.threadId, e.threadAuthorId]);
+  await insertFor(q, 'status', voters.map((r) => Number(r.id)), {
+    threadId: e.threadId,
+    postId: null,
+    actorId: e.actorId,
+    data: { status: e.status, statusNote: e.statusNote, previous: e.previous, as: 'voter' },
+    respectThreadMute: true,
   });
 }
 

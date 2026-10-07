@@ -517,7 +517,9 @@ function parseLink(s: string, i: number): { text: string; url: string; end: numb
     const urlLimit = Math.min(s.length, k + 2001);
     for (; k < urlLimit; k++) {
       const ch = s[k];
-      if (/\s/.test(ch)) break;
+      const code = s.charCodeAt(k);
+      // Whitespace ends the address; the regex only runs for the rare non-ASCII character.
+      if (code <= 32 || (code > 126 && /\s/.test(ch))) break;
       if (ch === '(') parens++;
       else if (ch === ')') {
         if (parens === 0) break;

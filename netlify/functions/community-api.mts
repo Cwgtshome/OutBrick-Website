@@ -36,10 +36,34 @@ import {
   solveThread,
   voteThread,
 } from '../community/threads.ts';
+// Feature board and interactive features (community-fx) ------------------------------------
+import { grantBadge } from '../community/badges.ts';
+import { getRoadmap, getSimilar } from '../community/ideas.ts';
+import { getPulse, getUpdates } from '../community/live.ts';
+import { getLeaderboard, suggestMembers } from '../community/people.ts';
+import { votePoll } from '../community/polls.ts';
+import { bookmark, react } from '../community/reactions.ts';
 
 const base = '/api/community';
 
+/** Routes with fixed words where the forum has `:id`; they are matched before the forum's routes. */
+const fxRoutes: Route[] = [
+  { method: 'GET', pattern: `${base}/roadmap`, run: getRoadmap },
+  { method: 'GET', pattern: `${base}/threads/similar`, run: getSimilar },
+  { method: 'GET', pattern: `${base}/threads/:id/updates`, run: getUpdates },
+  { method: 'POST', pattern: `${base}/threads/:id/poll/vote`, run: votePoll },
+  { method: 'POST', pattern: `${base}/posts/:id/reactions`, run: react },
+  { method: 'POST', pattern: `${base}/posts/:id/bookmark`, run: bookmark },
+  { method: 'GET', pattern: `${base}/pulse`, run: getPulse },
+  { method: 'GET', pattern: `${base}/leaderboard`, run: getLeaderboard },
+  { method: 'GET', pattern: `${base}/members/suggest`, run: suggestMembers },
+  { method: 'POST', pattern: `${base}/mod/members/:id/badges`, run: grantBadge },
+];
+// (GET /me/bookmarks is served by community-auth.mts, which owns /me/*.)
+
 const routes: Route[] = [
+  ...fxRoutes,
+
   { method: 'GET', pattern: `${base}/categories`, run: listCategories },
   { method: 'POST', pattern: `${base}/categories/:slug/follow`, run: followCategory },
 
@@ -103,5 +127,9 @@ export const config = {
     // Phase 2 (community-p2)
     `${base}/uploads`,
     `${base}/uploads/*`,
+    // community-fx
+    `${base}/roadmap`,
+    `${base}/pulse`,
+    `${base}/leaderboard`,
   ],
 };
