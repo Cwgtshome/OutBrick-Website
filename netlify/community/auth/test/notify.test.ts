@@ -1,4 +1,4 @@
-import { after, afterEach, before, beforeEach, describe, test } from 'node:test';
+import { after, before, beforeEach, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { PGlite } from '@electric-sql/pglite';
 import { freshDatabase } from '../../test/harness.ts';
@@ -41,6 +41,10 @@ async function memberRow(opts: { locale?: string; verified?: boolean; prefs?: Re
   );
 }
 
+async function extraPost(thread: number, actor: number, number: number) {
+  return one<{ id: number }>(pg, `INSERT INTO posts (thread_id, author_id, number, body_md, body_html) VALUES ($1, $2, $3, 'Another reply', '<p>x</p>') RETURNING id::int`, [thread, actor, number]);
+}
+
 async function threadWithPost(author: number, actor: number, body = 'A reply about <b>gates</b> & colours.') {
   const thread = await one<{ id: number }>(pg, `INSERT INTO threads (category_id, author_id, title, slug) VALUES (3, $1, 'Gate colours look alike', 'gate-colours-look-alike') RETURNING id::int`, [author]);
   await pg.query(`INSERT INTO posts (thread_id, author_id, number, body_md, body_html) VALUES ($1, $2, 1, 'Opening post', '<p>Opening</p>')`, [thread.id, author]);
@@ -58,8 +62,8 @@ async function notify(member: number, kind: string, opts: { thread?: number; pos
 
 const state = (id: number) => one<{ emailed: boolean; skipped: string | null }>(pg, `SELECT emailed_at IS NOT NULL AS emailed, email_skipped AS skipped FROM notifications WHERE id = $1`, [id]);
 
-describe('community notifier', () => {
-  test('one pending reply: one email, with the post, the link and one-click unsubscribe', async () => {
+void describe('community notifier', () => {
+  void test('one pending reply: one email, with the post, the link and one-click unsubscribe', async () => {
     const reader = await memberRow({ locale: 'fr' });
     const writer = await memberRow();
     const { thread, post } = await threadWithPost(reader.id, writer.id);
@@ -89,12 +93,12 @@ describe('community notifier', () => {
     assert.equal(again.sent.length, 0);
   });
 
-  test('several pending items become one grouped email', async () => {
+  void test('several pending items become one grouped email', async () => {
     const reader = await memberRow();
     const writer = await memberRow();
     const { thread, post } = await threadWithPost(reader.id, writer.id);
     await notify(reader.id, 'reply', { thread: thread.id, post: post.id, actor: writer.id });
-    await notify(reader.id, 'mention', { thread: thread.id, post: post.id, actor: writer.id });
+    await notify(reader.id, 'mention', { thread: thread.id, post: (await extraPost(thread.id, writer.id, 3)).id, actor: writer.id });
     await notify(reader.id, 'status', { thread: thread.id, data: { status: 'fixed', statusNote: 'Fixed in 5.1' } });
     const { sent, send } = recorder();
     await runNotify({ apiKey: TEST_RESEND_KEY, send });
@@ -106,7 +110,7 @@ describe('community notifier', () => {
     assert.match(sent[0].email.headers!['List-Unsubscribe'], /token=\d+\.all\./);
   });
 
-  test('too new to send: waits two minutes so edits settle', async () => {
+  void test('too new to send: waits two minutes so edits settle', async () => {
     const reader = await memberRow();
     const writer = await memberRow();
     const { thread, post } = await threadWithPost(reader.id, writer.id);
@@ -117,7 +121,7 @@ describe('community notifier', () => {
     assert.deepEqual(await state(fresh.id), { emailed: false, skipped: null });
   });
 
-  test('skips, and records why', async () => {
+  void test('skips, and records why', async () => {
     const writer = await memberRow();
     const off = await memberRow({ prefs: { reply: false } });
     const unverified = await memberRow({ verified: false });
@@ -145,7 +149,7 @@ describe('community notifier', () => {
     assert.deepEqual(await state(hiddenId), { emailed: false, skipped: 'hidden' });
   });
 
-  test('a banned member still gets the moderation notice, with the reason', async () => {
+  void test('a banned member still gets the moderation notice, with the reason', async () => {
     const banned = await memberRow({ banned: true, locale: 'de' });
     const t = await threadWithPost(banned.id, banned.id);
     await notify(banned.id, 'moderation', { thread: t.thread.id, post: t.post.id, data: { reason: 'Spam <script>' } });
@@ -157,7 +161,7 @@ describe('community notifier', () => {
     assert.match(sent[0].email.text, /antworten Sie auf diese E-Mail/);
   });
 
-  test('release announcements come from news@, one email for one release', async () => {
+  void test('release announcements come from news@, one email for one release', async () => {
     const reader = await memberRow();
     const bot = await one<{ id: number }>(pg, `SELECT id::int FROM members WHERE email = 'releases@outbrick.site'`);
     const t = await threadWithPost(bot.id, bot.id, 'What’s new: **calmer gates**.');
@@ -171,19 +175,19 @@ describe('community notifier', () => {
     assert.match(sent[0].email.text, /Opening post/);
   });
 
-  test('switched-off kinds are skipped; defaults are all on', async () => {
+  void test('switched-off kinds are skipped; defaults are all on', async () => {
     assert.equal(wantsEmail({}, 'watched'), true);
     assert.equal(wantsEmail({ watched: false }, 'watched'), false);
     assert.equal(wantsEmail({ reply: false }, 'welcome'), true);
   });
 
-  test('hourly cap: 6 emails, then the rest wait and go grouped later', async () => {
+  void test('hourly cap: 6 emails, then the rest wait and go grouped later', async () => {
     const reader = await memberRow();
     const writer = await memberRow();
     const t = await threadWithPost(reader.id, writer.id);
     for (let i = 0; i < HOURLY_CAP; i++) await pg.query(`INSERT INTO rate_events (key) VALUES ($1)`, [`notify:member:${reader.id}`]);
     const a = await notify(reader.id, 'reply', { thread: t.thread.id, post: t.post.id, actor: writer.id });
-    const b = await notify(reader.id, 'watched', { thread: t.thread.id, post: t.post.id, actor: writer.id });
+    const b = await notify(reader.id, 'watched', { thread: t.thread.id, post: (await extraPost(t.thread.id, writer.id, 3)).id, actor: writer.id });
     const first = recorder();
     const summary = await runNotify({ apiKey: TEST_RESEND_KEY, send: first.send });
     assert.equal(first.sent.length, 0);
@@ -198,7 +202,7 @@ describe('community notifier', () => {
     assert.deepEqual(await state(b.id), { emailed: true, skipped: null });
   });
 
-  test('the cap counts across runs and kinds', async () => {
+  void test('the cap counts across runs and kinds', async () => {
     const reader = await memberRow();
     const writer = await memberRow();
     const t = await threadWithPost(reader.id, writer.id);
@@ -212,7 +216,7 @@ describe('community notifier', () => {
     assert.equal(left.length, 2);
   });
 
-  test('a failed send is released and retried with the same idempotency key', async () => {
+  void test('a failed send is released and retried with the same idempotency key', async () => {
     const reader = await memberRow();
     const writer = await memberRow();
     const t = await threadWithPost(reader.id, writer.id);
@@ -228,7 +232,7 @@ describe('community notifier', () => {
     assert.deepEqual(await state(note.id), { emailed: true, skipped: null });
   });
 
-  test('overlapping runs never send the same rows twice', async () => {
+  void test('overlapping runs never send the same rows twice', async () => {
     const reader = await memberRow();
     const writer = await memberRow();
     const t = await threadWithPost(reader.id, writer.id);
@@ -238,7 +242,7 @@ describe('community notifier', () => {
     assert.equal(sent.length, 1);
   });
 
-  test('the welcome goes exactly once, in the member’s language, and waits for a confirmed address', async () => {
+  void test('the welcome goes exactly once, in the member’s language, and waits for a confirmed address', async () => {
     const member = await memberRow({ locale: 'ja' });
     const pending = await memberRow({ verified: false });
     await notify(member.id, 'welcome');
@@ -261,7 +265,7 @@ describe('community notifier', () => {
     assert.deepEqual(await state(old.id), { emailed: false, skipped: 'unverified' });
   });
 
-  test('without RESEND_API_KEY it does nothing and says so once', async () => {
+  void test('without RESEND_API_KEY it does nothing and says so once', async () => {
     const reader = await memberRow();
     await notify(reader.id, 'welcome');
     const saved = process.env.RESEND_API_KEY;

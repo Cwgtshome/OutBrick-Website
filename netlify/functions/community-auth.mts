@@ -10,7 +10,8 @@
 
 import { communityAuth } from '../community/auth/routes.ts';
 
-export default async (req: Request): Promise<Response> => communityAuth(req);
+const handler = async (req: Request): Promise<Response> => communityAuth(req);
+export default handler;
 
 export const config = {
   path: [

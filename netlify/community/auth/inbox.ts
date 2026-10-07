@@ -28,7 +28,8 @@ export async function listNotifications(req: Request, url: URL): Promise<Respons
   const page = int(url.searchParams.get('page'), 1, 1, pages);
   const rows = await sql`
     SELECT n.id::int AS id, n.kind, n.created_at, n.read_at, n.data,
-           a.id::int AS actor_id, a.display_name AS actor_name, a.role AS actor_role,
+           a.id::int AS actor_id, CASE WHEN a.deleted_at IS NOT NULL THEN 'Former member' ELSE a.display_name END AS actor_name,
+           CASE WHEN a.deleted_at IS NOT NULL THEN 'member' ELSE a.role END AS actor_role,
            t.id::int AS thread_id, t.slug AS thread_slug, t.title AS thread_title,
            p.number AS post_number
       FROM notifications n

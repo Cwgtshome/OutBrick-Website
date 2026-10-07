@@ -39,9 +39,9 @@ function checkShell(html: string, locale: EmailLocale) {
   assert.ok(Buffer.byteLength(html) < 100_000);
 }
 
-describe('community emails', () => {
+void describe('community emails', () => {
   for (const locale of emailLocales) {
-    test(`every template renders in ${locale}, with escaping`, () => {
+    void test(`every template renders in ${locale}, with escaping`, () => {
       const rendered = [
         communitySignIn({ locale, url: 'https://www.outbrick.site/api/community/auth/email/verify?token=abc' }),
         communityConfirmEmail({ locale, url: 'https://www.outbrick.site/api/community/auth/email/confirm?token=abc', reason: 'provider' }),
@@ -66,7 +66,7 @@ describe('community emails', () => {
       assert.ok(reply.html.includes(communityCopy[locale].footer.unsubscribe('reply').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)));
     });
 
-    test(`copy for ${locale} is translated, not English`, () => {
+    void test(`copy for ${locale} is translated, not English`, () => {
       if (locale === 'en') return;
       const en = communityCopy.en;
       const c = communityCopy[locale];
@@ -78,33 +78,33 @@ describe('community emails', () => {
     });
   }
 
-  test('the welcome names every category and links the guidelines', () => {
+  void test('the welcome names every category and links the guidelines', () => {
     const w = communityWelcome({ locale: 'en', name: 'Ada' });
     for (const title of ['Announcements', 'Help & support', 'Bug reports', 'Ideas & feedback', 'Accessibility', 'Show & tell', 'General']) assert.ok(w.text.includes(title), title);
     assert.match(w.html, /\/community\/guidelines/);
     assert.match(w.text, /VoiceOver/);
   });
 
-  test('status email shows the status in words and the team’s note', () => {
+  void test('status email shows the status in words and the team’s note', () => {
     const e = communityNotification({ locale: 'en', item: item('status', { statusNote: 'Fixed in 5.1' }), ...links });
     assert.match(e.subject, /is now Fixed$/);
     assert.match(e.html, /Fixed in 5\.1/);
   });
 
-  test('moderation email gives the reason and how to appeal', () => {
+  void test('moderation email gives the reason and how to appeal', () => {
     const e = communityNotification({ locale: 'en', item: item('moderation'), ...links });
     assert.match(e.html, /Reason/);
     assert.match(e.text, /reply to this email/);
   });
 
-  test('digest lists at most ten and says how many more', () => {
+  void test('digest lists at most ten and says how many more', () => {
     const items = Array.from({ length: DIGEST_LIMIT + 3 }, () => item('watched'));
     const e = communityDigest({ locale: 'en', items, notificationsUrl: 'https://www.outbrick.site/community/notifications', ...links });
     assert.match(e.subject, /^13 new things/);
     assert.match(e.text, /and 3 more/);
   });
 
-  test('plainExcerpt: Markdown to text, at most 400 characters, cut at a word', () => {
+  void test('plainExcerpt: Markdown to text, at most 400 characters, cut at a word', () => {
     assert.equal(plainExcerpt('# Title\n\n**Bold** and _it_ [link](https://x.example) `code`\n> quote'), 'Title Bold and it link code quote');
     const long = plainExcerpt('word '.repeat(200));
     assert.ok(long.length <= 400);
@@ -112,7 +112,7 @@ describe('community emails', () => {
     assert.doesNotMatch(long, /wor…$/);
   });
 
-  test('link pages are noindex, have a main landmark and a POST button', () => {
+  void test('link pages are noindex, have a main landmark and a POST button', () => {
     const html = communityPage({ locale: 'es', title: 'T <b>', body: 'B', form: { action: '/api/x?token=a"b', button: 'Go' } });
     assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
     assert.match(html, /<div role="main"/);
@@ -120,7 +120,7 @@ describe('community emails', () => {
     assert.match(html, /T &lt;b&gt;/);
   });
 
-  test('every sample registered for the preview build renders in five languages', () => {
+  void test('every sample registered for the preview build renders in five languages', () => {
     const issue = { id: 'x', name: 'x', locales: {} };
     for (const name of communityTemplateNames) for (const locale of emailLocales) checkShell(renderSample(name, locale, issue).html, locale);
   });

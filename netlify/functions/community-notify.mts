@@ -6,7 +6,7 @@
 
 import { runNotify } from '../community/notify.ts';
 
-export default async (): Promise<Response> => {
+const handler = async (): Promise<Response> => {
   try {
     await runNotify();
   } catch (error) {
@@ -14,5 +14,6 @@ export default async (): Promise<Response> => {
   }
   return new Response(null, { status: 204 });
 };
+export default handler;
 
 export const config = { schedule: '*/5 * * * *' };

@@ -1,3 +1,4 @@
+/* oxlint-disable typescript/no-explicit-any */
 import { after, afterEach, before, beforeEach, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { PGlite } from '@electric-sql/pglite';
@@ -33,8 +34,8 @@ async function member(name = `Member ${++n}`) {
 
 const patch = (cookie: string, body: unknown) => communityAuth(request('PATCH', '/api/community/me', { cookie, body }));
 
-describe('session', () => {
-  test('signed out: no member, only the configured providers', async () => {
+void describe('session', () => {
+  void test('signed out: no member, only the configured providers', async () => {
     const res = await communityAuth(request('GET', '/api/community/session'));
     assert.equal(res.status, 200);
     assert.equal(res.headers.get('cache-control'), 'no-store');
@@ -43,7 +44,7 @@ describe('session', () => {
     assert.deepEqual((await (await communityAuth(request('GET', '/api/community/session'))).json<any>()).providers, []);
   });
 
-  test('signed in: self view with unread count (the welcome row is not counted)', async () => {
+  void test('signed in: self view with unread count (the welcome row is not counted)', async () => {
     const { id, cookie } = await member('Unread Una');
     await pg.query(`INSERT INTO notifications (member_id, kind) VALUES ($1, 'welcome'), ($1, 'reply'), ($1, 'mention')`, [id]);
     const body = await (await communityAuth(request('GET', '/api/community/session', { cookie }))).json<any>();
@@ -54,7 +55,7 @@ describe('session', () => {
     assert.match(body.member.joinedAt, /^\d{4}-\d\d-\d\dT/);
   });
 
-  test('sign out ends the session', async () => {
+  void test('sign out ends the session', async () => {
     const { cookie } = await member();
     const res = await communityAuth(request('POST', '/api/community/auth/signout', { cookie }));
     assert.deepEqual(await res.json<any>(), { ok: true });
@@ -63,13 +64,13 @@ describe('session', () => {
   });
 });
 
-describe('PATCH /me', () => {
-  test('signed out is a 401', async () => {
+void describe('PATCH /me', () => {
+  void test('signed out is a 401', async () => {
     const res = await patch('', { bio: 'x' });
     assert.equal(res.status, 401);
   });
 
-  test('display name rules', async () => {
+  void test('display name rules', async () => {
     const { cookie } = await member();
     await member('Taken Name');
     const cases: [unknown, string][] = [
@@ -92,7 +93,7 @@ describe('PATCH /me', () => {
     }
   });
 
-  test('choosing a name clears needsName and tidies spaces', async () => {
+  void test('choosing a name clears needsName and tidies spaces', async () => {
     const { id } = await member();
     await pg.query(`UPDATE members SET name_chosen = false WHERE id = $1`, [id]);
     const { cookie } = await (async () => {
@@ -115,7 +116,7 @@ describe('PATCH /me', () => {
     assert.deepEqual(again.member.emailPrefs, { watched: false, release: true, reply: false });
   });
 
-  test('bio, locale and prefs validation', async () => {
+  void test('bio, locale and prefs validation', async () => {
     const { cookie } = await member();
     assert.equal((await (await patch(cookie, { bio: 'x'.repeat(501) })).json<any>()).error.fields.bio, 'too_long');
     assert.equal((await (await patch(cookie, { locale: 'it' })).json<any>()).error.fields.locale, 'invalid');
@@ -125,20 +126,20 @@ describe('PATCH /me', () => {
     assert.equal((await patch(cookie, { bio: 'x'.repeat(500) })).status, 200);
   });
 
-  test('PATCH needs our Origin', async () => {
+  void test('PATCH needs our Origin', async () => {
     const { cookie } = await member();
     const res = await communityAuth(request('PATCH', '/api/community/me', { cookie, body: { bio: 'x' }, origin: 'https://evil.example' }));
     assert.equal(res.status, 403);
   });
 
-  test('a suspended member can change emails and language but not their public profile', async () => {
+  void test('a suspended member can change emails and language but not their public profile', async () => {
     const { id, cookie } = await member();
     await pg.query(`UPDATE members SET banned_until = now() + interval '1 day' WHERE id = $1`, [id]);
     assert.equal((await patch(cookie, { bio: 'hi' })).status, 403);
     assert.equal((await patch(cookie, { emailPrefs: { reply: false }, locale: 'fr' })).status, 200);
   });
 
-  test('changing the email sends a confirmation; the address changes only when confirmed', async () => {
+  void test('changing the email sends a confirmation; the address changes only when confirmed', async () => {
     const { id, cookie } = await member();
     const res = await patch(cookie, { email: 'New@Example.com' });
     assert.equal(res.status, 200);
@@ -154,7 +155,7 @@ describe('PATCH /me', () => {
     assert.equal((await one<{ email: string }>(pg, `SELECT email FROM members WHERE id = $1`, [id])).email, 'new@example.com');
   });
 
-  test('an email that belongs to someone else is refused', async () => {
+  void test('an email that belongs to someone else is refused', async () => {
     const { cookie } = await member();
     await pg.query(`INSERT INTO members (display_name, email, email_verified) VALUES ('Holder', 'held@example.com', true)`);
     const res = await patch(cookie, { email: 'held@example.com' });
@@ -162,8 +163,8 @@ describe('PATCH /me', () => {
   });
 });
 
-describe('export and delete', () => {
-  test('export: a JSON attachment of everything, no secrets', async () => {
+void describe('export and delete', () => {
+  void test('export: a JSON attachment of everything, no secrets', async () => {
     const { id, cookie } = await member('Exporter');
     await pg.query(`INSERT INTO identities (member_id, provider, subject, email) VALUES ($1, 'google', 'g-exp', 'x@example.com')`, [id]);
     const thread = await one<{ id: number }>(pg, `INSERT INTO threads (category_id, author_id, title, slug) VALUES (7, $1, 'My thread', 'my-thread') RETURNING id::int`, [id]);
@@ -189,7 +190,7 @@ describe('export and delete', () => {
     assert.equal((await communityAuth(request('GET', '/api/community/me/export'))).status, 401);
   });
 
-  test('delete needs { confirm: "DELETE" }, blanks personal data and keeps posts', async () => {
+  void test('delete needs { confirm: "DELETE" }, blanks personal data and keeps posts', async () => {
     const { id, cookie } = await member('Leaving Lou');
     await pg.query(`UPDATE members SET bio = 'about me', email_prefs = '{"reply":false}' WHERE id = $1`, [id]);
     await pg.query(`INSERT INTO identities (member_id, provider, subject) VALUES ($1, 'apple', 'a-del')`, [id]);
@@ -217,7 +218,7 @@ describe('export and delete', () => {
     assert.equal((await patch(other, { displayName: 'Leaving Lou' })).status, 200);
   });
 
-  test('a deleted member signing in again by email starts afresh', async () => {
+  void test('a deleted member signing in again by email starts afresh', async () => {
     const res1 = await communityAuth(request('POST', '/api/community/auth/email', { body: { email: 'again@example.com', locale: 'en' } }));
     assert.equal(res1.status, 200);
     let token = linkToken(fetchStub.emails().at(-1)!.text, '/api/community/auth/email/verify');
@@ -232,8 +233,8 @@ describe('export and delete', () => {
   });
 });
 
-describe('name helpers', () => {
-  test('suggestions and cleaning', () => {
+void describe('name helpers', () => {
+  void test('suggestions and cleaning', () => {
     assert.equal(suggestedName({ name: null, email: 'ada.lovelace@example.com' }), 'Ada lovelace');
     assert.equal(suggestedName({ name: null, email: 'player12345@example.com' }), 'Player');
     assert.equal(suggestedName({ name: null, email: 'abc@privaterelay.appleid.com' }), 'Player');

@@ -49,7 +49,7 @@ export function cleanReturnTo(value: unknown): string | null {
   if (typeof value !== 'string') return null;
   const v = value.trim();
   if (!v || v.length > 500 || !v.startsWith('/') || v.startsWith('//')) return null;
-  if (/[\\\u0000-\u001f\u007f]|%2f|%5c|%00/i.test(v)) return null;
+  if (/\\|\p{Cc}|%2f|%5c|%00/iu.test(v)) return null;
   let url: URL;
   try {
     url = new URL(v, 'https://returnto.invalid');

@@ -8,7 +8,8 @@
 //
 //   - skips them, recording why in `email_skipped`, when the member is deleted, banned (except
 //     moderation notices, which explain the ban), has no confirmed address, has switched that kind
-//     off, wrote the post themselves, or when the post has since been hidden, held or deleted;
+//     off, wrote the post themselves, or when the post or thread has since been hidden, held or
+//     deleted (an author who has deleted their account shows as "Former member", as on the forum);
 //   - sends the welcome on its own, moderation notices on their own, and everything else as one
 //     email for one item or one grouped email for several (release announcements from news@,
 //     the rest from support@);
@@ -69,7 +70,8 @@ let warned = false;
 const parse = (v: unknown) => (typeof v === 'string' ? (JSON.parse(v) as Record<string, unknown>) : ((v as Record<string, unknown>) ?? {}));
 const isKind = (k: string): k is CommunityKind => (communityKinds as readonly string[]).includes(k);
 
-function skipReason(row: Row, now: number): string | null | 'wait' {
+/** Why a row gets no email ('wait': not yet, try again later), or null to send it. */
+function skipReason(row: Row, now: number): string | null {
   if (row.deleted) return 'deleted';
   if (row.banned && row.kind !== 'moderation') return 'banned';
   if (row.kind === 'welcome') {
@@ -143,8 +145,9 @@ export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: 
     SELECT n.id::int AS id, n.member_id::int AS member_id, n.kind, n.actor_id::int AS actor_id, n.data, n.created_at,
            m.display_name, m.email, m.email_verified, m.locale, m.email_prefs,
            (m.banned_until IS NOT NULL AND m.banned_until > now()) AS banned, (m.deleted_at IS NOT NULL) AS deleted,
-           a.display_name AS actor_name,
-           t.id::int AS thread_id, t.title AS thread_title, t.slug AS thread_slug, t.hidden AS thread_hidden,
+           CASE WHEN a.deleted_at IS NOT NULL THEN 'Former member' ELSE a.display_name END AS actor_name,
+           t.id::int AS thread_id, t.title AS thread_title, t.slug AS thread_slug,
+           (t.hidden OR t.pending OR t.deleted_at IS NOT NULL) AS thread_hidden,
            p.number AS post_number,
            COALESCE(p.body_md, (SELECT fp.body_md FROM posts fp WHERE fp.thread_id = t.id AND fp.number = 1)) AS body_md,
            (p.id IS NOT NULL AND (p.hidden OR p.pending OR p.deleted_at IS NOT NULL)) AS post_gone

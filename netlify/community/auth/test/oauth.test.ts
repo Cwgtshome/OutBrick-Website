@@ -1,3 +1,4 @@
+/* oxlint-disable typescript/no-explicit-any */
 import { after, afterEach, before, beforeEach, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHmac, verify } from 'node:crypto';
@@ -77,8 +78,8 @@ async function googleCallback(state: string, cookie: string, code = 'good-code')
   return communityAuth(request('GET', `/api/community/auth/google/callback?state=${encodeURIComponent(state)}&code=${code}`, { origin: null, cookie }));
 }
 
-describe('Google', () => {
-  test('start: authorization code with PKCE, state, nonce and a browser binding', async () => {
+void describe('Google', () => {
+  void test('start: authorization code with PKCE, state, nonce and a browser binding', async () => {
     const { location, cookie } = await start('google', '?returnTo=%2Ffr%2Fcommunity%2Fbugs&locale=fr');
     assert.equal(location.origin + location.pathname, 'https://accounts.google.com/o/oauth2/v2/auth');
     assert.equal(location.searchParams.get('client_id'), allProviderEnv.GOOGLE_CLIENT_ID);
@@ -93,7 +94,7 @@ describe('Google', () => {
     assert.equal(stored.data.locale, 'fr');
   });
 
-  test('a good ID token signs in, verifies the email and sends the PKCE verifier', async () => {
+  void test('a good ID token signs in, verifies the email and sends the PKCE verifier', async () => {
     nextIdToken = googleToken({});
     const { state, cookie } = await start('google', '?returnTo=%2Fcommunity%2Fideas');
     const res = await googleCallback(state, cookie);
@@ -115,7 +116,7 @@ describe('Google', () => {
     assert.ok(res.headers.getSetCookie().some((c) => c.startsWith('__Host-ob_oauth=;')));
   });
 
-  test('a replayed state is refused', async () => {
+  void test('a replayed state is refused', async () => {
     nextIdToken = googleToken({ sub: 'g-replay', email: 'replay@example.com' });
     const { state, cookie } = await start('google');
     assert.equal((await googleCallback(state, cookie)).status, 302);
@@ -124,7 +125,7 @@ describe('Google', () => {
     assert.equal(sessionCookieOf(again), null);
   });
 
-  test('a callback without the starting browser’s cookie is refused (login CSRF)', async () => {
+  void test('a callback without the starting browser’s cookie is refused (login CSRF)', async () => {
     nextIdToken = googleToken({ sub: 'g-csrf' });
     const { state } = await start('google');
     const res = await googleCallback(state, '');
@@ -142,7 +143,7 @@ describe('Google', () => {
     ['wrong nonce', () => (nonce: string) => googleToken({ sub: 'g-nonce' })(`${nonce}x`)],
     ['alg none', () => () => `${Buffer.from(JSON.stringify({ alg: 'none', kid: 'google-kid-1' })).toString('base64url')}.${Buffer.from(JSON.stringify({ sub: 'x' })).toString('base64url')}.`],
   ] as const) {
-    test(`refused: ${name}`, async () => {
+    void test(`refused: ${name}`, async () => {
       nextIdToken = make();
       const { state, cookie } = await start('google');
       const res = await googleCallback(state, cookie);
@@ -151,7 +152,7 @@ describe('Google', () => {
     });
   }
 
-  test('a failed code exchange and a denied consent', async () => {
+  void test('a failed code exchange and a denied consent', async () => {
     const a = await start('google');
     assert.match((await googleCallback(a.state, a.cookie, 'bad-code')).headers.get('location')!, /error=failed$/);
     const b = await start('google', '?locale=ja');
@@ -159,7 +160,7 @@ describe('Google', () => {
     assert.equal(denied.headers.get('location'), 'https://www.outbrick.site/ja/community/signin?error=denied');
   });
 
-  test('an unverified Google address is not used', async () => {
+  void test('an unverified Google address is not used', async () => {
     nextIdToken = googleToken({ sub: 'g-unverified', email: 'maybe@example.com', email_verified: false, name: 'Maybe' });
     const { state, cookie } = await start('google');
     const res = await googleCallback(state, cookie);
@@ -168,7 +169,7 @@ describe('Google', () => {
     assert.equal(me.emailVerified, false);
   });
 
-  test('links to an existing member by verified email, and names stay unique', async () => {
+  void test('links to an existing member by verified email, and names stay unique', async () => {
     await pg.query(`INSERT INTO members (display_name, name_chosen, email, email_verified) VALUES ('Hana', true, 'hana@example.com', true)`);
     nextIdToken = googleToken({ sub: 'g-hana', email: 'Hana@Example.com', name: 'Someone Else' });
     let flow = await start('google');
@@ -190,7 +191,7 @@ describe('Google', () => {
     assert.deepEqual(names, ['hana 2', 'hana 3']);
   });
 
-  test('configured admins are promoted', async () => {
+  void test('configured admins are promoted', async () => {
     process.env.COMMUNITY_ADMIN_EMAILS = 'boss@example.com';
     nextIdToken = googleToken({ sub: 'g-boss', email: 'boss@example.com' });
     const { state, cookie } = await start('google');
@@ -199,7 +200,7 @@ describe('Google', () => {
     assert.equal(me.role, 'admin');
   });
 
-  test('a provider without credentials is switched off', async () => {
+  void test('a provider without credentials is switched off', async () => {
     delete process.env.GOOGLE_CLIENT_SECRET;
     const res = await communityAuth(request('GET', '/api/community/auth/google/start?locale=es', { origin: null }));
     assert.equal(res.headers.get('location'), 'https://www.outbrick.site/es/community/signin?error=unavailable');
@@ -216,8 +217,8 @@ async function appleCallback(state: string, extra: Record<string, string> = {}) 
   return communityAuth(foreignRequest('POST', '/api/community/auth/apple/callback', { body, origin: 'https://appleid.apple.com' }));
 }
 
-describe('Sign in with Apple', () => {
-  test('start: form_post with name and email scope, no cookie needed', async () => {
+void describe('Sign in with Apple', () => {
+  void test('start: form_post with name and email scope, no cookie needed', async () => {
     const { location, cookie } = await start('apple');
     assert.equal(location.origin + location.pathname, 'https://appleid.apple.com/auth/authorize');
     assert.equal(location.searchParams.get('response_mode'), 'form_post');
@@ -226,7 +227,7 @@ describe('Sign in with Apple', () => {
     assert.equal(cookie, '');
   });
 
-  test('form_post callback with the first-time `user` name signs in; relay address is fine', async () => {
+  void test('form_post callback with the first-time `user` name signs in; relay address is fine', async () => {
     nextIdToken = appleToken({});
     const { state } = await start('apple', '?returnTo=%2Fde%2Fcommunity&locale=de');
     const res = await appleCallback(state, { user: JSON.stringify({ name: { firstName: 'Ada', lastName: 'Lovelace' }, email: 'x1y2z3@privaterelay.appleid.com' }) });
@@ -255,7 +256,7 @@ describe('Sign in with Apple', () => {
     assert.equal(me2.id, me.id);
   });
 
-  test('Apple without a name or a usable address falls back to "Player"', async () => {
+  void test('Apple without a name or a usable address falls back to "Player"', async () => {
     nextIdToken = appleToken({ sub: 'a-2', email: 'q9w8e7@privaterelay.appleid.com' });
     const { state } = await start('apple');
     const res = await appleCallback(state);
@@ -263,7 +264,7 @@ describe('Sign in with Apple', () => {
     assert.equal(me.displayName, 'Player');
   });
 
-  test('replayed Apple state and a bad Apple signature are refused', async () => {
+  void test('replayed Apple state and a bad Apple signature are refused', async () => {
     nextIdToken = appleToken({ sub: 'a-3', email: 'a3@privaterelay.appleid.com' });
     const { state } = await start('apple', '?locale=fr');
     assert.equal((await appleCallback(state)).status, 303);
@@ -276,21 +277,21 @@ describe('Sign in with Apple', () => {
     assert.equal(res.headers.get('location'), 'https://www.outbrick.site/fr/community/signin?error=failed');
   });
 
-  test('a user who cancels at Apple', async () => {
+  void test('a user who cancels at Apple', async () => {
     const { state } = await start('apple');
     const res = await appleCallback(state, { error: 'user_cancelled_authorize', code: '' });
     assert.match(res.headers.get('location')!, /error=denied$/);
   });
 
-  test('appleName reads only the name', () => {
+  void test('appleName reads only the name', () => {
     assert.equal(appleName(JSON.stringify({ name: { firstName: ' Ada ', lastName: '' } })), 'Ada');
     assert.equal(appleName('not json'), null);
     assert.equal(appleName(null), null);
   });
 });
 
-describe('Facebook', () => {
-  test('signs in unverified, sends "Confirm your email", and the link verifies it', async () => {
+void describe('Facebook', () => {
+  void test('signs in unverified, sends "Confirm your email", and the link verifies it', async () => {
     facebookMe = { id: '10001', name: 'Frida Kahlo', email: 'frida@example.com' };
     const { location, state, cookie } = await start('facebook', '?locale=es');
     assert.equal(location.origin + location.pathname, 'https://www.facebook.com/v19.0/dialog/oauth');
@@ -323,7 +324,7 @@ describe('Facebook', () => {
     assert.equal(me.emailVerified, true);
   });
 
-  test('an unverified Facebook address never links to an existing member; confirming merges', async () => {
+  void test('an unverified Facebook address never links to an existing member; confirming merges', async () => {
     await pg.query(`INSERT INTO members (display_name, name_chosen, email, email_verified) VALUES ('Owner', true, 'owner@example.com', true)`);
     const owner = await one<{ id: number }>(pg, `SELECT id::int FROM members WHERE email = 'owner@example.com'`);
     facebookMe = { id: '10002', name: 'Owner?', email: 'owner@example.com' };
@@ -343,7 +344,7 @@ describe('Facebook', () => {
     assert.equal((await all(pg, `SELECT 1 FROM members WHERE id = $1`, [me.id])).length, 0);
   });
 
-  test('Facebook without an email still signs in, with a placeholder', async () => {
+  void test('Facebook without an email still signs in, with a placeholder', async () => {
     facebookMe = { id: '10003', name: 'No Mail' };
     const { state, cookie } = await start('facebook');
     const res = await communityAuth(request('GET', `/api/community/auth/facebook/callback?state=${state}&code=good-code`, { origin: null, cookie }));
@@ -354,7 +355,7 @@ describe('Facebook', () => {
     assert.match(row.email, /\.invalid$/);
   });
 
-  test('a malformed Facebook profile is refused', async () => {
+  void test('a malformed Facebook profile is refused', async () => {
     facebookMe = { id: 'not-a-number', name: 'X' };
     const { state, cookie } = await start('facebook');
     const res = await communityAuth(request('GET', `/api/community/auth/facebook/callback?state=${state}&code=good-code`, { origin: null, cookie }));

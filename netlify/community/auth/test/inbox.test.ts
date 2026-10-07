@@ -1,3 +1,4 @@
+/* oxlint-disable typescript/no-explicit-any */
 import { after, afterEach, before, beforeEach, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { PGlite } from '@electric-sql/pglite';
@@ -35,8 +36,8 @@ async function seed() {
   return { me, actor, thread, post };
 }
 
-describe('notifications', () => {
-  test('list, newest first, with actor, thread, post number and data; welcome rows hidden', async () => {
+void describe('notifications', () => {
+  void test('list, newest first, with actor, thread, post number and data; welcome rows hidden', async () => {
     const { me, actor, thread, post } = await seed();
     await pg.query(`INSERT INTO notifications (member_id, kind, created_at) VALUES ($1, 'welcome', now() - interval '1 hour')`, [me.id]);
     await pg.query(`INSERT INTO notifications (member_id, kind, thread_id, post_id, actor_id, created_at) VALUES ($1, 'reply', $2, $3, $4, now() - interval '5 minutes')`, [me.id, thread.id, post.id, actor.id]);
@@ -57,7 +58,7 @@ describe('notifications', () => {
     assert.deepEqual(body.notifications[0].data, { status: 'fixed', statusNote: 'Fixed in 5.1' });
   });
 
-  test('pagination at 30 a page', async () => {
+  void test('pagination at 30 a page', async () => {
     const { me, thread } = await seed();
     await pg.query(`INSERT INTO notifications (member_id, kind, thread_id) SELECT $1, 'watched', $2 FROM generate_series(1, 31)`, [me.id, thread.id]);
     const p1 = await (await communityAuth(request('GET', '/api/community/notifications', { cookie: me.cookie }))).json<any>();
@@ -69,7 +70,7 @@ describe('notifications', () => {
     assert.equal(clamped.page, 2);
   });
 
-  test('mark read: some ids, only my own; then all', async () => {
+  void test('mark read: some ids, only my own; then all', async () => {
     const a = await seed();
     const b = await seed();
     const mine = await all<{ id: number }>(pg, `INSERT INTO notifications (member_id, kind) VALUES ($1, 'reply'), ($1, 'mention') RETURNING id::int`, [a.me.id]);
@@ -88,8 +89,8 @@ describe('notifications', () => {
   });
 });
 
-describe('unsubscribe', () => {
-  test('tokens are signed per member and kind', () => {
+void describe('unsubscribe', () => {
+  void test('tokens are signed per member and kind', () => {
     const t = unsubscribeToken(TEST_RESEND_KEY, 42, 'reply');
     assert.deepEqual(readUnsubscribeToken(TEST_RESEND_KEY, t), { memberId: 42, kind: 'reply' });
     assert.equal(readUnsubscribeToken(TEST_RESEND_KEY, t.replace('42.', '43.')), null);
@@ -99,7 +100,7 @@ describe('unsubscribe', () => {
     assert.match(unsubscribeUrl(TEST_RESEND_KEY, 42, 'all'), /^https:\/\/www\.outbrick\.site\/api\/community\/email\/unsubscribe\?token=42\.all\./);
   });
 
-  test('GET shows a page in the member’s language and changes nothing', async () => {
+  void test('GET shows a page in the member’s language and changes nothing', async () => {
     const { me } = await seed();
     await pg.query(`UPDATE members SET locale = 'fr' WHERE id = $1`, [me.id]);
     const token = unsubscribeToken(TEST_RESEND_KEY, me.id, 'watched');
@@ -112,7 +113,7 @@ describe('unsubscribe', () => {
     assert.deepEqual((await one<{ email_prefs: unknown }>(pg, `SELECT email_prefs FROM members WHERE id = $1`, [me.id])).email_prefs, {});
   });
 
-  test('RFC 8058 one-click POST: no cookie, no Origin, turns that kind off', async () => {
+  void test('RFC 8058 one-click POST: no cookie, no Origin, turns that kind off', async () => {
     const { me } = await seed();
     const token = unsubscribeToken(TEST_RESEND_KEY, me.id, 'reply');
     const res = await communityAuth(foreignRequest('POST', `/api/community/email/unsubscribe?token=${token}`, { body: 'List-Unsubscribe=One-Click' }));
@@ -121,7 +122,7 @@ describe('unsubscribe', () => {
     assert.deepEqual((await one<{ email_prefs: unknown }>(pg, `SELECT email_prefs FROM members WHERE id = $1`, [me.id])).email_prefs, { reply: false });
   });
 
-  test('the page’s button turns everything off for "all" and says so', async () => {
+  void test('the page’s button turns everything off for "all" and says so', async () => {
     const { me } = await seed();
     const token = unsubscribeToken(TEST_RESEND_KEY, me.id, 'all');
     const res = await communityAuth(foreignRequest('POST', `/api/community/email/unsubscribe?token=${token}`, { origin: 'https://www.outbrick.site', body: '' }));
@@ -132,7 +133,7 @@ describe('unsubscribe', () => {
     assert.ok(Object.values(prefs).every((v) => v === false));
   });
 
-  test('a bad token: a friendly page on GET, 400 on one-click', async () => {
+  void test('a bad token: a friendly page on GET, 400 on one-click', async () => {
     const page = await communityAuth(foreignRequest('GET', '/api/community/email/unsubscribe?token=1.reply.forged-signature-that-is-long'));
     assert.equal(page.status, 400);
     assert.match(await page.text(), /That link has expired/);
