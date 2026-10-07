@@ -13,7 +13,7 @@ importers:
         version: 11.1.3
       '@netlify/database':
         specifier: ^2.0.1
-        version: 2.0.1(@cloudflare/workers-types@4.20260515.1)
+        version: 2.0.1(@cloudflare/workers-types@4.20260515.1)(@electric-sql/pglite@0.5.8)
       react:
         specifier: 19.2.6
         version: 19.2.6
@@ -39,6 +39,9 @@ importers:
       '@cloudflare/workers-types':
         specifier: 4.20260515.1
         version: 4.20260515.1
+      '@electric-sql/pglite':
+        specifier: ^0.5.8
+        version: 0.5.8
       '@openai/sites-vite-plugin':
         specifier: 0.2.0
         version: 0.2.0(vite@8.0.13(@types/node@22.19.19)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.51.2))
@@ -279,6 +282,9 @@ packages:
 
   '@dotenvx/primitives@0.8.0':
     resolution: {integrity: sha512-VYJy0uhFm9zTJ1TxBaW/pA8bjbOM/OttaNMwZ1RHG4JKyRG7DhSdiqD1ipQoAyoD22olUtxbP78W9xY3Wd11bg==}
+
+  '@electric-sql/pglite@0.5.8':
+    resolution: {integrity: sha512-n9tsbUOhwx2epK1V0ZG9Ar4SHWUju04dhmzZXiSBXwBoleOvIfals33NAaWgagQVAL4Rbvx/Ptsu3P+pA09f6Q==}
 
   '@emnapi/core@1.10.0':
     resolution: {integrity: sha512-yq6OkJ4p82CAfPl0u9mQebQHKPJkY7WrIuk205cTYnYe+k2Z8YBh11FrbRG/H6ihirqcacOgl2BIO8oyMQLeXw==}
@@ -3477,6 +3483,8 @@ snapshots:
 
   '@dotenvx/primitives@0.8.0': {}
 
+  '@electric-sql/pglite@0.5.8': {}
+
   '@emnapi/core@1.10.0':
     dependencies:
       '@emnapi/wasi-threads': 1.2.1
@@ -3751,12 +3759,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@netlify/database@2.0.1(@cloudflare/workers-types@4.20260515.1)':
+  '@netlify/database@2.0.1(@cloudflare/workers-types@4.20260515.1)(@electric-sql/pglite@0.5.8)':
     dependencies:
       '@neondatabase/serverless': 1.2.0
       '@netlify/runtime-utils': 3.0.0
       pg: 8.23.1
-      waddler: 0.1.1(@cloudflare/workers-types@4.20260515.1)(@neondatabase/serverless@1.2.0)(pg@8.23.1)
+      waddler: 0.1.1(@cloudflare/workers-types@4.20260515.1)(@electric-sql/pglite@0.5.8)(@neondatabase/serverless@1.2.0)(pg@8.23.1)
       ws: 8.18.0
     transitivePeerDependencies:
       - '@clickhouse/client'
@@ -5923,9 +5931,10 @@ snapshots:
     optionalDependencies:
       vite: 8.0.13(@types/node@22.19.19)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.51.2)
 
-  waddler@0.1.1(@cloudflare/workers-types@4.20260515.1)(@neondatabase/serverless@1.2.0)(pg@8.23.1):
+  waddler@0.1.1(@cloudflare/workers-types@4.20260515.1)(@electric-sql/pglite@0.5.8)(@neondatabase/serverless@1.2.0)(pg@8.23.1):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20260515.1
+      '@electric-sql/pglite': 0.5.8
       '@neondatabase/serverless': 1.2.0
       pg: 8.23.1
 

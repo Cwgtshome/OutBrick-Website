@@ -43,3 +43,6 @@ next-env.d.ts
 
 # TypeScript incremental build cache
 tsconfig.tsbuildinfo
+
+# Netlify CLI state
+.netlify
