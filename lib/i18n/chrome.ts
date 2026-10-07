@@ -28,8 +28,8 @@ export type ChromeCopy = {
   badgeAlt: string;
   /** The home page's section anchors, in order: rule, journey, cast, fair, apple. */
   homeNav: [string, string, string, string, string];
-  /** The game, Journal, Mascots, Press, About, Authors, Research, Support. */
-  editorialNav: [string, string, string, string, string, string, string, string];
+  /** The game, Journal, Mascots, Press, About, Authors, Research, Community, Support. */
+  editorialNav: [string, string, string, string, string, string, string, string, string];
   footer: {
     blurb: string;
     game: string;
@@ -45,6 +45,8 @@ export type ChromeCopy = {
     pressKit: string;
     help: string;
     support: string;
+    /** OutBrick Community, /community (published in every language). */
+    community: string;
     privacy: string;
     privacyChoices: string;
     terms: string;
@@ -77,7 +79,7 @@ const en: ChromeCopy = {
   badgeLabel: 'Download OutBrick on the App Store',
   badgeAlt: 'Download on the App Store',
   homeNav: ['The rule', 'The Journey', 'The cast', 'What it costs', 'Built for Apple'],
-  editorialNav: ['The game', 'Journal', 'Mascots', 'Press', 'About', 'Authors', 'Research', 'Support'],
+  editorialNav: ['The game', 'Journal', 'Mascots', 'Press', 'About', 'Authors', 'Research', 'Community', 'Support'],
   footer: {
     blurb: 'OutBrick: Block Sort Puzzle. Slide, sort, clear the board. Free on the App Store.',
     game: 'The game',
@@ -92,6 +94,7 @@ const en: ChromeCopy = {
     pressKit: 'Press kit',
     help: 'Help & legal',
     support: 'Support',
+    community: 'Community',
     privacy: 'Privacy policy',
     privacyChoices: 'Privacy choices',
     terms: 'Terms',
@@ -123,7 +126,7 @@ const fr: ChromeCopy = {
   badgeLabel: 'Télécharger OutBrick dans l’App Store',
   badgeAlt: 'Télécharger dans l’App Store',
   homeNav: ['La règle', 'Le Voyage', 'Les amis', 'Ce que ça coûte', 'Pensé pour Apple'],
-  editorialNav: ['Le jeu', 'Journal', 'Mascottes', 'Presse', 'À propos', 'Auteurs', 'Recherche', 'Assistance'],
+  editorialNav: ['Le jeu', 'Journal', 'Mascottes', 'Presse', 'À propos', 'Auteurs', 'Recherche', 'Communauté', 'Assistance'],
   footer: {
     blurb: 'OutBrick: Block Sort Puzzle. Glissez, triez, videz le plateau. Gratuit sur l’App Store.',
     game: 'Le jeu',
@@ -138,6 +141,7 @@ const fr: ChromeCopy = {
     pressKit: 'Kit presse',
     help: 'Aide et mentions légales',
     support: 'Assistance',
+    community: 'Communauté',
     privacy: 'Confidentialité',
     privacyChoices: 'Vos choix de confidentialité',
     terms: 'Conditions d’utilisation',
@@ -169,7 +173,7 @@ const de: ChromeCopy = {
   badgeLabel: 'OutBrick im App Store laden',
   badgeAlt: 'Laden im App Store',
   homeNav: ['Die Regel', 'Die Reise', 'Die Freunde', 'Was es kostet', 'Für Apple gebaut'],
-  editorialNav: ['Das Spiel', 'Journal', 'Maskottchen', 'Presse', 'Über uns', 'Autoren', 'Forschung', 'Hilfe'],
+  editorialNav: ['Das Spiel', 'Journal', 'Maskottchen', 'Presse', 'Über uns', 'Autoren', 'Forschung', 'Community', 'Hilfe'],
   footer: {
     blurb: 'OutBrick: Block Sort Puzzle. Schieben, sortieren, Feld frei. Kostenlos im App Store.',
     game: 'Das Spiel',
@@ -184,6 +188,7 @@ const de: ChromeCopy = {
     pressKit: 'Pressekit',
     help: 'Hilfe & Rechtliches',
     support: 'Support',
+    community: 'Community',
     privacy: 'Datenschutzerklärung',
     privacyChoices: 'Datenschutzeinstellungen',
     terms: 'Nutzungsbedingungen',
@@ -215,7 +220,7 @@ const es: ChromeCopy = {
   badgeLabel: 'Descargar OutBrick en el App Store',
   badgeAlt: 'Descárgalo en el App Store',
   homeNav: ['La regla', 'El Viaje', 'Los amigos', 'Lo que cuesta', 'Hecho para Apple'],
-  editorialNav: ['El juego', 'Revista', 'Mascotas', 'Prensa', 'Quiénes somos', 'Autores', 'Investigación', 'Soporte'],
+  editorialNav: ['El juego', 'Revista', 'Mascotas', 'Prensa', 'Quiénes somos', 'Autores', 'Investigación', 'Comunidad', 'Soporte'],
   footer: {
     blurb: 'OutBrick: Block Sort Puzzle. Desliza, ordena, despeja el tablero. Gratis en el App Store.',
     game: 'El juego',
@@ -230,6 +235,7 @@ const es: ChromeCopy = {
     pressKit: 'Kit de prensa',
     help: 'Ayuda y legal',
     support: 'Soporte',
+    community: 'Comunidad',
     privacy: 'Política de privacidad',
     privacyChoices: 'Opciones de privacidad',
     terms: 'Condiciones',
@@ -261,7 +267,7 @@ const ja: ChromeCopy = {
   badgeLabel: 'App StoreでOutBrickをダウンロード',
   badgeAlt: 'App Storeからダウンロード',
   homeNav: ['ルール', 'ジャーニー', 'なかまたち', '料金のこと', 'Apple対応'],
-  editorialNav: ['ゲーム', '記事', 'マスコット', 'プレス', 'OutBrickについて', '著者', 'リサーチ', 'サポート'],
+  editorialNav: ['ゲーム', '記事', 'マスコット', 'プレス', 'OutBrickについて', '著者', 'リサーチ', 'コミュニティ', 'サポート'],
   footer: {
     blurb: 'OutBrick: Block Sort Puzzle。スライドして、仕分けて、ステージをクリア。App Storeで無料。',
     game: 'ゲーム',
@@ -276,6 +282,7 @@ const ja: ChromeCopy = {
     pressKit: 'プレスキット',
     help: 'ヘルプと規約',
     support: 'サポート',
+    community: 'コミュニティ',
     privacy: 'プライバシーポリシー',
     privacyChoices: 'プライバシーの選択',
     terms: '利用規約',

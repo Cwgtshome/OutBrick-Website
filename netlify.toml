@@ -142,6 +142,17 @@
   to = "/c"
   status = 200
 
+# OutBrick Community (app/community-shell.tsx). Only /community, /community/faq and
+# /community/guidelines are prerendered files (Netlify serves those first, since these rules are
+# not forced); every other /community/... address — a category, a thread, search, settings — is
+# served from the shell of its language with a 200, and the client app reads the address. Thread
+# pages are filled in for readers without script and for search engines by
+# netlify/edge-functions/community-thread.ts, which runs on the original path before this rewrite.
+[[redirects]]
+  from = "/community/*"
+  to = "/community"
+  status = 200
+
 [[redirects]]
   from = "/fr/privacy-policy"
   to = "/fr/privacy"
@@ -450,6 +461,27 @@
 [[redirects]]
   from = "/ja/c/*"
   to = "/ja/c"
+  status = 200
+
+# Community addresses in each language, served from that language's shell (see /community/* above).
+[[redirects]]
+  from = "/fr/community/*"
+  to = "/fr/community"
+  status = 200
+
+[[redirects]]
+  from = "/de/community/*"
+  to = "/de/community"
+  status = 200
+
+[[redirects]]
+  from = "/es/community/*"
+  to = "/es/community"
+  status = 200
+
+[[redirects]]
+  from = "/ja/community/*"
+  to = "/ja/community"
   status = 200
 
 # Existing localized files take priority; unknown paths retain their language.

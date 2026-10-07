@@ -1,0 +1,337 @@
+// The community's emails from notifications: run every five minutes by
+// netlify/functions/community-notify.mts.
+//
+// Rows in `notifications` are written by the forum (replies, mentions, follows, status changes,
+// solved answers, release posts, moderation) and, for the welcome, by sign-in. This picks the
+// ones that are at least two minutes old (so a quick edit or delete settles first) and have not
+// been emailed or skipped, and for each member:
+//
+//   - skips them, recording why in `email_skipped`, when the member is deleted, banned (except
+//     moderation notices, which explain the ban), has no confirmed address, has switched that kind
+//     off, wrote the post themselves, or when the post or thread has since been hidden, held or
+//     deleted (an author who has deleted their account shows as "Former member", as on the forum);
+//   - sends the welcome on its own, moderation notices on their own, and everything else as one
+//     email for one item or one grouped email for several (release announcements from news@,
+//     the rest from support@);
+//   - sends at most six emails per member per hour; the rest wait and go as one grouped email
+//     on a later run;
+//   - claims rows before sending (an expiring claim, so a run cut off mid-send is retried after
+//     15 minutes), marks them emailed only once Resend accepts the email, and gives each batch a
+//     Resend Idempotency-Key derived from its notification ids, so overlapping runs or a retry
+//     never send the same email twice.
+//
+// Email preferences: every kind is on unless the member's `email_prefs` has `{ kind: false }`.
+
+import { communityPath, threadPath, type CommunityLocale } from '../../lib/community/contract.ts';
+import { communityDigest, communityNotification, communityUrl, communityWelcome, plainExcerpt, type NotificationItem } from '../../emails/community.ts';
+import { communityKinds, type CommunityKind, type UnsubscribeKind } from '../../emails/community-i18n.ts';
+import { SENDERS, sendEmail, type OutgoingEmail, type ResendResult } from '../../emails/resend.ts';
+import { SITE } from './http.ts';
+import { sha256, sql } from './db.ts';
+import { listUnsubscribeHeaders, unsubscribeUrl } from './auth/inbox.ts';
+import { replyToFor } from './reply-email.ts';
+
+/** Phase 2: kinds whose single-item email gets a reply-by-email Reply-To. */
+const replyableKinds: readonly string[] = ['reply', 'mention', 'watched', 'status', 'solved', 'merged'];
+
+export const HOURLY_CAP = 6;
+export const SETTLE_SECONDS = 120;
+/** A welcome waits this long for an unconfirmed member to confirm their address. */
+const WELCOME_WAIT_DAYS = 7;
+
+export function wantsEmail(prefs: Record<string, unknown> | null | undefined, kind: string): boolean {
+  if (kind === 'welcome') return true;
+  return (prefs ?? {})[kind] !== false;
+}
+
+type Row = {
+  id: number;
+  member_id: number;
+  kind: string;
+  actor_id: number | null;
+  data: Record<string, unknown>;
+  created_at: string | Date;
+  display_name: string;
+  email: string;
+  email_verified: boolean;
+  locale: string;
+  email_prefs: Record<string, unknown>;
+  banned: boolean;
+  deleted: boolean;
+  actor_name: string | null;
+  thread_id: number | null;
+  thread_title: string | null;
+  thread_slug: string | null;
+  thread_hidden: boolean | null;
+  post_number: number | null;
+  body_md: string | null;
+  post_gone: boolean;
+};
+
+export type Sender = (apiKey: string, email: OutgoingEmail, idempotencyKey?: string) => Promise<ResendResult>;
+export type NotifySummary = {
+  sent: number;
+  skipped: number;
+  deferred: number;
+  failed: number;
+  /**
+   * When the notifier next has work without any new signal (ms epoch), or null when nothing is
+   * pending. A row still settling falls due when it settles; an in-flight claim when its lease
+   * expires; an unconfirmed member's welcome only at its seven-day expiry (confirming the address
+   * is a write request, which signals the notifier at once); anything already overdue (the hourly
+   * cap, a failed send, a run that ran out of time) on the next run.
+   */
+  dueAt: number | null;
+};
+
+/** The pending work's earliest due time; see NotifySummary.dueAt. */
+export async function nextDueAt(): Promise<number | null> {
+  const [row] = await sql`
+    SELECT min(CASE
+                 WHEN n.kind = 'welcome' AND NOT m.email_verified THEN n.created_at + make_interval(days => ${WELCOME_WAIT_DAYS})
+                 WHEN n.email_retry_at IS NOT NULL AND n.email_retry_at > now() THEN n.email_retry_at
+                 WHEN cap.n >= ${HOURLY_CAP} THEN GREATEST(cap.oldest + interval '1 hour', n.created_at + make_interval(secs => ${SETTLE_SECONDS}))
+                 WHEN n.email_claimed_at IS NOT NULL AND n.email_claimed_at > now() - make_interval(mins => ${CLAIM_MINUTES})
+                   THEN n.email_claimed_at + make_interval(mins => ${CLAIM_MINUTES})
+                 ELSE n.created_at + make_interval(secs => ${SETTLE_SECONDS})
+               END) AS due
+      FROM notifications n
+      JOIN members m ON m.id = n.member_id
+      LEFT JOIN LATERAL (
+        SELECT count(*)::int AS n, min(r.at) AS oldest FROM rate_events r
+         WHERE r.key = 'notify:member:' || n.member_id AND r.at > now() - interval '1 hour'
+      ) cap ON true
+     WHERE n.emailed_at IS NULL AND n.email_skipped IS NULL`;
+  const due = row?.due ? new Date(row.due as string).getTime() : null;
+  return due === null || Number.isNaN(due) ? null : due;
+}
+
+let warned = false;
+
+const parse = (v: unknown) => (typeof v === 'string' ? (JSON.parse(v) as Record<string, unknown>) : ((v as Record<string, unknown>) ?? {}));
+const isKind = (k: string): k is CommunityKind => (communityKinds as readonly string[]).includes(k);
+
+/** Why a row gets no email ('wait': not yet, try again later), or null to send it. */
+function skipReason(row: Row, now: number): string | null {
+  if (row.deleted) return 'deleted';
+  if (row.banned && row.kind !== 'moderation') return 'banned';
+  if (row.kind === 'welcome') {
+    if (row.email_verified) return null;
+    return now - new Date(row.created_at).getTime() > WELCOME_WAIT_DAYS * 86400_000 ? 'unverified' : 'wait';
+  }
+  if (!row.email_verified) return 'unverified';
+  if (!isKind(row.kind)) return 'unknown_kind';
+  if (!wantsEmail(row.email_prefs, row.kind)) return 'pref_off';
+  if (row.actor_id != null && row.actor_id === row.member_id) return 'self';
+  // A badge belongs to the member, not to a thread (community-fx).
+  if (row.kind === 'badge') return null;
+  if (row.thread_id == null || row.thread_title == null) return 'gone';
+  if (row.kind !== 'moderation' && (row.thread_hidden || row.post_gone)) return 'hidden';
+  return null;
+}
+
+function itemOf(row: Row, locale: CommunityLocale): NotificationItem {
+  const data = row.data ?? {};
+  const kind = row.kind as CommunityKind;
+  const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v : null);
+  if (kind === 'badge') {
+    // community-fx: links to the member's own profile, where badges are listed.
+    return {
+      kind,
+      actorName: null,
+      threadTitle: '',
+      url: `${SITE}${communityPath(locale, `/u/${row.member_id}`)}`,
+      excerpt: '',
+      badge: str(data.badge),
+      level: typeof data.level === 'number' ? data.level : 1,
+    };
+  }
+  return {
+    kind,
+    actorName: row.actor_name,
+    threadTitle: row.thread_title ?? '',
+    url: `${SITE}${threadPath(locale, { id: Number(row.thread_id), slug: String(row.thread_slug ?? 'thread') }, row.post_number)}`,
+    excerpt: plainExcerpt(str(data.excerpt) ?? row.body_md ?? '', 400),
+    status: str(data.status),
+    statusNote: str(data.statusNote),
+    version: str(data.version),
+    reason: str(data.reason),
+    fromTitle: str(data.fromTitle),
+  };
+}
+
+const batchKey = (prefix: string, memberId: number, ids: number[]) => `community-${prefix}-${memberId}-${sha256(ids.join(',')).slice(0, 32)}`;
+
+/** A claim older than this is abandoned (a run that timed out or crashed mid-send) and is retried. */
+const CLAIM_MINUTES = 15;
+
+async function claim(ids: number[]): Promise<number[]> {
+  const rows = await sql`UPDATE notifications SET email_claimed_at = now()
+                          WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)
+                            AND emailed_at IS NULL AND email_skipped IS NULL
+                            AND (email_claimed_at IS NULL OR email_claimed_at < now() - make_interval(mins => ${CLAIM_MINUTES}))
+                            AND (email_retry_at IS NULL OR email_retry_at <= now())
+                          RETURNING id::int AS id`;
+  return rows.map((r) => Number(r.id));
+}
+
+/** Only after Resend has accepted the email. */
+async function markSent(ids: number[]): Promise<void> {
+  await sql`UPDATE notifications SET emailed_at = now() WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)`;
+}
+
+/** Retries after a refused send: 5, 10, 20 … minutes apart (at most 6 hours), then give up. */
+export const MAX_SEND_ATTEMPTS = 8;
+const BACKOFF_FIRST_MINUTES = 5;
+const BACKOFF_MAX_MINUTES = 360;
+
+async function backOff(ids: number[]): Promise<void> {
+  await sql`UPDATE notifications
+               SET email_claimed_at = NULL,
+                   email_attempts = email_attempts + 1,
+                   email_retry_at = now() + make_interval(mins => LEAST(${BACKOFF_MAX_MINUTES}, ${BACKOFF_FIRST_MINUTES} * power(2, email_attempts)::int)),
+                   email_skipped = CASE WHEN email_attempts + 1 >= ${MAX_SEND_ATTEMPTS} THEN 'send_failed' ELSE NULL END
+             WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)`;
+}
+
+async function skip(ids: number[], reason: string): Promise<void> {
+  if (!ids.length) return;
+  await sql`UPDATE notifications SET email_skipped = ${reason}
+             WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint) AND emailed_at IS NULL`;
+}
+
+async function sentLastHour(memberId: number): Promise<number> {
+  const [row] = await sql`SELECT count(*)::int AS n FROM rate_events WHERE key = ${`notify:member:${memberId}`} AND at > now() - interval '1 hour'`;
+  return Number(row?.n ?? 0);
+}
+
+export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: number; budgetMs?: number } = {}): Promise<NotifySummary> {
+  const summary: NotifySummary = { sent: 0, skipped: 0, deferred: 0, failed: 0, dueAt: null };
+  const apiKey = opts.apiKey ?? process.env.RESEND_API_KEY ?? '';
+  if (!apiKey) {
+    if (!warned) console.log('[community-notify] RESEND_API_KEY is not set; no community emails are sent.');
+    warned = true;
+    return summary;
+  }
+  const send = opts.send ?? sendEmail;
+  const started = Date.now();
+  const budget = opts.budgetMs ?? 22_000;
+
+  const rows = (await sql`
+    SELECT n.id::int AS id, n.member_id::int AS member_id, n.kind, n.actor_id::int AS actor_id, n.data, n.created_at,
+           m.display_name, m.email, m.email_verified, m.locale, m.email_prefs,
+           (m.banned_until IS NOT NULL AND m.banned_until > now()) AS banned, (m.deleted_at IS NOT NULL) AS deleted,
+           CASE WHEN a.deleted_at IS NOT NULL THEN 'Former member' ELSE a.display_name END AS actor_name,
+           t.id::int AS thread_id, t.title AS thread_title, t.slug AS thread_slug,
+           (t.hidden OR t.pending OR t.deleted_at IS NOT NULL) AS thread_hidden,
+           p.number AS post_number,
+           COALESCE(p.body_md, (SELECT fp.body_md FROM posts fp WHERE fp.thread_id = t.id AND fp.number = 1)) AS body_md,
+           (p.id IS NOT NULL AND (p.hidden OR p.pending OR p.deleted_at IS NOT NULL)) AS post_gone
+      FROM notifications n
+      JOIN members m ON m.id = n.member_id
+      LEFT JOIN members a ON a.id = n.actor_id
+      LEFT JOIN threads t ON t.id = n.thread_id
+      LEFT JOIN posts p ON p.id = n.post_id
+     WHERE n.emailed_at IS NULL AND n.email_skipped IS NULL
+       AND (n.email_claimed_at IS NULL OR n.email_claimed_at < now() - make_interval(mins => ${CLAIM_MINUTES}))
+       AND (n.email_retry_at IS NULL OR n.email_retry_at <= now())
+       AND n.created_at < now() - make_interval(secs => ${SETTLE_SECONDS})
+     ORDER BY n.member_id, n.created_at, n.id
+     LIMIT ${opts.limit ?? 500}`) as unknown as Row[];
+
+  const byMember = new Map<number, Row[]>();
+  for (const row of rows) {
+    row.data = parse(row.data);
+    row.email_prefs = parse(row.email_prefs);
+    const list = byMember.get(row.member_id) ?? [];
+    list.push(row);
+    byMember.set(row.member_id, list);
+  }
+
+  const now = Date.now();
+  for (const [memberId, list] of byMember) {
+    if (Date.now() - started > budget) break;
+    const skips = new Map<string, number[]>();
+    const sendable: Row[] = [];
+    for (const row of list) {
+      const reason = skipReason(row, now);
+      if (reason === 'wait') summary.deferred++;
+      else if (reason) skips.set(reason, [...(skips.get(reason) ?? []), row.id]);
+      else sendable.push(row);
+    }
+    for (const [reason, ids] of skips) {
+      await skip(ids, reason);
+      summary.skipped += ids.length;
+    }
+    if (!sendable.length) continue;
+
+    const first = sendable[0];
+    const locale = (['en', 'fr', 'de', 'es', 'ja'].includes(first.locale) ? first.locale : 'en') as CommunityLocale;
+    const batches: { kind: 'welcome' | 'single' | 'group'; rows: Row[]; news: boolean }[] = [];
+    for (const row of sendable.filter((r) => r.kind === 'welcome')) batches.push({ kind: 'welcome', rows: [row], news: false });
+    for (const row of sendable.filter((r) => r.kind === 'moderation')) batches.push({ kind: 'single', rows: [row], news: false });
+    const others = sendable.filter((r) => r.kind !== 'welcome' && r.kind !== 'moderation' && r.kind !== 'release');
+    const releases = sendable.filter((r) => r.kind === 'release');
+    if (others.length) batches.push({ kind: others.length === 1 ? 'single' : 'group', rows: others, news: false });
+    if (releases.length) batches.push({ kind: releases.length === 1 ? 'single' : 'group', rows: releases, news: true });
+
+    let used = await sentLastHour(memberId);
+    for (const batch of batches) {
+      if (used >= HOURLY_CAP) {
+        summary.deferred += batch.rows.length;
+        continue;
+      }
+      const claimed = new Set(await claim(batch.rows.map((r) => r.id)));
+      const rowsNow = batch.rows.filter((r) => claimed.has(r.id));
+      if (!rowsNow.length) continue;
+      const ids = rowsNow.map((r) => r.id);
+      const manageUrl = communityUrl(locale, '/settings');
+      let email: OutgoingEmail;
+      let key: string;
+      if (batch.kind === 'welcome') {
+        const rendered = communityWelcome({ locale, name: first.display_name, manageUrl });
+        email = { ...SENDERS.community, to: first.email, subject: rendered.subject, html: rendered.html, text: rendered.text, tags: [{ name: 'form', value: 'community-welcome' }, { name: 'locale', value: locale }] };
+        key = `community-welcome-${memberId}`;
+      } else {
+        const items = rowsNow.map((r) => itemOf(r, locale));
+        const kinds = [...new Set(items.map((i) => i.kind))];
+        const unsubKind: UnsubscribeKind = kinds.length === 1 ? kinds[0] : 'all';
+        const unsub = unsubscribeUrl(apiKey, memberId, unsubKind);
+        const links = { manageUrl, unsubscribeUrl: unsub, unsubscribeKind: unsubKind };
+        // Phase 2 (community-p2): a single notification about a thread can be answered by email.
+        const only = rowsNow.length === 1 ? rowsNow[0] : null;
+        const replyTo = only && only.thread_id != null && replyableKinds.includes(only.kind) ? replyToFor({ memberId, threadId: only.thread_id, notificationId: only.id }) : null;
+        const rendered =
+          rowsNow.length === 1
+            ? communityNotification({ locale, item: items[0], ...links, replyByEmail: Boolean(replyTo) })
+            : communityDigest({ locale, items, notificationsUrl: communityUrl(locale, '/notifications'), ...links });
+        const sender = batch.news ? SENDERS.communityNews : SENDERS.community;
+        email = {
+          ...sender,
+          ...(replyTo ? { replyTo } : {}),
+          to: first.email,
+          subject: rendered.subject,
+          html: rendered.html,
+          text: rendered.text,
+          headers: listUnsubscribeHeaders(unsub),
+          tags: [{ name: 'form', value: rowsNow.length === 1 ? `community-${items[0].kind}` : 'community-digest' }, { name: 'locale', value: locale }],
+        };
+        key = batchKey('notify', memberId, ids);
+      }
+      const result = await send(apiKey, email, key);
+      if (!result.ok) {
+        console.error(`[community-notify] member ${memberId}: ${result.error}`);
+        await backOff(ids);
+        summary.failed += ids.length;
+        continue;
+      }
+      await markSent(ids);
+      await sql`INSERT INTO rate_events (key) VALUES (${`notify:member:${memberId}`})`;
+      used++;
+      summary.sent++;
+    }
+  }
+  summary.dueAt = await nextDueAt();
+  if (summary.sent || summary.failed) console.log(`[community-notify] sent ${summary.sent}, skipped ${summary.skipped}, deferred ${summary.deferred}, failed ${summary.failed}`);
+  return summary;
+}

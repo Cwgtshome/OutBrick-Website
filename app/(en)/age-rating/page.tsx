@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
-import { LegalPage, Pills } from '../../legal-page';
+import { LegalPage, Pills, SiteLink } from '../../legal-page';
 
 export const metadata: Metadata = pageMetadata({
   path: '/age-rating',
@@ -15,7 +15,7 @@ export default function AgeRatingPage() {
       eyebrow="OutBrick age suitability"
       title="A gentle 4+ puzzle."
       summary="OutBrick is a colour-sort puzzle designed for quiet, all-ages play. Here is the reasoning behind its App Store age-rating information, including its advertising and in-app purchases."
-      updated="22 September 2026"
+      updated="7 October 2026"
       current="/age-rating"
     >
       <div className="brick headline">
@@ -30,7 +30,7 @@ export default function AgeRatingPage() {
         <h2>What players will find</h2>
         <ul className="points">
           <li>Abstract brick boards, friendly mascots, light celebrations, and puzzle-focused progression.</li>
-          <li>No user-generated content and no public chat. Nothing has to be bought or watched to play the core boards.</li>
+          <li>The app has no user-generated content and no public chat. Nothing has to be bought or watched to play the core boards.</li>
           <li>Optional Game Center leaderboards and challenges are provided through Apple and may be controlled through the device&rsquo;s Game Center settings.</li>
           <li>Optional in-app purchases are processed by Apple. They are never required to finish the core journey.</li>
           <li>Rewarded video advertising, described below.</li>
@@ -58,6 +58,16 @@ export default function AgeRatingPage() {
           the Brick Pass, stops OutBrick requesting ads at all. What is collected when an ad is
           requested is set out in the <a href="/privacy#ads">privacy policy</a>, and the controls are
           listed on <a href="/privacy-choices">privacy choices</a>.
+        </p>
+      </section>
+
+      <section className="brick" id="community">
+        <h2>The OutBrick Community</h2>
+        <p>
+          The app itself has no user-generated content and no chat. Separately, this website has the{' '}
+          <SiteLink path="/community">OutBrick Community</SiteLink>, an optional, moderated forum for
+          people aged 16 and over, or older where the age of digital consent is higher. It is not part
+          of the app, and the game never requires it.
         </p>
       </section>
 

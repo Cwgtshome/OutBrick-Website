@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
-import { LegalPage, Pills } from '../../legal-page';
+import { LegalPage, Pills, SiteLink } from '../../legal-page';
 
 export const metadata: Metadata = pageMetadata({
   path: '/terms',
@@ -14,8 +14,8 @@ export default function TermsPage() {
     <LegalPage
       eyebrow="OutBrick terms"
       title="A few fair-play rules."
-      summary="These terms describe the simple ground rules for using OutBrick and this website. OutBrick is a game, not a service that requires an account."
-      updated="3 September 2026"
+      summary="These terms describe the simple ground rules for using OutBrick and this website, including the OutBrick Community. OutBrick is a game, not a service that requires an account; a community account is optional."
+      updated="7 October 2026"
       current="/terms"
     >
       <div className="brick headline">
@@ -53,6 +53,23 @@ export default function TermsPage() {
         </p>
       </section>
 
+      <section className="brick" id="community">
+        <h2>The OutBrick Community</h2>
+        <p>
+          The forum, support forum, FAQ and search on this website make up the OutBrick Community.
+          Anyone can read it. To post, vote, follow or report, you need a free community account, and
+          you must be at least 16, or older if the age of digital consent where you live is higher.
+        </p>
+        <ul className="points">
+          <li><b>Guidelines:</b> when you take part, the <SiteLink path="/community/guidelines">community guidelines</SiteLink> apply as part of these terms.</li>
+          <li><b>Your posts:</b> what you post stays yours. By posting it, you give OutBrick a worldwide, non-exclusive, royalty-free licence to host, store, reproduce, format and display it in the community, in its FAQ and search, and in the community&rsquo;s emails, for as long as it stays in the community, including after you delete your account, when it is shown as written by a Former member. Post only what you have the right to share.</li>
+          <li><b>Moderation:</b> moderators may review, hide, edit, lock, move or remove posts and threads that break the guidelines or these terms, and may suspend or ban an account that does. When a post of yours is hidden, we tell you why and how to appeal.</li>
+          <li><b>Advice from members:</b> answers and tips from other members are their own, not OutBrick&rsquo;s. We do not check them and give no warranty that they are accurate or that they will work for you.</li>
+          <li><b>Reporting:</b> if a post breaks the guidelines or the law, use Report on the post, or tell us through the contact form. Moderators review reports and act on them.</li>
+          <li><b>Your account:</b> you can delete it at any time in your community settings; the <a href="/privacy#community">privacy policy</a> sets out what happens to your data.</li>
+        </ul>
+      </section>
+
       <section className="brick">
         <h2>Availability and liability</h2>
         <p>
@@ -69,7 +86,7 @@ export default function TermsPage() {
         </p>
       </section>
 
-      <Pills items={['No account required', 'Apple services stay Apple-managed', 'Privacy-first by design']} />
+      <Pills items={['No account needed to play', 'Apple services stay Apple-managed', 'Privacy-first by design']} />
     </LegalPage>
   );
 }

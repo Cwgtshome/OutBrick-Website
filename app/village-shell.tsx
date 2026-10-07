@@ -156,6 +156,7 @@ export function homeNavFor(locale: Locale): NavLink[] {
 /** What a legal or support page puts in the masthead. */
 export const docNav: NavLink[] = [
   { href: '/support', label: 'Support' },
+  { href: '/community', label: 'Community' },
   { href: '/privacy', label: 'Privacy policy' },
   { href: '/privacy-choices', label: 'Privacy choices' },
   { href: '/terms', label: 'Terms' },
@@ -171,6 +172,7 @@ export const editorialNav: NavLink[] = [
   { href: '/about', label: 'About' },
   { href: '/authors', label: 'Authors' },
   { href: '/research', label: 'Research' },
+  { href: '/community', label: 'Community' },
   { href: '/support', label: 'Support' },
 ];
 
@@ -216,7 +218,7 @@ export function VillageHeader({
   if (locale !== 'en' && label === 'Primary navigation') label = copy.primaryNav;
   if (locale !== 'en' && label === 'Sections') label = copy.sections;
   if (links === docNav && locale !== 'en') {
-    const labels = [foot.support, foot.privacy, foot.privacyChoices, foot.terms, foot.license];
+    const labels = [foot.support, foot.community, foot.privacy, foot.privacyChoices, foot.terms, foot.license];
     links = docNav.map((link, i) => ({ href: localePath(locale, link.href), label: labels[i] }));
   }
   return (
@@ -386,6 +388,7 @@ export function VillageFooter({ locale = 'en', page, languages }: { locale?: Loc
             <h2>{copy.help}</h2>
             <ul>
               <li><a href={localePath(locale, '/support')}>{copy.support}</a></li>
+              <li><a href={localePath(locale, '/community')}>{copy.community}</a></li>
               <li><a href={localePath(locale, '/privacy')}>{copy.privacy}</a></li>
               <li><a href={localePath(locale, '/privacy-choices')}>{copy.privacyChoices}</a></li>
               <li><a href={localePath(locale, '/terms')}>{copy.terms}</a></li>
