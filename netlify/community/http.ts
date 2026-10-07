@@ -25,9 +25,9 @@ export const forbidden = (message = 'You cannot do that.') => new ApiError(403, 
 export const notFound = (message = 'Not found.') => new ApiError(404, 'not_found', message);
 export const tooMany = (message = 'Slow down a little and try again in a minute.') => new ApiError(429, 'rate_limited', message);
 
-export function json(data: unknown, init: ResponseInit & { headers?: Record<string, string> } = {}): Response {
+export function json(data: unknown, init: { status?: number; headers?: Record<string, string> } = {}): Response {
   return new Response(JSON.stringify(data), {
-    ...init,
+    status: init.status,
     headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', ...init.headers },
   });
 }
@@ -80,7 +80,7 @@ export async function readJson(req: Request, limit = 64 * 1024): Promise<Record<
 
 export function str(body: Record<string, unknown>, key: string, opts: { min?: number; max: number; optional?: boolean; label?: string }): string {
   const raw = body[key];
-  const value = typeof raw === 'string' ? raw.replace(/\r\n?/g, '\n').trim() : raw == null ? '' : String(raw).trim();
+  const value = typeof raw === 'string' ? raw.replace(/\r\n?/g, '\n').trim() : typeof raw === 'number' || typeof raw === 'boolean' ? String(raw) : '';
   const label = opts.label ?? key;
   if (!value && opts.optional) return '';
   if (value.length < (opts.min ?? 1)) throw badRequest('invalid', `${label} is too short.`, { [key]: 'too_short' });
@@ -89,7 +89,7 @@ export function str(body: Record<string, unknown>, key: string, opts: { min?: nu
 }
 
 export function int(value: unknown, fallback: number, min: number, max: number): number {
-  const n = typeof value === 'number' ? value : Number.parseInt(String(value ?? ''), 10);
+  const n = typeof value === 'number' ? value : typeof value === 'string' ? Number.parseInt(value, 10) : Number.NaN;
   if (!Number.isFinite(n)) return fallback;
   return Math.min(max, Math.max(min, Math.trunc(n)));
 }
