@@ -72,7 +72,9 @@ const routes: Route[] = [
   { method: 'POST', pattern: `${base}/mod/members/:id/role`, run: setRole },
 ];
 
-export default async (req: Request): Promise<Response> => handle(req, routes);
+const communityApi = async (req: Request): Promise<Response> => handle(req, routes);
+
+export default communityApi;
 
 export const config = {
   path: [

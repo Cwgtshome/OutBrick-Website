@@ -14,7 +14,7 @@
 
 import { runReleaseBot } from '../community/releases.ts';
 
-export default async (): Promise<Response> => {
+const communityReleases = async (): Promise<Response> => {
   try {
     const result = await runReleaseBot(fetch);
     console.log(`[community-releases] ${result.action}${result.version ? ` ${result.version}` : ''}${result.reason ? `: ${result.reason}` : ''}${result.notified != null ? ` (${result.notified} notified)` : ''}`);
@@ -23,6 +23,8 @@ export default async (): Promise<Response> => {
   }
   return new Response(null, { status: 204 });
 };
+
+export default communityReleases;
 
 export const config = {
   schedule: '@hourly',

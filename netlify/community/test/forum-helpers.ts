@@ -1,4 +1,6 @@
 // Shared by the forum tests: call the real function the way the site does and read the JSON.
+// Response bodies are typed loosely on purpose: the tests assert on their shape.
+/* oxlint-disable typescript/no-explicit-any */
 
 import type { PGlite } from '@electric-sql/pglite';
 import handler from '../../functions/community-api.mts';

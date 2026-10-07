@@ -20,7 +20,7 @@ import { communityLocales, pageSize } from '../../lib/community/contract.ts';
 import { ipHash } from './db.ts';
 import { int, json } from './http.ts';
 import { escapeHtml, plainText } from './markdown.ts';
-import { Params, iso, num, run } from './forum.ts';
+import { Params, iso, num, run, txt } from './forum.ts';
 import { rateLimitOrThrow } from './threads.ts';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL) => Promise<Response>;
@@ -159,9 +159,9 @@ export async function search(query: { q: string; category?: string | null; langu
     threadId: r.thread_id == null ? null : num(r.thread_id),
     slug: (r.slug as string | null) ?? null,
     title: String(r.title),
-    excerptHtml: excerpt(plainText(String(r.body ?? '')), terms),
+    excerptHtml: excerpt(plainText(txt(r.body)), terms),
     postNumber: r.post_number == null ? null : num(r.post_number),
-    category: r.cat_slug == null ? null : { slug: String(r.cat_slug), kind: r.cat_kind as CategoryKind },
+    category: r.cat_slug == null ? null : { slug: txt(r.cat_slug), kind: r.cat_kind as CategoryKind },
     language: r.language as CommunityLocale,
     solved: Boolean(r.solved),
     createdAt: iso(r.created_at),

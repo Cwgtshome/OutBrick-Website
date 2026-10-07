@@ -39,6 +39,7 @@ import {
   requireCanWrite,
   run,
   solvableKinds,
+  txt,
   statusesFor,
   summaryById,
   threadColumns,
@@ -189,7 +190,7 @@ export async function rateLimitOrThrow(checks: [string, number, number][]): Prom
 export const postThread: Handler = async (req) => {
   const viewer = await requireMember(req);
   const body = await readJson(req, 128 * 1024);
-  const category = await categoryBySlug(String(body.categorySlug ?? ''));
+  const category = await categoryBySlug(txt(body.categorySlug));
   const fields: Record<string, string> = {};
   let title = '';
   let md = '';
@@ -388,7 +389,7 @@ export const patchThread: Handler = async (req, params) => {
   let kind = thread.category_kind;
   if (body.categorySlug !== undefined) {
     if (!mod) throw forbidden('Only moderators move threads.');
-    const target = await categoryBySlug(String(body.categorySlug));
+    const target = await categoryBySlug(txt(body.categorySlug));
     if (target.id !== thread.category_id) {
       sets.push(`category_id = ${p.add(target.id)}`);
       kind = target.kind;

@@ -55,7 +55,12 @@ export function lookupUrl(country: string, lang: string): string {
 /** The app's entry in one Lookup response, or null if the response is not what we expect. */
 export function parseLookup(locale: CommunityLocale, data: unknown): StorefrontRelease | null {
   const results = (data as { results?: unknown[] } | null)?.results;
-  const app = Array.isArray(results) ? (results.find((r) => String((r as Record<string, unknown>)?.trackId ?? APP_ID) === APP_ID) as Record<string, unknown> | undefined) : undefined;
+  const app = Array.isArray(results)
+    ? (results.find((r) => {
+        const id = (r as Record<string, unknown> | null)?.trackId;
+        return id == null || String(id as string | number) === APP_ID;
+      }) as Record<string, unknown> | undefined)
+    : undefined;
   if (!app) return null;
   const version = typeof app.version === 'string' ? app.version.trim() : '';
   if (!versionRe.test(version)) return null;

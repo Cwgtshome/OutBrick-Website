@@ -43,7 +43,10 @@ export function safeHref(raw: string): string | null {
   const url = raw.trim();
   if (!url || url.length > 2000) return null;
   // Control characters and whitespace inside an address are how "java\tscript:" tricks work.
-  if (/[\u0000- \u007f-\u009f]/.test(url)) return null;
+  for (let i = 0; i < url.length; i++) {
+    const code = url.charCodeAt(i);
+    if (code <= 0x20 || (code >= 0x7f && code <= 0x9f)) return null;
+  }
   if (url.startsWith('/') && !url.startsWith('//') && !url.startsWith('/\\')) return url;
   let parsed: URL;
   try {
@@ -91,7 +94,7 @@ export function containsLink(md: string): boolean {
 
 export function renderMarkdown(md: string, options: RenderOptions = {}): RenderResult {
   const state: State = { mentions: options.mentions ?? new Map(), mentioned: new Set(), hasLink: false };
-  const lines = md.replace(/\r\n?/g, '\n').replace(/\t/g, '    ').replace(/\u0000/g, '�').split('\n');
+  const lines = md.replace(/\r\n?/g, '\n').replace(/\t/g, '    ').replaceAll(String.fromCharCode(0), '\uFFFD').split('\n');
   const html = renderBlocks(lines, state, 0);
   return { html, mentionedIds: [...state.mentioned], hasLink: state.hasLink };
 }

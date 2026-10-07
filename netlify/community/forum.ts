@@ -68,6 +68,9 @@ export const jsonList = (values: unknown[]) => JSON.stringify(values);
 export const iso = (value: unknown): string => (value instanceof Date ? value.toISOString() : new Date(String(value)).toISOString());
 export const isoOrNull = (value: unknown): string | null => (value == null ? null : iso(value));
 export const num = (value: unknown): number => Number(value ?? 0);
+/** A column as text: strings as they are, numbers and booleans printed, anything else ''. */
+export const txt = (value: unknown): string =>
+  typeof value === 'string' ? value : typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint' ? String(value) : '';
 
 // Members ----------------------------------------------------------------------------------------
 
@@ -252,13 +255,13 @@ export function bugFromRow(value: unknown): BugDetails | null {
   if (!value) return null;
   const b = (typeof value === 'string' ? JSON.parse(value) : value) as Record<string, unknown>;
   return {
-    device: String(b.device ?? ''),
-    osVersion: String(b.os_version ?? ''),
-    appVersion: String(b.app_version ?? ''),
+    device: txt(b.device),
+    osVersion: txt(b.os_version),
+    appVersion: txt(b.app_version),
     assistive: Array.isArray(b.assistive) ? (b.assistive as AssistiveTech[]) : [],
-    steps: String(b.steps ?? ''),
-    expected: String(b.expected ?? ''),
-    actual: String(b.actual ?? ''),
+    steps: txt(b.steps),
+    expected: txt(b.expected),
+    actual: txt(b.actual),
   };
 }
 

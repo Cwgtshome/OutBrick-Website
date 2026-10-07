@@ -19,6 +19,7 @@ import {
   refreshThreadCounters,
   renderBody,
   run,
+  txt,
   type Row,
 } from './forum.ts';
 import { notifyModeration, notifyNewPost } from './notifications.ts';
@@ -58,7 +59,7 @@ export const listReports: Handler = async (req) => {
   const reports: ModReport[] = reportRows.map((r) => ({
     id: num(r.rp_id),
     reason: r.rp_reason as ReportReason,
-    note: String(r.rp_note ?? ''),
+    note: txt(r.rp_note),
     createdAt: iso(r.rp_created),
     reporter: publicMember(r, 'r_'),
     post: postView(r, ctxFor(r, viewer)),

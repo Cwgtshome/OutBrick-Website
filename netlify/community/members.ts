@@ -5,7 +5,7 @@
 import type { MemberProfile } from '../../lib/community/contract.ts';
 import { json, notFound } from './http.ts';
 import { currentMember } from './session.ts';
-import { Params, idParam, iso, num, publicMember, run, threadColumns, threadJoins, threadSummary, threadVisible } from './forum.ts';
+import { Params, idParam, iso, num, publicMember, run, txt, threadColumns, threadJoins, threadSummary, threadVisible } from './forum.ts';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL) => Promise<Response>;
 
@@ -27,7 +27,7 @@ export const getMember: Handler = async (req, params) => {
   const profile: MemberProfile = {
     member: {
       ...publicMember(m, 'm_'),
-      bio: deleted ? '' : String(m.bio ?? ''),
+      bio: deleted ? '' : txt(m.bio),
       joinedAt: iso(m.created_at),
       postCount: num(m.post_count),
       solvedCount: num(m.solved_count),

@@ -142,7 +142,7 @@ void test('mentions link to members and report who was mentioned', () => {
     r.html,
     '<p>Thanks <a class="mention" href="/community/u/3">@Ada Lovelace</a>, and <a class="mention" href="/community/u/4">@Ada</a>. Not @Adam, not me@ada.example, not <code>@Ada</code>.</p>',
   );
-  assert.deepEqual(r.mentionedIds.sort(), [3, 4]);
+  assert.deepEqual([...r.mentionedIds].sort((a, b) => a - b), [3, 4]);
   const evil = renderMarkdown('@<b>', { mentions });
   assert.equal(evil.html, '<p><a class="mention" href="/community/u/5">@&lt;b&gt;</a></p>');
   assert.equal(renderMarkdown('[@Ada](https://x.example)', { mentions }).mentionedIds.length, 0);
