@@ -10,7 +10,7 @@
 //             real signed unsubscribe link for ADDR and the List-Unsubscribe headers.
 // (neither)   Creates one broadcast per language in Resend, addressed to that language's
 //             segment. Without --send they are left as drafts to review in the Resend dashboard;
-//             with --send (and optionally --schedule) they go out.
+//             with --send --locale LANG --broadcast-id ID the reviewed draft goes out (optionally --schedule).
 //
 // Segments: RESEND_SEGMENT_ID is "OutBrick News", everyone who confirmed. If per-language
 // segments exist (RESEND_SEGMENT_ID_EN, _FR, _DE, _ES, _JA; newsletter-confirm adds each
@@ -38,7 +38,7 @@ const { listUnsubscribeHeaders } = await import('../emails/newsletter.ts');
 const args = process.argv.slice(2);
 const flag = (name) => args.includes(name);
 const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
-const file = args.find((a, i) => !a.startsWith('--') && !['--test', '--locale', '--schedule'].includes(args[i - 1]));
+const file = args.find((a, i) => !a.startsWith('--') && !['--test', '--locale', '--schedule', '--broadcast-id'].includes(args[i - 1]));
 const die = (message) => {
   console.error(`send-newsletter: ${message}`);
   process.exit(1);
@@ -60,7 +60,7 @@ for (const l of locales) {
   if (c.stories.length < 2 || c.stories.length > 3) die(`${l}: an issue has 2 or 3 stories (has ${c.stories.length})`);
 }
 
-const address = issue.address ?? process.env.NEWSLETTER_POSTAL_ADDRESS ?? PLACEHOLDER_ADDRESS;
+const address = toText(issue.address ?? process.env.NEWSLETTER_POSTAL_ADDRESS ?? PLACEHOLDER_ADDRESS).trim();
 const render = (locale, unsubscribe) => newsletterCampaign({ locale, issue: issue.locales[locale], unsubscribeUrl: unsubscribe, address });
 
 // --- dry run -----------------------------------------------------------------------------
@@ -107,7 +107,16 @@ if (testTo !== undefined) {
 const send = flag('--send');
 const schedule = value('--schedule');
 if (schedule && !send) die('--schedule needs --send');
-if (send && address === PLACEHOLDER_ADDRESS) die('set NEWSLETTER_POSTAL_ADDRESS (or "address" in the issue) before a real send');
+if (send && (!address || address === PLACEHOLDER_ADDRESS)) die('set NEWSLETTER_POSTAL_ADDRESS (or "address" in the issue) before a real send');
+
+const reviewedId = value('--broadcast-id');
+if (send && (!onlyLocale || !reviewedId || !/^[a-zA-Z0-9-]+$/.test(reviewedId))) die('--send needs --locale and --broadcast-id for the draft reviewed in Resend');
+
+if (send) {
+  const sent = await resend(apiKey, `/broadcasts/${reviewedId}/send`, { body: schedule ? { scheduled_at: schedule } : {} });
+  console.log(sent.ok ? `${onlyLocale}: reviewed broadcast ${reviewedId} ${schedule ? `scheduled (${schedule})` : 'sent'}` : sent.error);
+  process.exit(sent.ok ? 0 : 1);
+}
 
 const main = process.env.RESEND_SEGMENT_ID;
 const segmentFor = (locale) => process.env[`RESEND_SEGMENT_ID_${locale.toUpperCase()}`] ?? (onlyLocale ? main : undefined);
@@ -134,11 +143,5 @@ for (const locale of locales) {
     continue;
   }
   const id = toText(created.data?.id);
-  if (!send) {
-    console.log(`${locale}: draft broadcast ${id} created — review it in Resend, then rerun with --send`);
-    continue;
-  }
-  const sent = await resend(apiKey, `/broadcasts/${id}/send`, { body: schedule ? { scheduled_at: schedule } : {} });
-  console.log(sent.ok ? `${locale}: broadcast ${id} ${schedule ? `scheduled (${schedule})` : 'sent'}` : `${locale}: ${sent.error}`);
-  if (!sent.ok) process.exitCode = 1;
+  console.log(`${locale}: draft broadcast ${id} created — review it in Resend, then rerun with --send --locale ${locale} --broadcast-id ${id}`);
 }
