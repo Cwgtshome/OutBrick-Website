@@ -179,7 +179,7 @@
   flex-wrap: wrap;
   gap: 4px;
 }
-.ob-site .cm-bar a {
+.ob-site .cm-bar a, .ob-site .cm-bar .cm-nav-signout {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -191,7 +191,7 @@
   font-family: var(--display);
   font-weight: 500;
 }
-.ob-site .cm-bar a:hover { background: rgba(255, 255, 255, 0.1); }
+.ob-site .cm-bar a:hover, .ob-site .cm-bar .cm-nav-signout:hover { background: rgba(255, 255, 255, 0.1); }
 .ob-site .cm-bar a[aria-current='page'] { background: var(--panel); box-shadow: inset 0 0 0 2px var(--gold); }
 .ob-site .cm-count {
   font-size: 0.8rem;
@@ -946,3 +946,5 @@
 .cm-admin-editor label { display:block; margin-block:1rem; }
 .cm-admin-editor input,.cm-admin-editor textarea,.cm-admin-editor select { display:block; width:100%; margin-top:.4rem; }
 .cm-draft-preview { white-space:pre-wrap; overflow-wrap:anywhere; }
+
+.ob-site .cm-nav-signout { color:inherit; font:inherit; border:0; background:transparent; cursor:pointer; }

@@ -32,7 +32,7 @@ import { BadgeChip } from './badges';
 import { fullDate, number, relativeDate } from '../../../lib/community/format';
 import { roleBadge, memberName } from '../../../lib/community/static-html';
 import { adminWords } from '../../../lib/i18n/admin';
-import { ApiFailure } from './api';
+import { api, ApiFailure } from './api';
 
 // ---------------------------------------------------------------------------------------
 // Routes
@@ -413,7 +413,15 @@ export function View({
 
 /** The community's own navigation: home, search, FAQ, guidelines, and the member's corner. */
 export function CommunityBar() {
-  const { copy, fx, session, path, route, n, locale } = useApp();
+  const { copy, fx, session, path, route, n, locale, refreshSession, announce, navigate } = useApp();
+  const [signingOut, setSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState<ApiFailure | null>(null);
+  const signOut = async () => {
+    setSigningOut(true); setSignOutError(null);
+    try { await api.signOut(); await refreshSession(); announce(copy.settings.signedOut); navigate(path('/signin'), {replace:true}); }
+    catch (error) {setSignOutError(error as ApiFailure);}
+    finally {setSigningOut(false);}
+  };
   const member = session?.member ?? null;
   const unread = session?.unreadNotifications ?? 0;
   const current = (name: Route['name']) =>
@@ -496,6 +504,7 @@ export function CommunityBar() {
                   </a>
                 </li>
               ) : null}
+              <li><button type="button" className="cm-nav-signout" disabled={signingOut} onClick={() => void signOut()}>{copy.nav.signOut}</button></li>
               {member.role === 'team' || member.role === 'admin' ? (
                 <li>
                   <a href={path('/admin')} aria-current={current('admin')}>
@@ -512,6 +521,7 @@ export function CommunityBar() {
             </li>
           ) : null}
         </ul>
+        {signOutError ? <ErrorNotice error={signOutError} /> : null}
         {member ? (
           <p className="cm-whoami">{copy.nav.signedInAs(member.displayName)}</p>
         ) : null}
