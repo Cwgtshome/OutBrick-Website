@@ -113,7 +113,7 @@ export default function SupportPage() {
         </p>
         <div className="act">
           <a className="btn" href="/community/c/help">Ask the community</a>
-          <a className="btn ghost" href="/community/new?category=bugs">Report a bug</a>
+          <a className="btn" href="/community/new?category=bugs">Report a bug</a>
         </div>
       </section>
 
