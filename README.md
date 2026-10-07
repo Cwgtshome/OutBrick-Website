@@ -118,3 +118,24 @@ Without per-language segments, `--locale <xx>` sends that one language to the wh
 `RESEND_SEGMENT_ID` segment. Broadcasts use Resend's own `{{{RESEND_UNSUBSCRIBE_URL}}}`, which sets
 the same `unsubscribed` flag as our link. Remember that `.env*` files are git-ignored; never commit
 a key.
+
+### The newsletter design as Resend templates
+
+The same campaign layout also lives in Resend as five published templates, **OutBrick News (en)**
+… **(ja)** (aliases `outbrick-news-<locale>`), so an issue can be written and sent from the Resend
+dashboard without a JSON file. `scripts/build-resend-templates.mjs` renders `newsletterCampaign()`
+with Resend variables in place of the content and writes `outputs/resend-templates/<locale>.html`,
+`.txt` and `.json`. `pnpm build` runs it with `--push-on-production`: on Netlify's production
+deploy it creates or updates each template by alias and publishes it, so Resend always carries the
+design that is live. Anywhere else it only writes the files, and a failed push never fails a deploy.
+
+The 28 variables are `SUBJECT`, `PREHEADER`, `EYEBROW`, `HERO_TITLE`, `HERO_BODY`,
+`HERO_IMAGE_URL`/`_ALT` (1200×630), `STORY1…3_TITLE`/`_BODY`/`_IMAGE_URL`/`_IMAGE_ALT` (square)
+/`_LINK_LABEL`/`_LINK_URL`, `CTA_LABEL`, `CTA_URL` and `POSTAL_ADDRESS`. Each falls back to the
+sample issue in that language (and `POSTAL_ADDRESS` to `NEWSLETTER_POSTAL_ADDRESS`), so a preview in
+Resend shows a real letter: replace every fallback before sending. Variables are inserted as HTML,
+so a body may use `<strong>`, `<em>`, `<a href="…">` and `<br>`, and plain `&` `<` `>` must be
+escaped. Unsubscribe is Resend's `{{{RESEND_UNSUBSCRIBE_URL}}}`. The layout has exactly three
+stories; for two, or for the "What's new" block, use the JSON issue and `pnpm newsletter` above.
+Change the design in `emails/`, never in the Resend editor: the next production deploy overwrites
+the templates.
