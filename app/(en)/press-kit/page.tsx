@@ -133,9 +133,11 @@ export default function PressKitPage() {
           <p className="ed-label">Current captures</p>
           <h2 id="captures-title" className="ed-h2" style={{ marginTop: 14 }}>The game as it ships.</h2>
           <p className="ed-lede" style={{ marginTop: 16 }}>Boards and Journey villages captured from the current build. Select one to open the file.</p>
+          {/* No aria-label: the link is named by its picture and caption, so the name a speech-input
+              user reads off the screen is the name the link answers to (WCAG 2.5.3). */}
           <div className="ed-captures">
             {captures.map((capture) => (
-              <a key={capture.src} href={capture.src} download aria-label={`Download capture: ${capture.name}`}>
+              <a key={capture.src} href={capture.src} download>
                 <figure>
                   <div className="ed-capture">
                     <img src={capture.src} alt={capture.alt} width={239} height={520} loading="lazy" decoding="async" />
