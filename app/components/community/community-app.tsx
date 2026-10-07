@@ -17,18 +17,59 @@
  * and no id is duplicated.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import type { CommunityLocale, SessionResponse } from '../../../lib/community/contract';
-import { communityLocales, communityPath } from '../../../lib/community/contract';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
+import type {
+  CommunityLocale,
+  SessionResponse,
+} from '../../../lib/community/contract';
+import {
+  communityLocales,
+  communityPath,
+} from '../../../lib/community/contract';
 import { communityCopy } from '../../../lib/i18n/community';
 import { communityFx } from '../../../lib/i18n/community-fx';
 import { number } from '../../../lib/community/format';
 import { api, ApiFailure, readerIsActive } from './api';
-import { Ctx, parseRoute, privateRoutes, type AppContext, type Navigate, type Route } from './core';
-import { CategoryView, FaqView, GuidelinesView, HomeView, MemberView, NotFoundView, SearchView } from './views-browse';
+import {
+  Ctx,
+  parseRoute,
+  privateRoutes,
+  type AppContext,
+  type Navigate,
+  type Route,
+} from './core';
+import {
+  CategoryView,
+  FaqView,
+  GuidelinesView,
+  HomeView,
+  MemberView,
+  NotFoundView,
+  SearchView,
+} from './views-browse';
 import { ThreadView } from './views-thread';
-import { BookmarksView, IdeasRedirect, LeaderboardView, RoadmapView } from './views-fx';
-import { ModView, NewThreadView, NotificationsView, SettingsView, SignInView, WelcomeView } from './views-forms';
+import {
+  BookmarksView,
+  IdeasRedirect,
+  LeaderboardView,
+  RoadmapView,
+} from './views-fx';
+import {
+  ModView,
+  NewThreadView,
+  NotificationsView,
+  SettingsView,
+  SignInView,
+  WelcomeView,
+} from './views-forms';
+import { AdminView, ContentLibraryView, ContentView } from './views-admin';
 
 function currentUrl(): URL {
   return new URL(window.location.href);
@@ -52,8 +93,15 @@ function subscribeLocation(listener: () => void) {
     if (!listeners.size) window.removeEventListener('popstate', onPopState);
   };
 }
-const noFeatures = { passkeys: false, uploads: false, replyByEmail: false, translate: false, digest: false };
-const locationSnapshot = () => window.location.pathname + window.location.search;
+const noFeatures = {
+  passkeys: false,
+  uploads: false,
+  replyByEmail: false,
+  translate: false,
+  digest: false,
+};
+const locationSnapshot = () =>
+  window.location.pathname + window.location.search;
 
 function ViewFor({ route }: { route: Route }) {
   switch (route.name) {
@@ -83,6 +131,12 @@ function ViewFor({ route }: { route: Route }) {
       return <MemberView route={route} />;
     case 'mod':
       return <ModView />;
+    case 'admin':
+      return <AdminView />;
+    case 'library':
+      return <ContentLibraryView />;
+    case 'content':
+      return <ContentView kind={route.kind} slug={route.slug} />;
     case 'roadmap':
       return <RoadmapView />;
     case 'ideas':
@@ -96,8 +150,18 @@ function ViewFor({ route }: { route: Route }) {
   }
 }
 
-export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale; supportFaqs: { question: string; answer: string }[] }) {
-  const address = useSyncExternalStore(subscribeLocation, locationSnapshot, () => '');
+export function CommunityApp({
+  locale,
+  supportFaqs,
+}: {
+  locale: CommunityLocale;
+  supportFaqs: { question: string; answer: string }[];
+}) {
+  const address = useSyncExternalStore(
+    subscribeLocation,
+    locationSnapshot,
+    () => '',
+  );
   const hydrated = address !== '';
   const url = useMemo(() => {
     if (!address) return null;
@@ -124,7 +188,12 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
         (error: unknown) => {
           setSessionError(error instanceof ApiFailure ? error : null);
           // Signed-out is the safe reading of a session the server could not give.
-          const fallback: SessionResponse = { member: null, providers: [], unreadNotifications: 0, features: noFeatures };
+          const fallback: SessionResponse = {
+            member: null,
+            providers: [],
+            unreadNotifications: 0,
+            features: noFeatures,
+          };
           setSession(fallback);
           return fallback;
         },
@@ -138,7 +207,12 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
       (next) => setSession(next),
       (error: unknown) => {
         setSessionError(error instanceof ApiFailure ? error : null);
-        setSession({ member: null, providers: [], unreadNotifications: 0, features: noFeatures });
+        setSession({
+          member: null,
+          providers: [],
+          unreadNotifications: 0,
+          features: noFeatures,
+        });
       },
     );
   }, [hydrated]);
@@ -151,7 +225,12 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
     const tick = () => {
       if (!readerIsActive()) return;
       api.pulse().then(
-        (p) => setSession((s) => (s && s.unreadNotifications !== p.unreadNotifications ? { ...s, unreadNotifications: p.unreadNotifications } : s)),
+        (p) =>
+          setSession((s) =>
+            s && s.unreadNotifications !== p.unreadNotifications
+              ? { ...s, unreadNotifications: p.unreadNotifications }
+              : s,
+          ),
         () => undefined,
       );
     };
@@ -177,13 +256,15 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
     notify();
   }, []);
 
-
   // A same-page #post-n link: the browser scrolls, we move focus there too.
   useEffect(() => {
     const onHash = () => {
-      const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+      const target = document.getElementById(
+        decodeURIComponent(window.location.hash.slice(1)),
+      );
       if (target) {
-        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+        if (!target.hasAttribute('tabindex'))
+          target.setAttribute('tabindex', '-1');
         target.focus();
       }
     };
@@ -196,14 +277,33 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
     if (!hydrated) return;
     const base = communityPath(locale);
     const onClick = (event: MouseEvent) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
       const anchor = (event.target as HTMLElement | null)?.closest?.('a[href]');
-      if (!(anchor instanceof HTMLAnchorElement) || anchor.target || anchor.hasAttribute('download')) return;
+      if (
+        !(anchor instanceof HTMLAnchorElement) ||
+        anchor.target ||
+        anchor.hasAttribute('download')
+      )
+        return;
       const target = new URL(anchor.href);
       if (target.origin !== window.location.origin) return;
-      if (target.pathname !== base && !target.pathname.startsWith(`${base}/`)) return;
+      if (target.pathname !== base && !target.pathname.startsWith(`${base}/`))
+        return;
       const here = window.location;
-      if (target.pathname === here.pathname && target.search === here.search && target.hash) return; // same page: let the browser jump
+      if (
+        target.pathname === here.pathname &&
+        target.search === here.search &&
+        target.hash
+      )
+        return; // same page: let the browser jump
       event.preventDefault();
       navigate(target.pathname + target.search + target.hash);
     };
@@ -211,18 +311,33 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
     return () => document.removeEventListener('click', onClick);
   }, [hydrated, locale, navigate]);
 
-  const route = useMemo<Route>(() => (url ? parseRoute(locale, url) : { name: 'home' }), [url, locale]);
+  const route = useMemo<Route>(
+    () => (url ? parseRoute(locale, url) : { name: 'home' }),
+    [url, locale],
+  );
 
   // A member who has not picked a display name yet is sent to choose one first.
   useEffect(() => {
     if (!url || !session?.member?.needsName) return;
-    if (route.name === 'welcome' || route.name === 'signin' || route.name === 'guidelines') return;
-    navigate(communityPath(locale, `/welcome?returnTo=${encodeURIComponent(url.pathname + url.search)}`), { replace: true });
+    if (
+      route.name === 'welcome' ||
+      route.name === 'signin' ||
+      route.name === 'guidelines'
+    )
+      return;
+    navigate(
+      communityPath(
+        locale,
+        `/welcome?returnTo=${encodeURIComponent(url.pathname + url.search)}`,
+      ),
+      { replace: true },
+    );
   }, [session, route, url, locale, navigate]);
 
   // ?from=signin: the provider or email link has just signed this member in.
   useEffect(() => {
-    if (!url || !session?.member || url.searchParams.get('from') !== 'signin') return;
+    if (!url || !session?.member || url.searchParams.get('from') !== 'signin')
+      return;
     announce(copy.signedIn);
     const clean = new URL(url);
     clean.searchParams.delete('from');
@@ -231,10 +346,15 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
 
   const pageReady = useCallback(
     (title: string) => {
-      document.title = /OutBrick/.test(title) ? title : copy.meta.pageTitle(title);
+      document.title = /OutBrick/.test(title)
+        ? title
+        : copy.meta.pageTitle(title);
       // Search engines index the shells and threads, never a member's own pages.
-      let robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
-      if (robotsOriginal.current === null) robotsOriginal.current = robots?.content ?? '';
+      let robots = document.querySelector<HTMLMetaElement>(
+        'meta[name="robots"]',
+      );
+      if (robotsOriginal.current === null)
+        robotsOriginal.current = robots?.content ?? '';
       const routeName = parseRoute(locale, currentUrl()).name;
       if (privateRoutes.has(routeName)) {
         if (!robots) {
@@ -243,13 +363,17 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
           document.head.appendChild(robots);
         }
         robots.content = 'noindex, follow';
-      } else if (robots) robots.content = robotsOriginal.current || 'index, follow';
+      } else if (robots)
+        robots.content = robotsOriginal.current || 'index, follow';
 
       // The footer's language picker leads to this same page in each language.
       const rest = window.location.pathname.slice(communityPath(locale).length);
-      for (const link of document.querySelectorAll<HTMLAnchorElement>('footer.site details.langs a[hreflang]')) {
+      for (const link of document.querySelectorAll<HTMLAnchorElement>(
+        'footer.site details.langs a[hreflang]',
+      )) {
         const l = link.hreflang as CommunityLocale;
-        if ((communityLocales as readonly string[]).includes(l)) link.href = communityPath(l) + rest + window.location.search;
+        if ((communityLocales as readonly string[]).includes(l))
+          link.href = communityPath(l) + rest + window.location.search;
       }
 
       const slot = document.querySelector<HTMLElement>('[data-cm-static]');
@@ -265,12 +389,15 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
       if (!focus.next && !(wasFirst && hash)) return;
       focus.next = false;
       window.requestAnimationFrame(() => {
-        const target = (hash && document.getElementById(hash)) || document.querySelector<HTMLElement>('.cm-app h1');
+        const target =
+          (hash && document.getElementById(hash)) ||
+          document.querySelector<HTMLElement>('.cm-app h1');
         if (!target) {
           announce(document.title);
           return;
         }
-        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+        if (!target.hasAttribute('tabindex'))
+          target.setAttribute('tabindex', '-1');
         if (!hash) window.scrollTo(0, 0);
         target.focus({ preventScroll: !hash });
         if (hash) target.scrollIntoView({ block: 'start' });
@@ -298,12 +425,36 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
       path: (p = '') => communityPath(locale, p),
       n: (value: number) => number(locale, value),
     }),
-    [locale, copy, route, url, navigate, session, sessionError, refreshSession, announce, pageReady, staticShowing, supportFaqs],
+    [
+      locale,
+      copy,
+      route,
+      url,
+      navigate,
+      session,
+      sessionError,
+      refreshSession,
+      announce,
+      pageReady,
+      staticShowing,
+      supportFaqs,
+    ],
   );
 
   return (
     <Ctx.Provider value={ctx}>
-      <div className="cm-app">{hydrated && url ? <ViewFor key={route.name === 'search' || route.name === 'category' ? url.pathname : url.pathname + url.search} route={route} /> : null}</div>
+      <div className="cm-app">
+        {hydrated && url ? (
+          <ViewFor
+            key={
+              route.name === 'search' || route.name === 'category'
+                ? url.pathname
+                : url.pathname + url.search
+            }
+            route={route}
+          />
+        ) : null}
+      </div>
       <output className="sr-only" aria-live="polite" aria-atomic="true">
         {message}
       </output>

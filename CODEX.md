@@ -13,3 +13,7 @@ distinct from development copy, use the existing design system, and update all f
 Documentation map: [docs/README.md](docs/README.md). Backend behavior and test commands:
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Email template/campaign workflow:
 [README.md](README.md#emails-resend). No secret values belong in these documents.
+
+## Administrative dashboard checkpoint
+
+Read [admin and editorial operations](docs/ADMIN-AND-EDITORIAL.md) for the role matrix, exact verified owner allowlist, draft/publish workflow and deployment gates. Do not grant domain-wide admin access or promote an Apple relay account without explicit instruction. Existing static pages and journal stay Git-managed; new editorial content uses the database dashboard.

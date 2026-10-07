@@ -933,3 +933,16 @@
   .ob-site .cm *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
   .ob-site .cm-vote[aria-pressed='true'] { transform: none; }
 }
+
+/* Administration uses the community's existing controls and surfaces. */
+.cm-admin-counts { display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1rem; margin-block:1.5rem; }
+.cm-admin-counts > div { padding:1rem; border:1px solid var(--cm-line); border-radius:1rem; }
+.cm-admin-counts dt { font-weight:700; }
+.cm-admin-counts dd { margin:0; font-size:2rem; }
+.cm-admin-members { list-style:none; padding:0; }
+.cm-admin-members > li { padding-block:1rem; border-bottom:1px solid var(--cm-line); }
+.cm-admin-members select { margin-inline:.5rem; max-width:100%; }
+.cm-admin-editor { margin-block:1.5rem; }
+.cm-admin-editor label { display:block; margin-block:1rem; }
+.cm-admin-editor input,.cm-admin-editor textarea,.cm-admin-editor select { display:block; width:100%; margin-top:.4rem; }
+.cm-draft-preview { white-space:pre-wrap; overflow-wrap:anywhere; }

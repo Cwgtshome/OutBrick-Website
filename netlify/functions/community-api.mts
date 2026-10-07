@@ -43,6 +43,7 @@ import { getPulse, getUpdates } from '../community/live.ts';
 import { getLeaderboard, suggestMembers } from '../community/people.ts';
 import { votePoll } from '../community/polls.ts';
 import { bookmark, react } from '../community/reactions.ts';
+import { dashboard, watchAll, saveContent, publishContent, publicContent } from '../community/admin.ts';
 
 const base = '/api/community';
 
@@ -63,6 +64,13 @@ const fxRoutes: Route[] = [
 
 const routes: Route[] = [
   ...fxRoutes,
+  { method: 'GET', pattern: `${base}/admin`, run: dashboard },
+  { method: 'POST', pattern: `${base}/admin/watch`, run: watchAll },
+  { method: 'POST', pattern: `${base}/admin/content`, run: saveContent },
+  { method: 'PATCH', pattern: `${base}/admin/content/:id`, run: saveContent },
+  { method: 'POST', pattern: `${base}/admin/content/:id/publish`, run: publishContent },
+  { method: 'GET', pattern: `${base}/content`, run: publicContent },
+  { method: 'GET', pattern: `${base}/content/:locale/:kind/:slug`, run: publicContent },
 
   { method: 'GET', pattern: `${base}/categories`, run: listCategories },
   { method: 'POST', pattern: `${base}/categories/:slug/follow`, run: followCategory },

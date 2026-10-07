@@ -17,3 +17,5 @@ checks, then [ARCHITECTURE.md](ARCHITECTURE.md) for source locations, configurat
 | [App Clip](APP-CLIP.md) | App Clip integration notes |
 
 Dated plans explain intent; current code and scoped verification establish what actually works.
+
+- [Admin and editorial operations](ADMIN-AND-EDITORIAL.md): roles, verified owner bootstrap, private drafts, publishing and validation.

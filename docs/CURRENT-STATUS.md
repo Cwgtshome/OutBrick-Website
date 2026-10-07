@@ -146,3 +146,7 @@ The owner's existing ChatGPT Dot has been assigned hourly New York checks for re
 feedback, deduplicated notifications, version-grounded and labelled automated replies, and
 escalation of uncertain issues. Schedule persistence and posting access require the Dot's
 readback; sending it instructions alone is not proof that autonomous replies are enabled.
+
+## Admin dashboard work checkpoint
+
+`codex/site-admin-dashboard` adds verified role management and database editorial drafts/publishing in all five languages. Netlify `COMMUNITY_ADMIN_EMAILS` was saved and read back as `support@outbrick.site,mourad@outbrick.site`, all scopes/all contexts. Local role/publishing/moderation/thread regression tests: 32 passed. Build and lint passed. Deployment and actual verified owner admin sign-in remain required before reporting live completion. See [admin operations](ADMIN-AND-EDITORIAL.md).

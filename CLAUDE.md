@@ -12,3 +12,7 @@ from configuration alone. Preserve existing design components and all five websi
 
 Update the shared status after substantive work so Claude and Codex read the same context.
 Keep credentials exclusively in approved secret storage; document variable names and behavior only.
+
+## Administrative dashboard checkpoint
+
+Read [admin and editorial operations](docs/ADMIN-AND-EDITORIAL.md) for the role matrix, exact verified owner allowlist, draft/publish workflow and deployment gates. Do not grant domain-wide admin access or promote an Apple relay account without explicit instruction. Existing static pages and journal stay Git-managed; new editorial content uses the database dashboard.

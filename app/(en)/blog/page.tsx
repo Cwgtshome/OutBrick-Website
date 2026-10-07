@@ -9,6 +9,7 @@ import { categorySlug, FollowJournal, StoryCard, StoryRow } from './journal-kit'
 import { JournalSearch, ShelfControls } from './journal-finder';
 import { authorByline, breadcrumbNode, graph, ids, isoDateTime, ref, webPageNode } from '../../../lib/structured-data';
 import { NewsletterSignup } from '../../components/newsletter-signup';
+import { PublishedEditorial } from '../../components/published-editorial';
 
 const title = 'The OutBrick Journal';
 const description =
@@ -252,6 +253,7 @@ export default function BlogPage({ locale = 'en' }: { locale?: Locale } = {}) {
       <FollowJournal />
 
       <JsonLd data={structuredData} />
+      <PublishedEditorial locale={locale} />
     </EditorialPage>
   );
 }
