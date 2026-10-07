@@ -7,7 +7,7 @@
 // Called by netlify/functions/submission-created.mts with the event payload. It never throws:
 // a bad payload, a missing key or a Resend error is logged (without the visitor's address or
 // message) and the function still answers 200, because the submission itself is already safe in
-// Netlify and the team's own notification does not depend on this.
+// Netlify. Visitor and team delivery outcomes are logged separately.
 
 import { isEmailLocale, type EmailLocale } from './i18n.ts';
 import { addressTag, confirmUrl, normalizeEmail } from './links.ts';

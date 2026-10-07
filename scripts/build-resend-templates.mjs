@@ -1,6 +1,6 @@
 // Turns the OutBrick News campaign layout into Resend templates, one per language, so a
-// newsletter can be written and sent from the Resend dashboard in the same design as the
-// emails this site sends from code.
+// individual test emails can use that design in Resend. Subscriber campaigns use Broadcasts,
+// created by scripts/send-newsletter.mjs and reviewed in the dashboard before sending.
 //
 //   node --experimental-strip-types scripts/build-resend-templates.mjs            # write files only
 //   node --experimental-strip-types scripts/build-resend-templates.mjs --push     # also create/update + publish in Resend
@@ -34,7 +34,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { newsletterCampaign, emailLocales } = await import('../emails/index.ts');
 const { SENDERS, resend } = await import('../emails/resend.ts');
-const { SITE, toText } = await import('../emails/core.ts');
+const { SITE, toText, plainMarkdown } = await import('../emails/core.ts');
 
 const sample = JSON.parse(fs.readFileSync(path.join(root, 'emails/issues/2026-10-sample.json'), 'utf8'));
 const address = toText(process.env.NEWSLETTER_POSTAL_ADDRESS ?? sample.address ?? '').trim();
@@ -93,7 +93,11 @@ function build(locale) {
       .replace(/https:\/\/[^"'\s<>()]*?\/OBVAR(\w+?)OBEND/g, '{{{$1}}}')
       .replace(/\/?OBVAR(\w+?)OBEND/g, '{{{$1}}}');
   const html = swap(rendered.html);
-  const text = swap(rendered.text);
+  // HTML body variables must not leak markup into text/plain. Editors supply a separate
+  // plain value when changing formatted bodies; sample defaults use the same copy.
+  const plainBodies = { HERO_BODY: hero.body, ...Object.fromEntries(Array.from({ length: STORIES }, (_, i) => [`STORY${i + 1}_BODY`, (c.stories[i] ?? c.stories[c.stories.length - 1]).body])) };
+  for (const [key, value] of Object.entries(plainBodies)) vars.push({ key: `${key}_TEXT`, type: 'string', fallbackValue: plainMarkdown(value) });
+  const text = swap(rendered.text).replace(/\{\{\{(HERO_BODY|STORY[1-3]_BODY)\}\}\}/g, '{{{$1_TEXT}}}');
   const left = (html + text).match(/OBVAR|OBEND/);
   if (left) throw new Error(`${locale}: a marker survived the swap`);
   const used = new Set([...(html + text).matchAll(/\{\{\{(\w+)\}\}\}/g)].map((m) => m[1]));
@@ -131,6 +135,11 @@ if (process.argv.includes('--push') || onProduction) {
   for (const { locale, t } of templates) {
     const body = { name: t.name, alias: t.alias, from: t.from, reply_to: t.replyTo, subject: t.subject, html: t.html, text: t.text, variables: t.variables.map((x) => ({ key: x.key, type: x.type, fallback_value: x.fallbackValue })) };
     const found = await resend(apiKey, `/templates/${t.alias}`, { method: 'GET' });
+    if (!found.ok && found.status !== 404) {
+      console.error(`${locale}: template lookup failed: ${found.error}`);
+      if (!onProduction) process.exitCode = 1;
+      continue;
+    }
     const saved = found.ok
       ? await resend(apiKey, `/templates/${toText(found.data?.id)}`, { method: 'PATCH', body })
       : await resend(apiKey, '/templates', { body });
