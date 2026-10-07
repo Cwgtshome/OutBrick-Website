@@ -8,9 +8,11 @@
  */
 
 import { createContext, useCallback, useContext, useEffect, useId, useRef, useState, type ReactNode } from 'react';
-import type { CommunityLocale, MemberRole, PublicMember, SessionResponse, ApiErrorBody } from '../../../lib/community/contract';
+import type { CommunityLocale, MemberRole, PublicMember, SessionResponse, ApiErrorBody, CommunityFeatures } from '../../../lib/community/contract';
 import { communityPath } from '../../../lib/community/contract';
 import { communityCopy, type CommunityCopy } from '../../../lib/i18n/community';
+import type { CommunityFxCopy } from '../../../lib/i18n/community-fx';
+import { BadgeChip } from './badges';
 import { fullDate, number, relativeDate } from '../../../lib/community/format';
 import { roleBadge, memberName } from '../../../lib/community/static-html';
 import { ApiFailure } from './api';
@@ -32,6 +34,10 @@ export type Route =
   | { name: 'notifications'; page: number }
   | { name: 'member'; id: number }
   | { name: 'mod' }
+  | { name: 'roadmap' }
+  | { name: 'ideas' }
+  | { name: 'leaderboard'; period: string; kind: string }
+  | { name: 'bookmarks'; page: number }
   | { name: 'notfound' };
 
 const int = (value: string | null, fallback = 1) => {
@@ -48,7 +54,7 @@ export function parseRoute(locale: CommunityLocale, url: URL): Route {
   const [first, second, third] = parts;
   if (!first) return { name: 'home' };
   if (first === 'c' && second && parts.length === 2)
-    return { name: 'category', slug: second, sort: q.get('sort') ?? 'latest', language: q.get('language') ?? 'mine', status: q.get('status') ?? '', page: int(q.get('page')) };
+    return { name: 'category', slug: second, sort: q.get('sort') ?? '', language: q.get('language') ?? 'mine', status: q.get('status') ?? '', page: int(q.get('page')) };
   if (first === 't' && second && /^\d+$/.test(second) && parts.length <= 3) return { name: 'thread', id: Number(second), slug: third ?? '', page: int(q.get('page')) };
   if (first === 'u' && second && /^\d+$/.test(second) && parts.length === 2) return { name: 'member', id: Number(second) };
   if (parts.length === 1) {
@@ -71,6 +77,14 @@ export function parseRoute(locale: CommunityLocale, url: URL): Route {
         return { name: 'notifications', page: int(q.get('page')) };
       case 'mod':
         return { name: 'mod' };
+      case 'roadmap':
+        return { name: 'roadmap' };
+      case 'ideas':
+        return { name: 'ideas' };
+      case 'leaderboard':
+        return { name: 'leaderboard', period: q.get('period') ?? 'month', kind: q.get('kind') ?? 'helpers' };
+      case 'bookmarks':
+        return { name: 'bookmarks', page: int(q.get('page')) };
     }
   }
   return { name: 'notfound' };
@@ -84,7 +98,7 @@ export function safeReturn(locale: CommunityLocale, value: string | null): strin
 }
 
 /** Pages a search engine should not index (the client adds the robots meta on these). */
-export const privateRoutes = new Set<Route['name']>(['signin', 'welcome', 'settings', 'notifications', 'mod', 'new', 'notfound', 'search']);
+export const privateRoutes = new Set<Route['name']>(['signin', 'welcome', 'settings', 'notifications', 'mod', 'new', 'notfound', 'search', 'bookmarks', 'ideas']);
 
 // ---------------------------------------------------------------------------------------
 // The app context
@@ -94,6 +108,10 @@ export type Navigate = (href: string, options?: { replace?: boolean; focus?: boo
 export type AppContext = {
   locale: CommunityLocale;
   copy: CommunityCopy;
+  /** The feature board, interactive and phase 2 words (lib/i18n/community-fx.ts). */
+  fx: CommunityFxCopy;
+  /** What this deploy has switched on (SessionResponse.features); all off until the session arrives. */
+  features: CommunityFeatures;
   route: Route;
   /** location.pathname + search of the current page. */
   here: string;
@@ -256,7 +274,7 @@ export function View({
 
 /** The community's own navigation: home, search, FAQ, guidelines, and the member's corner. */
 export function CommunityBar() {
-  const { copy, session, path, route, n } = useApp();
+  const { copy, fx, session, path, route, n } = useApp();
   const member = session?.member ?? null;
   const unread = session?.unreadNotifications ?? 0;
   const current = (name: Route['name']) => (route.name === name ? 'page' : undefined);
@@ -285,8 +303,23 @@ export function CommunityBar() {
               {copy.nav.guidelines}
             </a>
           </li>
+          <li>
+            <a href={path('/roadmap')} aria-current={current('roadmap')}>
+              {fx.nav.roadmap}
+            </a>
+          </li>
+          <li>
+            <a href={path('/leaderboard')} aria-current={current('leaderboard')}>
+              {fx.nav.leaderboard}
+            </a>
+          </li>
           {member ? (
             <>
+              <li>
+                <a href={path('/bookmarks')} aria-current={current('bookmarks')}>
+                  {fx.nav.bookmarks}
+                </a>
+              </li>
               <li>
                 <a href={path('/notifications')} aria-current={current('notifications')}>
                   {copy.nav.notifications}
@@ -344,7 +377,7 @@ export function RoleBadge({ role }: { role: MemberRole }) {
 
 /** A member's name, linked to their profile, with the team or moderator badge as text. */
 export function Member({ member, link = true }: { member: PublicMember | null; link?: boolean }) {
-  const { copy, path } = useApp();
+  const { copy, fx, path } = useApp();
   const name = memberName(copy, member);
   return (
     <>
@@ -356,14 +389,15 @@ export function Member({ member, link = true }: { member: PublicMember | null; l
         <span className="cm-author">{name}</span>
       )}
       {member ? <RoleBadge role={member.role} /> : null}
+      {member?.topBadge ? <BadgeChip badge={member.topBadge} name={fx.badges.names[member.topBadge]} title={fx.badges.descriptions[member.topBadge]} /> : null}
     </>
   );
 }
 
-export function StatusBadge({ status, note }: { status: string | null; note: string | null }) {
-  const { copy } = useApp();
+export function StatusBadge({ status, note, shippedVersion }: { status: string | null; note: string | null; shippedVersion?: string | null }) {
+  const { copy, fx } = useApp();
   if (!status) return null;
-  const label = copy.status[status] ?? status;
+  const label = status === 'shipped' && shippedVersion ? fx.status.shippedIn(shippedVersion) : (copy.status[status] ?? status);
   return (
     <span className={`cm-badge cm-status cm-status-${status}`}>
       <span className="sr-only">{copy.statusLabel}: </span>
@@ -499,9 +533,20 @@ export function ErrorSummary({ errors, ids, summaryRef, general }: { errors: Fie
 }
 
 /** Translate a server `fields` map ({ title: 'too_short' }) into messages. */
-export function fieldMessages(copy: CommunityCopy, fields: Record<string, string> | undefined): FieldErrors {
+export function fieldMessages(copy: CommunityCopy, fields: Record<string, string> | undefined, fx?: CommunityFxCopy): FieldErrors {
   const out: FieldErrors = {};
   for (const [key, code] of Object.entries(fields ?? {})) {
+    const special = fx ? ((fx.upload.problems as Record<string, string>)[code] ?? (key.startsWith('poll.') ? (fx.poll.fieldCodes as Record<string, string>)[code] : undefined)) : undefined;
+    if (special) {
+      out[key] = special;
+      continue;
+    }
+    if (fx && key.startsWith('poll.')) {
+      const m = key.match(/^poll\.options\.(\d+)$/);
+      const label = key === 'poll.question' ? fx.poll.question : m ? fx.poll.option(String(Number(m[1]) + 1)) : key === 'poll.closesAt' ? fx.poll.closes : fx.poll.legend;
+      out[key] = (copy.form.codes[code] ?? copy.form.codes.invalid)(label);
+      continue;
+    }
     const label = copy.form.fields[key.replace(/^bug\./, '')] ?? copy.form.fields[key] ?? key;
     out[key] = (copy.form.codes[code] ?? copy.form.codes.invalid)(label);
   }

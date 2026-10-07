@@ -21,11 +21,13 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import type { CommunityLocale, SessionResponse } from '../../../lib/community/contract';
 import { communityLocales, communityPath } from '../../../lib/community/contract';
 import { communityCopy } from '../../../lib/i18n/community';
+import { communityFx } from '../../../lib/i18n/community-fx';
 import { number } from '../../../lib/community/format';
 import { api, ApiFailure } from './api';
 import { Ctx, parseRoute, privateRoutes, type AppContext, type Navigate, type Route } from './core';
 import { CategoryView, FaqView, GuidelinesView, HomeView, MemberView, NotFoundView, SearchView } from './views-browse';
 import { ThreadView } from './views-thread';
+import { BookmarksView, IdeasRedirect, LeaderboardView, RoadmapView } from './views-fx';
 import { ModView, NewThreadView, NotificationsView, SettingsView, SignInView, WelcomeView } from './views-forms';
 
 function currentUrl(): URL {
@@ -50,6 +52,7 @@ function subscribeLocation(listener: () => void) {
     if (!listeners.size) window.removeEventListener('popstate', onPopState);
   };
 }
+const noFeatures = { passkeys: false, uploads: false, replyByEmail: false, translate: false, digest: false };
 const locationSnapshot = () => window.location.pathname + window.location.search;
 
 function ViewFor({ route }: { route: Route }) {
@@ -80,6 +83,14 @@ function ViewFor({ route }: { route: Route }) {
       return <MemberView route={route} />;
     case 'mod':
       return <ModView />;
+    case 'roadmap':
+      return <RoadmapView />;
+    case 'ideas':
+      return <IdeasRedirect />;
+    case 'leaderboard':
+      return <LeaderboardView route={route} />;
+    case 'bookmarks':
+      return <BookmarksView route={route} />;
     default:
       return <NotFoundView />;
   }
@@ -113,7 +124,7 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
         (error: unknown) => {
           setSessionError(error instanceof ApiFailure ? error : null);
           // Signed-out is the safe reading of a session the server could not give.
-          const fallback: SessionResponse = { member: null, providers: [], unreadNotifications: 0 };
+          const fallback: SessionResponse = { member: null, providers: [], unreadNotifications: 0, features: noFeatures };
           setSession(fallback);
           return fallback;
         },
@@ -127,10 +138,30 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
       (next) => setSession(next),
       (error: unknown) => {
         setSessionError(error instanceof ApiFailure ? error : null);
-        setSession({ member: null, providers: [], unreadNotifications: 0 });
+        setSession({ member: null, providers: [], unreadNotifications: 0, features: noFeatures });
       },
     );
   }, [hydrated]);
+
+  // The bell: while the tab is visible and someone is signed in, ask every 20 seconds how many
+  // notifications are unread. Nothing is announced; the count in the community bar changes.
+  const signedIn = !!session?.member;
+  useEffect(() => {
+    if (!signedIn) return;
+    const tick = () => {
+      if (document.visibilityState !== 'visible') return;
+      api.pulse().then(
+        (p) => setSession((s) => (s && s.unreadNotifications !== p.unreadNotifications ? { ...s, unreadNotifications: p.unreadNotifications } : s)),
+        () => undefined,
+      );
+    };
+    const timer = window.setInterval(tick, 20_000);
+    document.addEventListener('visibilitychange', tick);
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', tick);
+    };
+  }, [signedIn]);
 
   const announce = useCallback((text: string) => {
     // Clear first, so the same sentence twice in a row is still read out.
@@ -252,6 +283,8 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
     () => ({
       locale,
       copy,
+      fx: communityFx[locale],
+      features: session?.features ?? noFeatures,
       route,
       here: url ? url.pathname + url.search : communityPath(locale),
       navigate,

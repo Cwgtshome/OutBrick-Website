@@ -12,18 +12,32 @@ import { threadPath, bugStatuses, ideaStatuses } from '../../../lib/community/co
 import { categoryWords } from '../../../lib/i18n/community';
 import { htmlToText } from '../../../lib/community/format';
 import { memberName, pageOfPost } from '../../../lib/community/static-html';
-import { api, ApiFailure } from './api';
+import { api, ApiFailure, clearCache } from './api';
 import { Composer } from './composer';
 import { ErrorSummary, Fill, MARK, Member, Pagination, Pending, StatusBadge, Time, View, errorText, fieldMessages, useApp, useLoad, Honeypot, type FieldErrors, type Route } from './core';
 import { CategoryAside, FollowButtons } from './views-browse';
+import { BookmarkButton, NewRepliesBar, PollView, Reactions, Translation, useThreadUpdates } from './views-fx';
 
 type Detail = ThreadDetail;
 
 export function ThreadView({ route }: { route: Extract<Route, { name: 'thread' }> }) {
-  const { copy, locale, path, session, here, announce } = useApp();
+  const { copy, fx, locale, path, session, here, announce, navigate } = useApp();
   const load = useLoad(`thread:${route.id}:${route.page}`, () => api.thread(route.id, route.page));
   const focusAfter = useRef<number | null>(null);
-  const detail = load.data;
+  const raw = load.data;
+  const detail = raw && 'thread' in raw ? raw : null;
+  const redirect = raw && 'redirect' in raw ? raw.redirect : null;
+
+  // A thread merged into another answers with where it went: go there, in place, and say so.
+  useEffect(() => {
+    if (!redirect) return;
+    announce(fx.merged);
+    navigate(threadPath(locale, redirect) + window.location.hash, { replace: true });
+  }, [redirect, announce, fx, navigate, locale]);
+
+  // New replies, while this is the last page and the tab is visible. They never jump in.
+  const lastShown = detail?.posts.length ? Math.max(...detail.posts.map((p) => p.number)) : 0;
+  const newReplies = useThreadUpdates(detail && detail.page >= detail.pages ? detail.thread.id : null, lastShown);
 
   // A thread's address carries its slug; an old or shortened link is put right in place.
   useEffect(() => {
@@ -72,6 +86,8 @@ export function ThreadView({ route }: { route: Extract<Route, { name: 'thread' }
   const postHref = (n: number) => `${pageHref(pageOfPost(n))}#post-${n}`;
   const refresh = (focusPost?: number) => {
     if (focusPost !== undefined) focusAfter.current = focusPost;
+    // A refresh always asks the server: new replies are not in the cached page.
+    clearCache();
     load.reload();
   };
 
@@ -86,6 +102,7 @@ export function ThreadView({ route }: { route: Extract<Route, { name: 'thread' }
     >
       {detail.canModerate || detail.canSetStatus ? <ModTools detail={detail} onDone={() => refresh()} /> : null}
       {detail.bug ? <BugDetails detail={detail} /> : null}
+      {detail.poll ? <PollView threadId={thread.id} poll={detail.poll} /> : null}
       <section className="cm-posts" aria-labelledby="cm-posts-h">
         <h2 className="sr-only" id="cm-posts-h">
           {copy.thread.postsHeading}
@@ -94,6 +111,14 @@ export function ThreadView({ route }: { route: Extract<Route, { name: 'thread' }
           <PostArticle key={post.id} post={post} detail={detail} postHref={postHref} onChanged={refresh} />
         ))}
       </section>
+      <NewRepliesBar
+        count={newReplies}
+        onShow={() => {
+          const first = lastShown + 1;
+          if (pageOfPost(first) === detail.page) refresh(first);
+          else navigate(postHref(first));
+        }}
+      />
       <Pagination page={detail.page} pages={detail.pages} href={pageHref} label={copy.thread.pages} />
       <ReplyArea
         detail={detail}
@@ -133,7 +158,7 @@ function ThreadHead({ detail, postHref }: { detail: Detail; postHref: (n: number
   return (
     <>
       <p className="cm-badges">
-        <StatusBadge status={thread.status} note={thread.statusNote} />
+        <StatusBadge status={thread.status} note={thread.statusNote} shippedVersion={thread.shippedVersion} />
         {thread.solved ? <span className="cm-badge cm-badge-solution">{copy.list.solved}</span> : null}
         {thread.pinned ? <span className="cm-badge">{copy.list.pinned}</span> : null}
         {thread.locked ? <span className="cm-badge">{copy.list.locked}</span> : null}
@@ -221,7 +246,7 @@ function BugDetails({ detail }: { detail: Detail }) {
 type Mode = 'view' | 'edit' | 'delete' | 'report';
 
 function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail: Detail; postHref: (n: number) => string; onChanged: (focusPost?: number) => void }) {
-  const { copy, n, announce, session } = useApp();
+  const { copy, n, announce, session, features, locale } = useApp();
   const [mode, setMode] = useState<Mode>('view');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -293,6 +318,12 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
       ) : post.html ? (
         <div className="cm-post-body" lang={lang} dangerouslySetInnerHTML={{ __html: post.html }} />
       ) : null}
+      {mode === 'view' && !post.hidden && features.translate && session?.member && detail.thread.language !== locale ? (
+        <div className="cm-row">
+          <Translation post={post} from={detail.thread.language} />
+        </div>
+      ) : null}
+      {!post.hidden && !post.pending ? <Reactions post={post} interactive={!!session?.member && post.author?.id !== session.member.id && (!detail.thread.locked || detail.canModerate)} /> : null}
       {error ? (
         <p className="cm-error" role="alert">
           {error}
@@ -354,6 +385,11 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
               </button>
             </li>
           ) : null}
+          {session?.member ? (
+            <li>
+              <BookmarkButton post={post} />
+            </li>
+          ) : null}
           {session?.member && post.author?.id !== session.member.id ? (
             <li>
               <button type="button" className="cm-act" onClick={() => setMode('report')} aria-label={copy.thread.actions.reportLabel(num, name)}>
@@ -368,7 +404,7 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
 }
 
 function EditPost({ post, lang, onCancel, onSaved }: { post: Post; lang: string; onCancel: () => void; onSaved: () => void }) {
-  const { copy } = useApp();
+  const { copy, fx } = useApp();
   const [value, setValue] = useState(post.markdown ?? htmlToText(post.html));
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -388,7 +424,7 @@ function EditPost({ post, lang, onCancel, onSaved }: { post: Post; lang: string;
       onSaved();
     } catch (failure) {
       const f = failure as ApiFailure;
-      setError(fieldMessages(copy, f.body?.fields).body ?? errorText(copy, f));
+      setError(fieldMessages(copy, f.body?.fields, fx).body ?? errorText(copy, f));
       ref.current?.focus();
     } finally {
       setBusy(false);
@@ -469,13 +505,14 @@ function ReportForm({ post, name, onDone, onCancel }: { post: Post; name: string
 // Replying
 
 function ReplyArea({ detail, signInHref, onPosted }: { detail: Detail; signInHref: string; onPosted: (result: { number: number; page: number }) => void }) {
-  const { copy, n, session, announce } = useApp();
+  const { copy, fx, n, session, announce } = useApp();
   const [body, setBody] = useState('');
   const [replyTo, setReplyTo] = useState<number | null>(null);
   const [website, setWebsite] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [general, setGeneral] = useState('');
   const [busy, setBusy] = useState(false);
+  const [startedAt] = useState(() => Date.now());
   const textarea = useRef<HTMLTextAreaElement>(null);
   const summary = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -527,7 +564,7 @@ function ReplyArea({ detail, signInHref, onPosted }: { detail: Detail; signInHre
     setErrors({});
     setBusy(true);
     try {
-      const result = await api.reply(detail.thread.id, { body, replyTo, website: website || undefined });
+      const result = await api.reply(detail.thread.id, { body, replyTo, website: website || undefined, startedAt });
       setBody('');
       setReplyTo(null);
       // A honeypot hit is answered with a stand-in (id 0): say it worked, go nowhere.
@@ -535,7 +572,7 @@ function ReplyArea({ detail, signInHref, onPosted }: { detail: Detail; signInHre
       else onPosted({ number: result.post.number, page: result.page });
     } catch (failure) {
       const f = failure as ApiFailure;
-      const fields = fieldMessages(copy, f.body?.fields);
+      const fields = fieldMessages(copy, f.body?.fields, fx);
       setErrors(fields);
       setGeneral(Object.keys(fields).length ? '' : errorText(copy, f));
       window.setTimeout(() => summary.current?.focus(), 0);
@@ -557,7 +594,7 @@ function ReplyArea({ detail, signInHref, onPosted }: { detail: Detail; signInHre
             </button>
           </p>
         ) : null}
-        <Composer id={composerId} label={copy.composer.replyLabel} value={body} onChange={setBody} error={errors.body} lang={detail.thread.language} textareaRef={textarea} />
+        <Composer id={composerId} label={copy.composer.replyLabel} value={body} onChange={setBody} error={errors.body} lang={detail.thread.language} textareaRef={textarea} mentions />
         <Honeypot value={website} onChange={setWebsite} />
         <button type="submit" className="btn" disabled={busy} aria-disabled={busy || undefined}>
           {busy ? copy.composer.sending : copy.composer.submitReply}

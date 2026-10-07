@@ -34,6 +34,28 @@ import type {
   HidePostRequest,
   UpdateThreadRequest,
   EmailSignInRequest,
+  RoadmapResponse,
+  SimilarThreadsResponse,
+  ThreadUpdatesResponse,
+  ThreadRedirectResponse,
+  PollVoteResponse,
+  ReactionKind,
+  ReactionResponse,
+  BookmarkResponse,
+  BookmarksResponse,
+  PulseResponse,
+  LeaderboardResponse,
+  LeaderboardKind,
+  LeaderboardPeriod,
+  MemberSuggestResponse,
+  UploadResponse,
+  PreviewResponse,
+  TranslateResponse,
+  PasskeyCreationOptions,
+  PasskeyRequestOptions,
+  PasskeyRegisterRequest,
+  PasskeyLoginRequest,
+  PasskeyInfo,
 } from '../../../lib/community/contract';
 
 export const API = '/api/community';
@@ -122,7 +144,7 @@ export const api = {
   threads: (params: { category?: string; language?: string; sort?: string; status?: string; page?: number; author?: number }) =>
     get<ThreadListResponse>(`/threads${query({ ...params, page: params.page && params.page > 1 ? params.page : null })}`),
   newThread: (body: NewThreadRequest) => write<{ thread: ThreadSummary }>('POST', '/threads', body),
-  thread: (id: number, page: number, fresh = false) => get<ThreadDetail>(`/threads/${id}${query({ page: page > 1 ? page : null })}`, fresh),
+  thread: (id: number, page: number, fresh = false) => get<ThreadDetail | ThreadRedirectResponse>(`/threads/${id}${query({ page: page > 1 ? page : null })}`, fresh),
   updateThread: (id: number, body: UpdateThreadRequest) => write<{ thread: ThreadSummary }>('PATCH', `/threads/${id}`, body),
   reply: (id: number, body: NewPostRequest) => write<{ post: Post; page: number }>('POST', `/threads/${id}/posts`, body),
   solve: (id: number, postId: number | null) => write<{ thread: ThreadSummary }>('POST', `/threads/${id}/solve`, { postId }),
@@ -134,11 +156,29 @@ export const api = {
   editPost: (id: number, body: string) => write<{ post: Post }>('PATCH', `/posts/${id}`, { body }),
   deletePost: (id: number) => write<{ ok: true }>('DELETE', `/posts/${id}`),
   report: (id: number, body: ReportRequest) => request<{ ok: true }>('POST', `/posts/${id}/report`, body),
-  preview: (body: string) => request<{ html: string }>('POST', '/preview', { body }),
+  preview: (body: string) => request<PreviewResponse>('POST', '/preview', { body }),
   search: (params: { q: string; category?: string; language?: string; page?: number }) =>
     get<SearchResponse>(`/search${query({ ...params, page: params.page && params.page > 1 ? params.page : null })}`),
   faq: (locale: CommunityLocale) => get<{ entries: FaqEntry[] }>(`/faq${query({ locale })}`),
   member: (id: number) => get<MemberProfile>(`/members/${id}`),
+
+  roadmap: (locale: CommunityLocale) => get<RoadmapResponse>(`/roadmap${query({ locale })}`),
+  similar: (title: string, category: string) => request<SimilarThreadsResponse>('GET', `/threads/similar${query({ title, category })}`),
+  updates: (id: number, after: number) => request<ThreadUpdatesResponse>('GET', `/threads/${id}/updates${query({ after })}`),
+  pollVote: (id: number, optionIds: number[]) => write<PollVoteResponse>('POST', `/threads/${id}/poll/vote`, { optionIds }),
+  react: (postId: number, reaction: ReactionKind, on: boolean) => request<ReactionResponse>('POST', `/posts/${postId}/reactions`, { reaction, on }),
+  bookmark: (postId: number, on: boolean) => write<BookmarkResponse>('POST', `/posts/${postId}/bookmark`, { on }),
+  bookmarks: (page: number) => get<BookmarksResponse>(`/me/bookmarks${query({ page: page > 1 ? page : null })}`, true),
+  pulse: () => request<PulseResponse>('GET', '/pulse'),
+  leaderboard: (period: LeaderboardPeriod, kind: LeaderboardKind) => get<LeaderboardResponse>(`/leaderboard${query({ period, kind })}`),
+  suggest: (q: string) => request<MemberSuggestResponse>('GET', `/members/suggest${query({ q })}`),
+  translate: (postId: number, to: CommunityLocale) => request<TranslateResponse>('POST', `/posts/${postId}/translate`, { to }),
+  passkeyRegisterOptions: () => request<PasskeyCreationOptions>('POST', '/auth/passkey/register/options', {}),
+  passkeyRegister: (body: PasskeyRegisterRequest) => request<{ passkey: PasskeyInfo }>('POST', '/auth/passkey/register', body),
+  passkeyLoginOptions: () => request<PasskeyRequestOptions>('POST', '/auth/passkey/login/options', {}),
+  passkeyLogin: (body: PasskeyLoginRequest) => write<{ member: unknown }>('POST', '/auth/passkey/login', body),
+  passkeys: () => request<{ passkeys: PasskeyInfo[] }>('GET', '/me/passkeys'),
+  deletePasskey: (id: number) => request<{ ok: true }>('DELETE', `/me/passkeys/${id}`),
 
   modReports: () => get<ModReportsResponse>('/mod/reports', true),
   resolveReport: (id: number, body: ResolveReportRequest) => write<{ ok: true }>('POST', `/mod/reports/${id}/resolve`, body),
@@ -150,3 +190,16 @@ export const api = {
 export const authStart = (provider: string, returnTo: string, locale: CommunityLocale) =>
   `${API}/auth/${provider}/start${query({ returnTo, locale })}`;
 export const exportUrl = `${API}/me/export`;
+
+/** POST /uploads with the image bytes as the body. */
+export async function uploadImage(blob: Blob): Promise<UploadResponse> {
+  let response: Response;
+  try {
+    response = await fetch(`${API}/uploads`, { method: 'POST', credentials: 'same-origin', headers: { Accept: 'application/json', 'Content-Type': blob.type || 'application/octet-stream' }, body: blob });
+  } catch {
+    throw new ApiFailure(0, { code: 'network', message: 'Network error' });
+  }
+  const data = (await response.json().catch(() => null)) as (UploadResponse & { error?: ApiErrorBody }) | null;
+  if (!response.ok || !data?.upload) throw new ApiFailure(response.status, data?.error ?? { code: response.status === 413 ? 'too_large' : 'unknown', message: response.statusText, fields: response.status === 413 ? { file: 'too_large' } : undefined });
+  return data;
+}

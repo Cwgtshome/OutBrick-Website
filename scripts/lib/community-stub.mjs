@@ -17,7 +17,9 @@ const categories = ['announcements', 'help', 'bugs', 'ideas', 'accessibility', '
 }));
 
 const answers = {
-  '/api/community/session': () => ({ member: null, providers: ['email'], unreadNotifications: 0 }),
+  '/api/community/session': () => ({ member: null, providers: ['email'], unreadNotifications: 0, features: { passkeys: true, uploads: false, replyByEmail: false, translate: false, digest: false } }),
+  '/api/community/roadmap': () => ({ columns: ['considering', 'planned', 'in_progress', 'shipped'].map((status) => ({ status, threads: [], total: 0 })) }),
+  '/api/community/leaderboard': () => ({ period: 'month', kind: 'helpers', entries: [], team: [] }),
   '/api/community/categories': () => ({ categories }),
   '/api/community/threads': () => ({ threads: [], page: 1, pages: 1, total: 0 }),
   '/api/community/faq': () => ({ entries: [] }),

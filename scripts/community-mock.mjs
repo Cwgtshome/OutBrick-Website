@@ -14,6 +14,8 @@
 //   /__mock/as/team     Mourad, the OutBrick team (admin)
 //   /__mock/as/new      a member who has not chosen a display name yet
 //   /__mock/as/ja       Kenji, a member whose language is Japanese
+//   /__mock/as/lea      Léa, a member whose language is French
+//   /__mock/reply?thread=<id>&as=<who>   someone else replies (try the live "new replies" bar)
 //
 // (each takes ?to=/some/path to land somewhere). The sign-in buttons sign you in as Sam, and the
 // email form "sends" its link into the void: nothing in this file ever reaches the network —
@@ -40,6 +42,9 @@ Object.assign(process.env, {
   APPLE_KEY_ID: 'mock',
   APPLE_PRIVATE_KEY: 'mock',
   COMMUNITY_ADMIN_EMAILS: '',
+  // Translation goes to the fake model endpoint below, never to Anthropic.
+  ANTHROPIC_API_KEY: 'mock',
+  ANTHROPIC_BASE_URL: `${origin}/__anthropic`,
 });
 
 const realFetch = globalThis.fetch;
@@ -52,6 +57,13 @@ globalThis.fetch = async (input, init) => {
 
 const { freshDatabase } = await import('../netlify/community/test/harness.ts');
 const pg = await freshDatabase();
+// Image uploads land in memory instead of Netlify Blobs.
+const blobs = new Map();
+(await import('../netlify/community/uploads.ts')).setUploadStoreForTests({
+  set: async (key, value) => blobs.set(key, value),
+  get: async (key) => blobs.get(key) ?? null,
+  delete: async (key) => blobs.delete(key),
+});
 const { startSession } = await import('../netlify/community/session.ts');
 const forum = (await import('../netlify/functions/community-api.mts')).default;
 const accounts = (await import('../netlify/functions/community-auth.mts')).default;
@@ -192,8 +204,43 @@ await reset();
 await call('POST', `/api/community/posts/${answer.id + 1}/report`, { cookie: people.mod.cookie, body: { reason: 'off_topic', note: 'Fixture report for the moderation page.' } });
 
 // Spread the fixtures over the last few weeks, so lists read "3 days ago", not "now".
-await pg.query(`UPDATE posts SET created_at = now() - make_interval(hours => (SELECT max(id) FROM posts) * 3 - id::int * 3)`);
+await pg.query(`UPDATE posts SET created_at = now() - make_interval(hours => ((SELECT max(id) FROM posts)::int - id::int) * 3)`);
 await pg.query(`UPDATE threads t SET created_at = p.first, last_post_at = p.last FROM (SELECT thread_id, min(created_at) AS first, max(created_at) AS last FROM posts GROUP BY thread_id) p WHERE p.thread_id = t.id`);
+
+// ---- The feature board, reactions, polls, badges, bookmarks, a merged thread (community-fx, phase 2)
+await call('PATCH', `/api/community/threads/${idea.id}`, { cookie: people.team.cookie, body: { status: 'in_progress' } });
+const ideaFixtures = [
+  ['Replay a cleared level without spending a life', 'considering', 6],
+  ['A colour-blind palette preview in Settings', 'planned', 9],
+  ['Haptic feedback when a brick reaches its gate', 'shipped', 12, '5.1'],
+  ['Spoken move count after every move', 'shipped', 7, '5.0'],
+  ['Daily board streak calendar', 'considering', 3],
+  ['Undo history you can step through', 'open', 2],
+];
+const voters = [people.member, people.mod, people.lea, people.ja, people.new, newbie];
+for (const [title, status, votes, version] of ideaFixtures) {
+  const t = await thread(people.lea, { categorySlug: 'ideas', title, body: `${title}. It would make long sessions kinder.` });
+  for (const who of voters.slice(0, Math.min(votes, voters.length))) await call('POST', `/api/community/threads/${t.id}/vote`, { cookie: who.cookie, body: { on: true } });
+  if (status !== 'open') await call('PATCH', `/api/community/threads/${t.id}`, { cookie: people.team.cookie, body: { status, ...(version ? { shippedVersion: version } : {}) } });
+}
+const pollThread = await thread(people.team, {
+  categorySlug: 'general',
+  title: 'Which village should get the next twelve boards?',
+  body: 'We are planning the next set of boards. Which village would you like them in?',
+  poll: { question: 'Where should the next boards go?', options: ['Coral Cove', 'Moonlit Meadow', 'Ember Volcano', 'Peppermint Plaza'], multiple: false, closesAt: new Date(Date.now() + 14 * 86400000).toISOString() },
+});
+const pollDetail = await call('GET', `/api/community/threads/${pollThread.id}`, { cookie: people.team.cookie });
+const optionIds = pollDetail.body.poll.options.map((o) => o.id);
+for (const [i, who] of [people.member, people.mod, people.lea, people.ja].entries()) await call('POST', `/api/community/threads/${pollThread.id}/poll/vote`, { cookie: who.cookie, body: { optionIds: [optionIds[i % 2]] } });
+const helpDetail = await call('GET', `/api/community/threads/${help.id}`, { cookie: people.team.cookie });
+for (const post of helpDetail.body.posts.slice(0, 2)) {
+  for (const [who, reaction] of [[people.member, 'thanks'], [people.mod, 'like'], [people.lea, 'insightful'], [people.ja, 'like']]) await call('POST', `/api/community/posts/${post.id}/reactions`, { cookie: who.cookie, body: { reaction, on: true } });
+}
+await call('POST', `/api/community/posts/${answer.id}/bookmark`, { cookie: people.member.cookie, body: { on: true } });
+for (const [who, badge] of [[people.member, 'beta_tester'], [people.mod, 'accessibility_champion']]) await call('POST', `/api/community/mod/members/${who.id}/badges`, { cookie: people.team.cookie, body: { badge, on: true } });
+const duplicate = await thread(people.ja, { categorySlug: 'help', title: 'Undo more than once?', body: 'Is there a way to undo twice on a board?' });
+const merged = await call('POST', `/api/community/mod/threads/${duplicate.id}/merge`, { cookie: people.mod.cookie, body: { intoThreadId: help.id } });
+if (merged.status !== 200) console.warn('[mock] merge fixture:', merged.status, JSON.stringify(merged.body));
 
 console.log(`[mock] fixtures: threads ${release.id}–${long.id}; the 60-post thread is ${threadPath('en', long)}`);
 
@@ -255,6 +302,16 @@ createServer(async (req, res) => {
       return res.end();
     }
 
+    // Someone else replies to a thread (for trying the live "new replies" bar):
+    //   /__mock/reply?thread=15&as=mod
+    if (pathname === '/__mock/reply') {
+      const who = people[url.searchParams.get('as') ?? 'mod'] ?? people.mod;
+      await reset();
+      const result = await call('POST', `/api/community/threads/${url.searchParams.get('thread')}/posts`, { cookie: who.cookie, body: { body: `A live reply from ${who.name}, posted while you were reading.` } });
+      res.writeHead(result.status, { 'content-type': 'application/json' });
+      return res.end(JSON.stringify(result.body));
+    }
+
     // The provider buttons: a real round trip would leave for Apple, Google or Facebook.
     const start = pathname.match(/^\/api\/community\/auth\/(apple|google|facebook)\/start$/);
     if (start) {
@@ -262,6 +319,14 @@ createServer(async (req, res) => {
       back.searchParams.set('from', 'signin');
       res.writeHead(302, { 'set-cookie': cookieFor('member'), location: back.pathname + back.search });
       return res.end();
+    }
+
+    // A stand-in for the Anthropic Messages API: the "translation" is the post with a marker.
+    if (pathname === '/__anthropic/v1/messages') {
+      const body = JSON.parse(String(await readBody(req)));
+      const post = /<post>\n([\s\S]*)\n<\/post>/.exec(body.messages?.[0]?.content ?? '')?.[1] ?? '';
+      res.writeHead(200, { 'content-type': 'application/json' });
+      return res.end(JSON.stringify({ content: [{ type: 'text', text: `*(Mock translation)* ${post}` }], stop_reason: 'end_turn' }));
     }
 
     if (pathname.startsWith('/api/community/')) {
@@ -286,6 +351,10 @@ createServer(async (req, res) => {
       const page = url.searchParams.get('page');
       const detail = await call('GET', `/api/community/threads/${thread.id}${page ? `?page=${page}` : ''}`);
       const shell = await readFile(found, 'utf8');
+      if (detail.status === 200 && detail.body.redirect) {
+        res.writeHead(301, { location: threadPath(thread.locale, detail.body.redirect) });
+        return res.end();
+      }
       if (detail.status === 200) {
         const wanted = threadPath(thread.locale, detail.body.thread);
         if (wanted !== pathname) {

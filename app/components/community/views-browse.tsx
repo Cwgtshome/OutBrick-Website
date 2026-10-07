@@ -10,6 +10,7 @@ import { localeNames } from '../../../lib/i18n/locales';
 import { pageOfPost } from '../../../lib/community/static-html';
 import { dayDate } from '../../../lib/community/format';
 import { api } from './api';
+import { ProfileExtras, RoadmapPreview, VoteButton } from './views-fx';
 import { ErrorNotice, Fill, MARK, Member, Pagination, Pending, StatusBadge, Time, View, errorText, useApp, useLoad, type Route } from './core';
 
 /** "fr,en" for "my language and English"; nothing for all languages; one code for one. */
@@ -23,7 +24,7 @@ export function languageParam(locale: CommunityLocale, choice: string): string |
 // Shared lists
 
 export function ThreadList({ threads, headingLevel = 3 }: { threads: ThreadSummary[]; headingLevel?: 2 | 3 }) {
-  const { copy, locale, n } = useApp();
+  const { copy, fx, locale, n } = useApp();
   const H = headingLevel === 2 ? 'h2' : 'h3';
   return (
     <ul className="cm-threads">
@@ -42,7 +43,8 @@ export function ThreadList({ threads, headingLevel = 3 }: { threads: ThreadSumma
               {t.solved ? <span className="cm-badge cm-badge-solution">{copy.list.solved}</span> : null}
               {t.locked ? <span className="cm-badge">{copy.list.locked}</span> : null}
               {t.hidden ? <span className="cm-badge">{copy.list.hidden}</span> : null}
-              <StatusBadge status={t.status} note={t.statusNote} />
+              {t.hasPoll ? <span className="cm-badge">{fx.poll.legend}</span> : null}
+              <StatusBadge status={t.status} note={t.statusNote} shippedVersion={t.shippedVersion} />
               {t.language !== locale ? (
                 <span className="cm-badge" lang={t.language}>
                   {localeNames[t.language]}
@@ -58,6 +60,7 @@ export function ThreadList({ threads, headingLevel = 3 }: { threads: ThreadSumma
                 </>
               ) : null}
             </p>
+            {t.category.kind === 'ideas' ? <VoteButton thread={t} compact /> : null}
             <p className="cm-stats">
               <span>{copy.stats.replies(t.replyCount, n(t.replyCount))}</span>
               {t.category.kind === 'ideas' ? <span>{copy.stats.votes(t.voteCount, n(t.voteCount))}</span> : null}
@@ -227,10 +230,13 @@ export function HomeView() {
 // Category
 
 export function CategoryView({ route }: { route: Extract<Route, { name: 'category' }> }) {
-  const { copy, locale, path, navigate, session, n } = useApp();
+  const { copy, fx, locale, path, navigate, session, n } = useApp();
   const cats = useLoad('categories', () => api.categories());
-  const key = `threads:${route.slug}:${route.sort}:${route.language}:${route.status}:${route.page}`;
-  const threads = useLoad(key, () => api.threads({ category: route.slug, sort: route.sort, language: languageParam(locale, route.language), status: route.status || undefined, page: route.page }));
+  // Ideas open on their most-voted; everything else on the latest activity.
+  const defaultSort = route.slug === 'ideas' ? 'top' : 'latest';
+  const sort = route.sort || defaultSort;
+  const key = `threads:${route.slug}:${sort}:${route.language}:${route.status}:${route.page}`;
+  const threads = useLoad(key, () => api.threads({ category: route.slug, sort, language: languageParam(locale, route.language), status: route.status || undefined, page: route.page }));
   const [language, setLanguage] = useState(route.language);
   const [status, setStatus] = useState(route.status);
   const formId = useId();
@@ -243,9 +249,9 @@ export function CategoryView({ route }: { route: Extract<Route, { name: 'categor
   const member = session?.member;
   const canStart = !category.teamOnlyThreads || (member && ['team', 'admin'].includes(member.role));
   const href = (params: Partial<{ sort: string; language: string; status: string; page: number }>) => {
-    const next = { sort: route.sort, language: route.language, status: route.status, page: 1, ...params };
+    const next = { sort, language: route.language, status: route.status, page: 1, ...params };
     const q = new URLSearchParams();
-    if (next.sort !== 'latest') q.set('sort', next.sort);
+    if (next.sort !== defaultSort) q.set('sort', next.sort);
     if (next.language !== 'mine') q.set('language', next.language);
     if (next.status) q.set('status', next.status);
     if (next.page > 1) q.set('page', String(next.page));
@@ -256,11 +262,14 @@ export function CategoryView({ route }: { route: Extract<Route, { name: 'categor
     navigate(href({ language, status }), { focus: false });
   };
   const data = threads.data;
+  const isIdeas = category.kind === 'ideas';
+  const sorts = isIdeas ? (['top', 'trending', 'hot', 'new', 'latest'] as const) : (['latest', 'new', 'top', 'unanswered'] as const);
+  const sortLabel = (s: (typeof sorts)[number]) => (s === 'trending' || s === 'hot' ? fx.sorts[s] : copy.category.sorts[s]);
   const filtered = route.language !== 'all' || !!route.status;
   return (
     <View
       title={words.name}
-      lede={words.description}
+      lede={isIdeas ? fx.board.lede : words.description}
       crumbs={crumbs}
       ready={!threads.loading}
       aside={<CategoryAside />}
@@ -268,7 +277,7 @@ export function CategoryView({ route }: { route: Extract<Route, { name: 'categor
         <div className="cm-head-actions">
           {canStart ? (
             <a className="btn" href={path(`/new?category=${encodeURIComponent(category.slug)}`)}>
-              {copy.home.startThread}
+              {isIdeas ? fx.board.suggest : copy.home.startThread}
             </a>
           ) : (
             <p className="cm-note-dark">{copy.category.teamOnly}</p>
@@ -284,12 +293,13 @@ export function CategoryView({ route }: { route: Extract<Route, { name: 'categor
         </div>
       }
     >
+      {isIdeas ? <RoadmapPreview /> : null}
       <nav className="cm-sorts" aria-label={copy.category.sortLabel}>
         <ul>
-          {(['latest', 'new', 'top', 'unanswered'] as const).map((sort) => (
-            <li key={sort}>
-              <a href={href({ sort })} aria-current={route.sort === sort ? 'true' : undefined}>
-                {copy.category.sorts[sort]}
+          {sorts.map((s) => (
+            <li key={s}>
+              <a href={href({ sort: s })} aria-current={sort === s ? 'true' : undefined}>
+                {sortLabel(s)}
               </a>
             </li>
           ))}
@@ -530,6 +540,7 @@ export function MemberView({ route }: { route: Extract<Route, { name: 'member' }
       <section className="cm-section">
         <p className="cm-bio">{member.bio || copy.profile.noBio}</p>
       </section>
+      {profile.data.stats ? <ProfileExtras profile={profile.data} /> : null}
       <section className="cm-section" aria-labelledby="cm-recent-h">
         <h2 id="cm-recent-h">{copy.profile.recent}</h2>
         {recentThreads.length ? <ThreadList threads={recentThreads} /> : <p>{copy.profile.none}</p>}

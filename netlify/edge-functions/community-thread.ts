@@ -157,12 +157,17 @@ export default async function communityThread(req: Request, context: EdgeContext
 
   const shellPromise = context.next();
   let detail: ThreadDetail | null = null;
+  let redirect: { id: number; slug: string } | null = null;
   let missing = false;
   try {
     const signal = AbortSignal.timeout(4000);
     const res = await fetch(api, { headers: { accept: 'application/json' }, signal });
     if (res.status === 404) missing = true;
-    else if (res.ok) detail = (await res.json()) as ThreadDetail;
+    else if (res.ok) {
+      const data = (await res.json()) as ThreadDetail | { redirect: { id: number; slug: string } };
+      if ('redirect' in data) redirect = data.redirect;
+      else detail = data;
+    }
   } catch {
     detail = null;
   }
@@ -172,6 +177,8 @@ export default async function communityThread(req: Request, context: EdgeContext
   const source = await shell.text();
   const headers = withSecurity(new Headers(shell.headers));
   try {
+    // A thread merged into another: send readers and search engines to where it went.
+    if (redirect) return new Response(null, { status: 301, headers: withSecurity(new Headers({ location: threadPath(parsed.locale, redirect) })) });
     if (missing) return new Response(source.replace('</head>', '<meta name="robots" content="noindex, follow"/></head>'), { status: 404, headers });
     if (!detail?.thread) return new Response(source, { status: shell.status, headers });
     const wanted = threadPath(parsed.locale, detail.thread);

@@ -10,12 +10,13 @@
  */
 
 import { useEffect, useId, useRef, useState, type SubmitEvent, type ReactNode } from 'react';
-import type { AssistiveTech, CommunityLocale, ModQueueItem, ModReport, Provider, SelfMember } from '../../../lib/community/contract';
-import { communityLocales, threadPath } from '../../../lib/community/contract';
+import type { BadgeKey, AssistiveTech, CommunityLocale, ModQueueItem, ModReport, Provider, SelfMember } from '../../../lib/community/contract';
+import { bugLevelRange, communityLocales, threadPath } from '../../../lib/community/contract';
 import { categoryWords } from '../../../lib/i18n/community';
 import { localeNames } from '../../../lib/i18n/locales';
 import { api, ApiFailure, authStart, exportUrl } from './api';
 import { Composer } from './composer';
+import { PasskeySettings, PasskeySignIn, PollEditor, SimilarIdeas, emptyPoll, type PollDraft } from './views-fx';
 import { ErrorNotice, ErrorSummary, Field, Honeypot, Member, Pagination, Pending, Time, View, errorText, fieldMessages, safeReturn, useApp, useLoad, type FieldErrors, type Route } from './core';
 
 const failureOf = (error: unknown) => (error instanceof ApiFailure ? error : new ApiFailure(0, { code: 'unknown', message: String(error) }));
@@ -47,16 +48,39 @@ function SignInFirst({ title, crumbLabel, note }: { title: string; crumbLabel: s
 
 const assistiveOptions: AssistiveTech[] = ['voiceover', 'voice_control', 'switch_control', 'zoom', 'larger_text', 'colour_filters', 'none'];
 
+/** The bug details the app put in the address (lib/community/contract.ts, bugDeepLinkParams). */
+function readDeepLink(): { fromApp: boolean; device?: string; os?: string; app?: string; assistive?: AssistiveTech[]; level?: number; lang?: CommunityLocale } {
+  const q = new URLSearchParams(window.location.search);
+  const text = (key: string, max: number) => {
+    const v = (q.get(key) ?? '').trim();
+    return v ? v.slice(0, max) : undefined;
+  };
+  const assistive = (q.get('assistive') ?? '')
+    .split(',')
+    .map((a) => a.trim())
+    .filter((a): a is AssistiveTech => (assistiveOptions as string[]).includes(a));
+  const levelRaw = Number(q.get('level'));
+  const level = Number.isInteger(levelRaw) && levelRaw >= bugLevelRange.min && levelRaw <= bugLevelRange.max ? levelRaw : undefined;
+  const langRaw = q.get('lang') ?? '';
+  const lang = (communityLocales as readonly string[]).includes(langRaw) ? (langRaw as CommunityLocale) : undefined;
+  const found = { device: text('device', 80), os: text('os', 20), app: text('app', 20), assistive: assistive.length ? assistive : undefined, level, lang };
+  return { fromApp: Object.entries(found).some(([k, v]) => k !== 'lang' && v !== undefined), ...found };
+}
+
 export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }> }) {
-  const { copy, locale, path, session, navigate, announce } = useApp();
+  const { copy, fx, locale, path, session, navigate, announce } = useApp();
   const cats = useLoad('categories', () => api.categories());
   const id = useId();
+  // The app's "Report a bug" opens this page with the details filled in (bugDeepLinkParams).
+  const [prefill] = useState(() => readDeepLink());
   const [category, setCategory] = useState(route.category);
   const [title, setTitle] = useState('');
-  const [language, setLanguage] = useState<CommunityLocale>(locale);
+  const [language, setLanguage] = useState<CommunityLocale>(prefill.lang ?? locale);
   const [body, setBody] = useState('');
-  const [bug, setBug] = useState({ device: '', osVersion: '', appVersion: '', steps: '', expected: '', actual: '' });
-  const [assistive, setAssistive] = useState<AssistiveTech[]>([]);
+  const [bug, setBug] = useState({ device: prefill.device ?? '', osVersion: prefill.os ?? '', appVersion: prefill.app ?? '', steps: '', expected: '', actual: '', level: prefill.level ? String(prefill.level) : '' });
+  const [assistive, setAssistive] = useState<AssistiveTech[]>(prefill.assistive ?? []);
+  const [poll, setPoll] = useState<PollDraft | null>(null);
+  const [startedAt] = useState(() => Date.now());
   const [website, setWebsite] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [general, setGeneral] = useState('');
@@ -72,7 +96,20 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
   const available = cats.data.categories.filter((c) => !c.teamOnlyThreads || isTeam);
   const chosen = available.find((c) => c.slug === category);
   const isBug = chosen?.kind === 'bugs';
+  const isIdea = chosen?.kind === 'ideas';
   const ids: Record<string, string> = {
+    'bug.level': `${id}-level`,
+    'poll.question': `${id}-poll-q`,
+    'poll.options': `${id}-poll-o`,
+    'poll.options.0': `${id}-poll-o`,
+    'poll.options.1': `${id}-poll-o-1`,
+    'poll.options.2': `${id}-poll-o-2`,
+    'poll.options.3': `${id}-poll-o-3`,
+    'poll.options.4': `${id}-poll-o-4`,
+    'poll.options.5': `${id}-poll-o-5`,
+    'poll.options.6': `${id}-poll-o-6`,
+    'poll.options.7': `${id}-poll-o-7`,
+    'poll.closesAt': `${id}-poll-c`,
     categorySlug: `${id}-cat`,
     title: `${id}-title`,
     language: `${id}-lang`,
@@ -109,8 +146,28 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
         else if (v.length < min) out[`bug.${key}`] = c.too_short(label);
       }
     }
+    if (isBug && bug.level.trim() && !(Number.isInteger(Number(bug.level)) && Number(bug.level) >= bugLevelRange.min && Number(bug.level) <= bugLevelRange.max)) out['bug.level'] = c.invalid(fx.deepLink.level);
+    if (poll) {
+      if (!poll.question.trim()) out['poll.question'] = c.required(fx.poll.question);
+      const filled = poll.options.map((o) => o.trim());
+      filled.forEach((o, i) => {
+        if (!o) out[`poll.options.${i}`] = c.required(fx.poll.option(String(i + 1)));
+        else if (filled.findIndex((x) => x.toLowerCase() === o.toLowerCase()) !== i) out[`poll.options.${i}`] = fx.poll.fieldCodes.duplicate;
+      });
+    }
     return out;
   };
+
+  const pollRequest = () =>
+    poll
+      ? {
+          question: poll.question.trim(),
+          options: poll.options.map((o) => o.trim()),
+          multiple: poll.multiple,
+          // The end of the chosen day, where the member is.
+          closesAt: poll.closesOn ? new Date(`${poll.closesOn}T23:59:00`).toISOString() : null,
+        }
+      : undefined;
 
   const submit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -128,8 +185,10 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
         title: title.trim(),
         body,
         language,
-        bug: isBug ? { ...bug, assistive } : undefined,
+        bug: isBug ? { device: bug.device, osVersion: bug.osVersion, appVersion: bug.appVersion, steps: bug.steps, expected: bug.expected, actual: bug.actual, assistive, ...(bug.level.trim() ? { level: Number(bug.level) } : {}) } : undefined,
+        poll: pollRequest(),
         website: website || undefined,
+        startedAt,
       });
       announce(copy.newThread.posted);
       if (result.thread.id !== 0) navigate(threadPath(locale, result.thread));
@@ -139,7 +198,7 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
       }
     } catch (error) {
       const f = failureOf(error);
-      const fields = fieldMessages(copy, f.body.fields);
+      const fields = fieldMessages(copy, f.body.fields, fx);
       setErrors(fields);
       setGeneral(Object.keys(fields).length ? '' : errorText(copy, f));
       summary.focus();
@@ -161,9 +220,19 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
   );
 
   return (
-    <View title={copy.newThread.title} lede={copy.newThread.lede} crumbs={[{ href: path(), label: copy.nav.label }, { label: copy.newThread.title }]} ready>
+    <View
+      title={isIdea ? fx.board.suggest : copy.newThread.title}
+      lede={isIdea ? fx.board.lede : copy.newThread.lede}
+      crumbs={[{ href: path(), label: copy.nav.label }, { label: isIdea ? fx.board.suggest : copy.newThread.title }]}
+      ready
+    >
       <form className="cm-form" onSubmit={(e) => void submit(e)} noValidate>
         <ErrorSummary errors={errors} ids={ids} summaryRef={summary.ref} general={general} />
+        {prefill.fromApp ? (
+          <div className="cm-notice cm-notice-ok">
+            <p>{fx.deepLink.notice}</p>
+          </div>
+        ) : null}
         <p className="cm-hint">{copy.form.required}</p>
         <Field id={ids.categorySlug} label={copy.newThread.category} error={errors.categorySlug}>
           {(props) => (
@@ -178,9 +247,10 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
           )}
         </Field>
         {cats.data.categories.some((c) => c.teamOnlyThreads) && !isTeam ? <p className="cm-hint">{copy.newThread.teamOnly}</p> : null}
-        <Field id={ids.title} label={copy.newThread.titleLabel} hint={copy.newThread.titleHint} error={errors.title}>
+        <Field id={ids.title} label={isIdea ? fx.newIdea.titleLabel : copy.newThread.titleLabel} hint={isIdea ? fx.newIdea.titleHint : copy.newThread.titleHint} error={errors.title}>
           {(props) => <input {...props} type="text" value={title} maxLength={160} onChange={(e) => setTitle(e.target.value)} lang={language} autoComplete="off" />}
         </Field>
+        {isIdea ? <SimilarIdeas title={title} category="ideas" /> : null}
         <Field id={ids.language} label={copy.newThread.language} hint={copy.newThread.languageHint} error={errors.language}>
           {(props) => (
             <select {...props} value={language} onChange={(e) => setLanguage(e.target.value as CommunityLocale)}>
@@ -198,6 +268,9 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
             {bugField('device', copy.newThread.device, copy.newThread.deviceHint)}
             {bugField('osVersion', copy.newThread.osVersion, copy.newThread.osVersionHint)}
             {bugField('appVersion', copy.newThread.appVersion, copy.newThread.appVersionHint)}
+            <Field id={ids['bug.level']} label={fx.deepLink.level} hint={fx.deepLink.levelHint} error={errors['bug.level']} optional>
+              {(props) => <input {...props} type="text" inputMode="numeric" autoComplete="off" value={bug.level} onChange={(e) => setBug({ ...bug, level: e.target.value })} />}
+            </Field>
             <fieldset className="cm-fieldset cm-checks" aria-describedby={`${id}-at-hint`} data-invalid={errors['bug.assistive'] ? '' : undefined}>
               <legend>{copy.newThread.assistive}</legend>
               <p className="cm-hint" id={`${id}-at-hint`}>
@@ -221,7 +294,13 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
             {bugField('actual', copy.newThread.actual, undefined, true)}
           </fieldset>
         ) : null}
-        <Composer id={ids.body} label={isBug ? copy.newThread.bodyBug : copy.newThread.body} value={body} onChange={setBody} error={errors.body} lang={language} />
+        <Composer id={ids.body} label={isBug ? copy.newThread.bodyBug : isIdea ? fx.newIdea.bodyLabel : copy.newThread.body} value={body} onChange={setBody} error={errors.body} lang={language} mentions />
+        <p>
+          <button type="button" className="cm-act" aria-expanded={!!poll} onClick={() => setPoll(poll ? null : emptyPoll())}>
+            {poll ? fx.poll.remove : fx.poll.add}
+          </button>
+        </p>
+        {poll ? <PollEditor draft={poll} onChange={setPoll} errors={errors} ids={ids} /> : null}
         <Honeypot value={website} onChange={setWebsite} />
         <button type="submit" className="btn" disabled={busy} aria-disabled={busy || undefined}>
           {busy ? copy.composer.sending : copy.newThread.submit}
@@ -266,8 +345,9 @@ function ProviderButton({ provider, href, label }: { provider: Provider; href: s
 }
 
 export function SignInView({ route }: { route: Extract<Route, { name: 'signin' }> }) {
-  const { copy, locale, path, session, refreshSession, announce, navigate } = useApp();
+  const { copy, fx, locale, path, session, refreshSession, announce, navigate, features } = useApp();
   const id = useId();
+  const [startedAt] = useState(() => Date.now());
   const [email, setEmail] = useState('');
   const [website, setWebsite] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -327,11 +407,11 @@ export function SignInView({ route }: { route: Extract<Route, { name: 'signin' }
     setErrors({});
     setBusy(true);
     try {
-      await api.emailSignIn({ email: value, locale, returnTo: safeReturn(locale, returnTo), website: website || undefined });
+      await api.emailSignIn({ email: value, locale, returnTo: safeReturn(locale, returnTo), website: website || undefined, startedAt });
       setSent(true);
     } catch (error) {
       const f = failureOf(error);
-      const fields = fieldMessages(copy, f.body.fields);
+      const fields = fieldMessages(copy, f.body.fields, fx);
       if (fields.email && f.body.fields?.email === 'invalid') fields.email = copy.form.codes.email('');
       setErrors(fields);
       setGeneral(Object.keys(fields).length ? '' : errorText(copy, f));
@@ -361,6 +441,7 @@ export function SignInView({ route }: { route: Extract<Route, { name: 'signin' }
           </ul>
         </section>
       ) : null}
+      {features.passkeys ? <PasskeySignIn returnTo={safeReturn(locale, returnTo)} /> : null}
       {emailOn ? (
         <section className="cm-section" aria-labelledby={`${id}-e`}>
           <h2 id={`${id}-e`}>{providers.length ? `${copy.signin.or}: ${copy.signin.emailHeading}` : copy.signin.emailHeading}</h2>
@@ -447,7 +528,9 @@ export function WelcomeView({ route }: { route: Extract<Route, { name: 'welcome'
 // ---------------------------------------------------------------------------------------
 // Settings
 
-const emailKinds = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation'] as const;
+const emailKinds = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation', 'badge', 'merged'] as const;
+/** Keys that default to off (contract: emailPrefsOffByDefault). */
+const offByDefault = new Set(['digest']);
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
@@ -466,7 +549,7 @@ export function SettingsView() {
 }
 
 function SettingsForms({ member, crumbs }: { member: SelfMember; crumbs: { href?: string; label: string }[] }) {
-  const { copy, refreshSession, announce, navigate, path } = useApp();
+  const { copy, refreshSession, announce, navigate, path, features } = useApp();
   const id = useId();
   const confirmed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('email') === 'confirmed';
   return (
@@ -513,6 +596,7 @@ function SettingsForms({ member, crumbs }: { member: SelfMember; crumbs: { href?
           </a>
         </p>
       </Section>
+      {features.passkeys ? <PasskeySettings /> : null}
       <DeleteAccount id={`${id}-delete`} />
     </View>
   );
@@ -639,8 +723,10 @@ function AddressForm({ member, id, onSaved }: { member: SelfMember; id: string; 
 }
 
 function EmailPrefsForm({ member, id, onSaved }: { member: SelfMember; id: string; onSaved: () => Promise<unknown> }) {
-  const { copy, announce } = useApp();
-  const [prefs, setPrefs] = useState<Record<string, boolean>>(() => Object.fromEntries(emailKinds.map((k) => [k, member.emailPrefs[k] !== false])));
+  const { copy, fx, announce, features } = useApp();
+  const kinds: string[] = [...emailKinds, ...(features.digest ? ['digest'] : [])];
+  const [prefs, setPrefs] = useState<Record<string, boolean>>(() => Object.fromEntries(kinds.map((k) => [k, offByDefault.has(k) ? member.emailPrefs[k] === true : member.emailPrefs[k] !== false])));
+  const words = (k: string): [string, string] => (k === 'digest' || k === 'badge' || k === 'merged' ? fx.settings[k] : copy.settings.emailKinds[k as keyof typeof copy.settings.emailKinds]);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const submit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -663,12 +749,12 @@ function EmailPrefsForm({ member, id, onSaved }: { member: SelfMember; id: strin
         <p>{copy.settings.emailsLede(member.email || '—')}</p>
         <fieldset className="cm-fieldset cm-checks">
           <legend className="sr-only">{copy.settings.emails}</legend>
-          {emailKinds.map((k) => (
+          {kinds.map((k) => (
             <div className="cm-check" key={k}>
-              <input type="checkbox" id={`${id}-${k}`} checked={prefs[k]} onChange={(e) => setPrefs({ ...prefs, [k]: e.target.checked })} aria-describedby={`${id}-${k}-d`} />
-              <label htmlFor={`${id}-${k}`}>{copy.settings.emailKinds[k][0]}</label>
+              <input type="checkbox" id={`${id}-${k}`} checked={!!prefs[k]} onChange={(e) => setPrefs({ ...prefs, [k]: e.target.checked })} aria-describedby={`${id}-${k}-d`} />
+              <label htmlFor={`${id}-${k}`}>{words(k)[0]}</label>
               <p className="cm-hint" id={`${id}-${k}-d`}>
-                {copy.settings.emailKinds[k][1]}
+                {words(k)[1]}
               </p>
             </div>
           ))}
@@ -730,7 +816,7 @@ function DeleteAccount({ id }: { id: string }) {
 // Notifications
 
 export function NotificationsView({ route }: { route: Extract<Route, { name: 'notifications' }> }) {
-  const { copy, locale, path, session, refreshSession, announce } = useApp();
+  const { copy, fx, locale, path, session, refreshSession, announce } = useApp();
   const signedIn = !!session?.member;
   const load = useLoad(signedIn ? `notifications:${route.page}` : null, () => api.notifications(route.page));
   if (!session) return null;
@@ -763,7 +849,14 @@ export function NotificationsView({ route }: { route: Extract<Route, { name: 'no
             const title = note.thread?.title ?? '';
             const text0 = (v: unknown) => (typeof v === 'string' ? v : '');
             const extra = note.kind === 'status' ? [copy.status[text0(note.data.status)] ?? '', text0(note.data.statusNote)].filter(Boolean).join(': ') : note.kind === 'release' ? text0(note.data.version) : '';
-            const text = copy.notifications.kinds[note.kind](actor, title, extra);
+            const str = (v: unknown) => (typeof v === 'string' ? v : '');
+            const badgeKey = str(note.data.badge) as BadgeKey;
+            const text =
+              note.kind === 'badge'
+                ? fx.notifications.badge(fx.badges.names[badgeKey] ?? badgeKey)
+                : note.kind === 'merged'
+                  ? fx.notifications.merged(str(note.data.fromTitle), title)
+                  : (copy.notifications.kinds[note.kind] ?? copy.notifications.kinds.reply)(actor, title, extra);
             const href = note.thread ? threadPath(locale, note.thread, note.postNumber) : note.kind === 'welcome' ? path('/guidelines') : null;
             return (
               <li key={note.id} className={note.read ? 'cm-note-item' : 'cm-note-item is-unread'}>
