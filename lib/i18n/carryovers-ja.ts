@@ -61,7 +61,7 @@ export const ja: Record<string, string> = {
   'Tea, scarves and a gentle wave. The scarf tail swings a beat late.': 'お茶とマフラー、そして穏やかに振る手。マフラーの端は一拍遅れて揺れます。',
   'Tells fairy tales, and waves a wand that bursts into stars.': 'おとぎ話を語り、星が飛び出す魔法の杖を振ります。',
   'The challenge': '挑戦状',
-  'The sliding-brick colour-sort puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, where a board looks impossible and never is.': 'iPhone、iPad、Mac、Apple TV、Apple Vision Pro、Apple Watchで楽しめる、ブロックを滑らせて色ごとに分けるパズル。解けそうに見えない盤面も、必ず解けます。',
+  'The match-three brick puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, where a board looks impossible and never is.': 'iPhone、iPad、Mac、Apple TV、Apple Vision Pro、Apple Watchで楽しめる、ブロックを滑らせて色ごとに分けるパズル。解けそうに見えない盤面も、必ず解けます。',
   'Three steps, and you are on the board.': '3つのステップで、盤面へ進めます。',
   'Warm up first': 'まずはウォームアップ',
   'You have been challenged': '挑戦状が届きました',
@@ -69,6 +69,6 @@ export const ja: Record<string, string> = {
   'a free undo every board': '各盤面の最初の1回は無料で、ストックを使わずに元に戻せる',
   'no ad between levels': 'レベルの合間に広告なし',
   'works offline': 'オフラインで遊べる',
-  'Someone dared you to a board of OutBrick — a relaxed sliding-brick colour-sort puzzle. Match every brick to its gate, take the free undo the board comes with, and beat their move count.': '誰かからOutBrickの盤面への挑戦状が届きました。OutBrickは、ブロックを滑らせて色ごとに分ける、ゆったり楽しめるパズルです。それぞれのブロックを同じ色のゲートへ導き、その盤面の最初の1回の無料の「元に戻す」をストックを消費せずに活用して、相手より少ない手数でクリアしましょう。',
+  'Someone dared you to a board of OutBrick — a relaxed match-three brick puzzle. Match every brick to its gate, take the free undo the board comes with, and beat their move count.': '誰かからOutBrickの盤面への挑戦状が届きました。OutBrickは、ブロックを滑らせて色ごとに分ける、ゆったり楽しめるパズルです。それぞれのブロックを同じ色のゲートへ導き、その盤面の最初の1回の無料の「元に戻す」をストックを消費せずに活用して、相手より少ない手数でクリアしましょう。',
   'Warm-up OutBrick board': 'OutBrickのウォームアップ用盤面',
 };

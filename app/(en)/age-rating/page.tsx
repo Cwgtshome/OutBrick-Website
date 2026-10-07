@@ -1,3 +1,4 @@
+import { currentGameCopy } from '../../../lib/i18n/current-game';
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
 import { LegalPage, Pills, SiteLink } from '../../legal-page';
@@ -40,15 +41,7 @@ export default function AgeRatingPage() {
       <section className="brick">
         <h2>Advertising</h2>
         <p>
-          OutBrick contains advertising, and it is rewarded video only. There are no banners, no
-          interstitials, no ad when the app opens and no ad between levels. A video plays only when a
-          player presses a button asking for one of six things: a life, five more moves at the move
-          limit, two undos, a booster armed for the board about to start, the clear card&rsquo;s coins
-          paid again, or a second spin of the Brick Wheel. Each of the six carries its own daily cap —
-          eight, six, eight, four, four and one — so thirty-one rewarded videos a day is the most the
-          game will ever pay for. Declining costs nothing — every reward, board and price in the game is
-          the same whether a video is watched or not, and nothing a video pays for has to be bought or
-          watched to play the core boards.
+          {currentGameCopy.en.ads}
         </p>
         <p>
           The ads are served by Google (AdMob). In the European Economic Area, the United Kingdom and

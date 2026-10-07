@@ -1,3 +1,4 @@
+import { releasesIn } from '../../lib/releases';
 /**
  * /whats-new and its translations (/fr/whats-new, /de/whats-new, /es/whats-new,
  * /ja/whats-new): OutBrick's release notes as a timeline, newest first.
@@ -95,7 +96,7 @@ export function WhatsNewPage({ locale }: { locale: Locale }) {
   const extra = releaseExtras[locale];
   const chrome = chromeCopy[locale];
   const current = currentReleaseIn(locale);
-  const shown: Release[] = locale === 'en' ? releases : [current];
+  const shown: Release[] = locale === 'en' ? releases : releasesIn(locale);
   const pageUrl = localeUrl(locale, '/whats-new');
   const home = localePath(locale, '/');
   const storeUrl = localeStoreUrl('whats-new', locale);

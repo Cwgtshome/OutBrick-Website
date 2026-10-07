@@ -1,3 +1,4 @@
+import { CurrentGameFeatures } from '../../components/current-game-features';
 import { localeAlternates } from '../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
@@ -6,7 +7,7 @@ import { siteUrl } from '../../../lib/site';
 import { appNode, breadcrumbNode, graph, ids, ref, webPageNode } from '../../../lib/structured-data';
 
 const description =
-  'Who makes OutBrick, the sliding-brick colour-sort puzzle, what the game is built to respect, and why it publishes a cited journal alongside it.';
+  'Who makes OutBrick, the match-three brick puzzle, what the game is built to respect, and why it publishes a cited journal alongside it.';
 
 export const metadata: Metadata = {
   title: 'About OutBrick: who makes it and why',
@@ -24,12 +25,12 @@ export const metadata: Metadata = {
 };
 
 const facts: [string, string][] = [
-  ['The rule', 'Slide a brick and it glides until something stops it. Get every brick out through the gate that matches its colour and the board is clear.'],
+  ['The rule', 'Swap neighbouring bricks to make a line of three or more. Cascades fall around obstacles and bring new bricks in. Coloured gates, sealed rooms, portals and paint channels give each board its own task.'],
   ['The boards', '2,000, across 100 chapters of twenty. A solver cleared every one before it shipped.'],
   ['The Journey', '167 villages built stud by stud out of brick, twelve levels each, carried by twenty-eight distinct places.'],
   ['The cast', 'Nine brick friends. Three share your Home screen at a time; they animate and speak in text bubbles.'],
   ['The pressure', 'A move limit on every board. No clock, timer or countdown anywhere in the game.'],
-  ['What it costs', 'Free, with lives and six opt-in rewarded video placements. No banners, no interstitials, no subscription.'],
+  ['What it costs', 'Free, with lives and eight opt-in rewarded video placements. No banners, no interstitials, no subscription.'],
   ['Where it runs', 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, offline, with progress in your own iCloud.'],
 ];
 
@@ -62,7 +63,7 @@ export default function AboutPage() {
               <p className="ed-label">About OutBrick</p>
               <h1 className="ed-display">A small game, built <em>brick by brick.</em></h1>
               <p className="ed-lede">
-                OutBrick is a sliding-brick colour-sort puzzle for the moments between things. It is an
+                OutBrick is a match-three brick puzzle for the moments between things. It is an
                 independent project by {founder.name}, and this site is where the game, the thinking
                 behind it and the journal live side by side.
               </p>
@@ -141,6 +142,7 @@ export default function AboutPage() {
       </section>
 
       <JsonLd data={structuredData} />
+    <CurrentGameFeatures />
     </EditorialPage>
   );
 }

@@ -1,3 +1,5 @@
+import { currentGameCopy } from '../../../lib/i18n/current-game';
+import { CurrentGameFeatures } from '../../components/current-game-features';
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
 import { Handoff, LegalPage } from '../../legal-page';
@@ -21,7 +23,7 @@ export default function SupportPage() {
       eyebrow="OutBrick support"
       title="Need a hand?"
       summary="OutBrick is meant to feel calm even when the board gets knotty. Here are the quickest ways through a stuck level, what lives and undos actually cost, and the best way to reach us."
-      updated="24 September 2026"
+      updated="7 October 2026"
       current="/support"
     >
       <div data-help-root>
@@ -46,24 +48,14 @@ export default function SupportPage() {
           you the tank is empty runs a live countdown to the next one.
         </p>
         <p>
-          A life is spent in two situations, and only two: you ran out of moves on a board and chose
-          Try again instead of taking more moves, or you walked away from a board you had already made
-          a move on. Playing costs nothing, clearing costs nothing, undoing costs nothing, and opening
-          a level to look at it and backing out costs nothing. When leaving would cost one, the pause
-          card&rsquo;s Home button says so first — with the cost and the lives you have left — and lets
-          you go back to the board instead.
+          {currentGameCopy.en.lives}
         </p>
       </section>
 
       <section className="brick" data-help-item>
         <h2>Are there ads?</h2>
         <p>
-          Yes — rewarded video, and nothing else. There are no banners, no interstitials, no ad between
-          levels and no ad when the app opens. A video plays only when you press a button asking for
-          something: one life, five more moves at the limit, two undos, a booster armed for the board
-          you are about to start, the clear card&rsquo;s coins paid again, or a second spin of the Brick
-          Wheel. Each of the six is capped daily — eight, six, eight, four, four and one — so
-          thirty-one rewarded videos a day is the most the game will ever pay for.
+          {currentGameCopy.en.ads}
         </p>
         <p>
           Declining costs you nothing at all. Every reward, every board and every price is identical
@@ -87,7 +79,7 @@ export default function SupportPage() {
             attempt — 300, then 500, then 900 — and goes back to 300 when you leave the board or clear
             it.
           </li>
-          <li data-help-item><b>Target, not par:</b> the number you are aiming at used to be called par. It is called the target now. Same number, same rule: clear at or under it for the second star, and do that without an undo for the third.</li>
+          <li data-help-item><b>{currentGameCopy.en.starsTitle}:</b> {currentGameCopy.en.stars}</li>
           <li data-help-item><b>Advertising choices:</b> in the EEA, the UK and Switzerland, Settings &rsaquo; Advertising choices reopens the consent form at any time. iOS tracking permission lives in Settings &rsaquo; Privacy &amp; Security &rsaquo; Tracking, and saying no changes nothing about the game.</li>
           <li data-help-item><b>Widgets:</b> add the OutBrick widget from your iPhone Home Screen and choose a size that fits your layout.</li>
           <li data-help-item><b>What changed in the latest update:</b> the full release notes are on <a href="/whats-new">What’s new</a>.</li>
@@ -135,6 +127,7 @@ export default function SupportPage() {
           mainEntity: faqs.map((faq) => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: faq.answer } })),
         })}
       />
+    <CurrentGameFeatures />
     </LegalPage>
   );
 }

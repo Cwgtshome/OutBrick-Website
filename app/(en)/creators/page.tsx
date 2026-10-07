@@ -21,7 +21,7 @@ const ideas = [
     tone: 'gold',
     kicker: 'Clip',
     title: '“Can you beat the target?”',
-    body: 'Every board shows its move target and move limit from the first tap. Clear it on target without an undo for three stars — a natural fifteen-second challenge.',
+    body: 'Complete the goals shown on the board. The board finishes as soon as they are met, and leftover moves become line blasters that add to your score. Hard, Super Hard and Boss boards change the challenge along the Journey.',
   },
   {
     tone: 'teal',

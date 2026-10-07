@@ -25,10 +25,10 @@ import { APP_STORE_ID } from './store-badge';
 export const rootMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'OutBrick — Slide bricks out.',
+    default: 'OutBrick — Match bricks. Clear goals.',
     template: '%s — OutBrick',
   },
-  description: 'OutBrick is a sliding-brick colour-sort puzzle: 2,000 solver-verified boards across 100 chapters, a Journey of 167 villages built stud by stud out of brick, and nine brick friends. One finger, no clock, and nothing that interrupts a board.',
+  description: 'OutBrick is a match-three brick puzzle: 2,000 solver-verified boards across 100 chapters, a Journey of 167 villages built stud by stud out of brick, and nine brick friends. One finger, no clock, and nothing that interrupts a board.',
   applicationName: 'OutBrick',
   authors: [{ name: 'Mourad Hamdi', url: `${siteUrl}/authors/mourad-hamdi` }],
   creator: 'Mourad Hamdi',
@@ -38,7 +38,7 @@ export const rootMetadata: Metadata = {
   formatDetection: { telephone: false },
   keywords: [
     'OutBrick',
-    'sliding brick puzzle',
+    'match three brick puzzle',
     'colour sort puzzle',
     'offline puzzle game',
     'calm mobile games',
@@ -59,13 +59,13 @@ export const rootMetadata: Metadata = {
     type: 'website',
     url: siteUrl,
     siteName: 'OutBrick',
-    title: 'OutBrick — Slide bricks out.',
-    description: 'A relaxed sliding-brick colour-sort puzzle with real mascots, widgets, and no ad you did not press a button to see.',
+    title: 'OutBrick — Match bricks. Clear goals.',
+    description: 'A relaxed match-three brick puzzle with real mascots, widgets, and no ad you did not press a button to see.',
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'OutBrick mascots and home screen' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OutBrick — Slide bricks out.',
+    title: 'OutBrick — Match bricks. Clear goals.',
     description: 'A one-finger colour-sort puzzle with real mascots and widgets. Nothing interrupts a board, and every board comes with a free undo.',
     images: [{ url: '/og.png', alt: 'OutBrick mascots and home screen' }],
   },

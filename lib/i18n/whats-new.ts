@@ -32,7 +32,7 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
     meta: {
       title: 'What’s new in OutBrick: every update, newest first',
       description:
-        'Release notes for OutBrick, newest first. Version 4.2: harder boards, no clock anywhere, and a Journey of 167 villages rebuilt in brick.',
+        'Release notes for OutBrick, newest first. Version 5.0.1: faster VoiceOver, spoken hints, clearer gates, score-based stars and Apple system features.',
     },
     crumb: 'What’s new',
     label: 'Release notes',
@@ -51,9 +51,9 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
   },
   fr: {
     meta: {
-      title: 'Nouveautés d’OutBrick : les notes de la version 4.2',
+      title: 'Nouveautés d’OutBrick : les notes de la version 5.0.1',
       description:
-        'Tout ce qui change dans OutBrick 4.2 : des plateaux plus exigeants, plus aucun chrono, et un Voyage de 167 villages rebâti en briques.',
+        'OutBrick 5.0.1 : VoiceOver plus rapide, indices parlés, portes expliquées, fin de plateau dès la victoire et fonctions Apple.',
     },
     crumb: 'Nouveautés',
     label: 'Notes de version',
@@ -73,9 +73,9 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
   },
   de: {
     meta: {
-      title: 'Neu in OutBrick: die Versionshinweise zu 4.2',
+      title: 'Neu in OutBrick: die Versionshinweise zu 5.0.1',
       description:
-        'Alles, was sich in OutBrick 4.2 ändert: schwerere Felder, nirgends mehr eine Uhr und eine Reise durch 167 Dörfer, neu aus Steinen gebaut.',
+        'OutBrick 5.0.1: schnelleres VoiceOver, gesprochene Hinweise, erklärte Tore, sofortiger Abschluss erfüllter Ziele und Apple-Systemfunktionen.',
     },
     crumb: 'Neuigkeiten',
     label: 'Versionshinweise',
@@ -95,9 +95,9 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
   },
   es: {
     meta: {
-      title: 'Novedades de OutBrick: las notas de la versión 4.2',
+      title: 'Novedades de OutBrick: las notas de la versión 5.0.1',
       description:
-        'Todo lo que cambia en OutBrick 4.2: tableros más exigentes, ningún reloj en ninguna parte y un Viaje de 167 pueblos reconstruido en ladrillo.',
+        'OutBrick 5.0.1: VoiceOver más rápido, pistas habladas, puertas explicadas, final inmediato al cumplir objetivos y funciones del sistema Apple.',
     },
     crumb: 'Novedades',
     label: 'Notas de la versión',
@@ -117,8 +117,8 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
   },
   ja: {
     meta: {
-      title: 'OutBrick の新機能：バージョン 4.2 のリリースノート',
-      description: 'OutBrick 4.2 の変更点をすべて掲載。手ごたえを増した盤面、時間制限の撤廃、ブロックで組み直した 167 の村をめぐる旅路。',
+      title: 'OutBrick の新機能：バージョン 5.0.1 のリリースノート',
+      description: 'OutBrick 5.0.1：VoiceOverの高速化、音声ヒント、ゲートの説明、目標達成時の即時終了、Appleのシステム機能。',
     },
     crumb: '新機能',
     label: 'リリースノート',

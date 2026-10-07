@@ -1,3 +1,4 @@
+import { CurrentGameFeatures } from '../../components/current-game-features';
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
 import { Handoff, LegalPage, Pills } from '../../legal-page';
@@ -15,7 +16,7 @@ export default function AccessibilityPage() {
       eyebrow="OutBrick accessibility"
       title="Make room to play."
       summary="OutBrick aims to keep the board readable, calm, and comfortable across iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch. Tell us what would make the next clear easier."
-      updated="22 September 2026"
+      updated="7 October 2026"
       current="/accessibility"
     >
       <div className="brick headline">
@@ -58,6 +59,7 @@ export default function AccessibilityPage() {
 
       <Pills items={['Colour-blind glyphs', 'Audio controls', 'Reduce Motion']} />
       <Handoff title="Contact accessibility support" note="Open the contact form" action="Open the contact form" href="/contact" />
+    <CurrentGameFeatures />
     </LegalPage>
   );
 }

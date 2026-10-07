@@ -19,7 +19,7 @@ export const supportFaqs: { question: string; answer: string }[] = [
   },
   {
     question: 'Is there a timer?',
-    answer: 'No. Every board has a move limit, shown beside your move count from the first tap, but there is no clock or countdown. Reaching the limit offers five more moves for coins or a video before anything else happens.',
+    answer: 'The board shows moves remaining; there is no clock or countdown. At the limit, five extra moves cost 300 coins, then 500, then 900 within the same attempt, or a rewarded video. Leaving or clearing resets the coin ladder.',
   },
   {
     question: 'How do I restore a purchase?',
@@ -27,7 +27,7 @@ export const supportFaqs: { question: string; answer: string }[] = [
   },
   {
     question: 'What do the three stars mean?',
-    answer: 'One star for clearing the board, the second for clearing it at or under the target move count, and the third for doing that without an undo. The target used to be called par; it is the same number.',
+    answer: 'The current iOS game awards stars from the board’s score thresholds. Matches, specials, cascades and the leftover-move finish contribute to the score. The browser demo keeps its earlier move-target star rule.',
   },
   {
     question: 'How much do extra moves cost?',
@@ -35,7 +35,7 @@ export const supportFaqs: { question: string; answer: string }[] = [
   },
   {
     question: 'How many rewarded videos can I watch a day?',
-    answer: 'Thirty-one at most across the six rewards, each capped daily. Declining never changes a reward, a board or a price.',
+    answer: 'Daily caps: lives 8, undos 8, extra moves 6, a free Hint at the out-of-moves wall 4, doubled clear coins 4, Brick Wheel 1, the gift balloon 2 and Brick Cinema 6. No banners or interstitials. A video starts only when you choose it; declining costs nothing.',
   },
   {
     question: 'How do I turn colour-blind glyphs on or off?',

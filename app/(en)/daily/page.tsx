@@ -1,3 +1,4 @@
+import { currentGameCopy } from '../../../lib/i18n/current-game';
 import type { Metadata } from 'next';
 import { dailyPool } from '../../../lib/daily-board';
 import { pageMetadata, siteUrl } from '../../../lib/site';
@@ -155,6 +156,7 @@ export default function DailyPage() {
             <div className="cta-row centred"><AppStoreBadge campaign="daily" /></div>
           </div>
         </section>
+      <section className="band-cream"><div className="wrap"><h2>{currentGameCopy.en.demoTitle}</h2><p>{currentGameCopy.en.demo}</p></div></section>
       </main>
 
       <VillageFooter page="/daily" />

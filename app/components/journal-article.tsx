@@ -1,3 +1,4 @@
+import { currentGameCopy } from '../../lib/i18n/current-game';
 /**
  * One journal article, in any language it is published in: `/blog/<slug>`
  * (app/(en)/blog/[slug]/page.tsx) and the translated guides at
@@ -435,6 +436,7 @@ export function ArticleView({
                 <aside className="ed-gamenote" aria-labelledby="game-note-title">
                   <BrandMark className="gamenote-mark" />
                   <h2 id="game-note-title">{ui.gameNoteTitle}</h2>
+                  <p className="ed-label">{currentGameCopy[locale].label}</p>
                   <p>
                     {ui.gameNoteBody}
                   </p>

@@ -1,5 +1,5 @@
 export const de: Record<string, string> = {
-  "Someone dared you to a board of OutBrick — a relaxed sliding-brick colour-sort puzzle. Match every brick to its gate, take the free undo the board comes with, and beat their move count.": "Jemand hat dich zu einem Spielfeld in OutBrick herausgefordert — einem entspannten Farbsortierpuzzle mit verschiebbaren Bausteinen. Schiebe jeden Baustein zu seinem passenden Tor, nutze das erste kostenlose Rückgängigmachen auf dem Spielfeld, ohne deinen Vorrat zu verbrauchen, und schaffe es mit weniger Zügen als dein Gegenüber.",
+  "Someone dared you to a board of OutBrick — a relaxed match-three brick puzzle. Match every brick to its gate, take the free undo the board comes with, and beat their move count.": "Jemand hat dich zu einem Spielfeld in OutBrick herausgefordert — einem entspannten Farbsortierpuzzle mit verschiebbaren Bausteinen. Schiebe jeden Baustein zu seinem passenden Tor, nutze das erste kostenlose Rückgängigmachen auf dem Spielfeld, ohne deinen Vorrat zu verbrauchen, und schaffe es mit weniger Zügen als dein Gegenüber.",
   "Warm-up OutBrick board": "OutBrick-Spielfeld zum Aufwärmen",
   "Remote": "Ortsunabhängig",
   "· Remote ·": "· Ortsunabhängig ·",
@@ -65,7 +65,7 @@ export const de: Record<string, string> = {
   "Tea, scarves and a gentle wave. The scarf tail swings a beat late.": "Tee, Schals und ein sanftes Winken. Das Schalende schwingt einen Takt später nach.",
   "Tells fairy tales, and waves a wand that bursts into stars.": "Erzählt Märchen und schwenkt einen Zauberstab, aus dem Sterne hervorsprühen.",
   "The challenge": "Die Herausforderung",
-  "The sliding-brick colour-sort puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, where a board looks impossible and never is.": "Das Farbsortierpuzzle mit verschiebbaren Bausteinen für iPhone, iPad, Mac, Apple TV, Apple Vision Pro und Apple Watch: Ein Spielfeld sieht unmöglich aus, ist es aber nie.",
+  "The match-three brick puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, where a board looks impossible and never is.": "Das Farbsortierpuzzle mit verschiebbaren Bausteinen für iPhone, iPad, Mac, Apple TV, Apple Vision Pro und Apple Watch: Ein Spielfeld sieht unmöglich aus, ist es aber nie.",
   "Three steps, and you are on the board.": "In drei Schritten bist du auf dem Spielfeld.",
   "Warm up first": "Erst einmal aufwärmen",
   "You have been challenged": "Du wurdest herausgefordert",

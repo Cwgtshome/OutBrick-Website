@@ -1,3 +1,4 @@
+import { currentGameCopy } from './current-game.ts';
 /**
  * The home page's words, in every language it is published in.
  *
@@ -1045,3 +1046,21 @@ const ja: HomeCopy = {
 };
 
 export const homeCopy: Record<Locale, HomeCopy> = { en, fr, de, es, ja };
+
+// Keep current app facts separate from the classic browser demo below the hero.
+for (const locale of ['en', 'fr', 'de', 'es', 'ja'] as const) {
+  const t = currentGameCopy[locale];
+  const h = homeCopy[locale];
+  h.meta.description = t.description;
+  h.meta.ogDescription = t.description;
+  h.appDescription = t.summary;
+  h.hero.lede = t.summary;
+  h.fair.ledger[0].body = t.lives;
+  h.rule.eyebrow = t.demoTitle;
+  h.rule.lede = t.demo;
+  h.rule.steps[2].body = t.stars;
+  h.fair.ledger[2].body = t.moves;
+  h.fair.ledger[3] = { title: t.adsTitle, body: t.ads };
+  h.apple.accessibility.body = t.voiceover;
+  h.apple.system.body = t.apple;
+}

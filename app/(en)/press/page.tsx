@@ -1,3 +1,4 @@
+import { currentGameCopy } from '../../../lib/i18n/current-game';
 import type { Metadata } from 'next';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../editorial-shell';
 import { CopyButton } from '../../components/copy-button';
@@ -39,7 +40,7 @@ export default function PressPage() {
       { '@type': 'ListItem', position: 2, name: 'Press room', item: `${siteUrl}/press` },
     ],
   };
-  const latest = pressReleases[0];
+  const latest = { href: '/whats-new', dateline: '6 October 2026', short: 'OutBrick 5.0.1 is on the App Store', dek: currentGameCopy.en.description };
 
   return (
     <EditorialPage page={'/press'} current="press" className="bz">
@@ -59,7 +60,7 @@ export default function PressPage() {
                 <a className="ed-link" href="#contact">Press contact</a>
               </div>
             </div>
-            <a className="bz-newscard ed-slab lit" data-tone="gold" href={`/press/${latest.slug}`}>
+            <a className="bz-newscard ed-slab lit" data-tone="gold" href={latest.href}>
               <Studs count={4} />
               <span className="bz-newscard-kicker">Latest release · {latest.dateline}</span>
               <span className="bz-newscard-title">{latest.short}</span>
@@ -127,7 +128,7 @@ export default function PressPage() {
             <div><dt>Company</dt><dd>OutBrick, founded by Mourad Hamdi (Founder &amp; CEO)</dd></div>
             <div><dt>Website</dt><dd><a className="ed-link" style={{ fontSize: 'inherit' }} href="/">www.outbrick.site</a></dd></div>
             <div><dt>App Store</dt><dd><a className="ed-link" style={{ fontSize: 'inherit', overflowWrap: 'anywhere' }} href={APP_STORE_URL}>{APP_STORE_URL.replace('https://', '')}</a></dd></div>
-            <div><dt>Describe it as</dt><dd>A sliding-brick colour-sort puzzle. More wording, and what to avoid, is in the <a className="ed-link" style={{ fontSize: 'inherit' }} href="/press-kit">press kit</a>.</dd></div>
+            <div><dt>Describe it as</dt><dd>A match-three brick puzzle. More wording, and what to avoid, is in the <a className="ed-link" style={{ fontSize: 'inherit' }} href="/press-kit">press kit</a>.</dd></div>
           </dl>
         </div>
       </section>

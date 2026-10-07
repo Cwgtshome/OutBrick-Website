@@ -498,7 +498,7 @@ const mainPages = pages.filter((p) => p !== home && !blogPages.includes(p) && !l
 // scripts/prebuild.mjs) where it has them. Every other line restates what the home page says.
 const appStore = JSON.parse(fs.readFileSync(path.join(repoRoot, 'lib/generated/app-store.json'), 'utf8'));
 const appStoreUrl = 'https://apps.apple.com/us/app/outbrick/id6807997465';
-const version = appStore.version ?? '4.2';
+const version = appStore.version ?? '5.0.1';
 const versionDate = (appStore.currentVersionReleaseDate ?? '2026-09-22').slice(0, 10);
 
 const about = [

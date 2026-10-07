@@ -1,3 +1,4 @@
+import { CurrentGameFeatures } from './current-game-features';
 import type { Metadata } from 'next';
 import { homeCopy } from '../../lib/i18n/home';
 import { chromeCopy } from '../../lib/i18n/chrome';
@@ -132,6 +133,7 @@ export function PlayGuide({ locale }: { locale: Locale }) {
             <GetAppQr locale={locale} centred />
           </div>
         </section>
+      <CurrentGameFeatures locale={locale} />
       </main>
 
       <VillageFooter locale={locale} page="/play" />
