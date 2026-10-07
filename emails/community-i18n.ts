@@ -7,11 +7,11 @@
 
 import type { EmailLocale } from './i18n.ts';
 
-export type CommunityKind = 'reply' | 'mention' | 'watched' | 'status' | 'solved' | 'release' | 'moderation';
+export type CommunityKind = 'reply' | 'mention' | 'watched' | 'status' | 'solved' | 'release' | 'moderation' | 'merged';
 /** What an unsubscribe link can switch off: one kind, or every community email. */
-export type UnsubscribeKind = CommunityKind | 'all';
+export type UnsubscribeKind = CommunityKind | 'digest' | 'all';
 
-export const communityKinds: readonly CommunityKind[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation'];
+export const communityKinds: readonly CommunityKind[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation', 'merged'];
 
 type Item = { title: string; body: string };
 
@@ -70,6 +70,8 @@ export type CommunityCopy = {
     watched: { subject: (actor: string, title: string) => string; intro: string; cta: string };
     status: { subject: (title: string, status: string) => string; intro: (status: string) => string; note: string; cta: string };
     solved: { subject: (title: string) => string; intro: string; cta: string };
+    /** Phase 2: a moderator merged the thread holding your post into another. */
+    merged: { subject: (title: string) => string; intro: (from: string) => string; cta: string };
     release: { subject: (version: string) => string; intro: (version: string) => string; cta: string };
     moderation: { subject: (title: string) => string; heading: string; intro: (title: string) => string; reason: string; appeal: string; cta: string };
   };
@@ -113,6 +115,8 @@ const en: CommunityCopy = {
     solved: 'solved answers',
     release: 'new releases',
     moderation: 'moderation notices',
+    merged: 'threads merged by moderators',
+    digest: 'the weekly digest',
     all: 'anything at all',
   },
   signin: {
@@ -171,6 +175,7 @@ const en: CommunityCopy = {
       cta: 'See the thread',
     },
     solved: { subject: (title) => `Your answer in “${title}” was marked Solved`, intro: 'Thank you! Your answer is now the solution, so the next person with the same question will find it straight away.', cta: 'See your answer' },
+    merged: { subject: (title) => `Your post moved to “${title}”`, intro: (from) => `A moderator merged “${from}” into this thread, because both were about the same thing. Your post is here now, with everything else that was said.`, cta: 'See the thread' },
     release: { subject: (version) => `OutBrick ${version} is out`, intro: (version) => `Version ${version} has just reached the App Store. Here’s what’s new:`, cta: 'Read the release notes' },
     moderation: {
       subject: (title) => `About your post in “${title}”`,
@@ -187,6 +192,7 @@ const en: CommunityCopy = {
     watched: (actor, title) => `${actor} posted in “${title}”`,
     status: (_actor, title, status) => `“${title}” is now ${status}`,
     solved: (_actor, title) => `Your answer in “${title}” was marked Solved`,
+    merged: (_actor, title) => `Your post moved to “${title}”`,
     release: (_actor, _title, version) => `OutBrick ${version} is out`,
     moderation: (_actor, title) => `A moderator hid your post in “${title}”`,
   },
@@ -257,6 +263,8 @@ const fr: CommunityCopy = {
     solved: 'les réponses marquées comme solution',
     release: 'les nouvelles versions',
     moderation: 'les avis de modération',
+    merged: 'les fusions de discussions',
+    digest: 'le résumé hebdomadaire',
     all: 'quoi que ce soit',
   },
   signin: {
@@ -315,6 +323,7 @@ const fr: CommunityCopy = {
       cta: 'Voir la discussion',
     },
     solved: { subject: (title) => `Votre réponse dans « ${title} » a été marquée comme solution`, intro: 'Merci ! Votre réponse est désormais la solution : la prochaine personne qui se pose la même question la trouvera tout de suite.', cta: 'Voir votre réponse' },
+    merged: { subject: (title) => `Votre message a été déplacé dans « ${title} »`, intro: (from) => `Un modérateur a fusionné « ${from} » avec cette discussion, car elles portaient sur le même sujet. Votre message s’y trouve désormais, avec tout le reste de l’échange.`, cta: 'Voir la discussion' },
     release: { subject: (version) => `OutBrick ${version} est disponible`, intro: (version) => `La version ${version} vient d’arriver sur l’App Store. Voici les nouveautés :`, cta: 'Lire les notes de version' },
     moderation: {
       subject: (title) => `À propos de votre message dans « ${title} »`,
@@ -331,6 +340,7 @@ const fr: CommunityCopy = {
     watched: (actor, title) => `${actor} a publié dans « ${title} »`,
     status: (_actor, title, status) => `« ${title} » : nouveau statut ${status}`,
     solved: (_actor, title) => `Votre réponse dans « ${title} » a été marquée comme solution`,
+    merged: (_actor, title) => `Votre message a été déplacé dans « ${title} »`,
     release: (_actor, _title, version) => `OutBrick ${version} est disponible`,
     moderation: (_actor, title) => `Un modérateur a masqué votre message dans « ${title} »`,
   },
@@ -401,6 +411,8 @@ const de: CommunityCopy = {
     solved: 'als Lösung markierten Antworten',
     release: 'neuen Versionen',
     moderation: 'Moderationshinweisen',
+    merged: 'zusammengeführten Themen',
+    digest: 'der wöchentlichen Zusammenfassung',
     all: 'allem',
   },
   signin: {
@@ -459,6 +471,7 @@ const de: CommunityCopy = {
       cta: 'Zum Thema',
     },
     solved: { subject: (title) => `Ihre Antwort in „${title}“ wurde als Lösung markiert`, intro: 'Vielen Dank! Ihre Antwort ist jetzt die Lösung, sodass die Nächsten mit derselben Frage sie sofort finden.', cta: 'Ihre Antwort ansehen' },
+    merged: { subject: (title) => `Ihr Beitrag steht jetzt in „${title}“`, intro: (from) => `Ein Moderator hat „${from}“ mit diesem Thema zusammengeführt, weil es in beiden um dasselbe ging. Ihr Beitrag steht jetzt hier, zusammen mit allem anderen, was geschrieben wurde.`, cta: 'Thema ansehen' },
     release: { subject: (version) => `OutBrick ${version} ist da`, intro: (version) => `Version ${version} ist gerade im App Store erschienen. Das ist neu:`, cta: 'Versionshinweise lesen' },
     moderation: {
       subject: (title) => `Zu Ihrem Beitrag in „${title}“`,
@@ -475,6 +488,7 @@ const de: CommunityCopy = {
     watched: (actor, title) => `${actor} hat in „${title}“ geschrieben`,
     status: (_actor, title, status) => `„${title}“ hat jetzt den Status ${status}`,
     solved: (_actor, title) => `Ihre Antwort in „${title}“ wurde als Lösung markiert`,
+    merged: (_actor, title) => `Ihr Beitrag steht jetzt in „${title}“`,
     release: (_actor, _title, version) => `OutBrick ${version} ist da`,
     moderation: (_actor, title) => `Ein Moderator hat Ihren Beitrag in „${title}“ ausgeblendet`,
   },
@@ -545,6 +559,8 @@ const es: CommunityCopy = {
     solved: 'las respuestas marcadas como solución',
     release: 'las nuevas versiones',
     moderation: 'los avisos de moderación',
+    merged: 'los temas fusionados',
+    digest: 'el resumen semanal',
     all: 'nada en absoluto',
   },
   signin: {
@@ -603,6 +619,7 @@ const es: CommunityCopy = {
       cta: 'Ver el tema',
     },
     solved: { subject: (title) => `Tu respuesta en «${title}» se ha marcado como solución`, intro: '¡Gracias! Tu respuesta es ahora la solución, así que la próxima persona con la misma pregunta la encontrará enseguida.', cta: 'Ver tu respuesta' },
+    merged: { subject: (title) => `Tu mensaje se ha movido a «${title}»`, intro: (from) => `Un moderador ha fusionado «${from}» con este tema porque los dos trataban de lo mismo. Tu mensaje está ahora aquí, junto con todo lo demás que se dijo.`, cta: 'Ver el tema' },
     release: { subject: (version) => `Ya está aquí OutBrick ${version}`, intro: (version) => `La versión ${version} acaba de llegar a la App Store. Estas son las novedades:`, cta: 'Leer las notas de la versión' },
     moderation: {
       subject: (title) => `Sobre tu mensaje en «${title}»`,
@@ -619,6 +636,7 @@ const es: CommunityCopy = {
     watched: (actor, title) => `${actor} ha publicado en «${title}»`,
     status: (_actor, title, status) => `«${title}» ahora está en estado ${status}`,
     solved: (_actor, title) => `Tu respuesta en «${title}» se ha marcado como solución`,
+    merged: (_actor, title) => `Tu mensaje se ha movido a «${title}»`,
     release: (_actor, _title, version) => `Ya está aquí OutBrick ${version}`,
     moderation: (_actor, title) => `Un moderador ha ocultado tu mensaje en «${title}»`,
   },
@@ -689,6 +707,8 @@ const ja: CommunityCopy = {
     solved: '解決済みになった回答',
     release: '新しいバージョン',
     moderation: 'モデレーションのお知らせ',
+    merged: 'スレッドの統合',
+    digest: '週刊ダイジェスト',
     all: 'すべて',
   },
   signin: {
@@ -747,6 +767,7 @@ const ja: CommunityCopy = {
       cta: 'スレッドを見る',
     },
     solved: { subject: (title) => `「${title}」でのあなたの回答が解決済みになりました`, intro: 'ありがとうございます。あなたの回答が解決策になったので、同じ疑問を持つ次の人もすぐに見つけられます。', cta: '回答を見る' },
+    merged: { subject: (title) => `あなたの投稿は「${title}」に移動しました`, intro: (from) => `同じ話題だったため、モデレーターが「${from}」をこのスレッドに統合しました。あなたの投稿は、ほかのやり取りと一緒にここにあります。`, cta: 'スレッドを見る' },
     release: { subject: (version) => `OutBrick ${version}が登場しました`, intro: (version) => `バージョン${version}がApp Storeに登場しました。新しくなった点はこちらです：`, cta: 'リリースノートを読む' },
     moderation: {
       subject: (title) => `「${title}」でのあなたの投稿について`,
@@ -763,6 +784,7 @@ const ja: CommunityCopy = {
     watched: (actor, title) => `${actor}さんが「${title}」に投稿しました`,
     status: (_actor, title, status) => `「${title}」のステータスが「${status}」になりました`,
     solved: (_actor, title) => `「${title}」でのあなたの回答が解決済みになりました`,
+    merged: (_actor, title) => `あなたの投稿は「${title}」に移動しました`,
     release: (_actor, _title, version) => `OutBrick ${version}が登場しました`,
     moderation: (_actor, title) => `モデレーターが「${title}」でのあなたの投稿を非表示にしました`,
   },

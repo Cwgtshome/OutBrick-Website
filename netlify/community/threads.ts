@@ -7,6 +7,7 @@ import type {
   CommunityLocale,
   FollowLevel,
   ThreadDetail,
+  ThreadRedirectResponse,
   ThreadListResponse,
   ThreadSort,
   ThreadStatus,
@@ -53,6 +54,7 @@ import {
   type Row,
 } from './forum.ts';
 import { notifyNewPost, notifySolved, notifyStatus } from './notifications.ts';
+import { mergedTarget } from './merge.ts';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL) => Promise<Response>;
 
@@ -361,6 +363,9 @@ export async function threadDetail(req: Request, viewer: Viewer | null, threadId
 
 export const getThread: Handler = async (req, params, url) => {
   const viewer = await currentMember(req);
+  // Phase 2 (community-p2): a merged thread's URL says where it went (ThreadRedirectResponse).
+  const moved = await mergedTarget(run, idParam(params.id));
+  if (moved) return json({ redirect: moved } satisfies ThreadRedirectResponse);
   return json(await threadDetail(req, viewer, idParam(params.id), { page: url.searchParams.get('page'), post: url.searchParams.get('post') }));
 };
 

@@ -20,6 +20,10 @@ import { getMember } from '../community/members.ts';
 import { approvePost, banMember, hidePost, listQueue, listReports, resolveReport, setRole } from '../community/moderation.ts';
 import { deletePost, patchPost, postReply, preview, reportPost } from '../community/posts.ts';
 import { getSearch } from '../community/search.ts';
+// Phase 2 (community-p2)
+import { mergeThread } from '../community/merge.ts';
+import { translatePost } from '../community/translate.ts';
+import { createUpload, deleteUpload, serveUpload } from '../community/uploads.ts';
 import {
   followCategory,
   followThread,
@@ -70,6 +74,13 @@ const routes: Route[] = [
   { method: 'GET', pattern: `${base}/mod/queue`, run: listQueue },
   { method: 'POST', pattern: `${base}/mod/members/:id/ban`, run: banMember },
   { method: 'POST', pattern: `${base}/mod/members/:id/role`, run: setRole },
+
+  // Phase 2 (community-p2) ------------------------------------------------------------------
+  { method: 'POST', pattern: `${base}/mod/threads/:id/merge`, run: mergeThread },
+  { method: 'POST', pattern: `${base}/posts/:id/translate`, run: translatePost },
+  { method: 'POST', pattern: `${base}/uploads`, run: createUpload },
+  { method: 'GET', pattern: `${base}/uploads/:id`, run: serveUpload },
+  { method: 'DELETE', pattern: `${base}/uploads/:id`, run: deleteUpload },
 ];
 
 const communityApi = async (req: Request): Promise<Response> => handle(req, routes);
@@ -89,5 +100,8 @@ export const config = {
     `${base}/faq/*`,
     `${base}/members/*`,
     `${base}/mod/*`,
+    // Phase 2 (community-p2)
+    `${base}/uploads`,
+    `${base}/uploads/*`,
   ],
 };

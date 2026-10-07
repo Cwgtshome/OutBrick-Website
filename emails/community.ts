@@ -10,6 +10,7 @@ import { SITE, bricks, button, color, esc, escLines, eyebrow, field, fonts, foot
 import { emailCopy, type EmailLocale } from './i18n.ts';
 import { communityCopy, type CommunityKind, type UnsubscribeKind } from './community-i18n.ts';
 import type { Rendered } from './templates.ts';
+import { replyHints } from './community-p2-i18n.ts';
 
 export { communityCopy, communityKinds, type CommunityKind, type UnsubscribeKind } from './community-i18n.ts';
 
@@ -23,9 +24,9 @@ function sitePath(locale: EmailLocale, path: string, origin = SITE): string {
   return `${origin}${locale === 'en' ? path : path === '/' ? `/${locale}` : `/${locale}${path}`}`;
 }
 
-const ctxOf = (locale: EmailLocale, assetBase = SITE): Ctx => ({ locale, assetBase });
+export const ctxOf = (locale: EmailLocale, assetBase = SITE): Ctx => ({ locale, assetBase });
 
-function signoff(ctx: Ctx): string {
+export function signoff(ctx: Ctx): string {
   return para(ctx, `— ${esc(emailCopy[ctx.locale].signoff)}`, { margin: '4px 0 20px' });
 }
 
@@ -60,7 +61,7 @@ export type FooterLinks = {
   unsubscribeKind?: UnsubscribeKind;
 };
 
-function footer(ctx: Ctx, why: string, links: FooterLinks): string {
+export function footer(ctx: Ctx, why: string, links: FooterLinks): string {
   const c = communityCopy[ctx.locale];
   const t = emailCopy[ctx.locale];
   const items: [string, string][] = [[esc(c.footer.manage), links.manageUrl]];
@@ -73,7 +74,7 @@ function footer(ctx: Ctx, why: string, links: FooterLinks): string {
   });
 }
 
-function footerText(locale: EmailLocale, why: string, links: FooterLinks): (string | false)[] {
+export function footerText(locale: EmailLocale, why: string, links: FooterLinks): (string | false)[] {
   const c = communityCopy[locale];
   const t = emailCopy[locale];
   return [
@@ -217,6 +218,8 @@ export type NotificationItem = {
   statusNote?: string | null;
   version?: string | null;
   reason?: string | null;
+  /** Phase 2: for 'merged', the title of the thread the post came from. */
+  fromTitle?: string | null;
 };
 
 const statusLabel = (locale: EmailLocale, status: string | null | undefined) => (status ? (communityCopy[locale].statuses[status] ?? status) : '');
@@ -240,10 +243,12 @@ function subjectOf(locale: EmailLocale, item: NotificationItem): string {
       return k.release.subject(item.version || '');
     case 'moderation':
       return k.moderation.subject(title);
+    case 'merged':
+      return k.merged.subject(title);
   }
 }
 
-function clip(value: string, max: number): string {
+export function clip(value: string, max: number): string {
   const s = String(value ?? '').replace(/\s+/g, ' ').trim();
   return s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s;
 }
@@ -266,10 +271,18 @@ function itemParts(locale: EmailLocale, item: NotificationItem): { intro: string
       return { intro: k.release.intro(item.version || ''), cta: k.release.cta };
     case 'moderation':
       return { intro: k.moderation.intro(clip(item.threadTitle, 140)), cta: k.moderation.cta, note: item.reason ? [k.moderation.reason, item.reason] : undefined };
+    case 'merged':
+      return { intro: k.merged.intro(clip(item.fromTitle || item.threadTitle, 140)), cta: k.merged.cta };
   }
 }
 
-export type NotificationEmailInput = FooterLinks & { locale: EmailLocale; item: NotificationItem; assetBase?: string };
+export type NotificationEmailInput = FooterLinks & {
+  locale: EmailLocale;
+  item: NotificationItem;
+  assetBase?: string;
+  /** Phase 2: the email's Reply-To posts a reply, so say so under the button. */
+  replyByEmail?: boolean;
+};
 
 export function communityNotification(input: NotificationEmailInput): Rendered {
   const { locale, item } = input;
@@ -293,6 +306,7 @@ export function communityNotification(input: NotificationEmailInput): Rendered {
         )
       : '',
     button(ctx, item.url, esc(parts.cta)),
+    input.replyByEmail ? para(ctx, esc(replyHints[locale]), { muted: true, size: 16 }) : '',
     item.kind === 'moderation' ? para(ctx, esc(c.kinds.moderation.appeal)) : '',
     signoff(ctx),
   ].join('\n');
@@ -309,6 +323,8 @@ export function communityNotification(input: NotificationEmailInput): Rendered {
     excerpt && '',
     `${parts.cta}: ${item.url}`,
     '',
+    Boolean(input.replyByEmail) && replyHints[locale],
+    Boolean(input.replyByEmail) && '',
     item.kind === 'moderation' && c.kinds.moderation.appeal,
     item.kind === 'moderation' && '',
     `— ${emailCopy[locale].signoff}`,

@@ -74,7 +74,8 @@ export async function markRead(req: Request): Promise<Response> {
 // ---------------------------------------------------------------------------------------
 // Unsubscribe
 
-const unsubscribeKinds: readonly UnsubscribeKind[] = [...communityKinds, 'all'];
+// Phase 2 (community-p2): 'digest' is the weekly digest's switch.
+const unsubscribeKinds: readonly UnsubscribeKind[] = [...communityKinds, 'digest', 'all'];
 
 export function unsubscribeToken(apiKey: string, memberId: number, kind: UnsubscribeKind): string {
   return `${memberId}.${kind}.${signParts(apiKey, ['unsubscribe', String(memberId), kind])}`;
@@ -138,7 +139,7 @@ export async function unsubscribe(req: Request, url: URL): Promise<Response> {
   if (!parsed || !locale) {
     return oneClick ? json({ error: { code: 'invalid', message: 'This unsubscribe link is not valid.' } }, { status: 400 }) : invalidPage(req);
   }
-  const off = Object.fromEntries((parsed.kind === 'all' ? communityKinds : [parsed.kind]).map((k) => [k, false]));
+  const off = Object.fromEntries((parsed.kind === 'all' ? [...communityKinds, 'digest'] : [parsed.kind]).map((k) => [k, false]));
   await sql`UPDATE members SET email_prefs = email_prefs || ${JSON.stringify(off)}::jsonb WHERE id = ${parsed.memberId} AND deleted_at IS NULL`;
   console.log(`[community-auth] member ${parsed.memberId} unsubscribed from ${parsed.kind}${oneClick ? ' (one-click)' : ''}`);
   if (oneClick) return json({ ok: true });

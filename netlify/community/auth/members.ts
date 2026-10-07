@@ -176,6 +176,8 @@ export async function selfMember(viewer: Viewer): Promise<SelfMember> {
     ...base,
     // A placeholder is not an address; the settings page asks for a real one instead.
     email: isPlaceholderEmail(viewer.email) ? '' : viewer.email,
+    // Phase 2 (community-p2): the weekly digest is opt-in, so its switch reads off until set.
+    emailPrefs: { digest: false, ...base.emailPrefs },
     joinedAt: base.joinedAt ? new Date(base.joinedAt).toISOString() : base.joinedAt,
     needsName: !extra?.name_chosen,
     providers,

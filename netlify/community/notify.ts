@@ -101,6 +101,7 @@ function itemOf(row: Row, locale: CommunityLocale): NotificationItem {
     statusNote: str(data.statusNote),
     version: str(data.version),
     reason: str(data.reason),
+    fromTitle: str(data.fromTitle),
   };
 }
 

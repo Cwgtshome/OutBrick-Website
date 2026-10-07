@@ -146,9 +146,10 @@ export const threadJoins = `FROM threads t
 
 /** SQL that is true when the viewer may see thread `t`. */
 export function threadVisible(p: Params, viewer: Viewer | null): string {
-  if (isModerator(viewer)) return `t.deleted_at IS NULL`;
-  if (!viewer) return `t.deleted_at IS NULL AND NOT t.hidden AND NOT t.pending`;
-  return `t.deleted_at IS NULL AND NOT t.hidden AND (NOT t.pending OR t.author_id = ${p.add(viewer.id)})`;
+  // Phase 2 (community-p2): a merged thread is only a redirect stub, never shown as a thread.
+  if (isModerator(viewer)) return `t.deleted_at IS NULL AND t.merged_into IS NULL`;
+  if (!viewer) return `t.deleted_at IS NULL AND t.merged_into IS NULL AND NOT t.hidden AND NOT t.pending`;
+  return `t.deleted_at IS NULL AND t.merged_into IS NULL AND NOT t.hidden AND (NOT t.pending OR t.author_id = ${p.add(viewer.id)})`;
 }
 
 export function threadSummary(row: Row, viewer: Viewer | null): ThreadSummary {

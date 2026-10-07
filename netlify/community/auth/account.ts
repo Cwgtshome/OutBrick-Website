@@ -14,9 +14,10 @@ import { currentMember, endSession, sessionCookie, type Viewer } from '../sessio
 import { sendConfirmEmail } from './email-link.ts';
 import { displayNameProblem, selfMember, tidyName } from './members.ts';
 import { asLocale, configuredProviders, isPlaceholderEmail } from './util.ts';
+import { communityFeatures } from '../features.ts';
 
 /** Email kinds a member can switch off. The welcome is sent once and has no switch. */
-export const switchableKinds: readonly NotificationKind[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation'];
+export const switchableKinds: readonly (NotificationKind | 'digest')[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation', 'merged', 'digest'];
 
 export async function getSession(req: Request): Promise<Response> {
   const viewer = await currentMember(req);
@@ -25,7 +26,7 @@ export async function getSession(req: Request): Promise<Response> {
     const [row] = await sql`SELECT count(*)::int AS n FROM notifications WHERE member_id = ${viewer.id} AND read_at IS NULL AND kind <> 'welcome'`;
     unread = Number(row?.n ?? 0);
   }
-  const body: SessionResponse = { member: viewer ? await selfMember(viewer) : null, providers: configuredProviders(), unreadNotifications: unread };
+  const body: SessionResponse = { member: viewer ? await selfMember(viewer) : null, providers: configuredProviders(), unreadNotifications: unread, features: communityFeatures() };
   return json(body);
 }
 
