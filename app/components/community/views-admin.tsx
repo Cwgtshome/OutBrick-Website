@@ -11,6 +11,16 @@ import { localeNames } from '../../../lib/i18n/locales';
 import { renderMarkdown } from '../../../netlify/community/markdown';
 import { api, ApiFailure } from './api';
 import { View, Pending, ErrorNotice, Time, useApp, useLoad } from './core';
+function AdminError({ error }: { error: ApiFailure }) {
+  const { locale } = useApp();
+  return error.code === 'conflict' ? (
+    <div className="cm-notice cm-notice-error" role="alert">
+      <p>{adminWords[locale].newVersion}</p>
+    </div>
+  ) : (
+    <ErrorNotice error={error} />
+  );
+}
 const roles: MemberRole[] = ['member', 'trusted', 'moderator', 'team', 'admin'];
 
 export function AdminView() {
@@ -75,9 +85,9 @@ function Dashboard() {
     >
       <p>{w.memberHelp}</p>
       <div className="cm-toolbar">
-        <a className="btn" href={path('/mod')}>
-          {w.moderation}
-        </a>
+        {session?.member?.role === 'admin' ? (
+          <a className="btn" href={path('/mod')}>{w.moderation}</a>
+        ) : null}
         <button className="btn" onClick={load.reload} disabled={load.loading}>
           {w.refresh}
         </button>
@@ -89,7 +99,7 @@ function Dashboard() {
         </a>
       </div>
       {data.watchingAll ? <p className="cm-note">{w.watching}</p> : null}
-      {error ? <ErrorNotice error={error} /> : null}
+      {error ? <AdminError error={error} /> : null}
       <dl className="cm-admin-counts">
         {(
           [
@@ -226,7 +236,7 @@ function MemberRoleEditor({
         <a href={path('/u/' + member.id)}>{member.displayName}</a>
       </h3>
       <p>
-        {w.verified}: {member.verified ? w.verified : copy.errors.unverified} ·{' '}
+        {member.verified ? w.verified : copy.errors.unverified} ·{' '}
         <Time iso={member.joinedAt} />
       </p>
       <label htmlFor={`role-${member.id}`}>{w.role}</label>
@@ -273,7 +283,7 @@ function MemberRoleEditor({
           </button>
         </div>
       ) : null}
-      {error ? <ErrorNotice error={error} /> : null}
+      {error ? <AdminError error={error} /> : null}
     </li>
   );
 }
@@ -326,7 +336,7 @@ function ContentEditor({
       aria-label={w.content}
     >
       <p>{w.publishHelp}</p>
-      {error ? <ErrorNotice error={error} /> : null}
+      {error ? <AdminError error={error} /> : null}
       <label>
         {w.kind}
         <select
@@ -511,7 +521,7 @@ function ContentRow({
           </button>
         </div>
       ) : null}
-      {error ? <ErrorNotice error={error} /> : null}
+      {error ? <AdminError error={error} /> : null}
     </li>
   );
 }

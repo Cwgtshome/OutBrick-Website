@@ -883,7 +883,7 @@ export function NotificationsView({ route }: { route: Extract<Route, { name: 'no
 
 export function ModView() {
   const { copy, path, session } = useApp();
-  const isMod = !!session?.member && ['moderator', 'team', 'admin'].includes(session.member.role);
+  const isMod = !!session?.member && ['moderator', 'admin'].includes(session.member.role);
   const reports = useLoad(isMod ? 'mod:reports' : null, () => api.modReports());
   const queue = useLoad(isMod ? 'mod:queue' : null, () => api.modQueue());
   const id = useId();
@@ -1022,7 +1022,7 @@ export function MemberModeration({ member }: { member: { id: number; role: strin
   const [error, setError] = useState('');
   const id = useId();
   const me = session?.member;
-  if (!me || !['moderator', 'team', 'admin'].includes(me.role) || me.id === member.id || member.role === 'admin') return null;
+  if (!me || !['moderator', 'admin'].includes(me.role) || me.id === member.id || member.role === 'admin') return null;
   const submit = async (lift: boolean) => {
     setBusy(true);
     setError('');

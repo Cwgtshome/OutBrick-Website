@@ -7,7 +7,7 @@
 
 import type { CommunityLocale, Provider, SelfMember } from '../../../lib/community/contract.ts';
 import { sql, transaction, type Query } from '../db.ts';
-import { isConfiguredAdmin, selfView, type Viewer } from '../session.ts';
+import { isConfiguredAdmin, isConfiguredTeam, selfView, type Viewer } from '../session.ts';
 import { isPlaceholderEmail } from './util.ts';
 import { signalNotifyWork } from '../idle.ts';
 
@@ -93,10 +93,16 @@ export async function uniqueName(q: Query, base: string, exceptId: number | null
 
 const placeholderFor = (provider: string, key: string | number) => `${provider}-${key}@unverified.invalid`;
 
-async function promoteIfAdmin(q: Query, memberId: number): Promise<void> {
+async function promoteIfConfigured(q: Query, memberId: number, profile: ProviderProfile): Promise<void> {
   const [m] = await q(`SELECT email, email_verified, role FROM members WHERE id = $1`, [memberId]);
   if (m && m.email_verified && m.role !== 'admin' && isConfiguredAdmin(String(m.email))) {
     await q(`UPDATE members SET role = 'admin' WHERE id = $1`, [memberId]);
+  } else if (
+    m && m.email_verified && profile.provider === 'email' && profile.emailVerified &&
+    String(m.email).trim().toLowerCase() === profile.email?.trim().toLowerCase() &&
+    ['member', 'trusted'].includes(String(m.role)) && isConfiguredTeam(String(m.email))
+  ) {
+    await q(`UPDATE members SET role = 'team' WHERE id = $1`, [memberId]);
   }
 }
 
@@ -126,7 +132,7 @@ export async function signInWithProfile(profile: ProviderProfile): Promise<SignI
       if (verifiedEmail && !linked.email_verified && String(linked.email).toLowerCase() === verifiedEmail) {
         await q(`UPDATE members SET email_verified = true WHERE id = $1`, [id]);
       }
-      await promoteIfAdmin(q, id);
+      await promoteIfConfigured(q, id, profile);
       return { memberId: id, created: false, confirmEmail: null };
     }
 
@@ -136,7 +142,7 @@ export async function signInWithProfile(profile: ProviderProfile): Promise<SignI
       if (owner?.email_verified) {
         const id = Number(owner.id);
         await linkIdentity(q, id, profile);
-        await promoteIfAdmin(q, id);
+        await promoteIfConfigured(q, id, profile);
         return { memberId: id, created: false, confirmEmail: null };
       }
       // The address belongs to a member who never confirmed it. Whoever proves it now gets it;
@@ -161,7 +167,7 @@ export async function signInWithProfile(profile: ProviderProfile): Promise<SignI
     await linkIdentity(q, id, profile);
     // The welcome email goes out from the notifier, exactly once: one row per member.
     await q(`INSERT INTO notifications (member_id, kind) VALUES ($1, 'welcome')`, [id]);
-    await promoteIfAdmin(q, id);
+    await promoteIfConfigured(q, id, profile);
     return { memberId: id, created: true, confirmEmail };
   });
   // A new member's welcome is waiting for the notifier, now that the transaction has committed.

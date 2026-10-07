@@ -48,7 +48,7 @@ void test('first_post on the spot, with a badge notification; held posts wait fo
 void test('helpful at 1 and 10 solved answers, never for answering yourself; bug_hunter and idea_maker on status', async () => {
   await resetRates(pg);
   const helper = await member(pg);
-  const mod = await member(pg, { role: 'team' });
+  const mod = await member(pg, { role: 'moderator' });
   for (let i = 0; i < 10; i++) {
     if (i % 4 === 0) await resetRates(pg);
     const asker = await member(pg);
@@ -167,7 +167,7 @@ void test('profiles: stats, badges, recent posts; nothing private, nothing for a
   await resetRates(pg);
   const ada = await member(pg);
   const bob = await member(pg);
-  const mod = await member(pg, { role: 'team' });
+  const mod = await member(pg, { role: 'moderator' });
   const q = await newThread(bob.cookie, { categorySlug: 'help', title: 'Profile question' });
   const a = await reply(ada.cookie, q.id, 'Profile **answer**');
   await api('POST', `/threads/${q.id}/solve`, { cookie: bob.cookie, body: { postId: a.body.post.id } });

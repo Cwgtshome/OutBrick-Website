@@ -8,7 +8,9 @@ import {
   newThread,
   notificationsFor,
 } from './test/forum-helpers.ts';
-import { isConfiguredAdmin } from './session.ts';
+import { isConfiguredAdmin, isConfiguredTeam, hasRole } from './session.ts';
+import { signInWithProfile } from './auth/members.ts';
+import { stubFetch } from './auth/test/kit.ts';
 import { adminWords } from '../../lib/i18n/admin.ts';
 import { contentPage } from '../edge-functions/community-content.ts';
 import { homeStaticHtml } from '../../lib/community/static-html.ts';
@@ -31,9 +33,11 @@ void test('exact verified admin allowlist; no domain-wide or substring matching'
   const old = process.env.COMMUNITY_ADMIN_EMAILS;
   try {
     process.env.COMMUNITY_ADMIN_EMAILS =
-      'support@outbrick.site,mourad@outbrick.site';
+      'support@outbrick.site,mourad.hamdi@outbrick.site';
     assert.ok(isConfiguredAdmin(' SUPPORT@OUTBRICK.SITE '));
-    assert.ok(isConfiguredAdmin('mourad@outbrick.site'));
+    assert.ok(isConfiguredAdmin('mourad.hamdi@outbrick.site'));
+    assert.ok(!isConfiguredAdmin('mourad@outbrick.site'));
+    assert.ok(!isConfiguredAdmin('news@outbrick.site'));
     assert.ok(!isConfiguredAdmin('someone@outbrick.site'));
     assert.ok(!isConfiguredAdmin('support@outbrick.site.attacker.example'));
   } finally {
@@ -41,10 +45,42 @@ void test('exact verified admin allowlist; no domain-wide or substring matching'
     else process.env.COMMUNITY_ADMIN_EMAILS = old;
   }
 });
+void test('news staff bootstrap requires a verified email link and grants no moderation or admin access', async () => {
+  const oldTeam = process.env.COMMUNITY_TEAM_EMAILS;
+  const oldAdmins = process.env.COMMUNITY_ADMIN_EMAILS;
+  const stub = stubFetch();
+  try {
+    process.env.COMMUNITY_TEAM_EMAILS = 'news@outbrick.site';
+    process.env.COMMUNITY_ADMIN_EMAILS = 'support@outbrick.site,mourad.hamdi@outbrick.site';
+    assert.ok(isConfiguredTeam(' NEWS@OUTBRICK.SITE '));
+    assert.ok(!isConfiguredTeam('news@outbrick.site.attacker.example'));
+    assert.ok(!hasRole({ role: 'team' }, 'moderator'));
+    assert.ok(!hasRole({ role: 'team' }, 'admin'));
+    assert.ok(hasRole({ role: 'team' }, 'team'));
+    assert.ok(hasRole({ role: 'admin' }, 'moderator'));
+    const base = { subject: 'news-google', email: 'news@outbrick.site', emailVerified: true, name: 'News desk', locale: 'en' as const };
+    const oauth = await signInWithProfile({ ...base, provider: 'google' });
+    const role = async () => (await pg.query<{ role: string }>('SELECT role FROM members WHERE id=$1', [oauth.memberId])).rows[0].role;
+    assert.equal(await role(), 'member');
+    await signInWithProfile({ ...base, provider: 'facebook', subject: 'news-unverified-facebook', emailVerified: false });
+    assert.equal(await role(), 'member');
+    const email = await signInWithProfile({ ...base, provider: 'email', subject: base.email });
+    assert.equal(email.memberId, oauth.memberId);
+    assert.equal(await role(), 'team');
+    await pg.query("UPDATE members SET role='admin' WHERE id=$1", [email.memberId]);
+    await signInWithProfile({ ...base, provider: 'email', subject: base.email });
+    assert.equal(await role(), 'admin');
+  } finally {
+    stub.restore();
+    if (oldTeam === undefined) delete process.env.COMMUNITY_TEAM_EMAILS; else process.env.COMMUNITY_TEAM_EMAILS = oldTeam;
+    if (oldAdmins === undefined) delete process.env.COMMUNITY_ADMIN_EMAILS; else process.env.COMMUNITY_ADMIN_EMAILS = oldAdmins;
+  }
+});
 void test('private dashboard and publishing enforced for each role, unverified and anonymous users', async () => {
   assert.equal((await api('GET', '/admin')).status, 401);
   for (const role of ['member', 'trusted', 'moderator', 'team', 'admin']) {
     const m = await member(pg, { role });
+    assert.equal((await api('GET', '/mod/reports', { cookie: m.cookie })).status, ['moderator', 'admin'].includes(role) ? 200 : 403);
     assert.equal(
       (await api('GET', '/admin', { cookie: m.cookie })).status,
       ['team', 'admin'].includes(role) ? 200 : 403,

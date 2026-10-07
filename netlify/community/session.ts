@@ -84,6 +84,8 @@ export async function currentMember(req: Request): Promise<Viewer | null> {
 const rank: Record<MemberRole, number> = { member: 0, trusted: 1, moderator: 2, team: 3, admin: 4 };
 
 export function hasRole(viewer: Pick<Viewer, 'role'> | null, role: MemberRole): boolean {
+  // Editorial staff is independent of moderation; only moderators/admins receive it.
+  if (role === 'moderator') return Boolean(viewer && ['moderator', 'admin'].includes(viewer.role));
   return Boolean(viewer && rank[viewer.role] >= rank[role]);
 }
 
@@ -104,6 +106,15 @@ export async function requireRole(req: Request, role: MemberRole): Promise<Viewe
 /** Addresses in COMMUNITY_ADMIN_EMAILS become admins the moment they sign in. */
 export function isConfiguredAdmin(email: string): boolean {
   return (process.env.COMMUNITY_ADMIN_EMAILS ?? '')
+    .split(/[,\s]+/)
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean)
+    .includes(email.trim().toLowerCase());
+}
+
+/** Exact staff addresses; bootstrap still requires a verified email-link sign-in. */
+export function isConfiguredTeam(email: string): boolean {
+  return (process.env.COMMUNITY_TEAM_EMAILS ?? '')
     .split(/[,\s]+/)
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean)

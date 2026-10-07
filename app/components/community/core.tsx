@@ -426,7 +426,7 @@ export function CommunityBar() {
   const unread = session?.unreadNotifications ?? 0;
   const current = (name: Route['name']) =>
     route.name === name ? 'page' : undefined;
-  const isMod = member && ['moderator', 'team', 'admin'].includes(member.role);
+  const isMod = member && ['moderator', 'admin'].includes(member.role);
   return (
     <nav className="cm-bar" aria-label={copy.nav.label}>
       <div className="wrap">

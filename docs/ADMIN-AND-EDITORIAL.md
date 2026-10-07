@@ -9,8 +9,8 @@ Implementation checkpoint: 7 October 2026. Verify deployment and sign-in before 
 | Member | Own posts and preferences, report content | No | No |
 | Trusted | Member permissions; skips new-member review | No | No |
 | Moderator | Review reports/posts, approve, hide and manage forum statuses | No | No |
-| Team | Moderator permissions; create and edit editorial drafts | Drafts and aggregate activity | No |
-| Admin | Team permissions | Publish and unpublish pages/articles | Verified members only; cannot change own role |
+| Team | Replies and Announcements threads; create and edit editorial drafts | Drafts and aggregate activity | No |
+| Admin | Team and moderator permissions | Publish and unpublish pages/articles | Verified members only; cannot change own role |
 
 Every API checks the server-side session and verified email. Hiding navigation does not authorize
 an action. Mutation requests retain the same-origin check. Role changes lock and recheck the
@@ -20,10 +20,10 @@ Member lists contain public names, role and verification status, not private ema
 ## Owner bootstrap
 
 Netlify project `outbrick` has `COMMUNITY_ADMIN_EMAILS` set to the exact addresses
-`support@outbrick.site,mourad@outbrick.site`, with all scopes and the same value for all deploy
+`support@outbrick.site,mourad.hamdi@outbrick.site`, with all scopes and the same value for all deploy
 contexts. A deployment is needed to activate changed environment values. Existing auth code
 promotes an allowlisted address only after provider/email verification. This does not authorize
-all addresses on the domain, provision a mailbox, or promote the owner's Apple relay address.
+all addresses on the domain, provision a mailbox, or promote the owner's different Apple sign-in address.
 Sign in normally using a verified allowlisted address. Never insert a verified production account
 or bypass authentication for a demonstration. An allowlisted admin demoted manually will regain
 admin on a later verified sign-in; remove the address from the environment to revoke bootstrap.
@@ -56,3 +56,9 @@ checks all roles, unverified/anonymous access, origin checks, private drafts, re
 publication/unpublication, escaped Markdown, public rendering, audit logs and personal watches.
 Run the build, lint and the existing CI audits. Production access additionally requires deployment
 readback and an actual verified owner sign-in; local PGlite tests do not establish live access.
+
+## News staff
+
+`COMMUNITY_TEAM_EMAILS=news@outbrick.site` assigns the team role only after a verified email-link sign-in to that exact mailbox. It grants replies, Announcements threads and editorial drafts, without moderation, member-role management or publishing. It never overwrites an existing moderator/admin role. To revoke bootstrap, remove the address from the environment and change its stored role using an admin.
+
+`support@outbrick.site` was registered and verified as OutBrick Support through its real Mail link in Chrome. New environment values require a deployment and fresh sign-in before live role verification.

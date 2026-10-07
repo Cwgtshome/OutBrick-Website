@@ -411,7 +411,7 @@ void test('votes: ideas only, one per member, never your own', async () => {
 void test('status changes: moderators only, the right set per category, and a notification', async () => {
   await resetRates(pg);
   const reporter = await member(pg);
-  const mod = await member(pg, { role: 'team' });
+  const mod = await member(pg, { role: 'moderator' });
   const bug = { device: 'iPad', osVersion: '27', appVersion: '5.0', assistive: [], steps: 'Tap the level.', expected: 'Opens', actual: 'Crashes' };
   const thread = await newThread(reporter.cookie, { categorySlug: 'bugs', title: 'Crash on level 40', bug });
   assert.equal((await api('PATCH', `/threads/${thread.id}`, { cookie: reporter.cookie, body: { status: 'fixed' } })).status, 403);
