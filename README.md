@@ -94,6 +94,22 @@ limit); a broken template fails the build. On Deploy Previews and branch deploys
 publishes them at `/email-previews/` (noindex, never on production, never in the sitemap). Locally,
 `pnpm emails:preview` writes them to `outputs/email-previews/`.
 
+### The team's copy of every submission
+
+After the visitor's email, `submission-created` sends the team its own copy, in the same
+inboxes that handle everything else: contact, careers and affiliate from and to
+`support@outbrick.site`, newsletter sign-ups from and to `news@outbrick.site` (`TEAM_INBOX` overrides
+the recipient for testing). It is drawn in the same
+design (`emails/team.ts`). It leads with the visitor's message or cover note, lists every field they
+filled in (never their IP address), shows the page they were on, their language, the time and
+whether their acknowledgement went out, and has a Reply button. Reply-To is the visitor, so
+replying from Mail answers them. It is always English, and it is skipped for the honeypot and for
+spam, like the visitor's email. Previews: `team-*.<lang>.html` under `/email-previews/`, where
+the language is the visitor's. After deployment, verify delivery of these team copies before removing Netlify’s two plain
+notification rules (Project configuration → Notifications), which otherwise duplicate them.
+Resend rate-limit responses are retried up to three times with backoff and Retry-After, within
+a 12-second budget per email. Exhausted failures remain logged against the stored submission.
+
 ### Sending a newsletter issue
 
 An issue is a JSON file in `emails/issues/` (see `2026-10-sample.json`): per language a subject,
@@ -118,3 +134,29 @@ Without per-language segments, `--locale <xx>` sends that one language to the wh
 `RESEND_SEGMENT_ID` segment. Broadcasts use Resend's own `{{{RESEND_UNSUBSCRIBE_URL}}}`, which sets
 the same `unsubscribed` flag as our link. Remember that `.env*` files are git-ignored; never commit
 a key.
+
+### The newsletter design as Resend templates
+
+The same campaign layout also lives in Resend as five published templates, **OutBrick News (en)**
+… **(ja)** (aliases `outbrick-news-<locale>`), for individual template-based test emails. Templates are not Broadcasts and are not a
+subscriber campaign send path. To send to the subscriber segment, use the JSON issue workflow
+above to create a Broadcast draft, review it in Resend, then send that reviewed draft by ID. `scripts/build-resend-templates.mjs` renders `newsletterCampaign()`
+with Resend variables in place of the content and writes `outputs/resend-templates/<locale>.html`,
+`.txt` and `.json`. `pnpm build` runs it with `--push-on-production`: on Netlify's production
+deploy it creates or updates each template by alias and publishes it, so Resend always carries the
+design that is live. Anywhere else it only writes the files, and a failed push never fails a deploy.
+
+The 33 variables are `SUBJECT`, `PREHEADER`, `EYEBROW`, `HERO_TITLE`, `HERO_BODY`,
+`HERO_IMAGE_URL`/`_ALT` (1200×630), `STORY1…3_TITLE`/`_BODY`/`_IMAGE_URL`/`_IMAGE_ALT` (square)
+/`_LINK_LABEL`/`_LINK_URL`, `CTA_LABEL`, `CTA_URL` and `POSTAL_ADDRESS`, plus `HERO_BODY_TEXT` and `STORY1…3_BODY_TEXT` for the plain-text part, and a required `UNSUBSCRIBE_URL`. Content falls back to the
+sample issue in that language (and `POSTAL_ADDRESS` to `NEWSLETTER_POSTAL_ADDRESS`), so a preview in
+Resend shows a real letter: replace every fallback before sending. HTML body variables are inserted as HTML,
+so a body may use `<strong>`, `<em>`, `<a href="…">` and `<br>`, and plain `&` `<` `>` must be
+escaped. When editing a formatted body, also update its `_TEXT` variable with plain text
+(no HTML tags) for recipients who read text-only emails. Individual template sends must supply
+`UNSUBSCRIBE_URL`, generated per recipient with `unsubscribeUrl()` from `emails/links.ts`; it
+has no fallback, so an omitted URL refuses the send. Resend only supplies
+`{{{RESEND_UNSUBSCRIBE_URL}}}` for Broadcasts, which keep that automatic link. The layout has exactly three
+stories; for two, or for the "What's new" block, use the JSON issue and `pnpm newsletter` above.
+Change the design in `emails/`, never in the Resend editor: the next production deploy overwrites
+the templates.

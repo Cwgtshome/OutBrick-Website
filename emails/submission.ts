@@ -1,15 +1,20 @@
 // What happens after a Netlify Forms submission is verified: which email goes to whom.
 //
+// Two emails per submission: the visitor's own (an acknowledgement, or the newsletter's
+// confirm-your-subscription), then the team's copy to support@, or news@ for the newsletter (emails/team.ts), which says
+// whether the first one went out.
+//
 // Called by netlify/functions/submission-created.mts with the event payload. It never throws:
 // a bad payload, a missing key or a Resend error is logged (without the visitor's address or
 // message) and the function still answers 200, because the submission itself is already safe in
-// Netlify and the team's own notification does not depend on this.
+// Netlify. Visitor and team delivery outcomes are logged separately.
 
 import { isEmailLocale, type EmailLocale } from './i18n.ts';
 import { addressTag, confirmUrl, normalizeEmail } from './links.ts';
 import { SENDERS, sendEmail } from './resend.ts';
 import { affiliateAcknowledgement, careersAcknowledgement, contactAcknowledgement, newsletterConfirm, type Rendered } from './templates.ts';
 import { SITE, toText } from './core.ts';
+import { teamNotification, type TeamForm } from './team.ts';
 
 export type SubmissionPayload = {
   id?: string;
@@ -22,7 +27,10 @@ export type SubmissionPayload = {
   state?: string;
 };
 
-export type Outcome = { id: string; form: string; status: 'sent' | 'skipped' | 'failed'; reason?: string; locale?: EmailLocale };
+export type Outcome = { id: string; form: string; status: 'sent' | 'skipped' | 'failed'; reason?: string; locale?: EmailLocale; team?: 'sent' | 'skipped' | 'failed' };
+
+/** Where the team's copy goes: newsletter sign-ups to news@, everything else to support@. TEAM_INBOX overrides both (a test inbox, say). */
+export const TEAM_INBOX = { support: 'support@outbrick.site', news: 'news@outbrick.site' } as const;
 
 const str = (v: unknown, max = 5000) => toText(v).slice(0, max);
 
@@ -42,12 +50,11 @@ export function submissionLocale(data: Record<string, unknown>, formName: string
   return 'en';
 }
 
-export async function handleSubmission(payload: SubmissionPayload | undefined, env: Record<string, string | undefined>): Promise<Outcome> {
+async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<string, string | undefined>): Promise<Outcome> {
   const id = str(payload?.id, 80) || 'unknown';
   const form = str(payload?.form_name, 40) || 'unknown';
   const done = (status: Outcome['status'], reason?: string, locale?: EmailLocale): Outcome => {
     const outcome = { id, form, status, reason, locale };
-    console.log(`[email] submission ${id} (${form}) ${status}${reason ? `: ${reason}` : ''}${locale ? ` [${locale}]` : ''}`);
     return outcome;
   };
 
@@ -106,4 +113,46 @@ export async function handleSubmission(payload: SubmissionPayload | undefined, e
   );
   if (!result.ok) return done('failed', result.error, locale);
   return done('sent', `resend id ${toText(result.data?.id) || '?'}`, locale);
+}
+
+const forms: TeamForm[] = ['contact', 'careers', 'affiliate', 'newsletter'];
+
+/** The visitor's email, then the team's copy. Logs one line per submission, without the visitor's details. */
+export async function handleSubmission(payload: SubmissionPayload | undefined, env: Record<string, string | undefined>): Promise<Outcome> {
+  const outcome = await visitorEmail(payload, env);
+  const log = (o: Outcome) => {
+    console.log(`[email] submission ${o.id} (${o.form}) ${o.status}${o.reason ? `: ${o.reason}` : ''}${o.locale ? ` [${o.locale}]` : ''}${o.team ? `; team copy ${o.team}` : ''}`);
+    return o;
+  };
+  // No team copy for bots, spam, unknown forms or a missing key: the same gates as the visitor's.
+  const form = outcome.form as TeamForm;
+  const apiKey = env.RESEND_API_KEY;
+  if (!payload || !forms.includes(form) || !apiKey || ['honeypot', 'spam', 'no payload'].includes(outcome.reason ?? '')) return log(outcome);
+
+  const data = payload.data && typeof payload.data === 'object' ? payload.data : {};
+  const locale = outcome.locale ?? submissionLocale(data, form);
+  const acknowledgement = outcome.status === 'sent' ? 'sent' : (outcome.reason ?? outcome.status).replace(/^POST \/emails -> /, 'Resend refused it, ');
+  const visitor = normalizeEmail(data.email);
+  const team = form === 'newsletter' ? SENDERS.newsTeam : SENDERS.supportTeam;
+  const inbox = form === 'newsletter' ? TEAM_INBOX.news : TEAM_INBOX.support;
+  try {
+    const rendered = teamNotification({ form, data, locale, submissionId: outcome.id, createdAt: str(payload.created_at, 40), acknowledgement });
+    const result = await sendEmail(
+      apiKey,
+      {
+        from: team.from,
+        replyTo: visitor || team.replyTo,
+        to: normalizeEmail(env.TEAM_INBOX) || inbox,
+        subject: rendered.subject,
+        html: rendered.html,
+        text: rendered.text,
+        tags: [{ name: 'form', value: `${form}-team` }, { name: 'locale', value: locale }],
+      },
+      `team-${outcome.id}`,
+    );
+    return log({ ...outcome, team: result.ok ? 'sent' : 'failed' });
+  } catch (error) {
+    console.error(`[email] team copy of ${outcome.id} failed: ${error instanceof Error ? error.message : String(error)}`);
+    return log({ ...outcome, team: 'failed' });
+  }
 }

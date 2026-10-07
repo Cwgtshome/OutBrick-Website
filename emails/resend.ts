@@ -10,6 +10,11 @@ const API = 'https://api.resend.com';
 export const SENDERS = {
   support: { from: 'OutBrick Support <support@outbrick.site>', replyTo: 'support@outbrick.site' },
   news: { from: 'OutBrick News <news@outbrick.site>', replyTo: 'news@outbrick.site' },
+  // The team's copy of a submission, from and to the inbox that handles that form: support@ for
+  // contact, careers and affiliate, news@ for newsletter sign-ups. Its Reply-To is the visitor
+  // whenever they gave an address.
+  supportTeam: { from: 'OutBrick Forms <support@outbrick.site>', replyTo: 'support@outbrick.site' },
+  newsTeam: { from: 'OutBrick News sign-ups <news@outbrick.site>', replyTo: 'news@outbrick.site' },
 } as const;
 
 export type ResendResult = { ok: boolean; status: number; data: Record<string, unknown> | null; error?: string };
@@ -27,28 +32,45 @@ export async function resend(
   if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey.slice(0, 256);
   // Contact paths carry an email address; logs name the endpoint without it.
   const shown = path.replace(/\/contacts\/[^/]+/, '/contacts/<contact>');
-  try {
-    const response = await fetch(`${API}${path}`, {
-      method,
-      headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
-      signal: AbortSignal.timeout(9000),
-    });
-    const text = await response.text();
-    let data: Record<string, unknown> | null = null;
+  // A 429 means Resend refused the request, so even resource creation can be retried.
+  // Keep the exact body and idempotency key across attempts. Bound the whole call to 12 s
+  // so the two submission emails fit within the event function's execution window.
+  const serialized = body === undefined ? undefined : JSON.stringify(body);
+  const deadline = Date.now() + 12000;
+  for (let attempt = 0; attempt < 4; attempt++) {
     try {
-      data = text ? (JSON.parse(text) as Record<string, unknown>) : null;
-    } catch {
-      data = null;
-    }
-    if (!response.ok) {
+      const response = await fetch(`${API}${path}`, {
+        method,
+        headers,
+        body: serialized,
+        signal: AbortSignal.timeout(Math.max(1, Math.min(9000, deadline - Date.now()))),
+      });
+      const text = await response.text();
+      let data: Record<string, unknown> | null = null;
+      try {
+        data = text ? (JSON.parse(text) as Record<string, unknown>) : null;
+      } catch {
+        data = null;
+      }
+      if (response.ok) return { ok: true, status: response.status, data };
       const message = typeof data?.message === 'string' ? data.message : text.slice(0, 200);
-      return { ok: false, status: response.status, data, error: `${method} ${shown} -> ${response.status}: ${message}` };
+      const failure = { ok: false, status: response.status, data, error: `${method} ${shown} -> ${response.status}: ${message}` };
+      if (response.status !== 429 || attempt === 3) return failure;
+      const retryAfter = response.headers.get('retry-after');
+      const seconds = retryAfter === null || !retryAfter.trim() ? NaN : Number(retryAfter);
+      const requested = Number.isFinite(seconds) ? Math.max(0, seconds * 1000) : retryAfter ? Math.max(0, Date.parse(retryAfter) - Date.now()) : 0;
+      const delay = Math.max(1000 * 2 ** attempt, Number.isFinite(requested) ? requested : 0) + Math.floor(Math.random() * 250);
+      // Never retry sooner than Retry-After; leave room for the next request or return the
+      // failure for an operator to recover from the stored Netlify submission.
+      if (Date.now() + delay + 100 >= deadline) return failure;
+      await new Promise<void>((resolve) => setTimeout(resolve, delay));
+    } catch (error) {
+      // Do not repeat ambiguous network failures or 5xx writes to resources that do not
+      // support idempotency. They retain the existing failure/reporting behaviour.
+      return { ok: false, status: 0, data: null, error: `${method} ${shown} failed: ${error instanceof Error ? error.message : String(error)}` };
     }
-    return { ok: true, status: response.status, data };
-  } catch (error) {
-    return { ok: false, status: 0, data: null, error: `${method} ${shown} failed: ${error instanceof Error ? error.message : String(error)}` };
   }
+  return { ok: false, status: 0, data: null, error: `${method} ${shown} exhausted retries` };
 }
 
 export type OutgoingEmail = {
@@ -88,7 +110,7 @@ export async function subscribeContact(apiKey: string, email: string, segmentIds
   const created = await resend(apiKey, '/contacts', {
     body: { email, unsubscribed: false, segments: segments.map((id) => ({ id })) },
   });
-  if (created.ok) return created;
+  if (created.ok || (created.status !== 409 && created.status !== 422)) return created;
   // Already a contact (Resend answers 409 or 422 for a duplicate): update it instead.
   const contact = `/contacts/${encodeURIComponent(email)}`;
   const updated = await resend(apiKey, contact, { method: 'PATCH', body: { unsubscribed: false } });
