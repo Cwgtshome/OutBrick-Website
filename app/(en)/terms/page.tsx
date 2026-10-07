@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
-import { LegalPage, Pills } from '../../legal-page';
-import { localePath, type Locale } from '../../../lib/i18n/locales';
-import type { ReactNode } from 'react';
+import { LegalPage, Pills, SiteLink } from '../../legal-page';
 
 export const metadata: Metadata = pageMetadata({
   path: '/terms',
@@ -91,9 +89,4 @@ export default function TermsPage() {
       <Pills items={['No account needed to play', 'Apple services stay Apple-managed', 'Privacy-first by design']} />
     </LegalPage>
   );
-}
-
-/** A link to a page this tree does not localise by itself; `locale` is supplied when the page is rendered in another language. */
-function SiteLink({ path, children, locale = 'en' }: { path: string; children: ReactNode; locale?: Locale }) {
-  return <a href={localePath(locale, path)}>{children}</a>;
 }
