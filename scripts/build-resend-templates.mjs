@@ -42,7 +42,7 @@ const STORIES = 3;
 
 const mark = (key) => `OBVAR${key}OBEND`;
 const urlMark = (key) => `/${mark(key)}`;
-const abs = (src) => (/^https:\/\//.test(src) ? src : `${SITE}${src.startsWith('/') ? '' : '/'}${src}`);
+const abs = (src) => (src.startsWith('https://') ? src : `${SITE}${src.startsWith('/') ? '' : '/'}${src}`);
 
 function build(locale) {
   const c = sample.locales[locale];
@@ -112,8 +112,8 @@ function build(locale) {
 
 const out = path.join(root, 'outputs/resend-templates');
 fs.mkdirSync(out, { recursive: true });
-const templates = emailLocales.map((locale) => [locale, build(locale)]);
-for (const [locale, t] of templates) {
+const templates = emailLocales.map((locale) => ({ locale, t: build(locale) }));
+for (const { locale, t } of templates) {
   fs.writeFileSync(path.join(out, `${locale}.html`), t.html);
   fs.writeFileSync(path.join(out, `${locale}.txt`), t.text);
   fs.writeFileSync(path.join(out, `${locale}.json`), JSON.stringify(t, null, 2));
@@ -128,7 +128,7 @@ if (process.argv.includes('--push') || onProduction) {
     console.error('build-resend-templates: pushing needs RESEND_API_KEY');
     process.exit(onProduction ? 0 : 1);
   }
-  for (const [locale, t] of templates) {
+  for (const { locale, t } of templates) {
     const body = { name: t.name, alias: t.alias, from: t.from, reply_to: t.replyTo, subject: t.subject, html: t.html, text: t.text, variables: t.variables.map((x) => ({ key: x.key, type: x.type, fallback_value: x.fallbackValue })) };
     const found = await resend(apiKey, `/templates/${t.alias}`, { method: 'GET' });
     const saved = found.ok
