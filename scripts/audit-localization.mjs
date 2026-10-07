@@ -6,7 +6,7 @@ import { decodeEntities, distDir, fileToRoute, listHtmlFiles, metaContent, readN
 const locales=['fr','de','es','ja'];
 const { chromeCopy } = await import('../lib/i18n/chrome.ts');
 const breadcrumbLabels = {fr:'Fil d’Ariane',de:'Brotkrumennavigation',es:'Ruta de navegación',ja:'パンくずリスト'};
-const editorialRoutes=['/','/blog','/mascots','/press','/about','/authors','/research','/support'];
+const editorialRoutes=['/','/blog','/mascots','/press','/about','/authors','/research','/community','/support'];
 const publicPages=(await import('../lib/i18n/public-pages.ts')).publicPages;
 const inventory=JSON.parse(fs.readFileSync(path.join(repoRoot,'lib/i18n/public-source-inventory.json'),'utf8'));
 const pages=new Map(listHtmlFiles().map(file=>[fileToRoute(file),fs.readFileSync(path.join(distDir,file),'utf8')]));
@@ -20,7 +20,7 @@ const aliasRoutes=new Set(redirects.filter(r=>r.status>=300&&r.status<400).map(r
 const normalize=text=>decodeEntities(text).replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
 const problems=[];
 const manifests=[];
-const publicRoots=new Set(['about','accessibility','accessibility-support','affiliates','age-rating','age-suitability','authors','blog','c','careers','contact','creators','daily','eula','eula-apple','license','license-agreement','mascots','newsletter','play','press','press-kit','privacy','privacy-choices','privacy-policy','refund','refunds','research','support','terms','whats-new']);
+const publicRoots=new Set(['about','accessibility','accessibility-support','affiliates','age-rating','age-suitability','authors','blog','c','careers','contact','creators','daily','eula','eula-apple','license','license-agreement','mascots','newsletter','play','press','press-kit','privacy','privacy-choices','privacy-policy','refund','refunds','research','support','community','terms','whats-new']);
 const noindexEvidence=[];
 const schemaLanguages=[];
 const englishRoutes=[...pages.keys()].filter(route=>!/^\/(fr|de|es|ja)(\/|$)/.test(route)&&route!='/404'&&!/^\/google[0-9a-f]+$/.test(route));

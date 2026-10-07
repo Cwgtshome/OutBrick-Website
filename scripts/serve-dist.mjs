@@ -4,11 +4,14 @@
 //
 //   node scripts/serve-dist.mjs [port]      (default 4321)
 //
-// `/r/<code>` answers with the same 302 as netlify.toml's affiliate rule.
+// `/r/<code>` answers with the same 302 as netlify.toml's affiliate rule. `/community/<anything>`
+// is served from its language's community shell, as netlify.toml rewrites it, and /api/community/*
+// gets the read-only stand-in in scripts/lib/community-stub.mjs.
 
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
+import { communityStub } from './lib/community-stub.mjs';
 
 const root = new URL('../dist/client/', import.meta.url).pathname;
 const port = Number(process.argv[2] ?? process.env.PORT ?? 4321);
@@ -42,11 +45,15 @@ async function resolve(pathname) {
   if (challenge) return join(root, challenge[1] ? `${challenge[1]}/c.html` : 'c.html');
   const clean = normalize(decodeURIComponent(pathname)).replace(/^(\.\.[/\\])+/, '');
   const base = join(root, clean).replace(/\/$/, '');
-  return (await file(`${base}.html`)) ?? (await file(join(base, 'index.html'))) ?? (await file(base));
+  const found = (await file(`${base}.html`)) ?? (await file(join(base, 'index.html'))) ?? (await file(base));
+  if (found) return found;
+  const community = pathname.match(/^(?:\/(fr|de|es|ja))?\/community\//);
+  return community ? join(root, community[1] ? `${community[1]}/community.html` : 'community.html') : null;
 }
 
 createServer(async (req, res) => {
   const { pathname } = new URL(req.url ?? '/', 'http://localhost');
+  if (communityStub(pathname, res)) return;
   // Affiliate links, as netlify.toml's `/r/:code` rule answers them.
   const affiliate = pathname.match(/^\/r\/([^/]+)\/?$/);
   if (affiliate) {

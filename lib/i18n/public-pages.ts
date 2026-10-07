@@ -8,7 +8,8 @@ import { fr as extraFr } from './carryovers-fr.ts';
 import { es as extraEs } from './carryovers-es.ts';
 import { ja as extraJa } from './carryovers-ja.ts';
 import { emailPages } from './email-pages.ts';
+import { communitySupportPhrases as cm } from './community.ts';
 /** Full, phrase-level page translations shared by existing English layouts. */
 export const publicPages: Record<TranslatedLocale, Record<string, string>> = {
-  fr: {...fr, ...extraFr, ...emailPages.fr}, de: {...de, ...extraDe, ...emailPages.de}, es: {...es, ...extraEs, ...emailPages.es}, ja: {...ja, ...extraJa, ...emailPages.ja},
+  fr: {...fr, ...extraFr, ...emailPages.fr, ...cm('fr')}, de: {...de, ...extraDe, ...emailPages.de, ...cm('de')}, es: {...es, ...extraEs, ...emailPages.es, ...cm('es')}, ja: {...ja, ...extraJa, ...emailPages.ja, ...cm('ja')},
 };

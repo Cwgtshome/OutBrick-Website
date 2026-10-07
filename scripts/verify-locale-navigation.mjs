@@ -9,14 +9,14 @@ fs.mkdirSync(outDir, { recursive: true });
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
 const locales = ['en', 'fr', 'de', 'es', 'ja'];
 const editorialLabels = {
-  en: ['The game','Journal','Mascots','Press','About','Authors','Research','Support'],
-  fr: ['Le jeu','Journal','Mascottes','Presse','À propos','Auteurs','Recherche','Assistance'],
-  de: ['Das Spiel','Journal','Maskottchen','Presse','Über uns','Autoren','Forschung','Hilfe'],
-  es: ['El juego','Revista','Mascotas','Prensa','Quiénes somos','Autores','Investigación','Soporte'],
-  ja: ['ゲーム','記事','マスコット','プレス','OutBrickについて','著者','リサーチ','サポート'],
+  en: ['The game','Journal','Mascots','Press','About','Authors','Research','Community','Support'],
+  fr: ['Le jeu','Journal','Mascottes','Presse','À propos','Auteurs','Recherche','Communauté','Assistance'],
+  de: ['Das Spiel','Journal','Maskottchen','Presse','Über uns','Autoren','Forschung','Community','Hilfe'],
+  es: ['El juego','Revista','Mascotas','Prensa','Quiénes somos','Autores','Investigación','Comunidad','Soporte'],
+  ja: ['ゲーム','記事','マスコット','プレス','OutBrickについて','著者','リサーチ','コミュニティ','サポート'],
 };
 const breadcrumbLabels = { en: 'Breadcrumb', fr: 'Fil d’Ariane', de: 'Brotkrumennavigation', es: 'Ruta de navegación', ja: 'パンくずリスト' };
-const editorialRoutes = ['/', '/blog', '/mascots', '/press', '/about', '/authors', '/research', '/support'];
+const editorialRoutes = ['/', '/blog', '/mascots', '/press', '/about', '/authors', '/research', '/community', '/support'];
 const firstUndoRule = {
   fr:'Sur chaque plateau, la première annulation est gratuite et ne consomme pas votre réserve.',
   de:'Auf jedem Spielfeld ist das erste Rückgängigmachen kostenlos und wird nicht von deinem Vorrat abgezogen.',
