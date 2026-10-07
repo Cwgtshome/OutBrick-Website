@@ -5,7 +5,7 @@
 import { isEmailLocale, type EmailLocale } from './i18n.ts';
 import { addressTag, unsubscribeUrl, verifyConfirm, verifyUnsubscribe } from './links.ts';
 import { SENDERS, newsletterSegments, sendEmail, subscribeContact, unsubscribeContact } from './resend.ts';
-import { newsletterWelcome, unsubscribePage } from './templates.ts';
+import { newsletterWelcome, unsubscribePage, confirmPage } from './templates.ts';
 import { SITE } from './core.ts';
 
 type Env = Record<string, string | undefined>;
@@ -39,7 +39,7 @@ export function listUnsubscribeHeaders(url: string): Record<string, string> {
 export async function handleConfirm(req: Request, env: Env): Promise<Response> {
   const params = new URL(req.url).searchParams;
   if (req.method === 'HEAD') return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
-  if (req.method !== 'GET') return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET' } });
+  if (req.method !== 'GET' && req.method !== 'POST') return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET, POST, HEAD' } });
   const apiKey = env.RESEND_API_KEY;
   if (!apiKey) {
     console.error('[newsletter] confirm: RESEND_API_KEY is not set');
@@ -51,6 +51,20 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
     return redirect(req, verified.locale, '/newsletter/link-expired');
   }
   const { email, locale } = verified;
+  if (req.method === 'GET') {
+    const url = new URL(req.url);
+    return new Response(confirmPage(locale, `${url.pathname}${url.search}`), {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'X-Robots-Tag': 'noindex, nofollow',
+        'Referrer-Policy': 'no-referrer',
+        'Content-Security-Policy': "default-src 'none'; img-src 'self' https://www.outbrick.site; style-src 'unsafe-inline'; font-src 'self' https://www.outbrick.site; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+      },
+    });
+  }
+  const origin = req.headers.get('Origin');
+  if (origin && origin !== new URL(req.url).origin) return new Response('Forbidden', { status: 403 });
   const tag = addressTag(apiKey, email);
   const segments = newsletterSegments(env, locale);
   if (!segments.length) {
