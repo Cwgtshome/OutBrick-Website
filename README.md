@@ -59,7 +59,7 @@ to English.
   logged (never the address or the message), each email carries a Resend `Idempotency-Key`, and
   the function always answers 200.
 * `netlify/functions/newsletter-confirm.mts` — the confirm link. Checks the HMAC and the 7-day
-  expiry, adds the address to the **OutBrick News** segment, sends the welcome email, and
+  expiry, displays a confirmation page on GET, then on a deliberate POST adds the address to the **OutBrick News** segment, sends the welcome email, and
   redirects to `/newsletter/confirmed` (or `/newsletter/link-expired`, which has a fresh sign-up
   form), in the reader's language.
 * `netlify/functions/newsletter-unsubscribe.mts` — the signed unsubscribe link. Mail clients'
@@ -74,7 +74,8 @@ to English.
 
 **Environment (Netlify, set by the owner):**
 
-* `RESEND_API_KEY` — required for every email. The confirm and unsubscribe links are signed with
+* `RESEND_API_KEY` — required for every email; use Full access because newsletter confirmation
+  and unsubscribe manage contacts and segments. Sending access alone cannot do that. The confirm and unsubscribe links are signed with
   a key derived from it (HKDF-SHA-256, salt `outbrick-newsletter-v1`), so there is no second
   secret; rotating the Resend key invalidates links already sent.
 * `RESEND_SEGMENT_ID` — the "OutBrick News" segment confirmed subscribers are added to.
@@ -110,7 +111,7 @@ RESEND_API_KEY=… pnpm newsletter emails/issues/2026-10-sample.json --test you@
 # Create draft broadcasts in Resend (one per language, to its segment), review them there…
 RESEND_API_KEY=… RESEND_SEGMENT_ID_EN=… pnpm newsletter emails/issues/<issue>.json
 # …then send (or --schedule "in 1 hour")
-RESEND_API_KEY=… NEWSLETTER_POSTAL_ADDRESS="…" pnpm newsletter emails/issues/<issue>.json --send
+RESEND_API_KEY=… NEWSLETTER_POSTAL_ADDRESS="…" pnpm newsletter emails/issues/<issue>.json --send --locale en --broadcast-id <reviewed-draft-id>
 ```
 
 Without per-language segments, `--locale <xx>` sends that one language to the whole
