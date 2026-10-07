@@ -367,8 +367,7 @@ export function StatusBadge({ status, note }: { status: string | null; note: str
   return (
     <span className={`cm-badge cm-status cm-status-${status}`}>
       <span className="sr-only">{copy.statusLabel}: </span>
-      {label}
-      {note ? `: ${note}` : ''}
+      {note && note.toLowerCase().startsWith(label.toLowerCase()) ? note : note ? `${label}: ${note}` : label}
     </span>
   );
 }

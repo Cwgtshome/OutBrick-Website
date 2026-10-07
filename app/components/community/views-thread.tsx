@@ -310,7 +310,7 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
         </fieldset>
       ) : null}
       {mode === 'report' ? <ReportForm post={post} name={name} onDone={() => { announce(copy.thread.reported); setMode('view'); }} onCancel={() => setMode('view')} /> : null}
-      {mode === 'view' && !post.hidden ? (
+      {mode === 'view' && !post.hidden && (detail.canReply || (detail.canSolve && !isFirst) || post.canEdit || post.canDelete || (session?.member && post.author?.id !== session.member.id)) ? (
         <ul className="cm-actions">
           {detail.canReply ? (
             <>

@@ -36,12 +36,18 @@ function currentUrl(): URL {
 // so the app re-renders from `location` without setting state inside an effect.
 const listeners = new Set<() => void>();
 const notify = () => listeners.forEach((l) => l());
+/** Whether the next page drawn should take focus: set by every navigation, before the re-render. */
+const focus = { next: false };
+const onPopState = () => {
+  focus.next = true;
+  notify();
+};
 function subscribeLocation(listener: () => void) {
+  if (!listeners.size) window.addEventListener('popstate', onPopState);
   listeners.add(listener);
-  window.addEventListener('popstate', listener);
   return () => {
     listeners.delete(listener);
-    window.removeEventListener('popstate', listener);
+    if (!listeners.size) window.removeEventListener('popstate', onPopState);
   };
 }
 const locationSnapshot = () => window.location.pathname + window.location.search;
@@ -93,7 +99,6 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
   const [sessionError, setSessionError] = useState<ApiFailure | null>(null);
   const [message, setMessage] = useState('');
   const [staticShowing, setStaticShowing] = useState(true);
-  const pendingFocus = useRef(false);
   const firstPage = useRef(true);
   const robotsOriginal = useRef<string | null>(null);
 
@@ -137,18 +142,10 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
     const target = new URL(href, window.location.href);
     if (options.replace) window.history.replaceState(null, '', target);
     else window.history.pushState(null, '', target);
-    pendingFocus.current = options.focus !== false;
+    focus.next = options.focus !== false;
     notify();
   }, []);
 
-  // Back and forward: the store re-renders; this only asks for focus on the new page.
-  useEffect(() => {
-    const onPop = () => {
-      pendingFocus.current = true;
-    };
-    window.addEventListener('popstate', onPop);
-    return () => window.removeEventListener('popstate', onPop);
-  }, []);
 
   // A same-page #post-n link: the browser scrolls, we move focus there too.
   useEffect(() => {
@@ -234,8 +231,8 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
       const hash = decodeURIComponent(window.location.hash.slice(1));
       const wasFirst = firstPage.current;
       firstPage.current = false;
-      if (!pendingFocus.current && !(wasFirst && hash)) return;
-      pendingFocus.current = false;
+      if (!focus.next && !(wasFirst && hash)) return;
+      focus.next = false;
       window.requestAnimationFrame(() => {
         const target = (hash && document.getElementById(hash)) || document.querySelector<HTMLElement>('.cm-app h1');
         if (!target) {

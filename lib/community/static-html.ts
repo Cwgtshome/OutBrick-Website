@@ -136,7 +136,8 @@ export function memberName(copy: CommunityCopy, member: PublicMember | null): st
 export function statusText(copy: CommunityCopy, status: string | null, note: string | null): string | null {
   if (!status) return null;
   const label = copy.status[status] ?? status;
-  return note ? `${label}: ${note}` : label;
+  if (!note) return label;
+  return note.toLowerCase().startsWith(label.toLowerCase()) ? note : `${label}: ${note}`;
 }
 
 export function pageOfPost(postNumber: number): number {

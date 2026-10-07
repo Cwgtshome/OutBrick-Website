@@ -51,6 +51,8 @@
 }
 
 .ob-site .cm [hidden] { display: none !important; }
+/* `.ob-site section` is a full-height band on the home page; here a section is just a section. */
+.ob-site .cm section:not(.cm-section) { padding: 0; }
 
 /* ---------------- the masthead of each page ---------------- */
 
@@ -106,7 +108,7 @@
 .ob-site .cm-meta-dark a,
 .ob-site .cm-head .cm-author { color: #fff; }
 .ob-site .cm-note-dark { color: var(--lilac); margin: 0; }
-.ob-site .cm-head .cm-badge { background: var(--panel-inner); color: #fff; box-shadow: 0 3px 0 #241d7c; }
+.ob-site .cm-head .cm-badge:not(.cm-status):not(.cm-badge-solution) { background: var(--panel-inner); color: #fff; box-shadow: 0 3px 0 #241d7c; }
 .ob-site .cm-head .cm-role { background: var(--gold); color: var(--ink); }
 
 /* breadcrumb */
@@ -334,7 +336,7 @@
 .ob-site .cm-thread-title { font-size: 1.15rem !important; margin: 0 0 4px !important; }
 .ob-site .cm-thread-title a { display: inline-flex; align-items: center; min-height: 44px; }
 .ob-site .cm-meta { color: var(--cm-muted); font-size: 0.92rem; margin: 0 0 6px; }
-.ob-site .cm-meta a { display: inline-block; padding-block: 11px; }
+.ob-site .cm-meta a { display: inline; }
 .ob-site .cm-excerpt { color: var(--cm-muted); }
 .ob-site .cm-excerpt mark { background: var(--gold); color: var(--ink); border-radius: 3px; padding: 0 2px; }
 .ob-site .cm-unread { font-weight: 700; }
@@ -556,6 +558,8 @@
 /* ---------------- forms ---------------- */
 
 .ob-site .cm-form { display: grid; gap: 4px; max-width: 46rem; }
+.ob-site .cm-form > .btn,
+.ob-site .cm-form > .cm-act { justify-self: start; }
 .ob-site .cm-field { margin: 0 0 16px; }
 .ob-site .cm-field label,
 .ob-site .cm-composer-label,

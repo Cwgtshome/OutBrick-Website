@@ -660,8 +660,9 @@ function EmailPrefsForm({ member, id, onSaved }: { member: SelfMember; id: strin
   return (
     <Section id={id} title={copy.settings.emails}>
       <form className="cm-form" onSubmit={(e) => void submit(e)}>
+        <p>{copy.settings.emailsLede(member.email || '—')}</p>
         <fieldset className="cm-fieldset cm-checks">
-          <legend>{copy.settings.emailsLede(member.email || '—')}</legend>
+          <legend className="sr-only">{copy.settings.emails}</legend>
           {emailKinds.map((k) => (
             <div className="cm-check" key={k}>
               <input type="checkbox" id={`${id}-${k}`} checked={prefs[k]} onChange={(e) => setPrefs({ ...prefs, [k]: e.target.checked })} aria-describedby={`${id}-${k}-d`} />

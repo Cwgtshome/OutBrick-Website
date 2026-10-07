@@ -90,9 +90,6 @@ export function renderThreadPage(shell: string, locale: CommunityLocale, detail:
   html = setMeta(html, 'name', 'twitter:description', description);
   if (thread.hidden) html = setMeta(html, 'name', 'robots', 'noindex, follow');
 
-  // The shell's own WebPage graph describes /community, not this thread.
-  const shellId = `${SITE}${communityPath(locale)}#webpage`;
-  html = html.replace(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g, (block, json: string) => (json.includes(shellId) ? '' : block));
 
   const person = (member: ThreadDetail['thread']['author'] | null) =>
     member ? { '@type': 'Person', name: memberName(copy, member), url: `${SITE}${communityPath(thread.language, `/u/${member.id}`)}` } : { '@type': 'Person', name: copy.formerMember };
@@ -126,12 +123,22 @@ export function renderThreadPage(shell: string, locale: CommunityLocale, detail:
     ],
     ...(comments.length ? { comment: comments } : {}),
   };
-  const jsonLd = `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
+  const jsonLd = JSON.stringify(data).replace(/</g, '\\u003c');
+
+  // The shell's own JSON-LD describes /community, not this thread. Its <script> element stays
+  // (React hydrates the element; removing it is a hydration mismatch) and only its text changes.
+  const shellId = `${SITE}${communityPath(locale)}#webpage`;
+  let replaced = false;
+  html = html.replace(/(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/g, (block, open: string, json: string, close: string) => {
+    if (replaced || !json.includes(shellId)) return block;
+    replaced = true;
+    return open + jsonLd + close;
+  });
+  if (!replaced) return null;
 
   const s = html.indexOf(STATIC_START, html.indexOf('data-cm-static'));
   const e = html.indexOf(STATIC_END, s);
-  html = html.slice(0, s) + threadStaticHtml(locale, detail) + html.slice(e + STATIC_END.length);
-  return html.replace('</body>', `${jsonLd}</body>`);
+  return html.slice(0, s) + threadStaticHtml(locale, detail) + html.slice(e + STATIC_END.length);
 }
 
 function withSecurity(headers: Headers): Headers {
