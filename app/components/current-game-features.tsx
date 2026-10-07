@@ -15,7 +15,7 @@ export function CurrentGameFeatures({ locale = 'en' }: { locale?: Locale }) {
         </div>
         <ul className="ledger">
           {[t.match, t.specials, t.goals, t.voiceover, t.apple, t.community].map(text => (
-            <li key={text}><div><p>{text}</p></div></li>
+            <li key={text}><span className="mark" style={{ background: 'var(--purple)' }} aria-hidden="true">◆</span><div><p>{text}</p></div></li>
           ))}
         </ul>
         <p><a href={localePath(locale, '/community')}>{chromeCopy[locale].footer.community}</a></p>
