@@ -355,6 +355,15 @@ export type CommunityCopy = {
     reasonLabel: string;
     done: string;
     forbidden: string;
+    banHeading: string;
+    banLede: string;
+    banDays: string;
+    banReason: string;
+    banSubmit: string;
+    unban: string;
+    bannedUntil: (d: string) => string;
+    banDone: string;
+    unbanDone: string;
   };
   errors: Record<string, string>;
   loading: string;
@@ -864,6 +873,15 @@ const en: CommunityCopy = {
     reasonLabel: 'Reason, emailed to the author',
     done: 'Done.',
     forbidden: 'Only moderators can see this page.',
+    banHeading: 'Suspend this member',
+    banLede: 'A suspended member can still read and change their email settings, but cannot post, reply, react or vote.',
+    banDays: 'Days',
+    banReason: 'Reason, shown to the member',
+    banSubmit: 'Suspend',
+    unban: 'Lift the suspension',
+    bannedUntil: (d) => `Suspended until ${d}`,
+    banDone: 'The member is suspended.',
+    unbanDone: 'The suspension is lifted.',
   },
   errors: {
     signin_required: 'Sign in to do that.',
@@ -1392,6 +1410,15 @@ const fr: CommunityCopy = {
     reasonLabel: 'Motif, envoyé par e-mail à l’auteur',
     done: 'C’est fait.',
     forbidden: 'Seuls les modérateurs peuvent voir cette page.',
+    banHeading: 'Suspendre ce membre',
+    banLede: 'Un membre suspendu peut toujours lire et modifier ses réglages d’e-mail, mais ne peut ni publier, ni répondre, ni réagir, ni voter.',
+    banDays: 'Jours',
+    banReason: 'Motif, affiché au membre',
+    banSubmit: 'Suspendre',
+    unban: 'Lever la suspension',
+    bannedUntil: (d) => `Suspendu jusqu’au ${d}`,
+    banDone: 'Le membre est suspendu.',
+    unbanDone: 'La suspension est levée.',
   },
   errors: {
     signin_required: 'Connectez-vous pour faire cela.',
@@ -1920,6 +1947,15 @@ const de: CommunityCopy = {
     reasonLabel: 'Grund, geht per E-Mail an die Person',
     done: 'Erledigt.',
     forbidden: 'Nur die Moderation kann diese Seite sehen.',
+    banHeading: 'Dieses Mitglied sperren',
+    banLede: 'Ein gesperrtes Mitglied kann weiterhin lesen und seine E-Mail-Einstellungen ändern, aber nicht posten, antworten, reagieren oder abstimmen.',
+    banDays: 'Tage',
+    banReason: 'Grund, wird dem Mitglied angezeigt',
+    banSubmit: 'Sperren',
+    unban: 'Sperre aufheben',
+    bannedUntil: (d) => `Gesperrt bis ${d}`,
+    banDone: 'Das Mitglied ist gesperrt.',
+    unbanDone: 'Die Sperre ist aufgehoben.',
   },
   errors: {
     signin_required: 'Melde dich dafür an.',
@@ -2448,6 +2484,15 @@ const es: CommunityCopy = {
     reasonLabel: 'Motivo, se envía por correo a quien lo escribió',
     done: 'Hecho.',
     forbidden: 'Solo los moderadores pueden ver esta página.',
+    banHeading: 'Suspender a este miembro',
+    banLede: 'Un miembro suspendido puede seguir leyendo y cambiar sus ajustes de correo, pero no puede publicar, responder, reaccionar ni votar.',
+    banDays: 'Días',
+    banReason: 'Motivo, visible para el miembro',
+    banSubmit: 'Suspender',
+    unban: 'Levantar la suspensión',
+    bannedUntil: (d) => `Suspendido hasta el ${d}`,
+    banDone: 'El miembro está suspendido.',
+    unbanDone: 'La suspensión se ha levantado.',
   },
   errors: {
     signin_required: 'Inicia sesión para hacer eso.',
@@ -2976,6 +3021,15 @@ const ja: CommunityCopy = {
     reasonLabel: '理由（投稿者にメールで伝えます）',
     done: '完了しました。',
     forbidden: 'このページはモデレーターだけが見られます。',
+    banHeading: 'このメンバーを利用停止にする',
+    banLede: '利用停止中のメンバーも閲覧やメール設定の変更はできますが、投稿・返信・リアクション・投票はできません。',
+    banDays: '日数',
+    banReason: '理由（メンバーに表示されます）',
+    banSubmit: '利用停止にする',
+    unban: '利用停止を解除する',
+    bannedUntil: (d) => `${d}まで利用停止中`,
+    banDone: 'メンバーを利用停止にしました。',
+    unbanDone: '利用停止を解除しました。',
   },
   errors: {
     signin_required: 'この操作にはサインインが必要です。',

@@ -316,7 +316,7 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
       {mode === 'edit' ? (
         <EditPost post={post} lang={lang} onCancel={() => setMode('view')} onSaved={() => { announce(copy.thread.postSaved); setMode('view'); onChanged(post.number); }} />
       ) : post.html ? (
-        <div className="cm-post-body" lang={lang} dangerouslySetInnerHTML={{ __html: post.html }} />
+        <div className="cm-post-body" lang={lang} dangerouslySetInnerHTML={{ __html: localiseMemberLinks(post.html, locale) }} />
       ) : null}
       {mode === 'view' && !post.hidden && features.translate && session?.member && detail.thread.language !== locale ? (
         <div className="cm-row">
@@ -685,4 +685,9 @@ function ModTools({ detail, onDone }: { detail: Detail; onDone: () => void }) {
       ) : null}
     </section>
   );
+}
+
+/** The server writes @mention links as /community/u/<id>; send readers to their own language's profile page. */
+function localiseMemberLinks(html: string, locale: string): string {
+  return locale === 'en' ? html : html.replaceAll('href="/community/u/', `href="/${locale}/community/u/`);
 }

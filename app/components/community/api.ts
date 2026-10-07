@@ -32,6 +32,8 @@ import type {
   UpdateMeRequest,
   UpdateMeResponse,
   HidePostRequest,
+  BanRequest,
+  ModMemberResponse,
   UpdateThreadRequest,
   EmailSignInRequest,
   RoadmapResponse,
@@ -184,6 +186,7 @@ export const api = {
   resolveReport: (id: number, body: ResolveReportRequest) => write<{ ok: true }>('POST', `/mod/reports/${id}/resolve`, body),
   modQueue: () => get<ModQueueResponse>('/mod/queue', true),
   approve: (postId: number) => write<{ post: Post }>('POST', `/posts/${postId}/approve`),
+  banMember: (memberId: number, body: BanRequest) => write<ModMemberResponse>('POST', `/mod/members/${memberId}/ban`, body),
   hidePost: (postId: number, reason: string) => write<{ post: Post }>('POST', `/posts/${postId}/hide`, { reason } satisfies HidePostRequest),
 };
 

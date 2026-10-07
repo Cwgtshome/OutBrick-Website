@@ -97,7 +97,7 @@ export const listQueue: Handler = async (req) => {
   const rows = await run(
     `SELECT ${postColumns}, ${threadCols}
        FROM posts p JOIN members m ON m.id = p.author_id JOIN threads t ON t.id = p.thread_id JOIN categories c ON c.id = t.category_id
-      WHERE p.pending AND p.deleted_at IS NULL AND t.deleted_at IS NULL
+      WHERE p.pending AND NOT p.hidden AND p.deleted_at IS NULL AND t.deleted_at IS NULL
       ORDER BY p.created_at, p.id
       LIMIT 200`,
   );
@@ -145,10 +145,13 @@ export const approvePost: Handler = async (req, params) => {
 // Hiding ------------------------------------------------------------------------------------------
 
 async function hideInTransaction(q: (text: string, params?: unknown[]) => Promise<Row[]>, viewer: Viewer, postId: number, reason: string): Promise<void> {
-  const [post] = await q(`SELECT thread_id::int AS thread_id, author_id::int AS author_id, hidden FROM posts WHERE id = $1`, [postId]);
+  const [post] = await q(`SELECT thread_id::int AS thread_id, author_id::int AS author_id, hidden, pending, number FROM posts WHERE id = $1`, [postId]);
   if (!post) throw notFound('That post does not exist.');
   if (post.hidden) return;
-  await q(`UPDATE posts SET hidden = true, hidden_reason = $1 WHERE id = $2`, [reason, postId]);
+  // Hiding a queued post is the moderator's rejection: it leaves the review queue for good, and a
+  // queued opening post takes its (still unpublished) thread with it.
+  await q(`UPDATE posts SET hidden = true, hidden_reason = $1, pending = false WHERE id = $2`, [reason, postId]);
+  if (post.pending && num(post.number) === 1) await q(`UPDATE threads SET pending = false, hidden = true WHERE id = $1`, [num(post.thread_id)]);
   await refreshThreadCounters(q, num(post.thread_id));
   await modLog(q, viewer.id, 'post.hide', 'post', postId, reason);
   await notifyModeration(q, { threadId: num(post.thread_id), postId, actorId: viewer.id, postAuthorId: num(post.author_id), reason });

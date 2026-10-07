@@ -15,8 +15,10 @@
 //     the rest from support@);
 //   - sends at most six emails per member per hour; the rest wait and go as one grouped email
 //     on a later run;
-//   - claims rows before sending and gives each batch a Resend Idempotency-Key derived from its
-//     notification ids, so overlapping runs or a retry never send the same email twice.
+//   - claims rows before sending (an expiring claim, so a run cut off mid-send is retried after
+//     15 minutes), marks them emailed only once Resend accepts the email, and gives each batch a
+//     Resend Idempotency-Key derived from its notification ids, so overlapping runs or a retry
+//     never send the same email twice.
 //
 // Email preferences: every kind is on unless the member's `email_prefs` has `{ kind: false }`.
 
@@ -125,16 +127,25 @@ function itemOf(row: Row, locale: CommunityLocale): NotificationItem {
 
 const batchKey = (prefix: string, memberId: number, ids: number[]) => `community-${prefix}-${memberId}-${sha256(ids.join(',')).slice(0, 32)}`;
 
+/** A claim older than this is abandoned (a run that timed out or crashed mid-send) and is retried. */
+const CLAIM_MINUTES = 15;
+
 async function claim(ids: number[]): Promise<number[]> {
-  const rows = await sql`UPDATE notifications SET emailed_at = now()
+  const rows = await sql`UPDATE notifications SET email_claimed_at = now()
                           WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)
                             AND emailed_at IS NULL AND email_skipped IS NULL
+                            AND (email_claimed_at IS NULL OR email_claimed_at < now() - make_interval(mins => ${CLAIM_MINUTES}))
                           RETURNING id::int AS id`;
   return rows.map((r) => Number(r.id));
 }
 
+/** Only after Resend has accepted the email. */
+async function markSent(ids: number[]): Promise<void> {
+  await sql`UPDATE notifications SET emailed_at = now() WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)`;
+}
+
 async function release(ids: number[]): Promise<void> {
-  await sql`UPDATE notifications SET emailed_at = NULL WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)`;
+  await sql`UPDATE notifications SET email_claimed_at = NULL WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)`;
 }
 
 async function skip(ids: number[], reason: string): Promise<void> {
@@ -176,6 +187,7 @@ export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: 
       LEFT JOIN threads t ON t.id = n.thread_id
       LEFT JOIN posts p ON p.id = n.post_id
      WHERE n.emailed_at IS NULL AND n.email_skipped IS NULL
+       AND (n.email_claimed_at IS NULL OR n.email_claimed_at < now() - make_interval(mins => ${CLAIM_MINUTES}))
        AND n.created_at < now() - make_interval(secs => ${SETTLE_SECONDS})
      ORDER BY n.member_id, n.created_at, n.id
      LIMIT ${opts.limit ?? 500}`) as unknown as Row[];
@@ -266,6 +278,7 @@ export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: 
         summary.failed += ids.length;
         continue;
       }
+      await markSent(ids);
       await sql`INSERT INTO rate_events (key) VALUES (${`notify:member:${memberId}`})`;
       used++;
       summary.sent++;

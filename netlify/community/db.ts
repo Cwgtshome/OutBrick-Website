@@ -59,14 +59,20 @@ export function ipHash(req: Request): string {
 
 /**
  * Count events for `key` in the last `windowSeconds`; if fewer than `max`, record one and return
- * true. Old rows are pruned opportunistically.
+ * true. The check and the insert run in one transaction under a per-key advisory lock, so a burst
+ * of parallel requests is admitted one at a time and cannot all read the same below-limit count.
+ * Old rows are pruned opportunistically.
  */
 export async function rateAllow(key: string, max: number, windowSeconds: number): Promise<boolean> {
-  const [row] = (await sql`SELECT count(*)::int AS n FROM rate_events WHERE key = ${key} AND at > now() - make_interval(secs => ${windowSeconds})`) as { n: number }[];
-  if ((row?.n ?? 0) >= max) return false;
-  await sql`INSERT INTO rate_events (key) VALUES (${key})`;
-  if (Math.random() < 0.02) await sql`DELETE FROM rate_events WHERE at < now() - interval '2 days'`;
-  return true;
+  const allowed = await transaction(async (q) => {
+    await q(`SELECT pg_advisory_xact_lock(hashtextextended($1, 0))`, [`rate:${key}`]);
+    const [row] = await q(`SELECT count(*)::int AS n FROM rate_events WHERE key = $1 AND at > now() - make_interval(secs => $2)`, [key, windowSeconds]);
+    if (Number(row?.n ?? 0) >= max) return false;
+    await q(`INSERT INTO rate_events (key) VALUES ($1)`, [key]);
+    return true;
+  });
+  if (allowed && Math.random() < 0.02) await sql`DELETE FROM rate_events WHERE at < now() - interval '2 days'`;
+  return allowed;
 }
 
 /** URL slug for a thread title: lower-case latin words joined by hyphens, or 'thread' for other scripts. */

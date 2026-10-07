@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useId, useRef, useState, type SubmitEvent, type ReactNode } from 'react';
+import { dayDate } from '../../../lib/community/format';
 import type { BadgeKey, AssistiveTech, CommunityLocale, ModQueueItem, ModReport, Provider, SelfMember } from '../../../lib/community/contract';
 import { bugLevelRange, communityLocales, threadPath } from '../../../lib/community/contract';
 import { categoryWords } from '../../../lib/i18n/community';
@@ -1004,5 +1005,71 @@ function QueueItem({ item, onDone }: { item: ModQueueItem; onDone: () => void })
         </button>
       </div>
     </li>
+  );
+}
+
+/**
+ * On a member's profile, for moderators: suspend the member for a number of days with a reason
+ * the member is shown, or lift a suspension. Admins can't be suspended, and nobody suspends
+ * themself; the server enforces both and the role order as well.
+ */
+export function MemberModeration({ member }: { member: { id: number; role: string; displayName: string } }) {
+  const { copy, locale, session, announce } = useApp();
+  const [days, setDays] = useState('7');
+  const [reason, setReason] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [bannedUntil, setBannedUntil] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const id = useId();
+  const me = session?.member;
+  if (!me || !['moderator', 'team', 'admin'].includes(me.role) || me.id === member.id || member.role === 'admin') return null;
+  const submit = async (lift: boolean) => {
+    setBusy(true);
+    setError('');
+    try {
+      const res = await api.banMember(member.id, lift ? { days: 0, reason: '' } : { days: Number.parseInt(days, 10), reason: reason.trim() });
+      setBannedUntil(res.member.bannedUntil);
+      announce(lift ? copy.mod.unbanDone : copy.mod.banDone);
+    } catch (failure) {
+      const text = errorText(copy, failureOf(failure));
+      setError(text);
+      announce(text);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    void submit(false);
+  };
+  return (
+    <section className="cm-section" aria-labelledby={`${id}-h`}>
+      <h2 id={`${id}-h`}>{copy.mod.banHeading}</h2>
+      <p>{copy.mod.banLede}</p>
+      {bannedUntil ? <p className="cm-badge">{copy.mod.bannedUntil(dayDate(locale, bannedUntil))}</p> : null}
+      {error ? (
+        <p className="cm-error" role="alert">
+          {error}
+        </p>
+      ) : null}
+      <form onSubmit={onSubmit} noValidate>
+        <div className="cm-field">
+          <label htmlFor={`${id}-days`}>{copy.mod.banDays}</label>
+          <input id={`${id}-days`} type="number" inputMode="numeric" min={1} max={36500} value={days} onChange={(e) => setDays(e.target.value)} required />
+        </div>
+        <div className="cm-field">
+          <label htmlFor={`${id}-reason`}>{copy.mod.banReason}</label>
+          <input id={`${id}-reason`} type="text" minLength={2} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} required />
+        </div>
+        <div className="cm-row">
+          <button type="submit" className="cm-act cm-danger" disabled={busy}>
+            {copy.mod.banSubmit}
+          </button>
+          <button type="button" className="cm-act" disabled={busy} onClick={() => void submit(true)}>
+            {copy.mod.unban}
+          </button>
+        </div>
+      </form>
+    </section>
   );
 }

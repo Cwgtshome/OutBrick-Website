@@ -11,6 +11,7 @@ import { pageOfPost } from '../../../lib/community/static-html';
 import { dayDate } from '../../../lib/community/format';
 import { api } from './api';
 import { ProfileExtras, RoadmapPreview, VoteButton } from './views-fx';
+import { MemberModeration } from './views-forms';
 import { ErrorNotice, Fill, MARK, Member, Pagination, Pending, StatusBadge, Time, View, errorText, useApp, useLoad, type Route } from './core';
 
 /** "fr,en" for "my language and English"; nothing for all languages; one code for one. */
@@ -541,6 +542,7 @@ export function MemberView({ route }: { route: Extract<Route, { name: 'member' }
         <p className="cm-bio">{member.bio || copy.profile.noBio}</p>
       </section>
       {profile.data.stats ? <ProfileExtras profile={profile.data} /> : null}
+      <MemberModeration member={member} />
       <section className="cm-section" aria-labelledby="cm-recent-h">
         <h2 id="cm-recent-h">{copy.profile.recent}</h2>
         {recentThreads.length ? <ThreadList threads={recentThreads} /> : <p>{copy.profile.none}</p>}

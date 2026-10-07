@@ -111,25 +111,26 @@ const communityApi = async (req: Request): Promise<Response> => handle(req, rout
 
 export default communityApi;
 
+// Netlify reads this object statically at build time: every path must be a plain string literal.
 export const config = {
   path: [
-    `${base}/categories`,
-    `${base}/categories/*`,
-    `${base}/threads`,
-    `${base}/threads/*`,
-    `${base}/posts/*`,
-    `${base}/preview`,
-    `${base}/search`,
-    `${base}/faq`,
-    `${base}/faq/*`,
-    `${base}/members/*`,
-    `${base}/mod/*`,
+    '/api/community/categories',
+    '/api/community/categories/*',
+    '/api/community/threads',
+    '/api/community/threads/*',
+    '/api/community/posts/*',
+    '/api/community/preview',
+    '/api/community/search',
+    '/api/community/faq',
+    '/api/community/faq/*',
+    '/api/community/members/*',
+    '/api/community/mod/*',
     // Phase 2 (community-p2)
-    `${base}/uploads`,
-    `${base}/uploads/*`,
+    '/api/community/uploads',
+    '/api/community/uploads/*',
     // community-fx
-    `${base}/roadmap`,
-    `${base}/pulse`,
-    `${base}/leaderboard`,
+    '/api/community/roadmap',
+    '/api/community/pulse',
+    '/api/community/leaderboard',
   ],
 };
