@@ -62,3 +62,6 @@ readback and an actual verified owner sign-in; local PGlite tests do not establi
 `COMMUNITY_TEAM_EMAILS=news@outbrick.site` assigns the team role only after a verified email-link sign-in to that exact mailbox. It grants replies, Announcements threads and editorial drafts, without moderation, member-role management or publishing. It never overwrites an existing moderator/admin role. To revoke bootstrap, remove the address from the environment and change its stored role using an admin.
 
 `support@outbrick.site` was registered and verified as OutBrick Support through its real Mail link in Chrome. New environment values require a deployment and fresh sign-in before live role verification.
+
+
+Release: PR #15 merged at `d0cc7d6`; Netlify production deploy `6ac66d5741587b000833a715` published with migrations applied. All 13 cloud checks and all 233 local community/auth cases passed. News team draft/save/reload/private-404 and 390px layout are verified on the deployment preview. Fresh production news/support sign-in and role acceptance remain pending Mail access while the Mac is locked. See CURRENT-STATUS.md for the complete release and Brazil translation coordination receipts.
