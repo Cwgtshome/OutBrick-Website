@@ -18,7 +18,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const { renderSample, templateNames, templateTitles, emailLocales } = await import('../emails/index.ts');
+const { renderSample, templateNames, templateTitles, templateLang, emailLocales } = await import('../emails/index.ts');
 
 const args = process.argv.slice(2);
 const outArg = args.includes('--out') ? args[args.indexOf('--out') + 1] : null;
@@ -39,12 +39,14 @@ for (const name of templateNames) {
     const where = `${name}/${locale}`;
     if (!email.subject?.trim()) problems.push(`${where}: empty subject`);
     if (!email.text?.trim() || email.text.length < 120) problems.push(`${where}: plain-text part is missing or too short`);
-    if (!new RegExp(`<html lang="${locale}"`).test(email.html)) problems.push(`${where}: <html lang> is not ${locale}`);
+    const lang = templateLang(name, locale);
+    if (!new RegExp(`<html lang="${lang}"`).test(email.html)) problems.push(`${where}: <html lang> is not ${lang}`);
     if (!/<meta name="color-scheme" content="light dark">/.test(email.html)) problems.push(`${where}: no color-scheme meta`);
     if (/<b>Not bold<\/b>|<b>Pas en gras|<b>Nicht fett|<b>No en negrita|<b>太字/.test(email.html)) problems.push(`${where}: sample markup was not escaped`);
     if (/<img(?![^>]*\balt=")[^>]*>/.test(email.html)) problems.push(`${where}: an <img> has no alt`);
     if (/<table(?![^>]*role="presentation")[^>]*>/.test(email.html)) problems.push(`${where}: a layout table lacks role="presentation"`);
     if (/undefined|\[object Object\]/.test(email.html + email.text)) problems.push(`${where}: "undefined" or "[object Object]" in the output`);
+    if (name.startsWith('team-') && /203\.0\.113\.7/.test(email.html + email.text)) problems.push(`${where}: the visitor's IP address reached the team copy`);
     if (Buffer.byteLength(email.html) > 100_000) problems.push(`${where}: HTML is ${Buffer.byteLength(email.html)} bytes; Gmail clips messages over 102 KB`);
     rendered.push({ name, locale, email });
   }

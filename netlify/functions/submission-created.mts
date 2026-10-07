@@ -5,7 +5,8 @@
 // `human_fields`, `id` and `site_url`.
 //
 // It sends the visitor an acknowledgement (contact, careers, affiliate) or the newsletter's
-// confirm-your-subscription email. The rules live in emails/submission.ts. Whatever happens it
+// confirm-your-subscription email, then the team's own copy of the submission to
+// support@outbrick.site (emails/team.ts). The rules live in emails/submission.ts. Whatever happens it
 // answers 200: the submission is already stored in Netlify, and a failed email is logged with
 // the submission id rather than retried into a loop.
 
