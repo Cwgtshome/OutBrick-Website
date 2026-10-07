@@ -10,7 +10,9 @@
  * Accounts and sessions — netlify/functions/community-auth.mts
  *   GET    /session                         → SessionResponse
  *   POST   /auth/email          EmailSignInRequest → { sent: true }
- *   GET    /auth/email/verify?token=&returnTo=      → 302 to returnTo (sets the session cookie)
+ *   GET    /auth/email/verify?token=            → a one-button page (link scanners only GET)
+ *   POST   /auth/email/verify?token=            → 303 to returnTo (sets the session cookie)
+ *   GET|POST /auth/email/confirm?token=         → page / 303 to /community/settings?email=confirmed
  *   GET    /auth/:provider/start?returnTo=&locale=   → 302 to Apple / Google / Facebook
  *   GET|POST /auth/:provider/callback                 → 302 back (Apple posts its form here)
  *   POST   /auth/signout                    → { ok: true }
@@ -111,7 +113,12 @@ export type UpdateMeRequest = {
   bio?: string;
   locale?: CommunityLocale;
   emailPrefs?: Record<string, boolean>;
+  /** A new address: a "Confirm your email" goes to it, and it replaces the old one only once confirmed. */
+  email?: string;
 };
+
+/** PATCH /me answers with the member; `emailConfirmationSent` is present when `email` was sent. */
+export type UpdateMeResponse = { member: SelfMember; emailConfirmationSent?: boolean };
 
 export type Category = {
   id: number;
