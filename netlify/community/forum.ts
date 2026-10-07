@@ -45,7 +45,8 @@ export async function run(text: string, params: unknown[] = []): Promise<Row[]> 
   let m: RegExpExecArray | null;
   while ((m = re.exec(text))) {
     strings.push(text.slice(last, m.index));
-    values.push(params[Number(m[1]) - 1]);
+    // The Netlify driver (waddler) refuses `undefined`; a missing value is SQL NULL.
+    values.push(params[Number(m[1]) - 1] ?? null);
     last = m.index + m[0].length;
   }
   strings.push(text.slice(last));
