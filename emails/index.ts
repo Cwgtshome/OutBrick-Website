@@ -14,9 +14,12 @@ import {
 } from './templates.ts';
 
 import { communityConfirmEmail, communityDigest, communityNotification, communitySignIn, communityWelcome, type NotificationItem } from './community.ts';
+// Phase 2 (community-p2)
+import { communityReplyBounce, communityWeeklyDigest } from './community-digest.ts';
 
 export * from './templates.ts';
 export * from './community.ts';
+export * from './community-digest.ts';
 export { emailCopy, emailLocales, isEmailLocale, type EmailLocale } from './i18n.ts';
 
 /** An issue file in emails/issues/: one IssueContent per language. */
@@ -46,7 +49,13 @@ export type CommunityTemplateName =
   | 'community-solved'
   | 'community-release'
   | 'community-moderation'
-  | 'community-digest';
+  | 'community-badge'
+  | 'community-digest'
+  // Phase 2 (community-p2)
+  | 'community-merged'
+  | 'community-reply-by-email'
+  | 'community-weekly-digest'
+  | 'community-reply-bounce';
 
 export type TemplateName = 'contact' | 'contact-bug' | 'careers' | 'affiliate' | 'newsletter-confirm' | 'newsletter-welcome' | 'newsletter-campaign' | CommunityTemplateName;
 
@@ -62,7 +71,13 @@ export const communityTemplateNames: CommunityTemplateName[] = [
   'community-solved',
   'community-release',
   'community-moderation',
+  'community-badge',
   'community-digest',
+  // Phase 2 (community-p2)
+  'community-merged',
+  'community-reply-by-email',
+  'community-weekly-digest',
+  'community-reply-bounce',
 ];
 
 export const templateNames: TemplateName[] = ['contact', 'contact-bug', 'careers', 'affiliate', 'newsletter-confirm', 'newsletter-welcome', 'newsletter-campaign', ...communityTemplateNames];
@@ -86,7 +101,12 @@ export const templateTitles: Record<TemplateName, string> = {
   'community-solved': 'Community: your answer was marked Solved',
   'community-release': 'Community: release announcement (from news@)',
   'community-moderation': 'Community: moderation notice',
+  'community-badge': 'Community: you earned a badge (Helpful, 10 solved answers)',
   'community-digest': 'Community: several notifications grouped',
+  'community-merged': 'Community: your post moved in a thread merge',
+  'community-reply-by-email': 'Community: reply notification with the reply-by-email hint',
+  'community-weekly-digest': 'Community: weekly digest (opt-in, Mondays)',
+  'community-reply-bounce': 'Community: a reply by email could not be posted',
 };
 
 const sampleTitles: Record<EmailLocale, string> = {
@@ -127,6 +147,8 @@ function sampleItem(locale: EmailLocale, kind: NotificationItem['kind']): Notifi
     statusNote: kind === 'status' ? sampleNotes[locale] : null,
     version: kind === 'release' ? '5.1' : null,
     reason: kind === 'moderation' ? `${sampleReasons[locale]} <b>Not bold</b>` : null,
+    fromTitle: kind === 'merged' ? `${sampleTitles[locale]} <b>Not bold</b>` : null,
+    ...(kind === 'badge' ? { actorName: null, threadTitle: '', url: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/community/u/7`, excerpt: '', badge: 'helpful', level: 10 } : {}),
   };
 }
 
@@ -161,7 +183,8 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
     case 'community-status':
     case 'community-solved':
     case 'community-release':
-    case 'community-moderation': {
+    case 'community-moderation':
+    case 'community-badge': {
       const kind = name.slice('community-'.length) as NotificationItem['kind'];
       return communityNotification({
         locale,
@@ -172,6 +195,38 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
         unsubscribeKind: kind,
       });
     }
+    case 'community-merged':
+      return communityNotification({ locale, assetBase, item: sampleItem(locale, 'merged'), manageUrl: `${sampleLink}-settings`, unsubscribeUrl: `${sampleLink}-unsubscribe`, unsubscribeKind: 'merged' });
+    case 'community-reply-by-email':
+      return communityNotification({ locale, assetBase, item: sampleItem(locale, 'reply'), manageUrl: `${sampleLink}-settings`, unsubscribeUrl: `${sampleLink}-unsubscribe`, unsubscribeKind: 'reply', replyByEmail: true });
+    case 'community-weekly-digest': {
+      const thread = (n: number, replies: number, votes?: number) => ({ title: `${sampleTitles[locale]} ${n} <b>Not bold</b>`, url: `${sampleLink}-thread-${n}`, replies, votes });
+      return communityWeeklyDigest({
+        locale,
+        assetBase,
+        name: `${sampleActors[locale]} <b>Not bold</b>`,
+        releases: [{ version: '5.1', url: `${sampleLink}-release` }],
+        categories: [
+          { kind: 'accessibility', threads: [thread(1, 12), thread(2, 4)] },
+          { kind: 'ideas', threads: [thread(3, 7, 31)] },
+        ],
+        unanswered: [thread(4, 0)],
+        communityUrl: `${sampleLink}-community`,
+        manageUrl: `${sampleLink}-settings`,
+        unsubscribeUrl: `${sampleLink}-unsubscribe`,
+        unsubscribeKind: 'digest',
+      });
+    }
+    case 'community-reply-bounce':
+      return communityReplyBounce({
+        locale,
+        assetBase,
+        reason: 'locked',
+        threadTitle: sampleTitles[locale],
+        threadUrl: `${sampleLink}-thread`,
+        text: `${sampleMessages[locale]} <b>Not bold</b>`,
+        manageUrl: `${sampleLink}-settings`,
+      });
     case 'community-digest':
       return communityDigest({
         locale,

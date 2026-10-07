@@ -39,7 +39,13 @@ void describe('session', () => {
     const res = await communityAuth(request('GET', '/api/community/session'));
     assert.equal(res.status, 200);
     assert.equal(res.headers.get('cache-control'), 'no-store');
-    assert.deepEqual(await res.json<any>(), { member: null, providers: ['email'], unreadNotifications: 0 });
+    assert.deepEqual(await res.json<any>(), {
+      member: null,
+      providers: ['email'],
+      unreadNotifications: 0,
+      // Phase 2 (community-p2)
+      features: { passkeys: true, uploads: true, replyByEmail: false, translate: false, digest: true },
+    });
     delete process.env.RESEND_API_KEY;
     assert.deepEqual((await (await communityAuth(request('GET', '/api/community/session'))).json<any>()).providers, []);
   });
@@ -110,10 +116,11 @@ void describe('PATCH /me', () => {
     assert.equal(me.needsName, false);
     assert.equal(me.bio, 'Hello\nthere');
     assert.equal(me.locale, 'ja');
-    assert.deepEqual(me.emailPrefs, { watched: false, release: true });
+    // The weekly digest is opt-in: its switch reads off until set (phase 2).
+    assert.deepEqual(me.emailPrefs, { digest: false, watched: false, release: true });
     // Prefs merge rather than replace.
     const again = await (await patch(cookie, { emailPrefs: { reply: false } })).json<any>();
-    assert.deepEqual(again.member.emailPrefs, { watched: false, release: true, reply: false });
+    assert.deepEqual(again.member.emailPrefs, { digest: false, watched: false, release: true, reply: false });
   });
 
   void test('bio, locale and prefs validation', async () => {

@@ -152,7 +152,7 @@ void test('mentions link to members and report who was mentioned', () => {
 });
 
 void test('pathological input stays fast', () => {
-  const inputs = ['*a'.repeat(10000), '['.repeat(20000), '**a'.repeat(6000), '`'.repeat(20000), '_a '.repeat(6000), '[a](' .repeat(5000), '@a '.repeat(6000), '> '.repeat(10000)];
+  const inputs = ['*a'.repeat(10000), '['.repeat(20000), '**a'.repeat(6000), '`'.repeat(20000), '_a '.repeat(6000), '[a](' .repeat(5000), '@a '.repeat(6000), '> '.repeat(10000), '![a](upload:'.repeat(3000)];
   for (const md of inputs) {
     const start = performance.now();
     const out = renderMarkdown(md, { mentions: new Map([['a', { id: 1, displayName: 'a' }]]) }).html;

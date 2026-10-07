@@ -129,7 +129,7 @@ void describe('unsubscribe', () => {
     assert.equal(res.status, 200);
     assert.match(await res.text(), /OutBrick Community won’t email you any more/);
     const prefs = (await one<{ email_prefs: Record<string, boolean> }>(pg, `SELECT email_prefs FROM members WHERE id = $1`, [me.id])).email_prefs;
-    assert.deepEqual(Object.keys(prefs).sort(), ['mention', 'moderation', 'release', 'reply', 'solved', 'status', 'watched']);
+    assert.deepEqual(Object.keys(prefs).sort(), ['badge', 'digest', 'mention', 'merged', 'moderation', 'release', 'reply', 'solved', 'status', 'watched']);
     assert.ok(Object.values(prefs).every((v) => v === false));
   });
 

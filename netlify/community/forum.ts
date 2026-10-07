@@ -22,10 +22,10 @@ import type {
   ThreadSummary,
   AssistiveTech,
 } from '../../lib/community/contract.ts';
-import { bugStatuses, communityLocales, ideaStatuses } from '../../lib/community/contract.ts';
+import { badgeKeys, bugLevelRange, bugStatuses, communityLocales, ideaStatuses, type BadgeKey } from '../../lib/community/contract.ts';
 import { sql, type Query } from './db.ts';
 import { ApiError, badRequest, forbidden, notFound } from './http.ts';
-import { renderMarkdown, mentionCandidates, type MentionTarget } from './markdown.ts';
+import { renderMarkdown, mentionCandidates, uploadCandidates, type MentionTarget, type RenderResult, type UploadTarget } from './markdown.ts';
 import { hasRole, type Viewer } from './session.ts';
 
 export type Row = Record<string, unknown>;
@@ -80,10 +80,17 @@ const FORMER = 'Former member';
 /** A member as anyone may see them, from columns `<prefix>id`, `<prefix>name`, `<prefix>role`, `<prefix>deleted`. */
 export function publicMember(row: Row, prefix: string): PublicMember {
   if (row[`${prefix}deleted`]) return { id: num(row[`${prefix}id`]), displayName: FORMER, role: 'member' };
-  return { id: num(row[`${prefix}id`]), displayName: String(row[`${prefix}name`]), role: row[`${prefix}role`] as MemberRole };
+  const member: PublicMember = { id: num(row[`${prefix}id`]), displayName: String(row[`${prefix}name`]), role: row[`${prefix}role`] as MemberRole };
+  // `<prefix>badge` (members.top_badge), when the query selected it.
+  const badge = row[`${prefix}badge`];
+  if (typeof badge === 'string' && (badgeKeys as readonly string[]).includes(badge)) member.topBadge = badge as BadgeKey;
+  return member;
 }
 
 export const isModerator = (viewer: Viewer | null) => hasRole(viewer, 'moderator');
+
+/** Phase 2 (community-p2): trusted members (and staff) get the higher of two rate limits. */
+export const limitFor = (viewer: Viewer | null, base: number, trusted: number) => (hasRole(viewer, 'trusted') ? trusted : base);
 
 /** Writing anything needs a verified address; requireMember has already refused bans. */
 export function requireCanWrite(viewer: Viewer): void {
@@ -130,6 +137,8 @@ export function threadColumns(p: Params, viewer: Viewer | null): string {
   return `t.id::int AS id, t.slug, t.title, t.language, t.status, t.status_note, t.pinned, t.locked, t.hidden, t.pending,
     t.solved_post_id::int AS solved_post_id, t.vote_count, t.reply_count, t.view_count, t.last_post_at, t.created_at,
     t.release_version, t.bug, t.category_id::int AS category_id, t.deleted_at,
+    t.shipped_version, t.status_changed_at, EXISTS (SELECT 1 FROM polls pl WHERE pl.thread_id = t.id) AS has_poll,
+    a.top_badge AS a_badge, l.top_badge AS l_badge,
     c.slug AS category_slug, c.kind AS category_kind,
     a.id::int AS a_id, a.display_name AS a_name, a.role AS a_role, (a.deleted_at IS NOT NULL) AS a_deleted,
     l.id::int AS l_id, l.display_name AS l_name, l.role AS l_role, (l.deleted_at IS NOT NULL) AS l_deleted,
@@ -143,9 +152,10 @@ export const threadJoins = `FROM threads t
 
 /** SQL that is true when the viewer may see thread `t`. */
 export function threadVisible(p: Params, viewer: Viewer | null): string {
-  if (isModerator(viewer)) return `t.deleted_at IS NULL`;
-  if (!viewer) return `t.deleted_at IS NULL AND NOT t.hidden AND NOT t.pending`;
-  return `t.deleted_at IS NULL AND NOT t.hidden AND (NOT t.pending OR t.author_id = ${p.add(viewer.id)})`;
+  // Phase 2 (community-p2): a merged thread is only a redirect stub, never shown as a thread.
+  if (isModerator(viewer)) return `t.deleted_at IS NULL AND t.merged_into IS NULL`;
+  if (!viewer) return `t.deleted_at IS NULL AND t.merged_into IS NULL AND NOT t.hidden AND NOT t.pending`;
+  return `t.deleted_at IS NULL AND t.merged_into IS NULL AND NOT t.hidden AND (NOT t.pending OR t.author_id = ${p.add(viewer.id)})`;
 }
 
 export function threadSummary(row: Row, viewer: Viewer | null): ThreadSummary {
@@ -169,6 +179,8 @@ export function threadSummary(row: Row, viewer: Viewer | null): ThreadSummary {
     lastPostAt: iso(row.last_post_at),
     createdAt: iso(row.created_at),
     releaseVersion: (row.release_version as string | null) ?? null,
+    shippedVersion: (row.shipped_version as string | null) ?? null,
+    hasPoll: Boolean(row.has_poll),
   };
   if (viewer) {
     summary.voted = Boolean(row.voted);
@@ -244,18 +256,33 @@ export function readBug(raw: unknown): BugDetails {
   const list = Array.isArray(body.assistive) ? body.assistive : [];
   if (list.length > assistiveValues.length || list.some((v) => !assistiveValues.includes(v as AssistiveTech))) fields['bug.assistive'] = 'invalid';
   else bug.assistive = [...new Set(list as AssistiveTech[])];
+  // Phase 2 (community-p2): the level, from the app's "Report a bug" deep link. Optional.
+  if (body.level !== undefined && body.level !== null && body.level !== '') {
+    const level = typeof body.level === 'number' ? body.level : typeof body.level === 'string' && /^\d{1,6}$/.test(body.level.trim()) ? Number(body.level.trim()) : Number.NaN;
+    if (!Number.isInteger(level) || level < bugLevelRange.min || level > bugLevelRange.max) fields['bug.level'] = 'invalid';
+    else bug.level = level;
+  }
   if (Object.keys(fields).length) throw badRequest('invalid', 'Some details of the bug report need another look.', fields);
   return bug;
 }
 
 /** Stored in snake_case, as the schema describes; read back into the contract's shape. */
 export const bugToJson = (b: BugDetails) =>
-  JSON.stringify({ device: b.device, os_version: b.osVersion, app_version: b.appVersion, assistive: b.assistive, steps: b.steps, expected: b.expected, actual: b.actual });
+  JSON.stringify({
+    device: b.device,
+    os_version: b.osVersion,
+    app_version: b.appVersion,
+    assistive: b.assistive,
+    steps: b.steps,
+    expected: b.expected,
+    actual: b.actual,
+    ...(b.level === undefined ? {} : { level: b.level }),
+  });
 
 export function bugFromRow(value: unknown): BugDetails | null {
   if (!value) return null;
   const b = (typeof value === 'string' ? JSON.parse(value) : value) as Record<string, unknown>;
-  return {
+  const bug: BugDetails = {
     device: txt(b.device),
     osVersion: txt(b.os_version),
     appVersion: txt(b.app_version),
@@ -264,6 +291,8 @@ export function bugFromRow(value: unknown): BugDetails | null {
     expected: txt(b.expected),
     actual: txt(b.actual),
   };
+  if (typeof b.level === 'number' && Number.isInteger(b.level)) bug.level = b.level;
+  return bug;
 }
 
 export function readLocale(value: unknown, fallback: CommunityLocale, field = 'language'): CommunityLocale {
@@ -276,8 +305,12 @@ export function readLocale(value: unknown, fallback: CommunityLocale, field = 'l
 
 export const BODY_MAX = 20000;
 
-/** Render a body, resolving @mentions against current members. */
-export async function renderBody(md: string): Promise<{ html: string; mentionedIds: number[]; hasLink: boolean }> {
+/**
+ * Render a body, resolving @mentions against current members and ![alt](upload:<id>) images
+ * against uploads that are not deleted. With `uploadOwners`, only uploads by those members count
+ * (a member can show their own images, a moderator editing a post the author's and their own).
+ */
+export async function renderBody(md: string, opts: { uploadOwners?: number[] } = {}): Promise<RenderResult> {
   const candidates = mentionCandidates(md);
   const mentions = new Map<string, MentionTarget>();
   if (candidates.length) {
@@ -288,7 +321,35 @@ export async function renderBody(md: string): Promise<{ html: string; mentionedI
     );
     for (const r of rows) mentions.set(String(r.display_name).toLowerCase(), { id: num(r.id), displayName: String(r.display_name) });
   }
-  return renderMarkdown(md, { mentions });
+  const uploads = new Map<string, UploadTarget>();
+  const ids = uploadCandidates(md);
+  if (ids.length) {
+    const rows = await run(
+      `SELECT id, width, height, member_id::int AS member_id FROM uploads
+        WHERE deleted_at IS NULL AND id IN (SELECT jsonb_array_elements_text($1::jsonb))`,
+      [jsonList(ids)],
+    );
+    for (const r of rows) {
+      if (opts.uploadOwners && !opts.uploadOwners.includes(num(r.member_id))) continue;
+      uploads.set(String(r.id), { width: num(r.width), height: num(r.height) });
+    }
+  }
+  return renderMarkdown(md, { mentions, uploads });
+}
+
+/** Phase 2 (community-p2): images in a body that is about to be stored must be usable and described. */
+export function assertImagesOk(rendered: RenderResult): void {
+  if (rendered.imagesWithoutAlt > 0) throw badRequest('invalid', 'Every image needs a description (alt text) so everyone can follow the post.', { body: 'image_needs_alt' });
+  if (rendered.unknownUploads > 0) throw badRequest('invalid', 'One of the images is not one of your uploads, or it was removed.', { body: 'upload_not_found' });
+}
+
+/** Record which post now shows each upload. Call inside the transaction that stored the post. */
+export async function attachUploads(q: Query, postId: number, uploadIds: string[]): Promise<void> {
+  if (!uploadIds.length) return;
+  await q(
+    `UPDATE uploads SET attached_post_id = $1 WHERE deleted_at IS NULL AND attached_post_id IS NULL AND id IN (SELECT jsonb_array_elements_text($2::jsonb))`,
+    [postId, JSON.stringify(uploadIds)],
+  );
 }
 
 /**
@@ -308,7 +369,7 @@ export async function needsReview(viewer: Viewer, hasLink: boolean): Promise<boo
 
 export const postColumns = `p.id::int AS id, p.thread_id::int AS thread_id, p.number, p.body_md, p.body_html, p.reply_to, p.hidden, p.hidden_reason,
   p.pending, p.has_link, p.created_at, p.edited_at, p.deleted_at,
-  m.id::int AS m_id, m.display_name AS m_name, m.role AS m_role, (m.deleted_at IS NOT NULL) AS m_deleted`;
+  m.id::int AS m_id, m.display_name AS m_name, m.role AS m_role, (m.deleted_at IS NOT NULL) AS m_deleted, m.top_badge AS m_badge`;
 
 export type PostContext = {
   viewer: Viewer | null;

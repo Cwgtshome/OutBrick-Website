@@ -7,7 +7,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/privacy',
   title: 'OutBrick privacy policy: data, ads and choices',
   description:
-    'The OutBrick privacy policy: no accounts and no analytics, what the rewarded-ad SDK collects, and how to change your advertising choices.',
+    'The OutBrick privacy policy: no analytics, what the rewarded-ad SDK collects, what the optional OutBrick Community stores, and how to make your choices.',
 });
 
 export default function PrivacyPage() {
@@ -15,14 +15,14 @@ export default function PrivacyPage() {
     <LegalPage
       eyebrow="OutBrick privacy policy"
       title="Your board stays yours."
-      summary="OutBrick is designed to work entirely on your device. This policy explains what the app does and does not collect, how Apple services fit in, and how to make privacy choices."
-      updated="6 October 2026"
+      summary="OutBrick is designed to work entirely on your device. This policy explains what the app does and does not collect, how Apple services fit in, what the optional OutBrick Community on this website stores, and how to make privacy choices."
+      updated="7 October 2026"
       current="/privacy"
     >
       <div className="brick headline">
-        <h2>No accounts, no analytics, and no ad you did not ask for.</h2>
+        <h2>No accounts in the app, no analytics, and no ad you did not ask for.</h2>
         <p>
-          We do not operate accounts, and there is no analytics SDK in OutBrick. The developer does not
+          The app has no accounts, and there is no analytics SDK in OutBrick. The developer does not
           receive your gameplay or face data. The app stores gameplay data locally and can sync
           progress through your own iCloud account. There is one third party in the app:
           Google&rsquo;s advertising SDK, which runs only when you choose to watch a rewarded video in
@@ -30,6 +30,11 @@ export default function PrivacyPage() {
           for the board ahead, the clear card&rsquo;s coins paid again, or a second spin of the Brick
           Wheel. It is described in full below, and buying Remove Ads or holding the Brick Pass switches
           it off entirely.
+        </p>
+        <p>
+          The one account we run is optional and lives on this website: the OutBrick Community, our
+          forum. It is described in its own section below, and joining it or not changes nothing in the
+          game.
         </p>
       </div>
 
@@ -174,6 +179,105 @@ export default function PrivacyPage() {
         </p>
       </section>
 
+      <section className="brick" id="community">
+        <h2>The OutBrick Community</h2>
+        <p>
+          This section is new as of 7 October 2026. The OutBrick Community is the forum, support forum,
+          FAQ and search on this website. Anyone can read it without an account; you need one only to
+          post, vote, follow threads or report a post. The community is separate from the app, and
+          nothing you do in it is linked to your game progress.
+        </p>
+        <ul className="points">
+          <li><b>Your account:</b> a display name, which is public; your email address, which is never shown to anyone else; the language you chose; an optional bio; your email preferences; and your role, such as member or moderator. You can sign in with a one-time link sent to your email address, or with Apple, Google or Facebook. If you use one of those, we store the user id that company gives us for you and the email address it shares with us; we never see your password. Apple&rsquo;s Hide My Email relay addresses work like any other address.</li>
+          <li><b>What you do in the community:</b> your threads and posts, including earlier versions of a post you have edited, your votes, the threads and categories you follow, how far you have read each thread, your notifications, the reports you make, and any moderation action taken on your posts or your account.</li>
+          <li><b>Bug reports:</b> a bug report can also include your device model, iOS version, app version and the assistive technologies you use. Each of these is optional, and only what you choose to fill in is stored.</li>
+          <li><b>Signed-in sessions:</b> for each browser you sign in on, when the session started, when it expires and the browser&rsquo;s user agent, so the sign-in can be recognised. The token that keeps you signed in is stored only as a one-way hash.</li>
+          <li><b>IP addresses:</b> the community&rsquo;s database does not store them. To slow down spam and abuse, the community briefly keeps a salted one-way hash of your IP address to count requests, and records older than two days are deleted.</li>
+          <li><b>Public posts:</b> everything you post — threads, replies, your display name and your bio — is public. Anyone can read it without an account, and search engines index it. Please do not post your own or anyone else&rsquo;s personal information.</li>
+        </ul>
+        <p>
+          <b>Who processes it.</b> Netlify, which hosts this website, runs the community&rsquo;s
+          functions and its database, Netlify Database, a Postgres database run with Neon. Resend
+          delivers the community&rsquo;s emails. Both act as our service providers, as described in the
+          forms section above. If you choose to sign in with Apple, Google or Facebook, that company
+          handles the sign-in under its own privacy policy and shares with us only the user id and
+          email address described above. Nobody else receives community data, and we do not sell it
+          or use it for advertising.
+        </p>
+        <p>
+          <b>Netlify&rsquo;s request logs.</b> Like any web host, Netlify records technical details of
+          the requests made to this website and its functions — such as the time, the address
+          requested, your IP address and your browser&rsquo;s user agent — to deliver the site, keep it
+          secure and investigate problems. These logs are kept by Netlify for a limited period under its
+          own policy. We read them only to diagnose errors, and never to identify or profile visitors.
+        </p>
+        <p>
+          <b>Emails.</b> We email you sign-in links when you ask for one, a confirmation when you add or
+          change your email address, a welcome when you join, and notifications: replies to you,
+          mentions of your name, new posts in threads and categories you follow, a status change on
+          your bug report or idea, your answer being marked as the solution, new OutBrick releases, and
+          moderation notices about your posts or your account. You can switch each kind of
+          notification off in your community settings, and every notification email has a one-click
+          unsubscribe link.
+        </p>
+        <p>
+          <b>How long we keep it.</b> Your account and what you post stay for as long as you keep the
+          account. A session ends when you sign out, or after 30 days without a visit. Sign-in links
+          stop working after 20 minutes.
+        </p>
+        <p>
+          <b>Your choices and rights.</b> In your community settings you can change your name, bio,
+          language and email preferences, download everything we hold about your account as a JSON
+          file, and delete your account yourself. You can also edit or delete your own posts at any
+          time. Deleting your account blanks your name, email address and bio, removes your sign-in
+          links, sessions, follows and notifications, and signs you out. Your posts stay, shown as
+          written by a Former member, so the conversations they belong to still make sense. To have
+          specific posts erased as well, ask us through the contact form with the topic set to Privacy,
+          or reply to any community email, and we will remove them and confirm when it is done.
+        </p>
+        <p>
+          <b>What stays after deletion.</b> Your votes, the reports you made and the edit history of
+          your posts stay attached to the blanked Former member account. Removing them would change
+          vote counts and leave gaps in threads, and moderators need the record of what was reported and
+          changed to handle disputes and repeated abuse fairly. None of it is linked to your name or
+          email address any more.
+        </p>
+        <p>
+          <b>Who can join.</b> You must be at least 16 to create a community account, or older if the
+          age of digital consent where you live is higher. The game itself is rated 4+ and needs no
+          account.
+        </p>
+      </section>
+
+      <section className="brick" id="community-next">
+        <h2>Coming to the community</h2>
+        <p>
+          These features are planned for the OutBrick Community. They are described here now so that
+          this policy is accurate on the day each one arrives; until a feature is live, none of the data
+          below is collected.
+        </p>
+        <ul className="points">
+          <li><b>Images in posts:</b> images you attach to a post are stored with Netlify Blobs, Netlify&rsquo;s file storage. Each image needs a text description (alt text) for people who cannot see it, and the location and other metadata embedded in the file are removed when you upload it. An image is public, like the post it belongs to.</li>
+          <li><b>Reply by email:</b> you will be able to answer a notification email to post your reply. Resend receives and processes the incoming email on our behalf, and we post its text as your reply, under your account.</li>
+          <li><b>Passkeys:</b> if you sign in with a passkey, we store only its public key and a credential id. The private key never leaves your device or password manager, and no fingerprint or face data is ever sent to us.</li>
+          <li><b>Translation on request:</b> if you ask for a post to be translated, the text of that post is sent to an AI translation provider through Netlify&rsquo;s AI Gateway, and the translation is shown to you. Nothing is sent unless someone asks for a translation, and your account details are never part of it.</li>
+          <li><b>Weekly digest:</b> an optional weekly email summarising what happened in the community. It is off unless you switch it on, and it has the same one-click unsubscribe as every notification email.</li>
+        </ul>
+      </section>
+
+      <section className="brick" id="cookies">
+        <h2>Cookies</h2>
+        <p>
+          This website uses no advertising or analytics cookies, and reading it sets none at all. The
+          OutBrick Community uses two first-party cookies, both strictly necessary for signing in, and
+          neither is used to follow you around the web.
+        </p>
+        <ul className="points">
+          <li><b>Session cookie:</b> set when you sign in to the community. It holds a random token that keeps you signed in, cannot be read by scripts on the page (it is HttpOnly), and lasts 30 days, renewed while you keep visiting. Signing out removes it.</li>
+          <li><b>Sign-in cookie:</b> when you start signing in with Google or Facebook, a cookie that lasts at most 10 minutes ties the sign-in to the browser that started it, so nobody else can finish it. It is removed as soon as the sign-in completes.</li>
+        </ul>
+      </section>
+
       <section className="brick">
         <h2>Retention and deletion</h2>
         <p>
@@ -188,6 +292,10 @@ export default function PrivacyPage() {
           information in a support message, use our <a href="/privacy-choices">privacy choices</a> page
           or the <a href="/contact?topic=privacy">contact form</a>.
         </p>
+        <p>
+          Your OutBrick Community account is kept and deleted as described in the community section
+          above.
+        </p>
       </section>
 
       <section className="brick">
@@ -200,6 +308,12 @@ export default function PrivacyPage() {
           where Apple or applicable law requires it, which restricts it to non-personalised ads and
           prevents the use of an advertising identifier.
         </p>
+        <p>
+          The OutBrick Community on this website is separate from the game and is not meant for
+          children: you must be at least 16 to create an account, or older if the age of digital
+          consent where you live is higher. If you believe a child has created an account, tell us
+          through the contact form and we will delete it.
+        </p>
       </section>
 
       <section className="brick">
@@ -207,8 +321,11 @@ export default function PrivacyPage() {
         <p>
           Apple services, App Store purchases, Game Center, iCloud sync, and iCloud backups are operated
           under their own terms and privacy policies. Google is the one advertising partner in the app,
-          described above. On this website, Netlify hosts the pages and handles the forms, and Resend sends the
-          emails that answer them, both described above. We do not add a third-party analytics or advertising partner without updating
+          described above. On this website, Netlify hosts the pages, handles the forms and runs the
+          OutBrick Community and its database, and Resend sends the emails that answer the forms and
+          the community&rsquo;s emails, all described above. If you sign in to the community with
+          Apple, Google or Facebook, that company handles the sign-in under its own terms and privacy
+          policy. We do not add a third-party analytics or advertising partner without updating
           this policy and the relevant App Store privacy information first — which is what this revision
           is. We may update this page when the app or its practices change; the effective date above
           will show the latest revision.

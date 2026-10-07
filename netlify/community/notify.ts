@@ -20,13 +20,17 @@
 //
 // Email preferences: every kind is on unless the member's `email_prefs` has `{ kind: false }`.
 
-import { threadPath, type CommunityLocale } from '../../lib/community/contract.ts';
+import { communityPath, threadPath, type CommunityLocale } from '../../lib/community/contract.ts';
 import { communityDigest, communityNotification, communityUrl, communityWelcome, plainExcerpt, type NotificationItem } from '../../emails/community.ts';
 import { communityKinds, type CommunityKind, type UnsubscribeKind } from '../../emails/community-i18n.ts';
 import { SENDERS, sendEmail, type OutgoingEmail, type ResendResult } from '../../emails/resend.ts';
 import { SITE } from './http.ts';
 import { sha256, sql } from './db.ts';
 import { listUnsubscribeHeaders, unsubscribeUrl } from './auth/inbox.ts';
+import { replyToFor } from './reply-email.ts';
+
+/** Phase 2: kinds whose single-item email gets a reply-by-email Reply-To. */
+const replyableKinds: readonly string[] = ['reply', 'mention', 'watched', 'status', 'solved', 'merged'];
 
 export const HOURLY_CAP = 6;
 export const SETTLE_SECONDS = 120;
@@ -82,6 +86,8 @@ function skipReason(row: Row, now: number): string | null {
   if (!isKind(row.kind)) return 'unknown_kind';
   if (!wantsEmail(row.email_prefs, row.kind)) return 'pref_off';
   if (row.actor_id != null && row.actor_id === row.member_id) return 'self';
+  // A badge belongs to the member, not to a thread (community-fx).
+  if (row.kind === 'badge') return null;
   if (row.thread_id == null || row.thread_title == null) return 'gone';
   if (row.kind !== 'moderation' && (row.thread_hidden || row.post_gone)) return 'hidden';
   return null;
@@ -91,6 +97,18 @@ function itemOf(row: Row, locale: CommunityLocale): NotificationItem {
   const data = row.data ?? {};
   const kind = row.kind as CommunityKind;
   const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v : null);
+  if (kind === 'badge') {
+    // community-fx: links to the member's own profile, where badges are listed.
+    return {
+      kind,
+      actorName: null,
+      threadTitle: '',
+      url: `${SITE}${communityPath(locale, `/u/${row.member_id}`)}`,
+      excerpt: '',
+      badge: str(data.badge),
+      level: typeof data.level === 'number' ? data.level : 1,
+    };
+  }
   return {
     kind,
     actorName: row.actor_name,
@@ -101,6 +119,7 @@ function itemOf(row: Row, locale: CommunityLocale): NotificationItem {
     statusNote: str(data.statusNote),
     version: str(data.version),
     reason: str(data.reason),
+    fromTitle: str(data.fromTitle),
   };
 }
 
@@ -220,11 +239,17 @@ export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: 
         const unsubKind: UnsubscribeKind = kinds.length === 1 ? kinds[0] : 'all';
         const unsub = unsubscribeUrl(apiKey, memberId, unsubKind);
         const links = { manageUrl, unsubscribeUrl: unsub, unsubscribeKind: unsubKind };
+        // Phase 2 (community-p2): a single notification about a thread can be answered by email.
+        const only = rowsNow.length === 1 ? rowsNow[0] : null;
+        const replyTo = only && only.thread_id != null && replyableKinds.includes(only.kind) ? replyToFor({ memberId, threadId: only.thread_id, notificationId: only.id }) : null;
         const rendered =
-          rowsNow.length === 1 ? communityNotification({ locale, item: items[0], ...links }) : communityDigest({ locale, items, notificationsUrl: communityUrl(locale, '/notifications'), ...links });
+          rowsNow.length === 1
+            ? communityNotification({ locale, item: items[0], ...links, replyByEmail: Boolean(replyTo) })
+            : communityDigest({ locale, items, notificationsUrl: communityUrl(locale, '/notifications'), ...links });
         const sender = batch.news ? SENDERS.communityNews : SENDERS.community;
         email = {
           ...sender,
+          ...(replyTo ? { replyTo } : {}),
           to: first.email,
           subject: rendered.subject,
           html: rendered.html,

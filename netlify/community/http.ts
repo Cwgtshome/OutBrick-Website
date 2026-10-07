@@ -144,3 +144,22 @@ export async function handle(req: Request, routes: Route[]): Promise<Response> {
     return json({ error: { code: 'server_error', message: 'Something went wrong on our side. Please try again.' } }, { status: 500 });
   }
 }
+
+// Phase 2 (community-p2): the time-to-fill check ----------------------------------------------
+
+/** A person needs longer than this between seeing a form and sending it. */
+export const MIN_FILL_MS = 3000;
+
+/**
+ * True when the form was sent less than MIN_FILL_MS after it was shown, by the client's own
+ * `startedAt` (ms epoch). The caller answers like a honeypot hit: a convincing success, nothing
+ * stored. A missing or unreadable value is allowed (older clients), and so is a `startedAt` in
+ * the future: a phone whose clock runs ahead must never lose a real post.
+ */
+export function filledTooFast(body: Record<string, unknown>, now = Date.now()): boolean {
+  const raw = body.startedAt;
+  const started = typeof raw === 'number' ? raw : typeof raw === 'string' && /^\d{10,16}$/.test(raw) ? Number(raw) : Number.NaN;
+  if (!Number.isFinite(started)) return false;
+  const elapsed = now - started;
+  return elapsed >= 0 && elapsed < MIN_FILL_MS;
+}

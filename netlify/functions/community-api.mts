@@ -20,6 +20,10 @@ import { getMember } from '../community/members.ts';
 import { approvePost, banMember, hidePost, listQueue, listReports, resolveReport, setRole } from '../community/moderation.ts';
 import { deletePost, patchPost, postReply, preview, reportPost } from '../community/posts.ts';
 import { getSearch } from '../community/search.ts';
+// Phase 2 (community-p2)
+import { mergeThread } from '../community/merge.ts';
+import { translatePost } from '../community/translate.ts';
+import { createUpload, deleteUpload, serveUpload } from '../community/uploads.ts';
 import {
   followCategory,
   followThread,
@@ -32,10 +36,34 @@ import {
   solveThread,
   voteThread,
 } from '../community/threads.ts';
+// Feature board and interactive features (community-fx) ------------------------------------
+import { grantBadge } from '../community/badges.ts';
+import { getRoadmap, getSimilar } from '../community/ideas.ts';
+import { getPulse, getUpdates } from '../community/live.ts';
+import { getLeaderboard, suggestMembers } from '../community/people.ts';
+import { votePoll } from '../community/polls.ts';
+import { bookmark, react } from '../community/reactions.ts';
 
 const base = '/api/community';
 
+/** Routes with fixed words where the forum has `:id`; they are matched before the forum's routes. */
+const fxRoutes: Route[] = [
+  { method: 'GET', pattern: `${base}/roadmap`, run: getRoadmap },
+  { method: 'GET', pattern: `${base}/threads/similar`, run: getSimilar },
+  { method: 'GET', pattern: `${base}/threads/:id/updates`, run: getUpdates },
+  { method: 'POST', pattern: `${base}/threads/:id/poll/vote`, run: votePoll },
+  { method: 'POST', pattern: `${base}/posts/:id/reactions`, run: react },
+  { method: 'POST', pattern: `${base}/posts/:id/bookmark`, run: bookmark },
+  { method: 'GET', pattern: `${base}/pulse`, run: getPulse },
+  { method: 'GET', pattern: `${base}/leaderboard`, run: getLeaderboard },
+  { method: 'GET', pattern: `${base}/members/suggest`, run: suggestMembers },
+  { method: 'POST', pattern: `${base}/mod/members/:id/badges`, run: grantBadge },
+];
+// (GET /me/bookmarks is served by community-auth.mts, which owns /me/*.)
+
 const routes: Route[] = [
+  ...fxRoutes,
+
   { method: 'GET', pattern: `${base}/categories`, run: listCategories },
   { method: 'POST', pattern: `${base}/categories/:slug/follow`, run: followCategory },
 
@@ -70,6 +98,13 @@ const routes: Route[] = [
   { method: 'GET', pattern: `${base}/mod/queue`, run: listQueue },
   { method: 'POST', pattern: `${base}/mod/members/:id/ban`, run: banMember },
   { method: 'POST', pattern: `${base}/mod/members/:id/role`, run: setRole },
+
+  // Phase 2 (community-p2) ------------------------------------------------------------------
+  { method: 'POST', pattern: `${base}/mod/threads/:id/merge`, run: mergeThread },
+  { method: 'POST', pattern: `${base}/posts/:id/translate`, run: translatePost },
+  { method: 'POST', pattern: `${base}/uploads`, run: createUpload },
+  { method: 'GET', pattern: `${base}/uploads/:id`, run: serveUpload },
+  { method: 'DELETE', pattern: `${base}/uploads/:id`, run: deleteUpload },
 ];
 
 const communityApi = async (req: Request): Promise<Response> => handle(req, routes);
@@ -89,5 +124,12 @@ export const config = {
     `${base}/faq/*`,
     `${base}/members/*`,
     `${base}/mod/*`,
+    // Phase 2 (community-p2)
+    `${base}/uploads`,
+    `${base}/uploads/*`,
+    // community-fx
+    `${base}/roadmap`,
+    `${base}/pulse`,
+    `${base}/leaderboard`,
   ],
 };

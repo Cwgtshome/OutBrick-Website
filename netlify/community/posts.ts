@@ -3,14 +3,17 @@
 import type { Post, ReportReason } from '../../lib/community/contract.ts';
 import { pageSize } from '../../lib/community/contract.ts';
 import { ipHash, transaction } from './db.ts';
-import { ApiError, badRequest, forbidden, json, notFound, oneOf, readJson, str } from './http.ts';
-import { requireMember, type Viewer } from './session.ts';
+import { ApiError, badRequest, filledTooFast, forbidden, json, notFound, oneOf, readJson, str } from './http.ts';
+import { currentMember, requireMember, type Viewer } from './session.ts';
 import {
   BODY_MAX,
   Params,
+  assertImagesOk,
+  attachUploads,
   assertMineOrMod,
   idParam,
   isModerator,
+  limitFor,
   modLog,
   needsReview,
   num,
@@ -26,6 +29,9 @@ import {
 } from './forum.ts';
 import { notifyMentions, notifyNewPost } from './notifications.ts';
 import { rateLimitOrThrow } from './threads.ts';
+// Feature board and interactive features (community-fx).
+import { onVisiblePost } from './badges.ts';
+import { decoratePosts } from './reactions.ts';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL) => Promise<Response>;
 
@@ -38,7 +44,8 @@ export async function loadPost(id: number, viewer: Viewer | null): Promise<Post>
   if (!row) throw notFound('That post does not exist.');
   const thread = await visibleThread(num(row.thread_id), viewer);
   const [replies] = await run(`SELECT EXISTS (SELECT 1 FROM posts WHERE thread_id = $1 AND number > 1 AND deleted_at IS NULL) AS yes`, [thread.id]);
-  return postView(row, { viewer, locked: thread.locked, solvedPostId: thread.solved_post_id, hasReplies: Boolean(replies?.yes) });
+  const [post] = await decoratePosts([postView(row, { viewer, locked: thread.locked, solvedPostId: thread.solved_post_id, hasReplies: Boolean(replies?.yes) })], viewer);
+  return post;
 }
 
 /** The page of the thread on which the viewer sees post `number`. */
@@ -51,10 +58,16 @@ async function pageOf(threadId: number, number: number, viewer: Viewer): Promise
 
 // Replying ----------------------------------------------------------------------------------------
 
-export const postReply: Handler = async (req, params) => {
-  const viewer = await requireMember(req);
-  const threadId = idParam(params.id);
-  const body = await readJson(req, 128 * 1024);
+export type ReplyOutcome = { post: Post; page: number; decoy: boolean };
+
+/**
+ * Post a reply as `viewer` with every rule the forum has: verified address, bans (refused by
+ * the caller's requireMember or by `viewer.banned`), locked threads, the honeypot and the
+ * time-to-fill check (a decoy success), rate limits, image checks and the review queue. The
+ * site's form and reply by email (reply-email.ts) both come through here.
+ */
+export async function replyAs(viewer: Viewer, threadId: number, body: Record<string, unknown>): Promise<ReplyOutcome> {
+  if (viewer.banned) throw new ApiError(403, 'banned', `Your account is suspended${viewer.ban_reason ? `: ${viewer.ban_reason}` : ''}.`);
   const thread = await visibleThread(threadId, viewer);
   const md = str(body, 'body', { min: 1, max: BODY_MAX, label: 'The reply' });
   requireCanWrite(viewer);
@@ -63,7 +76,7 @@ export const postReply: Handler = async (req, params) => {
   const replyToRaw = body.replyTo == null ? null : Number(body.replyTo);
   if (replyToRaw != null && (!Number.isSafeInteger(replyToRaw) || replyToRaw < 1)) throw badRequest('invalid', 'That is not a post to reply to.', { replyTo: 'invalid' });
 
-  if (typeof body.website === 'string' && body.website.trim() !== '') {
+  if ((typeof body.website === 'string' && body.website.trim() !== '') || filledTooFast(body)) {
     const now = new Date().toISOString();
     const decoy: Post = {
       id: 0,
@@ -79,12 +92,13 @@ export const postReply: Handler = async (req, params) => {
       canEdit: false,
       canDelete: false,
     };
-    return json({ post: decoy, page: 1 }, { status: 201 });
+    return { post: decoy, page: 1, decoy: true };
   }
 
-  await rateLimitOrThrow([[`post:hour:${viewer.id}`, 30, 3600]]);
+  await rateLimitOrThrow([[`post:hour:${viewer.id}`, limitFor(viewer, 30, 90), 3600]]);
 
-  const rendered = await renderBody(md);
+  const rendered = await renderBody(md, { uploadOwners: [viewer.id] });
+  assertImagesOk(rendered);
   const pending = await needsReview(viewer, rendered.hasLink);
   const created = await transaction(async (q) => {
     // Lock the thread row: post numbers are handed out one at a time per thread.
@@ -104,6 +118,7 @@ export const postReply: Handler = async (req, params) => {
       [threadId, viewer.id, number, md, rendered.html, replyTo, pending, rendered.hasLink],
     );
     const postId = num(row.id);
+    await attachUploads(q, postId, rendered.uploadIds);
     await refreshThreadCounters(q, threadId);
     await q(
       `INSERT INTO reads (member_id, thread_id, last_number) VALUES ($1, $2, $3)
@@ -121,10 +136,19 @@ export const postReply: Handler = async (req, params) => {
         replyTo,
         mentionedIds: rendered.mentionedIds,
       });
+      await onVisiblePost(q, viewer.id);
     }
     return { postId, number };
   });
-  return json({ post: await loadPost(created.postId, viewer), page: await pageOf(threadId, created.number, viewer) }, { status: 201 });
+  return { post: await loadPost(created.postId, viewer), page: await pageOf(threadId, created.number, viewer), decoy: false };
+}
+
+export const postReply: Handler = async (req, params) => {
+  const viewer = await requireMember(req);
+  const threadId = idParam(params.id);
+  const body = await readJson(req, 128 * 1024);
+  const { post, page } = await replyAs(viewer, threadId, body);
+  return json({ post, page }, { status: 201 });
 };
 
 // Editing -----------------------------------------------------------------------------------------
@@ -145,7 +169,9 @@ export const patchPost: Handler = async (req, params) => {
   const md = str(body, 'body', { min: 1, max: BODY_MAX, label: 'The post' });
   if (md === post.body_md) return json({ post: await loadPost(id, viewer) });
 
-  const rendered = await renderBody(md);
+  // The author's own uploads, and the editing moderator's.
+  const rendered = await renderBody(md, { uploadOwners: [...new Set([authorId, viewer.id])] });
+  assertImagesOk(rendered);
   // Editing a link into a post is held for review the same way posting one is.
   const hadLink = Boolean(post.has_link);
   const nowPending = Boolean(post.pending) || (!hadLink && rendered.hasLink && viewer.id === authorId && (await needsReview(viewer, true)));
@@ -158,6 +184,7 @@ export const patchPost: Handler = async (req, params) => {
       nowPending,
       id,
     ]);
+    await attachUploads(q, id, rendered.uploadIds);
     if (nowPending && !post.pending) {
       if (num(post.number) === 1) await q(`UPDATE threads SET pending = true WHERE id = $1`, [thread.id]);
       await refreshThreadCounters(q, thread.id);
@@ -222,5 +249,12 @@ export const preview: Handler = async (req) => {
   const md = typeof body.body === 'string' ? body.body : '';
   if (md.length > BODY_MAX) throw badRequest('invalid', 'The post is too long.', { body: 'too_long' });
   await rateLimitOrThrow([[`preview:ip:${ipHash(req)}`, 60, 60]]);
-  return json({ html: md.trim() ? (await renderBody(md)).html : '' });
+  if (!md.trim()) return json({ html: '' });
+  const viewer = await currentMember(req);
+  // Signed in: the same image rules as posting, so the preview says what Post would refuse.
+  const rendered = await renderBody(md, viewer ? { uploadOwners: [viewer.id] } : { uploadOwners: [] });
+  const problems: string[] = [];
+  if (rendered.imagesWithoutAlt > 0) problems.push('image_needs_alt');
+  if (rendered.unknownUploads > 0) problems.push('upload_not_found');
+  return json(problems.length ? { html: rendered.html, problems } : { html: rendered.html });
 };

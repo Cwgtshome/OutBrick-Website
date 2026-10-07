@@ -174,3 +174,44 @@ each one in Netlify → Project configuration → Environment variables, marked 
    `FACEBOOK_APP_SECRET`.
 4. Netlify Database provisions itself on the first deploy; Netlify may ask you to accept its terms once.
 5. Your own member account becomes **admin** by setting `COMMUNITY_ADMIN_EMAILS` to your address(es).
+
+## Phase 2 on the server: what the owner has to do
+
+Phase 2 (reply by email, image uploads, passkeys, the weekly digest, translation on request,
+trust levels, thread merges and the app's pre-filled bug report) is in the code. What needs no
+credentials is on; the rest stays off, and `GET /api/community/session` says which in
+`features: { passkeys, uploads, replyByEmail, translate, digest }`, so the pages only show what
+works. Never paste a secret in chat; set each in Netlify → Project configuration → Environment
+variables, marked secret.
+
+1. **Reply by email** (`features.replyByEmail`). In Resend → Domains, add the receiving domain
+   `reply.outbrick.site` and turn on receiving; Resend shows an **MX record** for
+   `reply.outbrick.site` (host `reply`, its inbound mail server, priority 10). Add it at the DNS
+   host for outbrick.site; it does not touch the MX records of `outbrick.site` itself, so
+   support@ keeps working. In Resend → Webhooks, add the endpoint
+   `https://www.outbrick.site/api/community/email/inbound` for the event **email.received**, and
+   copy its signing secret (it starts `whsec_`). Then set `RESEND_WEBHOOK_SECRET` to that secret and
+   `COMMUNITY_REPLY_DOMAIN` to `reply.outbrick.site` (`RESEND_API_KEY` is already set). From the
+   next notification email on, single notifications carry a `Reply-To: reply+…@reply.outbrick.site`
+   and say that replying posts the answer. To switch it off again, delete `COMMUNITY_REPLY_DOMAIN`.
+2. **Translation on request** (`features.translate`). On plans with Netlify's AI Gateway, Netlify
+   injects `ANTHROPIC_API_KEY` and `ANTHROPIC_BASE_URL` into functions by itself and nothing needs
+   doing; otherwise set `ANTHROPIC_API_KEY` to an Anthropic API key. The model is Claude Haiku 4.5
+   (`claude-haiku-4-5-20251001`); each post is translated once per edit and language, then cached.
+3. **Weekly digest** (`features.digest`). Nothing to set: it uses `RESEND_API_KEY`, is off for every
+   member until they switch it on in settings, and is sent on Mondays from 08:00 UTC by the
+   scheduled function `community-digest` (production deploys only).
+4. **Image uploads** (`features.uploads`) and **passkeys** (`features.passkeys`) need nothing: Netlify
+   Blobs (store `community-uploads`) provisions itself, and passkeys use the site's own domain
+   (`outbrick.site` as the relying party, so one passkey works on www and the apex). Set
+   `COMMUNITY_UPLOADS=off` or `COMMUNITY_PASSKEYS=off` to hide either. Netlify's synchronous
+   functions accept request bodies up to about 6 MB, so photos larger than that are refused by the
+   platform before the 8 MB check; the page should shrink a large photo before uploading it.
+5. **Trust levels**: the scheduled function `community-trust` runs daily at 04:00 UTC and promotes
+   members to trusted (7 days, 10 visible posts, 2 solved answers or 5 votes on their ideas, no
+   upheld report in 30 days). It never demotes; setting someone back to member is permanent for
+   the schedule.
+
+The app's **Report a bug** opens `/community/new?category=bugs&device=…&os=…&app=…&assistive=…&level=…&lang=…`
+(see `bugDeepLinkParams` in `lib/community/contract.ts`); the form pre-fills, nothing is posted
+until the member presses Post.

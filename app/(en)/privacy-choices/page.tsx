@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
-import { LegalPage, Pills } from '../../legal-page';
+import { LegalPage, Pills, SiteLink } from '../../legal-page';
 
 export const metadata: Metadata = pageMetadata({
   path: '/privacy-choices',
@@ -14,8 +14,8 @@ export default function PrivacyChoicesPage() {
     <LegalPage
       eyebrow="User privacy choices"
       title="Your choices, clearly."
-      summary="OutBrick has no account system and no analytics. These are the controls available to you — over your advertising choices, over what is stored on your device, and over what Apple services hold."
-      updated="24 September 2026"
+      summary="The OutBrick app has no account system and no analytics. These are the controls available to you — over your advertising choices, over what is stored on your device, and over what Apple services hold."
+      updated="7 October 2026"
       current="/privacy-choices"
     >
       <div className="brick headline">
@@ -102,11 +102,23 @@ export default function PrivacyChoicesPage() {
         </p>
       </section>
 
+      <section className="brick" id="community">
+        <h2>The OutBrick Community</h2>
+        <p>
+          The app itself has no user-generated content and no chat. Separately, this website has the{' '}
+          <SiteLink path="/community">OutBrick Community</SiteLink>, an optional, moderated forum for
+          people aged 16 and over, or older where the age of digital consent is higher. If you join, your
+          community settings let you change your email preferences, download everything we hold about
+          your account and delete the account yourself. The{' '}
+          <a href="/privacy#community">privacy policy</a> explains what the community stores.
+        </p>
+      </section>
+
       <section className="brick">
         <h2>Questions or deletion requests</h2>
         <p>
-          Because OutBrick has no account database, there is normally no server profile for us to
-          retrieve or delete. If you have sent us something — a support message, or a contact,
+          The game has no account database, so for the app there is normally no server profile for us
+          to retrieve or delete. If you have sent us something — a support message, or a contact,
           affiliate or job form on this website — use the <a href="/contact?topic=privacy">OutBrick contact form</a>{' '}
           with the topic set to Privacy, and tell us what you want removed; we delete it from our inbox and
           from the form service that stores website submissions (see <a href="/privacy#forms">Forms on this
@@ -114,7 +126,7 @@ export default function PrivacyChoicesPage() {
         </p>
       </section>
 
-      <Pills items={['No account', 'Apple-managed services', 'Ads only when you ask', 'Local reset in Settings']} />
+      <Pills items={['No account in the app', 'Apple-managed services', 'Ads only when you ask', 'Local reset in Settings']} />
     </LegalPage>
   );
 }
