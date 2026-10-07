@@ -69,7 +69,42 @@ type Row = {
 };
 
 export type Sender = (apiKey: string, email: OutgoingEmail, idempotencyKey?: string) => Promise<ResendResult>;
-export type NotifySummary = { sent: number; skipped: number; deferred: number; failed: number };
+export type NotifySummary = {
+  sent: number;
+  skipped: number;
+  deferred: number;
+  failed: number;
+  /**
+   * When the notifier next has work without any new signal (ms epoch), or null when nothing is
+   * pending. A row still settling falls due when it settles; an in-flight claim when its lease
+   * expires; an unconfirmed member's welcome only at its seven-day expiry (confirming the address
+   * is a write request, which signals the notifier at once); anything already overdue (the hourly
+   * cap, a failed send, a run that ran out of time) on the next run.
+   */
+  dueAt: number | null;
+};
+
+/** The pending work's earliest due time; see NotifySummary.dueAt. */
+export async function nextDueAt(): Promise<number | null> {
+  const [row] = await sql`
+    SELECT min(CASE
+                 WHEN n.kind = 'welcome' AND NOT m.email_verified THEN n.created_at + make_interval(days => ${WELCOME_WAIT_DAYS})
+                 WHEN n.email_retry_at IS NOT NULL AND n.email_retry_at > now() THEN n.email_retry_at
+                 WHEN cap.n >= ${HOURLY_CAP} THEN GREATEST(cap.oldest + interval '1 hour', n.created_at + make_interval(secs => ${SETTLE_SECONDS}))
+                 WHEN n.email_claimed_at IS NOT NULL AND n.email_claimed_at > now() - make_interval(mins => ${CLAIM_MINUTES})
+                   THEN n.email_claimed_at + make_interval(mins => ${CLAIM_MINUTES})
+                 ELSE n.created_at + make_interval(secs => ${SETTLE_SECONDS})
+               END) AS due
+      FROM notifications n
+      JOIN members m ON m.id = n.member_id
+      LEFT JOIN LATERAL (
+        SELECT count(*)::int AS n, min(r.at) AS oldest FROM rate_events r
+         WHERE r.key = 'notify:member:' || n.member_id AND r.at > now() - interval '1 hour'
+      ) cap ON true
+     WHERE n.emailed_at IS NULL AND n.email_skipped IS NULL`;
+  const due = row?.due ? new Date(row.due as string).getTime() : null;
+  return due === null || Number.isNaN(due) ? null : due;
+}
 
 let warned = false;
 
@@ -135,6 +170,7 @@ async function claim(ids: number[]): Promise<number[]> {
                           WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)
                             AND emailed_at IS NULL AND email_skipped IS NULL
                             AND (email_claimed_at IS NULL OR email_claimed_at < now() - make_interval(mins => ${CLAIM_MINUTES}))
+                            AND (email_retry_at IS NULL OR email_retry_at <= now())
                           RETURNING id::int AS id`;
   return rows.map((r) => Number(r.id));
 }
@@ -144,8 +180,18 @@ async function markSent(ids: number[]): Promise<void> {
   await sql`UPDATE notifications SET emailed_at = now() WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)`;
 }
 
-async function release(ids: number[]): Promise<void> {
-  await sql`UPDATE notifications SET email_claimed_at = NULL WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)`;
+/** Retries after a refused send: 5, 10, 20 … minutes apart (at most 6 hours), then give up. */
+export const MAX_SEND_ATTEMPTS = 8;
+const BACKOFF_FIRST_MINUTES = 5;
+const BACKOFF_MAX_MINUTES = 360;
+
+async function backOff(ids: number[]): Promise<void> {
+  await sql`UPDATE notifications
+               SET email_claimed_at = NULL,
+                   email_attempts = email_attempts + 1,
+                   email_retry_at = now() + make_interval(mins => LEAST(${BACKOFF_MAX_MINUTES}, ${BACKOFF_FIRST_MINUTES} * power(2, email_attempts)::int)),
+                   email_skipped = CASE WHEN email_attempts + 1 >= ${MAX_SEND_ATTEMPTS} THEN 'send_failed' ELSE NULL END
+             WHERE id IN (SELECT jsonb_array_elements_text(${JSON.stringify(ids)}::jsonb)::bigint)`;
 }
 
 async function skip(ids: number[], reason: string): Promise<void> {
@@ -160,7 +206,7 @@ async function sentLastHour(memberId: number): Promise<number> {
 }
 
 export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: number; budgetMs?: number } = {}): Promise<NotifySummary> {
-  const summary: NotifySummary = { sent: 0, skipped: 0, deferred: 0, failed: 0 };
+  const summary: NotifySummary = { sent: 0, skipped: 0, deferred: 0, failed: 0, dueAt: null };
   const apiKey = opts.apiKey ?? process.env.RESEND_API_KEY ?? '';
   if (!apiKey) {
     if (!warned) console.log('[community-notify] RESEND_API_KEY is not set; no community emails are sent.');
@@ -188,6 +234,7 @@ export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: 
       LEFT JOIN posts p ON p.id = n.post_id
      WHERE n.emailed_at IS NULL AND n.email_skipped IS NULL
        AND (n.email_claimed_at IS NULL OR n.email_claimed_at < now() - make_interval(mins => ${CLAIM_MINUTES}))
+       AND (n.email_retry_at IS NULL OR n.email_retry_at <= now())
        AND n.created_at < now() - make_interval(secs => ${SETTLE_SECONDS})
      ORDER BY n.member_id, n.created_at, n.id
      LIMIT ${opts.limit ?? 500}`) as unknown as Row[];
@@ -274,7 +321,7 @@ export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: 
       const result = await send(apiKey, email, key);
       if (!result.ok) {
         console.error(`[community-notify] member ${memberId}: ${result.error}`);
-        await release(ids);
+        await backOff(ids);
         summary.failed += ids.length;
         continue;
       }
@@ -284,6 +331,7 @@ export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: 
       summary.sent++;
     }
   }
+  summary.dueAt = await nextDueAt();
   if (summary.sent || summary.failed) console.log(`[community-notify] sent ${summary.sent}, skipped ${summary.skipped}, deferred ${summary.deferred}, failed ${summary.failed}`);
   return summary;
 }

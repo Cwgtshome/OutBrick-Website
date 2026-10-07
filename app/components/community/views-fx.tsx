@@ -27,7 +27,7 @@ import { reactionInfo, reactionKinds, roadmapStatuses, threadPath } from '../../
 import { languageNamesIn, targetNamesIn } from '../../../lib/i18n/community-fx';
 import { dayDate, fullDate } from '../../../lib/community/format';
 import { pageOfPost } from '../../../lib/community/static-html';
-import { api, ApiFailure } from './api';
+import { api, ApiFailure, readerIsActive } from './api';
 import { BadgeIcon } from './badges';
 import { ErrorNotice, Member, Pending, StatusBadge, Time, View, errorText, useApp, useLoad, type Route } from './core';
 
@@ -559,7 +559,7 @@ export function useThreadUpdates(threadId: number | null, lastNumber: number) {
     let timer = 0;
     let live = true;
     const tick = () => {
-      if (document.visibilityState !== 'visible') return;
+      if (!readerIsActive()) return;
       api.updates(threadId, lastNumber).then(
         (r) => {
           if (live) setFresh({ after: lastNumber, count: r.newPosts });

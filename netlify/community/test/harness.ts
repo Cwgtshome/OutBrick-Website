@@ -31,8 +31,30 @@ export async function freshDatabase(): Promise<PGlite> {
     transaction: (work) => pg.transaction((tx) => work(async (text, params = []) => (await tx.query(text, params)).rows as Record<string, unknown>[])),
   };
   setDatabaseForTests(db);
+  testDb = db;
   process.env.CONTEXT ??= 'dev';
   return pg;
+}
+
+/** The adapter freshDatabase() installed, for tests that wrap it (e.g. to count queries). */
+export let testDb: Db | null = null;
+
+/** Wrap the installed database so every query and transaction is counted. */
+export function countQueries(): { count: () => number; reset: () => void } {
+  const inner = testDb;
+  if (!inner) throw new Error('call freshDatabase() first');
+  let n = 0;
+  setDatabaseForTests({
+    sql: (strings, ...values) => {
+      n++;
+      return inner.sql(strings, ...values);
+    },
+    transaction: (work) => {
+      n++;
+      return inner.transaction(work);
+    },
+  });
+  return { count: () => n, reset: () => (n = 0) };
 }
 
 /** A Request as the site would send it: same origin, optional JSON body and cookie. */

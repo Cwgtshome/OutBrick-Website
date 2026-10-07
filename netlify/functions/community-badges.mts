@@ -7,10 +7,12 @@
 // Scheduled functions run on published deploys only, never on Deploy Previews.
 
 import { runBadgeJob } from '../community/badges.ts';
+import { signalNotifyWork } from '../community/idle.ts';
 
 const communityBadges = async (): Promise<Response> => {
   try {
     const { awarded } = await runBadgeJob();
+    if (awarded) await signalNotifyWork();
     console.log(`[community-badges] awarded ${awarded}`);
   } catch (error) {
     console.error('[community-badges] failed:', error instanceof Error ? error.message : String(error));
@@ -20,6 +22,6 @@ const communityBadges = async (): Promise<Response> => {
 
 export default communityBadges;
 
-export const config = {
-  schedule: '@daily',
-};
+// 08:00 UTC, the one daily wake window it shares with community-trust, the notifier's safety
+// sweep and (on Mondays) the digest, so the database wakes once a day rather than four times.
+export const config = { schedule: '0 8 * * *' };

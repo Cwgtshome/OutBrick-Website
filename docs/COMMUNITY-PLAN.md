@@ -215,3 +215,34 @@ variables, marked secret.
 The app's **Report a bug** opens `/community/new?category=bugs&device=…&os=…&app=…&assistive=…&level=…&lang=…`
 (see `bugDeepLinkParams` in `lib/community/contract.ts`); the form pre-fills, nothing is posted
 until the member presses Post.
+
+## Keeping the database asleep (credit-based Free plan)
+
+Netlify Database suspends its compute after five idle minutes and bills while it is awake
+(10 credits per compute-unit hour; the free plan has 300 credits a month). The scheduled jobs run
+more often than five minutes, so they must not query Postgres just to find nothing to do.
+`netlify/community/idle.ts` gates each one with a small Netlify Blobs store:
+
+| Job | Schedule | Opens the database only when |
+|---|---|---|
+| community-notify | every 5 min | a write committed since its last run (a fresh token, written after every successful write request, sign-up, release post and badge award), pending work falls due (still settling, a member's hourly cap frees, a failed send's backoff ends, an interrupted send's 15-minute lease expires, an unconfirmed welcome reaches its 7-day expiry), or the daily sweep (08:00 UTC, or after 26 hours) |
+| community-releases | hourly | the App Store versions differ from the fingerprint stored after the last successful run (Apple's lookup itself costs nothing) |
+| community-digest | Mondays 08:00–10:50 every 10 min | that week's digest is not finished |
+| community-trust, community-badges | 08:00 UTC daily | always (one shared daily wake) |
+
+Failed sends back off 5, 10, 20 … minutes (at most 6 hours) and give up after 8 attempts, so an
+outage or a revoked key can't keep the database awake. If Blobs is unreachable, a gate fails open
+(the job queries as before). A notification is never lost to the gate: the notifier records the
+token it read *before* querying, so anything committed during a run signals a newer token, and a
+writer that dies between its commit and its signal is caught by the daily sweep.
+
+**Idle budget.** A quiet month wakes the database about once a day (the 08:00 window shared by the
+sweep, trust, badges and the Monday digest), plus once per App Store release: roughly 31–35 wakes
+of a few minutes each, about 3–5 compute hours, well under the plan's limits (before the gates the
+notifier alone kept it awake around the clock, about 720 hours). `idle.test.ts` simulates 30 quiet
+days and asserts at most 31 notifier runs, and asserts no query at all on skipped ticks.
+
+**Visitors still wake it.** Every page view of the community reads the database, and the bell and
+live replies poll every 20 seconds, but only while the tab is visible and the reader has been
+active in the last 10 minutes, so a tab left open overnight doesn't keep it awake. Heavy crawler or
+visitor traffic is the remaining cost; if it becomes one, cache the anonymous GETs at the CDN.

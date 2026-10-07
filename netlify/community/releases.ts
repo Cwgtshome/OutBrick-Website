@@ -45,7 +45,7 @@ export type StorefrontRelease = {
   storeUrl: string | null;
 };
 
-type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
+export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
 
 const versionRe = /^\d{1,4}(?:\.\d{1,4}){0,3}$/;
 
@@ -152,8 +152,16 @@ export function buildReleasePosts(version: string, found: StorefrontRelease[]): 
 
 export type ReleaseRunResult = { action: 'none' | 'record' | 'post' | 'raced'; version?: string; threadId?: number; notified?: number; reason?: string; shippedIdeas?: number[] };
 
-export async function runReleaseBot(fetchFn: FetchLike): Promise<ReleaseRunResult> {
-  const found = await fetchStorefronts(fetchFn);
+/** A stable summary of what the storefronts report, for the idle gate (idle.ts). */
+export function releaseFingerprint(found: StorefrontRelease[]): string {
+  return found
+    .map((f) => `${f.locale}:${f.version}`)
+    .sort()
+    .join(',');
+}
+
+export async function runReleaseBot(fetchFn: FetchLike, prefetched?: StorefrontRelease[]): Promise<ReleaseRunResult> {
+  const found = prefetched ?? (await fetchStorefronts(fetchFn));
   const known = (await run(`SELECT version FROM app_releases`)).map((r) => String(r.version));
   const plan = planRelease(known, found);
   if (plan.action === 'none') return { action: 'none', reason: plan.reason };

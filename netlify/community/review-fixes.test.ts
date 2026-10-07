@@ -65,7 +65,8 @@ void test('a notification claimed by a run that died is emailed later; a live cl
   let row = (await pg.query<{ emailed_at: string | null; email_claimed_at: string | null }>(`SELECT emailed_at, email_claimed_at FROM notifications WHERE id = $1`, [stale[0].id])).rows[0];
   assert.equal(row.emailed_at, null);
   assert.equal(row.email_claimed_at, null);
-  // The next run sends it and only then marks it emailed.
+  // The next run, once the 5-minute backoff is up, sends it and only then marks it emailed.
+  await pg.query(`UPDATE notifications SET email_retry_at = now() - interval '1 second' WHERE id = $1`, [stale[0].id]);
   await runNotify({ apiKey: 're_test_key_for_tests_only', send: ok });
   row = (await pg.query<{ emailed_at: string | null; email_claimed_at: string | null }>(`SELECT emailed_at, email_claimed_at FROM notifications WHERE id = $1`, [stale[0].id])).rows[0];
   assert.ok(row.emailed_at);

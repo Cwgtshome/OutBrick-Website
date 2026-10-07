@@ -62,6 +62,23 @@ import type {
 
 export const API = '/api/community';
 
+/**
+ * Background polling (the bell, live replies) only while someone is actually here: the tab is
+ * visible and the reader has touched, typed, scrolled or moved the pointer in the last ten
+ * minutes. A forum tab left open overnight must not keep the database awake (each poll is a
+ * query, and Netlify Database bills for the time it is awake).
+ */
+export const POLL_IDLE_MS = 10 * 60_000;
+let lastActivity = Date.now();
+if (typeof window !== 'undefined') {
+  for (const event of ['pointerdown', 'pointermove', 'keydown', 'scroll', 'touchstart', 'focus'] as const) {
+    window.addEventListener(event, () => (lastActivity = Date.now()), { passive: true, capture: true });
+  }
+}
+export function readerIsActive(now = Date.now()): boolean {
+  return typeof document !== 'undefined' && document.visibilityState === 'visible' && now - lastActivity < POLL_IDLE_MS;
+}
+
 export class ApiFailure extends Error {
   status: number;
   body: ApiErrorBody;

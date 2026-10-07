@@ -16,4 +16,5 @@ const communityTrust = async (): Promise<Response> => {
 
 export default communityTrust;
 
-export const config = { schedule: '0 4 * * *' };
+// 08:00 UTC: the shared daily wake window (see community-badges.mts).
+export const config = { schedule: '0 8 * * *' };

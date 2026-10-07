@@ -5,6 +5,8 @@
 // `{ error: { code, message, fields? } }` with the right status. Anything else is logged
 // (without the request body) and answered as a 500 with no detail.
 
+import { signalNotifyWork } from './idle.ts';
+
 export const SITE = 'https://www.outbrick.site';
 
 export class ApiError extends Error {
@@ -132,7 +134,10 @@ export async function handle(req: Request, routes: Route[]): Promise<Response> {
         continue;
       }
       requireSameOrigin(req);
-      return await route.run(req, params, url);
+      const response = await route.run(req, params, url);
+      // A write may have queued notifications; tell the notifier, now that it has committed.
+      if (req.method !== 'GET' && req.method !== 'HEAD' && response.status < 400) await signalNotifyWork();
+      return response;
     }
     if (methodMismatch) throw new ApiError(405, 'method_not_allowed', 'Method not allowed.');
     throw notFound();

@@ -9,6 +9,7 @@ import type { CommunityLocale, Provider, SelfMember } from '../../../lib/communi
 import { sql, transaction, type Query } from '../db.ts';
 import { isConfiguredAdmin, selfView, type Viewer } from '../session.ts';
 import { isPlaceholderEmail } from './util.ts';
+import { signalNotifyWork } from '../idle.ts';
 
 export type ProviderProfile = {
   provider: Provider;
@@ -111,7 +112,7 @@ async function linkIdentity(q: Query, memberId: number, profile: ProviderProfile
 export async function signInWithProfile(profile: ProviderProfile): Promise<SignInResult> {
   const email = profile.email?.trim().toLowerCase() || null;
   const verifiedEmail = profile.emailVerified && email ? email : null;
-  return transaction(async (q) => {
+  const result = await transaction(async (q) => {
     // 1. Already linked.
     const [linked] = await q(
       `SELECT m.id::int AS id, m.email, m.email_verified FROM identities i JOIN members m ON m.id = i.member_id
@@ -163,6 +164,9 @@ export async function signInWithProfile(profile: ProviderProfile): Promise<SignI
     await promoteIfAdmin(q, id);
     return { memberId: id, created: true, confirmEmail };
   });
+  // A new member's welcome is waiting for the notifier, now that the transaction has committed.
+  if (result.created) await signalNotifyWork();
+  return result;
 }
 
 // ---------------------------------------------------------------------------------------

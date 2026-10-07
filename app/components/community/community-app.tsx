@@ -23,7 +23,7 @@ import { communityLocales, communityPath } from '../../../lib/community/contract
 import { communityCopy } from '../../../lib/i18n/community';
 import { communityFx } from '../../../lib/i18n/community-fx';
 import { number } from '../../../lib/community/format';
-import { api, ApiFailure } from './api';
+import { api, ApiFailure, readerIsActive } from './api';
 import { Ctx, parseRoute, privateRoutes, type AppContext, type Navigate, type Route } from './core';
 import { CategoryView, FaqView, GuidelinesView, HomeView, MemberView, NotFoundView, SearchView } from './views-browse';
 import { ThreadView } from './views-thread';
@@ -149,7 +149,7 @@ export function CommunityApp({ locale, supportFaqs }: { locale: CommunityLocale;
   useEffect(() => {
     if (!signedIn) return;
     const tick = () => {
-      if (document.visibilityState !== 'visible') return;
+      if (!readerIsActive()) return;
       api.pulse().then(
         (p) => setSession((s) => (s && s.unreadNotifications !== p.unreadNotifications ? { ...s, unreadNotifications: p.unreadNotifications } : s)),
         () => undefined,

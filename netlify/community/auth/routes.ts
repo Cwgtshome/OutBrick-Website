@@ -14,6 +14,7 @@ import { oauthCallback, oauthProviders, startOAuth, type OAuthProvider } from '.
 // Phase 2 (community-p2)
 import { deletePasskey, listPasskeys, login as passkeyLogin, loginOptions as passkeyLoginOptions, register as passkeyRegister, registerOptions as passkeyRegisterOptions } from './passkeys.ts';
 import { inboundEmail } from '../reply-email.ts';
+import { signalNotifyWork } from '../idle.ts';
 import { listBookmarks } from '../reactions.ts';
 
 const provider = (name: string): OAuthProvider => {
@@ -62,7 +63,9 @@ export async function communityAuth(req: Request): Promise<Response> {
   const special = crossSite.find((r) => r.method === req.method && r.pattern === path);
   if (special) {
     try {
-      return await special.run(req, {}, url);
+      const response = await special.run(req, {}, url);
+      if (response.status < 400) await signalNotifyWork();
+      return response;
     } catch (error) {
       if (error instanceof ApiError) return json({ error: { code: error.code, message: error.message, fields: error.fields } }, { status: error.status });
       console.error(`[community] ${req.method} ${path} failed:`, error instanceof Error ? error.message : String(error));

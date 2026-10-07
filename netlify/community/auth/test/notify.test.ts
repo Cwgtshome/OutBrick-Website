@@ -216,7 +216,7 @@ void describe('community notifier', () => {
     assert.equal(left.length, 2);
   });
 
-  void test('a failed send is released and retried with the same idempotency key', async () => {
+  void test('a failed send backs off and is retried, once due, with the same idempotency key', async () => {
     const reader = await memberRow();
     const writer = await memberRow();
     const t = await threadWithPost(reader.id, writer.id);
@@ -225,6 +225,12 @@ void describe('community notifier', () => {
     const summary = await runNotify({ apiKey: TEST_RESEND_KEY, send: broken.send });
     assert.equal(summary.failed, 1);
     assert.deepEqual(await state(note.id), { emailed: false, skipped: null });
+    // Not retried before its backoff (5 minutes after the first failure) is up …
+    const early = recorder();
+    await runNotify({ apiKey: TEST_RESEND_KEY, send: early.send });
+    assert.equal(early.sent.length, 0);
+    // … and retried once it is.
+    await pg.query(`UPDATE notifications SET email_retry_at = now() - interval '1 second' WHERE id = $1`, [note.id]);
     const fixed = recorder();
     await runNotify({ apiKey: TEST_RESEND_KEY, send: fixed.send });
     assert.equal(fixed.sent.length, 1);
