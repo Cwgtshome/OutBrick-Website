@@ -58,16 +58,16 @@ export type MemberRole = 'member' | 'trusted' | 'moderator' | 'team' | 'admin';
 export type Provider = 'apple' | 'google' | 'facebook' | 'email';
 export type CategoryKind = 'announcements' | 'support' | 'bugs' | 'ideas' | 'accessibility' | 'showcase' | 'general';
 export type BugStatus = 'new' | 'confirmed' | 'fixed' | 'released' | 'not_a_bug' | 'duplicate';
-export type IdeaStatus = 'open' | 'considering' | 'planned' | 'shipped' | 'declined';
+export type IdeaStatus = 'open' | 'considering' | 'planned' | 'in_progress' | 'shipped' | 'declined';
 export type ThreadStatus = BugStatus | IdeaStatus;
 export type FollowLevel = 'watch' | 'mute' | 'none';
-export type ThreadSort = 'latest' | 'new' | 'top' | 'unanswered';
-export type NotificationKind = 'reply' | 'mention' | 'watched' | 'status' | 'solved' | 'release' | 'moderation' | 'welcome';
+export type ThreadSort = 'latest' | 'new' | 'top' | 'unanswered' | 'trending' | 'hot';
+export type NotificationKind = 'reply' | 'mention' | 'watched' | 'status' | 'solved' | 'release' | 'moderation' | 'welcome' | 'badge';
 export type ReportReason = 'spam' | 'abuse' | 'off_topic' | 'personal_info' | 'other';
 export type AssistiveTech = 'voiceover' | 'voice_control' | 'switch_control' | 'zoom' | 'larger_text' | 'colour_filters' | 'none';
 
 export const bugStatuses: readonly BugStatus[] = ['new', 'confirmed', 'fixed', 'released', 'not_a_bug', 'duplicate'];
-export const ideaStatuses: readonly IdeaStatus[] = ['open', 'considering', 'planned', 'shipped', 'declined'];
+export const ideaStatuses: readonly IdeaStatus[] = ['open', 'considering', 'planned', 'in_progress', 'shipped', 'declined'];
 export const pageSize = { threads: 30, posts: 25, search: 20, notifications: 30 } as const;
 
 export type ApiErrorBody = {
@@ -83,6 +83,8 @@ export type PublicMember = {
   id: number;
   displayName: string;
   role: MemberRole;
+  /** The member's highest badge, shown next to their name (see badgeOrder); absent when none. */
+  topBadge?: BadgeKey;
 };
 
 export type SelfMember = PublicMember & {
@@ -156,6 +158,10 @@ export type ThreadSummary = {
   /** For the viewer: posts after the last one they read; absent when signed out. */
   unread?: number;
   releaseVersion?: string | null;
+  /** Ideas: the version it shipped in ("5.1"), set by moderators. */
+  shippedVersion?: string | null;
+  /** Whether the opening post carries a poll. */
+  hasPoll?: boolean;
 };
 
 export type ThreadListResponse = {
@@ -181,6 +187,8 @@ export type NewThreadRequest = {
   body: string;
   language: CommunityLocale;
   bug?: BugDetails;
+  /** A poll on the opening post (any category). */
+  poll?: NewPollRequest;
   /** Honeypot: must be empty. */
   website?: string;
 };
@@ -193,6 +201,10 @@ export type UpdateThreadRequest = {
   pinned?: boolean;
   locked?: boolean;
   hidden?: boolean;
+  /** Moderators, ideas only: the version it shipped in, or null to clear. */
+  shippedVersion?: string | null;
+  /** The author or a moderator: replace the poll (null removes it). Refused once anyone has voted. */
+  poll?: NewPollRequest | null;
 };
 
 export type Post = {
@@ -212,6 +224,10 @@ export type Post = {
   isSolution: boolean;
   canEdit: boolean;
   canDelete: boolean;
+  /** Every reaction kind in reactionKinds order, with counts and whether the viewer gave it (ThreadDetail, updates). */
+  reactions?: PostReaction[];
+  /** Whether the viewer bookmarked it; present when signed in. */
+  bookmarked?: boolean;
 };
 
 export type ThreadDetail = {
@@ -231,6 +247,8 @@ export type ThreadDetail = {
   canModerate: boolean;
   canSetStatus: boolean;
   canSolve: boolean;
+  /** The opening post's poll, if it has one. */
+  poll: Poll | null;
 };
 
 export type NewPostRequest = { body: string; replyTo?: number | null; website?: string };
@@ -280,6 +298,11 @@ export type NotificationsResponse = { notifications: CommunityNotification[]; un
 export type MemberProfile = {
   member: PublicMember & { bio: string; joinedAt: string; postCount: number; solvedCount: number };
   recentThreads: ThreadSummary[];
+  stats: MemberStats;
+  /** Current (not revoked) badges, best first. */
+  badges: MemberBadge[];
+  /** The latest ten public posts. */
+  recentPosts: ProfilePost[];
 };
 
 /** Paths of the community pages, per language. English has no prefix. */
@@ -340,3 +363,208 @@ export type FaqWriteRequest = {
   threadId?: number | null;
   position?: number;
 };
+
+// Feature board and interactive features (community-fx, 7 October 2026) ----------------------
+//
+// Routes (netlify/functions/community-api.mts unless noted):
+//   GET  /roadmap?locale=                     → RoadmapResponse
+//   GET  /threads?sort=trending|hot …         → ThreadListResponse (see ThreadSort)
+//   GET  /threads/similar?title=&category=    → SimilarThreadsResponse
+//   GET  /threads/:id/updates?after=          → ThreadUpdatesResponse (Cache-Control: private, max-age=5)
+//   POST /threads/:id/poll/vote  PollVoteRequest → PollVoteResponse
+//   POST /posts/:id/reactions    ReactionRequest → ReactionResponse
+//   POST /posts/:id/bookmark     BookmarkRequest → BookmarkResponse
+//   GET  /me/bookmarks?page=                  → BookmarksResponse (community-auth.mts)
+//   GET  /pulse                               → PulseResponse (Cache-Control: private, max-age=5)
+//   GET  /leaderboard?period=&kind=           → LeaderboardResponse
+//   GET  /members/suggest?q=                  → MemberSuggestResponse (signed in)
+//   POST /mod/members/:id/badges BadgeGrantRequest → BadgeGrantResponse (team+)
+// Scheduled: community-badges.mts (daily) awards the badges that are not awarded on the spot.
+
+/** The ideas board's columns, in order. 'shipped' lists ideas shipped in the last 90 days. */
+export type RoadmapStatus = 'considering' | 'planned' | 'in_progress' | 'shipped';
+export const roadmapStatuses: readonly RoadmapStatus[] = ['considering', 'planned', 'in_progress', 'shipped'];
+
+export type RoadmapColumn = {
+  status: RoadmapStatus;
+  /** Most votes first; shipped: most recently shipped first. At most 50. */
+  threads: ThreadSummary[];
+  total: number;
+};
+export type RoadmapResponse = { columns: RoadmapColumn[] };
+
+export type SimilarThreadsResponse = { threads: ThreadSummary[] };
+
+export type ThreadUpdatesResponse = {
+  /** Visible posts numbered after `after`. */
+  newPosts: number;
+  /** The highest visible post number (`after` when there is nothing newer). */
+  lastNumber: number;
+  /** The posts after `after`, oldest first, at most 10. If newPosts > latest.length, ask again with after = the last one's number. */
+  latest: Post[];
+};
+
+export type PulseResponse = { unreadNotifications: number; latestThreadAt: string | null };
+
+// Reactions -------------------------------------------------------------------------------------
+
+export type ReactionKind = 'like' | 'love' | 'celebrate' | 'funny' | 'thanks' | 'insightful';
+export const reactionKinds: readonly ReactionKind[] = ['like', 'love', 'celebrate', 'funny', 'thanks', 'insightful'];
+/** The emoji and the English accessible name of each reaction; the UI localises the name. */
+export const reactionInfo: Record<ReactionKind, { emoji: string; name: string }> = {
+  like: { emoji: '👍', name: 'Like' },
+  love: { emoji: '❤️', name: 'Love' },
+  celebrate: { emoji: '🎉', name: 'Celebrate' },
+  funny: { emoji: '😂', name: 'Funny' },
+  thanks: { emoji: '🙏', name: 'Thanks' },
+  insightful: { emoji: '💡', name: 'Insightful' },
+};
+export type PostReaction = { kind: ReactionKind; count: number; mine: boolean };
+export type ReactionRequest = { reaction: ReactionKind; on: boolean };
+export type ReactionResponse = { reactions: PostReaction[] };
+
+// Polls -----------------------------------------------------------------------------------------
+
+export type NewPollRequest = {
+  question: string;
+  /** 2 to 8 distinct labels, each 1–100 characters. */
+  options: string[];
+  multiple: boolean;
+  /** ISO 8601, in the future and within a year. */
+  closesAt?: string | null;
+};
+export type PollOption = { id: number; label: string; votes: number };
+export type Poll = {
+  question: string;
+  options: PollOption[];
+  multiple: boolean;
+  closesAt: string | null;
+  /** Past closesAt, or the thread is locked. */
+  closed: boolean;
+  /** Option ids the viewer chose; [] when signed out or not voted. */
+  myVotes: number[];
+  totalVoters: number;
+};
+/** One id unless the poll is `multiple`; [] withdraws the viewer's vote. Voting again replaces it. */
+export type PollVoteRequest = { optionIds: number[] };
+export type PollVoteResponse = { poll: Poll };
+
+// Bookmarks -------------------------------------------------------------------------------------
+
+export type BookmarkRequest = { on: boolean };
+export type BookmarkResponse = { bookmarked: boolean };
+export type BookmarkItem = {
+  post: { id: number; number: number; author: PublicMember; excerpt: string; createdAt: string };
+  thread: { id: number; slug: string; title: string };
+  bookmarkedAt: string;
+};
+export type BookmarksResponse = { bookmarks: BookmarkItem[]; page: number; pages: number; total: number };
+
+// Badges ----------------------------------------------------------------------------------------
+
+export type BadgeKey =
+  | 'first_post'
+  | 'helpful'
+  | 'bug_hunter'
+  | 'idea_maker'
+  | 'shipped'
+  | 'welcomer'
+  | 'beta_tester'
+  | 'accessibility_champion'
+  | 'anniversary'
+  | 'popular_post';
+export const badgeKeys: readonly BadgeKey[] = [
+  'first_post',
+  'helpful',
+  'bug_hunter',
+  'idea_maker',
+  'shipped',
+  'welcomer',
+  'beta_tester',
+  'accessibility_champion',
+  'anniversary',
+  'popular_post',
+];
+/** Best first: a member's top badge (PublicMember.topBadge) is the first of these they hold. */
+export const badgeOrder: readonly BadgeKey[] = [
+  'accessibility_champion',
+  'shipped',
+  'beta_tester',
+  'bug_hunter',
+  'helpful',
+  'idea_maker',
+  'popular_post',
+  'welcomer',
+  'anniversary',
+  'first_post',
+];
+/** Badges only staff grant; the rest are earned. */
+export const grantedBadges: readonly BadgeKey[] = ['beta_tester', 'accessibility_champion'];
+/** Solved answers needed for each level of 'helpful'. */
+export const helpfulLevels = [1, 10, 50] as const;
+
+/** The icon key (the UI maps it to artwork) and English name and description; the UI localises them. */
+export const badgeInfo: Record<BadgeKey, { icon: string; name: string; description: string }> = {
+  first_post: { icon: 'brick', name: 'First post', description: 'Posted in the community for the first time.' },
+  helpful: { icon: 'lifebuoy', name: 'Helpful', description: 'Answers marked as the solution: 1, 10 and 50.' },
+  bug_hunter: { icon: 'magnifier', name: 'Bug hunter', description: 'Reported a bug the OutBrick team confirmed.' },
+  idea_maker: { icon: 'lightbulb', name: 'Idea maker', description: 'Suggested an idea that the team planned.' },
+  shipped: { icon: 'rocket', name: 'Shipped', description: 'Suggested an idea that shipped in OutBrick.' },
+  welcomer: { icon: 'wave', name: 'Welcomer', description: 'Replied to ten newcomers’ first threads.' },
+  beta_tester: { icon: 'flask', name: 'Beta tester', description: 'Tested OutBrick before release.' },
+  accessibility_champion: { icon: 'accessibility', name: 'Accessibility champion', description: 'Made OutBrick better for players who use assistive technology.' },
+  anniversary: { icon: 'cake', name: 'Anniversary', description: 'A member for a year or more.' },
+  popular_post: { icon: 'star', name: 'Popular post', description: 'Wrote a post with 25 reactions.' },
+};
+
+export type MemberBadge = {
+  key: BadgeKey;
+  /** helpful: 1, 10 or 50 (solved answers); anniversary: years; otherwise 1. */
+  level: number;
+  awardedAt: string;
+  /** Granted by staff rather than earned. */
+  granted: boolean;
+};
+/** `on: false` revokes; `level` defaults to 1. */
+export type BadgeGrantRequest = { badge: BadgeKey; on: boolean; level?: number };
+export type BadgeGrantResponse = { badges: MemberBadge[] };
+
+// Profiles, leaderboards, mentions --------------------------------------------------------------
+
+export type MemberStats = {
+  posts: number;
+  threads: number;
+  solved: number;
+  reactionsReceived: number;
+  ideasShipped: number;
+  bugsConfirmed: number;
+};
+export type ProfilePost = {
+  id: number;
+  number: number;
+  thread: { id: number; slug: string; title: string };
+  /** Plain text, at most 200 characters. */
+  excerpt: string;
+  createdAt: string;
+};
+
+export type LeaderboardPeriod = 'week' | 'month' | 'all';
+/** helpers: solved answers + reactions received; ideas: votes received on your ideas; bugs: bug reports confirmed. */
+export type LeaderboardKind = 'helpers' | 'ideas' | 'bugs';
+export type LeaderboardEntry = {
+  rank: number;
+  member: PublicMember;
+  score: number;
+  /** helpers: { solved, reactions }; ideas: { votes }; bugs: { confirmed }. */
+  detail: Record<string, number>;
+};
+export type LeaderboardResponse = {
+  period: LeaderboardPeriod;
+  kind: LeaderboardKind;
+  /** Members, top 20, staff excluded. */
+  entries: LeaderboardEntry[];
+  /** The OutBrick team (team and admin roles), scored the same way, shown separately. */
+  team: LeaderboardEntry[];
+};
+
+export type MemberSuggestResponse = { members: PublicMember[] };

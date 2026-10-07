@@ -16,7 +16,7 @@ import { displayNameProblem, selfMember, tidyName } from './members.ts';
 import { asLocale, configuredProviders, isPlaceholderEmail } from './util.ts';
 
 /** Email kinds a member can switch off. The welcome is sent once and has no switch. */
-export const switchableKinds: readonly NotificationKind[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation'];
+export const switchableKinds: readonly NotificationKind[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation', 'badge'];
 
 export async function getSession(req: Request): Promise<Response> {
   const viewer = await currentMember(req);
@@ -128,6 +128,11 @@ export async function exportMe(req: Request): Promise<Response> {
   const follows = await sql`SELECT target_type, target_id::int, level, created_at FROM follows WHERE member_id = ${id} ORDER BY created_at`;
   const notifications = await sql`SELECT id::int, kind, thread_id::int, post_id::int, data, created_at, read_at, emailed_at, email_skipped FROM notifications WHERE member_id = ${id} ORDER BY created_at`;
   const reports = await sql`SELECT post_id::int, reason, note, created_at, resolved_at, resolution FROM reports WHERE reporter_id = ${id} ORDER BY created_at`;
+  // community-fx
+  const reactions = await sql`SELECT post_id::int, kind, created_at FROM reactions WHERE member_id = ${id} ORDER BY created_at`;
+  const bookmarks = await sql`SELECT post_id::int, created_at FROM bookmarks WHERE member_id = ${id} ORDER BY created_at`;
+  const pollVotes = await sql`SELECT pv.thread_id::int, o.label AS option, pv.created_at FROM poll_votes pv JOIN poll_options o ON o.id = pv.option_id WHERE pv.member_id = ${id} ORDER BY pv.created_at`;
+  const badges = await sql`SELECT badge, level, (granted_by IS NOT NULL) AS granted, awarded_at, revoked_at FROM member_badges WHERE member_id = ${id} ORDER BY awarded_at`;
   const dated = (rows: Record<string, unknown>[]) =>
     rows.map((row) => Object.fromEntries(Object.entries(row).map(([k, v]) => [k, v instanceof Date ? v.toISOString() : typeof v === 'bigint' ? Number(v) : v])));
   const out = {
@@ -142,6 +147,10 @@ export async function exportMe(req: Request): Promise<Response> {
     follows: dated(follows),
     notifications: dated(notifications),
     reports: dated(reports),
+    reactions: dated(reactions),
+    bookmarks: dated(bookmarks),
+    pollVotes: dated(pollVotes),
+    badges: dated(badges),
   };
   return new Response(JSON.stringify(out, null, 2), {
     headers: {
@@ -169,6 +178,12 @@ export async function deleteMe(req: Request): Promise<Response> {
     await q(`DELETE FROM notifications WHERE member_id = $1`, [id]);
     await q(`DELETE FROM follows WHERE member_id = $1`, [id]);
     await q(`DELETE FROM reads WHERE member_id = $1`, [id]);
+    // community-fx: reactions, poll votes, bookmarks and badges go with the account.
+    await q(`DELETE FROM reactions WHERE member_id = $1`, [id]);
+    await q(`DELETE FROM poll_votes WHERE member_id = $1`, [id]);
+    await q(`DELETE FROM bookmarks WHERE member_id = $1`, [id]);
+    await q(`DELETE FROM member_badges WHERE member_id = $1`, [id]);
+    await q(`UPDATE members SET top_badge = NULL WHERE id = $1`, [id]);
     await q(`DELETE FROM auth_tokens WHERE lower(email) = lower($2) OR (purpose = 'email_change' AND data->>'memberId' = $1::text)`, [id, viewer.email]);
   });
   console.log(`[community-auth] member ${id} deleted their account`);

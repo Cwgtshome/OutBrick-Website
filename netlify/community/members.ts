@@ -5,6 +5,7 @@
 import type { MemberProfile } from '../../lib/community/contract.ts';
 import { json, notFound } from './http.ts';
 import { currentMember } from './session.ts';
+import { profileExtras } from './people.ts';
 import { Params, idParam, iso, num, publicMember, run, txt, threadColumns, threadJoins, threadSummary, threadVisible } from './forum.ts';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL) => Promise<Response>;
@@ -13,7 +14,7 @@ export const getMember: Handler = async (req, params) => {
   const viewer = await currentMember(req);
   const id = idParam(params.id);
   const [m] = await run(
-    `SELECT id::int AS m_id, display_name AS m_name, role AS m_role, (deleted_at IS NOT NULL) AS m_deleted, bio, created_at,
+    `SELECT id::int AS m_id, display_name AS m_name, role AS m_role, (deleted_at IS NOT NULL) AS m_deleted, top_badge AS m_badge, bio, created_at,
             (SELECT count(*)::int FROM posts p JOIN threads t ON t.id = p.thread_id
               WHERE p.author_id = members.id AND NOT p.hidden AND NOT p.pending AND p.deleted_at IS NULL
                 AND t.deleted_at IS NULL AND NOT t.hidden) AS post_count,
@@ -33,6 +34,7 @@ export const getMember: Handler = async (req, params) => {
       solvedCount: num(m.solved_count),
     },
     recentThreads: [],
+    ...(await profileExtras(id, deleted)),
   };
   if (!deleted) {
     const p = new Params();

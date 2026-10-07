@@ -50,6 +50,12 @@ import {
   type Row,
 } from './forum.ts';
 import { notifyNewPost, notifySolved, notifyStatus } from './notifications.ts';
+// Feature board and interactive features (community-fx).
+import { hotFilter, hotOrder, trendingOrder } from './ideas.ts';
+import { insertPoll, pollFor, readPoll, replacePoll } from './polls.ts';
+import { decoratePosts } from './reactions.ts';
+import { onSolved, onStatus, onVisiblePost } from './badges.ts';
+import type { NewPollRequest } from '../../lib/community/contract.ts';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL) => Promise<Response>;
 
@@ -89,7 +95,7 @@ export const listCategories: Handler = async (req) => {
 
 // Lists ------------------------------------------------------------------------------------------
 
-const sorts: readonly ThreadSort[] = ['latest', 'new', 'top', 'unanswered'];
+const sorts: readonly ThreadSort[] = ['latest', 'new', 'top', 'unanswered', 'trending', 'hot'];
 
 export async function listThreads(
   viewer: Viewer | null,
@@ -115,8 +121,13 @@ export async function listThreads(
   if (query.author && /^\d{1,15}$/.test(query.author)) where.push(`t.author_id = ${p.add(Number(query.author))}`);
   const sort = oneOf(query.sort, sorts, 'latest');
   if (sort === 'unanswered') where.push('t.reply_count = 0');
+  if (sort === 'hot') where.push(hotFilter);
   const order =
-    sort === 'new'
+    sort === 'trending'
+      ? trendingOrder
+      : sort === 'hot'
+        ? hotOrder
+        : sort === 'new'
       ? 't.created_at DESC, t.id DESC'
       : sort === 'top'
         ? 't.vote_count DESC, t.last_post_at DESC, t.id DESC'
@@ -213,6 +224,14 @@ export const postThread: Handler = async (req) => {
       Object.assign(fields, (e as ApiError).fields);
     }
   }
+  let poll: NewPollRequest | null = null;
+  if (body.poll != null) {
+    try {
+      poll = readPoll(body.poll);
+    } catch (e) {
+      Object.assign(fields, (e as ApiError).fields);
+    }
+  }
   if (Object.keys(fields).length) throw badRequest('invalid', 'Some fields need another look.', fields);
 
   requireCanWrite(viewer);
@@ -240,6 +259,7 @@ export const postThread: Handler = async (req) => {
       `INSERT INTO posts (thread_id, author_id, number, body_md, body_html, pending, has_link) VALUES ($1, $2, 1, $3, $4, $5, $6) RETURNING id::int AS id`,
       [id, viewer.id, md, rendered.html, pending, rendered.hasLink],
     );
+    if (poll) await insertPoll(q, id, poll);
     await refreshThreadCounters(q, id);
     // The author follows their own thread; muting it later silences replies too.
     await q(`INSERT INTO follows (member_id, target_type, target_id, level) VALUES ($1, 'thread', $2, 'watch') ON CONFLICT DO NOTHING`, [viewer.id, id]);
@@ -255,6 +275,7 @@ export const postThread: Handler = async (req) => {
         replyTo: null,
         mentionedIds: rendered.mentionedIds,
       });
+      await onVisiblePost(q, viewer.id);
     }
     return id;
   });
@@ -339,7 +360,7 @@ export async function threadDetail(req: Request, viewer: Viewer | null, threadId
   const detail: ThreadDetail = {
     thread: threadSummary(thread, viewer),
     bug: bugFromRow(thread.bug),
-    posts: rows.map((r) => postView(r, ctx)),
+    posts: await decoratePosts(rows.map((r) => postView(r, ctx)), viewer),
     page,
     pages,
     solvedPostNumber,
@@ -349,6 +370,7 @@ export async function threadDetail(req: Request, viewer: Viewer | null, threadId
     canModerate: mod,
     canSetStatus: mod && statusesFor(thread.category_kind).length > 0,
     canSolve: Boolean(viewer && !viewer.banned && (isAuthor || mod) && solvableKinds.includes(thread.category_kind)),
+    poll: await pollFor(threadId, viewer, thread.locked),
   };
   if (replyBlocked) detail.replyBlocked = replyBlocked;
   return detail;
@@ -414,9 +436,31 @@ export const patchThread: Handler = async (req, params) => {
     if (body.statusNote !== undefined) statusNote = body.statusNote === null ? null : str(body, 'statusNote', { max: 140, optional: true, label: 'The status note' }) || null;
     if (status !== thread.status || statusNote !== thread.status_note) {
       sets.push(`status = ${p.add(status)}`, `status_note = ${p.add(statusNote)}`);
+      if (status !== thread.status) sets.push('status_changed_at = now()');
       statusEvent = { status, statusNote, previous: (thread.status as string | null) ?? null };
       logs.push(['thread.status', '', { from: thread.status, to: status, note: statusNote }]);
     }
+  }
+
+  if (body.shippedVersion !== undefined) {
+    if (!mod) throw forbidden('Only moderators and the OutBrick team set the version an idea shipped in.');
+    if (kind !== 'ideas') throw badRequest('invalid', 'Only ideas have a shipped version.', { shippedVersion: 'invalid' });
+    const version = body.shippedVersion === null || body.shippedVersion === '' ? null : txt(body.shippedVersion).trim().replace(/^v/i, '');
+    if (version !== null && !/^\d{1,4}(?:\.\d{1,4}){0,3}$/.test(version)) throw badRequest('invalid', 'A version looks like 5.1 or 5.1.2.', { shippedVersion: 'invalid' });
+    if (version !== ((thread.shipped_version as string | null) ?? null)) {
+      sets.push(`shipped_version = ${p.add(version)}`);
+      logs.push(['thread.shipped_version', '', { from: thread.shipped_version ?? null, to: version }]);
+    }
+  }
+
+  let pollChange: { poll: NewPollRequest | null } | null = null;
+  if (body.poll !== undefined) {
+    if (!mod && !isAuthor) throw forbidden('Only the author or a moderator changes the poll.');
+    if (!mod) {
+      requireCanWrite(viewer);
+      if (thread.locked) throw new ApiError(403, 'locked', 'This thread is locked.');
+    }
+    pollChange = { poll: body.poll === null ? null : readPoll(body.poll) };
   }
 
   for (const flag of ['pinned', 'locked', 'hidden'] as const) {
@@ -429,11 +473,18 @@ export const patchThread: Handler = async (req, params) => {
     }
   }
 
-  if (sets.length) {
+  if (sets.length || pollChange) {
     await transaction(async (q) => {
-      await q(`UPDATE threads SET ${sets.join(', ')}, updated_at = now() WHERE id = ${p.add(id)}`, p.values);
+      if (sets.length) await q(`UPDATE threads SET ${sets.join(', ')}, updated_at = now() WHERE id = ${p.add(id)}`, p.values);
+      if (pollChange) {
+        await replacePoll(q, id, pollChange.poll);
+        if (!isAuthor) logs.push(['thread.poll', '', { removed: pollChange.poll === null }]);
+      }
       for (const [action, reason, data] of logs) await modLog(q, viewer.id, action, 'thread', id, reason, data);
-      if (statusEvent) await notifyStatus(q, { threadId: id, actorId: viewer.id, threadAuthorId: thread.author_id, ...statusEvent });
+      if (statusEvent) {
+        await notifyStatus(q, { threadId: id, actorId: viewer.id, threadAuthorId: thread.author_id, ...statusEvent });
+        await onStatus(q, id);
+      }
     });
   }
   return json({ thread: await summaryById(id, viewer) });
@@ -464,7 +515,10 @@ export const solveThread: Handler = async (req, params) => {
     await transaction(async (q) => {
       await q(`UPDATE threads SET solved_post_id = $1, updated_at = now() WHERE id = $2`, [postId, id]);
       if (viewer.id !== thread.author_id) await modLog(q, viewer.id, solution ? 'thread.solve' : 'thread.unsolve', 'thread', id, '', { postId });
-      if (solution) await notifySolved(q, { threadId: id, postId: num(solution.id), actorId: viewer.id, postAuthorId: num(solution.author_id) });
+      if (solution) {
+        await notifySolved(q, { threadId: id, postId: num(solution.id), actorId: viewer.id, postAuthorId: num(solution.author_id) });
+        await onSolved(q, num(solution.author_id));
+      }
     });
   }
   return json({ thread: await summaryById(id, viewer) });

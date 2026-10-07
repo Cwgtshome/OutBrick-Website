@@ -24,6 +24,7 @@ import type { CommunityLocale } from '../../lib/community/contract.ts';
 import { slugify, transaction } from './db.ts';
 import { modLog, num, refreshThreadCounters, renderBody, run } from './forum.ts';
 import { notifyRelease } from './notifications.ts';
+import { linkShippedIdeas } from './ideas.ts';
 
 export const APP_ID = '6807997465';
 export const RELEASES_EMAIL = 'releases@outbrick.site';
@@ -149,7 +150,7 @@ export function buildReleasePosts(version: string, found: StorefrontRelease[]): 
   return { title: `OutBrick ${version} is out`, opening, translations };
 }
 
-export type ReleaseRunResult = { action: 'none' | 'record' | 'post' | 'raced'; version?: string; threadId?: number; notified?: number; reason?: string };
+export type ReleaseRunResult = { action: 'none' | 'record' | 'post' | 'raced'; version?: string; threadId?: number; notified?: number; reason?: string; shippedIdeas?: number[] };
 
 export async function runReleaseBot(fetchFn: FetchLike): Promise<ReleaseRunResult> {
   const found = await fetchStorefronts(fetchFn);
@@ -207,6 +208,8 @@ export async function runReleaseBot(fetchFn: FetchLike): Promise<ReleaseRunResul
     await q(`UPDATE app_releases SET thread_id = $1 WHERE version = $2`, [threadId, plan.version]);
     await modLog(q, null, 'release.announce', 'thread', threadId, '', { version: plan.version });
     const notified = await notifyRelease(q, { threadId, categoryId, actorId: botId, version: plan.version });
-    return { action: 'post' as const, version: plan.version, threadId, notified };
+    // Ideas that shipped in this version get a reply linking here, and their voters a notice.
+    const shippedIdeas = await linkShippedIdeas(q, { version: plan.version, announcementId: threadId, announcementSlug: slugify(posts.title), botId });
+    return { action: 'post' as const, version: plan.version, threadId, notified, shippedIdeas };
   });
 }
