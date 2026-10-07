@@ -27,6 +27,10 @@ import { SENDERS, sendEmail, type OutgoingEmail, type ResendResult } from '../..
 import { SITE } from './http.ts';
 import { sha256, sql } from './db.ts';
 import { listUnsubscribeHeaders, unsubscribeUrl } from './auth/inbox.ts';
+import { replyToFor } from './reply-email.ts';
+
+/** Phase 2: kinds whose single-item email gets a reply-by-email Reply-To. */
+const replyableKinds: readonly string[] = ['reply', 'mention', 'watched', 'status', 'solved', 'merged'];
 
 export const HOURLY_CAP = 6;
 export const SETTLE_SECONDS = 120;
@@ -221,11 +225,17 @@ export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: 
         const unsubKind: UnsubscribeKind = kinds.length === 1 ? kinds[0] : 'all';
         const unsub = unsubscribeUrl(apiKey, memberId, unsubKind);
         const links = { manageUrl, unsubscribeUrl: unsub, unsubscribeKind: unsubKind };
+        // Phase 2 (community-p2): a single notification about a thread can be answered by email.
+        const only = rowsNow.length === 1 ? rowsNow[0] : null;
+        const replyTo = only && only.thread_id != null && replyableKinds.includes(only.kind) ? replyToFor({ memberId, threadId: only.thread_id, notificationId: only.id }) : null;
         const rendered =
-          rowsNow.length === 1 ? communityNotification({ locale, item: items[0], ...links }) : communityDigest({ locale, items, notificationsUrl: communityUrl(locale, '/notifications'), ...links });
+          rowsNow.length === 1
+            ? communityNotification({ locale, item: items[0], ...links, replyByEmail: Boolean(replyTo) })
+            : communityDigest({ locale, items, notificationsUrl: communityUrl(locale, '/notifications'), ...links });
         const sender = batch.news ? SENDERS.communityNews : SENDERS.community;
         email = {
           ...sender,
+          ...(replyTo ? { replyTo } : {}),
           to: first.email,
           subject: rendered.subject,
           html: rendered.html,

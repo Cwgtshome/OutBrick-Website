@@ -1,16 +1,19 @@
 // The routes behind netlify/functions/community-auth.mts.
 //
-// Everything goes through handle() (JSON errors, the same-origin rule on writes) except two POSTs
+// Everything goes through handle() (JSON errors, the same-origin rule on writes) except the POSTs
 // that by design come from somewhere else: Apple's form_post callback (a cross-site POST from
-// appleid.apple.com) and a mail client's RFC 8058 one-click unsubscribe (no Origin at all). Each
-// is protected by what it carries instead: a single-use state plus a verified ID token, and a
-// signed token.
+// appleid.apple.com), a mail client's RFC 8058 one-click unsubscribe (no Origin at all) and, in
+// phase 2, Resend's inbound-email webhook. Each is protected by what it carries instead: a
+// single-use state plus a verified ID token, a signed token, and a Svix signature.
 
 import { ApiError, handle, json, notFound, type Route } from '../http.ts';
 import { deleteMe, exportMe, getSession, signOut, updateMe } from './account.ts';
 import { confirmEmailPage, confirmEmailWithLink, requestEmailSignIn, signInPage, signInWithLink } from './email-link.ts';
 import { listNotifications, markRead, unsubscribe, unsubscribePage } from './inbox.ts';
 import { oauthCallback, oauthProviders, startOAuth, type OAuthProvider } from './oauth.ts';
+// Phase 2 (community-p2)
+import { deletePasskey, listPasskeys, login as passkeyLogin, loginOptions as passkeyLoginOptions, register as passkeyRegister, registerOptions as passkeyRegisterOptions } from './passkeys.ts';
+import { inboundEmail } from '../reply-email.ts';
 
 const provider = (name: string): OAuthProvider => {
   if (!(oauthProviders as readonly string[]).includes(name)) throw notFound();
@@ -18,6 +21,13 @@ const provider = (name: string): OAuthProvider => {
 };
 
 export const routes: Route[] = [
+  // Phase 2 (community-p2): passkeys, before the /auth/:provider/* patterns.
+  { method: 'POST', pattern: '/api/community/auth/passkey/register/options', run: (req) => passkeyRegisterOptions(req) },
+  { method: 'POST', pattern: '/api/community/auth/passkey/register', run: (req) => passkeyRegister(req) },
+  { method: 'POST', pattern: '/api/community/auth/passkey/login/options', run: (req) => passkeyLoginOptions(req) },
+  { method: 'POST', pattern: '/api/community/auth/passkey/login', run: (req) => passkeyLogin(req) },
+  { method: 'GET', pattern: '/api/community/me/passkeys', run: (req) => listPasskeys(req) },
+  { method: 'DELETE', pattern: '/api/community/me/passkeys/:id', run: (req, p) => deletePasskey(req, p.id) },
   { method: 'GET', pattern: '/api/community/session', run: (req) => getSession(req) },
   { method: 'POST', pattern: '/api/community/auth/signout', run: (req) => signOut(req) },
   { method: 'POST', pattern: '/api/community/auth/email', run: (req) => requestEmailSignIn(req) },
@@ -39,6 +49,8 @@ export const routes: Route[] = [
 const crossSite: Route[] = [
   { method: 'POST', pattern: '/api/community/auth/apple/callback', run: (req, _p, url) => oauthCallback(req, 'apple', url) },
   { method: 'POST', pattern: '/api/community/email/unsubscribe', run: (req, _p, url) => unsubscribe(req, url) },
+  // Phase 2 (community-p2): Resend's inbound webhook, protected by its Svix signature.
+  { method: 'POST', pattern: '/api/community/email/inbound', run: (req) => inboundEmail(req) },
 ];
 
 export async function communityAuth(req: Request): Promise<Response> {

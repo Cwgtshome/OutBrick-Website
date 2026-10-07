@@ -15,6 +15,7 @@ import { sendConfirmEmail } from './email-link.ts';
 import { displayNameProblem, selfMember, tidyName } from './members.ts';
 import { asLocale, configuredProviders, isPlaceholderEmail } from './util.ts';
 import { communityFeatures } from '../features.ts';
+import { deleteUnattachedUploads } from '../uploads.ts';
 
 /** Email kinds a member can switch off. The welcome is sent once and has no switch. */
 export const switchableKinds: readonly (NotificationKind | 'digest')[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation', 'merged', 'digest'];
@@ -129,6 +130,9 @@ export async function exportMe(req: Request): Promise<Response> {
   const follows = await sql`SELECT target_type, target_id::int, level, created_at FROM follows WHERE member_id = ${id} ORDER BY created_at`;
   const notifications = await sql`SELECT id::int, kind, thread_id::int, post_id::int, data, created_at, read_at, emailed_at, email_skipped FROM notifications WHERE member_id = ${id} ORDER BY created_at`;
   const reports = await sql`SELECT post_id::int, reason, note, created_at, resolved_at, resolution FROM reports WHERE reporter_id = ${id} ORDER BY created_at`;
+  // Phase 2 (community-p2): passkeys (never their keys) and uploads.
+  const passkeys = await sql`SELECT nickname, transports, backed_up, created_at, last_used_at FROM passkeys WHERE member_id = ${id} ORDER BY created_at`;
+  const uploads = await sql`SELECT id, content_type, width, height, bytes, attached_post_id::int, created_at, deleted_at FROM uploads WHERE member_id = ${id} ORDER BY created_at`;
   const dated = (rows: Record<string, unknown>[]) =>
     rows.map((row) => Object.fromEntries(Object.entries(row).map(([k, v]) => [k, v instanceof Date ? v.toISOString() : typeof v === 'bigint' ? Number(v) : v])));
   const out = {
@@ -143,6 +147,8 @@ export async function exportMe(req: Request): Promise<Response> {
     follows: dated(follows),
     notifications: dated(notifications),
     reports: dated(reports),
+    passkeys: dated(passkeys),
+    uploads: dated(uploads),
   };
   return new Response(JSON.stringify(out, null, 2), {
     headers: {
@@ -170,8 +176,13 @@ export async function deleteMe(req: Request): Promise<Response> {
     await q(`DELETE FROM notifications WHERE member_id = $1`, [id]);
     await q(`DELETE FROM follows WHERE member_id = $1`, [id]);
     await q(`DELETE FROM reads WHERE member_id = $1`, [id]);
+    // Phase 2 (community-p2): passkeys can no longer sign in to the deleted account.
+    await q(`DELETE FROM passkeys WHERE member_id = $1`, [id]);
+    await q(`UPDATE members SET webauthn_handle = NULL WHERE id = $1`, [id]);
     await q(`DELETE FROM auth_tokens WHERE lower(email) = lower($2) OR (purpose = 'email_change' AND data->>'memberId' = $1::text)`, [id, viewer.email]);
   });
+  // Images no post shows go with the account; those in posts stay with the posts, as the text does.
+  await deleteUnattachedUploads(id);
   console.log(`[community-auth] member ${id} deleted their account`);
   return json({ ok: true }, { headers: { 'Set-Cookie': sessionCookie(req, '', 0) } });
 }
