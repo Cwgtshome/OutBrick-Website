@@ -105,7 +105,7 @@ describe('Google', () => {
     const form = new URLSearchParams(tokenCall.body);
     assert.match(form.get('code_verifier')!, /^[A-Za-z0-9_-]{64}$/);
     assert.equal(form.get('redirect_uri'), 'https://www.outbrick.site/api/community/auth/google/callback');
-    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: session! }))).json()).member;
+    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: session! }))).json<any>()).member;
     assert.equal(me.email, 'gina@example.com');
     assert.equal(me.emailVerified, true);
     assert.equal(me.displayName, 'Gina');
@@ -163,7 +163,7 @@ describe('Google', () => {
     nextIdToken = googleToken({ sub: 'g-unverified', email: 'maybe@example.com', email_verified: false, name: 'Maybe' });
     const { state, cookie } = await start('google');
     const res = await googleCallback(state, cookie);
-    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json()).member;
+    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json<any>()).member;
     assert.equal(me.email, '');
     assert.equal(me.emailVerified, false);
   });
@@ -173,7 +173,7 @@ describe('Google', () => {
     nextIdToken = googleToken({ sub: 'g-hana', email: 'Hana@Example.com', name: 'Someone Else' });
     let flow = await start('google');
     let res = await googleCallback(flow.state, flow.cookie);
-    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json()).member;
+    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json<any>()).member;
     assert.equal(me.displayName, 'Hana');
     assert.equal(me.needsName, false);
     const ids = await all(pg, `SELECT provider FROM identities WHERE member_id = $1`, [me.id]);
@@ -185,7 +185,7 @@ describe('Google', () => {
       nextIdToken = googleToken({ sub, email: `${sub}@example.com`, name: 'hana' });
       flow = await start('google');
       res = await googleCallback(flow.state, flow.cookie);
-      names.push((await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json()).member.displayName);
+      names.push((await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json<any>()).member.displayName);
     }
     assert.deepEqual(names, ['hana 2', 'hana 3']);
   });
@@ -195,7 +195,7 @@ describe('Google', () => {
     nextIdToken = googleToken({ sub: 'g-boss', email: 'boss@example.com' });
     const { state, cookie } = await start('google');
     const res = await googleCallback(state, cookie);
-    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json()).member;
+    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json<any>()).member;
     assert.equal(me.role, 'admin');
   });
 
@@ -203,7 +203,7 @@ describe('Google', () => {
     delete process.env.GOOGLE_CLIENT_SECRET;
     const res = await communityAuth(request('GET', '/api/community/auth/google/start?locale=es', { origin: null }));
     assert.equal(res.headers.get('location'), 'https://www.outbrick.site/es/community/signin?error=unavailable');
-    const session = await (await communityAuth(request('GET', '/api/community/session'))).json();
+    const session = await (await communityAuth(request('GET', '/api/community/session'))).json<any>();
     assert.deepEqual(session.providers, ['apple', 'facebook', 'email']);
     const unknown = await communityAuth(request('GET', '/api/community/auth/github/start', { origin: null }));
     assert.equal(unknown.status, 404);
@@ -232,7 +232,7 @@ describe('Sign in with Apple', () => {
     const res = await appleCallback(state, { user: JSON.stringify({ name: { firstName: 'Ada', lastName: 'Lovelace' }, email: 'x1y2z3@privaterelay.appleid.com' }) });
     assert.equal(res.status, 303);
     assert.equal(res.headers.get('location'), 'https://www.outbrick.site/de/community?from=signin');
-    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json()).member;
+    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json<any>()).member;
     assert.equal(me.displayName, 'Ada Lovelace');
     assert.equal(me.email, 'x1y2z3@privaterelay.appleid.com');
     assert.equal(me.emailVerified, true);
@@ -251,7 +251,7 @@ describe('Sign in with Apple', () => {
     // Next time Apple sends no name; the same member signs in.
     const again = await start('apple');
     const res2 = await appleCallback(again.state);
-    const me2 = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res2)! }))).json()).member;
+    const me2 = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res2)! }))).json<any>()).member;
     assert.equal(me2.id, me.id);
   });
 
@@ -259,7 +259,7 @@ describe('Sign in with Apple', () => {
     nextIdToken = appleToken({ sub: 'a-2', email: 'q9w8e7@privaterelay.appleid.com' });
     const { state } = await start('apple');
     const res = await appleCallback(state);
-    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json()).member;
+    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json<any>()).member;
     assert.equal(me.displayName, 'Player');
   });
 
@@ -303,7 +303,7 @@ describe('Facebook', () => {
     assert.equal(meUrl.searchParams.get('appsecret_proof'), createHmac('sha256', allProviderEnv.FACEBOOK_APP_SECRET).update('fb-access-token').digest('hex'));
 
     const cookieHeader = sessionCookieOf(res)!;
-    let me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: cookieHeader }))).json()).member;
+    let me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: cookieHeader }))).json<any>()).member;
     assert.equal(me.emailVerified, false);
     assert.equal(me.email, 'frida@example.com');
     assert.equal(me.displayName, 'Frida Kahlo');
@@ -319,7 +319,7 @@ describe('Facebook', () => {
     const done = await communityAuth(request('POST', `/api/community/auth/email/confirm?token=${token}`));
     assert.equal(done.status, 303);
     assert.equal(done.headers.get('location'), 'https://www.outbrick.site/es/community/settings?email=confirmed');
-    me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: cookieHeader }))).json()).member;
+    me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: cookieHeader }))).json<any>()).member;
     assert.equal(me.emailVerified, true);
   });
 
@@ -329,7 +329,7 @@ describe('Facebook', () => {
     facebookMe = { id: '10002', name: 'Owner?', email: 'owner@example.com' };
     const { state, cookie } = await start('facebook');
     const res = await communityAuth(request('GET', `/api/community/auth/facebook/callback?state=${state}&code=good-code`, { origin: null, cookie }));
-    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json()).member;
+    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json<any>()).member;
     assert.notEqual(me.id, owner.id);
     assert.equal(me.email, '');
     assert.equal((await all(pg, `SELECT 1 FROM identities WHERE member_id = $1`, [owner.id])).length, 0);
@@ -337,7 +337,7 @@ describe('Facebook', () => {
     const token = linkToken(fetchStub.emails().at(-1)!.text, '/api/community/auth/email/confirm');
     const done = await communityAuth(request('POST', `/api/community/auth/email/confirm?token=${token}`));
     assert.equal(done.status, 303);
-    const after = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(done)! }))).json()).member;
+    const after = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(done)! }))).json<any>()).member;
     assert.equal(after.id, owner.id);
     assert.deepEqual(after.providers, ['facebook']);
     assert.equal((await all(pg, `SELECT 1 FROM members WHERE id = $1`, [me.id])).length, 0);
@@ -347,7 +347,7 @@ describe('Facebook', () => {
     facebookMe = { id: '10003', name: 'No Mail' };
     const { state, cookie } = await start('facebook');
     const res = await communityAuth(request('GET', `/api/community/auth/facebook/callback?state=${state}&code=good-code`, { origin: null, cookie }));
-    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json()).member;
+    const me = (await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json<any>()).member;
     assert.equal(me.email, '');
     assert.equal(me.emailVerified, false);
     const row = await one<{ email: string }>(pg, `SELECT email FROM members WHERE id = $1`, [me.id]);

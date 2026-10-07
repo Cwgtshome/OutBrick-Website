@@ -40,7 +40,7 @@ export function plainExcerpt(markdown: string, max = 400): string {
     .replace(/(\*\*|__)(.+?)\1/g, '$2')
     .replace(/(^|[^*\w])[*_]([^*_\n]+)[*_]/g, '$1$2')
     .replace(/`([^`]+)`/g, '$1')
-    .replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '')
+    .replace(/(?![\t\n])\p{Cc}/gu, '')
     .replace(/\s+/g, ' ')
     .trim();
   if (text.length <= max) return text;

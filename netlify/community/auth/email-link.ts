@@ -80,7 +80,7 @@ async function peek(token: string, purpose: 'signin' | 'email_change') {
   if (!token) return null;
   const [row] = await sql`SELECT email, data FROM auth_tokens
                            WHERE token_hash = ${sha256(token)} AND purpose = ${purpose} AND used_at IS NULL AND expires_at > now()`;
-  return row ? { email: String(row.email ?? ''), data: parseData(row.data) } : null;
+  return row ? { email: typeof row.email === 'string' ? row.email : '', data: parseData(row.data) } : null;
 }
 
 /** Locale for an error page: the token's own, when the token exists at all (even used). */
@@ -186,7 +186,7 @@ export async function confirmEmailWithLink(req: Request, url: URL): Promise<Resp
       await q(`UPDATE identities SET member_id = $1 WHERE member_id = $2`, [target, memberId]);
       await q(`DELETE FROM members WHERE id = $1`, [memberId]);
     } else {
-      if (holder) await q(`UPDATE members SET email = $2 WHERE id = $1`, [holder.id, `released-${holder.id}@unverified.invalid`]);
+      if (holder) await q(`UPDATE members SET email = $2 WHERE id = $1`, [holder.id, `released-${Number(holder.id)}@unverified.invalid`]);
       await q(`UPDATE members SET email = $2, email_verified = true WHERE id = $1`, [memberId, email]);
       await q(`UPDATE identities SET email = $2 WHERE member_id = $1 AND provider = 'email'`, [memberId, email]);
     }

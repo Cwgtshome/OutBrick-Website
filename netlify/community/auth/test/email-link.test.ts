@@ -37,7 +37,7 @@ describe('email sign-in link', () => {
   test('happy path: request, scanner-safe page, POST signs in and lands on returnTo', async () => {
     const res = await askForLink('Ada@Example.com ', { returnTo: '/community/t/42/hello?page=2#post-3' });
     assert.equal(res.status, 200);
-    assert.deepEqual(await res.json(), { sent: true });
+    assert.deepEqual(await res.json<any>(), { sent: true });
     const [email] = fetchStub.emails();
     assert.equal(email.to[0], 'ada@example.com');
     assert.equal(email.from, 'OutBrick Community <support@outbrick.site>');
@@ -67,7 +67,7 @@ describe('email sign-in link', () => {
     const cookie = sessionCookieOf(done);
     assert.ok(cookie);
 
-    const session = await (await communityAuth(request('GET', '/api/community/session', { cookie: cookie! }))).json();
+    const session = await (await communityAuth(request('GET', '/api/community/session', { cookie: cookie! }))).json<any>();
     assert.equal(session.member.email, 'ada@example.com');
     assert.equal(session.member.emailVerified, true);
     assert.equal(session.member.displayName, 'Ada');
@@ -172,7 +172,7 @@ describe('email sign-in link', () => {
 
   test('honeypot: told it worked, nothing stored or sent', async () => {
     const res = await askForLink('bot@example.com', { website: 'http://spam.example' });
-    assert.deepEqual(await res.json(), { sent: true });
+    assert.deepEqual(await res.json<any>(), { sent: true });
     assert.equal(fetchStub.calls.length, 0);
     assert.equal((await all(pg, `SELECT 1 FROM auth_tokens`)).length, 0);
   });
@@ -180,7 +180,7 @@ describe('email sign-in link', () => {
   test('invalid addresses are a field error', async () => {
     const res = await askForLink('not-an-email');
     assert.equal(res.status, 400);
-    const body = await res.json();
+    const body = await res.json<any>();
     assert.equal(body.error.fields.email, 'invalid');
   });
 
@@ -188,7 +188,7 @@ describe('email sign-in link', () => {
     for (let i = 0; i < 5; i++) assert.equal((await askForLink('greta@example.com')).status, 200);
     const sixth = await askForLink('greta@example.com');
     assert.equal(sixth.status, 429);
-    assert.equal((await sixth.json()).error.code, 'rate_limited');
+    assert.equal((await sixth.json<any>()).error.code, 'rate_limited');
     assert.equal(fetchStub.emails().length, 5);
   });
 
@@ -203,7 +203,7 @@ describe('email sign-in link', () => {
     delete process.env.RESEND_API_KEY;
     const res = await askForLink('hal@example.com');
     assert.equal(res.status, 503);
-    assert.equal((await res.json()).error.code, 'unavailable');
+    assert.equal((await res.json<any>()).error.code, 'unavailable');
   });
 
   test('a Resend failure is reported, not swallowed', async () => {
@@ -211,7 +211,7 @@ describe('email sign-in link', () => {
     fetchStub = stubFetch(undefined, { resendStatus: 500 });
     const res = await askForLink('ivy@example.com');
     assert.equal(res.status, 502);
-    assert.equal((await res.json()).error.code, 'send_failed');
+    assert.equal((await res.json<any>()).error.code, 'send_failed');
   });
 
   test('an existing member gets the link in their own language', async () => {
@@ -225,7 +225,7 @@ describe('email sign-in link', () => {
     await askForLink('Owner@example.com');
     const token = linkToken(fetchStub.emails()[0].text, '/api/community/auth/email/verify');
     const res = await communityAuth(request('POST', `/api/community/auth/email/verify?token=${token}`));
-    const session = await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json();
+    const session = await (await communityAuth(request('GET', '/api/community/session', { cookie: sessionCookieOf(res)! }))).json<any>();
     assert.equal(session.member.role, 'admin');
   });
 });

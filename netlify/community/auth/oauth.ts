@@ -148,7 +148,7 @@ async function postForm(url: string, form: Record<string, string>): Promise<Reco
     signal: AbortSignal.timeout(9000),
   });
   const data = (await response.json().catch(() => ({}))) as Record<string, unknown>;
-  if (!response.ok) throw new FlowError('failed', `token endpoint ${response.status} ${String(data.error ?? '')}`);
+  if (!response.ok) throw new FlowError('failed', `token endpoint ${response.status} ${typeof data.error === 'string' ? data.error : ''}`);
   return data;
 }
 
@@ -161,7 +161,7 @@ async function googleProfile(req: Request, code: string, st: StateData): Promise
     grant_type: 'authorization_code',
     code_verifier: st.verifier,
   });
-  const claims = await verifyIdToken(String(tokens.id_token ?? ''), { jwksUrl: endpoints.google.jwks, issuers: [...endpoints.google.issuers], audience: env('GOOGLE_CLIENT_ID'), nonce: st.nonce });
+  const claims = await verifyIdToken(typeof tokens.id_token === 'string' ? tokens.id_token : '', { jwksUrl: endpoints.google.jwks, issuers: [...endpoints.google.issuers], audience: env('GOOGLE_CLIENT_ID'), nonce: st.nonce });
   const verified = claimTrue(claims.email_verified) && typeof claims.email === 'string';
   return {
     provider: 'google',
@@ -202,7 +202,7 @@ async function appleProfile(req: Request, code: string, st: StateData, user: str
     grant_type: 'authorization_code',
     redirect_uri: callbackUrl(req, 'apple'),
   });
-  const claims = await verifyIdToken(String(tokens.id_token ?? ''), { jwksUrl: endpoints.apple.jwks, issuers: [...endpoints.apple.issuers], audience: env('APPLE_CLIENT_ID'), nonce: st.nonce });
+  const claims = await verifyIdToken(typeof tokens.id_token === 'string' ? tokens.id_token : '', { jwksUrl: endpoints.apple.jwks, issuers: [...endpoints.apple.issuers], audience: env('APPLE_CLIENT_ID'), nonce: st.nonce });
   // Apple only issues verified addresses (relay addresses included), but says so explicitly.
   const verified = typeof claims.email === 'string' && claimTrue(claims.email_verified ?? true);
   return { provider: 'apple', subject: String(claims.sub), email: verified ? String(claims.email) : null, emailVerified: verified, name: appleName(user), locale: st.locale };

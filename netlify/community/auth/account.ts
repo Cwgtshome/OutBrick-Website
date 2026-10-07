@@ -12,7 +12,7 @@ import { rateAllow, sql, transaction } from '../db.ts';
 import { ApiError, badRequest, forbidden, json, readJson, unauthorized } from '../http.ts';
 import { currentMember, endSession, sessionCookie, type Viewer } from '../session.ts';
 import { sendConfirmEmail } from './email-link.ts';
-import { cleanName, displayNameProblem, selfMember } from './members.ts';
+import { displayNameProblem, selfMember, tidyName } from './members.ts';
 import { asLocale, configuredProviders, isPlaceholderEmail } from './util.ts';
 
 /** Email kinds a member can switch off. The welcome is sent once and has no switch. */
@@ -47,13 +47,13 @@ export async function updateMe(req: Request): Promise<Response> {
   const changes: { displayName?: string; bio?: string; locale?: string; prefs?: Record<string, boolean> } = {};
 
   if (body.displayName !== undefined) {
-    const name = cleanName(body.displayName);
+    const name = tidyName(body.displayName);
     const problem = displayNameProblem(name);
     if (problem) fields.displayName = problem;
     else changes.displayName = name;
   }
   if (body.bio !== undefined) {
-    const bio = String(body.bio ?? '').replace(/\r\n?/g, '\n').replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '').trim();
+    const bio = (typeof body.bio === 'string' ? body.bio : '').replace(/\r\n?/g, '\n').replace(/(?![\t\n])\p{Cc}/gu, '').trim();
     if (bio.length > 500) fields.bio = 'too_long';
     else changes.bio = bio;
   }

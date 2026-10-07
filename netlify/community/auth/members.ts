@@ -34,20 +34,23 @@ export type SignInResult = {
 const RESERVED = /^(?:outbrick(?:\s*team)?|admin(?:istrator)?|mod(?:erator)?s?|team|support|system|staff|former member(?:\s.*)?|deleted|anonymous)$/i;
 const LINKISH = /(?:https?:|www\.|:\/\/|\b[a-z0-9-]+\.(?:com|net|org|io|co|app|site|xyz|info|biz|me|dev|ly|gg|tv|ru|cn|uk|de|fr|es|jp|link|click|shop|online)\b)/i;
 
-/** Tidy a name a person or a provider gave: no invisible characters, single spaces, ≤ 40. */
-export function cleanName(raw: unknown): string {
-  return String(raw ?? '')
+/** Tidy a name a person typed: no invisible characters, single spaces. Length is checked, not cut. */
+export function tidyName(raw: unknown): string {
+  return (typeof raw === 'string' ? raw : '')
     .normalize('NFKC')
     .replace(/[\p{Cc}\p{Cf}\p{Co}\p{Cn}]/gu, '')
     .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 40)
     .trim();
+}
+
+/** A provider's name, tidied and cut to 40. */
+export function cleanName(raw: unknown): string {
+  return tidyName(raw).slice(0, 40).trim();
 }
 
 /** Why a chosen display name can't be used, or null when it can. */
 export function displayNameProblem(name: string): 'too_short' | 'too_long' | 'no_email' | 'no_links' | 'reserved' | null {
-  if ([...name].length < 2 || name.length < 2) return 'too_short';
+  if (name.length < 2) return 'too_short';
   if (name.length > 40) return 'too_long';
   if (name.includes('@')) return 'no_email';
   if (LINKISH.test(name)) return 'no_links';
@@ -61,7 +64,7 @@ export function suggestedName(profile: Pick<ProviderProfile, 'name' | 'email'>):
   if (fromName && !displayNameProblem(fromName)) return fromName;
   const email = profile.email ?? '';
   if (email && !/@privaterelay\.appleid\.com$/i.test(email) && !isPlaceholderEmail(email)) {
-    const local = cleanName(email.split('@')[0].replace(/[._+\-]+/g, ' ').replace(/\d{3,}$/, ''));
+    const local = cleanName(email.split('@')[0].replace(/[._+-]+/g, ' ').replace(/\d{3,}$/, ''));
     const cased = local ? local.charAt(0).toLocaleUpperCase() + local.slice(1) : '';
     if (cased && !displayNameProblem(cased)) return cased;
   }
