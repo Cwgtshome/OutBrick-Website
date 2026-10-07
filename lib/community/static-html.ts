@@ -35,7 +35,7 @@ function crumbs(copy: CommunityCopy, items: Crumb[]): string {
     .map((item) =>
       item.href
         ? `<li><a href="${e(item.href)}"${item.lang ? ` lang="${item.lang}"` : ''}>${e(item.label)}</a></li>`
-        : `<li><a aria-current="page"${item.lang ? ` lang="${item.lang}"` : ''}>${e(item.label)}</a></li>`,
+        : `<li><span aria-current="page"${item.lang ? ` lang="${item.lang}"` : ''}>${e(item.label)}</span></li>`,
     )
     .join('')}</ol></nav>`;
 }

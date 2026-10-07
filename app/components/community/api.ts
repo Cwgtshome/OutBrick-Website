@@ -25,12 +25,13 @@ import type {
   ReportRequest,
   ResolveReportRequest,
   SearchResponse,
-  SelfMember,
   SessionResponse,
   ThreadDetail,
   ThreadListResponse,
   ThreadSummary,
   UpdateMeRequest,
+  UpdateMeResponse,
+  HidePostRequest,
   UpdateThreadRequest,
   EmailSignInRequest,
 } from '../../../lib/community/contract';
@@ -112,7 +113,7 @@ export const api = {
   session: (fresh = false) => get<SessionResponse>('/session', fresh),
   emailSignIn: (body: EmailSignInRequest) => write<{ sent: true }>('POST', '/auth/email', body),
   signOut: () => write<{ ok: true }>('POST', '/auth/signout'),
-  updateMe: (body: UpdateMeRequest) => write<{ member: SelfMember }>('PATCH', '/me', body),
+  updateMe: (body: UpdateMeRequest) => write<UpdateMeResponse>('PATCH', '/me', body),
   deleteMe: () => write<{ ok: true }>('DELETE', '/me', { confirm: 'DELETE' }),
   notifications: (page: number) => get<NotificationsResponse>(`/notifications${query({ page: page > 1 ? page : null })}`, true),
   readNotifications: (body: { ids?: number[]; all?: boolean }) => write<{ ok: true }>('POST', '/notifications/read', body),
@@ -142,8 +143,8 @@ export const api = {
   modReports: () => get<ModReportsResponse>('/mod/reports', true),
   resolveReport: (id: number, body: ResolveReportRequest) => write<{ ok: true }>('POST', `/mod/reports/${id}/resolve`, body),
   modQueue: () => get<ModQueueResponse>('/mod/queue', true),
-  approve: (postId: number) => write<{ ok: true }>('POST', `/posts/${postId}/approve`),
-  hidePost: (postId: number, reason: string) => write<{ ok: true }>('POST', `/posts/${postId}/hide`, { reason }),
+  approve: (postId: number) => write<{ post: Post }>('POST', `/posts/${postId}/approve`),
+  hidePost: (postId: number, reason: string) => write<{ post: Post }>('POST', `/posts/${postId}/hide`, { reason } satisfies HidePostRequest),
 };
 
 export const authStart = (provider: string, returnTo: string, locale: CommunityLocale) =>

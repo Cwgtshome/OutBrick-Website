@@ -6,7 +6,7 @@
  * button named with its effect and target. Pages of 25 posts, never infinite scroll.
  */
 
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
 import type { Post, ThreadDetail, ReportReason, ThreadStatus } from '../../../lib/community/contract';
 import { threadPath, bugStatuses, ideaStatuses } from '../../../lib/community/contract';
 import { categoryWords } from '../../../lib/i18n/community';
@@ -299,15 +299,15 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
         </p>
       ) : null}
       {mode === 'delete' ? (
-        <div className="cm-confirm" role="group" aria-label={copy.thread.actions.deleteLabel(num)}>
-          <p>{copy.thread.actions.confirmDelete}</p>
+        <fieldset className="cm-confirm">
+          <legend>{copy.thread.actions.confirmDelete}</legend>
           <button type="button" className="cm-act cm-danger" disabled={busy} onClick={() => void act(() => api.deletePost(post.id), copy.thread.postDeleted)}>
             {copy.thread.actions.yesDelete}
           </button>
           <button type="button" className="cm-act" onClick={() => setMode('view')}>
             {copy.thread.actions.cancel}
           </button>
-        </div>
+        </fieldset>
       ) : null}
       {mode === 'report' ? <ReportForm post={post} name={name} onDone={() => { announce(copy.thread.reported); setMode('view'); }} onCancel={() => setMode('view')} /> : null}
       {mode === 'view' && !post.hidden ? (
@@ -375,7 +375,7 @@ function EditPost({ post, lang, onCancel, onSaved }: { post: Post; lang: string;
   const ref = useRef<HTMLTextAreaElement>(null);
   const id = useId();
   useEffect(() => ref.current?.focus(), []);
-  const save = async (event: FormEvent) => {
+  const save = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!value.trim()) {
       setError(copy.form.codes.required(copy.form.fields.body));
@@ -418,7 +418,7 @@ function ReportForm({ post, name, onDone, onCancel }: { post: Post; name: string
   const id = useId();
   const first = useRef<HTMLInputElement>(null);
   useEffect(() => first.current?.focus(), []);
-  const send = async (event: FormEvent) => {
+  const send = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setBusy(true);
     try {
@@ -516,7 +516,7 @@ function ReplyArea({ detail, signInHref, onPosted }: { detail: Detail; signInHre
     );
   }
 
-  const submit = async (event: FormEvent) => {
+  const submit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setGeneral('');
     if (!body.trim()) {

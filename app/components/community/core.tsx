@@ -129,19 +129,27 @@ export function copyFor(locale: CommunityLocale) {
 
 export type Load<T> = { data: T | null; error: ApiFailure | null; loading: boolean; reload: () => void; set: (value: T) => void };
 
-/** Run `fetcher` whenever `key` changes; keeps the last good data while a reload runs. */
+/**
+ * Run `fetcher` whenever `key` changes (or `reload` is called); keeps the last good data for the
+ * same key while a reload runs. `loading` is derived, never set inside the effect.
+ */
 export function useLoad<T>(key: string | null, fetcher: () => Promise<T>): Load<T> {
-  const [state, setState] = useState<{ key: string | null; data: T | null; error: ApiFailure | null; loading: boolean }>({ key: null, data: null, error: null, loading: key !== null });
+  const [state, setState] = useState<{ key: string | null; tick: number; data: T | null; error: ApiFailure | null }>({ key: null, tick: 0, data: null, error: null });
   const [tick, setTick] = useState(0);
   const fetchRef = useRef(fetcher);
-  fetchRef.current = fetcher;
+  useEffect(() => {
+    fetchRef.current = fetcher;
+  });
   useEffect(() => {
     if (key === null) return;
     let live = true;
-    setState((s) => ({ ...s, loading: true, error: null }));
     fetchRef.current().then(
-      (data) => live && setState({ key, data, error: null, loading: false }),
-      (error: unknown) => live && setState((s) => ({ key, data: s.key === key ? s.data : null, error: error instanceof ApiFailure ? error : new ApiFailure(0, { code: 'unknown', message: String(error) }), loading: false })),
+      (data) => {
+        if (live) setState({ key, tick, data, error: null });
+      },
+      (error: unknown) => {
+        if (live) setState((s) => ({ key, tick, data: s.key === key ? s.data : null, error: error instanceof ApiFailure ? error : new ApiFailure(0, { code: 'unknown', message: String(error) }) }));
+      },
     );
     return () => {
       live = false;
@@ -149,8 +157,8 @@ export function useLoad<T>(key: string | null, fetcher: () => Promise<T>): Load<
   }, [key, tick]);
   const reload = useCallback(() => setTick((t) => t + 1), []);
   const set = useCallback((value: T) => setState((s) => ({ ...s, data: value })), []);
-  const current = state.key === key ? state : { data: null, error: null, loading: key !== null };
-  return { data: current.data, error: current.error, loading: current.loading || (key !== null && state.key !== key), reload, set };
+  const same = state.key === key;
+  return { data: same ? state.data : null, error: same ? state.error : null, loading: key !== null && (!same || state.tick !== tick), reload, set };
 }
 
 export function errorText(copy: CommunityCopy, error: ApiFailure | ApiErrorBody | null | undefined): string {
@@ -213,9 +221,9 @@ export function View({
                       {crumb.label}
                     </a>
                   ) : (
-                    <a aria-current="page" lang={crumb.lang}>
+                    <span aria-current="page" lang={crumb.lang}>
                       {crumb.label}
-                    </a>
+                    </span>
                   )}
                 </li>
               ))}
@@ -405,9 +413,9 @@ export function Pagination({ page, pages, href, label }: { page: number; pages: 
 export function Loading() {
   const { copy } = useApp();
   return (
-    <p className="cm-loading" role="status">
+    <output className="cm-loading" aria-live="polite">
       {copy.loading}
-    </p>
+    </output>
   );
 }
 
@@ -460,7 +468,7 @@ export function ErrorSummary({ errors, ids, summaryRef, general }: { errors: Fie
   const keys = Object.keys(errors);
   if (!keys.length && !general) return <div ref={summaryRef} tabIndex={-1} hidden />;
   return (
-    <div className="cm-summary" ref={summaryRef} tabIndex={-1} role="group" aria-labelledby={`${id}-h`}>
+    <div className="cm-summary" ref={summaryRef} tabIndex={-1}>
       <h2 id={`${id}-h`}>{copy.form.problem}</h2>
       {general ? <p>{general}</p> : null}
       {keys.length ? (

@@ -285,7 +285,7 @@ export type CommunityCopy = {
     emailButton: string;
     sent: string;
     sentNote: string;
-    errors: Record<'expired' | 'invalid' | 'provider' | 'cancelled', string>;
+    errors: Record<'expired' | 'invalid' | 'denied' | 'failed' | 'unavailable' | 'email_taken', string>;
     already: (name: string) => string;
     privacy: string;
     noProviders: string;
@@ -308,6 +308,12 @@ export type CommunityCopy = {
     emailKinds: Record<'reply' | 'mention' | 'watched' | 'status' | 'solved' | 'release' | 'moderation', [string, string]>;
     saveEmails: string;
     emailsSaved: string;
+    address: string;
+    addressHint: string;
+    addressNeeded: string;
+    saveAddress: string;
+    addressSent: (address: string) => string;
+    addressConfirmed: string;
     accounts: string;
     accountsLede: string;
     providerNames: Record<'apple' | 'google' | 'facebook' | 'email', string>;
@@ -352,6 +358,7 @@ export type CommunityCopy = {
   };
   errors: Record<string, string>;
   loading: string;
+  signedIn: string;
   retry: string;
   notFoundTitle: string;
   notFoundLede: string;
@@ -588,7 +595,6 @@ const en: CommunityCopy = {
       ['> quote', 'a quotation'],
       ['[words](https://…)', 'a link'],
       ['`code`', 'code, such as a level number or a setting name'],
-      ['||spoiler||', 'a spoiler, hidden until someone chooses to show it'],
     ],
     count: (used, max) => `${used} of ${max} characters`,
     left: (n, f) => (n === 1 ? '1 character left' : `${f} characters left`),
@@ -661,6 +667,9 @@ const en: CommunityCopy = {
       email: () => 'Enter an email address like name@example.com',
       choose: (field) => `Choose ${field.toLowerCase()}`,
       mismatch: () => 'Type DELETE in capital letters to confirm',
+      no_email: (f) => `${f} cannot be an email address`,
+      no_links: (f) => `${f} cannot contain a link`,
+      reserved: (f) => `${f} is reserved: choose another`,
     },
   },
   search: {
@@ -708,7 +717,7 @@ const en: CommunityCopy = {
       },
       {
         heading: 'Spoilers',
-        paragraphs: ['Some players love working a board out alone. Put solutions and late-Journey surprises inside spoiler marks (||like this||) and say which level the spoiler is for. Screen readers announce a spoiler before reading it.'],
+        paragraphs: ["Some players love working a board out alone. Start a post that gives away a solution or a late-Journey surprise with “Spoiler:” and the level it is about, so people can skip it, and keep the answer out of the thread title."],
       },
       {
         heading: 'Stay on topic, and post in any language',
@@ -748,8 +757,10 @@ const en: CommunityCopy = {
     errors: {
       expired: 'That sign-in link has expired. Links work for 15 minutes: ask for a new one below.',
       invalid: 'That sign-in link did not work. It may have been used already. Ask for a new one below.',
-      provider: 'Signing in did not finish because of a problem on the other side. Please try again, or use an email link.',
-      cancelled: 'Sign-in was cancelled. Nothing was shared. You can try again whenever you like.',
+      failed: 'Signing in did not finish because of a problem on the other side. Please try again, or use an email link.',
+      denied: 'Sign-in was cancelled. Nothing was shared. You can try again whenever you like.',
+      unavailable: "That way of signing in is not available right now. Use an email link, or try again later.",
+      email_taken: "That email address already belongs to another account. Sign in the way you did the first time.",
     },
     already: (name) => `You are already signed in as ${name}.`,
     privacy: 'How we handle your data is in the privacy policy and the community guidelines.',
@@ -788,6 +799,12 @@ const en: CommunityCopy = {
     },
     saveEmails: 'Save email choices',
     emailsSaved: 'Email choices saved.',
+    address: "Email address",
+    addressHint: "Never shown to anyone. A new address takes over once you confirm it from the email we send.",
+    addressNeeded: "Add an email address to post. We need a confirmed address to send you replies and sign-in links.",
+    saveAddress: "Change email address",
+    addressSent: (a) => `We sent a confirmation link to ${a}. Your address changes once you open it.`,
+    addressConfirmed: "Your email address is confirmed.",
     accounts: 'Ways you sign in',
     accountsLede: 'You can sign in with any of these. To add another, sign out and sign in with it using the same email address.',
     providerNames: { apple: 'Apple', google: 'Google', facebook: 'Facebook', email: 'Email link' },
@@ -860,8 +877,10 @@ const en: CommunityCopy = {
     network: 'We could not reach the community. Check your connection and try again.',
     unavailable: 'The community is resting for a moment. Please try again shortly.',
     unknown: 'Something went wrong on our side. Please try again.',
+    send_failed: "We could not send the email just now. Please try again in a minute.",
   },
   loading: 'Loading…',
+  signedIn: "You are signed in.",
   retry: 'Try again',
   notFoundTitle: 'Page not found',
   notFoundLede: 'There is no community page at this address.',
@@ -1103,7 +1122,6 @@ const fr: CommunityCopy = {
       ['> citation', 'une citation'],
       ['[texte](https://…)', 'un lien'],
       ['`code`', 'du code, comme un numéro de niveau ou le nom d’un réglage'],
-      ['||spoiler||', 'un spoiler, caché tant qu’on ne choisit pas de l’afficher'],
     ],
     count: (used, max) => `${used} caractères sur ${max}`,
     left: (n, f) => (n < 2 ? `${f} caractère restant` : `${f} caractères restants`),
@@ -1176,6 +1194,9 @@ const fr: CommunityCopy = {
       email: () => 'Saisissez une adresse e-mail comme nom@exemple.fr',
       choose: (field) => `${field} : faites un choix`,
       mismatch: () => 'Tapez DELETE en majuscules pour confirmer',
+      no_email: (f) => `${f} ne peut pas être une adresse e-mail`,
+      no_links: (f) => `${f} ne peut pas contenir de lien`,
+      reserved: (f) => `${f} est réservé : choisissez-en un autre`,
     },
   },
   search: {
@@ -1223,7 +1244,7 @@ const fr: CommunityCopy = {
       },
       {
         heading: 'Spoilers',
-        paragraphs: ['Certains aiment trouver la solution d’un plateau seuls. Placez les solutions et les surprises de fin de Voyage entre des marques de spoiler (||comme ceci||) et indiquez le niveau concerné. Les lecteurs d’écran annoncent un spoiler avant de le lire.'],
+        paragraphs: ["Certains aiment trouver la solution d’un plateau seuls. Commencez un message qui dévoile une solution ou une surprise de fin de Voyage par « Spoiler : » suivi du niveau concerné, pour qu’on puisse le passer, et gardez la réponse hors du titre."],
       },
       {
         heading: 'Restez dans le sujet, dans la langue de votre choix',
@@ -1263,8 +1284,10 @@ const fr: CommunityCopy = {
     errors: {
       expired: 'Ce lien de connexion a expiré. Les liens sont valables 15 minutes : demandez-en un nouveau ci-dessous.',
       invalid: 'Ce lien de connexion n’a pas fonctionné. Il a peut-être déjà servi. Demandez-en un nouveau ci-dessous.',
-      provider: 'La connexion n’a pas abouti à cause d’un problème de l’autre côté. Réessayez, ou utilisez un lien par e-mail.',
-      cancelled: 'La connexion a été annulée. Rien n’a été partagé. Vous pouvez réessayer quand vous voulez.',
+      failed: 'La connexion n’a pas abouti à cause d’un problème de l’autre côté. Réessayez, ou utilisez un lien par e-mail.',
+      denied: 'La connexion a été annulée. Rien n’a été partagé. Vous pouvez réessayer quand vous voulez.',
+      unavailable: "Ce moyen de connexion n’est pas disponible pour le moment. Utilisez un lien par e-mail ou réessayez plus tard.",
+      email_taken: "Cette adresse e-mail appartient déjà à un autre compte. Connectez-vous comme la première fois.",
     },
     already: (name) => `Vous êtes déjà connecté en tant que ${name}.`,
     privacy: 'La politique de confidentialité et les règles de la communauté expliquent comment nous traitons vos données.',
@@ -1303,6 +1326,12 @@ const fr: CommunityCopy = {
     },
     saveEmails: 'Enregistrer les choix d’e-mails',
     emailsSaved: 'Choix d’e-mails enregistrés.',
+    address: "Adresse e-mail",
+    addressHint: "Jamais montrée à personne. Une nouvelle adresse remplace l’ancienne une fois confirmée depuis l’e-mail que nous envoyons.",
+    addressNeeded: "Ajoutez une adresse e-mail pour publier. Il nous faut une adresse confirmée pour vous envoyer les réponses et les liens de connexion.",
+    saveAddress: "Changer d’adresse e-mail",
+    addressSent: (a) => `Nous avons envoyé un lien de confirmation à ${a}. L’adresse changera dès que vous l’ouvrirez.`,
+    addressConfirmed: "Votre adresse e-mail est confirmée.",
     accounts: 'Vos moyens de connexion',
     accountsLede: 'Vous pouvez vous connecter avec chacun d’eux. Pour en ajouter un, déconnectez-vous puis connectez-vous avec, en utilisant la même adresse e-mail.',
     providerNames: { apple: 'Apple', google: 'Google', facebook: 'Facebook', email: 'Lien par e-mail' },
@@ -1375,8 +1404,10 @@ const fr: CommunityCopy = {
     network: 'Impossible de joindre la communauté. Vérifiez votre connexion et réessayez.',
     unavailable: 'La communauté fait une petite pause. Réessayez dans un instant.',
     unknown: 'Un problème est survenu de notre côté. Réessayez.',
+    send_failed: "Impossible d’envoyer l’e-mail pour le moment. Réessayez dans une minute.",
   },
   loading: 'Chargement…',
+  signedIn: "Vous êtes connecté.",
   retry: 'Réessayer',
   notFoundTitle: 'Page introuvable',
   notFoundLede: 'Aucune page de la communauté ne se trouve à cette adresse.',
@@ -1618,7 +1649,6 @@ const de: CommunityCopy = {
       ['> Zitat', 'ein Zitat'],
       ['[Text](https://…)', 'ein Link'],
       ['`Code`', 'Code, etwa eine Levelnummer oder der Name einer Einstellung'],
-      ['||Spoiler||', 'ein Spoiler, verborgen, bis jemand ihn bewusst aufdeckt'],
     ],
     count: (used, max) => `${used} von ${max} Zeichen`,
     left: (n, f) => (n === 1 ? 'Noch 1 Zeichen' : `Noch ${f} Zeichen`),
@@ -1691,6 +1721,9 @@ const de: CommunityCopy = {
       email: () => 'Gib eine E-Mail-Adresse wie name@beispiel.de ein',
       choose: (field) => `${field}: Bitte auswählen`,
       mismatch: () => 'Gib zur Bestätigung DELETE in Großbuchstaben ein',
+      no_email: (f) => `${f}: bitte keine E-Mail-Adresse verwenden`,
+      no_links: (f) => `${f}: bitte keine Links verwenden`,
+      reserved: (f) => `${f}: ist reserviert, bitte wähl einen anderen`,
     },
   },
   search: {
@@ -1738,7 +1771,7 @@ const de: CommunityCopy = {
       },
       {
         heading: 'Spoiler',
-        paragraphs: ['Manche knobeln ein Spielfeld am liebsten allein aus. Setz Lösungen und Überraschungen aus der späten Reise in Spoiler-Zeichen (||so wie hier||) und nenn das Level, um das es geht. Screenreader kündigen einen Spoiler an, bevor sie ihn vorlesen.'],
+        paragraphs: ["Manche knobeln ein Spielfeld am liebsten allein aus. Beginn einen Beitrag, der eine Lösung oder eine Überraschung aus der späten Reise verrät, mit „Spoiler:“ und dem Level, um das es geht, damit andere ihn überspringen können, und lass die Antwort aus dem Titel heraus."],
       },
       {
         heading: 'Beim Thema bleiben, in jeder Sprache',
@@ -1778,8 +1811,10 @@ const de: CommunityCopy = {
     errors: {
       expired: 'Dieser Anmeldelink ist abgelaufen. Links gelten 15 Minuten: Fordere unten einen neuen an.',
       invalid: 'Dieser Anmeldelink hat nicht funktioniert. Vielleicht wurde er schon benutzt. Fordere unten einen neuen an.',
-      provider: 'Die Anmeldung wurde wegen eines Problems beim Anbieter nicht abgeschlossen. Versuch es noch einmal oder nutz einen E-Mail-Link.',
-      cancelled: 'Die Anmeldung wurde abgebrochen. Es wurde nichts geteilt. Du kannst es jederzeit noch einmal versuchen.',
+      failed: 'Die Anmeldung wurde wegen eines Problems beim Anbieter nicht abgeschlossen. Versuch es noch einmal oder nutz einen E-Mail-Link.',
+      denied: 'Die Anmeldung wurde abgebrochen. Es wurde nichts geteilt. Du kannst es jederzeit noch einmal versuchen.',
+      unavailable: "Diese Anmeldung ist gerade nicht verfügbar. Nutz einen E-Mail-Link oder versuch es später noch einmal.",
+      email_taken: "Diese E-Mail-Adresse gehört schon zu einem anderen Konto. Melde dich so an wie beim ersten Mal.",
     },
     already: (name) => `Du bist schon als ${name} angemeldet.`,
     privacy: 'Wie wir mit deinen Daten umgehen, steht in der Datenschutzerklärung und in den Community-Regeln.',
@@ -1818,6 +1853,12 @@ const de: CommunityCopy = {
     },
     saveEmails: 'E-Mail-Auswahl sichern',
     emailsSaved: 'E-Mail-Auswahl gesichert.',
+    address: "E-Mail-Adresse",
+    addressHint: "Wird niemandem angezeigt. Eine neue Adresse gilt erst, wenn du sie über unsere E-Mail bestätigst.",
+    addressNeeded: "Füg eine E-Mail-Adresse hinzu, um schreiben zu können. Für Antworten und Anmeldelinks brauchen wir eine bestätigte Adresse.",
+    saveAddress: "E-Mail-Adresse ändern",
+    addressSent: (a) => `Wir haben einen Bestätigungslink an ${a} geschickt. Die Adresse ändert sich, sobald du ihn öffnest.`,
+    addressConfirmed: "Deine E-Mail-Adresse ist bestätigt.",
     accounts: 'So meldest du dich an',
     accountsLede: 'Du kannst dich mit jeder dieser Möglichkeiten anmelden. Für eine weitere meldest du dich ab und mit ihr wieder an, mit derselben E-Mail-Adresse.',
     providerNames: { apple: 'Apple', google: 'Google', facebook: 'Facebook', email: 'E-Mail-Link' },
@@ -1890,8 +1931,10 @@ const de: CommunityCopy = {
     network: 'Die Community ist nicht erreichbar. Prüf deine Verbindung und versuch es noch einmal.',
     unavailable: 'Die Community macht kurz Pause. Versuch es gleich noch einmal.',
     unknown: 'Bei uns ist etwas schiefgegangen. Versuch es bitte noch einmal.',
+    send_failed: "Die E-Mail ließ sich gerade nicht senden. Versuch es in einer Minute noch einmal.",
   },
   loading: 'Wird geladen …',
+  signedIn: "Du bist angemeldet.",
   retry: 'Noch einmal versuchen',
   notFoundTitle: 'Seite nicht gefunden',
   notFoundLede: 'Unter dieser Adresse gibt es keine Community-Seite.',
@@ -2133,7 +2176,6 @@ const es: CommunityCopy = {
       ['> cita', 'una cita'],
       ['[texto](https://…)', 'un enlace'],
       ['`código`', 'código, como un número de nivel o el nombre de un ajuste'],
-      ['||spoiler||', 'un spoiler, oculto hasta que alguien decide mostrarlo'],
     ],
     count: (used, max) => `${used} de ${max} caracteres`,
     left: (n, f) => (n === 1 ? 'Queda 1 carácter' : `Quedan ${f} caracteres`),
@@ -2206,6 +2248,9 @@ const es: CommunityCopy = {
       email: () => 'Escribe un correo como nombre@ejemplo.es',
       choose: (field) => `${field}: elige una opción`,
       mismatch: () => 'Escribe DELETE en mayúsculas para confirmar',
+      no_email: (f) => `${f}: no puede ser un correo electrónico`,
+      no_links: (f) => `${f}: no puede contener enlaces`,
+      reserved: (f) => `${f}: está reservado, elige otro`,
     },
   },
   search: {
@@ -2253,7 +2298,7 @@ const es: CommunityCopy = {
       },
       {
         heading: 'Spoilers',
-        paragraphs: ['A algunas personas les encanta resolver un tablero por su cuenta. Pon las soluciones y las sorpresas del final del Viaje entre marcas de spoiler (||así||) e indica a qué nivel se refieren. Los lectores de pantalla anuncian un spoiler antes de leerlo.'],
+        paragraphs: ["A algunas personas les encanta resolver un tablero por su cuenta. Empieza los mensajes que desvelan una solución o una sorpresa del final del Viaje con «Spoiler:» y el nivel del que hablan, para que se puedan saltar, y deja la respuesta fuera del título."],
       },
       {
         heading: 'Sin salirse del tema, en cualquier idioma',
@@ -2293,8 +2338,10 @@ const es: CommunityCopy = {
     errors: {
       expired: 'Ese enlace de acceso ha caducado. Los enlaces duran 15 minutos: pide uno nuevo aquí abajo.',
       invalid: 'Ese enlace de acceso no ha funcionado. Puede que ya se usara. Pide uno nuevo aquí abajo.',
-      provider: 'El inicio de sesión no terminó por un problema del otro lado. Vuelve a intentarlo o usa un enlace por correo.',
-      cancelled: 'Se canceló el inicio de sesión. No se ha compartido nada. Puedes volver a intentarlo cuando quieras.',
+      failed: 'El inicio de sesión no terminó por un problema del otro lado. Vuelve a intentarlo o usa un enlace por correo.',
+      denied: 'Se canceló el inicio de sesión. No se ha compartido nada. Puedes volver a intentarlo cuando quieras.',
+      unavailable: "Esa forma de iniciar sesión no está disponible ahora. Usa un enlace por correo o inténtalo más tarde.",
+      email_taken: "Ese correo ya pertenece a otra cuenta. Inicia sesión como lo hiciste la primera vez.",
     },
     already: (name) => `Ya has iniciado sesión como ${name}.`,
     privacy: 'Cómo tratamos tus datos está en la política de privacidad y en las normas de la comunidad.',
@@ -2333,6 +2380,12 @@ const es: CommunityCopy = {
     },
     saveEmails: 'Guardar preferencias de correo',
     emailsSaved: 'Preferencias de correo guardadas.',
+    address: "Correo electrónico",
+    addressHint: "Nunca se muestra a nadie. Una dirección nueva sustituye a la anterior cuando la confirmas desde el correo que te enviamos.",
+    addressNeeded: "Añade un correo electrónico para publicar. Necesitamos una dirección confirmada para enviarte respuestas y enlaces de acceso.",
+    saveAddress: "Cambiar el correo electrónico",
+    addressSent: (a) => `Hemos enviado un enlace de confirmación a ${a}. La dirección cambiará cuando lo abras.`,
+    addressConfirmed: "Tu correo electrónico está confirmado.",
     accounts: 'Cómo inicias sesión',
     accountsLede: 'Puedes iniciar sesión con cualquiera de estas. Para añadir otra, cierra sesión y vuelve a entrar con ella usando el mismo correo.',
     providerNames: { apple: 'Apple', google: 'Google', facebook: 'Facebook', email: 'Enlace por correo' },
@@ -2405,8 +2458,10 @@ const es: CommunityCopy = {
     network: 'No pudimos conectar con la comunidad. Revisa tu conexión y vuelve a intentarlo.',
     unavailable: 'La comunidad está descansando un momento. Vuelve a intentarlo enseguida.',
     unknown: 'Algo falló por nuestra parte. Vuelve a intentarlo.',
+    send_failed: "No pudimos enviar el correo ahora mismo. Vuelve a intentarlo en un minuto.",
   },
   loading: 'Cargando…',
+  signedIn: "Has iniciado sesión.",
   retry: 'Volver a intentarlo',
   notFoundTitle: 'Página no encontrada',
   notFoundLede: 'No hay ninguna página de la comunidad en esta dirección.',
@@ -2648,7 +2703,6 @@ const ja: CommunityCopy = {
       ['> 引用', '引用'],
       ['[文字](https://…)', 'リンク'],
       ['`コード`', 'レベル番号や設定名などのコード'],
-      ['||ネタバレ||', '読む人が選ぶまで隠しておくネタバレ'],
     ],
     count: (used, max) => `${max}文字中${used}文字`,
     left: (_n, f) => `残り${f}文字`,
@@ -2721,6 +2775,9 @@ const ja: CommunityCopy = {
       email: () => 'name@example.jpのような形式でメールアドレスを入力してください',
       choose: (field) => `${field}を選んでください`,
       mismatch: () => '確認のため、大文字でDELETEと入力してください',
+      no_email: (f) => `${f}にメールアドレスは使えません`,
+      no_links: (f) => `${f}にリンクは使えません`,
+      reserved: (f) => `その${f}は予約されています。別のものを選んでください`,
     },
   },
   search: {
@@ -2768,7 +2825,7 @@ const ja: CommunityCopy = {
       },
       {
         heading: 'ネタバレ',
-        paragraphs: ['自分の力でステージを解きたい人もいます。攻略法や旅の終盤の驚きは、ネタバレの記号（||このように||）で囲み、どのレベルの話かを書き添えてください。スクリーンリーダーは読み上げる前にネタバレであることを知らせます。'],
+        paragraphs: ["自分の力でステージを解きたい人もいます。攻略法や旅の終盤の驚きを書くときは、投稿の最初に「ネタバレ：」と対象のレベルを書いて読み飛ばせるようにし、タイトルには答えを書かないでください。"],
       },
       {
         heading: '話題に沿って、どの言語でも',
@@ -2808,8 +2865,10 @@ const ja: CommunityCopy = {
     errors: {
       expired: 'このサインイン用のリンクは期限切れです。リンクの有効期間は15分です。下から新しいリンクを受け取ってください。',
       invalid: 'このサインイン用のリンクは使えませんでした。すでに使われた可能性があります。下から新しいリンクを受け取ってください。',
-      provider: '相手側の問題でサインインが完了しませんでした。もう一度お試しいただくか、メールのリンクをご利用ください。',
-      cancelled: 'サインインはキャンセルされました。何も共有されていません。いつでもやり直せます。',
+      failed: '相手側の問題でサインインが完了しませんでした。もう一度お試しいただくか、メールのリンクをご利用ください。',
+      denied: 'サインインはキャンセルされました。何も共有されていません。いつでもやり直せます。',
+      unavailable: "この方法でのサインインは現在ご利用いただけません。メールのリンクを使うか、しばらくしてからお試しください。",
+      email_taken: "このメールアドレスはすでに別のアカウントで使われています。前回と同じ方法でサインインしてください。",
     },
     already: (name) => `すでに${name}としてサインインしています。`,
     privacy: 'データの扱いについては、プライバシーポリシーとコミュニティのガイドラインをご覧ください。',
@@ -2848,6 +2907,12 @@ const ja: CommunityCopy = {
     },
     saveEmails: 'メールの設定を保存',
     emailsSaved: 'メールの設定を保存しました。',
+    address: "メールアドレス",
+    addressHint: "誰にも表示されません。新しいアドレスは、お送りするメールで確認すると切り替わります。",
+    addressNeeded: "投稿するにはメールアドレスを追加してください。返信やサインイン用リンクを送るには確認済みのアドレスが必要です。",
+    saveAddress: "メールアドレスを変更",
+    addressSent: (a) => `${a}に確認用のリンクを送りました。リンクを開くとアドレスが切り替わります。`,
+    addressConfirmed: "メールアドレスを確認しました。",
     accounts: 'サインインの方法',
     accountsLede: 'これらのどの方法でもサインインできます。方法を追加するには、いったんサインアウトし、同じメールアドレスで新しい方法を使ってサインインしてください。',
     providerNames: { apple: 'Apple', google: 'Google', facebook: 'Facebook', email: 'メールのリンク' },
@@ -2920,8 +2985,10 @@ const ja: CommunityCopy = {
     network: 'コミュニティに接続できませんでした。通信状況を確認して、もう一度お試しください。',
     unavailable: 'コミュニティは少しお休み中です。しばらくしてからお試しください。',
     unknown: 'こちらで問題が起きました。もう一度お試しください。',
+    send_failed: "いまはメールを送信できませんでした。1分ほどしてからもう一度お試しください。",
   },
   loading: '読み込んでいます…',
+  signedIn: "サインインしました。",
   retry: 'もう一度試す',
   notFoundTitle: 'ページが見つかりません',
   notFoundLede: 'このアドレスにコミュニティのページはありません。',

@@ -2,7 +2,7 @@
 
 /** Reading the community: the home page, a category, search, the FAQ, the guidelines and a member's profile. */
 
-import { useId, useState, type FormEvent } from 'react';
+import { useId, useState, type SubmitEvent } from 'react';
 import type { Category, FollowLevel, ThreadSummary, CommunityLocale } from '../../../lib/community/contract';
 import { communityLocales, threadPath, ideaStatuses, bugStatuses } from '../../../lib/community/contract';
 import { categoryColours, categoryWords, type CategorySlug } from '../../../lib/i18n/community';
@@ -133,7 +133,7 @@ export function SearchBox({ initial = '', category = '' }: { initial?: string; c
   const { copy, navigate, path } = useApp();
   const [q, setQ] = useState(initial);
   const id = useId();
-  const submit = (event: FormEvent) => {
+  const submit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const params = new URLSearchParams();
     if (q.trim()) params.set('q', q.trim());
@@ -160,7 +160,6 @@ export function FollowButtons({ level, onChange, watchLabel, muteLabel }: { leve
   const { copy, announce } = useApp();
   const [busy, setBusy] = useState(false);
   const [current, setCurrent] = useState(level);
-  const id = useId();
   const set = async (target: FollowLevel) => {
     const next = current === target ? 'none' : target;
     setBusy(true);
@@ -175,17 +174,15 @@ export function FollowButtons({ level, onChange, watchLabel, muteLabel }: { leve
     }
   };
   return (
-    <div className="cm-follow" role="group" aria-labelledby={id}>
-      <span id={id} className="cm-follow-label">
-        {copy.follow.legend}
-      </span>
-      <button type="button" className="cm-act" aria-pressed={current === 'watch'} aria-label={watchLabel} disabled={busy} onClick={() => set('watch')}>
+    <fieldset className="cm-follow">
+      <legend className="cm-follow-label">{copy.follow.legend}</legend>
+      <button type="button" className="cm-act" aria-pressed={current === 'watch'} aria-label={watchLabel} disabled={busy} onClick={() => void set('watch')}>
         {current === 'watch' ? copy.follow.watching : copy.follow.watch}
       </button>
-      <button type="button" className="cm-act" aria-pressed={current === 'mute'} aria-label={muteLabel} disabled={busy} onClick={() => set('mute')}>
+      <button type="button" className="cm-act" aria-pressed={current === 'mute'} aria-label={muteLabel} disabled={busy} onClick={() => void set('mute')}>
         {current === 'mute' ? copy.follow.muted : copy.follow.mute}
       </button>
-    </div>
+    </fieldset>
   );
 }
 
@@ -254,7 +251,7 @@ export function CategoryView({ route }: { route: Extract<Route, { name: 'categor
     if (next.page > 1) q.set('page', String(next.page));
     return path(`/c/${route.slug}`) + (q.size ? `?${q}` : '');
   };
-  const apply = (event: FormEvent) => {
+  const apply = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     navigate(href({ language, status }), { focus: false });
   };
@@ -336,9 +333,9 @@ export function CategoryView({ route }: { route: Extract<Route, { name: 'categor
       ) : data ? (
         data.threads.length ? (
           <>
-            <p className="cm-count-line" role="status">
+            <output className="cm-count-line" aria-live="polite">
               {copy.category.showing(n((data.page - 1) * 30 + 1), n((data.page - 1) * 30 + data.threads.length), n(data.total))}
-            </p>
+            </output>
             <ThreadList threads={data.threads} headingLevel={2} />
             <Pagination page={data.page} pages={data.pages} href={(page) => href({ page })} label={copy.category.pages} />
           </>
@@ -360,7 +357,7 @@ export function SearchView({ route }: { route: Extract<Route, { name: 'search' }
   const cats = useLoad('categories', () => api.categories());
   const results = useLoad(route.q ? `search:${route.q}:${route.category}:${route.page}` : null, () => api.search({ q: route.q, category: route.category || undefined, page: route.page }));
   const id = useId();
-  const submit = (event: FormEvent) => {
+  const submit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const params = new URLSearchParams();
     if (q.trim()) params.set('q', q.trim());
@@ -404,9 +401,9 @@ export function SearchView({ route }: { route: Extract<Route, { name: 'search' }
           </button>
         </form>
       </search>
-      <p className="cm-count-line" role="status">
+      <output className="cm-count-line" aria-live="polite">
         {!route.q ? copy.search.prompt : data ? (data.total ? copy.search.results(data.total, n(data.total)) : copy.search.none(route.q)) : ''}
-      </p>
+      </output>
       {results.error ? <ErrorNotice error={results.error} retry={results.reload} /> : null}
       {data && data.hits.length ? (
         <>

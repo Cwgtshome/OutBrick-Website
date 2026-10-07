@@ -7,8 +7,8 @@
  * close, then says how much room is left once per step.
  */
 
-import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
-import { api } from './api';
+import { useRef, useState, type KeyboardEvent, type RefObject } from 'react';
+import { api, type ApiFailure } from './api';
 import { errorText, useApp } from './core';
 
 export const POST_MAX = 20000;
@@ -48,36 +48,40 @@ export function Composer({
   const previewTab = useRef<HTMLButtonElement>(null);
 
   const left = max - value.length;
-  useEffect(() => {
-    // The step we are in now: the smallest threshold not yet passed.
-    const step = steps.filter((s) => left <= s).at(-1) ?? null;
+  const previewRun = useRef(0);
+
+  /** Each keystroke: announce the room left only when it crosses the next step near the limit. */
+  const change = (next: string) => {
+    const remaining = max - next.length;
+    const step = steps.filter((s) => remaining <= s).at(-1) ?? null;
     if (step !== lastStep.current) {
-      if (step !== null && (lastStep.current === null || step < lastStep.current)) setSpoken(left < 0 ? copy.composer.over(-left, n(-left)) : copy.composer.left(left, n(left)));
+      if (step !== null && (lastStep.current === null || step < lastStep.current)) setSpoken(remaining < 0 ? copy.composer.over(-remaining, n(-remaining)) : copy.composer.left(remaining, n(remaining)));
       lastStep.current = step;
     }
-  }, [left, copy, n]);
+    onChange(next);
+  };
 
-  useEffect(() => {
-    if (tab !== 'preview') return;
+  /** Show a tab; the preview is rendered by the server (POST /preview), exactly as a post would be. */
+  const show = (next: 'write' | 'preview', focus = false) => {
+    setTab(next);
+    if (focus) (next === 'write' ? writeTab : previewTab).current?.focus();
+    if (next !== 'preview') return;
+    const run = ++previewRun.current;
     if (!value.trim()) {
       setPreview({ html: null, error: null, loading: false });
       return;
     }
-    let live = true;
     setPreview({ html: null, error: null, loading: true });
     api.preview(value).then(
-      (result) => live && setPreview({ html: result.html, error: null, loading: false }),
-      (failure) => live && setPreview({ html: null, error: errorText(copy, failure), loading: false }),
+      (result) => {
+        if (run === previewRun.current) setPreview({ html: result.html, error: null, loading: false });
+      },
+      (failure: unknown) => {
+        if (run === previewRun.current) setPreview({ html: null, error: errorText(copy, failure as ApiFailure), loading: false });
+      },
     );
-    return () => {
-      live = false;
-    };
-  }, [tab, value, copy]);
-
-  const choose = (next: 'write' | 'preview') => {
-    setTab(next);
-    (next === 'write' ? writeTab : previewTab).current?.focus();
   };
+  const choose = (next: 'write' | 'preview') => show(next, true);
   const onKey = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
       event.preventDefault();
@@ -110,7 +114,7 @@ export function Composer({
           aria-selected={tab === 'write'}
           aria-controls={`${id}-panel-write`}
           tabIndex={tab === 'write' ? 0 : -1}
-          onClick={() => setTab('write')}
+          onClick={() => show('write')}
           onKeyDown={onKey}
         >
           {copy.composer.write}
@@ -123,7 +127,7 @@ export function Composer({
           aria-selected={tab === 'preview'}
           aria-controls={`${id}-panel-preview`}
           tabIndex={tab === 'preview' ? 0 : -1}
-          onClick={() => setTab('preview')}
+          onClick={() => show('preview')}
           onKeyDown={onKey}
         >
           {copy.composer.preview}
@@ -138,14 +142,14 @@ export function Composer({
           value={value}
           lang={lang}
           spellCheck
-          onChange={(event) => onChange(event.target.value)}
+          onChange={(event) => change(event.target.value)}
           aria-invalid={error || left < 0 ? true : undefined}
           aria-describedby={described}
         />
       </div>
       <div role="tabpanel" id={`${id}-panel-preview`} aria-labelledby={`${id}-tab-preview`} hidden={tab !== 'preview'} tabIndex={0} className="cm-preview">
         {preview.loading ? (
-          <p role="status">{copy.composer.previewLoading}</p>
+          <output aria-live="polite">{copy.composer.previewLoading}</output>
         ) : preview.error ? (
           <p className="cm-error">{preview.error}</p>
         ) : preview.html ? (
@@ -160,9 +164,9 @@ export function Composer({
       <p className={`cm-charcount ${left < 0 ? 'is-over' : ''}`} id={`${id}-count`}>
         {left < 0 ? copy.composer.over(-left, n(-left)) : copy.composer.count(n(value.length), n(max))}
       </p>
-      <p className="sr-only" role="status" aria-live="polite">
+      <output className="sr-only" aria-live="polite">
         {spoken}
-      </p>
+      </output>
       <details className="cm-help">
         <summary>{copy.composer.help}</summary>
         <dl>

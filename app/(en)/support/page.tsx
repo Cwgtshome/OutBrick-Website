@@ -106,6 +106,17 @@ export default function SupportPage() {
 
       </div>
 
+      <section className="brick headline">
+        <h2>Ask the community</h2>
+        <p>
+          Players and the OutBrick team answer questions, track bugs and vote on ideas in OutBrick Community.
+        </p>
+        <div className="act">
+          <a className="btn" href="/community/c/help">Ask the community</a>
+          <a className="btn ghost" href="/community/new?category=bugs">Report a bug</a>
+        </div>
+      </section>
+
       <section className="brick">
         <h2>Still stuck?</h2>
         <p>
