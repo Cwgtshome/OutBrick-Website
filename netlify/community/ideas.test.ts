@@ -112,7 +112,7 @@ void test('the roadmap groups ideas by status, with votes, the viewer’s vote a
   await resetRates(pg);
   const author = await member(pg);
   const fan = await member(pg);
-  const mod = await member(pg, { role: 'team' });
+  const mod = await member(pg, { role: 'moderator' });
   const considering = await idea(author.cookie, 'Roadmap considering');
   const planned = await idea(author.cookie, 'Roadmap planned');
   const progress = await idea(author.cookie, 'Roadmap in progress');
@@ -204,7 +204,7 @@ void test('the release bot links the announcement into ideas it shipped and tell
   await resetRates(pg);
   const author = await member(pg);
   const fan = await member(pg);
-  const mod = await member(pg, { role: 'team' });
+  const mod = await member(pg, { role: 'moderator' });
   const byNote = await idea(author.cookie, 'Shipped by note idea');
   const byVersion = await idea(author.cookie, 'Shipped by version idea');
   const other = await idea(author.cookie, 'Shipped in another version');

@@ -40,8 +40,15 @@ for (const locale of locales) {
   sql += `\nDO $links$\nDECLARE target record;\nBEGIN\n FOR target IN SELECT g.key, t.id, t.slug FROM player_guides g JOIN threads t ON t.id = g.thread_id WHERE g.locale = ${literal(locale)} LOOP\n  UPDATE posts SET body_md = replace(body_md, '/community/guide-placeholder/' || target.key, ${literal(locale === 'en' ? '/community/t/' : `/${locale}/community/t/`)} || target.id || '/' || target.slug),\n   body_html = replace(body_html, '/community/guide-placeholder/' || target.key, ${literal(locale === 'en' ? '/community/t/' : `/${locale}/community/t/`)} || target.id || '/' || target.slug)\n  WHERE number = 1 AND thread_id IN (SELECT thread_id FROM player_guides WHERE locale = ${literal(locale)});\n END LOOP;\nEND $links$;\n`;
 }
 const dir = 'netlify/database/migrations/20261007170000_player-guides';
-fs.mkdirSync(dir, { recursive: true });
-fs.writeFileSync(`${dir}/migration.sql`, sql);
+const migration = `${dir}/migration.sql`;
+if (fs.existsSync(migration)) {
+  if (fs.readFileSync(migration, 'utf8') !== sql) {
+    throw new Error('The initial guide migration is immutable. Write guide updates in a new timestamped additive migration.');
+  }
+} else {
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(migration, sql);
+}
 console.log(
   `Generated ${locales.length * 9} team guides with locale-specific thread links.`,
 );

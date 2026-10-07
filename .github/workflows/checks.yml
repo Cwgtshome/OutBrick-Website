@@ -46,6 +46,8 @@ jobs:
       - name: Player guide links and additive seed
         run: node --experimental-strip-types --test netlify/community/player-guides.test.ts netlify/community/threads.test.ts
 
+      - name: Administrative roles and editorial publishing
+        run: node --experimental-strip-types --test netlify/community/admin.test.ts netlify/community/moderation.test.ts
       - name: SEO audit
         run: pnpm audit:seo
 

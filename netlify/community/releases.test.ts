@@ -71,6 +71,7 @@ void test('the pure parts: parsing, comparing, planning, writing the posts', () 
 });
 
 void test('first run records the current version without posting', async () => {
+  const existingThreads = (await pg.query('SELECT 1 FROM threads')).rows.length;
   const fake = fakeFetch('5.0.1');
   const result = await runReleaseBot(fake.fn);
   assert.equal(result.action, 'record');
@@ -81,7 +82,7 @@ void test('first run records the current version without posting', async () => {
   );
   const { rows } = await pg.query<{ version: string; thread_id: number | null }>(`SELECT version, thread_id FROM app_releases`);
   assert.deepEqual(rows, [{ version: '5.0.1', thread_id: null }]);
-  assert.equal((await pg.query(`SELECT 1 FROM threads`)).rows.length, 0);
+  assert.equal((await pg.query(`SELECT 1 FROM threads`)).rows.length, existingThreads);
   assert.equal((await runReleaseBot(fakeFetch('5.0.1').fn)).action, 'none');
 });
 

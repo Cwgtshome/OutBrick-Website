@@ -434,7 +434,7 @@ export const patchThread: Handler = async (req, params) => {
   }
 
   if (body.status !== undefined || body.statusNote !== undefined) {
-    if (!mod) throw forbidden('Only moderators and the OutBrick team change a status.');
+    if (!mod) throw forbidden('Only moderators and administrators change a status.');
     const allowed = statusesFor(kind);
     let status = (thread.status as ThreadStatus | null) ?? null;
     if (body.status !== undefined) {
@@ -453,7 +453,7 @@ export const patchThread: Handler = async (req, params) => {
   }
 
   if (body.shippedVersion !== undefined) {
-    if (!mod) throw forbidden('Only moderators and the OutBrick team set the version an idea shipped in.');
+    if (!mod) throw forbidden('Only moderators and administrators set the version an idea shipped in.');
     if (kind !== 'ideas') throw badRequest('invalid', 'Only ideas have a shipped version.', { shippedVersion: 'invalid' });
     const version = body.shippedVersion === null || body.shippedVersion === '' ? null : txt(body.shippedVersion).trim().replace(/^v/i, '');
     if (version !== null && !/^\d{1,4}(?:\.\d{1,4}){0,3}$/.test(version)) throw badRequest('invalid', 'A version looks like 5.1 or 5.1.2.', { shippedVersion: 'invalid' });
