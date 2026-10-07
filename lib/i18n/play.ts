@@ -1,3 +1,4 @@
+import { currentGameCopy } from './current-game.ts';
 /**
  * The play guide's words (/play and its translations). `en` is the original
  * copy of app/play/page.tsx, verbatim; the loop section uses the same words as
@@ -341,3 +342,18 @@ const ja: PlayCopy = {
 };
 
 export const playCopy: Record<Locale, PlayCopy> = { en, fr, de, es, ja };
+
+for (const locale of ['en', 'fr', 'de', 'es', 'ja'] as const) {
+  const t = currentGameCopy[locale];
+  const p = playCopy[locale];
+  p.meta.description = t.playDescription;
+  p.eyebrow = t.demoTitle;
+  p.lede = t.demo;
+  p.loop.lede = t.summary;
+  p.loop.rows[0].body = t.moves;
+  p.loop.rows[3].body = t.lives;
+  p.loop.rows[1] = { title: t.starsTitle, body: t.stars };
+  p.loop.rows[4] = { title: t.adsTitle, body: t.ads };
+  p.meet.lede = t.match;
+  p.meet.nouns = [];
+}

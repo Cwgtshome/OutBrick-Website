@@ -1,3 +1,4 @@
+import { currentGameCopy } from './i18n/current-game.ts';
 /**
  * The facts behind the business pages — contact topics, the affiliate programme's terms and
  * the open roles — kept in one place so the pages, their forms and their structured data
@@ -278,8 +279,7 @@ export function jobDescriptionHtml(job: Job): string {
 // ---------------------------------------------------------------------------------------
 // Press
 
-export const pressBoilerplate =
-  'OutBrick is an independent games company founded by Mourad Hamdi. Its game, OutBrick: Block Sort Puzzle, is a sliding-brick colour-sort puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch: 2,000 solver-verified boards across 100 chapters, a Journey of 167 brick-built villages, and nine brick friends. It is free on the App Store, with optional in-app purchases and no subscription. More at outbrick.site.';
+export const pressBoilerplate = currentGameCopy.en.summary;
 
 export const founderQuote =
   'We wanted a puzzle that respects the person holding the phone. A solver cleared every board in OutBrick before it shipped, so when a board looks impossible, it isn’t — the way out is there, and finding it is yours. There is no clock anywhere in the game, and we say plainly how lives and ads work, because a calm game shouldn’t need small print.';

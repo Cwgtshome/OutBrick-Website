@@ -1,3 +1,4 @@
+import { currentPublicCopy } from './current-public.ts';
 import type { TranslatedLocale } from './locales';
 import { de } from './public-pages-de.ts';
 import { fr } from './public-pages-fr.ts';
@@ -11,5 +12,5 @@ import { emailPages } from './email-pages.ts';
 import { communitySupportPhrases as cm } from './community.ts';
 /** Full, phrase-level page translations shared by existing English layouts. */
 export const publicPages: Record<TranslatedLocale, Record<string, string>> = {
-  fr: {...fr, ...extraFr, ...emailPages.fr, ...cm('fr')}, de: {...de, ...extraDe, ...emailPages.de, ...cm('de')}, es: {...es, ...extraEs, ...emailPages.es, ...cm('es')}, ja: {...ja, ...extraJa, ...emailPages.ja, ...cm('ja')},
+  fr: {...fr, ...extraFr, ...emailPages.fr, ...cm('fr'), ...currentPublicCopy.fr}, de: {...de, ...extraDe, ...emailPages.de, ...cm('de'), ...currentPublicCopy.de}, es: {...es, ...extraEs, ...emailPages.es, ...cm('es'), ...currentPublicCopy.es}, ja: {...ja, ...extraJa, ...emailPages.ja, ...cm('ja'), ...currentPublicCopy.ja},
 };

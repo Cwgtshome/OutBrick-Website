@@ -1,3 +1,4 @@
+import { CurrentGameFeatures } from './current-game-features';
 import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
 import { cast, passes, villages } from '../../lib/villages';
@@ -513,6 +514,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             </div>
           </div>
         </section>
+      <CurrentGameFeatures locale={locale} />
       </main>
 
       <VillageFooter locale={locale} page="/" />

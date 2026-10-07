@@ -124,7 +124,7 @@ export function ChallengeLanding({ qr }: { qr?: ReactNode }) {
             <h1>{dare}</h1>
 
             <p className="lede">
-              Someone dared you to a board of OutBrick — a relaxed sliding-brick colour-sort puzzle.
+              Someone dared you to a board of OutBrick — a relaxed match-three brick puzzle.
               Match every brick to its gate, take the free undo the board comes with, and beat their
               move count.
             </p>

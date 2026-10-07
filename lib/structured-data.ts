@@ -1,3 +1,4 @@
+import { currentGameCopy } from './i18n/current-game.ts';
 /**
  * The site's structured data (schema.org JSON-LD), in one place.
  *
@@ -47,13 +48,13 @@ type AppStoreRecord = {
 const record = stats as unknown as AppStoreRecord;
 
 /**
- * Last known values from Apple's record (iTunes Lookup, 24 September 2026), used only when the
+ * Last known values from Apple's record (iTunes Lookup, 7 October 2026), used only when the
  * build could not reach Apple. Nothing here is a guess: each one is what the record said.
  */
 const appStoreFallback = {
-  version: '4.2',
+  version: '5.0.1',
   releaseDate: '2026-09-06T07:00:00Z',
-  currentVersionReleaseDate: '2026-09-22T23:48:59Z',
+  currentVersionReleaseDate: '2026-10-06T00:20:52Z',
   minimumOsVersion: '15.0',
   languages: ['nl', 'en', 'fr', 'de', 'it', 'ja', 'ko', 'pt', 'ru', 'zh', 'es', 'tr'],
   genres: ['Casual', 'Puzzle'],
@@ -88,7 +89,7 @@ export function organizationNode(): Node {
       caption: 'The OutBrick app icon',
     },
     image: ref(ids.logo),
-    description: 'The studio behind OutBrick: Block Sort Puzzle, a relaxed sliding-brick colour-sort puzzle, and the OutBrick Journal on puzzle design and calmer play.',
+    description: 'The studio behind OutBrick: Block Sort Puzzle, a relaxed match-three brick puzzle, and the OutBrick Journal on puzzle design and calmer play.',
     founder: ref(ids.founder),
     contactPoint: {
       '@type': 'ContactPoint',
@@ -122,7 +123,7 @@ export function websiteNode(): Node {
     name: 'OutBrick',
     alternateName: 'outbrick.site',
     url: `${siteUrl}/`,
-    description: 'The official site of OutBrick: Block Sort Puzzle, a relaxed sliding-brick colour-sort puzzle, and the OutBrick Journal.',
+    description: 'The official site of OutBrick: Block Sort Puzzle, a relaxed match-three brick puzzle, and the OutBrick Journal.',
     inLanguage: siteLanguages,
     publisher: ref(ids.organization),
     // The journal's search answers /blog?q=… (app/(en)/blog/journal-finder.tsx reads the query
@@ -212,7 +213,7 @@ export function appNode({ description, url = `${siteUrl}/`, showsRating = false 
     name: 'OutBrick: Block Sort Puzzle',
     alternateName: 'OutBrick',
     url,
-    description: description ?? 'A sliding-brick colour-sort puzzle: 2,000 solver-verified boards across 100 chapters, a Journey of 167 brick-built villages, and nine brick friends.',
+    description: description ?? currentGameCopy.en.summary,
     applicationCategory: 'GameApplication',
     applicationSubCategory: 'Puzzle game',
     operatingSystem: `iOS ${record.minimumOsVersion ?? appStoreFallback.minimumOsVersion} or later, iPadOS, macOS, tvOS, visionOS, watchOS`,

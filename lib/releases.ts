@@ -422,15 +422,123 @@ const notes42: Record<ReleaseLocale, ReleaseNotes> = {
   },
 };
 
+const notes501: Record<ReleaseLocale, ReleaseNotes> = {
+  "en": {
+    "headline": "Thank you for every message about 5.0. This update is built from your feedback.",
+    "sections": [
+      {
+        "title": "In this update",
+        "bullets": [
+          "Faster with VoiceOver. A move's result is now spoken the moment you make it, instead of after the animation, and VoiceOver keeps its place on the brick you moved.",
+          "Hints speak again. Ask for a hint and VoiceOver tells you which brick to swap and which way, then takes you to it.",
+          "Gates explained. Every gate tells you how to use it, and a brick standing in front of its own gate says so.",
+          "Settings that explain themselves. Every option in Settings › Accessibility now says what it does.",
+          "More VoiceOver tools. A two-finger double tap gives you a hint on a board, a two-finger scrub closes any screen, new rotors jump to specials, goals, blockers and gates, and an optional row sound lets you hear where the colours sit.",
+          "Boards finish when you win. The board ends the moment your goals are met. Every move you have left turns into a line blaster for a bigger score, and more stars.",
+          "Goals that look like your bricks. Goal icons now match the board's bricks exactly, in every village and colour palette, and a finished goal stays in its own colour.",
+          "Siri, without opening the game. Ask how many lives you have, when the next one comes back, about today's Daily Brick, or how many stars you have in a village.",
+          "Find OutBrick everywhere. Spotlight learns which levels and villages you play, Visual Intelligence can find a matching village or friend from a photo of toy bricks, and widgets come forward in your Smart Stack when there is something to do.",
+          "Focus filters. Choose whether a Focus such as Sleep or Work turns off the music and pauses OutBrick's reminders.",
+          "Fresh design. The level card, the wardrobe and the shop tiles now wear OutBrick's own colours, with clearer text."
+        ]
+      }
+    ]
+  },
+  "fr": {
+    "headline": "Merci pour chacun de tes messages sur la 5.0. Cette mise à jour est construite à partir de tes retours.",
+    "sections": [
+      {
+        "title": "Dans cette mise à jour",
+        "bullets": [
+          "Plus rapide avec VoiceOver. Le résultat d’un coup est annoncé dès que tu le joues, et non plus après l’animation, et VoiceOver reste sur la brique que tu viens de déplacer.",
+          "Les indices reprennent la parole. Demande un indice : VoiceOver te dit quelle brique échanger et dans quel sens, puis t’y emmène.",
+          "Des portes expliquées. Chaque porte te dit comment l’utiliser, et une brique placée devant sa propre porte te le signale.",
+          "Des réglages qui s’expliquent. Chaque option de Réglages › Accessibilité indique désormais ce qu’elle fait.",
+          "Plus d’outils VoiceOver. Un double toucher à deux doigts te donne un indice sur un plateau, frotter avec deux doigts ferme n’importe quel écran, de nouveaux rotors sautent aux spéciales, aux objectifs, aux obstacles et aux portes, et un son de rangée facultatif te fait entendre où se trouvent les couleurs.",
+          "Les plateaux s’arrêtent quand tu gagnes. Le plateau se termine dès que tes objectifs sont atteints. Chaque coup qu’il te reste devient un rayon de ligne, pour un plus gros score et plus d’étoiles.",
+          "Des objectifs à l’image de tes briques. Les icônes d’objectif correspondent désormais exactement aux briques du plateau, dans chaque village et chaque palette de couleurs, et un objectif atteint garde sa propre couleur.",
+          "Siri, sans ouvrir le jeu. Demande combien de vies il te reste, quand la prochaine revient, quelle est la Brique du jour, ou combien d’étoiles tu as dans un village.",
+          "Retrouve OutBrick partout. Spotlight apprend quels niveaux et villages tu joues, Intelligence visuelle peut trouver un village ou un ami assorti à partir d’une photo de briques de jeu, et les widgets passent devant dans ta Pile intelligente quand il y a quelque chose à faire.",
+          "Filtres de concentration. Choisis si un mode de concentration comme Sommeil ou Travail coupe la musique et suspend les rappels d’OutBrick.",
+          "Un nouveau look. La carte de niveau, la Garde-robe et les vignettes de la Boutique arborent désormais les couleurs d’OutBrick, avec des textes plus lisibles."
+        ]
+      }
+    ]
+  },
+  "de": {
+    "headline": "Danke für jede Nachricht zu 5.0. Dieses Update ist aus deinem Feedback entstanden.",
+    "sections": [
+      {
+        "title": "In diesem Update",
+        "bullets": [
+          "Schneller mit VoiceOver. Das Ergebnis eines Zugs wird jetzt in dem Moment angesagt, in dem du ihn machst, statt erst nach der Animation, und VoiceOver bleibt auf dem Stein, den du bewegt hast.",
+          "Tipps sprechen wieder. Bitte um einen Tipp, und VoiceOver sagt dir, welchen Stein du in welche Richtung tauschen sollst, und bringt dich dann zu ihm.",
+          "Tore erklärt. Jedes Tor sagt dir, wie du es benutzt, und ein Stein, der vor seinem eigenen Tor steht, sagt dir das auch.",
+          "Einstellungen, die sich selbst erklären. Jede Option unter Einstellungen › Bedienungshilfen sagt jetzt, was sie tut.",
+          "Mehr Werkzeuge für VoiceOver. Ein Doppeltippen mit zwei Fingern gibt dir auf einem Feld einen Tipp, Rubbeln mit zwei Fingern schließt jeden Bildschirm, neue Rotoren springen zu Spezialsteinen, Zielen, Hindernissen und Toren, und ein optionaler Reihenklang lässt dich hören, wo die Farben liegen.",
+          "Felder enden, wenn du gewinnst. Das Feld ist in dem Moment vorbei, in dem deine Ziele erfüllt sind. Jeder Zug, der dir bleibt, wird zu einem Linienstein für mehr Punkte und mehr Sterne.",
+          "Ziele, die wie deine Steine aussehen. Die Zielsymbole entsprechen jetzt genau den Steinen auf dem Feld, in jedem Dorf und jeder Farbpalette, und ein erfülltes Ziel behält seine eigene Farbe.",
+          "Siri, ohne das Spiel zu öffnen. Frag, wie viele Leben du hast, wann das nächste zurückkommt, nach dem heutigen Tagesstein oder wie viele Sterne du in einem Dorf hast.",
+          "Finde OutBrick überall. Spotlight lernt, welche Level und Dörfer du spielst, Visuelle Intelligenz findet anhand eines Fotos von Spielzeugsteinen ein passendes Dorf oder einen passenden Freund, und Widgets rücken in deinem intelligenten Stapel nach vorn, wenn es etwas zu tun gibt.",
+          "Fokusfilter. Lege fest, ob ein Fokus wie „Schlafen“ oder „Arbeit“ die Musik ausschaltet und die Erinnerungen von OutBrick pausiert.",
+          "Frisches Design. Die Levelkarte, die Garderobe und die Kacheln im Shop tragen jetzt OutBricks eigene Farben, mit klarerem Text."
+        ]
+      }
+    ]
+  },
+  "es": {
+    "headline": "Gracias por cada mensaje sobre la 5.0. Esta actualización está hecha a partir de lo que nos contaste.",
+    "sections": [
+      {
+        "title": "En esta actualización",
+        "bullets": [
+          "Más rápido con VoiceOver. El resultado de un movimiento se anuncia en cuanto lo haces, no al terminar la animación, y VoiceOver se queda en el ladrillo que acabas de mover.",
+          "Las pistas vuelven a hablar. Pide una pista y VoiceOver te dice qué ladrillo cambiar y hacia dónde, y luego te lleva hasta él.",
+          "Puertas explicadas. Cada puerta te cuenta cómo usarla, y un ladrillo que está delante de su propia puerta te lo avisa.",
+          "Ajustes que se explican solos. Cada opción de Ajustes › Accesibilidad te dice ahora qué hace.",
+          "Más herramientas de VoiceOver. Un doble toque con dos dedos te da una pista en el tablero, frotar con dos dedos cierra cualquier pantalla, nuevos rotores saltan a especiales, objetivos, bloqueos y puertas, y un sonido de fila opcional te deja oír dónde están los colores.",
+          "Los tableros terminan cuando ganas. El tablero acaba en el momento en que cumples tus objetivos. Cada movimiento que te queda se convierte en un rayo de línea para sumar más puntos y más estrellas.",
+          "Objetivos que se parecen a tus ladrillos. Los iconos de los objetivos coinciden ahora exactamente con los ladrillos del tablero, en cada aldea y en cada paleta de colores, y un objetivo cumplido conserva su propio color.",
+          "Siri, sin abrir el juego. Pregunta cuántas vidas tienes, cuándo vuelve la siguiente, por el Ladrillo diario de hoy o cuántas estrellas tienes en una aldea.",
+          "Encuentra OutBrick en todas partes. Spotlight aprende qué niveles y aldeas juegas, Inteligencia visual puede encontrar una aldea o un amigo a juego a partir de una foto de ladrillos de juguete, y los widgets se adelantan en tu Pila inteligente cuando hay algo que hacer.",
+          "Filtros de concentración. Elige si un modo de concentración como Dormir o Trabajo apaga la música y pausa los recordatorios de OutBrick.",
+          "Diseño renovado. La tarjeta de nivel, el Armario y las fichas de la Tienda lucen ahora los colores propios de OutBrick, con textos más claros."
+        ]
+      }
+    ]
+  },
+  "ja": {
+    "headline": "5.0へのたくさんのメッセージ、ありがとうございます。今回のアップデートは、みなさんの声から生まれました。",
+    "sections": [
+      {
+        "title": "このアップデート",
+        "bullets": [
+          "VoiceOverがより速く。手の結果は、アニメーションの後ではなく、動かしたその瞬間に読み上げられます。VoiceOverは動かしたブロックの上にとどまります。",
+          "ヒントがまた話します。ヒントを頼むと、どのブロックをどの方向に入れ替えるかをVoiceOverが教えてくれて、そこまで連れていってくれます。",
+          "ゲートの使い方がわかる。すべてのゲートが使い方を教えてくれます。自分の色のゲートの前にいるブロックは、そのことを知らせてくれます。",
+          "自分で説明する設定。「設定 › アクセシビリティ」のすべての項目が、何をするのかを説明するようになりました。",
+          "VoiceOverの新しい機能。ボードで2本指のダブルタップをするとヒントが出て、2本指でスクラブするとどの画面も閉じられます。新しいローターでスペシャル、目標、障害物、ゲートへジャンプでき、オプションの列のサウンドで色の位置を耳で確かめられます。",
+          "勝ったらボードはそこで終わり。目標を達成した瞬間にボードが終わります。残った手はすべてラインブラスターに変わり、スコアもスターももっと増えます。",
+          "ブロックそっくりの目標。目標のアイコンが、どの村でもどのカラーパレットでも、ボードのブロックとぴったり同じになりました。達成した目標も自分の色のまま残ります。",
+          "ゲームを開かずにSiriで。ライフがいくつあるか、次のライフがいつ戻るか、今日のデイリーブロック、村で集めたスターの数を聞いてみましょう。",
+          "どこでもOutBrick。Spotlightは遊んだレベルや村を覚え、ビジュアルインテリジェンスはおもちゃのブロックの写真から似合う村や仲間を見つけます。やることがあるときは、ウィジェットがスマートスタックの前に出てきます。",
+          "集中モードフィルタ。「睡眠」や「仕事」などの集中モードで、音楽をオフにするか、OutBrickのリマインダーを一時停止するかを選べます。",
+          "新しいデザイン。レベルカード、ワードローブ、ショップのタイルがOutBrickならではの色になり、文字も読みやすくなりました。"
+        ]
+      }
+    ]
+  }
+};
+
 /** Every release with notes on this site, newest first. English. */
-export const releases: Release[] = [{ version: '4.2', date: '2026-09-22', ...notes42.en }];
+export const releases: Release[] = [{ version: '5.0.1', date: '2026-10-06', ...notes501.en }, { version: '4.2', date: '2026-09-22', ...notes42.en }];
 
 /** The current release. */
 export const currentRelease: Release = releases[0];
 
 /** The current release's notes in `locale`, with the same version and date. */
 export function currentReleaseIn(locale: ReleaseLocale): Release {
-  return { version: currentRelease.version, date: currentRelease.date, ...notes42[locale] };
+  return { version: currentRelease.version, date: currentRelease.date, ...notes501[locale] };
 }
 
 /**
@@ -439,3 +547,8 @@ export function currentReleaseIn(locale: ReleaseLocale): Release {
  * kept in a form that can be quoted here honestly, so the page says so rather than rewriting them.
  */
 export const firstRelease = { version: '1.0', date: '2026-09-06' };
+
+/** Published notes including stable anchors for older translated links. */
+export function releasesIn(locale: ReleaseLocale): Release[] {
+  return [currentReleaseIn(locale), { version: '4.2', date: '2026-09-22', ...notes42[locale] }];
+}

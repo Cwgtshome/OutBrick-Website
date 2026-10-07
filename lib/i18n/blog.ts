@@ -1,3 +1,4 @@
+import { currentGameCopy } from './current-game.ts';
 /**
  * The journal in the languages it is translated into.
  *
@@ -638,3 +639,9 @@ export function assertCompleteArticleTranslations() {
   }
 }
 assertCompleteArticleTranslations();
+
+// The live product card on every journal article follows the released app,
+// while dated editorial text and its sources remain historical.
+for (const locale of ['en', 'fr', 'de', 'es', 'ja'] as const) {
+  journalUi[locale].gameNoteBody = currentGameCopy[locale].summary;
+}

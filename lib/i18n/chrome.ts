@@ -81,7 +81,7 @@ const en: ChromeCopy = {
   homeNav: ['The rule', 'The Journey', 'The cast', 'What it costs', 'Built for Apple'],
   editorialNav: ['The game', 'Journal', 'Mascots', 'Press', 'About', 'Authors', 'Research', 'Community', 'Support'],
   footer: {
-    blurb: 'OutBrick: Block Sort Puzzle. Slide, sort, clear the board. Free on the App Store.',
+    blurb: 'OutBrick: Block Sort Puzzle. Match bricks, clear goals. Free on the App Store.',
     game: 'The game',
     download: 'Download on the App Store',
     journey: 'The Journey',
@@ -128,7 +128,7 @@ const fr: ChromeCopy = {
   homeNav: ['La règle', 'Le Voyage', 'Les amis', 'Ce que ça coûte', 'Pensé pour Apple'],
   editorialNav: ['Le jeu', 'Journal', 'Mascottes', 'Presse', 'À propos', 'Auteurs', 'Recherche', 'Communauté', 'Assistance'],
   footer: {
-    blurb: 'OutBrick: Block Sort Puzzle. Glissez, triez, videz le plateau. Gratuit sur l’App Store.',
+    blurb: 'OutBrick: Block Sort Puzzle. Alignez les briques, accomplissez les objectifs. Gratuit sur l’App Store.',
     game: 'Le jeu',
     download: 'Télécharger dans l’App Store',
     journey: 'Le Voyage',
@@ -175,7 +175,7 @@ const de: ChromeCopy = {
   homeNav: ['Die Regel', 'Die Reise', 'Die Freunde', 'Was es kostet', 'Für Apple gebaut'],
   editorialNav: ['Das Spiel', 'Journal', 'Maskottchen', 'Presse', 'Über uns', 'Autoren', 'Forschung', 'Community', 'Hilfe'],
   footer: {
-    blurb: 'OutBrick: Block Sort Puzzle. Schieben, sortieren, Feld frei. Kostenlos im App Store.',
+    blurb: 'OutBrick: Block Sort Puzzle. Bausteine kombinieren, Ziele erreichen. Kostenlos im App Store.',
     game: 'Das Spiel',
     download: 'Laden im App Store',
     journey: 'Die Reise',
@@ -222,7 +222,7 @@ const es: ChromeCopy = {
   homeNav: ['La regla', 'El Viaje', 'Los amigos', 'Lo que cuesta', 'Hecho para Apple'],
   editorialNav: ['El juego', 'Revista', 'Mascotas', 'Prensa', 'Quiénes somos', 'Autores', 'Investigación', 'Comunidad', 'Soporte'],
   footer: {
-    blurb: 'OutBrick: Block Sort Puzzle. Desliza, ordena, despeja el tablero. Gratis en el App Store.',
+    blurb: 'OutBrick: Block Sort Puzzle. Combina ladrillos, cumple objetivos. Gratis en el App Store.',
     game: 'El juego',
     download: 'Descárgalo en el App Store',
     journey: 'El Viaje',
@@ -269,7 +269,7 @@ const ja: ChromeCopy = {
   homeNav: ['ルール', 'ジャーニー', 'なかまたち', '料金のこと', 'Apple対応'],
   editorialNav: ['ゲーム', '記事', 'マスコット', 'プレス', 'OutBrickについて', '著者', 'リサーチ', 'コミュニティ', 'サポート'],
   footer: {
-    blurb: 'OutBrick: Block Sort Puzzle。スライドして、仕分けて、ステージをクリア。App Storeで無料。',
+    blurb: 'OutBrick: Block Sort Puzzle。ブロックをそろえて、目標を達成。App Storeで無料。',
     game: 'ゲーム',
     download: 'App Storeからダウンロード',
     journey: 'ジャーニー',
