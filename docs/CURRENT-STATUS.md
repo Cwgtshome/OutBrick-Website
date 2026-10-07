@@ -84,9 +84,10 @@ Controlled callbacks with deliberately invalid authorization codes then reached 
 endpoint and returned `invalid_grant`, establishing that decoding/signing succeeded. Those
 synthetic failures are not evidence of a real user's failed login.
 
-The owner reported logging in with Apple, but a completed **OutBrick Community** session has
-not yet been independently confirmed. The open clarification is whether this meant Community
-or Apple Developer/CloudKit and which device was used. Do not silently mark that acceptance done.
+The owner subsequently confirmed Apple sign-in working in Google Chrome. Claude Code also
+reported production member #3 created at 14:21 UTC on 7 October, with role `member`.
+This is user-confirmed Chrome success plus Claude's database readback; Codex did not observe
+that browser session. Safari/iPhone acceptance and admin-role assignment remain separate.
 
 ### Email and optional-feature follow-up
 
@@ -125,3 +126,23 @@ provider sign-in success. The native game proof/release work remains in its own 
 Claude Code was sent the PR #13 publication, verification, Apple repair limitation and architecture
 decision after deployment. Future agents should read this shared record rather than rely on chat
 history alone. Record newer implementation checkpoints and evidence here after subsequent work.
+
+## Player-help library (7 October 2026)
+
+`lib/community/player-guides.ts` is the reviewed source for eight guides and one index in each
+of the five languages. The additive `20261007170000_player-guides` migration publishes 45 team
+threads using the existing OutBrick editorial identity. It creates no fake player accounts,
+sends no seeded-post notifications and leaves existing player content intact. Every guide links
+to the other guides in its own language. Community home links to the Help category, whose guide
+index is pinned. VoiceOver and Settings guides are in Accessibility and are linked by the index.
+
+The text covers the first board, specials/goals/stars, Journey, VoiceOver steps, comfortable
+Settings, economy, bug reports and release/demo distinctions. Released iOS 5.0.1 and upcoming
+5.1 stay separate. Claude reports the only available Slide & Match simulator artifact predates
+today's fixes; screenshots are deferred until an integrated, source-matched build exists. Do
+not use SM-Levels-17Pro, SwapFix or RescueIAP simulators: they belong to Claude's active work.
+
+The owner's existing ChatGPT Dot has been assigned hourly New York checks for real-user forum
+feedback, deduplicated notifications, version-grounded and labelled automated replies, and
+escalation of uncertain issues. Schedule persistence and posting access require the Dot's
+readback; sending it instructions alone is not proof that autonomous replies are enabled.
