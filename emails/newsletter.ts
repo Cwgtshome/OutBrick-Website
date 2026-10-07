@@ -58,7 +58,9 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'no-store',
         'X-Robots-Tag': 'noindex, nofollow',
-        'Referrer-Policy': 'no-referrer',
+        // Chrome sends Origin: null on a form POST from a no-referrer page. Keep the
+        // same-origin POST verifiable while suppressing the signed URL for external links.
+        'Referrer-Policy': 'same-origin',
         'Content-Security-Policy': "default-src 'none'; img-src 'self' https://www.outbrick.site; style-src 'unsafe-inline'; font-src 'self' https://www.outbrick.site; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
       },
     });
