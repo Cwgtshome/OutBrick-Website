@@ -99,7 +99,7 @@ void test('search is rate limited per IP', async () => {
   assert.equal((await api('GET', '/search?q=board', { headers: { 'x-nf-client-connection-ip': '198.51.100.8' } })).status, 200);
 });
 
-void test('the FAQ is seeded from the support page in five languages', async () => {
+void test('the FAQ is seeded from the support page in six languages', async () => {
   const en = await api('GET', '/faq?locale=en');
   assert.equal(en.status, 200);
   assert.equal(en.body.entries.length, 11);

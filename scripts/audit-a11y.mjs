@@ -18,10 +18,10 @@ const axePath = process.env.AXE_PATH ?? require.resolve('axe-core/axe.min.js');
 
 const sitemap = await readFile(new URL('../dist/client/sitemap.xml', import.meta.url), 'utf8');
 const paths = [...sitemap.matchAll(/<loc>https:\/\/www\.outbrick\.site([^<]*)<\/loc>/g)].map((m) => m[1] || '/');
-for (const prefix of ['', '/fr', '/de', '/es', '/ja']) {
+for (const prefix of ['', '/fr', '/de', '/es', '/ja', '/pt-BR']) {
   for (let board = 1; board <= 17; board += 1) for (let stars = 1; stars <= 3; stars += 1) paths.push(`${prefix}/play/result/${board}-${stars}`);
 }
-for (const prefix of ['', '/fr', '/de', '/es', '/ja']) paths.push(`${prefix}/c?lv=42`, `${prefix}/contact/thanks`, `${prefix}/affiliates/thanks`, `${prefix}/careers/thanks`, `${prefix}/newsletter/thanks`, `${prefix}/404`);
+for (const prefix of ['', '/fr', '/de', '/es', '/ja', '/pt-BR']) paths.push(`${prefix}/c?lv=42`, `${prefix}/contact/thanks`, `${prefix}/affiliates/thanks`, `${prefix}/careers/thanks`, `${prefix}/newsletter/thanks`, `${prefix}/404`);
 const shardIndex = Number(process.env.AUDIT_SHARD_INDEX ?? 0);
 const shardCount = Number(process.env.AUDIT_SHARD_COUNT ?? 1);
 if (!Number.isInteger(shardIndex) || !Number.isInteger(shardCount) || shardCount < 1 || shardIndex < 0 || shardIndex >= shardCount) throw new Error('Invalid audit shard');
@@ -31,9 +31,9 @@ const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePa
 let failures = 0;
 const englishCopy = new Map();
 async function hydratedCarryovers(page, pagePath) {
-  const locale = pagePath.match(/^\/(fr|de|es|ja)(?:\/|$)/)?.[1];
+  const locale = pagePath.match(/^\/(fr|de|es|ja|pt-BR)(?:\/|$)/)?.[1];
   if (!locale) return [];
-  const route = new URL(pagePath, base).pathname.replace(/^\/(fr|de|es|ja)(?=\/|$)/, '') || '/';
+  const route = new URL(pagePath, base).pathname.replace(/^\/(fr|de|es|ja|pt-BR)(?=\/|$)/, '') || '/';
   if (!englishCopy.has(route)) {
     const file = route === '/' ? 'index.html' : route.slice(1) + '.html';
     const html = await readFile(new URL('../dist/client/' + file, import.meta.url), 'utf8');

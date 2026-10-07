@@ -941,15 +941,102 @@ const ja: CommunityFxCopy = {
   errors: { too_many: '一度に多すぎます。少し待ってからお試しください。', translate_failed: '今回は翻訳できませんでした。1分ほどしてからもう一度お試しください。', unknown_credential: 'このパスキーはここのアカウントと結びついていません。', poll_closed: 'このアンケートは締め切りました。', poll_has_votes: 'すでに投票があるため、アンケートは変更できません。' },
 };
 
-export const communityFx: Record<Locale, CommunityFxCopy> = { en, fr, de, es, ja };
+const ptBR: CommunityFxCopy = {
+  nav: { roadmap: 'Roteiro', leaderboard: 'Ranking', bookmarks: 'Salvos' },
+  status: { in_progress: 'Em andamento', shippedIn: (v) => 'Lançado na versão ' + v },
+  sorts: { trending: 'Em alta', hot: 'Populares' },
+  board: {
+    eyebrow: 'Painel de ideias',
+    lede: 'O que o OutBrick deveria fazer a seguir? Sugira um recurso, vote nas ideias que quiser e acompanhe cada uma até o lançamento. A equipe lê todas.',
+    suggest: 'Sugerir um recurso',
+    roadmapLink: 'Ver o roteiro completo',
+    previewHeading: 'No roteiro',
+    columns: { considering: 'Em avaliação', planned: 'Planejado', in_progress: 'Em andamento', shipped: 'Lançado' },
+    columnNotes: { considering: 'A equipe está avaliando estas ideias.', planned: 'Vem por aí, aproximadamente nesta ordem.', in_progress: 'Em desenvolvimento agora.', shipped: 'Lançado nos últimos 90 dias.' },
+    columnEmpty: 'Ainda não há nada aqui.',
+    more: (n) => `Mais ${n}`,
+    roadmapTitle: 'Roteiro',
+    roadmapLede: 'Todas as ideias que a equipe está avaliando, planejou, está desenvolvendo ou já lançou, com os votos que ajudaram a levá-las até lá.',
+  },
+  similar: { heading: 'Ideias parecidas já publicadas', found: (n, f) => n === 1 ? 'Já existe 1 ideia parecida. Que tal votar nela em vez de publicar outra?' : `Já existem ${f} ideias parecidas. Que tal votar em uma delas em vez de publicar outra?`, none: 'Ainda não há ideias parecidas.', checking: 'Procurando ideias parecidas…' },
+  newIdea: { titleLabel: 'Sua ideia em uma frase', titleHint: 'Por exemplo: “Quero jogar novamente uma fase concluída sem gastar uma vida”. De 4 a 140 caracteres.', bodyLabel: 'Por que isso ajudaria' },
+  reactions: { group: (n) => `Reações à publicação ${n}`, names: { like: 'Gostei', love: 'Adorei', celebrate: 'Parabéns', funny: 'Engraçado', thanks: 'Obrigado', insightful: 'Boa ideia' }, signIn: 'Entre para reagir' },
+  poll: {
+    add: 'Adicionar enquete', remove: 'Remover enquete', legend: 'Enquete', question: 'Pergunta', option: (n) => `Opção ${n}`,
+    addOption: 'Adicionar opção', removeOption: (n) => `Remover opção ${n}`, multiple: 'É possível escolher mais de uma opção',
+    closes: 'Encerra em', closesHint: 'Deixe em branco para manter a enquete aberta. O limite é um ano a partir de hoje.',
+    vote: 'Votar', change: 'Alterar meu voto', withdraw: 'Retirar meu voto', results: 'Resultados',
+    optionResult: (label, votes, percent) => `${label}: ${votes}, ${percent}`,
+    voters: (n, f) => n === 1 ? '1 pessoa votou' : `${f} pessoas votaram`,
+    closedOn: (when) => `Encerrada ${when}`, closesOn: (when) => `Encerra ${when}`, closed: 'Esta enquete está encerrada.',
+    signIn: 'Entre para votar nesta enquete.', voted: 'Seu voto foi registrado.', withdrawn: 'Seu voto foi retirado.',
+    chooseOne: 'Escolha uma opção primeiro.', mine: 'Sua escolha',
+    errors: { poll_closed: 'Esta enquete foi encerrada e não aceita mais votos.', poll_has_votes: 'A enquete já recebeu votos e não pode mais ser alterada.' },
+    fieldCodes: { too_few: 'Adicione pelo menos duas opções', too_many: 'Adicione no máximo oito opções', duplicate: 'Cada opção deve ser diferente' },
+  },
+  live: { newReplies: (n, f) => n === 1 ? '1 nova resposta' : `${f} novas respostas`, show: 'Mostrar', announce: (n, f) => n === 1 ? '1 nova resposta. Use o botão Mostrar depois das publicações para ler.' : `${f} novas respostas. Use o botão Mostrar depois das publicações para ler.` },
+  badges: {
+    heading: 'Medalhas', none: 'Você ainda não tem medalhas.',
+    names: { first_post: 'Primeira publicação', helpful: 'Prestativo', bug_hunter: 'Caçador de problemas', idea_maker: 'Criador de ideias', shipped: 'Ideia realizada', welcomer: 'Boas-vindas', beta_tester: 'Testador beta', accessibility_champion: 'Defensor da acessibilidade', anniversary: 'Aniversário', popular_post: 'Publicação popular' },
+    descriptions: {
+      first_post: 'Publicou na comunidade pela primeira vez.', helpful: 'Respostas marcadas como solução: 1, 10 e 50.',
+      bug_hunter: 'Relatou um problema confirmado pela equipe OutBrick.', idea_maker: 'Sugeriu uma ideia que entrou nos planos da equipe.',
+      shipped: 'Sugeriu uma ideia que agora faz parte do OutBrick.', welcomer: 'Respondeu às primeiras conversas de dez novos membros.',
+      beta_tester: 'Testou o OutBrick antes do lançamento.', accessibility_champion: 'Ajudou a melhorar o OutBrick para quem usa tecnologia assistiva.',
+      anniversary: 'É membro há pelo menos um ano.', popular_post: 'Escreveu uma publicação que recebeu 25 reações.',
+    },
+    level: (name, level) => `${name} (${level})`, years: (name, years) => `${name}: ${years} anos`, granted: 'Concedida pela equipe', earned: (when) => `Conquistada ${when}`,
+  },
+  profile: { stats: 'Em números', posts: 'Publicações', threads: 'Conversas', solved: 'Soluções', reactionsReceived: 'Reações recebidas', ideasShipped: 'Ideias realizadas', bugsConfirmed: 'Problemas confirmados', recentPosts: 'Publicações recentes', noPosts: 'Ainda não há publicações.' },
+  leaderboard: {
+    title: 'Ranking', lede: 'Quem mais ajuda: respostas que solucionaram dúvidas, ideias que receberam votos e problemas confirmados pela equipe.',
+    period: 'Período', periods: { week: 'Esta semana', month: 'Este mês', all: 'Desde o início' }, kind: 'Classificar por',
+    kinds: { helpers: 'Quem ajuda', ideas: 'Ideias', bugs: 'Problemas' }, show: 'Mostrar', rank: 'Posição', member: 'Membro', score: 'Pontuação', details: 'Detalhes',
+    detail: { helpers: (d) => `${d.solved ?? '0'} soluções, ${d.reactions ?? '0'} reações`, ideas: (d) => `${d.votes ?? '0'} votos nas ideias`, bugs: (d) => `${d.confirmed ?? '0'} problemas confirmados` },
+    team: 'Equipe OutBrick', teamNote: 'A equipe aparece separada para que os membros estejam sempre no topo.', empty: 'Ainda não há ninguém neste período.', caption: (kind, period) => `${kind}, ${period.toLowerCase()}`,
+  },
+  bookmarks: {
+    title: 'Salvos', lede: 'Publicações que você guardou para ver depois. Só você pode vê-las.', add: 'Salvar', added: 'Salvo',
+    label: (n) => `Salvar publicação ${n}`, removeLabel: (n) => `Remover publicação ${n} dos salvos`,
+    none: 'Você ainda não salvou nada. Use o botão Salvar em qualquer publicação para guardá-la aqui.', saved: 'Salvo.', removed: 'Removido dos salvos.', bookmarkedOn: (when) => `Salvo ${when}`,
+  },
+  mentions: { listLabel: 'Membros para mencionar', instructions: 'Os membros que correspondem ao texto digitado aparecem aqui. Use as setas para cima e para baixo para escolher, Enter para inserir e Escape para fechar.', none: 'Nenhum membro com esse nome.', found: (n, f) => n === 1 ? '1 membro encontrado' : `${f} membros encontrados` },
+  upload: {
+    button: 'Adicionar imagem', legend: 'Adicionar imagem', file: 'Imagem',
+    fileHint: 'Foto ou captura de tela em JPEG, PNG ou WebP. Fotos grandes são reduzidas primeiro no seu dispositivo.',
+    alt: 'Descreva a imagem', altHint: 'Obrigatório. Quem usa o VoiceOver ouve este texto no lugar de ver a imagem. Descreva o que importa; por exemplo: “Fase 214, com o tijolo vermelho a um movimento da porta”.',
+    insert: 'Inserir imagem', cancel: 'Cancelar', preparing: 'Preparando a imagem…', uploading: 'Enviando…', inserted: 'A imagem foi adicionada à sua publicação com uma descrição.',
+    altMissing: 'Descreva a imagem antes de inseri-la', fileMissing: 'Escolha uma imagem',
+    errors: { missing: 'Escolha uma imagem para enviar.', too_large: 'A imagem continua grande demais mesmo reduzida. Tente outra menor.', too_many_pixels: 'A imagem é grande demais: o limite é 4096 pixels por lado.', unsupported_type: 'Esse tipo de arquivo não pode ser publicado. Use JPEG, PNG ou WebP.', heic_unsupported: 'Fotos HEIC ainda não são aceitas. Faça uma captura de tela ou exporte como JPEG.', bad_image: 'Não foi possível ler a imagem. Talvez ela esteja danificada.', unavailable: 'O envio de imagens está desativado no momento.' },
+    problems: { image_needs_alt: 'Todas as imagens precisam de uma descrição para serem publicadas.', upload_not_found: 'Uma das imagens não está mais disponível. Remova-a e adicione novamente.' },
+  },
+  translate: { button: (language) => `Traduzir para ${language}`, working: 'Traduzindo…', label: (language) => `Tradução automática do ${language}`, hide: 'Ocultar tradução', failed: 'Não foi possível traduzir desta vez. Tente novamente em um minuto.' },
+  passkey: {
+    signIn: 'Entrar com uma chave de acesso', signInNote: 'Use o Face ID, Touch ID ou o bloqueio de tela do seu dispositivo. Você pode adicionar uma chave de acesso nas configurações depois de entrar de outra forma.',
+    unsupported: 'Este navegador não aceita chaves de acesso. Entre de outra forma.', cancelled: 'A solicitação da chave de acesso foi cancelada. Nada foi alterado.',
+    unknown: 'Esta chave de acesso não está vinculada a nenhuma conta daqui. Entre de outra forma e adicione-a nas configurações.',
+    heading: 'Chaves de acesso', lede: 'Entre com Face ID, Touch ID ou o bloqueio de tela do seu dispositivo em vez de usar um link por e-mail.',
+    add: 'Adicionar chave de acesso', nickname: 'Nome desta chave de acesso', nicknameHint: 'Opcional, para diferenciar suas chaves; por exemplo, “Meu iPhone”.', none: 'Você ainda não tem chaves de acesso.',
+    added: (when) => `adicionada ${when}`, lastUsed: (when) => `usada pela última vez ${when}`, neverUsed: 'ainda não usada', synced: 'sincronizada nos seus dispositivos',
+    remove: (name) => `Remover a chave de acesso “${name}”`, addedNow: 'Chave de acesso adicionada. Da próxima vez, entre com ela.', removedNow: 'Chave de acesso removida.',
+  },
+  settings: { digest: ['Resumo semanal', 'Um e-mail às segundas-feiras com os melhores assuntos da semana. Desativado até você ativar.'], badge: ['Medalhas', 'Você conquista uma medalha.'], merged: ['Conversas unidas', 'Um moderador move sua publicação para outra conversa.'] },
+  notifications: { badge: (badge) => `Você conquistou a medalha ${badge}`, merged: (from, thread) => `Sua publicação em “${from}” agora está em “${thread}”` },
+  merged: 'Esta conversa foi unida a outra. Você está lendo a conversa que a recebeu.',
+  deepLink: { notice: 'Preenchido pelo app. Confira cada campo antes de publicar.', level: 'Fase', levelHint: 'Opcional: número da fase, se o problema aconteceu em um tabuleiro.' },
+  errors: { too_many: 'Muitas ações de uma vez. Aguarde um pouco e tente novamente.', translate_failed: 'Não foi possível traduzir desta vez. Tente novamente em um minuto.', unknown_credential: 'Esta chave de acesso não está vinculada a nenhuma conta daqui.', poll_closed: 'Esta enquete está encerrada.', poll_has_votes: 'A enquete já recebeu votos e não pode mais ser alterada.' },
+};
+
+export const communityFx: Record<Locale, CommunityFxCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
 
 /** Language names as an adjective for "Machine translation from French", in each page language. */
 export const languageNamesIn: Record<Locale, Record<Locale, string>> = {
-  en: { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese' },
-  fr: { en: 'de l’anglais', fr: 'du français', de: 'de l’allemand', es: 'de l’espagnol', ja: 'du japonais' },
-  de: { en: 'Englischen', fr: 'Französischen', de: 'Deutschen', es: 'Spanischen', ja: 'Japanischen' },
-  es: { en: 'Inglés', fr: 'Francés', de: 'Alemán', es: 'Español', ja: 'Japonés' },
-  ja: { en: '英語', fr: 'フランス語', de: 'ドイツ語', es: 'スペイン語', ja: '日本語' },
+  en: { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese', 'pt-BR': 'Brazilian Portuguese' },
+  fr: { en: 'de l’anglais', fr: 'du français', de: 'de l’allemand', es: 'de l’espagnol', ja: 'du japonais', 'pt-BR': 'du portugais du Brésil' },
+  de: { en: 'Englischen', fr: 'Französischen', de: 'Deutschen', es: 'Spanischen', ja: 'Japanischen', 'pt-BR': 'Brasilianischen Portugiesischen' },
+  es: { en: 'Inglés', fr: 'Francés', de: 'Alemán', es: 'Español', ja: 'Japonés', 'pt-BR': 'portugués de Brasil' },
+  ja: { en: '英語', fr: 'フランス語', de: 'ドイツ語', es: 'スペイン語', ja: '日本語', 'pt-BR': 'ブラジルポルトガル語' },
+  'pt-BR': { en: 'do inglês', fr: 'do francês', de: 'do alemão', es: 'do espanhol', ja: 'do japonês', 'pt-BR': 'do português do Brasil' },
 };
 /** "Translate to <my language>": the target named in the page's own language. */
-export const targetNamesIn: Record<Locale, string> = { en: 'English', fr: 'français', de: 'Deutsch', es: 'Español', ja: '日本語' };
+export const targetNamesIn: Record<Locale, string> = { en: 'English', fr: 'français', de: 'Deutsch', es: 'Español', ja: '日本語', 'pt-BR': 'português do Brasil' };

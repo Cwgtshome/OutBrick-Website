@@ -1,4 +1,4 @@
-// Words for the OutBrick Community's phase-2 emails, in the site's five languages: the weekly
+// Words for the OutBrick Community's phase-2 emails, in the site's six languages: the weekly
 // digest, the "reply by email" hint under a notification's button, and the note sent back when
 // a reply by email could not be posted.
 //
@@ -46,6 +46,7 @@ export const categoryNames: Record<EmailLocale, Record<CategoryKindName, string>
   de: { announcements: 'Ankündigungen', support: 'Hilfe & Support', bugs: 'Fehlerberichte', ideas: 'Ideen & Feedback', accessibility: 'Barrierefreiheit', showcase: 'Zeigen & erzählen', general: 'Allgemeines' },
   es: { announcements: 'Anuncios', support: 'Ayuda y soporte', bugs: 'Informes de errores', ideas: 'Ideas y sugerencias', accessibility: 'Accesibilidad', showcase: 'Enseña lo tuyo', general: 'General' },
   ja: { announcements: 'お知らせ', support: 'ヘルプとサポート', bugs: '不具合の報告', ideas: 'アイデアとご意見', accessibility: 'アクセシビリティ', showcase: '見せて語ろう', general: '雑談' },
+  'pt-BR': { announcements: 'Novidades', support: 'Ajuda e suporte', bugs: 'Relatos de problemas', ideas: 'Ideias e sugestões', accessibility: 'Acessibilidade', showcase: 'Mostre o que você fez', general: 'Geral' },
 };
 
 /** Under the button of a notification whose Reply-To posts a reply. */
@@ -55,6 +56,7 @@ export const replyHints: Record<EmailLocale, string> = {
   de: 'Sie können auch direkt auf diese E-Mail antworten: Was Sie über der zitierten Nachricht schreiben, erscheint als Ihre Antwort im Thema.',
   es: 'También puedes responder a este correo: lo que escribas encima del mensaje citado se publica como tu respuesta en el tema.',
   ja: 'このメールに返信することもできます。引用部分より上に書いた内容が、スレッドへのあなたの返信として投稿されます。',
+  'pt-BR': 'Você também pode responder a este e-mail: o texto que escrever acima da mensagem citada será publicado como sua resposta na conversa.',
 };
 
 export const weeklyDigestCopy: Record<EmailLocale, WeeklyDigestCopy> = {
@@ -132,6 +134,21 @@ export const weeklyDigestCopy: Record<EmailLocale, WeeklyDigestCopy> = {
     votes: (count) => `${count}票`,
     cta: 'コミュニティへ',
     why: 'OutBrickコミュニティの設定で週刊ダイジェストをオンにしているため、このメールをお送りしています。毎週月曜日、お知らせがあるときだけ届きます。',
+  },
+  'pt-BR': {
+    subject: 'Sua semana na comunidade OutBrick',
+    preheader: 'As conversas mais movimentadas que você acompanha, novidades e suas perguntas em aberto.',
+    heading: 'Esta semana na comunidade',
+    intro: (name) => `Olá, ${name}! Veja o que aconteceu nos últimos sete dias nos espaços que você acompanha.`,
+    releasesTitle: 'Novidades',
+    release: (version) => `OutBrick ${version} já está disponível`,
+    categoryTitle: (category) => `Em destaque em ${category}`,
+    unansweredTitle: 'Suas perguntas que ainda aguardam resposta',
+    unansweredNote: 'Acrescentar detalhes, como seu dispositivo, a versão do iOS ou a fase, costuma ajudar alguém a responder.',
+    replies: (count) => count === 1 ? '1 resposta' : `${count} respostas`,
+    votes: (count) => count === 1 ? '1 voto' : `${count} votos`,
+    cta: 'Acessar a comunidade',
+    why: 'Você recebe este e-mail porque ativou o resumo semanal nas configurações da comunidade OutBrick. Ele chega às segundas-feiras, somente quando há novidades.',
   },
 };
 
@@ -230,5 +247,24 @@ export const bounceCopy: Record<EmailLocale, BounceCopy> = {
     yourText: 'あなたが書いた内容',
     cta: 'スレッドを開く',
     why: 'OutBrickコミュニティの通知にメールで返信いただいたため、このメールをお送りしています。',
+  },
+  'pt-BR': {
+    subject: (title) => `Sua resposta a “${title}” não foi publicada`,
+    preheader: 'Sua resposta por e-mail não chegou à conversa. Veja o motivo e o que você escreveu.',
+    heading: 'Não foi possível publicar sua resposta.',
+    intro: 'Você respondeu por e-mail a uma notificação da comunidade, mas a resposta não foi publicada:',
+    reasons: {
+      locked: 'A conversa está fechada e não aceita novas respostas.',
+      banned: 'Sua conta está suspensa no momento.',
+      rate_limited: 'Você publicou muitas mensagens em pouco tempo. Aguarde um pouco e tente novamente.',
+      empty: 'Não encontramos texto novo antes da mensagem citada.',
+      invalid: 'Não foi possível publicar a resposta como está (talvez ela seja longa demais ou uma imagem precise de descrição). Publique pelo site; o formulário mostrará o que você precisa alterar.',
+      unverified: 'Seu endereço de e-mail ainda não foi confirmado.',
+      not_found: 'Essa conversa não está mais disponível.',
+      failed: 'Algo deu errado do nosso lado.',
+    },
+    yourText: 'O que você escreveu',
+    cta: 'Abrir a conversa',
+    why: 'Você recebe este e-mail porque respondeu por e-mail a uma notificação da comunidade OutBrick.',
   },
 };

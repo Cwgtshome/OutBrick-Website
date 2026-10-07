@@ -191,17 +191,17 @@ const pages = indexablePages();
 if (pages.length === 0) throw new Error('[postbuild] no indexable pages found in dist/client — refusing to write an empty sitemap');
 
 // The guides the journal is translated into other languages (lib/i18n/blog.ts), read from what was built.
-const localizedGuideSlugs = new Set(pages.map((p) => p.route.match(/^\/(?:fr|de|es|ja)\/blog\/([^/]+)$/)?.[1]).filter(Boolean));
+const localizedGuideSlugs = new Set(pages.map((p) => p.route.match(/^\/(?:fr|de|es|ja|pt-BR)\/blog\/([^/]+)$/)?.[1]).filter(Boolean));
 
 const entries = pages.map((page) => {
   let lastmod;
   // An article in English (/blog/<slug>) or translated (/fr/blog/<slug> …): its lastmod is the
   // article's own updatedAt, which a translation shares.
-  const articleSlug = page.route.match(/^(?:\/(?:fr|de|es|ja))?\/blog\/([^/]+)$/)?.[1];
-  const collection = page.route.match(/^(?:\/(fr|de|es|ja))?\/blog\/(category|tag)\/([^/]+)$/);
+  const articleSlug = page.route.match(/^(?:\/(?:fr|de|es|ja|pt-BR))?\/blog\/([^/]+)$/)?.[1];
+  const collection = page.route.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/blog\/(category|tag)\/([^/]+)$/);
   if (articleSlug && articleBySlug.has(articleSlug)) {
     lastmod = isoDate(articleBySlug.get(articleSlug).updatedAt);
-  } else if (/^\/(fr|de|es|ja)\/blog$/.test(page.route)) {
+  } else if (/^\/(fr|de|es|ja|pt-BR)\/blog$/.test(page.route)) {
     // A translated journal index changes when one of its guides does.
     const guides = articles.filter((a) => localizedGuideSlugs.has(a.slug));
     lastmod = guides.map((a) => isoDate(a.updatedAt)).reduce((max, d) => (d > max ? d : max), '') || undefined;
@@ -488,9 +488,9 @@ const home = pages.find((p) => p.route === '/');
 const blogPages = pages.filter((p) => p.route === '/blog' || p.route.startsWith('/blog/'));
 const legalRoutes = /^\/(privacy|privacy-choices|terms|eula|license-agreement|refunds|age-rating|accessibility)$/;
 const legalPages = pages.filter((p) => legalRoutes.test(p.route));
-const localizedRoutes = /^\/(fr|de|es|ja)(\/|$)/;
+const localizedRoutes = /^\/(fr|de|es|ja|pt-BR)(\/|$)/;
 // The journal's five cornerstone guides in French, German, Spanish and Japanese, and their indexes.
-const translatedBlogPages = pages.filter((p) => /^\/(fr|de|es|ja)\/blog(\/|$)/.test(p.route));
+const translatedBlogPages = pages.filter((p) => /^\/(fr|de|es|ja|pt-BR)\/blog(\/|$)/.test(p.route));
 const localizedPages = pages.filter((p) => localizedRoutes.test(p.route) && !translatedBlogPages.includes(p));
 const mainPages = pages.filter((p) => p !== home && !blogPages.includes(p) && !legalPages.includes(p) && !localizedPages.includes(p));
 

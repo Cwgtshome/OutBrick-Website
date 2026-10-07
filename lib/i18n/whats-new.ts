@@ -135,6 +135,14 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
       lede: 'OutBrick は iPhone と iPad 向けに App Store で無料配信中です。アップデートは自動で届くほか、App Store のアカウントページからも入手できます。',
     },
   },
+  'pt-BR': {
+    meta: { title: 'Novidades da OutBrick: atualizações da mais recente para a mais antiga', description: 'Notas de versão da OutBrick, da mais recente para a mais antiga. Versão 5.0.1: VoiceOver mais rápido, dicas faladas, portões mais claros, estrelas por pontuação e recursos do sistema Apple.' },
+    crumb: 'Novidades', label: 'Notas da versão', title: ['Novidades na ', 'OutBrick.'],
+    lede: (version, date) => `As notas publicadas com cada atualização da App Store, palavra por palavra. A versão atual é ${version}, lançada em ${date}.`,
+    getUpdate: 'Obter a atualização', rss: 'Acompanhar por RSS (em inglês)', current: 'Versão atual', version: 'Versão', released: 'Lançada em',
+    olderInEnglish: { note: 'As versões anteriores estão descritas em inglês.', link: 'Ver o histórico completo' },
+    cta: { title: 'Já está jogando? A atualização está esperando.', lede: 'OutBrick é grátis na App Store para iPhone e iPad. As atualizações chegam automaticamente ou pela página da sua conta na App Store.' },
+  },
 };
 
 export const getAppCopy: Record<Locale, GetAppCopy> = {
@@ -168,6 +176,7 @@ export const getAppCopy: Record<Locale, GetAppCopy> = {
     caption: 'iPhone のカメラをコードに向けると、App Store の OutBrick のページが開きます。',
     qrLabel: 'QR コード：App Store の OutBrick',
   },
+  'pt-BR': { eyebrow: 'Está no computador?', title: 'Escaneie para baixar OutBrick no iPhone', caption: 'Aponte a câmera do iPhone para o código para abrir OutBrick na App Store.', qrLabel: 'Código QR: OutBrick na App Store' },
 };
 
 /** "22 September 2026", "22 septembre 2026", "22. September 2026", "2026年9月22日" for a YYYY-MM-DD date. */
@@ -178,6 +187,7 @@ const monthNames: Record<Exclude<Locale, 'ja'>, string[]> = {
   fr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
   de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
   es: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+  'pt-BR': ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
 };
 
 export function formatReleaseDate(iso: string, locale: Locale): string {
@@ -187,6 +197,7 @@ export function formatReleaseDate(iso: string, locale: Locale): string {
   if (locale === 'de') return `${day}. ${name} ${year}`;
   if (locale === 'es') return `${day} de ${name} de ${year}`;
   if (locale === 'fr') return `${day === 1 ? '1er' : day} ${name} ${year}`;
+  if (locale === 'pt-BR') return `${day} de ${name} de ${year}`;
   return `${day} ${name} ${year}`;
 }
 

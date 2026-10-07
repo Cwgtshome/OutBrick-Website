@@ -69,7 +69,7 @@ export function replyToFor(token: ReplyToken, env: Record<string, string | undef
 
 // Quoted history ----------------------------------------------------------------------------------
 
-/** Lines that start the quoted history in the mail clients our members use, in our five languages. */
+/** Lines that start the quoted history in the mail clients our members use, in our six languages. */
 const attribution = [
   /^on\b.{0,300}\bwrote:?\s*$/i,
   /^le\b.{0,300}\ba écrit\s?:?\s*$/i,
@@ -131,7 +131,7 @@ function bounceReason(error: unknown): BounceReason {
 async function bounce(apiKey: string, member: Viewer, threadId: number, messageId: string, reason: BounceReason, text: string): Promise<void> {
   // Never more than a few a day: a misbehaving autoresponder must not start a loop.
   if (!(await rateAllow(`reply-bounce:${member.id}`, 5, 86400))) return;
-  const locale = (['en', 'fr', 'de', 'es', 'ja'].includes(member.locale) ? member.locale : 'en') as CommunityLocale;
+  const locale = (['en', 'fr', 'de', 'es', 'ja', 'pt-BR'].includes(member.locale) ? member.locale : 'en') as CommunityLocale;
   const [t] = await sql`SELECT id::int AS id, slug, title FROM threads WHERE id = ${threadId}`;
   const threadUrl = t ? `${SITE}${threadPath(locale, { id: Number(t.id), slug: String(t.slug) })}` : communityUrl(locale);
   const rendered = communityReplyBounce({ locale, reason, threadTitle: t ? String(t.title) : '', threadUrl, text, manageUrl: communityUrl(locale, '/settings') });

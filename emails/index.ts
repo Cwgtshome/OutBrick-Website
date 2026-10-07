@@ -29,7 +29,7 @@ export type IssueFile = { id: string; name: string; note?: string; address?: str
 
 export const PLACEHOLDER_ADDRESS = 'OutBrick · [postal address goes here before the first send]';
 
-const sampleNames: Record<EmailLocale, string> = { en: 'Ada Lovelace', fr: 'Camille Martin', de: 'Lena Schmidt', es: 'Lucía García', ja: '山田 花子' };
+const sampleNames: Record<EmailLocale, string> = { en: 'Ada Lovelace', fr: 'Camille Martin', de: 'Lena Schmidt', es: 'Lucía García', ja: '山田 花子', 'pt-BR': 'Ana Souza' };
 
 const sampleMessages: Record<EmailLocale, string> = {
   en: 'Level 213 keeps telling me I’m out of moves one move before the gate.\nIs that board solvable at the target? <b>Not bold</b> & not a link: https://example.com',
@@ -37,6 +37,7 @@ const sampleMessages: Record<EmailLocale, string> = {
   de: 'Stufe 213 sagt mir einen Zug vor dem Tor, dass ich keine Züge mehr habe.\nIst das Spielfeld im Ziel lösbar? <b>Nicht fett</b> & kein Link.',
   es: 'El nivel 213 me dice que me quedo sin movimientos justo antes de la puerta.\n¿Se puede resolver dentro del objetivo? <b>No en negrita</b> & sin enlace.',
   ja: 'ステージ213で、ゲートの一手前で手数切れになります。\n目標手数でクリアできますか？ <b>太字ではありません</b> & リンクでもありません。',
+  'pt-BR': 'Na fase 213, fico sem movimentos um lance antes do portão.\nDá para resolver esse tabuleiro dentro do limite? <b>Não está em negrito</b> & não é um link.',
 };
 
 export type CommunityTemplateName =
@@ -138,9 +139,10 @@ const sampleTitles: Record<EmailLocale, string> = {
   de: 'VoiceOver liest den Zugzähler <i>doppelt</i> vor',
   es: 'VoiceOver lee el contador de movimientos <i>dos veces</i>',
   ja: 'VoiceOverが手数カウンターを<i>2回</i>読み上げる',
+  'pt-BR': 'O VoiceOver lê o contador de movimentos <i>duas vezes</i>',
 };
 
-const sampleActors: Record<EmailLocale, string> = { en: 'Ada', fr: 'Camille', de: 'Lena', es: 'Lucía', ja: '花子' };
+const sampleActors: Record<EmailLocale, string> = { en: 'Ada', fr: 'Camille', de: 'Lena', es: 'Lucía', ja: '花子', 'pt-BR': 'Ana' };
 
 const sampleNotes: Record<EmailLocale, string> = {
   en: 'Fixed in 5.1. Thanks for the clear steps!',
@@ -148,6 +150,7 @@ const sampleNotes: Record<EmailLocale, string> = {
   de: 'Behoben in 5.1. Danke für die klaren Schritte!',
   es: 'Corregido en la 5.1. ¡Gracias por los pasos tan claros!',
   ja: '5.1で修正しました。わかりやすい手順をありがとうございます！',
+  'pt-BR': 'Corrigido na versão 5.1. Obrigado por explicar tão bem!',
 };
 
 const sampleReasons: Record<EmailLocale, string> = {
@@ -156,6 +159,7 @@ const sampleReasons: Record<EmailLocale, string> = {
   de: 'Er enthielt die E-Mail-Adresse eines anderen Spielers. Sie können ihn gern ohne diese Zeile erneut posten.',
   es: 'Incluía la dirección de correo de otro jugador. Puedes volver a publicarlo sin esa línea.',
   ja: 'ほかのプレイヤーのメールアドレスが含まれていました。その行を除けば、もう一度投稿していただいてかまいません。',
+  'pt-BR': 'A publicação incluía o endereço de e-mail de outra pessoa. Você pode publicá-la novamente sem essa linha.',
 };
 
 function sampleItem(locale: EmailLocale, kind: NotificationItem['kind']): NotificationItem {
@@ -175,7 +179,7 @@ function sampleItem(locale: EmailLocale, kind: NotificationItem['kind']): Notifi
   };
 }
 
-const sampleEmails: Record<EmailLocale, string> = { en: 'ada@example.com', fr: 'camille@example.com', de: 'lena@example.com', es: 'lucia@example.com', ja: 'hanako@example.com' };
+const sampleEmails: Record<EmailLocale, string> = { en: 'ada@example.com', fr: 'camille@example.com', de: 'lena@example.com', es: 'lucia@example.com', ja: 'hanako@example.com', 'pt-BR': 'ana@example.com' };
 const sampleId = '6a0f3c1e2b9d4a0008a1b2c3';
 const sampleAt = '2026-10-07T07:35:26.000Z';
 
@@ -310,4 +314,3 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
     }
   }
 }
-

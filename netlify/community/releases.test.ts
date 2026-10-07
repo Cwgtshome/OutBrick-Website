@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import type { PGlite } from '@electric-sql/pglite';
 import { freshDatabase } from './test/harness.ts';
 import { api, member, notificationsFor } from './test/forum-helpers.ts';
-import { buildReleasePosts, compareVersions, notesToMarkdown, parseLookup, planRelease, runReleaseBot, type StorefrontRelease } from './releases.ts';
+import { buildReleasePosts, compareVersions, notesToMarkdown, parseLookup, planRelease, runReleaseBot, storefronts, type StorefrontRelease } from './releases.ts';
 
 let pg: PGlite;
 before(async () => {
@@ -21,6 +21,7 @@ const notes: Record<string, string> = {
   de: 'Schwierigere Bretter.',
   es: 'Tableros más difíciles.',
   jp: 'より難しいボード。',
+  br: 'Tabuleiros mais desafiadores.',
 };
 
 /** A fetch that answers like iTunes Lookup with `version` in every storefront (or per country), and records what was asked. */
@@ -75,10 +76,10 @@ void test('first run records the current version without posting', async () => {
   const fake = fakeFetch('5.0.1');
   const result = await runReleaseBot(fake.fn);
   assert.equal(result.action, 'record');
-  assert.equal(fake.calls.length, 5);
+  assert.equal(fake.calls.length, storefronts.length);
   assert.deepEqual(
     fake.calls.map((c) => new URL(c).searchParams.get('country') + '/' + new URL(c).searchParams.get('lang')),
-    ['us/en', 'fr/fr', 'de/de', 'es/es', 'jp/ja'],
+    storefronts.map(({ country, lang }) => `${country}/${lang}`),
   );
   const { rows } = await pg.query<{ version: string; thread_id: number | null }>(`SELECT version, thread_id FROM app_releases`);
   assert.deepEqual(rows, [{ version: '5.0.1', thread_id: null }]);

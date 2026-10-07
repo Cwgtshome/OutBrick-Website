@@ -10,7 +10,7 @@ const base = process.argv[2] ?? 'http://127.0.0.1:4321';
 const { webkit, firefox, devices } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
 
 const basePaths = ['/', '/play', '/blog', '/blog/how-to-solve-sliding-block-puzzles', '/mascots', '/support', '/play/result/2-3', '/contact', '/affiliates', '/careers', '/careers/ai-ml-engineer', '/press', '/c/42?par=18', '/daily', '/privacy', '/newsletter', '/whats-new'];
-const paths = ['', '/fr', '/de', '/es', '/ja'].flatMap(prefix => basePaths.map(path => path === '/' ? prefix || '/' : prefix + path));
+const paths = ['', '/fr', '/de', '/es', '/ja', '/pt-BR'].flatMap(prefix => basePaths.map(path => path === '/' ? prefix || '/' : prefix + path));
 
 const targets = [
   ['webkit desktop', webkit, { viewport: { width: 1440, height: 900 } }],
@@ -83,8 +83,8 @@ for (const [label, type, options] of targets.filter((_, index) => targetIndex ==
   await context.close();
 
   // Solve and share board 1 in every locale using real pointer input.
-  const starText = { en: '3 stars of 3', fr: '3 étoiles sur 3', de: '3 Sterne von 3', es: '3 estrellas de 3', ja: 'スター3個中3個' };
-  for (const locale of ['en', 'fr', 'de', 'es', 'ja']) {
+  const starText = { en: '3 stars of 3', fr: '3 étoiles sur 3', de: '3 Sterne von 3', es: '3 estrellas de 3', ja: 'スター3個中3個', 'pt-BR': '3 estrelas de 3' };
+  for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
     const prefix = locale === 'en' ? '' : `/${locale}`;
     const page = await browser.newPage({ viewport: { width: label.includes('desktop') ? 1440 : 390, height: 844 } });
     await page.addInitScript(() => Object.defineProperty(navigator, 'share', { configurable: true, value: async data => { window.__outbrickShared = data; } }));

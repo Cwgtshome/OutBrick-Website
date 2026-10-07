@@ -4,10 +4,15 @@ import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import { handleConfirm, handleUnsubscribe } from '../emails/newsletter.ts';
 import { confirmUrl, unsubscribeUrl } from '../emails/links.ts';
+import { newsletterSegments } from '../emails/resend.ts';
 
 const env = { RESEND_API_KEY: 'test-key-never-a-live-credential', RESEND_SEGMENT_ID: 'test-segment' };
 const address = 'test@example.com';
 const site = 'https://www.outbrick.site';
+
+test('Brazilian Portuguese can use its optional Resend language segment', () => {
+  assert.deepEqual(newsletterSegments({ RESEND_SEGMENT_ID: 'main', RESEND_SEGMENT_ID_PT_BR: 'brazil' }, 'pt-BR'), ['main', 'brazil']);
+});
 
 test('scanners cannot subscribe; deliberate POST subscribes and sends welcome in all languages', async () => {
   const originalFetch = globalThis.fetch;
@@ -17,7 +22,7 @@ test('scanners cannot subscribe; deliberate POST subscribes and sends welcome in
     return Response.json({ id: 'test-id' });
   };
   try {
-    for (const locale of ['en', 'fr', 'de', 'es', 'ja']) {
+    for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
       calls.length = 0;
       const url = confirmUrl(site, env.RESEND_API_KEY, address, locale);
       const head = await handleConfirm(new Request(url, { method: 'HEAD' }), env);
@@ -134,7 +139,7 @@ test('all four forms send a localized visitor email and an escaped English team 
   globalThis.fetch = async (_url, options) => { calls.push(JSON.parse(options.body)); return Response.json({ id: 'test-id' }); };
   try {
     for (const form of ['contact', 'careers', 'affiliate', 'newsletter']) {
-      for (const locale of ['en', 'fr', 'de', 'es', 'ja']) {
+      for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
         calls.length = 0;
         const payload = { id: `${form}-${locale}`, form_name: form, created_at: '2026-10-07T12:00:00Z', data: { email: address, name: 'QA <script>alert(1)</script>', topic: 'support', role: 'Content Marketing Lead', message: '<script>alert(2)</script>', 'cover-note': '<b>literal cover note</b>', channels: ['YouTube', 'TikTok'], plan: '<b>literal plan</b>', locale, language: locale, consent: 'yes', ip: '203.0.113.42' } };
         const outcome = await handleSubmission(payload, env);
@@ -172,9 +177,9 @@ test('Resend templates have separate plain bodies and only create after a genuin
   const mock = `globalThis.fetch = async (url, options) => { const p = new URL(url).pathname; console.log('MOCK_ENDPOINT:' + options.method + ':' + p); if (options.method === 'GET') return Response.json({message:'lookup failed'}, {status:403}); throw new Error('unexpected template write'); };`;
   const run = spawnSync(process.execPath, ['--experimental-strip-types', '--import', `data:text/javascript,${encodeURIComponent(mock)}`, 'scripts/build-resend-templates.mjs', '--push'], { cwd: new URL('..', import.meta.url), encoding: 'utf8', env: { ...process.env, CONTEXT: '', RESEND_API_KEY: env.RESEND_API_KEY } });
   assert.equal(run.status, 1);
-  assert.equal((run.stdout.match(/MOCK_ENDPOINT:GET:/g) ?? []).length, 5);
+  assert.equal((run.stdout.match(/MOCK_ENDPOINT:GET:/g) ?? []).length, 6);
   assert.ok(!run.stdout.includes('MOCK_ENDPOINT:POST:'));
-  for (const locale of ['en', 'fr', 'de', 'es', 'ja']) {
+  for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
     const template = JSON.parse(fs.readFileSync(new URL(`../outputs/resend-templates/${locale}.json`, import.meta.url), 'utf8'));
     assert.equal(template.variables.length, 33);
     assert.ok(!template.html.includes('RESEND_UNSUBSCRIBE_URL'));

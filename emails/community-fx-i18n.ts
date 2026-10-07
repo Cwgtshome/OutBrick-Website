@@ -1,6 +1,6 @@
 // The words the feature board adds to the community emails (community-fx, 7 October 2026): the
 // 'badge' notification and the badge names, and the ideas status "In progress", in the site's
-// five languages. emails/community-i18n.ts folds these into each language's CommunityCopy.
+// six languages. emails/community-i18n.ts folds these into each language's CommunityCopy.
 //
 // Same rules as the rest of the community copy: the site's voice, British spelling in English,
 // German "Sie", Spanish "tú", no markup in any string.
@@ -167,4 +167,30 @@ const ja: BadgeEmailCopy = {
   fallback: '新しいバッジ',
 };
 
-export const badgeEmailCopy: Record<EmailLocale, BadgeEmailCopy> = { en, fr, de, es, ja };
+const ptBR: BadgeEmailCopy = {
+  kindName: 'conquistas recebidas',
+  inProgress: 'Em andamento',
+  badges: {
+    first_post: { name: 'Primeira publicação', description: 'Você publicou na comunidade pela primeira vez.' },
+    helpful: { name: 'Prestativo', description: 'Uma de suas respostas foi marcada como solução.' },
+    bug_hunter: { name: 'Caçador de problemas', description: 'Você relatou um problema confirmado pela equipe OutBrick.' },
+    idea_maker: { name: 'Criador de ideias', description: 'Você sugeriu uma ideia que entrou nos planos da equipe.' },
+    shipped: { name: 'Ideia realizada', description: 'Você sugeriu uma ideia que agora faz parte do OutBrick.' },
+    welcomer: { name: 'Boas-vindas', description: 'Você respondeu às primeiras conversas de dez novos membros.' },
+    beta_tester: { name: 'Testador beta', description: 'Você testou o OutBrick antes do lançamento.' },
+    accessibility_champion: { name: 'Defensor da acessibilidade', description: 'Você ajudou a melhorar o OutBrick para quem usa tecnologias assistivas.' },
+    anniversary: { name: 'Aniversário', description: 'Você faz parte da comunidade OutBrick há pelo menos um ano.' },
+    popular_post: { name: 'Publicação popular', description: 'Uma de suas publicações recebeu 25 reações.' },
+  },
+  named: named(() => ptBR, (badge, n) => badge === 'helpful' ? (n === 1 ? '1 resposta solucionada' : `${n} respostas solucionadas`) : badge === 'anniversary' ? `${n} anos` : null),
+  kind: {
+    subject: (badge) => `Você conquistou uma medalha: ${badge}`,
+    intro: (badge) => `Parabéns! Você conquistou a medalha ${badge}. Ela aparece no seu perfil e, quando é sua medalha principal, ao lado do seu nome.`,
+    what: 'Por que você recebeu',
+    cta: 'Ver suas medalhas',
+  },
+  digestLine: (badge) => `Você conquistou uma medalha: ${badge}`,
+  fallback: 'uma nova medalha',
+};
+
+export const badgeEmailCopy: Record<EmailLocale, BadgeEmailCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };

@@ -41,7 +41,7 @@ export function isoWeek(date: Date): string {
   return `${d.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
 }
 
-const asLocale = (v: unknown): CommunityLocale => (['en', 'fr', 'de', 'es', 'ja'].includes(String(v)) ? (v as CommunityLocale) : 'en');
+const asLocale = (v: unknown): CommunityLocale => (['en', 'fr', 'de', 'es', 'ja', 'pt-BR'].includes(String(v)) ? (v as CommunityLocale) : 'en');
 const url = (locale: CommunityLocale, t: Record<string, unknown>) => `${SITE}${threadPath(locale, { id: Number(t.id), slug: String(t.slug) })}`;
 
 type Member = { id: number; display_name: string; email: string; locale: string };

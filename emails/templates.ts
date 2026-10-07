@@ -33,7 +33,7 @@ import { emailCopy, greetingName, type EmailLocale } from './i18n.ts';
 
 export type Rendered = { subject: string; html: string; text: string };
 
-const storefront: Record<EmailLocale, string> = { en: 'us', fr: 'fr', de: 'de', es: 'es', ja: 'jp' };
+const storefront: Record<EmailLocale, string> = { en: 'us', fr: 'fr', de: 'de', es: 'es', ja: 'jp', 'pt-BR': 'br' };
 
 /** An English site label (a contact topic, a job title) in the email's language, from the site's own dictionary. */
 export function siteLabel(locale: EmailLocale, english: string): string {

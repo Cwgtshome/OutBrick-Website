@@ -1,0 +1,75 @@
+import type { JournalUi } from '../i18n/blog.ts';
+
+/** Brazilian Portuguese wording for the journal interface. */
+export const ptBRJournalUi: JournalUi = {
+  breadcrumb: 'Navegação estrutural',
+  journal: 'Blog',
+  readingTime: (minutes) => `${minutes} min de leitura`,
+  published: 'Publicado em',
+  updated: 'Atualizado em',
+  figcaption: 'Ilustração do blog',
+  inThisStory: 'Neste artigo',
+  toc: 'Sumário',
+  allStories: 'Todos os artigos do blog',
+  takeaways: 'O que você precisa saber',
+  sources: 'Fontes',
+  source: (n, label) => `Fonte ${n}: ${label}`,
+  faqLabel: 'Perguntas e respostas',
+  faqTitle: 'Algumas respostas úteis',
+  references: 'Referências',
+  referencesNote:
+    'As referências permanecem no idioma original. Quando a fonte é um relato do próprio estúdio ou uma notícia, e não um estudo, o artigo deixa isso claro junto à afirmação.',
+  newTab: ' (abre em uma nova aba)',
+  writtenBy: 'Escrito por',
+  moreFrom: (name) => (name.startsWith('OutBrick') ? 'Mais da redação' : `Mais de ${name.split(' ')[0]}`),
+  gameNoteTitle: 'O jogo que acompanha este blog',
+  gameNoteBody:
+    'OutBrick é um quebra-cabeça de deslizar blocos e separá-los por cor: 2.000 tabuleiros verificados por um solucionador, 167 vilarejos feitos de blocos e nove amigos de tijolinho. Grátis na App Store, com vidas e vídeos com recompensa opcionais, sem cronômetro em nenhum momento.',
+  costsLink: 'O que isso custa',
+  keepReading: 'Continue lendo',
+  moreTitle: 'Mais três artigos para ler.',
+  by: (name) => `Por ${name}`,
+  share: 'Compartilhar',
+  linkCopied: 'Link copiado',
+  copyFailedLink: 'Não foi possível copiar. O link está na barra de endereço.',
+  copyFailedShare: 'Não foi possível copiar. Copie o endereço na barra de endereço.',
+  copySectionLink: (title) => `Copiar link para a seção: ${title}`,
+  sourceCard: (n) => `Fonte ${n}`,
+  filedUnder: 'Categorias e tags',
+  storyNav: 'Mais artigos do blog',
+  previousStory: 'Artigo anterior',
+  nextStory: 'Próximo artigo',
+  categories: {
+    'Success stories': 'Histórias de sucesso',
+    'Learning through play': 'Aprender brincando',
+    'Game craft': 'Criação de jogos',
+    'Inclusive design': 'Design inclusivo',
+    'Social play': 'Jogar em grupo',
+    'OutBrick practice': 'OutBrick na prática',
+    'Player habits': 'Hábitos de quem joga',
+  },
+  authors: {
+    'mourad-hamdi': {
+      role: 'Fundador e CEO',
+      bio: 'Mourad cria jogos pequenos e cuidadosos para os intervalos entre uma tarefa e outra. OutBrick é seu experimento contínuo com uma forma mais tranquila de jogar.',
+    },
+    'outbrick-editorial': {
+      role: 'Experiência de jogo e pesquisa em design',
+      bio: 'A equipe editorial da OutBrick transforma pesquisas sobre jogadores, práticas de acessibilidade e aprendizados do desenvolvimento de jogos em textos úteis e fáceis de ler.',
+    },
+  },
+  languages: 'Leia em',
+  index: {
+    title: 'Blog da OutBrick: guias de quebra-cabeças em português',
+    description:
+      'Guias do blog da OutBrick em português do Brasil: resolva quebra-cabeças de blocos deslizantes, organize cores e encontre jogos tranquilos para jogar offline.',
+    label: 'Blog da OutBrick',
+    h1: 'Blog da OutBrick em português',
+    lede:
+      'Guias práticos de quem criou OutBrick, traduzidos do inglês: como analisar o tabuleiro, economizar movimentos, reconhecer um jogo realmente relaxante e escolher um jogo para a viagem. Toda afirmação baseada em pesquisa traz um link para a fonte.',
+    count: (n) => `${n} artigos`,
+    guides: 'Guias',
+    more: 'Os outros artigos estão em inglês.',
+    moreLink: 'Ler os outros artigos (em inglês)',
+  },
+};

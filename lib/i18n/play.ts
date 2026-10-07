@@ -341,7 +341,26 @@ const ja: PlayCopy = {
   },
 };
 
-export const playCopy: Record<Locale, PlayCopy> = { en, fr, de, es, ja };
+const ptBR: PlayCopy = {
+  meta: { title: 'Como jogar OutBrick: movimentos, estrelas, vidas e desfazer', description: 'Jogue um tabuleiro de OutBrick aqui e conheça o restante: metas, limites de movimentos, estrelas, impulsos e o custo real de uma vida e de desfazer.' },
+  eyebrow: 'Guia de jogo', title: ['Deslize os blocos ', 'para fora.'],
+  lede: 'Deslize um bloco e ele vai até algo pará-lo. Tire todos os blocos pela saída da cor correspondente e o tabuleiro estará livre. Essa é toda a regra — experimente aqui em três tabuleiros, do fácil a um desafio de verdade.',
+  keys: [['Arraste', ' um bloco em qualquer direção.'], ['Teclado:', ' use Tab até um bloco e depois Shift + uma seta.'], ['Desfazer', ' é ilimitado aqui; no jogo, o primeiro uso em cada tabuleiro é grátis.']],
+  boardLabel: 'Jogue um tabuleiro de OutBrick', daily: ['Já jogou os três? ', 'Experimente o tabuleiro diário'],
+  loop: { eyebrow: 'Ao redor do tabuleiro', title: 'O ciclo do jogo, sem arredondar nada a nosso favor.', lede: 'O jogo completo acrescenta limite de movimentos, estrelas, vidas e opções para desfazer. Veja exatamente como cada uma funciona.', rows: [
+    { title: 'A corda é um limite de movimentos, não um relógio', body: 'Cada tabuleiro mostra sua meta e seu limite desde o primeiro toque. Não há contagem regressiva em nenhum ponto do jogo. Quando os movimentos ficam curtos, você pode receber mais cinco antes de qualquer outra coisa.' },
+    { title: 'Três estrelas, sem rodeios', body: 'Concluir um tabuleiro vale uma estrela. Concluir dentro da meta de movimentos do solver vale duas. Fazer isso sem desfazer nenhuma jogada vale três.' },
+    { title: 'A primeira vez que você desfaz em cada tabuleiro é grátis', body: 'Depois disso, os usos vêm de uma reserva de cinco, que recupera um a cada vinte e cinco minutos. A opção oferecida quando um tabuleiro trava também é grátis e não usa a reserva.' },
+    { title: 'Uma vida só é perdida quando uma tentativa falha', body: 'É preciso ter uma vida para abrir um tabuleiro, mas isso não consome uma; concluir também não custa nada. Você tem cinco vidas, oito com o Brick Pass, e recupera uma a cada trinta minutos.' },
+    { title: 'Impulsos e vídeos são opcionais', body: 'Moedas compram impulsos; vídeos com recompensa são opcionais, têm limite e nunca interrompem um tabuleiro. Recusar não custa nada.' },
+  ] },
+  meet: { eyebrow: 'O que você vai encontrar', title: 'Do que são feitos 2.000 tabuleiros.', lede: 'Um solver concluiu cada um dos 2.000 tabuleiros antes do lançamento, então nenhum é um beco sem saída. Estas são as peças que os formam.', nouns: [
+    ['Portões coloridos', 'Um bloco só sai pelo portão da cor correspondente.'], ['Chaves e fechaduras', 'Pares que abrem uma parte do tabuleiro quando você faz a jogada certa.'], ['Blocos congelados', 'Precisam de três deslizadas para descongelar.'], ['Geradores', 'Trazem mais blocos para o tabuleiro.'], ['Esteiras', 'Movem o que está sobre elas.'], ['Caixas', 'Obstáculos que definem quais caminhos ficam abertos.'], ['Arenas com formatos', 'Tabuleiros em forma de H, L ou cruz.'],
+  ] },
+  close: { title: 'Gostou? O jogo tem mais 2.000.', lede: 'Uma Jornada por 167 vilas construídas com blocos e nove amigos. Grátis na App Store e funciona offline.' },
+};
+
+export const playCopy: Record<Locale, PlayCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
 
 for (const locale of ['en', 'fr', 'de', 'es', 'ja'] as const) {
   const t = currentGameCopy[locale];

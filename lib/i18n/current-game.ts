@@ -9,6 +9,29 @@ type GameCopy = {
   stars: string; starsTitle: string; adsTitle: string; ads: string; moves: string;
 };
 export const currentGameCopy: Record<Locale, GameCopy> = {
+  'pt-BR': {
+    description: 'Um quebra-cabeça de combinar três tranquilo: 2.000 fases, 167 vilarejos de blocos, nove amigos, VoiceOver e jogo offline. Grátis na App Store, com compras opcionais.',
+    playDescription: 'Conheça os objetivos, especiais, estrelas por pontuação, vidas e desfazer do OutBrick. Experimente no navegador a demonstração separada do clássico jogo de deslizar blocos.',
+    lives: 'Abrir uma fase exige uma vida, mas não consome nenhuma. Concluir também não consome. Uma vida é usada quando você recusa continuar sem jogadas, sai depois de fazer uma jogada ou reinicia depois de jogar. São cinco vidas, oito com o Brick Pass; uma se recupera a cada trinta minutos.',
+    label: 'Na App Store · iOS 5.0.1',
+    title: 'Combine blocos. Cumpra objetivos. Siga pela Jornada.',
+    summary: 'Um quebra-cabeça tranquilo de combinar três, com 2.000 fases, 167 vilarejos feitos de blocos e nove amigos em 3D. Troque blocos vizinhos, combine três ou mais e cumpra os objetivos de cada fase. Sem cronômetro; todas as fases funcionam offline.',
+    match: 'Troque blocos vizinhos para formar uma linha de três ou mais. As cascatas contornam obstáculos e trazem novos blocos. Saídas coloridas, salas lacradas, portais e canais de tinta dão a cada fase seu próprio desafio.',
+    specials: 'Quatro blocos em linha criam um blaster de linha; um L ou T cria uma bomba; um quadrado cria um dardo teleguiado; cinco em linha criam uma bomba de cor. Toque em um especial ou combine dois para limpar uma área maior.',
+    goals: 'Complete os objetivos mostrados na fase. Ela termina assim que forem cumpridos, e as jogadas restantes viram blasters de linha que aumentam sua pontuação. Fases Difíceis, Superdifíceis e Chefes variam o desafio ao longo da Jornada.',
+    voiceover: 'O VoiceOver anuncia o resultado de cada jogada imediatamente e mantém o foco no bloco movido. As dicas indicam o bloco e o sentido da troca. Um toque duplo com dois dedos pede uma dica; o gesto de esfregar com dois dedos fecha a tela. Os rotores encontram especiais, objetivos, obstáculos e saídas; sons opcionais por linha ajudam a identificar as cores.',
+    apple: 'A Siri responde sobre vidas, tempo de recuperação, o Bloco do Dia e as estrelas dos vilarejos. Widgets, Atividades ao Vivo, Spotlight, Atalhos e filtros de Foco conectam o jogo aos recursos da Apple; os recursos compatíveis do Apple Intelligence dependem do dispositivo e do sistema. O iCloud mantém seu progresso nos seus dispositivos.',
+    community: 'A Comunidade OutBrick está aberta: peça ajuda, relate um erro, sugira uma ideia e vote no que vem a seguir. A leitura é livre; entre com e-mail, Google ou Apple para participar.',
+    upcomingTitle: 'Em desenvolvimento · Slide & Match para a versão 5.1',
+    upcoming: 'A próxima atualização para iOS está em teste. Ela reúne deslizes para espaços livres, saídas por portas da mesma cor e trocas entre vizinhos, com doze tipos de fase por vilarejo, blocos maiores e ações de deslizar pelo VoiceOver. Os botões Comunidade e Relatar um erro nos Ajustes e controles renovados também estão em desenvolvimento. Essa versão ainda não está na App Store; a auditoria final das fases e as verificações de lançamento continuam.',
+    demoTitle: 'Experimente no navegador o clássico jogo de deslizar blocos',
+    demo: 'Esta demonstração no navegador mantém o antigo quebra-cabeça de deslizar blocos do OutBrick: leve cada bloco até a saída da mesma cor. É um jogo web separado, com desfazer ilimitado. O app atual para iOS usa combinações, cascatas, objetivos e estrelas por pontuação; a demonstração não é uma prévia da versão 5.1.',
+    starsTitle: 'As estrelas dependem da sua pontuação',
+    stars: 'O jogo atual para iOS concede estrelas de acordo com as faixas de pontuação da fase. Combinações, especiais, cascatas e jogadas restantes contribuem para a pontuação. A demonstração no navegador mantém a antiga regra de estrelas baseada no objetivo de jogadas.',
+    adsTitle: 'Oito opções de vídeos, no máximo 39 por dia',
+    ads: 'Limites diários: 8 vídeos para vidas, 8 para desfazer, 6 para jogadas extras, 4 para a dica gratuita ao ficar sem jogadas, 4 para dobrar as moedas da vitória, 1 para a Brick Wheel, 2 para o balão-surpresa e 6 para o Brick Cinema. Sem banners nem anúncios intersticiais. O vídeo só começa se você escolher; recusar não custa nada.',
+    moves: 'A fase mostra as jogadas restantes; não há relógio nem contagem regressiva. Ao atingir o limite, cinco jogadas extras custam 300 moedas, depois 500 e então 900 na mesma tentativa, ou podem ser obtidas com um vídeo com recompensa. Sair ou concluir a fase reinicia essa sequência de preços.',
+  },
   en: {
     description: "A calm match-three puzzle: 2,000 boards, 167 brick villages, nine friends, VoiceOver and offline play. Free on the App Store, with optional purchases.",
     playDescription: "Learn OutBrick’s match-three goals, specials, score-based stars, lives and undos. Try the separate classic sliding demo in your browser.",

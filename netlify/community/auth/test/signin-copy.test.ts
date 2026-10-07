@@ -15,7 +15,7 @@ function numbersIn(value: unknown, out: number[] = []): number[] {
   return out;
 }
 
-void test('every stated sign-in link lifetime equals SIGNIN_MINUTES, in all five languages', () => {
+void test('every stated sign-in link lifetime equals SIGNIN_MINUTES, in all six languages', () => {
   for (const locale of ['en', 'fr', 'de', 'es', 'ja'] as const) {
     const page = numbersIn((pageCopy[locale] as unknown as Record<string, unknown>).signin);
     const email = numbersIn((emailCopy[locale] as unknown as Record<string, unknown>).signin);

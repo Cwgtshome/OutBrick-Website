@@ -375,8 +375,66 @@ const ja: BoardStrings = {
   gatesPrefix: 'ゲート：',
 };
 
-for (const [locale, strings] of Object.entries({ fr, de, es, ja })) {
+/* ------------------------------------------------------------------ pt-BR */
+
+const ptBRDir: Record<Direction, string> = { up: 'para cima', down: 'para baixo', left: 'para a esquerda', right: 'para a direita' };
+const ptBRSides: Record<Side, string> = { top: 'borda superior', bottom: 'borda inferior', left: 'borda esquerda', right: 'borda direita' };
+
+const ptBR: BoardStrings = {
+  label: 'Experimente uma fase de OutBrick',
+  colour: { red: 'vermelho', yellow: 'amarelo', teal: 'azul-petróleo', violet: 'violeta', blue: 'azul', green: 'verde' },
+  glyph: { red: 'coração', yellow: 'triângulo', teal: 'círculo', violet: 'losango', blue: 'quadrado', green: 'estrela' },
+  levelName: { 'first-light': 'Primeira luz', 'side-step': 'Passo ao lado', knot: 'O nó' },
+  brick: (c) => `bloco ${ptBR.colour[c]}`,
+  describeBrick: (c, w, h, row, col) => {
+    const size = w > 1 ? `${w} de largura` : h > 1 ? `${h} de altura` : 'unitário';
+    return `bloco ${ptBR.colour[c]}, ${size}, linha ${row}, coluna ${col}`;
+  },
+  describeGate: (g) => {
+    const along = g.side === 'top' || g.side === 'bottom' ? 'colunas' : 'linhas';
+    const where = g.span > 1 ? `${along} ${g.start + 1} a ${g.start + g.span}` : `${along.slice(0, -1)} ${g.start + 1}`;
+    return `saída ${ptBR.glyph[g.colour]} ${ptBR.colour[g.colour]} na ${ptBRSides[g.side]}, ${where}`;
+  },
+  gatesJoin: '; ',
+  cantMove: (b, dir) => `${b} não pode se mover ${ptBRDir[dir]}.`,
+  leftBoard: (b, r) => `${b} saiu do tabuleiro. ${r} ${r === 1 ? 'bloco restante' : 'blocos restantes'}.`,
+  leftAndClear: (b, m, t, s) => `${b} saiu do tabuleiro. Fase concluída em ${m} ${m === 1 ? 'jogada' : 'jogadas'}; objetivo: ${t}. ${s} ${s === 1 ? 'estrela' : 'estrelas'}.`,
+  slid: (b, dir, d, row, col) => `${b} deslizou ${ptBRDir[dir]} ${d} ${d === 1 ? 'casa' : 'casas'}; agora está na linha ${row}, coluna ${col}.`,
+  undid: (m) => `Última jogada desfeita. Jogadas: ${m}.`,
+  reset: 'Fase reiniciada.',
+  levelChange: (n, total, name, t) => `Fase ${n} de ${total}: ${name}. Objetivo: ${t} jogadas.`,
+  boards: 'Fases:',
+  pip: (n, name) => `Fase ${n}: ${name}`,
+  target: 'Objetivo ',
+  moves: 'Jogadas ',
+  legend: (name, c, r, left) => `${name}, tabuleiro de ${c} por ${r}, ${left} ${left === 1 ? 'bloco restante' : 'blocos restantes'}`,
+  kicker: (n, total) => `Fase ${n} de ${total}`,
+  clear: 'Fase concluída',
+  starsOf: (s) => `${s} de 3 estrelas`,
+  cardLine: (m) => `${m} ${m === 1 ? 'jogada' : 'jogadas'} · objetivo `,
+  secondStar: (t) => `Conclua em até ${t} jogadas para ganhar a segunda estrela.`,
+  thirdStar: 'Conclua sem desfazer jogadas para ganhar a terceira estrela.',
+  next: 'Próxima fase',
+  again: 'Jogar desde a fase 1',
+  shareLabel: 'Compartilhar resultado',
+  share: 'Compartilhar',
+  replay: 'Jogar novamente',
+  copied: 'Link copiado',
+  copyFailed: 'Não foi possível copiar o link',
+  store: ['Baixe o jogo completo na ', 'App Store'],
+  shareTitle: (board, s) => `Concluí a fase ${board} de OutBrick com ${s} ${s === 1 ? 'estrela' : 'estrelas'}`,
+  shareText: (board, name, m, t, stars) => `Concluí a fase ${board} de OutBrick, ${name}, em ${m} ${m === 1 ? 'jogada' : 'jogadas'} (objetivo: ${t}) ${stars}`,
+  undo: 'Desfazer',
+  resetButton: 'Reiniciar',
+  lifted: (c) => `Bloco ${ptBR.colour[c]} selecionado · use as setas para movê-lo`,
+  tipLong: 'Arraste um bloco em direção à saída da mesma cor',
+  tipShort: 'Arraste para deslizar',
+  hint: 'Arraste ou deslize um bloco para movê-lo. Com o teclado, use Tab para chegar ao tabuleiro e as setas para escolher um bloco; depois segure Shift e pressione uma seta para deslizá-lo, ou pressione Enter e depois uma seta. Escape solta o bloco selecionado. Control ou Command + Z desfaz uma jogada. O bloco desliza até uma parede, outro bloco ou uma saída de outra cor e sai pela saída da sua cor.',
+  gatesPrefix: 'Saídas: ',
+};
+
+for (const [locale, strings] of Object.entries({ fr, de, es, ja, 'pt-BR': ptBR })) {
   Object.assign(strings.levelName, additionalBoardNames[locale as Locale]);
 }
 
-export const boardStrings: Record<Locale, BoardStrings> = { en, fr, de, es, ja };
+export const boardStrings: Record<Locale, BoardStrings> = { en, fr, de, es, ja, 'pt-BR': ptBR };

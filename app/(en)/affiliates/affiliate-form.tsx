@@ -21,8 +21,8 @@ function localizedAudienceSizes(locale: Locale) {
   if (locale === 'en') return audienceSizes;
   const number = new Intl.NumberFormat(locale);
   const bounds = [[1_000], [1_000, 10_000], [10_000, 50_000], [50_000, 250_000], [250_000, 1_000_000], [1_000_000]];
-  const under = { fr: 'Moins de ', de: 'Unter ', es: 'Menos de ', ja: '' }[locale];
-  const over = { fr: 'Plus de ', de: 'Über ', es: 'Más de ', ja: '' }[locale];
+  const under = { fr: 'Moins de ', de: 'Unter ', es: 'Menos de ', ja: '', 'pt-BR': 'Menos de ' }[locale];
+  const over = { fr: 'Plus de ', de: 'Über ', es: 'Más de ', ja: '', 'pt-BR': 'Mais de ' }[locale];
   return audienceSizes.map((option, index) => {
     const [lower, upper] = bounds[index];
     const label = upper !== undefined

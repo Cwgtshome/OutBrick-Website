@@ -96,7 +96,7 @@ void test('reply addresses: signed, case-insensitive, bound to our domain', () =
   assert.equal(readReplyAddress('another key', DOMAIN, addr), null);
 });
 
-void test('quoted history is cut in all five languages', () => {
+void test('quoted history is cut in all six languages', () => {
   const cases = [
     'Merci !\n\nLe mar. 7 oct. 2026 à 10:00, OutBrick Community <reply+x@reply.outbrick.site> a écrit :\n> vieux',
     'Danke!\n\nAm Di., 7. Okt. 2026 um 10:00 Uhr schrieb OutBrick Community <reply+x@reply.outbrick.site>:\n> alt',

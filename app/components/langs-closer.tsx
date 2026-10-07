@@ -14,8 +14,8 @@ export function LangsCloser() {
         const target = new URL(link.href, location.href);
         if (target.origin !== location.origin) continue;
         const language = link.hreflang;
-        if (!['en', 'fr', 'de', 'es', 'ja'].includes(language)) continue;
-        const route = location.pathname.replace(/^\/(fr|de|es|ja)(?=\/|$)/, '') || '/';
+        if (!['en', 'fr', 'de', 'es', 'ja', 'pt-BR'].includes(language)) continue;
+        const route = location.pathname.replace(/^\/(fr|de|es|ja|pt-BR)(?=\/|$)/, '') || '/';
         target.pathname = language === 'en' ? route : `/${language}${route === '/' ? '' : route}`;
         target.search = location.search;
         target.hash = location.hash;

@@ -35,6 +35,7 @@ export const storefronts: readonly { country: string; lang: string; locale: Comm
   { country: 'de', lang: 'de', locale: 'de', language: 'Deutsch' },
   { country: 'es', lang: 'es', locale: 'es', language: 'Español' },
   { country: 'jp', lang: 'ja', locale: 'ja', language: '日本語' },
+  { country: 'br', lang: 'pt_BR', locale: 'pt-BR', language: 'Português (Brasil)' },
 ];
 
 export type StorefrontRelease = {

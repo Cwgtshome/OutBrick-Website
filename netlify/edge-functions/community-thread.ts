@@ -33,7 +33,7 @@ const SITE = 'https://www.outbrick.site';
 
 type EdgeContext = { next: () => Promise<Response> };
 
-const ogLocales: Record<CommunityLocale, string> = { en: 'en_US', fr: 'fr_FR', de: 'de_DE', es: 'es_ES', ja: 'ja_JP' };
+const ogLocales: Record<CommunityLocale, string> = { en: 'en_US', fr: 'fr_FR', de: 'de_DE', es: 'es_ES', ja: 'ja_JP', 'pt-BR': 'pt_BR' };
 
 /** The security headers public/_headers gives every page, for the case where a custom header set does not reach an edge response. */
 const securityHeaders: Record<string, string> = {
@@ -46,7 +46,7 @@ const securityHeaders: Record<string, string> = {
 };
 
 export function parseThreadPath(pathname: string): { locale: CommunityLocale; id: number; slug: string } | null {
-  const match = pathname.match(/^(?:\/(fr|de|es|ja))?\/community\/t\/(\d{1,12})(?:\/([^/]*))?\/?$/);
+  const match = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/community\/t\/(\d{1,12})(?:\/([^/]*))?\/?$/);
   if (!match) return null;
   return { locale: (match[1] as CommunityLocale | undefined) ?? 'en', id: Number(match[2]), slug: decodeURIComponent(match[3] ?? '') };
 }
@@ -195,5 +195,5 @@ export default async function communityThread(req: Request, context: EdgeContext
 }
 
 export const config = {
-  path: ['/community/t/*', '/fr/community/t/*', '/de/community/t/*', '/es/community/t/*', '/ja/community/t/*'],
+  path: ['/community/t/*', '/fr/community/t/*', '/de/community/t/*', '/es/community/t/*', '/ja/community/t/*', '/pt-BR/community/t/*'],
 };

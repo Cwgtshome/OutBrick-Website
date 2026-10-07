@@ -1,4 +1,4 @@
-// Renders every email template with sample data in all five languages, and checks each one.
+// Renders every email template with sample data in all six languages, and checks each one.
 // Runs as the last step of `pnpm build` (after postbuild, so nothing here reaches the sitemap).
 //
 // On every build it renders and checks: a template that throws, loses its lang attribute, a

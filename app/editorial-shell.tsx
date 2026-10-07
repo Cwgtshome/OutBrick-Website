@@ -148,7 +148,7 @@ export function Badge({ locale }: { locale?: TranslatedLocale } = {}) {
     const copy = chromeCopy[locale];
     return (
       <a className="ed-badge" href={localeStoreUrl('journal', locale)} aria-label={copy.badgeLabel}>
-        <img src={`/assets/badge/appstore-black-${locale}.svg`} alt={copy.badgeAlt} width={132} height={44} />
+        <img src={locale === 'pt-BR' ? '/assets/badge/appstore-black.svg' : `/assets/badge/appstore-black-${locale}.svg`} alt={copy.badgeAlt} width={132} height={44} />
       </a>
     );
   }

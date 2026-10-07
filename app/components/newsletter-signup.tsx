@@ -31,6 +31,7 @@ const languages = [
   { value: 'de', label: 'Deutsch' },
   { value: 'es', label: 'Español' },
   { value: 'ja', label: '日本語' },
+  { value: 'pt-BR', label: 'Português (Brasil)' },
 ] as const;
 
 export type NewsletterLanguage = (typeof languages)[number]['value'];

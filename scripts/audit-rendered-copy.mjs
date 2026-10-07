@@ -5,10 +5,10 @@ import { listHtmlFiles, fileToRoute, distDir, repoRoot } from './lib/pages.mjs';
 import { extractRenderedCopy, extractMetadataCopy, findCarryovers, carryoverException } from './lib/rendered-copy.mjs';
 
 const builtRoot = path.resolve(process.argv[2] ?? distDir);
-const locales = ['fr', 'de', 'es', 'ja'];
+const locales = ['fr', 'de', 'es', 'ja', 'pt-BR'];
 const files = listHtmlFiles(builtRoot);
 const fileByRoute = new Map(files.map((file) => [fileToRoute(file), file]));
-const englishFiles = files.filter((file) => !/^(fr|de|es|ja)(?:\/|\.html)/.test(file) && !/^google[^/]*\.html$/.test(file));
+const englishFiles = files.filter((file) => !/^(fr|de|es|ja|pt-BR)(?:\/|\.html)/.test(file) && !/^google[^/]*\.html$/.test(file));
 const issues = new Map();
 const exceptions = new Map();
 const missing = [];

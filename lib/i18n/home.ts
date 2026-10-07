@@ -856,6 +856,101 @@ const es: HomeCopy = {
   },
 };
 
+/* ======================================================================= pt-BR */
+
+const ptBR: HomeCopy = {
+  meta: {
+    title: 'OutBrick — uma avenida construída bloco por bloco',
+    description: 'Um quebra-cabeça de blocos deslizantes para separar por cor: 2.000 tabuleiros verificados, 167 vilarejos de blocos e nove amigos. Sem cronômetro; funciona offline. Grátis na App Store.',
+    ogTitle: 'OutBrick — uma avenida construída bloco por bloco',
+    ogDescription: '2.000 tabuleiros verificados por um solucionador, 167 vilarejos de blocos e nove amigos. Um dedo, sem cronômetro e nada interrompe uma partida.',
+    ogImageAlt: 'Bricko, Peach e Sprout ao lado de blocos coloridos em uma ilustração de OutBrick',
+  },
+  appDescription: 'Um quebra-cabeça de blocos deslizantes para separar por cor: 2.000 tabuleiros verificados por um solucionador em 100 capítulos, uma Jornada por 167 vilarejos de blocos e nove amigos.',
+  headline: [{ word: 'Uma', line: 0 }, { word: 'avenida', line: 0 }, { word: 'feita', line: 1 }, { word: 'de', line: 1 }, { word: 'blocos', line: 2, slab: true }],
+  stop: '.',
+  hero: {
+    eyebrow: 'Grátis na App Store',
+    lede: 'Deslize um bloco e ele vai até algo pará-lo. Tire todos pela saída da cor correspondente e o tabuleiro estará livre. Essa é a regra inteira, e você aprende em cerca de cinco segundos.',
+    walk: 'Passeie por um vilarejo',
+    facts: ['2.000 tabuleiros com solução verificada', '167 vilarejos construídos com blocos', 'Sem cronômetro, em lugar nenhum', 'Funciona offline'],
+    phoneAlt: 'O mapa da Jornada em Garden City: uma rua de blocos serpenteia entre casas e árvores de brinquedo, com marcadores numerados de fases pelo caminho.',
+  },
+  rule: {
+    eyebrow: 'Uma regra para aprender', title: 'O tabuleiro parece impossível. Mas não é.',
+    lede: 'Cada tabuleiro está cheio até as bordas. Uma jogada certa abre espaço e libera a pilha aos poucos. Um solucionador venceu os 2.000 tabuleiros antes do lançamento, então nenhum deles é um beco sem saída.',
+    boardLabel: 'Experimente um tabuleiro de OutBrick: retire cada bloco pela sua saída',
+    steps: [
+      { title: 'Arraste um bloco', body: 'Ele desliza até onde você o arrastar, até algo pará-lo: uma parede, um vizinho ou uma saída que não aceita aquela cor.', alt: 'Um tabuleiro de OutBrick cheio no início de uma fase, com blocos ocupando todo o espaço.' },
+      { title: 'Encontre a saída', body: 'Saídas coloridas, chaves e fechaduras, blocos congelados que precisam de três deslizadas para descongelar, geradores, esteiras, caixas e arenas em forma de H, L ou cruz.', alt: 'Um tabuleiro de OutBrick durante uma partida, com chaves, fechaduras, caixas e saídas coloridas nas bordas.' },
+      { title: 'Alcance o objetivo', body: 'Concluir o tabuleiro vale uma estrela. Concluí-lo dentro do limite de movimentos do solucionador vale duas. Fazer isso sem desfazer nenhuma jogada vale três.', alt: 'A tela de conclusão de um tabuleiro de OutBrick, com estrelas e moedas.' },
+    ],
+    wallLabel: 'OutBrick em números',
+    plaques: [
+      { shown: '2.000', label: 'tabuleiros, todos comprovadamente solucionáveis' },
+      { shown: '100', label: 'capítulos de vinte fases' },
+      { shown: '0', label: 'relógios, cronômetros ou contagens regressivas' },
+      { shown: '8', label: 'elementos: saídas, chaves, gelo, caixas e mais' },
+    ],
+  },
+  journey: {
+    eyebrow: 'A Jornada', title: 'Nada neste caminho é só uma pintura.',
+    lede: 'Os 167 vilarejos da avenida são construídos bloco por bloco: o chão, a rua, as árvores, os postes e os pontos de referência. Vinte e oito cenários dão forma a eles, cada um com sua paleta, pavimento, marcadores de fase e animações; as variações fazem cada retorno parecer um lugar diferente.',
+    windowLabel: 'Os 28 temas de vilarejos da Jornada de OutBrick. Role ou arraste para os lados e percorra o caminho.',
+    villageAlt: (name) => `${name}, um vilarejo de blocos no mapa da Jornada de OutBrick.`,
+    levelRange: (first, last) => `Fases ${first}–${last}`,
+    passesLede: 'A estrada dá seis voltas até a fase 2.000, e cada volta acontece em um horário diferente do dia.',
+    notes: [
+      { tag: 'Doze fases', title: 'Um vilarejo é um lugar, não um capítulo', body: 'Cada vilarejo tem doze fases e vale trinta e seis estrelas. Os capítulos são contados à parte: são cem, com vinte fases cada.' },
+      { tag: 'Construído, não pintado', title: 'Uma única linguagem de blocos', body: 'Cada peça tem profundidade, frente arredondada, uma faixa de luz em cima e uma junta embaixo; os pinos aparecem onde o topo está visível. É assim que 28 lugares diferentes formam um só mundo.' },
+      { tag: 'Além de 2.000', title: 'A estrada continua', body: 'Depois do tabuleiro número 2.000, a mesma curva continua gerando novos endereços, resolvidos no seu próprio aparelho antes mesmo de você vê-los.' },
+    ],
+  },
+  cast: {
+    eyebrow: 'Nove amigos de blocos', title: 'Eles vivem no mesmo mundo concreto que você.',
+    lede: 'Personagens 3D de verdade, não adesivos colados em um quebra-cabeça. Três dividem sua tela inicial por vez, e o grupo muda enquanto você joga: um se despede e vai embora, outro chega e dá oi. Eles reagem ao toque, acompanham com os olhos quando você inclina o celular e cada um tem sua própria dança da vitória.',
+    meet: 'Conheça os amigos',
+    lines: {
+      bloo: 'Olha o relógio entre tabuleiros e dá uma volta quando você conclui um.', peach: 'Fica apreensiva do começo ao fim e comemora quando a pilha finalmente se abre.',
+      sprout: 'Faz a pergunta que ninguém fez. Dá dois pulinhos e uma volta quando dá certo.', bricko: 'Conta as repetições, faz sinal de positivo e mostra os músculos a cada vitória.',
+      zippy: 'Perde o fio da conversa no meio da frase. Gira quando tocado e dá três pulos quando você vence.', vio: 'Avalia suas jogadas como músicas e dança a 112 bpm.',
+      moss: 'Ditados da fazenda, botas de trabalho e uma salva de palmas lenta quando você merece.', flurry: 'Chá, cachecóis e um aceno delicado. A ponta do cachecol balança um instante depois.',
+      poppy: 'Conta contos de fadas e agita uma varinha que explode em estrelas.',
+    },
+    note: 'Os amigos se animam e falam em balões de texto. Eles não têm voz: as vocalizações dos personagens foram removidas em 21 de setembro de 2026. Os anúncios do VoiceOver continuam.',
+  },
+  fair: {
+    eyebrow: 'O que custa', title: 'Sem rodeios, porque a maioria dos jogos não faz isso.',
+    lede: 'OutBrick tem vidas e anúncios. Veja exatamente como cada um funciona, sem arredondar nada a nosso favor.',
+    struck: { lead: 'Duas frases que não podemos escrever, porque já foram verdade e hoje não são mais: ', ads: '“sem anúncios”', and: ' e ', lives: '“sem vidas”', end: '.' },
+    quote: 'OutBrick foi lançado com essas duas promessas, e ambas mudaram. As mecânicas continuam aqui, mas são generosas — e esta página explica isso.',
+    ledger: [
+      { title: 'Uma vida é o custo de perder um tabuleiro, nunca de jogar ou concluí-lo.', body: 'Abrir um tabuleiro exige uma vida, mas não consome nenhuma. Concluí-lo não custa nada. Você só perde uma vida quando uma tentativa termina sem concluir o tabuleiro. São cinco vidas, oito com o Brick Pass, e você recupera uma a cada trinta minutos.' },
+      { title: 'A primeira vez que você desfaz uma jogada em cada tabuleiro é grátis e não acaba.', body: 'Depois disso, cada desfazer usa uma reserva de cinco, que recupera uma a cada vinte e cinco minutos. A opção de desfazer oferecida quando um tabuleiro trava também é grátis e não mexe na reserva.' },
+      { title: 'O limite é de movimentos, não de tempo.', body: 'Cada tabuleiro mostra o objetivo e o limite desde o primeiro toque. Não há contagem regressiva no jogo. Se os movimentos acabarem, você pode comprar mais cinco: 300 moedas, depois 500 e depois 900 na mesma tentativa.' },
+      { title: 'Oito opções de vídeos com recompensa, todas voluntárias e limitadas.', body: 'Vídeos podem oferecer vidas (até 8 por dia), desfazer (8), movimentos extras (6), uma dica grátis quando os movimentos acabam (4), moedas dobradas na conclusão (4), uma rodada na Brick Wheel (1), o balão de presente (2) e o Brick Cinema (6): até 39 vídeos por dia no total. Sem banners ou anúncios intersticiais: nada começa sem você tocar para assistir, e nada interrompe um tabuleiro. Recusar não custa nada.' },
+      { title: 'Moedas e reforços são opcionais. Não há assinatura.', body: 'Remover Anúncios desativa a publicidade para sempre e ainda concede o que os vídeos renderiam. O Brick Pass aumenta o limite de vidas de cinco para oito e desativa os anúncios enquanto estiver ativo.' },
+    ],
+  },
+  apple: {
+    eyebrow: 'Feito para Apple', title: 'Uma compra. Um progresso. Seis lugares para jogar.',
+    lede: 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro e um jogo independente no Apple Watch. Com a sessão do iCloud iniciada, um aparelho novo continua exatamente de onde o antigo parou: fase, moedas, sequência, coleção e tudo mais. Seu progresso fica no seu iCloud, não no nosso.',
+    platforms: 'Plataformas',
+    showcase: {
+      label: 'OutBrick no iPad e no iPhone', ipad: 'OutBrick no iPad: a tela inicial com Peach, Bloo e Sprout diante de um vilarejo de blocos.',
+      iphone: 'OutBrick no iPhone: um tabuleiro cheio na fase 214, com saídas coloridas ao redor.',
+      iphone2: 'OutBrick no iPhone: a coleção de cartas de blocos, com Bloo e Peach em suas versões do dia a dia, comemorando, pensando, douradas, noturnas e doces.',
+    },
+    widgets: { tag: 'Tela Bloqueada', title: 'Atividades ao Vivo e widgets', body: 'Atividades ao Vivo na Tela Bloqueada e na Dynamic Island, widgets para a Tela de Início e acessórios para a Tela Bloqueada, todos lendo o mesmo retrato compartilhado.', alt: 'Montagem de widgets do OutBrick para a Tela de Início: fase atual, bloco do dia, sequência, mascote do dia, capítulo e tabuleiro infinito.' },
+    gameCenter: { tag: 'Game Center', title: 'Classificações e 57 conquistas', body: 'Classificações de todos os tempos, cinquenta e sete conquistas e desafios para enviar a alguém que você realmente conhece.' },
+    messages: { tag: 'Mensagens', title: 'Figurinhas e desafios', body: 'Um app do iMessage com figurinhas e desafios que você pode enviar direto em uma conversa, sem ninguém sair do Mensagens.' },
+    colourBlind: { tag: 'Daltonismo', title: 'Três recursos para facilitar a leitura', body: 'O modo para daltonismo vem ativado por padrão e marca cada bloco e cada saída com um símbolo distinto, para que a cor nunca seja a única referência. Matiz, forma e pinos também transmitem a informação.', alt: 'Um tabuleiro de OutBrick no modo para daltonismo: cada cor de bloco tem seu próprio símbolo — losangos, quadrados, cruzes e estrelas — e cada saída tem o símbolo correspondente.' },
+    accessibility: { tag: 'Acessibilidade', title: 'Dá para jogar sem enxergar a tela', body: 'Cada bloco é um elemento do VoiceOver que informa cor, forma e posição, com uma ação para cada direção em que pode deslizar. Texto Maior funciona em todo o jogo e Reduzir Movimento é respeitado em toda parte, inclusive nesta página.' },
+    system: { tag: 'Sistema', title: 'Siri, Atalhos, Spotlight', body: 'Peça um tabuleiro à Siri, encontre um pelo Spotlight e continue a partida em outro aparelho exatamente de onde os blocos estavam.' },
+  },
+  close: { laneClear: 'Tabuleiro concluído', title: 'Conclua um tabuleiro. Avance mais um pouco.', lede: 'Offline, com uma mão, cerca de dois minutos por tabuleiro e sempre pronto para esperar num cantinho até você querer mover mais um bloco.' },
+};
+
 /* ======================================================================= ja */
 
 const ja: HomeCopy = {
@@ -1045,7 +1140,7 @@ const ja: HomeCopy = {
   },
 };
 
-export const homeCopy: Record<Locale, HomeCopy> = { en, fr, de, es, ja };
+export const homeCopy: Record<Locale, HomeCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
 
 // Keep current app facts separate from the classic browser demo below the hero.
 for (const locale of ['en', 'fr', 'de', 'es', 'ja'] as const) {

@@ -266,7 +266,7 @@ export async function runNotify(opts: { apiKey?: string; send?: Sender; limit?: 
     if (!sendable.length) continue;
 
     const first = sendable[0];
-    const locale = (['en', 'fr', 'de', 'es', 'ja'].includes(first.locale) ? first.locale : 'en') as CommunityLocale;
+    const locale = (['en', 'fr', 'de', 'es', 'ja', 'pt-BR'].includes(first.locale) ? first.locale : 'en') as CommunityLocale;
     const batches: { kind: 'welcome' | 'single' | 'group'; rows: Row[]; news: boolean }[] = [];
     for (const row of sendable.filter((r) => r.kind === 'welcome')) batches.push({ kind: 'welcome', rows: [row], news: false });
     for (const row of sendable.filter((r) => r.kind === 'moderation')) batches.push({ kind: 'single', rows: [row], news: false });

@@ -39,6 +39,15 @@ export function Flag({ locale, size = 22 }: { locale: Locale; size?: number }) {
           <circle cx="15" cy="10" r="6" fill="#bc002d" />
         </svg>
       );
+    case 'pt-BR':
+      return (
+        <svg {...common}>
+          <rect width="30" height="20" fill="#009739" />
+          <path d="M15 2 28 10 15 18 2 10Z" fill="#ffdf00" />
+          <circle cx="15" cy="10" r="4.8" fill="#002776" />
+          <path d="M10.6 8.3c2.8-.7 5.5-.4 8.3.8" fill="none" stroke="#fff" strokeWidth=".7" />
+        </svg>
+      );
     default:
       return (
         <svg {...common}>

@@ -1,4 +1,4 @@
-// Every word the emails say, in the site's five languages.
+// Every word the emails say, in the site's six languages.
 //
 // The voice is the site's: warm, plain, a brick friend at the counter rather than a ticket
 // system. Strings never contain markup; the templates add it, and values from a visitor reach
@@ -7,7 +7,7 @@
 // German follows the site: "Sie" throughout, except the affiliate email, which uses "du" as the
 // affiliate programme pages do.
 
-export const emailLocales = ['en', 'fr', 'de', 'es', 'ja'] as const;
+export const emailLocales = ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'] as const;
 export type EmailLocale = (typeof emailLocales)[number];
 
 export function isEmailLocale(value: unknown): value is EmailLocale {
@@ -517,4 +517,68 @@ const ja: EmailCopy = {
   },
 };
 
-export const emailCopy: Record<EmailLocale, EmailCopy> = { en, fr, de, es, ja };
+const ptBR: EmailCopy = {
+  logoAlt: 'OutBrick', signoff: 'Bloo e a equipe OutBrick', tagline: 'OutBrick: o quebra-cabeça de separar cores deslizando blocos',
+  links: { support: 'Suporte', privacy: 'Privacidade', appStore: 'App Store', careers: 'Carreiras', affiliates: 'Programa de afiliados' },
+  contact: {
+    subject: 'Recebemos sua mensagem — Suporte OutBrick',
+    preheader: 'Uma pessoa lê cada mensagem e responde por e-mail. Aqui está uma cópia do que você enviou.',
+    heading: (name) => name ? `Obrigado, ${name}! Sua mensagem chegou à equipe.` : 'Obrigado! Sua mensagem chegou à equipe.',
+    intro: 'Esta é uma mensagem rápida para confirmar que recebemos seu contato. Uma pessoa vai ler e responder por e-mail neste endereço, então não precisa enviar de novo.',
+    copyTitle: 'O que você enviou', topic: 'Assunto', message: 'Mensagem',
+    device: 'Uma informação que ajuda: se puder, responda com o modelo do seu dispositivo e a versão do iOS (Ajustes › Geral › Sobre). Assim conseguimos entender o que aconteceu.',
+    add: 'Quer acrescentar algo, como uma captura de tela? É só responder a este e-mail.',
+    meanwhile: 'Enquanto isso, talvez a página de suporte já tenha a resposta.', cta: 'Acessar a página de suporte',
+    why: 'Você recebeu este e-mail porque este endereço foi usado no formulário de contato em outbrick.site. Ele não adiciona você a nenhuma lista de e-mails.',
+  },
+  careers: {
+    subject: (role) => `Candidatura recebida: ${role} — OutBrick`, preheader: 'Obrigado por se candidatar. Uma pessoa lê cada candidatura.',
+    heading: (name) => name ? `Obrigado por se candidatar, ${name}.` : 'Obrigado por se candidatar.',
+    intro: (role) => `Sua candidatura para ${role} chegou à equipe OutBrick. Uma pessoa vai analisá-la e escrever para você neste endereço.`,
+    next: 'Se houver compatibilidade, a próxima etapa será uma breve chamada de vídeo.', role: 'Vaga', cta: 'Ver todas as vagas abertas',
+    why: 'Você recebeu este e-mail porque este endereço foi usado para se candidatar a uma vaga em outbrick.site.',
+  },
+  affiliate: {
+    subject: 'Candidatura ao programa de afiliados recebida — OutBrick',
+    preheader: 'Obrigado por se candidatar ao programa de afiliados da OutBrick. Uma pessoa vai analisar sua candidatura.',
+    heading: (name) => name ? `Obrigado por se candidatar, ${name}!` : 'Obrigado por se candidatar!',
+    intro: 'Sua candidatura ao programa de afiliados da OutBrick chegou à equipe. Uma pessoa vai analisá-la e responder por e-mail.',
+    code: 'Código sugerido', link: 'Seu link, após a aprovação',
+    wait: 'Não compartilhe o link até receber nossa confirmação: até lá, ele é apenas uma proposta e não gera ganhos. Se o código já estiver em uso, sugeriremos o código disponível mais parecido.',
+    cta: 'Ler os termos do programa',
+    why: 'Você recebeu este e-mail porque este endereço foi usado para se candidatar ao programa de afiliados em outbrick.site.',
+  },
+  confirm: {
+    subject: 'Confirme sua inscrição nas novidades da OutBrick', preheader: 'Um toque e pronto. O botão funciona por 7 dias.', eyebrow: 'Novidades da OutBrick',
+    heading: 'Confirme com um toque.',
+    intro: 'Alguém, esperamos que você, pediu para receber as novidades da OutBrick neste endereço: uma mensagem breve quando uma nova vila chegar à Jornada ou uma grande atualização for lançada, no máximo uma vez por mês.',
+    cta: 'Confirmar minha inscrição', expiry: 'O botão funciona por 7 dias. Se não funcionar, copie este link para o navegador:',
+    ignore: 'Não foi você que pediu? Ignore este e-mail e não enviaremos mais nada. Seu endereço só será adicionado à lista depois da confirmação.',
+    why: 'Você recebeu este e-mail porque este endereço foi informado no formulário da newsletter em outbrick.site.',
+  },
+  welcome: {
+    subject: 'Boas-vindas às novidades da OutBrick', preheader: 'Você está na lista. Veja o que esperar e como sair quando quiser.',
+    heading: 'Você está na lista!',
+    intro: 'Obrigado por confirmar. O Bloo já está acenando. A partir de agora, você receberá uma mensagem breve quando uma nova vila chegar à Jornada ou uma grande atualização for lançada.',
+    promises: [
+      { title: 'Novas vilas.', body: 'Para onde a estrada segue.' },
+      { title: 'Grandes atualizações.', body: 'O que mudou no tabuleiro e por quê, em palavras simples.' },
+      { title: 'No máximo uma vez por mês.', body: 'Só quando tivermos algo para contar.' },
+      { title: 'Sem spam.', body: 'Seu endereço será usado apenas para estas mensagens.' },
+    ],
+    cta: 'Ver as novidades', leave: 'Mudou de ideia? Todas as mensagens, inclusive esta, têm um link para cancelar a inscrição com um clique no final.',
+  },
+  news: {
+    eyebrow: 'Novidades da OutBrick',
+    why: 'Você recebeu este e-mail porque se inscreveu nas novidades da OutBrick em outbrick.site e confirmou seu endereço.',
+    unsubscribe: 'Cancelar inscrição', privacy: 'Política de privacidade', whatsNew: 'Novidades da OutBrick',
+    version: (v) => `Versão ${v}`, appStore: 'Baixar OutBrick na App Store', readMore: 'Leia mais',
+  },
+  unsubscribePage: {
+    title: 'Cancelar sua inscrição nas novidades da OutBrick?',
+    body: 'Clique no botão e este endereço deixará de receber as novidades da OutBrick. Você pode se inscrever novamente quando quiser.',
+    button: 'Cancelar inscrição', keep: 'Continuar na lista',
+  },
+};
+
+export const emailCopy: Record<EmailLocale, EmailCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };

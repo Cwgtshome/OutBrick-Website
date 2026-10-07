@@ -382,6 +382,82 @@
         "label": "App StoreでOutBrickを入手",
         "href": "https://apps.apple.com/jp/app/outbrick/id6807997465?mt=8&ct=web-email-newsletter"
       }
+    },
+    "pt-BR": {
+      "subject": "A Jornada é construída com blocos",
+      "preheader": "167 vilas, nenhum relógio e amigos que aparecem quando você os chama pelo nome.",
+      "hero": {
+        "eyebrow": "Novidades da OutBrick · outubro de 2026",
+        "title": "Um jogo mais desafiador em uma Jornada reconstruída com blocos.",
+        "body": "Vocês disseram que todas as fases eram fáceis demais. Tinham razão. Esta edição fala da atualização que começa a responder a isso e do caminho onde ela acontece.\n\nTodos os tabuleiros continuam **com solução comprovada**, e todos podem ser concluídos sem gastar nada.",
+        "image": {
+          "src": "/og/pt-BR.png",
+          "alt": "“Uma avenida construída com blocos. 2.000 tabuleiros · 167 vilas de blocos · nove amigos.” Bloo, Peach e Sprout ao lado de um iPhone com o mapa da Jornada",
+          "width": 1200,
+          "height": 630
+        }
+      },
+      "stories": [
+        {
+          "title": "167 vilas, bloco por bloco",
+          "body": "Nada no mapa é mais uma imagem pintada. As 167 vilas constroem o terreno, as estradas, os objetos e os pontos de referência com blocos enquanto você avança, a partir de 28 lugares projetados.",
+          "image": {
+            "src": "/assets/friends/bloo.png",
+            "alt": "Bloo, o amigo azul de blocos, usando um relógio de bolso",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Conheça as vilas",
+            "href": "/pt-BR/whats-new"
+          }
+        },
+        {
+          "title": "Nenhum relógio por aqui",
+          "body": "O modo Rush foi removido do jogo inteiro. Nada em OutBrick é cronometrado: o limite de movimentos de cada tabuleiro é a única restrição.",
+          "image": {
+            "src": "/assets/friends/peach.png",
+            "alt": "Peach, a amiga cor de pêssego, sorrindo",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Como funcionam os tabuleiros",
+            "href": "/pt-BR/play"
+          }
+        },
+        {
+          "title": "Chame um amigo pelo nome",
+          "body": "A Siri e os Atalhos podem trazer qualquer um dos nove amigos de blocos para o palco inicial pelo nome.",
+          "image": {
+            "src": "/assets/friends/sprout.png",
+            "alt": "Sprout, o amigo verde de blocos, com uma muda na cabeça",
+            "width": 360,
+            "height": 360
+          },
+          "link": {
+            "label": "Conheça os nove amigos",
+            "href": "/pt-BR/mascots"
+          }
+        }
+      ],
+      "release": {
+        "version": "4.2",
+        "title": "Um jogo mais desafiador em uma Jornada reconstruída com blocos.",
+        "items": [
+          "1.301 dos 2.000 tabuleiros ganharam novos layouts, reconstruídos com um padrão que aumenta a cada capítulo.",
+          "Portões com contador e portões congelados agora são fáceis de distinguir.",
+          "O texto secundário em painéis escuros está mais claro, com contraste medido acima de 4,5:1."
+        ],
+        "link": {
+          "label": "Leia todas as notas da versão",
+          "href": "/pt-BR/whats-new"
+        }
+      },
+      "cta": {
+        "label": "Baixar OutBrick na App Store",
+        "href": "https://apps.apple.com/br/app/outbrick/id6807997465?mt=8&ct=web-email-newsletter"
+      }
     }
   }
 }

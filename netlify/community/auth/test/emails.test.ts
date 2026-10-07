@@ -120,7 +120,7 @@ void describe('community emails', () => {
     assert.match(html, /T &lt;b&gt;/);
   });
 
-  void test('every sample registered for the preview build renders in five languages', () => {
+  void test('every sample registered for the preview build renders in six languages', () => {
     const issue = { id: 'x', name: 'x', locales: {} };
     for (const name of communityTemplateNames) for (const locale of emailLocales) checkShell(renderSample(name, locale, issue).html, locale);
   });

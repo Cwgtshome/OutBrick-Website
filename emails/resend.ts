@@ -137,6 +137,7 @@ export async function unsubscribeContact(apiKey: string, email: string): Promise
 /** The newsletter segment, plus an optional per-language segment (RESEND_SEGMENT_ID_FR …). */
 export function newsletterSegments(env: Record<string, string | undefined>, locale: string): string[] {
   const main = env.RESEND_SEGMENT_ID ?? env.RESEND_AUDIENCE_ID ?? '';
-  const perLanguage = env[`RESEND_SEGMENT_ID_${locale.toUpperCase()}`] ?? '';
+  const segmentSuffix: Record<string, string> = { 'pt-BR': 'PT_BR' };
+  const perLanguage = env[`RESEND_SEGMENT_ID_${segmentSuffix[locale] ?? locale.toUpperCase()}`] ?? '';
   return [...new Set([main, perLanguage].filter(Boolean))];
 }

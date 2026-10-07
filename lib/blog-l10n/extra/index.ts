@@ -44,6 +44,19 @@ import { ja8 } from './ja-8.ts';
 import { ja9 } from './ja-9.ts';
 import { ja10 } from './ja-10.ts';
 import { ja11 } from './ja-11.ts';
+import { ptBR1 } from './pt-BR-1.ts';
+import { ptBR2 } from './pt-BR-2.ts';
+import { ptBR3 } from './pt-BR-3.ts';
+import { ptBR4a } from './pt-BR-4a.ts';
+import { ptBR4b } from './pt-BR-4b.ts';
+import { ptBR5 } from './pt-BR-5.ts';
+import { ptBR6 } from './pt-BR-6.ts';
+import { ptBR6Rest } from './pt-BR-6-rest.ts';
+import { ptBR7 } from './pt-BR-7.ts';
+import { ptBR8 } from './pt-BR-8.ts';
+import { ptBR9 } from './pt-BR-9.ts';
+import { ptBR10 } from './pt-BR-10.ts';
+import { ptBR11 } from './pt-BR-11.ts';
 
 /** The journal batches' translations, one file per language and batch. */
 export const extraGuides: Record<TranslatedLocale, ExtraGuides> = {
@@ -51,4 +64,5 @@ export const extraGuides: Record<TranslatedLocale, ExtraGuides> = {
   de: { ...de1, ...de2, ...de3, ...de4, ...de5, ...de6, ...de7, ...de8, ...de9, ...de10, ...de11 },
   es: { ...es1, ...es2, ...es3, ...es4, ...es5, ...es6, ...es7, ...es8, ...es9, ...es10, ...es11 },
   ja: { ...ja1, ...ja2, ...ja3, ...ja4, ...ja5, ...ja6, ...ja7, ...ja8, ...ja9, ...ja10, ...ja11 },
+  'pt-BR': { ...ptBR1, ...ptBR2, ...ptBR3, ...ptBR4a, ...ptBR4b, ...ptBR5, ...ptBR6, ...ptBR6Rest, ...ptBR7, ...ptBR8, ...ptBR9, ...ptBR10, ...ptBR11 },
 };

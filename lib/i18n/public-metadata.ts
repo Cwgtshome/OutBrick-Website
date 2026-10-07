@@ -70,6 +70,32 @@ const copy: Record<TranslatedLocale, Record<string, Snippet>> = {
     '/newsletter': { description: 'Recibe noticias y actualizaciones del juego OutBrick. Elige tu idioma y consulta cómo se utilizan tus datos para enviarte el boletín.' },
     '/research': { description: 'Explora las fuentes de investigación del diario de OutBrick sobre puzles y juego. Consulta estudios, referencias y los límites de sus conclusiones.' },
   },
+  'pt-BR': {
+    '/about': { title: 'Sobre OutBrick: quem cria e por quê', description: 'Conheça OutBrick e seu criador: um quebra-cabeça de blocos deslizantes com regras claras, partidas curtas e um mundo em expansão.' },
+    '/accessibility': { title: 'Acessibilidade no OutBrick: símbolos e VoiceOver', description: 'Conheça os símbolos, o VoiceOver e os ajustes de movimento do OutBrick, além dos limites atuais e de como pedir ajuda com acessibilidade.' },
+    '/age-rating': { title: 'Classificação etária do OutBrick', description: 'Consulte a classificação etária do OutBrick e as informações disponíveis na App Store para famílias.' },
+    '/affiliates': { title: 'Programa de afiliados do OutBrick', description: 'Veja como funcionam a atribuição, as comissões e as regras do programa de afiliados do OutBrick. Envie sua inscrição e conte como pretende divulgar o jogo.' },
+    '/authors/mourad-hamdi': { description: 'Mourad Hamdi, criador do OutBrick, escreve sobre design de quebra-cabeças e jogos no dia a dia. Leia seus artigos no diário do OutBrick.' },
+    '/authors/outbrick-editorial': { description: 'A equipe editorial do OutBrick explora quebra-cabeças, design de jogos e hábitos de jogo. Artigos com afirmações de pesquisa informam suas fontes.' },
+    '/blog/category/player-habits': { description: 'Artigos do OutBrick sobre hábitos de jogo: partidas curtas, rotinas, atenção e pausas. Afirmações de pesquisa citam suas fontes.' },
+    '/careers': { description: 'Conheça as vagas remotas do OutBrick em engenharia, design, marketing e comunidade. Consulte as responsabilidades, os requisitos e como se candidatar.' },
+    '/careers/ai-ml-engineer': { title: 'Engenharia de IA e ML — vaga remota no OutBrick', description: 'Trabalhe remotamente na geração de fases e nos solucionadores do OutBrick. Veja as responsabilidades, os requisitos e como se candidatar.' },
+    '/careers/community-social-media-manager': { title: 'Comunidade e redes sociais — vaga no OutBrick', description: 'Cuide da comunidade e das redes sociais do OutBrick em uma vaga remota. Veja as responsabilidades, os requisitos e como se candidatar.' },
+    '/careers/content-marketing-lead': { title: 'Marketing de conteúdo — vaga no OutBrick', description: 'Desenvolva o conteúdo e a comunicação do OutBrick em uma vaga remota. Conheça as responsabilidades, os requisitos e como se candidatar.' },
+    '/careers/growth-aso-specialist': { title: 'Crescimento e ASO — vaga remota no OutBrick', description: 'Trabalhe com crescimento e otimização da App Store para o OutBrick. Veja as responsabilidades, os requisitos e como se candidatar.' },
+    '/careers/player-experience-designer': { title: 'Design de experiência do jogador — vaga no OutBrick', description: 'Projete a experiência de jogo do OutBrick em uma vaga remota. Consulte as responsabilidades, os requisitos de design e como se candidatar.' },
+    '/contact': { title: 'Fale com a equipe da OutBrick', description: 'Entre em contato com o OutBrick sobre suporte, compras, privacidade, imprensa ou parcerias. Escolha um assunto para encaminhar sua pergunta à equipe certa.' },
+    '/creators': { title: 'Kit para criadores do OutBrick: ideias, imagens e orientações', description: 'Encontre ideias, imagens, hashtags e orientações de marca para criar conteúdo sobre o OutBrick.' },
+    '/mascots/bloo': { title: 'Bloo: coragem depois do tropeço — OutBrick' },
+    '/mascots/peach': { title: 'Peach e seus planos alternativos — história do OutBrick' },
+    '/mascots/sprout': { title: 'Sprout: cada bloco traz uma pergunta — OutBrick' },
+    '/newsletter': { description: 'Receba notícias e atualizações do jogo OutBrick. Escolha seu idioma e saiba como seus dados são usados para enviar o boletim.' },
+    '/press-kit': { title: 'Kit de imprensa do OutBrick: logotipos, imagens e ficha técnica' },
+    '/privacy': { title: 'Privacidade no OutBrick: dados, anúncios e suas escolhas', description: 'A política de privacidade do OutBrick explica quais dados são tratados, como funcionam os anúncios e as opções disponíveis para você.' },
+    '/privacy-choices': { description: 'Consulte suas opções de privacidade no OutBrick, incluindo consentimento para anúncios e solicitações sobre seus dados.' },
+    '/refunds': { title: 'Compras e reembolsos no OutBrick', description: 'Saiba como solicitar um reembolso de uma compra do OutBrick pela Apple e como restaurar compras elegíveis.' },
+    '/support': { description: 'Encontre respostas sobre como jogar OutBrick, o desafio diário e a restauração de compras. Se precisar de ajuda, fale com o suporte.' },
+  },
   ja: {
     '/age-rating': { description: 'OutBrickの年齢レーティングと対象年齢について確認できます。保護者向けの案内と、App Storeで確認できる情報を紹介します。' },
     '/authors/mourad-hamdi': { description: 'OutBrickの制作者Mourad Hamdiによる記事を紹介。パズルの設計や日常の遊びを、制作の経験と参照資料をもとに考えます。' },
@@ -86,6 +112,7 @@ const distinctTags: Record<TranslatedLocale, Record<string,string>> = {
   de: { 'gaming-habits':'Spielgewohnheiten', 'player-habits':'Gewohnheiten der Spieler' },
   es: { 'gaming-habits':'hábitos de juego', 'player-habits':'hábitos de los jugadores', 'mobile-games':'juegos móviles', 'mobile-gaming':'jugar en el móvil' },
   ja: { 'mobile-games':'モバイルゲーム', 'mobile-gaming':'モバイルで遊ぶこと' },
+  'pt-BR': { 'gaming-habits':'hábitos de jogo', 'player-habits':'hábitos dos jogadores', 'mobile-games':'jogos para celular', 'mobile-gaming':'jogos mobile' },
 };
 
 export function publicMetadataSnippet(path: string, locale: TranslatedLocale): Snippet | undefined {
@@ -95,11 +122,12 @@ export function publicMetadataSnippet(path: string, locale: TranslatedLocale): S
     if(!tag)return;
     const label=distinctTags[locale][slug] ?? journalTextTranslations(locale)[tag.label] ?? tag.label;
     const n=tag.articles.length;
-    const snippets={
+  const snippets={
       fr: { title:`${label} : articles — Journal OutBrick`, description:`${n} articles du journal OutBrick : ${label}. Idées et expériences de jeu, avec des sources pour les affirmations de recherche.` },
       de: { title:`${label}: Artikel — OutBrick-Journal`, description:`${n} Artikel im OutBrick-Journal zu ${label}. Entdecken Sie Ideen und Spielerfahrungen; Forschungsaussagen nennen ihre Quellen.` },
-      es: { title:`${label}: artículos — Diario OutBrick`, description:`${n} artículos del diario de OutBrick sobre ${label}. Ideas y experiencias de juego, con fuentes para las afirmaciones de investigación.` },
-      ja: { title:`「${label}」の記事 — OutBrickジャーナル`, description:`${label}に関するOutBrickジャーナルの記事${n}本。遊びやデザインの考え方を探ります。研究に関する主張は出典を示しています。` },
+    es: { title:`${label}: artículos — Diario OutBrick`, description:`${n} artículos del diario de OutBrick sobre ${label}. Ideas y experiencias de juego, con fuentes para las afirmaciones de investigación.` },
+    ja: { title:`「${label}」の記事 — OutBrickジャーナル`, description:`${label}に関するOutBrickジャーナルの記事${n}本。遊びやデザインの考え方を探ります。研究に関する主張は出典を示しています。` },
+    'pt-BR': { title:`${label}: artigos — Diário OutBrick`, description:`${n} artigos do diário do OutBrick sobre ${label}. Ideias e experiências de jogo, com fontes para afirmações de pesquisa.` },
     };
     return snippets[locale];
   }
@@ -128,7 +156,7 @@ export function withPublicSchemaSnippets(value: unknown, locale: TranslatedLocal
   const types=Array.isArray(node['@type'])?node['@type']:[node['@type']];
   const nodeUrl=typeof node.url==='string'?node.url:typeof node['@id']==='string'?node['@id']:'';
   if(types.includes('NewsArticle') && nodeUrl && new URL(nodeUrl,'https://www.outbrick.site').pathname===`/${locale}/press/outbrick-4-2`) {
-    result.headline={fr:'OutBrick 4.2 arrive sur l’App Store',de:'OutBrick 4.2 ist im App Store erhältlich',es:'OutBrick 4.2 llega al App Store',ja:'OutBrick 4.2がApp Storeに登場'}[locale];
+    result.headline={fr:'OutBrick 4.2 arrive sur l’App Store',de:'OutBrick 4.2 ist im App Store erhältlich',es:'OutBrick 4.2 llega al App Store',ja:'OutBrick 4.2がApp Storeに登場','pt-BR':'OutBrick 4.2 chega à App Store'}[locale];
   }
   if(types.some(type=>['WebPage','CollectionPage','AboutPage','ContactPage','BlogPosting'].includes(String(type)))&&typeof node.url==='string') {
     const path=new URL(node.url,'https://www.outbrick.site').pathname;

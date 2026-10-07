@@ -482,7 +482,7 @@ export const es: Record<string, string> = {
   "See all nine on the home page": "Ver los nueve en el inicio",
   "Download the renders": "Descargar las imágenes renderizadas",
   "The OutBrick newsletter: new villages and big updates": "El boletín de OutBrick: pueblos nuevos y grandes novedades",
-  "One short email when OutBrick opens a new village or ships a big update, about once a month. No spam, five languages, unsubscribe any time.": "Un correo breve cuando OutBrick abre un pueblo nuevo o publica una gran actualización, aproximadamente una vez al mes. Sin spam, cinco idiomas y baja en cualquier momento.",
+  "One short email when OutBrick opens a new village or ships a big update, about once a month. No spam, six languages, unsubscribe any time.": "Un correo breve cuando OutBrick abre un pueblo nuevo o publica una gran actualización, aproximadamente una vez al mes. Sin spam, seis idiomas y baja en cualquier momento.",
   "New villages": "Pueblos nuevos",
   "When the Journey grows, you hear where the road goes next.": "Cuando crece el Viaje, sabes adónde lleva después el camino.",
   "Big updates": "Grandes actualizaciones",

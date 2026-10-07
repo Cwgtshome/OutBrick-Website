@@ -4,6 +4,7 @@ import { localizedAsset } from './assets';
 import { localeUrl, storefronts, type Locale } from './locales';
 
 const captions = {
+  'pt-BR': ['OutBrick no iPhone: tela inicial com três amigos de blocos', 'OutBrick no iPhone: tabuleiro cheio com portais coloridos ao redor', 'OutBrick no iPhone: tabuleiro de formato especial com chaves, fechaduras e caixas', 'OutBrick no iPhone: coleção de cartas de blocos', 'OutBrick no iPad: tela inicial diante de um vilarejo de blocos', 'OutBrick no iPad: tabuleiro durante uma partida'],
   fr: ['OutBrick sur iPhone : l’écran d’accueil avec trois amis en briques', 'OutBrick sur iPhone : un plateau bien rempli, entouré de portes colorées', 'OutBrick sur iPhone : un plateau de forme particulière avec des clés, des serrures et des caisses', 'OutBrick sur iPhone : la collection de cartes de briques', 'OutBrick sur iPad : l’écran d’accueil devant un village en briques', 'OutBrick sur iPad : un plateau en cours de jeu'],
   de: ['OutBrick auf dem iPhone: der Startbildschirm mit drei Steinfreunden', 'OutBrick auf dem iPhone: ein dicht gefülltes Spielfeld mit farbigen Toren am Rand', 'OutBrick auf dem iPhone: ein geformtes Spielfeld mit Schlüsseln, Schlössern und Kisten', 'OutBrick auf dem iPhone: die Sammlung der Steinkarten', 'OutBrick auf dem iPad: der Startbildschirm vor einem Dorf aus Bausteinen', 'OutBrick auf dem iPad: ein Spielfeld während des Spiels'],
   es: ['OutBrick en iPhone: la pantalla de inicio con tres amigos de bloques', 'OutBrick en iPhone: un tablero lleno con puertas de colores alrededor del marco', 'OutBrick en iPhone: un tablero con una forma especial, llaves, cerraduras y cajas', 'OutBrick en iPhone: la colección de tarjetas de bloques', 'OutBrick en iPad: la pantalla de inicio frente a un pueblo de bloques', 'OutBrick en iPad: un tablero en juego'],
@@ -11,6 +12,7 @@ const captions = {
 };
 const screenshotFiles = ['iphone-home.png', 'iphone-board.png', 'iphone-board-shaped.png', 'iphone-collection.png', 'ipad-home.png', 'ipad-board.png'];
 const labels = {
+  'pt-BR': { puzzle: 'Jogo de quebra-cabeça', casual: 'Jogo casual', free: 'grátis', later: 'ou posterior' },
   fr: { puzzle: 'Jeu de casse-tête', casual: 'Jeu occasionnel', free: 'gratuit', later: 'ou version ultérieure' },
   de: { puzzle: 'Rätselspiel', casual: 'Gelegenheitsspiel', free: 'kostenlos', later: 'oder neuer' },
   es: { puzzle: 'Juego de puzles', casual: 'Juego informal', free: 'gratis', later: 'o posterior' },

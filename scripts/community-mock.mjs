@@ -263,9 +263,9 @@ async function resolve(pathname) {
   const found = (await file(`${base}.html`)) ?? (await file(join(base, 'index.html'))) ?? (await file(base));
   if (found) return found;
   // netlify.toml: /community/* and /<locale>/community/* are served from the language's shell.
-  const community = pathname.match(/^(?:\/(fr|de|es|ja))?\/community\//);
+  const community = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/community\//);
   if (community) return join(root, community[1] ? `${community[1]}/community.html` : 'community.html');
-  const challenge = pathname.match(/^(?:\/(fr|de|es|ja))?\/c\//);
+  const challenge = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/c\//);
   if (challenge) return join(root, challenge[1] ? `${challenge[1]}/c.html` : 'c.html');
   return null;
 }
@@ -340,7 +340,7 @@ createServer(async (req, res) => {
 
     const found = await resolve(pathname);
     if (!found) {
-      const locale = pathname.match(/^\/(fr|de|es|ja)(?:\/|$)/)?.[1];
+      const locale = pathname.match(/^\/(fr|de|es|ja|pt-BR)(?:\/|$)/)?.[1];
       res.writeHead(404, { 'content-type': 'text/html; charset=utf-8' });
       return res.end(await readFile(join(root, locale ? `${locale}/404.html` : '404.html')));
     }

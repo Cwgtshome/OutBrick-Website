@@ -303,4 +303,29 @@ const ja: ChromeCopy = {
   language: '言語',
 };
 
-export const chromeCopy: Record<Locale, ChromeCopy> = { en, fr, de, es, ja };
+const ptBR: ChromeCopy = {
+  skip: 'Pular para o conteúdo',
+  backToTop: ' — voltar ao topo',
+  sections: 'Seções',
+  primaryNav: 'Navegação principal',
+  menu: 'Navegação',
+  menuLabel: (label) => `Abrir ${label.toLowerCase()}`,
+  menuPanelLabel: (label) => `${label} (navegação)`,
+  badgeLabel: 'Baixar OutBrick na App Store',
+  badgeAlt: 'Baixar na App Store',
+  homeNav: ['A regra', 'A Jornada', 'Os amigos', 'Quanto custa', 'Feito para Apple'],
+  editorialNav: ['O jogo', 'Diário', 'Mascotes', 'Imprensa', 'Sobre', 'Autores', 'Pesquisa', 'Comunidade', 'Suporte'],
+  footer: {
+    blurb: 'OutBrick: Block Sort Puzzle. Combine blocos e cumpra objetivos. Grátis na App Store.',
+    game: 'O jogo', download: 'Baixar na App Store', journey: 'A Jornada', friends: 'Os nove amigos', costs: 'Quanto custa',
+    playGuide: 'Guia de jogo', whatsNew: 'Novidades', daily: 'Tabuleiro diário', journal: 'Diário', pressKit: 'Kit de imprensa',
+    help: 'Ajuda e informações legais', support: 'Suporte', community: 'Comunidade', privacy: 'Política de privacidade',
+    privacyChoices: 'Opções de privacidade', terms: 'Termos', license: 'Contrato de licença', eula: 'EULA da Apple',
+    age: 'Classificação etária', accessibility: 'Acessibilidade', refunds: 'Reembolsos e compras', contact: 'Contato',
+    company: 'Empresa', pressRoom: 'Sala de imprensa', creators: 'Criadores', affiliates: 'Afiliados', careers: 'Carreiras',
+    legal: '© 2026 OutBrick. Apple, o logotipo da Apple, iPhone, iPad, Mac, Apple TV, Apple Watch e Apple Vision Pro são marcas registradas da Apple Inc. nos Estados Unidos e em outros países e regiões. App Store é uma marca de serviço da Apple Inc.',
+  },
+  language: 'Idioma',
+};
+
+export const chromeCopy: Record<Locale, ChromeCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };

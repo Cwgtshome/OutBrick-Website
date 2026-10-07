@@ -7,15 +7,16 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright')
 const outDir = fileURLToPath(new URL('../outputs/', import.meta.url));
 fs.mkdirSync(outDir, { recursive: true });
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
-const locales = ['en', 'fr', 'de', 'es', 'ja'];
+const locales = ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'];
 const editorialLabels = {
   en: ['The game','Journal','Mascots','Press','About','Authors','Research','Community','Support'],
   fr: ['Le jeu','Journal','Mascottes','Presse','À propos','Auteurs','Recherche','Communauté','Assistance'],
   de: ['Das Spiel','Journal','Maskottchen','Presse','Über uns','Autoren','Forschung','Community','Hilfe'],
   es: ['El juego','Revista','Mascotas','Prensa','Quiénes somos','Autores','Investigación','Comunidad','Soporte'],
   ja: ['ゲーム','記事','マスコット','プレス','OutBrickについて','著者','リサーチ','コミュニティ','サポート'],
+  'pt-BR': ['O jogo','Diário','Mascotes','Imprensa','Sobre','Autores','Pesquisa','Comunidade','Suporte'],
 };
-const breadcrumbLabels = { en: 'Breadcrumb', fr: 'Fil d’Ariane', de: 'Brotkrumennavigation', es: 'Ruta de navegación', ja: 'パンくずリスト' };
+const breadcrumbLabels = { en: 'Breadcrumb', fr: 'Fil d’Ariane', de: 'Brotkrumennavigation', es: 'Ruta de navegación', ja: 'パンくずリスト', 'pt-BR': 'Navegação estrutural' };
 const editorialRoutes = ['/', '/blog', '/mascots', '/press', '/about', '/authors', '/research', '/community', '/support'];
 const firstUndoRule = {
   fr:'Sur chaque plateau, la première annulation est gratuite et ne consomme pas votre réserve.',
@@ -24,7 +25,7 @@ const firstUndoRule = {
   ja:'各盤面では最初の1回の「元に戻す」が無料で、ストックを消費しません。',
 };
 async function verifyChrome(page, locale) {
-  if(locale !== 'en' && new URL(page.url()).pathname.match(/^\/(fr|de|es|ja)\/c(?:\/|$)/)) {
+  if(locale !== 'en' && new URL(page.url()).pathname.match(/^\/(fr|de|es|ja|pt-BR)\/c(?:\/|$)/)) {
     const appCopy=await page.locator('.challenge .lede,.challenge .facts,.grid.g3 .card:nth-child(2) p').allTextContents();
     assert.ok(appCopy.join(' ').includes(firstUndoRule[locale]), `${locale}: first undo consumes no reserve`);
     assert.doesNotMatch(appCopy.join(' '), /sans limite|unbegrenzt|ilimitada|何度でも/);
@@ -39,14 +40,14 @@ async function verifyChrome(page, locale) {
     assert.equal(await crumbs.getAttribute('aria-label'), breadcrumbLabels[locale], `${locale}: breadcrumb accessible label`);
   }
 }
-const flagColours = { en: '#012169', fr: '#0055a4', de: '#dd0000', es: '#aa151b', ja: '#bc002d' };
+const flagColours = { en: '#012169', fr: '#0055a4', de: '#dd0000', es: '#aa151b', ja: '#bc002d', 'pt-BR': '#009739' };
 function verifyFlags(links) {
   for (const link of links) assert.ok(link.flag.includes(flagColours[link.locale]), `Incorrect flag for ${link.locale}`);
 }
 const routes = ['/', '/blog', '/blog/designing-for-real-life-play', '/blog/category/inclusive-design', '/blog/tag/mobile-games', '/authors/mourad-hamdi', '/careers/content-marketing-lead', '/mascots', '/mascots/bloo', '/about', '/press', '/press/outbrick-4-2', '/press-kit', '/creators', '/whats-new', '/play/result/1-3', '/play/result/17-3', '/daily', '/c', '/c/42', '/privacy', '/contact/thanks', '/affiliates/thanks', '/careers/thanks', '/newsletter/thanks'];
 const localized = (locale, route) => locale === 'en' ? route : `/${locale}${route === '/' ? '' : route}`;
 const evidence = { base, matrix: [], clicks: [], internalNavigation: [], noScriptLanguages: [], notFound: [], editorialCurrent: [], errors: [] };
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}) });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
 page.on('pageerror', error => evidence.errors.push(error.message));
@@ -95,16 +96,16 @@ try {
       const html = await page.content();
       const renderedCopy = [...extractRenderedCopy(html, {localized:locale !== 'en'}), ...extractMetadataCopy(html)];
       if(locale === 'en') englishCopy = renderedCopy;
-      else assert.deepEqual(findCarryovers(englishCopy, renderedCopy, locale), [], `${locale}${route}: hydrated English carryover`);
+      else assert.deepEqual(findCarryovers(englishCopy, renderedCopy, locale).filter(item => item.text !== 'Português (Brasil)'), [], `${locale}${route}: hydrated English carryover`);
       const links = await languageLinks();
-      assert.equal(links.length, 5);
+      assert.equal(links.length, locales.length);
       for (const target of locales) {
         const url = new URL(links.find(link => link.locale === target)?.href ?? '');
         assert.equal(url.pathname, localized(target, route));
         assert.equal(url.search, new URL(`${base}${suffix}`).search);
         assert.equal(url.hash, '#main');
       }
-      evidence.matrix.push({ route, locale, targets: 5, queryHashPreserved: true });
+      evidence.matrix.push({ route, locale, targets: locales.length, queryHashPreserved: true });
     }
   }
   for (const [route, from, to] of [['/c', 'fr', 'de'], ['/c/42', 'de', 'ja'], ['/privacy', 'es', 'fr'], ['/blog/designing-for-real-life-play', 'ja', 'es']]) {

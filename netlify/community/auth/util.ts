@@ -34,11 +34,11 @@ export function asLocale(value: unknown, fallback: CommunityLocale = 'en'): Comm
 
 /** The language a /fr/community/... path is in. */
 export function localeOfPath(path: string): CommunityLocale {
-  const m = /^\/(fr|de|es|ja)\//.exec(path);
+  const m = /^\/(fr|de|es|ja|pt-BR)\//.exec(path);
   return m ? (m[1] as CommunityLocale) : 'en';
 }
 
-const COMMUNITY_PATH = /^\/(?:(?:fr|de|es|ja)\/)?community(?:[/?#]|$)/;
+const COMMUNITY_PATH = /^\/(?:(?:fr|de|es|ja|pt-BR)\/)?community(?:[/?#]|$)/;
 
 /**
  * A same-site path inside the community, or null. Absolute URLs, protocol-relative `//host`,

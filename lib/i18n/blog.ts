@@ -24,12 +24,17 @@ import { de } from '../blog-l10n/de.ts';
 import { es } from '../blog-l10n/es.ts';
 import { fr } from '../blog-l10n/fr.ts';
 import { ja } from '../blog-l10n/ja.ts';
+import { ptBRCore1 } from '../blog-l10n/pt-BR-core-1.ts';
+import { ptBRJournalUi } from '../blog-l10n/pt-BR-ui.ts';
 import { extraGuides } from '../blog-l10n/extra/index.ts';
 import { remainingFr } from '../blog-l10n/remaining/fr.ts';
 import { remainingDe } from '../blog-l10n/remaining/de.ts';
 import { remainingEs } from '../blog-l10n/remaining/es.ts';
 import { remainingJa } from '../blog-l10n/remaining/ja.ts';
-const remainingGuides = { fr: remainingFr, de: remainingDe, es: remainingEs, ja: remainingJa };
+import { remainingPtBRA } from '../blog-l10n/remaining/pt-BR-a.ts';
+import { remainingPtBRB } from '../blog-l10n/remaining/pt-BR-b.ts';
+import { remainingPtBRc } from '../blog-l10n/remaining/pt-BR-c.ts';
+const remainingGuides: Record<TranslatedLocale, ExtraGuides> = { fr: remainingFr, de: remainingDe, es: remainingEs, ja: remainingJa, 'pt-BR': { ...remainingPtBRA, ...remainingPtBRB, ...remainingPtBRc } };
 import { siteUrl } from '../site.ts';
 import { localizedAsset } from './assets.ts';
 import type { Locale, TranslatedLocale } from './locales.ts';
@@ -120,7 +125,7 @@ export type LocaleGuides = { [S in GuideSlug]: GuideTranslation<S> };
 export type ExtraGuideTranslation = Omit<GuideTranslation<GuideSlug>, 'sections'> & { sections: Record<string, SectionTranslation> };
 export type ExtraGuides = Record<string, ExtraGuideTranslation>;
 
-const guides: Record<TranslatedLocale, LocaleGuides> = { fr, de, es, ja };
+const guides: Record<TranslatedLocale, LocaleGuides> = { fr, de, es, ja, 'pt-BR': ptBRCore1 as LocaleGuides };
 
 /* ------------------------------------------------------------------ UI words */
 
@@ -530,7 +535,7 @@ const jaUi: JournalUi = {
   },
 };
 
-export const journalUi: Record<Locale, JournalUi> = { en, fr: frUi, de: deUi, es: esUi, ja: jaUi };
+export const journalUi: Record<Locale, JournalUi> = { en, fr: frUi, de: deUi, es: esUi, ja: jaUi, 'pt-BR': ptBRJournalUi };
 
 /* ------------------------------------------------------------------ paths */
 
@@ -642,6 +647,6 @@ assertCompleteArticleTranslations();
 
 // The live product card on every journal article follows the released app,
 // while dated editorial text and its sources remain historical.
-for (const locale of ['en', 'fr', 'de', 'es', 'ja'] as const) {
+for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'] as const) {
   journalUi[locale].gameNoteBody = currentGameCopy[locale].summary;
 }

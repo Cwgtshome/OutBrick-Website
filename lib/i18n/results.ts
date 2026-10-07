@@ -29,6 +29,12 @@ const copy: Record<TranslatedLocale, ResultCopy> = {
     line:(n,t,s)=>s===3?`誰かが「${n}」を「戻す」なしで${t}手でクリアしました。次はあなたの番です。`:s===2?`誰かが「${n}」を${t}手でクリアしました。「戻す」なしでできますか？`:`誰かが「${n}」をクリアしました。今度は${t}手で挑戦しましょう。`,
     alt:(b,n,t,s)=>`OutBrickのステージ${b}「${n}」を星3個中${s}個でクリア。目標は${t}手。`,
   },
+  'pt-BR': {
+    title:(b,s)=>`Concluí o tabuleiro ${b} de OutBrick com ${s} ${s===1?'estrela':'estrelas'}`,
+    description:(b,n,t,s)=>`Tabuleiro ${b}, ${n}, concluído ${s===3?`em ${t} movimentos sem desfazer`:s===2?`em ${t} movimentos, exatamente na meta`:`com alguns movimentos a mais que a meta de ${t}`}: ${s} ${s===1?'estrela':'estrelas'}. Jogue o mesmo tabuleiro grátis no navegador e encontre outros 2.000 em OutBrick na App Store.`,
+    line:(n,t,s)=>s===3?`Alguém concluiu ${n} em ${t} movimentos sem desfazer. Agora é sua vez.`:s===2?`Alguém concluiu ${n} em ${t} movimentos. Você consegue sem desfazer?`:`Alguém concluiu ${n}. Tente agora em ${t} movimentos.`,
+    alt:(b,n,t,s)=>`Tabuleiro ${b} de OutBrick, ${n}, concluído com ${s} de 3 estrelas. Meta: ${t} movimentos.`,
+  },
 };
 export function localizedResult(result: BoardResult, locale: TranslatedLocale): BoardResult {
   const level = boardLevels[result.levelIndex];

@@ -3,9 +3,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { decodeEntities, distDir, fileToRoute, listHtmlFiles, metaContent, readNetlifyRedirects, repoRoot, siteUrl } from './lib/pages.mjs';
-const locales=['fr','de','es','ja'];
+const locales=['fr','de','es','ja','pt-BR'];
 const { chromeCopy } = await import('../lib/i18n/chrome.ts');
-const breadcrumbLabels = {fr:'Fil d’Ariane',de:'Brotkrumennavigation',es:'Ruta de navegación',ja:'パンくずリスト'};
+const breadcrumbLabels = {fr:'Fil d’Ariane',de:'Brotkrumennavigation',es:'Ruta de navegación',ja:'パンくずリスト','pt-BR':'Navegação estrutural'};
 const editorialRoutes=['/','/blog','/mascots','/press','/about','/authors','/research','/community','/support'];
 const publicPages=(await import('../lib/i18n/public-pages.ts')).publicPages;
 const inventory=JSON.parse(fs.readFileSync(path.join(repoRoot,'lib/i18n/public-source-inventory.json'),'utf8'));
@@ -23,7 +23,7 @@ const manifests=[];
 const publicRoots=new Set(['about','accessibility','accessibility-support','affiliates','age-rating','age-suitability','authors','blog','c','careers','contact','creators','daily','eula','eula-apple','license','license-agreement','mascots','newsletter','play','press','press-kit','privacy','privacy-choices','privacy-policy','refund','refunds','research','support','community','terms','whats-new']);
 const noindexEvidence=[];
 const schemaLanguages=[];
-const englishRoutes=[...pages.keys()].filter(route=>!/^\/(fr|de|es|ja)(\/|$)/.test(route)&&route!='/404'&&!/^\/google[0-9a-f]+$/.test(route));
+const englishRoutes=[...pages.keys()].filter(route=>!/^\/(fr|de|es|ja|pt-BR)(\/|$)/.test(route)&&route!='/404'&&!/^\/google[0-9a-f]+$/.test(route));
 for(const locale of locales) {
  const missingCopy=inventory.filter(({text})=>!(text in publicPages[locale]));
  if(missingCopy.length) problems.push(`${locale}: ${missingCopy.length} missing public dictionary entries`);
@@ -49,7 +49,7 @@ for(const locale of locales) {
    const links=[...head.matchAll(/<link\b[^>]*>/gi)].filter(m=>new RegExp(`hreflang="${code}"`,'i').test(m[0]));
    if(!links.some(m=>{const url=m[0].match(/href="([^"]+)"/i)?.[1];return url&&new URL(url).href===new URL(expected).href;}))problems.push(`${translated}: incorrect concrete hreflang ${code}, expected ${expected}`);
   }
-  const ogLocale={fr:'fr_FR',de:'de_DE',es:'es_ES',ja:'ja_JP'}[locale];
+  const ogLocale={fr:'fr_FR',de:'de_DE',es:'es_ES',ja:'ja_JP','pt-BR':'pt_BR'}[locale];
   if(metaContent(html,'og:locale')[0]!==ogLocale)problems.push(`${translated}: incorrect OG locale`);
   for(const key of ['og:title','og:description','twitter:title','twitter:description']) {
    const value=metaContent(html,key)[0];
@@ -78,7 +78,7 @@ for(const locale of locales) {
    const tag=match[0];if(/(?:lang|hreflang)="en"/i.test(tag))continue;
    for(const dest of tag.matchAll(/(?:href|action|formaction)="([^"]+)"/gi)) {
     const url=decodeEntities(dest[1]);const path=url.startsWith(siteUrl)?url.slice(siteUrl.length):url;
-    if(!path.startsWith('/')||path.startsWith('//')||/^\/(?:fr|de|es|ja)(?:\/|$)/.test(path))continue;
+    if(!path.startsWith('/')||path.startsWith('//')||/^\/(?:fr|de|es|ja|pt-BR)(?:\/|$)/.test(path))continue;
     const base=path.split(/[?#]/)[0];const root=base.split('/')[1];
     const asset=/\.[a-z\d]+$/i.test(base)&&!base.endsWith('/feed.xml');
     if(!asset&&(base==='/'||publicRoots.has(root)))problems.push(`${translated}: English internal destination ${url}`);

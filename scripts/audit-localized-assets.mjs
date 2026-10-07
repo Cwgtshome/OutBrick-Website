@@ -2,7 +2,7 @@
 import { existsSync, statSync } from 'node:fs';
 import { localizedAsset, localizedAssetManifest } from '../lib/i18n/assets.ts';
 
-const locales = ['fr', 'de', 'es', 'ja'];
+const locales = ['fr', 'de', 'es', 'ja', 'pt-BR'];
 const failures = [];
 for (const [source, target] of Object.entries(localizedAssetManifest)) {
   for (const file of [source, target]) {

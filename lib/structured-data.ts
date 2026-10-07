@@ -65,7 +65,7 @@ const appStoreFallback = {
 const FOUNDER_APP_STORE_PROFILE = 'https://apps.apple.com/us/developer/mourad-hamdi/id1831080974';
 
 /** Languages the site itself is published in (home page and play guide; the rest is English). */
-export const siteLanguages = ['en', 'fr', 'de', 'es', 'ja'];
+export const siteLanguages = ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'];
 
 const founderAuthor = authors.find((author) => author.id === 'mourad-hamdi')!;
 

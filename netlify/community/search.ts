@@ -1,7 +1,7 @@
 // Search across thread titles, posts and the FAQ.
 //
 // Latin-script queries use Postgres full-text search in the 'simple' configuration (no
-// stemming, so it treats all five languages alike), with every word matched as a prefix:
+// stemming, so it treats all six languages alike), with every word matched as a prefix:
 // "undo" finds "undos". Titles also match by trigram word similarity, which forgives a typo.
 // Japanese has no spaces between words, so full-text search cannot split it; a query with
 // Japanese (or other CJK) characters matches by substring instead (ILIKE, which the trigram

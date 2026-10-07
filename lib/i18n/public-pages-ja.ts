@@ -482,7 +482,7 @@ export const ja: Record<string, string> = {
   "See all nine on the home page": "ホームページで9人を見る",
   "Download the renders": "レンダリング画像をダウンロード",
   "The OutBrick newsletter: new villages and big updates": "OutBrickニュースレター：新しい村と大きな更新",
-  "One short email when OutBrick opens a new village or ships a big update, about once a month. No spam, five languages, unsubscribe any time.": "新しい村や大きな更新のとき、約月1回の短いメール。迷惑メールなし、5言語、いつでも解除できます。",
+  "One short email when OutBrick opens a new village or ships a big update, about once a month. No spam, six languages, unsubscribe any time.": "新しい村や大きな更新のとき、約月1回の短いメール。迷惑メールなし、6言語、いつでも解除できます。",
   "New villages": "新しい村",
   "When the Journey grows, you hear where the road goes next.": "Journeyが育つと、道の次の行き先を知らせます。",
   "Big updates": "大きな更新",

@@ -26,6 +26,11 @@ const copies = {
     title: 'ブロックで<br>つくる<br><span>大通り。</span>',
     stats: '2,000の盤面 · 167のブロックの村 · 9人の仲間',
   },
+  'pt-BR': {
+    eyebrow: 'OUTBRICK · GRÁTIS NA APP STORE',
+    title: 'Uma avenida<br>construída com<br><span>blocos.</span>',
+    stats: '2.000 tabuleiros · 167 vilarejos de blocos · nove amigos',
+  },
 };
 const data = async (file, mime) => `data:${mime};base64,${(await readFile(path.join(root, 'public', file))).toString('base64')}`;
 const assets = {
@@ -36,10 +41,13 @@ const assets = {
   peach: await data('assets/friends/peach.png', 'image/png'),
 };
 await mkdir(path.join(root, 'public/og'), { recursive: true });
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}) });
 try {
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
-  for (const [locale, copy] of Object.entries(copies)) {
+  const only = process.argv.find((arg) => arg.startsWith('--only='))?.slice(7);
+  const entries = Object.entries(copies).filter(([locale]) => !only || only === locale);
+  if (only && !copies[only]) throw new Error(`Unsupported locale: ${only}`);
+  for (const [locale, copy] of entries) {
     await page.setContent(`<!doctype html><html lang="${locale}"><head><meta charset="UTF-8"><style>
       @font-face{font-family:Fredoka;src:url('${assets.display}');font-weight:300 700}
       @font-face{font-family:Figtree;src:url('${assets.text}');font-weight:300 900}

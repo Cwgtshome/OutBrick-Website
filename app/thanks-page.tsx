@@ -29,7 +29,7 @@ export function ThanksPage({
   children: ReactNode;
   back: { href: string; label: string };
 }) {
-  const ui = { en: ['Skip to content', 'Help and legal', 'Back to OutBrick'], fr: ['Aller au contenu', 'Aide et informations juridiques', 'Retour à OutBrick'], de: ['Zum Inhalt springen', 'Hilfe und Rechtliches', 'Zurück zu OutBrick'], es: ['Ir al contenido', 'Ayuda e información legal', 'Volver a OutBrick'], ja: ['本文へ移動', 'ヘルプと法的情報', 'OutBrickに戻る'] }[locale];
+  const ui = { en: ['Skip to content', 'Help and legal', 'Back to OutBrick'], fr: ['Aller au contenu', 'Aide et informations juridiques', 'Retour à OutBrick'], de: ['Zum Inhalt springen', 'Hilfe und Rechtliches', 'Zurück zu OutBrick'], es: ['Ir al contenido', 'Ayuda e información legal', 'Volver a OutBrick'], ja: ['本文へ移動', 'ヘルプと法的情報', 'OutBrickに戻る'], 'pt-BR': ['Pular para o conteúdo', 'Ajuda e informações legais', 'Voltar ao OutBrick'] }[locale];
   return (
     <div className="ob-site">
       <a className="skip" href="#main">{ui[0]}</a>

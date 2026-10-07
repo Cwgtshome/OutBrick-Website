@@ -8,6 +8,7 @@ const copy = {
  de: ['Dieser Stein ist vom Spielfeld gerutscht.', 'Wir haben in jeder Reihe, unter der Rückgängig-Taste und hinter Peach gesucht. Die gewünschte Seite ist nicht hier. Vielleicht ist sie umgezogen oder dem Link fehlte eine Noppe. Kein Leben ging verloren.', 'OutBrick-Startseite', 'Wohin als Nächstes', 'Zurück zu OutBrick', 'Ein Spielfeld spielen', 'Das Journal lesen', 'Hilfe erhalten'],
  es: ['Esta pieza se ha deslizado fuera del tablero.', 'Buscamos en cada fila, debajo del botón Deshacer y detrás de Peach. La página no está aquí: quizá se haya movido o al enlace le faltara un encaje. No se perdió ninguna vida.', 'Inicio de OutBrick', 'Adónde ir ahora', 'Volver a OutBrick', 'Jugar un tablero', 'Leer el diario', 'Obtener ayuda'],
  ja: ['このブロックは盤面の外へ滑り出してしまいました。', 'すべての列も、「戻す」ボタンの下も、Peachの後ろも探しましたが、このページは見つかりませんでした。移動したか、リンクの突起が外れていたのかもしれません。ライフは減っていません。', 'OutBrickのホーム', '次の移動先', 'OutBrickに戻る', 'ステージで遊ぶ', 'ジャーナルを読む', 'サポートを受ける'],
+ 'pt-BR': ['Este bloco escorregou para fora do tabuleiro.', 'Procuramos em todas as fileiras, embaixo do botão de desfazer e atrás da Peach. A página que você queria não está aqui: talvez tenha mudado de lugar ou o link esteja com uma peça solta. Nenhuma vida foi perdida.', 'Página inicial do OutBrick', 'Para onde agora?', 'Voltar ao OutBrick', 'Jogar uma fase', 'Ler o blog', 'Falar com o suporte'],
 };
 export function LocalizedNotFound({brand}:{brand:ReactNode}) {
  const locale=useLocale(); const c=copy[locale];

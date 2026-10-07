@@ -44,7 +44,7 @@ type LegalPageProps = {
 
 export function LegalPage({ eyebrow, title, summary, updated, current, children, locale = 'en' }: LegalPageProps) {
   const url = current ? `${siteUrl}${localePath(locale, current)}` : undefined;
-  const ui = { en: ['Skip to content', 'Help and legal', 'Back to OutBrick', 'Updated'], fr: ['Aller au contenu', 'Aide et informations juridiques', 'Retour à OutBrick', 'Mis à jour le'], de: ['Zum Inhalt springen', 'Hilfe und Rechtliches', 'Zurück zu OutBrick', 'Aktualisiert am'], es: ['Ir al contenido', 'Ayuda e información legal', 'Volver a OutBrick', 'Actualizado el'], ja: ['本文へ移動', 'ヘルプと法的情報', 'OutBrickに戻る', '更新日'] }[locale];
+  const ui = { en: ['Skip to content', 'Help and legal', 'Back to OutBrick', 'Updated'], fr: ['Aller au contenu', 'Aide et informations juridiques', 'Retour à OutBrick', 'Mis à jour le'], de: ['Zum Inhalt springen', 'Hilfe und Rechtliches', 'Zurück zu OutBrick', 'Aktualisiert am'], es: ['Ir al contenido', 'Ayuda e información legal', 'Volver a OutBrick', 'Actualizado el'], ja: ['本文へ移動', 'ヘルプと法的情報', 'OutBrickに戻る', '更新日'], 'pt-BR': ['Pular para o conteúdo', 'Ajuda e informações legais', 'Voltar ao OutBrick', 'Atualizado em'] }[locale];
   const day = isoDay(updated);
   const stamp = locale === 'en' ? updated : new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(day + 'T12:00:00Z'));
   const doc = current ? documents[current] : undefined;

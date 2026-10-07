@@ -6,7 +6,7 @@ import { breadcrumbNode, graph, webPageNode } from '../../../lib/structured-data
 
 const title = 'The OutBrick newsletter: new villages and big updates';
 const description =
-  'One short email when OutBrick opens a new village or ships a big update, about once a month. No spam, five languages, unsubscribe any time.';
+  'One short email when OutBrick opens a new village or ships a big update, about once a month. No spam, six languages, unsubscribe any time.';
 
 export const metadata: Metadata = pageMetadata({ path: '/newsletter', title, description });
 

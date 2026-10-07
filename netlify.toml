@@ -441,6 +441,94 @@
   status = 301
   force = true
 
++[[redirects]]
+  from = "/pt-BR/privacy-policy"
+  to = "/pt-BR/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/privacy-policy.html"
+  to = "/pt-BR/privacy"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/license"
+  to = "/pt-BR/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/license.html"
+  to = "/pt-BR/license-agreement"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/refund"
+  to = "/pt-BR/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/refund.html"
+  to = "/pt-BR/refunds"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/eula-apple"
+  to = "/pt-BR/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/eula-apple.html"
+  to = "/pt-BR/eula"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/accessibility-support"
+  to = "/pt-BR/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/accessibility-support.html"
+  to = "/pt-BR/accessibility"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/age-suitability"
+  to = "/pt-BR/age-rating"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/age-suitability.html"
+  to = "/pt-BR/age-rating"
+  status = 301
+  force = true
+
+# Brazilian Portuguese challenge pages keep their language and challenge route.
+[[redirects]]
+  from = "/pt-BR/c/*"
+  to = "/pt-BR/c"
+  status = 200
+
+[[redirects]]
+  from = "/pt-BR/community/*"
+  to = "/pt-BR/community"
+  status = 200
+
+[[redirects]]
+  from = "/pt-BR/*"
+  to = "/pt-BR/404"
+  status = 404
+
 # Challenge path-form links retain their level, query and language. These
 # rewrites must precede each locale's unknown-page fallback.
 [[redirects]]

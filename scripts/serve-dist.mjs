@@ -41,13 +41,13 @@ async function file(path) {
 }
 
 async function resolve(pathname) {
-  const challenge = pathname.match(/^(?:\/(fr|de|es|ja))?\/c\//);
+  const challenge = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/c\//);
   if (challenge) return join(root, challenge[1] ? `${challenge[1]}/c.html` : 'c.html');
   const clean = normalize(decodeURIComponent(pathname)).replace(/^(\.\.[/\\])+/, '');
   const base = join(root, clean).replace(/\/$/, '');
   const found = (await file(`${base}.html`)) ?? (await file(join(base, 'index.html'))) ?? (await file(base));
   if (found) return found;
-  const community = pathname.match(/^(?:\/(fr|de|es|ja))?\/community\//);
+  const community = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/community\//);
   return community ? join(root, community[1] ? `${community[1]}/community.html` : 'community.html') : null;
 }
 
@@ -61,13 +61,13 @@ createServer(async (req, res) => {
     res.end();
     return;
   }
-  const alias = pathname.match(/^(?:\/(fr|de|es|ja))?\/(accessibility-support|age-suitability|eula-apple|license|privacy-policy|refund)\/?$/);
+  const alias = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/(accessibility-support|age-suitability|eula-apple|license|privacy-policy|refund)\/?$/);
   if (alias) {
     const destinations = { 'accessibility-support': 'accessibility', 'age-suitability': 'age-rating', 'eula-apple': 'eula', license: 'license-agreement', 'privacy-policy': 'privacy', refund: 'refunds' };
     res.writeHead(301, { location: `${alias[1] ? `/${alias[1]}` : ''}/${destinations[alias[2]]}` }); res.end(); return;
   }
   const found = await resolve(pathname);
-  const locale = pathname.match(/^\/(fr|de|es|ja)(?:\/|$)/)?.[1];
+  const locale = pathname.match(/^\/(fr|de|es|ja|pt-BR)(?:\/|$)/)?.[1];
   const path = found ?? join(root, locale ? `${locale}/404.html` : '404.html');
   res.writeHead(found ? 200 : 404, { 'content-type': types[extname(path)] ?? 'application/octet-stream' });
   res.end(await readFile(path));

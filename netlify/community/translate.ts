@@ -30,7 +30,7 @@ export const TRANSLATE_MODEL = 'claude-haiku-4-5-20251001';
 
 export const translateConfigured = (env: Record<string, string | undefined> = process.env) => Boolean(env.ANTHROPIC_API_KEY?.trim());
 
-const languageNames: Record<CommunityLocale, string> = { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese' };
+const languageNames: Record<CommunityLocale, string> = { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese', 'pt-BR': 'Brazilian Portuguese' };
 
 export function systemPrompt(to: CommunityLocale): string {
   return [

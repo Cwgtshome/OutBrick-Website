@@ -1,4 +1,7 @@
 import type { TranslatedLocale } from './locales';
+import { ptBRLegalPart1 } from './legal-pages-pt-BR-part-1.ts';
+import { ptBRLegalPart2 } from './legal-pages-pt-BR-part-2.ts';
+import { ptBRLegalPart3 } from './legal-pages-pt-BR-part-3.ts';
 
 // Complete translations of the canonical legal/accessibility pages, including
 // metadata, inline-link text, list items and the shared face-data disclosures.
@@ -1420,5 +1423,6 @@ export const legalPages: Record<TranslatedLocale, Record<string, string>> = {
     "Refunds & purchases": "返金と購入",
     "Apple handles billing": "請求はAppleが対応",
     "A real line to the team": "チームへの直接の連絡先"
-  }
+  },
+  'pt-BR': { ...ptBRLegalPart1, ...ptBRLegalPart2, ...ptBRLegalPart3 }
 };

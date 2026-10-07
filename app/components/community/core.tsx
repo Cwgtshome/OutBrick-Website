@@ -171,7 +171,7 @@ export function safeReturn(
   if (!value || !value.startsWith('/') || value.startsWith('//'))
     return communityPath(locale);
   const path = value.split(/[?#]/)[0];
-  return /^\/(?:(?:fr|de|es|ja)\/)?community(?:\/|$)/.test(path)
+  return /^\/(?:(?:fr|de|es|ja|pt-BR)\/)?community(?:\/|$)/.test(path)
     ? value
     : communityPath(locale);
 }

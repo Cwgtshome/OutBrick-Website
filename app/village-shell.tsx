@@ -53,7 +53,7 @@ export function AppStoreBadge({ campaign = 'badge', locale = 'en' }: { campaign?
   const copy = chromeCopy[locale];
   return (
     <a className="badge" href={localeStoreUrl(campaign, locale)} aria-label={copy.badgeLabel}>
-      <img src={locale === 'en' ? '/assets/badge/appstore-black.svg' : `/assets/badge/appstore-black-${locale}.svg`} alt={copy.badgeAlt} width={143} height={48} />
+      <img src={locale === 'en' || locale === 'pt-BR' ? '/assets/badge/appstore-black.svg' : `/assets/badge/appstore-black-${locale}.svg`} alt={copy.badgeAlt} width={143} height={48} />
     </a>
   );
 }

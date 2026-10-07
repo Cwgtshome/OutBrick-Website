@@ -5,6 +5,7 @@ const names = {
   de: ['Türschwelle', 'Tante-Emma-Laden', 'Hintergasse', 'Seitenwind', 'Trittsteine', 'Windrad', 'Der lange Weg', 'Serpentinen', 'Holzstau', 'Engpass', 'Staffel', 'Drehkreuz', 'Schlüsselloch', 'Stillstand'],
   es: ['El umbral', 'La tienda de la esquina', 'El callejón', 'Viento cruzado', 'Piedras de paso', 'El molinillo', 'El camino largo', 'El zigzag', 'El atasco', 'Paso estrecho', 'El relevo', 'El torno', 'El ojo de la cerradura', 'El bloqueo'],
   ja: ['玄関先', '角の店', '裏路地', '横風', '飛び石', '風車', '遠回り', '折り返し', '丸太の詰まり', '狭い通り道', 'リレー', '回転式ゲート', '鍵穴', '行き詰まり'],
+  'pt-BR': ['Logo ali', 'Loja da esquina', 'Beco', 'Vento cruzado', 'Pedras de passagem', 'Cata-vento', 'Caminho longo', 'Zigue-zague', 'Engarrafamento', 'Passagem estreita', 'Revezamento', 'Catraca', 'Fechadura', 'Impasse'],
 };
 export const additionalBoardNames: Record<Locale, Record<string, string>> = {
   en: {}, ...Object.fromEntries(Object.entries(names).map(([locale, words]) => [locale, Object.fromEntries(ids.map((id, i) => [id, words[i]]))])) as Record<Exclude<Locale, 'en'>, Record<string, string>>,

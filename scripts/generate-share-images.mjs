@@ -22,11 +22,11 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const locale = process.argv.find((a) => a.startsWith('--locale='))?.slice(9) ?? 'en';
-if (!['en', 'fr', 'de', 'es', 'ja'].includes(locale)) throw new Error('Unsupported locale');
+if (!['en', 'fr', 'de', 'es', 'ja', 'pt-BR'].includes(locale)) throw new Error('Unsupported locale');
 const outDir = path.join(root, 'public/share', locale === 'en' ? '' : locale);
 const { boardStrings } = await import('../lib/i18n/board.ts');
 const cardCopy = {
@@ -35,13 +35,18 @@ const cardCopy = {
  de: { board: (b) => `Spielfeld ${b}`, cleared: 'Gelöst', target: 'Ziel', moves: 'Züge', noUndo: 'Ohne Rückgängig. Kein einziges Mal.', onTarget: 'Genau im Ziel.', try: (t) => `Versuche es in ${t} Zügen.`, turn: 'Du bist dran' },
  es: { board: (b) => `Tablero ${b}`, cleared: 'Completado', target: 'objetivo', moves: 'movimientos', noUndo: 'Sin deshacer. Ni una vez.', onTarget: 'Justo en el objetivo.', try: (t) => `Inténtalo en ${t} movimientos.`, turn: 'Te toca' },
  ja: { board: (b) => `ステージ${b}`, cleared: 'クリア', target: '目標', moves: '手', noUndo: '「戻す」を一度も使わずに。', onTarget: '目標どおり。', try: (t) => `${t}手で挑戦しましょう。`, turn: '次はあなたの番' },
+ 'pt-BR': { board: (b) => `Fase ${b}`, cleared: 'Concluída', target: 'meta', moves: 'movimentos', noUndo: 'Sem desfazer. Nenhuma vez.', onTarget: 'Exatamente na meta.', try: (t) => `Tente em ${t} movimentos.`, turn: 'Sua vez' },
 }[locale];
 const { boardLevels } = await import('../lib/board-levels.ts');
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? '/opt/node22/lib/node_modules/playwright/index.mjs');
 
 const only = process.argv.find((a) => a.startsWith('--only='))?.slice(7);
 const from = Number(process.argv.find((a) => a.startsWith('--from='))?.slice(7) ?? 1);
-const file = (rel) => pathToFileURL(path.join(root, rel)).href;
+const file = (rel) => {
+  const fullPath = path.join(root, rel);
+  const mime = path.extname(fullPath) === '.woff2' ? 'font/woff2' : 'image/webp';
+  return `data:${mime};base64,${fs.readFileSync(fullPath).toString('base64')}`;
+};
 
 const PALETTE = {
   red: { c: '#e2352f', lt: '#ff7a6b', dk: '#8e1c18', ink: '#7a1512' },
@@ -212,16 +217,14 @@ function quantize(png) {
 }
 
 fs.mkdirSync(outDir, { recursive: true });
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const ctx = await browser.newContext({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
 const tab = await ctx.newPage();
-const tmp = path.join(outDir, '.card.html');
 for (const [i, level] of boardLevels.entries()) {
   for (const stars of [1, 2, 3]) {
     const id = `${i + 1}-${stars}`;
     if ((only && only !== id) || i + 1 < from) continue;
-    fs.writeFileSync(tmp, page(level, i + 1, stars));
-    await tab.goto(pathToFileURL(tmp).href);
+    await tab.setContent(page(level, i + 1, stars), { waitUntil: 'load' });
     await tab.evaluate(() => document.fonts.ready);
     const out = path.join(outDir, `board-${id}.png`);
     await tab.screenshot({ path: out, type: 'png' });
@@ -229,5 +232,4 @@ for (const [i, level] of boardLevels.entries()) {
     console.log(`${path.relative(root, out)}  ${(fs.statSync(out).size / 1024).toFixed(0)} KB`);
   }
 }
-fs.rmSync(tmp);
 await browser.close();

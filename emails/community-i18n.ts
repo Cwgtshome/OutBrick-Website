@@ -1,4 +1,4 @@
-// Every word the OutBrick Community emails and their link pages say, in the site's five languages.
+// Every word the OutBrick Community emails and their link pages say, in the site's six languages.
 //
 // Same rules as emails/i18n.ts: the site's voice (warm, plain, British spelling in English),
 // German "Sie", Spanish "tú", no markup in any string. Values that came from a member (a display
@@ -860,4 +860,82 @@ const ja: CommunityCopy = {
   },
 };
 
-export const communityCopy: Record<EmailLocale, CommunityCopy> = { en, fr, de, es, ja };
+const ptBR: CommunityCopy = {
+  eyebrow: 'Comunidade OutBrick', newsEyebrow: 'Novidades do OutBrick',
+  footer: {
+    manage: 'Gerenciar e-mails',
+    unsubscribe: (kind) => kind === 'all' ? 'Não receber e-mails da comunidade' : `Não receber e-mails sobre ${ptBR.kindNames[kind]}`,
+    guidelines: 'Diretrizes da comunidade', privacy: 'Privacidade',
+    why: 'Você recebe este e-mail porque faz parte da comunidade OutBrick em outbrick.site. Seu endereço nunca é exibido para outros membros.',
+  },
+  kindNames: { reply: 'respostas às suas publicações', mention: 'menções ao seu nome', watched: 'conversas e categorias que você acompanha', status: 'mudanças de status', solved: 'respostas marcadas como solução', release: 'novas versões', badge: badgeEmailCopy['pt-BR'].kindName, moderation: 'avisos da moderação', merged: 'conversas unidas', digest: 'resumo semanal', all: 'nenhum e-mail' },
+  signin: {
+    subject: 'Seu link para entrar na comunidade OutBrick', preheader: 'Um toque e você entra. O link pode ser usado uma vez e vale por 20 minutos.',
+    heading: 'Aqui está seu link para entrar.', intro: 'Toque no botão para entrar na comunidade OutBrick. Não precisa lembrar de senha: este e-mail é a chave.',
+    cta: 'Entrar na comunidade', expiry: 'O link pode ser usado uma vez e vale por 20 minutos. Se o botão não funcionar, copie este link para o navegador:',
+    ignore: 'Não pediu para entrar? Pode ignorar este e-mail. Ninguém consegue entrar sem o link, e ele expira sozinho.',
+    why: 'Você recebe este e-mail porque este endereço foi informado na página de acesso de outbrick.site.',
+  },
+  confirmEmail: {
+    subject: 'Confirme seu e-mail para a comunidade OutBrick', preheader: 'Um toque para confirmar e você já poderá publicar.',
+    heading: 'Confirme seu endereço de e-mail.',
+    introProvider: 'Você entrou na comunidade OutBrick com o Facebook, que não confirma se este endereço é realmente seu. Toque no botão para confirmar e poder publicar e responder.',
+    introChange: 'Você pediu para usar este endereço na comunidade OutBrick. Toque no botão para confirmá-lo; até lá, seus e-mails continuarão chegando ao endereço anterior.',
+    cta: 'Confirmar meu e-mail', expiry: 'O botão funciona por 24 horas. Se não funcionar, copie este link para o navegador:',
+    ignore: 'Não esperava este e-mail? Ignore-o e nada será alterado.',
+    why: 'Você recebe este e-mail porque este endereço foi informado à comunidade OutBrick em outbrick.site.',
+  },
+  welcome: {
+    subject: 'Boas-vindas à comunidade OutBrick', preheader: 'Faça uma pergunta, relate um problema, compartilhe uma ideia ou simplesmente diga olá.',
+    heading: (name) => name ? `Olá, ${name}! Boas-vindas.` : 'Boas-vindas!',
+    intro: 'A comunidade OutBrick é um espaço para jogadores se ajudarem, a equipe responder publicamente e todos acompanharem o status de problemas e ideias. O Bloo está feliz por ter você aqui.',
+    categoriesTitle: 'O que publicar em cada espaço',
+    categories: [
+      { title: 'Novidades.', body: 'Cada nova versão, publicada assim que chega à App Store.' },
+      { title: 'Ajuda.', body: 'Perguntas como “Como faço…?”. Quando uma resposta resolve a dúvida, ela é marcada para ajudar a próxima pessoa.' },
+      { title: 'Problemas.', body: 'Algo não funciona? Um formulário rápido pergunta qual é seu dispositivo, sua versão do iOS e quais etapas levam ao problema. Você pode acompanhar a correção.' },
+      { title: 'Ideias e sugestões.', body: 'Sugira um recurso ou vote no que gostaria de ver.' },
+      { title: 'Acessibilidade.', body: 'VoiceOver, Controle por Voz, Controle Assistivo, texto maior e jogo para pessoas daltônicas. A equipe acompanha esta categoria de perto.' },
+      { title: 'Mostre o que você fez.', body: 'Fases concluídas, marcos da Jornada e capturas de tela.' },
+      { title: 'Geral.', body: 'Todo o resto.' },
+    ],
+    followTitle: 'Acompanhe o que importa para você',
+    follow: 'Escolha Acompanhar em qualquer conversa ou categoria para receber um aviso quando houver novidades. Sempre avisaremos quando alguém responder às suas publicações, e você pode desativar cada tipo de e-mail nas configurações.',
+    accessibilityTitle: 'Feita para VoiceOver',
+    accessibility: 'Cada página tem um único título principal, cada publicação tem seu próprio título para facilitar a navegação e o editor é um campo de texto simples. Se algo atrapalhar, conte para nós na categoria Acessibilidade e vamos corrigir.',
+    guidelines: 'Seja gentil, mantenha o assunto e não publique dados pessoais.', guidelinesLink: 'Ler as diretrizes da comunidade', cta: 'Acessar a comunidade',
+    why: 'Você recebe este e-mail porque se juntou à comunidade OutBrick em outbrick.site.',
+  },
+  kinds: {
+    reply: { subject: (actor, title) => `${actor} respondeu em “${title}”`, intro: 'Há uma nova resposta à sua publicação:', cta: 'Ler a resposta' },
+    mention: { subject: (actor, title) => `${actor} mencionou você em “${title}”`, intro: 'Mencionaram você nesta publicação:', cta: 'Ler publicação' },
+    watched: { subject: (actor, title) => `${actor} publicou em “${title}”`, intro: 'Há novidades em uma conversa ou categoria que você acompanha:', cta: 'Ler publicação' },
+    status: { subject: (title, status) => `“${title}” agora está com o status ${status}`, intro: (status) => `A equipe alterou o status desta conversa para ${status}.`, note: 'Nota da equipe', cta: 'Ver conversa' },
+    solved: { subject: (title) => `Sua resposta em “${title}” foi marcada como solução`, intro: 'Obrigado! Sua resposta agora é a solução, assim a próxima pessoa com a mesma dúvida poderá encontrá-la rapidamente.', cta: 'Ver sua resposta' },
+    merged: { subject: (title) => `Sua publicação foi movida para “${title}”`, intro: (from) => `Um moderador uniu “${from}” a esta conversa porque os assuntos eram iguais. Sua publicação agora está aqui, junto com as demais respostas.`, cta: 'Ver conversa' },
+    release: { subject: (version) => `OutBrick ${version} já está disponível`, intro: (version) => `A versão ${version} acabou de chegar à App Store. Veja as novidades:`, cta: 'Ler notas da versão' },
+    badge: badgeEmailCopy['pt-BR'].kind,
+    moderation: { subject: (title) => `Sobre sua publicação em “${title}”`, heading: 'Um moderador ocultou uma de suas publicações.', intro: (title) => `Sua publicação em “${title}” não está mais visível para outros membros.`, reason: 'Motivo', appeal: 'Se acha que isso foi um engano, responda a este e-mail e alguém da equipe analisará novamente. Nada mais mudou na sua conta.', cta: 'Ver conversa' },
+  },
+  digestLine: {
+    reply: (actor, title) => `${actor} respondeu em “${title}”`, mention: (actor, title) => `${actor} mencionou você em “${title}”`, watched: (actor, title) => `${actor} publicou em “${title}”`,
+    status: (_actor, title, status) => `“${title}” agora está com o status ${status}`, solved: (_actor, title) => `Sua resposta em “${title}” foi marcada como solução`, merged: (_actor, title) => `Sua publicação foi movida para “${title}”`,
+    release: (_actor, _title, version) => `OutBrick ${version} já está disponível`, badge: (_actor, _title, badge) => badgeEmailCopy['pt-BR'].digestLine(badge), moderation: (_actor, title) => `Um moderador ocultou sua publicação em “${title}”`,
+  },
+  digest: { subject: (count) => `${count} novidades na comunidade OutBrick`, preheader: 'Respostas, menções e novidades desde o último e-mail, reunidas em uma só mensagem.', heading: (count) => `${count} novidades desde o último e-mail`, intro: 'Reunimos tudo em um e-mail para manter sua caixa de entrada organizada.', open: 'Abrir', more: (count) => count === 1 ? 'e mais 1' : `e mais ${count}`, cta: 'Ver todas as notificações' },
+  someone: 'Alguém',
+  statuses: { new: 'Novo', confirmed: 'Confirmado', fixed: 'Corrigido', released: 'Lançado', not_a_bug: 'Não é um problema', duplicate: 'Duplicado', open: 'Aberta', considering: 'Em avaliação', planned: 'Planejada', shipped: 'Lançada', declined: 'Recusada', in_progress: badgeEmailCopy['pt-BR'].inProgress },
+  pages: {
+    signin: { title: 'Entrar na comunidade OutBrick', body: 'Toque no botão para concluir o acesso. Ele funciona em qualquer dispositivo, não apenas naquele em que você pediu o link.', button: 'Entrar', note: 'Esta etapa extra impede que verificadores de segurança do e-mail usem seu link antes de você.' },
+    confirmEmail: { title: 'Confirme seu endereço de e-mail', body: 'Toque no botão para confirmar este endereço na comunidade OutBrick.', button: 'Confirmar meu e-mail' },
+    unsubscribe: {
+      title: (kind) => kind === 'all' ? 'Não quer mais receber e-mails da comunidade?' : `Não quer mais receber e-mails sobre ${ptBR.kindNames[kind]}?`,
+      body: (kind) => kind === 'all' ? 'Toque no botão e a comunidade OutBrick deixará de enviar e-mails. Suas notificações continuarão disponíveis no site, e você pode reativar os e-mails nas configurações.' : `Toque no botão e deixaremos de enviar e-mails sobre ${ptBR.kindNames[kind]}. Você ainda poderá ver as notificações no site e reativar os e-mails nas configurações.`,
+      button: 'Parar de receber estes e-mails', keep: 'Continuar recebendo',
+    },
+    unsubscribed: { title: 'Pronto. Você não receberá mais esse tipo de e-mail.', body: (kind) => kind === 'all' ? 'A comunidade OutBrick não enviará mais e-mails.' : `Não enviaremos mais e-mails sobre ${ptBR.kindNames[kind]}.`, settings: 'Abrir configurações de e-mail' },
+    invalid: { title: 'Este link expirou', body: 'Os links dos nossos e-mails valem por tempo limitado ou podem ser usados uma só vez. Você pode pedir outro na página de acesso.', cta: 'Ir para a página de acesso' },
+  },
+};
+
+export const communityCopy: Record<EmailLocale, CommunityCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };

@@ -3,11 +3,11 @@ import { siteUrl } from '../site.ts';
 /**
  * The languages the home page and the play guide are published in. English
  * lives at the bare paths (`/`, `/play`); every other language gets a prefix
- * (`/fr`, `/fr/play`). Only these four codes are prerendered under
+ * (`/fr`, `/fr/play`). Translated locale codes are prerendered under
  * `app/[locale]`, and that route sets `dynamicParams = false`, so any other
  * first segment is still a 404.
  */
-export const translatedLocales = ['fr', 'de', 'es', 'ja'] as const;
+export const translatedLocales = ['fr', 'de', 'es', 'ja', 'pt-BR'] as const;
 export type TranslatedLocale = (typeof translatedLocales)[number];
 export type Locale = 'en' | TranslatedLocale;
 export const locales: readonly Locale[] = ['en', ...translatedLocales];
@@ -23,6 +23,7 @@ export const localeNames: Record<Locale, string> = {
   de: 'Deutsch',
   es: 'Español',
   ja: '日本語',
+  'pt-BR': 'Português (Brasil)',
 };
 
 /** Open Graph `og:locale`. */
@@ -32,6 +33,7 @@ export const ogLocales: Record<Locale, string> = {
   de: 'de_DE',
   es: 'es_ES',
   ja: 'ja_JP',
+  'pt-BR': 'pt_BR',
 };
 
 /** The App Store storefront each language links to (same app id everywhere). */
@@ -41,6 +43,7 @@ export const storefronts: Record<Locale, string> = {
   de: 'de',
   es: 'es',
   ja: 'jp',
+  'pt-BR': 'br',
 };
 
 /**

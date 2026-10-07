@@ -34,7 +34,7 @@ export type Release = ReleaseNotes & {
 };
 
 /** The languages the current release's notes are published in on this site. */
-export type ReleaseLocale = 'en' | 'fr' | 'de' | 'es' | 'ja';
+export type ReleaseLocale = 'en' | 'fr' | 'de' | 'es' | 'ja' | 'pt-BR';
 
 /** The URL fragment for a version: "4.2" -> "4-2", so /whats-new#4-2. */
 export function releaseAnchor(version: string): string {
@@ -420,6 +420,82 @@ const notes42: Record<ReleaseLocale, ReleaseNotes> = {
       },
     ],
   },
+  'pt-BR': {
+    headline: 'Um jogo mais desafiador, em uma Jornada reconstruída com tijolos.',
+    sections: [
+      {
+        title: 'Os tabuleiros exigem mais',
+        intro: 'Vocês nos disseram que todas as fases eram fáceis demais. Tinham razão, e esta versão começa a responder a isso.',
+        bullets: [
+          'O pacote inteiro de 2.000 tabuleiros foi reconstruído com um nível de dificuldade que aumenta a cada capítulo: as fases iniciais precisam resistir a uma busca superficial, os capítulos intermediários a uma busca mais profunda, e o final do jogo a uma ainda mais profunda.',
+          '1.301 dos 2.000 tabuleiros têm novos layouts. Todos continuam comprovadamente solucionáveis, e ainda é possível concluir todos sem gastar nada.',
+          'Este é o primeiro ajuste, não um trabalho concluído. Alguns tabuleiros ainda começam de forma mais fácil do que gostaríamos, e continuamos trabalhando nisso.',
+        ],
+      },
+      {
+        title: 'Sem cronômetro em lugar nenhum',
+        bullets: [
+          'O modo Rush foi removido do jogo inteiro. Nada em OutBrick é cronometrado: o limite de movimentos por tabuleiro é o único limite. O Fim de Semana Rush passa a ser Fim de Semana da Meta e recompensa quem supera a meta de movimentos.',
+        ],
+      },
+      {
+        title: 'A Jornada é construída com tijolos',
+        bullets: [
+          'Nada no mapa é mais uma ilustração pintada. As 167 vilas constroem seu terreno, ruas, objetos e monumentos com tijolos conforme você avança, a partir de 28 locais projetados: Garden City, Clover Farm, Seashell Beach, Ember Volcano, Snowflake Village, Mushroom Forest, Pirate Harbor, Spaceport e mais vinte.',
+          'Cada local tem sua própria paleta, pavimento, objetos e monumentos, formato de marcador de fase e movimento.',
+          'A estrada dá seis voltas a caminho da fase 2.000, e cada passagem representa uma hora diferente do dia: First Light, Market Day, Festival Gardens, Hidden Courtyards, Windmill Walk e Grand Promenade. As 167 paradas parecem lugares diferentes.',
+          'A Jornada agora fica no centro da barra de abas, de onde você pode voltar diretamente ao mapa.',
+          'A tela inicial usa o mesmo vocabulário de tijolos da estrada.',
+        ],
+      },
+      {
+        title: 'Links voltam a funcionar',
+        bullets: [
+          'Ações rápidas da Tela de Início, links de desafio enviados por amigos, resultados do Spotlight, Handoff e toques em widgets agora abrem a tela indicada, em vez de levar você à tela inicial.',
+        ],
+      },
+      {
+        title: 'Chame um amigo pelo nome',
+        bullets: [
+          'Siri e Atalhos podem trazer qualquer um dos nove amigos para o palco da Tela de Início pelo nome.',
+        ],
+      },
+      {
+        title: 'Mais fácil de ler',
+        bullets: [
+          'O texto secundário em painéis escuros está mais claro, medido para superar o contraste mínimo de 4,5:1 em vez de ser avaliado a olho.',
+          'Nos tamanhos de texto de acessibilidade, os rótulos de Líderes, Passe, Perfil e Início quebram em linhas, em vez de perder a última palavra para reticências.',
+          'Símbolos para daltonismo, VoiceOver e Reduzir Movimento continuam iguais e ativos desde a primeira abertura.',
+        ],
+      },
+      {
+        title: 'No tabuleiro',
+        bullets: [
+          'Pegue um tijolo, e o tabuleiro indica onde ele pararia em cada direção.',
+          'Portas com contador e portas congeladas não parecem mais iguais. O contraste das portas é medido em relação a cada moldura de capítulo e a cada céu, em vez de ser avaliado a olho.',
+          'O som ao atravessar uma porta foi removido. Ele tocava o tempo todo e não informava nada.',
+        ],
+      },
+      {
+        title: 'Um motivo para voltar',
+        bullets: [
+          'O selo do ícone conta o que você já ganhou e ainda não resgatou: missões concluídas, um Tijolo Diário, níveis do Passe disponíveis, uma recompensa de vila à espera ou o tanque de vidas cheio. Ele conta destinos, não recompensas, então para em nove e sempre pode ser zerado.',
+        ],
+      },
+      {
+        title: 'Um novo ícone do app',
+        bullets: [
+          'Bloo — o personagem 3D de verdade, não uma ilustração dele — está sobre uma trilha de tijolos dourados, corais e verde-azulados, diante de um brilho violeta, sem nenhuma borda.',
+        ],
+      },
+      {
+        title: 'Nada mudou na loja',
+        bullets: [
+          'Nenhum preço, compra ou regra da economia mudou. As vidas continuam se recuperando sozinhas, o primeiro desfazer de cada tabuleiro continua grátis e todos os tabuleiros ainda podem ser concluídos sem gastar nada.',
+        ],
+      },
+    ],
+  },
 };
 
 const notes501: Record<ReleaseLocale, ReleaseNotes> = {
@@ -524,6 +600,27 @@ const notes501: Record<ReleaseLocale, ReleaseNotes> = {
           "どこでもOutBrick。Spotlightは遊んだレベルや村を覚え、ビジュアルインテリジェンスはおもちゃのブロックの写真から似合う村や仲間を見つけます。やることがあるときは、ウィジェットがスマートスタックの前に出てきます。",
           "集中モードフィルタ。「睡眠」や「仕事」などの集中モードで、音楽をオフにするか、OutBrickのリマインダーを一時停止するかを選べます。",
           "新しいデザイン。レベルカード、ワードローブ、ショップのタイルがOutBrickならではの色になり、文字も読みやすくなりました。"
+        ]
+      }
+    ]
+  },
+  "pt-BR": {
+    "headline": "Obrigado por cada mensagem sobre a versão 5.0. Esta atualização foi feita com base no que vocês nos contaram.",
+    "sections": [
+      {
+        "title": "Nesta atualização",
+        "bullets": [
+          "VoiceOver mais rápido. O resultado de um movimento agora é anunciado assim que você o faz, em vez de esperar a animação terminar, e o VoiceOver permanece no tijolo que você moveu.",
+          "As dicas voltaram a falar. Peça uma dica e o VoiceOver informa qual tijolo mover e em que direção, depois leva você até ele.",
+          "Portas explicadas. Cada porta informa como usá-la, e um tijolo parado diante da própria porta avisa isso.",
+          "Ajustes que se explicam. Cada opção em Ajustes › Acessibilidade agora informa o que faz.",
+          "Mais ferramentas do VoiceOver. Um toque duplo com dois dedos dá uma dica no tabuleiro; deslizar com dois dedos fecha qualquer tela; novos rotores levam a especiais, objetivos, bloqueios e portas; e um som opcional de linha permite ouvir onde as cores estão.",
+          "Os tabuleiros terminam quando você vence. O tabuleiro acaba no momento em que seus objetivos são cumpridos. Cada movimento restante vira um disparador de linha, para uma pontuação maior e mais estrelas.",
+          "Objetivos com a aparência dos seus tijolos. Os ícones dos objetivos agora correspondem exatamente aos tijolos do tabuleiro, em todas as vilas e paletas de cores, e um objetivo concluído mantém sua própria cor.",
+          "Siri, sem abrir o jogo. Pergunte quantas vidas você tem, quando a próxima volta, sobre o Tijolo Diário de hoje ou quantas estrelas tem em uma vila.",
+          "Encontre OutBrick em todos os lugares. O Spotlight aprende quais fases e vilas você joga; a Inteligência Visual pode encontrar uma vila ou um amigo correspondente a partir de uma foto de tijolos de brinquedo; e os widgets aparecem na frente da Pilha Inteligente quando há algo para fazer.",
+          "Filtros de Foco. Escolha se um Foco, como Sono ou Trabalho, desliga a música e pausa os lembretes de OutBrick.",
+          "Visual renovado. O cartão de fase, o Guarda-Roupa e os blocos da Loja agora usam as cores próprias de OutBrick, com textos mais claros."
         ]
       }
     ]
