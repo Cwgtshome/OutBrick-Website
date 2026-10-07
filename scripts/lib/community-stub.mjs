@@ -23,6 +23,7 @@ const answers = {
   '/api/community/categories': () => ({ categories }),
   '/api/community/threads': () => ({ threads: [], page: 1, pages: 1, total: 0 }),
   '/api/community/faq': () => ({ entries: [] }),
+  '/api/community/content': () => ({ content: [] }),
 };
 
 /** Answer `pathname` if it is a community API path; returns false for anything else. */
