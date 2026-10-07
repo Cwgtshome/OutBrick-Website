@@ -146,14 +146,17 @@ with Resend variables in place of the content and writes `outputs/resend-templat
 deploy it creates or updates each template by alias and publishes it, so Resend always carries the
 design that is live. Anywhere else it only writes the files, and a failed push never fails a deploy.
 
-The 32 variables are `SUBJECT`, `PREHEADER`, `EYEBROW`, `HERO_TITLE`, `HERO_BODY`,
+The 33 variables are `SUBJECT`, `PREHEADER`, `EYEBROW`, `HERO_TITLE`, `HERO_BODY`,
 `HERO_IMAGE_URL`/`_ALT` (1200×630), `STORY1…3_TITLE`/`_BODY`/`_IMAGE_URL`/`_IMAGE_ALT` (square)
-/`_LINK_LABEL`/`_LINK_URL`, `CTA_LABEL`, `CTA_URL` and `POSTAL_ADDRESS`, plus `HERO_BODY_TEXT` and `STORY1…3_BODY_TEXT` for the plain-text part. Each falls back to the
+/`_LINK_LABEL`/`_LINK_URL`, `CTA_LABEL`, `CTA_URL` and `POSTAL_ADDRESS`, plus `HERO_BODY_TEXT` and `STORY1…3_BODY_TEXT` for the plain-text part, and a required `UNSUBSCRIBE_URL`. Content falls back to the
 sample issue in that language (and `POSTAL_ADDRESS` to `NEWSLETTER_POSTAL_ADDRESS`), so a preview in
 Resend shows a real letter: replace every fallback before sending. HTML body variables are inserted as HTML,
 so a body may use `<strong>`, `<em>`, `<a href="…">` and `<br>`, and plain `&` `<` `>` must be
 escaped. When editing a formatted body, also update its `_TEXT` variable with plain text
-(no HTML tags) for recipients who read text-only emails. Unsubscribe is Resend's `{{{RESEND_UNSUBSCRIBE_URL}}}`. The layout has exactly three
+(no HTML tags) for recipients who read text-only emails. Individual template sends must supply
+`UNSUBSCRIBE_URL`, generated per recipient with `unsubscribeUrl()` from `emails/links.ts`; it
+has no fallback, so an omitted URL refuses the send. Resend only supplies
+`{{{RESEND_UNSUBSCRIBE_URL}}}` for Broadcasts, which keep that automatic link. The layout has exactly three
 stories; for two, or for the "What's new" block, use the JSON issue and `pnpm newsletter` above.
 Change the design in `emails/`, never in the Resend editor: the next production deploy overwrites
 the templates.

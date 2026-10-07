@@ -17,8 +17,8 @@
 // The layout is newsletterCampaign() from emails/templates.ts, rendered with marker values
 // that are then swapped for Resend variables ({{{HERO_TITLE}}} …). Every variable falls back
 // to the sample issue (emails/issues/2026-10-sample.json) in that language, so a preview in
-// Resend shows a real letter. The unsubscribe link is Resend's {{{RESEND_UNSUBSCRIBE_URL}}},
-// which Resend fills in per recipient and honours by setting the contact to unsubscribed.
+// Resend shows a real letter. Individual sends must supply UNSUBSCRIBE_URL from
+// emails/links.ts's unsubscribeUrl(); only Broadcasts fill RESEND_UNSUBSCRIBE_URL.
 //
 // Variables hold HTML (triple braces are not escaped): use <strong>, <em>, <a> or <br> in a
 // body if you need them, and escape & < > in plain text. Images keep the sample's shape:
@@ -80,8 +80,11 @@ function build(locale) {
   };
   // Link fallbacks are registered here because their markers are made by urlMark() alone.
   issue.stories.forEach((_, i) => vars.push({ key: `STORY${i + 1}_LINK_URL`, type: 'string', fallbackValue: abs(c.stories[i]?.link?.href ?? '/whats-new') }));
-  const rendered = newsletterCampaign({ locale, issue, unsubscribeUrl: '{{{RESEND_UNSUBSCRIBE_URL}}}', address: mark('POSTAL_ADDRESS') });
+  const rendered = newsletterCampaign({ locale, issue, unsubscribeUrl: '{{{UNSUBSCRIBE_URL}}}', address: mark('POSTAL_ADDRESS') });
   vars.push({ key: 'POSTAL_ADDRESS', type: 'string', fallbackValue: address });
+  // Resend only fills RESEND_UNSUBSCRIBE_URL for Broadcasts, not transactional templates.
+  // Require the caller's per-recipient signed link; never send a silent empty unsubscribe.
+  vars.push({ key: 'UNSUBSCRIBE_URL', type: 'string' });
   // The CTA falls back to the language's App Store link, which the campaign draws when an issue has none.
   const ctaDefault = newsletterCampaign({ locale, issue: { ...issue, cta: undefined }, unsubscribeUrl: '', address: '' });
   const storeUrl = ctaDefault.text.match(/https:\/\/apps\.apple\.com\/\S+/)?.[0] ?? 'https://apps.apple.com/app/outbrick/id6807997465';

@@ -176,7 +176,10 @@ test('Resend templates have separate plain bodies and only create after a genuin
   assert.ok(!run.stdout.includes('MOCK_ENDPOINT:POST:'));
   for (const locale of ['en', 'fr', 'de', 'es', 'ja']) {
     const template = JSON.parse(fs.readFileSync(new URL(`../outputs/resend-templates/${locale}.json`, import.meta.url), 'utf8'));
-    assert.equal(template.variables.length, 32);
+    assert.equal(template.variables.length, 33);
+    assert.ok(!template.html.includes('RESEND_UNSUBSCRIBE_URL'));
+    assert.ok(template.html.includes('{{{UNSUBSCRIBE_URL}}}'));
+    assert.equal(template.variables.find(v => v.key === 'UNSUBSCRIBE_URL').fallbackValue, undefined);
     for (const key of ['HERO_BODY', 'STORY1_BODY', 'STORY2_BODY', 'STORY3_BODY']) {
       assert.ok(template.html.includes(`{{{${key}}}}`));
       assert.ok(!template.text.includes(`{{{${key}}}}`));
