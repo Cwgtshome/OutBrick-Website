@@ -179,7 +179,7 @@ export default async function communityThread(req: Request, context: EdgeContext
   try {
     // A thread merged into another: send readers and search engines to where it went.
     if (redirect) return new Response(null, { status: 301, headers: withSecurity(new Headers({ location: threadPath(parsed.locale, redirect) })) });
-    if (missing) return new Response(source.replace('</head>', '<meta name="robots" content="noindex, follow"/></head>'), { status: 404, headers });
+    if (missing) return new Response(setMeta(source, 'name', 'robots', 'noindex, follow'), { status: 404, headers });
     if (!detail?.thread) return new Response(source, { status: shell.status, headers });
     const wanted = threadPath(parsed.locale, detail.thread);
     if (url.pathname !== wanted) {
