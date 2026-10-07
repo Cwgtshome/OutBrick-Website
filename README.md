@@ -3,6 +3,12 @@
 The public site for **OutBrick: Block Sort Puzzle**, served at
 [www.outbrick.site](https://www.outbrick.site).
 
+**Project context:** start with [current status](docs/CURRENT-STATUS.md),
+[architecture and operations](docs/ARCHITECTURE.md), and [the documentation index](docs/README.md).
+[AGENTS.md](AGENTS.md) contains shared working guidance; [CODEX.md](CODEX.md) and
+[CLAUDE.md](CLAUDE.md) point both agents to the same handoff record. The community backend uses
+Netlify Functions, managed Postgres, Blobs and Resend; CloudKit remains in the separate native game.
+
 Netlify builds it from this source on every push to `main` — `pnpm build` prerenders every
 route into `dist/client`, which is what gets published. Nothing here is committed build
 output, deliberately: an earlier version of this repository held a prerendered copy, and it
@@ -31,9 +37,10 @@ The game itself is a separate repository. This one is only the website.
 * The contact form (`contact`), the affiliate application (`affiliate`), job applications
   (`careers`) and the newsletter sign-up (`newsletter`) are Netlify Forms, detected from the
   prerendered HTML. In the Netlify UI, form
-  detection must be enabled (Forms → Enable form detection), and an email notification added
-  for each form (Site configuration → Notifications → Form submission notifications) so
-  submissions reach the inbox. The privacy policy's "Forms on this website" section describes
+  detection must be enabled (Forms → Enable form detection). Visitor acknowledgements and team
+  copies are sent by the Resend submission function described below; legacy Netlify plain email
+  notifications can duplicate those copies. Verify delivery and inspect the existing rules before
+  changing them. The privacy policy's "Forms on this website" section describes
   exactly this; change one and the other must follow.
 * `outbrick.site/r/<code>` 302-redirects to the App Store with `ct=aff-<code>` (netlify.toml).
   `node scripts/affiliate-link.mjs <code>` prints and checks a code's links.

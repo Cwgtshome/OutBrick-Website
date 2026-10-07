@@ -2,6 +2,11 @@
 
 *7 October 2026. The forum, support forum, FAQ and search for outbrick.site, built into the site.*
 
+The core forum and phase-2 server code are now implemented. Read
+[CURRENT-STATUS.md](CURRENT-STATUS.md) for deployed configuration and acceptance evidence, and
+[ARCHITECTURE.md](ARCHITECTURE.md) for source paths and operations. This document preserves the
+design contract; a planned feature or configured flag is not proof of an end-to-end live flow.
+
 ## The recommendation in one paragraph
 
 Build the community into the website itself, on **Netlify Database** (managed Postgres that Netlify
@@ -16,19 +21,24 @@ every element on the page.
 
 | | Netlify Database (chosen) | CloudKit public database | Hosted Discourse |
 |---|---|---|---|
-| Sign in with Google, Facebook, email | Yes, any provider | **No**: Apple ID only (CloudKit JS) | Yes (plugins) |
-| Full-text search, in five languages | Postgres full-text + trigram | **No**: prefix match on indexed fields only | Yes |
-| Email on reply, digests, moderation | Functions + Resend, our design | **No** server-side triggers to send mail | Yes, its own design |
+| Sign in with Apple, Google, email; optional Facebook | Our configured providers and server-side account system | Direct access uses iCloud identity; other identities need our server mapping and permission checks | Provider integrations |
+| Full-text search, in five languages | Postgres full-text + trigram | Indexed and token-based text queries; no SQL joins through related records | Search included |
+| Email on reply, digests, moderation | Functions + Resend, our design | Requires an external backend and email service; record subscriptions alone do not send our emails | Its own workflow and design |
 | Moderation, roles, reports, rate limits | Ours, in SQL | Hard: security roles are coarse, no server logic | Yes |
 | Our design system, VoiceOver behaviour | Every element ours | Ours (front end) | **Theming only**; its markup and focus handling are Discourse's |
 | Localised with the site (en/fr/de/es/ja) | Same dictionaries, same URLs | Ours | Its own UI strings |
-| Search engines see threads | Yes (edge-rendered) | Poor (client-only) | Yes |
-| Running cost | Netlify plan + Postgres usage (free tier to start) | Free | ~$100/month hosted, or a server to run |
-| Lives on outbrick.site, one account with the site | Yes | Yes | Separate subdomain and account |
+| Search engines see threads | Edge-rendered HTML | Possible with a host/rendering layer; CloudKit is not the website host | Server-rendered pages |
+| Running cost | Shared Netlify credits + email usage; Free plan has a hard allowance | Included storage subject to Apple's allocation; host, server and email costs remain | Hosting/subscription and maintenance depend on deployment |
+| Lives on outbrick.site, one account with the site | Yes | Possible with custom integration | Requires deployment and account integration choices |
 
 CloudKit is the right tool for what it does in the app (iCloud sync, the Village Race), and it can
 still feed the community later — for example, the app could open a pre-filled bug report. As the
-forum's database it fails on three hard requirements at once: non-Apple sign-in, search and email.
+forum's database it would require a rewrite of account mapping, queries and server workflows.
+It can support these features with additional infrastructure; our decision is based on the fit
+and maintenance cost of the existing Postgres implementation, not an absolute impossibility.
+CloudKit queries and identity behavior are documented in
+[CKQuery](https://developer.apple.com/documentation/cloudkit/ckquery) and
+[CloudKit web services](https://developer.apple.com/library/archive/documentation/DataManagement/Conceptual/CloudKitWebServicesReference/SettingUpWebServices.html).
 
 ## What AppleVis teaches us
 
@@ -78,13 +88,16 @@ plus English", with a one-tap "all languages" filter; the UI itself is fully tra
 - Respect `prefers-reduced-motion`, `prefers-contrast`, Dynamic Type (rem sizes), dark mode.
 - Target sizes ≥ 44 pt, visible focus rings in the site's colours, contrast ≥ 4.5:1 (tokens already pass).
 - Timestamps are `time` elements with a full spoken date ("7 October 2026 at 09:14").
-- Tested with VoiceOver on iOS and macOS, Voice Control and keyboard only, plus `pnpm audit:a11y` (axe) in CI.
+- Acceptance target: VoiceOver on iOS and macOS, Voice Control and keyboard only, plus
+  `pnpm audit:a11y` (axe) in CI. Automated/browser checks do not establish physical-device
+  assistive-technology acceptance; record each completed manual check in current status.
 
 ## Accounts and sign-in
 
 - **Sign in with Apple**, **Google**, **Facebook** (OAuth 2.0 / OpenID Connect, done in our own
   functions — no third-party identity service), and **email link** (a one-time sign-in link via
-  Resend) for anyone who wants none of those. Passkeys are the next step after launch.
+  Resend) for anyone who wants none of those. Facebook is optional and was not enabled in the
+  current production snapshot. Passkeys are implemented; members add one after signing in.
 - Each provider switches itself on when its credentials are in Netlify; the page only shows the
   buttons that work.
 - One member can link several providers. A member picks a **display name**; email addresses are never
@@ -151,11 +164,13 @@ and emails the members who follow Announcements. It never posts twice for one ve
 ## Phases
 
 1. **Launch** (this work): categories above, threads, replies, edit/delete, Markdown, solved answers,
-   bug form + status, idea upvotes, follows, notifications and emails, search, FAQ, the five sign-in
-   methods, moderation essentials, release posts, five languages, the accessibility contract.
-2. **Next**: reply by email, image uploads, passkeys, weekly digest, machine translation of a post on
-   request, trust levels, the app's "Report a bug" opening a pre-filled community report.
-3. **Later**: Game Center link (badge for verified players), RSS per category, a public roadmap view.
+   bug form + status, idea upvotes, follows, notifications and emails, search, FAQ, configured sign-in
+   providers, moderation essentials, release posts, five languages, the accessibility contract.
+2. **Implemented server capabilities**: reply by email, image uploads, passkeys, weekly digest,
+   translation on request, trust levels and thread merging. Check current status for enabled
+   features and live acceptance. The native app's Report a bug link remains tied to its own release.
+3. **Further work**: Game Center link (badge for verified players) and RSS per category. The public
+   roadmap, reactions, polls, bookmarks and community leaderboards are already in the source.
 
 ## What the owner has to do (the code waits for it, safely)
 
@@ -207,7 +222,7 @@ variables, marked secret.
    `COMMUNITY_UPLOADS=off` or `COMMUNITY_PASSKEYS=off` to hide either. Netlify's synchronous
    functions accept request bodies up to about 6 MB, so photos larger than that are refused by the
    platform before the 8 MB check; the page should shrink a large photo before uploading it.
-5. **Trust levels**: the scheduled function `community-trust` runs daily at 04:00 UTC and promotes
+5. **Trust levels**: the scheduled function `community-trust` runs daily at 08:00 UTC and promotes
    members to trusted (7 days, 10 visible posts, 2 solved answers or 5 votes on their ideas, no
    upheld report in 30 days). It never demotes; setting someone back to member is permanent for
    the schedule.
