@@ -122,6 +122,10 @@ export default communityApi;
 // Netlify reads this object statically at build time: every path must be a plain string literal.
 export const config = {
   path: [
+    '/api/community/admin',
+    '/api/community/admin/*',
+    '/api/community/content',
+    '/api/community/content/*',
     '/api/community/categories',
     '/api/community/categories/*',
     '/api/community/threads',

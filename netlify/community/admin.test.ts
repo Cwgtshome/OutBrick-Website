@@ -14,6 +14,7 @@ import { stubFetch } from './auth/test/kit.ts';
 import { adminWords } from '../../lib/i18n/admin.ts';
 import { contentPage } from '../edge-functions/community-content.ts';
 import { homeStaticHtml } from '../../lib/community/static-html.ts';
+import { config as apiConfig } from '../functions/community-api.mts';
 let pg: PGlite;
 before(async () => {
   pg = await freshDatabase();
@@ -29,6 +30,20 @@ const draft = {
   summary: 'A private draft.',
   body: '## Hello\n\nSafe **content**, [guide](/community/c/help). <script>alert(1)</script>',
 };
+void test('Netlify routes deployed admin and editorial requests to their function', () => {
+  for (const path of [
+    '/api/community/admin',
+    '/api/community/admin/watch',
+    '/api/community/admin/content',
+    '/api/community/admin/content/42/publish',
+    '/api/community/content',
+    '/api/community/content/en/blog/voiceover-guide',
+  ]) {
+    assert.ok(apiConfig.path.some((route) => route === path ||
+      (route.endsWith('/*') && path.startsWith(route.slice(0, -1)))), `${path} must reach the deployed handler`);
+  }
+  assert.ok(!apiConfig.path.includes('/api/community/*'), 'auth routes retain their own function');
+});
 void test('exact verified admin allowlist; no domain-wide or substring matching', () => {
   const old = process.env.COMMUNITY_ADMIN_EMAILS;
   try {
