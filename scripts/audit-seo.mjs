@@ -82,7 +82,11 @@ const EMAIL = /\b[A-Z0-9._%+-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)*\.[A-Z]{2,}\b/gi;
   });
   for (const full of walk(distDir)) {
     if (!/\.(txt|xml|json|rsc|webmanifest)$/.test(full) || full.includes(`${path.sep}_next${path.sep}`)) continue;
-    const found = [...new Set(fs.readFileSync(full, 'utf8').match(EMAIL) ?? [])];
+    // The contact page's own RSC payload repeats the one address it is allowed to show (below).
+    const rel = path.relative(distDir, full).split(path.sep).join('/');
+    const contactPayload = /^(?:(?:fr|de|es|ja)\/)?contact\.rsc$/.test(rel);
+    const text = fs.readFileSync(full, 'utf8');
+    const found = [...new Set((contactPayload ? text.replaceAll('support@outbrick.site', '') : text).match(EMAIL) ?? [])];
     if (found.length) {
       console.log(`${path.relative(distDir, full)}\n  ERROR  publishes an email address (${found.join(', ')}) — use the contact form instead\n`);
       process.exitCode = 1;
@@ -104,10 +108,15 @@ for (const file of listHtmlFiles()) {
 
   const body = stripSvg(stripScripts(html));
 
-  // No email address is published on this site: visitors write through /contact. A mailto: link
-  // or a bare address anywhere in a page (markup, JSON-LD or RSC payload) fails the build.
-  if (/mailto:/i.test(html)) err('page contains a mailto: link — link to /contact instead');
-  const emails = [...new Set(html.match(EMAIL) ?? [])];
+  // No email address is published on this site except on /contact: visitors write through the
+  // form. A mailto: link or a bare address anywhere else in a page (markup, JSON-LD or RSC
+  // payload) fails the audit.
+  // One deliberate exception (owner's request, October 2026): the contact page itself, in each
+  // language, offers support@outbrick.site as a mailto link beside the form. Nowhere else.
+  const allowedEmail = /^\/(?:(?:fr|de|es|ja)\/)?contact$/.test(route) ? 'support@outbrick.site' : null;
+  const scanned = allowedEmail ? html.replaceAll(`mailto:${allowedEmail}`, '').replaceAll(allowedEmail, '') : html;
+  if (/mailto:/i.test(scanned)) err('page contains a mailto: link — link to /contact instead');
+  const emails = [...new Set(scanned.match(EMAIL) ?? [])];
   if (emails.length) err(`page shows an email address (${emails.join(', ')}) — use the contact form instead`);
 
   if (full) {

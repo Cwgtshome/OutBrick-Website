@@ -213,6 +213,8 @@ export function NetlifyForm({
       ref={formRef}
     >
       <input type="hidden" name="form-name" value={name} />
+      {/* The page language, so the acknowledgement email (emails/submission.ts) is written in it. */}
+      <input type="hidden" name="locale" value={locale} />
       {/* The honeypot: people never see it; a bot that fills it in is dropped by Netlify. */}
       <div hidden>
         <label>

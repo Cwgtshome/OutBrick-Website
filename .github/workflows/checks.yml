@@ -40,6 +40,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Newsletter confirmation and unsubscribe
+        run: node --experimental-strip-types --test scripts/test-newsletter.mjs
+
       - name: SEO audit
         run: pnpm audit:seo
 
