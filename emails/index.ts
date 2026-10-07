@@ -13,7 +13,10 @@ import {
   type Rendered,
 } from './templates.ts';
 
+import { communityConfirmEmail, communityDigest, communityNotification, communitySignIn, communityWelcome, type NotificationItem } from './community.ts';
+
 export * from './templates.ts';
+export * from './community.ts';
 export { emailCopy, emailLocales, isEmailLocale, type EmailLocale } from './i18n.ts';
 
 /** An issue file in emails/issues/: one IssueContent per language. */
@@ -31,9 +34,38 @@ const sampleMessages: Record<EmailLocale, string> = {
   ja: 'ステージ213で、ゲートの一手前で手数切れになります。\n目標手数でクリアできますか？ <b>太字ではありません</b> & リンクでもありません。',
 };
 
-export type TemplateName = 'contact' | 'contact-bug' | 'careers' | 'affiliate' | 'newsletter-confirm' | 'newsletter-welcome' | 'newsletter-campaign';
+export type CommunityTemplateName =
+  | 'community-signin'
+  | 'community-confirm-email'
+  | 'community-confirm-change'
+  | 'community-welcome'
+  | 'community-reply'
+  | 'community-mention'
+  | 'community-watched'
+  | 'community-status'
+  | 'community-solved'
+  | 'community-release'
+  | 'community-moderation'
+  | 'community-digest';
 
-export const templateNames: TemplateName[] = ['contact', 'contact-bug', 'careers', 'affiliate', 'newsletter-confirm', 'newsletter-welcome', 'newsletter-campaign'];
+export type TemplateName = 'contact' | 'contact-bug' | 'careers' | 'affiliate' | 'newsletter-confirm' | 'newsletter-welcome' | 'newsletter-campaign' | CommunityTemplateName;
+
+export const communityTemplateNames: CommunityTemplateName[] = [
+  'community-signin',
+  'community-confirm-email',
+  'community-confirm-change',
+  'community-welcome',
+  'community-reply',
+  'community-mention',
+  'community-watched',
+  'community-status',
+  'community-solved',
+  'community-release',
+  'community-moderation',
+  'community-digest',
+];
+
+export const templateNames: TemplateName[] = ['contact', 'contact-bug', 'careers', 'affiliate', 'newsletter-confirm', 'newsletter-welcome', 'newsletter-campaign', ...communityTemplateNames];
 
 export const templateTitles: Record<TemplateName, string> = {
   contact: 'Contact acknowledgement (Support topic)',
@@ -43,7 +75,61 @@ export const templateTitles: Record<TemplateName, string> = {
   'newsletter-confirm': 'Newsletter: confirm your subscription',
   'newsletter-welcome': 'Newsletter: welcome',
   'newsletter-campaign': 'Newsletter: campaign layout (sample issue)',
+  'community-signin': 'Community: sign-in link',
+  'community-confirm-email': 'Community: confirm your email (Facebook sign-in)',
+  'community-confirm-change': 'Community: confirm a changed email',
+  'community-welcome': 'Community: welcome (first sign-in)',
+  'community-reply': 'Community: reply to your post',
+  'community-mention': 'Community: you were mentioned',
+  'community-watched': 'Community: new post in something you follow',
+  'community-status': 'Community: status change (Fixed in 5.1)',
+  'community-solved': 'Community: your answer was marked Solved',
+  'community-release': 'Community: release announcement (from news@)',
+  'community-moderation': 'Community: moderation notice',
+  'community-digest': 'Community: several notifications grouped',
 };
+
+const sampleTitles: Record<EmailLocale, string> = {
+  en: 'VoiceOver reads the move counter <i>twice</i>',
+  fr: 'VoiceOver lit le compteur de coups <i>deux fois</i>',
+  de: 'VoiceOver liest den Zugzähler <i>doppelt</i> vor',
+  es: 'VoiceOver lee el contador de movimientos <i>dos veces</i>',
+  ja: 'VoiceOverが手数カウンターを<i>2回</i>読み上げる',
+};
+
+const sampleActors: Record<EmailLocale, string> = { en: 'Ada', fr: 'Camille', de: 'Lena', es: 'Lucía', ja: '花子' };
+
+const sampleNotes: Record<EmailLocale, string> = {
+  en: 'Fixed in 5.1. Thanks for the clear steps!',
+  fr: 'Corrigé dans la 5.1. Merci pour les étapes si claires !',
+  de: 'Behoben in 5.1. Danke für die klaren Schritte!',
+  es: 'Corregido en la 5.1. ¡Gracias por los pasos tan claros!',
+  ja: '5.1で修正しました。わかりやすい手順をありがとうございます！',
+};
+
+const sampleReasons: Record<EmailLocale, string> = {
+  en: 'It shared another player’s email address. You’re welcome to post it again without that line.',
+  fr: 'Il contenait l’adresse e-mail d’un autre joueur. Vous pouvez le republier sans cette ligne.',
+  de: 'Er enthielt die E-Mail-Adresse eines anderen Spielers. Sie können ihn gern ohne diese Zeile erneut posten.',
+  es: 'Incluía la dirección de correo de otro jugador. Puedes volver a publicarlo sin esa línea.',
+  ja: 'ほかのプレイヤーのメールアドレスが含まれていました。その行を除けば、もう一度投稿していただいてかまいません。',
+};
+
+function sampleItem(locale: EmailLocale, kind: NotificationItem['kind']): NotificationItem {
+  const thread = { title: sampleTitles[locale], url: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/community/t/42/voiceover-move-counter#post-3` };
+  return {
+    kind,
+    actorName: kind === 'release' || kind === 'moderation' ? null : sampleActors[locale],
+    threadTitle: kind === 'release' ? 'OutBrick 5.1' : thread.title,
+    url: thread.url,
+    excerpt: `**${sampleMessages[locale].split('\n')[0]}**\n\n> ${sampleMessages[locale].split('\n')[1]}`,
+    status: kind === 'status' ? 'fixed' : null,
+    statusNote: kind === 'status' ? sampleNotes[locale] : null,
+    version: kind === 'release' ? '5.1' : null,
+    reason: kind === 'moderation' ? `${sampleReasons[locale]} <b>Not bold</b>` : null,
+  };
+}
+
 
 /** Renders one template with sample data. Sample links are inert (#preview). */
 export function renderSample(name: TemplateName, locale: EmailLocale, issue: IssueFile, assetBase?: string): Rendered {
@@ -61,6 +147,41 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
       return newsletterConfirm({ locale, assetBase, confirmUrl: `${sampleLink}-confirm` });
     case 'newsletter-welcome':
       return newsletterWelcome({ locale, assetBase, unsubscribeUrl: `${sampleLink}-unsubscribe` });
+    case 'community-signin':
+      return communitySignIn({ locale, assetBase, url: `${sampleLink}-signin` });
+    case 'community-confirm-email':
+      return communityConfirmEmail({ locale, assetBase, url: `${sampleLink}-confirm-email`, reason: 'provider' });
+    case 'community-confirm-change':
+      return communityConfirmEmail({ locale, assetBase, url: `${sampleLink}-confirm-change`, reason: 'change' });
+    case 'community-welcome':
+      return communityWelcome({ locale, assetBase, name: `${sampleActors[locale]} <b>Not bold</b>` });
+    case 'community-reply':
+    case 'community-mention':
+    case 'community-watched':
+    case 'community-status':
+    case 'community-solved':
+    case 'community-release':
+    case 'community-moderation': {
+      const kind = name.slice('community-'.length) as NotificationItem['kind'];
+      return communityNotification({
+        locale,
+        assetBase,
+        item: sampleItem(locale, kind),
+        manageUrl: `${sampleLink}-settings`,
+        unsubscribeUrl: `${sampleLink}-unsubscribe`,
+        unsubscribeKind: kind,
+      });
+    }
+    case 'community-digest':
+      return communityDigest({
+        locale,
+        assetBase,
+        items: (['reply', 'mention', 'status', 'watched', 'solved'] as const).map((kind) => sampleItem(locale, kind)),
+        notificationsUrl: `${sampleLink}-notifications`,
+        manageUrl: `${sampleLink}-settings`,
+        unsubscribeUrl: `${sampleLink}-unsubscribe`,
+        unsubscribeKind: 'all',
+      });
     case 'newsletter-campaign': {
       const content = issue.locales[locale] ?? issue.locales.en;
       if (!content) throw new Error(`issue ${issue.id} has no ${locale} or en content`);

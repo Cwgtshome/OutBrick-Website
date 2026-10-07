@@ -10,6 +10,10 @@ const API = 'https://api.resend.com';
 export const SENDERS = {
   support: { from: 'OutBrick Support <support@outbrick.site>', replyTo: 'support@outbrick.site' },
   news: { from: 'OutBrick News <news@outbrick.site>', replyTo: 'news@outbrick.site' },
+  // OutBrick Community: sign-in links, welcome, notifications. Replies reach support@.
+  community: { from: 'OutBrick Community <support@outbrick.site>', replyTo: 'support@outbrick.site' },
+  // Community release announcements go out as news, from news@.
+  communityNews: { from: 'OutBrick News <news@outbrick.site>', replyTo: 'news@outbrick.site' },
 } as const;
 
 export type ResendResult = { ok: boolean; status: number; data: Record<string, unknown> | null; error?: string };
