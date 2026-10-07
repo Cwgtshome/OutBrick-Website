@@ -62,7 +62,17 @@ export type IdeaStatus = 'open' | 'considering' | 'planned' | 'shipped' | 'decli
 export type ThreadStatus = BugStatus | IdeaStatus;
 export type FollowLevel = 'watch' | 'mute' | 'none';
 export type ThreadSort = 'latest' | 'new' | 'top' | 'unanswered';
-export type NotificationKind = 'reply' | 'mention' | 'watched' | 'status' | 'solved' | 'release' | 'moderation' | 'welcome';
+export type NotificationKind =
+  | 'reply'
+  | 'mention'
+  | 'watched'
+  | 'status'
+  | 'solved'
+  | 'release'
+  | 'moderation'
+  | 'welcome'
+  // Phase 2 (community-p2): your post was moved by a thread merge. data: { fromThreadId, fromTitle }
+  | 'merged';
 export type ReportReason = 'spam' | 'abuse' | 'off_topic' | 'personal_info' | 'other';
 export type AssistiveTech = 'voiceover' | 'voice_control' | 'switch_control' | 'zoom' | 'larger_text' | 'colour_filters' | 'none';
 
@@ -104,9 +114,18 @@ export type SessionResponse = {
   /** Which sign-in buttons to show: only those whose credentials are configured. */
   providers: Provider[];
   unreadNotifications: number;
+  /** Phase 2 (community-p2): which optional features are switched on for this deploy. */
+  features: CommunityFeatures;
 };
 
-export type EmailSignInRequest = { email: string; locale: CommunityLocale; returnTo?: string; website?: string /* honeypot */ };
+export type EmailSignInRequest = {
+  email: string;
+  locale: CommunityLocale;
+  returnTo?: string;
+  website?: string /* honeypot */;
+  /** Phase 2 (community-p2): ms epoch when the form was shown (time-to-fill check). */
+  startedAt?: number;
+};
 
 export type UpdateMeRequest = {
   displayName?: string;
@@ -173,6 +192,8 @@ export type BugDetails = {
   steps: string;
   expected: string;
   actual: string;
+  /** Phase 2 (community-p2): the level the bug happened on, 1–100000 (the app's deep link fills it). */
+  level?: number;
 };
 
 export type NewThreadRequest = {
@@ -183,6 +204,8 @@ export type NewThreadRequest = {
   bug?: BugDetails;
   /** Honeypot: must be empty. */
   website?: string;
+  /** Phase 2 (community-p2): ms epoch when the form was shown (time-to-fill check). */
+  startedAt?: number;
 };
 
 export type UpdateThreadRequest = {
@@ -233,7 +256,13 @@ export type ThreadDetail = {
   canSolve: boolean;
 };
 
-export type NewPostRequest = { body: string; replyTo?: number | null; website?: string };
+export type NewPostRequest = {
+  body: string;
+  replyTo?: number | null;
+  website?: string;
+  /** Phase 2 (community-p2): ms epoch when the form was shown (time-to-fill check). */
+  startedAt?: number;
+};
 
 export type ReportRequest = { reason: ReportReason; note?: string };
 
@@ -340,3 +369,128 @@ export type FaqWriteRequest = {
   threadId?: number | null;
   position?: number;
 };
+
+// Phase 2 (community-p2) ------------------------------------------------------------------------
+//
+// Routes added in phase 2 (all under /api/community; writes need a same-origin request unless noted):
+//
+//   POST   /mod/threads/:id/merge   MergeThreadRequest → MergeThreadResponse      (moderator+)
+//   GET    /threads/:id                    → ThreadRedirectResponse when :id was merged away
+//   POST   /uploads                 raw image body or multipart field "file" → UploadResponse (201)
+//   GET    /uploads/:id                    → the image bytes (immutable, nosniff, CSP default-src 'none')
+//   DELETE /uploads/:id                    → { ok: true }   (the uploader, or a moderator)
+//   POST   /posts/:id/translate     TranslateRequest → TranslateResponse          (signed in)
+//   POST   /preview                 { body } → PreviewResponse (now with `problems`)
+//   POST   /auth/passkey/register/options     → PasskeyCreationOptions          (signed in)
+//   POST   /auth/passkey/register   PasskeyRegisterRequest → { passkey: PasskeyInfo } (201)
+//   POST   /auth/passkey/login/options        → PasskeyRequestOptions
+//   POST   /auth/passkey/login      PasskeyLoginRequest → { member: SelfMember } (sets the session cookie)
+//   GET    /me/passkeys                       → { passkeys: PasskeyInfo[] }
+//   DELETE /me/passkeys/:id                   → { ok: true }
+//   POST   /email/inbound           Resend inbound webhook (Svix-signed, no Origin) → { ok: true, outcome }
+//
+// Scheduled: community-trust.mts (daily 04:00 UTC, member → trusted), community-digest.mts
+// (Mondays from 08:00 UTC, the opt-in weekly digest; catch-up runs until 10:50 are no-ops once sent).
+
+/** What the deploy has switched on. The UI hides what is off. */
+export type CommunityFeatures = {
+  /** WebAuthn sign-in; always on (needs no credentials). */
+  passkeys: boolean;
+  /** Image uploads in posts (Netlify Blobs). */
+  uploads: boolean;
+  /** Replying to a notification email posts the reply (COMMUNITY_REPLY_DOMAIN + RESEND_WEBHOOK_SECRET + RESEND_API_KEY). */
+  replyByEmail: boolean;
+  /** "Translate this post" (ANTHROPIC_API_KEY). */
+  translate: boolean;
+  /** The weekly digest switch in settings (RESEND_API_KEY). `emailPrefs.digest` defaults to false. */
+  digest: boolean;
+};
+
+/** Email preference keys that default to OFF (every other key defaults to on). */
+export const emailPrefsOffByDefault: readonly string[] = ['digest'];
+
+export type MergeThreadRequest = { intoThreadId: number };
+/** The target thread after the merge, and how many posts moved into it. */
+export type MergeThreadResponse = { thread: ThreadSummary; moved: number };
+
+/** GET /threads/:id of a merged thread (HTTP 200): go to this thread instead (replace the URL). */
+export type ThreadRedirectResponse = { redirect: { id: number; slug: string } };
+
+export type Upload = {
+  /** 22 characters, [A-Za-z0-9_-]. */
+  id: string;
+  /** /api/community/uploads/<id> */
+  url: string;
+  /** What to insert in the composer: ![](upload:<id>) — the member must fill in the alt text. */
+  markdown: string;
+  contentType: 'image/jpeg' | 'image/png' | 'image/webp';
+  width: number;
+  height: number;
+  bytes: number;
+  createdAt: string;
+};
+export type UploadResponse = { upload: Upload };
+
+/** POST /preview. `problems` lists body field codes the post would be refused for, e.g. 'image_needs_alt'. */
+export type PreviewResponse = { html: string; problems?: string[] };
+
+export type TranslateRequest = { to: CommunityLocale };
+/** `html` is allow-listed like a post; `from` is the thread's language. */
+export type TranslateResponse = { html: string; from: CommunityLocale; to: CommunityLocale; cached: boolean };
+
+/** JSON forms of WebAuthn options: every binary value is base64url. Decode before navigator.credentials.*. */
+export type PasskeyCreationOptions = {
+  challenge: string;
+  rp: { id: string; name: string };
+  user: { id: string; name: string; displayName: string };
+  pubKeyCredParams: { type: 'public-key'; alg: number }[];
+  timeout: number;
+  attestation: 'none';
+  authenticatorSelection: { residentKey: 'required'; requireResidentKey: true; userVerification: 'preferred' };
+  excludeCredentials: { type: 'public-key'; id: string; transports?: string[] }[];
+};
+export type PasskeyRequestOptions = {
+  challenge: string;
+  rpId: string;
+  timeout: number;
+  userVerification: 'preferred';
+  allowCredentials: [];
+};
+/** A PublicKeyCredential from navigator.credentials.create(), binary fields base64url. */
+export type PasskeyRegisterRequest = {
+  id: string;
+  rawId: string;
+  type: 'public-key';
+  response: { clientDataJSON: string; attestationObject: string; transports?: string[] };
+  nickname?: string;
+};
+/** A PublicKeyCredential from navigator.credentials.get(), binary fields base64url. */
+export type PasskeyLoginRequest = {
+  id: string;
+  rawId: string;
+  type: 'public-key';
+  response: { clientDataJSON: string; authenticatorData: string; signature: string; userHandle?: string | null };
+};
+export type PasskeyInfo = {
+  id: number;
+  nickname: string;
+  createdAt: string;
+  lastUsedAt: string | null;
+  transports: string[];
+  /** Synced passkey (iCloud Keychain, Google Password Manager …). */
+  backedUp: boolean;
+};
+
+/**
+ * The iOS app's "Report a bug" opens /community/new (or /fr/community/new …) with these query
+ * parameters, which the form pre-fills; nothing is posted until the member presses Post:
+ *
+ *   ?category=bugs&device=<model>&os=<iOS version>&app=<version (build)>
+ *    &assistive=voiceover,switch_control&level=<n>&lang=<locale>
+ *
+ * device → bug.device (2–80), os → bug.osVersion (1–20), app → bug.appVersion (1–20),
+ * assistive → bug.assistive (AssistiveTech values, comma-separated; unknown ones dropped),
+ * level → bug.level (integer 1–100000; anything else dropped), lang → the thread language.
+ */
+export const bugDeepLinkParams = ['category', 'device', 'os', 'app', 'assistive', 'level', 'lang'] as const;
+export const bugLevelRange = { min: 1, max: 100000 } as const;

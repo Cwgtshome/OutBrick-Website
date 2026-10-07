@@ -14,11 +14,13 @@ import type {
 } from '../../lib/community/contract.ts';
 import { bugStatuses, communityLocales, ideaStatuses, pageSize } from '../../lib/community/contract.ts';
 import { ipHash, rateAllow, slugify, transaction } from './db.ts';
-import { ApiError, badRequest, forbidden, int, json, notFound, oneOf, readJson, str, tooMany } from './http.ts';
+import { ApiError, badRequest, filledTooFast, forbidden, int, json, notFound, oneOf, readJson, str, tooMany } from './http.ts';
 import { currentMember, hasRole, requireMember, type Viewer } from './session.ts';
 import {
   BODY_MAX,
   Params,
+  assertImagesOk,
+  attachUploads,
   bugFromRow,
   bugToJson,
   categoryBySlug,
@@ -26,6 +28,7 @@ import {
   idParam,
   isModerator,
   iso,
+  limitFor,
   modLog,
   needsReview,
   num,
@@ -218,16 +221,17 @@ export const postThread: Handler = async (req) => {
   requireCanWrite(viewer);
   if (category.team_only_threads && !hasRole(viewer, 'team')) throw forbidden('Only the OutBrick team starts threads here. You can reply to any of them.');
 
-  if (typeof body.website === 'string' && body.website.trim() !== '') {
+  if ((typeof body.website === 'string' && body.website.trim() !== '') || filledTooFast(body)) {
     return json({ thread: decoyThread(title, category.slug, category.kind, language, viewer) }, { status: 201 });
   }
 
   await rateLimitOrThrow([
-    [`thread:day:${viewer.id}`, 20, 86400],
-    [`thread:hour:${viewer.id}`, 5, 3600],
+    [`thread:day:${viewer.id}`, limitFor(viewer, 20, 60), 86400],
+    [`thread:hour:${viewer.id}`, limitFor(viewer, 5, 15), 3600],
   ]);
 
-  const rendered = await renderBody(md);
+  const rendered = await renderBody(md, { uploadOwners: [viewer.id] });
+  assertImagesOk(rendered);
   const pending = await needsReview(viewer, rendered.hasLink);
   const threadId = await transaction(async (q) => {
     const [t] = await q(
@@ -240,6 +244,7 @@ export const postThread: Handler = async (req) => {
       `INSERT INTO posts (thread_id, author_id, number, body_md, body_html, pending, has_link) VALUES ($1, $2, 1, $3, $4, $5, $6) RETURNING id::int AS id`,
       [id, viewer.id, md, rendered.html, pending, rendered.hasLink],
     );
+    await attachUploads(q, num(post.id), rendered.uploadIds);
     await refreshThreadCounters(q, id);
     // The author follows their own thread; muting it later silences replies too.
     await q(`INSERT INTO follows (member_id, target_type, target_id, level) VALUES ($1, 'thread', $2, 'watch') ON CONFLICT DO NOTHING`, [viewer.id, id]);

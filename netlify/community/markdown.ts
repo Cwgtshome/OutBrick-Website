@@ -13,8 +13,13 @@
 //   Links:   http and https only, or a path on this site ("/community/…"); anything else
 //            (javascript:, data:, vbscript:, protocol-relative //host) is shown as plain text.
 //            Every link carries rel="ugc nofollow noopener".
-//   Images:  not in phase 1. ![alt](url) becomes a link labelled with its alt text, so the
-//            address is still reachable and the alt text still reads.
+//   Images:  only the community's own uploads (phase 2): ![alt text](upload:<id>) becomes
+//            <img src="/api/community/uploads/<id>" alt="…" loading="lazy" width height>, and
+//            only when the caller passes that upload in (it exists and may be used) and the alt
+//            text is not empty. An empty alt is counted in `imagesWithoutAlt` and renders
+//            nothing (posting refuses it with fields.body = 'image_needs_alt'); an unknown upload
+//            renders its alt text. Any other ![alt](url) becomes a link labelled with its alt
+//            text, so the address is still reachable and the alt text still reads.
 //   Mentions: "@Display Name" becomes a link to /community/u/<id> when a member by that name
 //            exists. The caller looks the names up (see mentionCandidates) and passes them in;
 //            the renderer returns the ids it linked so notifications can be created.
@@ -24,12 +29,37 @@
 
 export type MentionTarget = { id: number; displayName: string };
 
+export type UploadTarget = { width: number; height: number };
+
 export type RenderOptions = {
   /** Members by lower-cased display name. */
   mentions?: Map<string, MentionTarget>;
+  /** Uploads this body may show, by id (see uploadCandidates). */
+  uploads?: Map<string, UploadTarget>;
 };
 
-export type RenderResult = { html: string; mentionedIds: number[]; hasLink: boolean };
+export type RenderResult = {
+  html: string;
+  mentionedIds: number[];
+  hasLink: boolean;
+  /** Upload ids rendered as images. */
+  uploadIds: string[];
+  /** ![](upload:…) images with empty alt text: a post with any is refused. */
+  imagesWithoutAlt: number;
+  /** ![alt](upload:…) images whose upload was not passed in (unknown, deleted, or someone else's). */
+  unknownUploads: number;
+};
+
+const uploadRef = /^upload:([A-Za-z0-9_-]{22})$/;
+
+/** Every upload id a body refers to as an image, for the caller to look up. */
+export function uploadCandidates(md: string): string[] {
+  const out = new Set<string>();
+  const re = /!\[[^\]\n]{0,1000}\]\(\s*<?upload:([A-Za-z0-9_-]{22})>?/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(md)) && out.size < 50) out.add(m[1]);
+  return [...out];
+}
 
 const MAX_BLOCK_DEPTH = 8;
 const MAX_INLINE_DEPTH = 12;
@@ -93,13 +123,21 @@ export function containsLink(md: string): boolean {
 }
 
 export function renderMarkdown(md: string, options: RenderOptions = {}): RenderResult {
-  const state: State = { mentions: options.mentions ?? new Map(), mentioned: new Set(), hasLink: false };
+  const state: State = { mentions: options.mentions ?? new Map(), mentioned: new Set(), hasLink: false, uploads: options.uploads ?? new Map(), images: new Set(), missingAlt: 0, unknownUploads: 0 };
   const lines = md.replace(/\r\n?/g, '\n').replace(/\t/g, '    ').replaceAll(String.fromCharCode(0), '\uFFFD').split('\n');
   const html = renderBlocks(lines, state, 0);
-  return { html, mentionedIds: [...state.mentioned], hasLink: state.hasLink };
+  return { html, mentionedIds: [...state.mentioned], hasLink: state.hasLink, uploadIds: [...state.images], imagesWithoutAlt: state.missingAlt, unknownUploads: state.unknownUploads };
 }
 
-type State = { mentions: Map<string, MentionTarget>; mentioned: Set<number>; hasLink: boolean };
+type State = {
+  mentions: Map<string, MentionTarget>;
+  mentioned: Set<number>;
+  hasLink: boolean;
+  uploads: Map<string, UploadTarget>;
+  images: Set<string>;
+  missingAlt: number;
+  unknownUploads: number;
+};
 
 // Blocks --------------------------------------------------------------------------------------
 
@@ -295,6 +333,21 @@ function parseInline(s: string, state: State, depth: number, flags: InlineFlags)
 
     if (c === '!' && s[i + 1] === '[' && flags.links && !missing.has('link')) {
       const link = parseLink(s, i + 1);
+      const upload = link ? uploadRef.exec(link.url.trim()) : null;
+      if (link && upload) {
+        const alt = link.text.replace(/\\([!-/:-@[-`{-~])/g, '$1').replace(/\s+/g, ' ').trim();
+        const target = state.uploads.get(upload[1]);
+        if (!alt) state.missingAlt++;
+        else if (target) {
+          state.images.add(upload[1]);
+          out += `<img src="/api/community/uploads/${upload[1]}" alt="${escapeHtml(alt)}" loading="lazy" width="${Math.trunc(target.width)}" height="${Math.trunc(target.height)}">`;
+        } else {
+          state.unknownUploads++;
+          out += escapeHtml(alt);
+        }
+        i = link.end;
+        continue;
+      }
       if (link) {
         const href = safeHref(link.url);
         const label = escapeHtml(link.text.trim() || link.url);
