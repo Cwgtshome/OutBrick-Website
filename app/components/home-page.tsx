@@ -5,6 +5,7 @@ import { cast, passes, villages } from '../../lib/villages';
 import { chromeCopy } from '../../lib/i18n/chrome';
 import { homeCopy } from '../../lib/i18n/home';
 import { localizedAsset } from '../../lib/i18n/assets';
+import { localizedVillageName } from '../../lib/i18n/village-names';
 import { localeAlternates, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { AppStoreBadge, Course, homeNavFor, VillageFooter, VillageHeader, BrandMark } from '../village-shell';
 import { VillageMotion } from '../village-motion';
@@ -291,8 +292,9 @@ export function HomePage({ locale }: { locale: Locale }) {
                 aria-label={t.journey.windowLabel}
               >
                 <ol className="journey-track">
-                  {villages.map((village, index) => (
-                    <li className="village" key={village.slug} style={{ '--y': `${Math.round(Math.sin(index * 0.9) * 22)}px` } as Vars}>
+                  {villages.map((village, index) => {
+                    const name = localizedVillageName(village.name, locale);
+                    return <li className="village" key={village.slug} style={{ '--y': `${Math.round(Math.sin(index * 0.9) * 22)}px` } as Vars}>
                       <div className="frame">
                         <img
                           loading="lazy"
@@ -300,20 +302,20 @@ export function HomePage({ locale }: { locale: Locale }) {
                           src={localizedAsset(`/assets/villages/${village.slug}.jpg`, locale)}
                           width={520}
                           height={1131}
-                          alt={t.journey.villageAlt(village.name)}
+                          alt={t.journey.villageAlt(name)}
                         />
                       </div>
-                      <b>{village.name}</b>
+                      <b>{name}</b>
                       <span>{t.journey.levelRange(index * 12 + 1, index * 12 + 12)}</span>
-                    </li>
-                  ))}
+                    </li>;
+                  })}
                 </ol>
               </section>
 
               <div className="wrap journey-meter" aria-hidden="true">
-                <span className="meter-label">Garden City</span>
+                <span className="meter-label">{localizedVillageName('Garden City', locale)}</span>
                 <span className="meter"><i /></span>
-                <span className="meter-label">Celebration Square</span>
+                <span className="meter-label">{localizedVillageName('Celebration Square', locale)}</span>
               </div>
             </div>
           </div>

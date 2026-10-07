@@ -21,7 +21,7 @@ patterns, a ledger that says exactly what lives and ads cost. Marketing that con
 | Share a result → `/play/result/<board>-<stars>` with a custom card image | Every clear becomes a link with a preview in Messages, WhatsApp, X, Discord |
 | Smart App Banner | One-tap Get/Open for every iPhone and iPad visitor |
 | Campaign-tagged App Store links | Which page, which button, which creator sent the download |
-| 27 journal guides, FR/DE/ES/JA home + play | Search traffic in five languages |
+| 99 journal guides in EN/FR/DE/ES/JA/PT-BR; localized public routes | Search traffic in six languages |
 | Press kit, wordmark and friends downloads | Journalists and creators can publish without asking |
 | Affiliate programme with `/r/<code>` links (in progress) | Creators get paid for results, not promises |
 

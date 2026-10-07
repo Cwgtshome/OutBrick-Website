@@ -22,11 +22,11 @@ every element on the page.
 | | Netlify Database (chosen) | CloudKit public database | Hosted Discourse |
 |---|---|---|---|
 | Sign in with Apple, Google, email; optional Facebook | Our configured providers and server-side account system | Direct access uses iCloud identity; other identities need our server mapping and permission checks | Provider integrations |
-| Full-text search, in five languages | Postgres full-text + trigram | Indexed and token-based text queries; no SQL joins through related records | Search included |
+| Full-text search, in six languages | Postgres full-text + trigram | Indexed and token-based text queries; no SQL joins through related records | Search included |
 | Email on reply, digests, moderation | Functions + Resend, our design | Requires an external backend and email service; record subscriptions alone do not send our emails | Its own workflow and design |
 | Moderation, roles, reports, rate limits | Ours, in SQL | Hard: security roles are coarse, no server logic | Yes |
 | Our design system, VoiceOver behaviour | Every element ours | Ours (front end) | **Theming only**; its markup and focus handling are Discourse's |
-| Localised with the site (en/fr/de/es/ja) | Same dictionaries, same URLs | Ours | Its own UI strings |
+| Localised with the site (en/fr/de/es/ja/pt-BR) | Same dictionaries, same URLs | Ours | Its own UI strings |
 | Search engines see threads | Edge-rendered HTML | Possible with a host/rendering layer; CloudKit is not the website host | Server-rendered pages |
 | Running cost | Shared Netlify credits + email usage; Free plan has a hard allowance | Included storage subject to Apple's allocation; host, server and email costs remain | Hosting/subscription and maintenance depend on deployment |
 | Lives on outbrick.site, one account with the site | Yes | Possible with custom integration | Requires deployment and account integration choices |
@@ -107,7 +107,7 @@ plus English", with a one-tap "all languages" filter; the UI itself is fully tra
 - Privacy: export my data, delete my account (posts become "Former member"), both self-service.
   The privacy policy and a new **Community guidelines** page say what is stored and why.
 
-## Emails (all in the site's email design, all five languages)
+## Emails (all in the site's email design, all six languages)
 
 | Email | When |
 |---|---|
@@ -165,7 +165,7 @@ and emails the members who follow Announcements. It never posts twice for one ve
 
 1. **Launch** (this work): categories above, threads, replies, edit/delete, Markdown, solved answers,
    bug form + status, idea upvotes, follows, notifications and emails, search, FAQ, configured sign-in
-   providers, moderation essentials, release posts, five languages, the accessibility contract.
+   providers, moderation essentials, release posts, six languages, the accessibility contract.
 2. **Implemented server capabilities**: reply by email, image uploads, passkeys, weekly digest,
    translation on request, trust levels and thread merging. Check current status for enabled
    features and live acceptance. The native app's Report a bug link remains tied to its own release.

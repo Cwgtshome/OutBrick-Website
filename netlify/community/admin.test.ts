@@ -306,7 +306,7 @@ void test('watch all uses existing deduplicated notifications and remains person
     false,
   );
 });
-void test('five language admin UI dictionaries have complete labels', () => {
+void test('six language admin UI dictionaries have complete labels', () => {
   for (const c of Object.values(adminWords)) {
     assert.deepEqual(Object.keys(c).sort(), Object.keys(adminWords.en).sort());
     assert.equal(c.roles.length, 5);

@@ -74,7 +74,7 @@ export const ptBR4a: ExtraGuides = {
     title: 'Game feel e “juice”: por que um bom deslizar importa',
     dek: '“Juice” é o feedback extra que torna um gesto prazeroso. Estudos com milhares de jogadores mostram que ele ajuda até certo ponto — depois atrapalha.',
     imageAlt: 'Tabuleiro real de OutBrick em um iPhone, com Moss e Vio entre tijolos flutuantes diante de uma parede azul-marinho',
-    tags: ['sensação de jogo', 'design expressivo', 'design de jogos', 'criação de jogos', 'feedback'],
+    tags: ['sensação de jogo', 'design expressivo', 'design de jogos', 'criação de jogos', 'retorno'],
     intro: 'Imagine duas versões do mesmo jogo. Em uma, um bloco atravessa o tabuleiro e para. Na outra, ele desliza, desacelera ao chegar, encosta de leve na parede e levanta um pouco de poeira ao sair pela porta. As regras são iguais. Uma parece uma planilha; a outra, um brinquedo. Designers chamam essa diferença de game feel. O feedback extra, dispensável para as regras mas responsável por parte da sensação, é chamado de “juice”. É uma das ideias mais discutidas no desenvolvimento de jogos e, até pouco tempo, uma das menos testadas. A pesquisa disponível agora traz um recado claro: o juice existe, e o excesso também.',
     keyTakeaways: [
       'Juice é feedback redundante: respostas visuais, sonoras ou táteis extras que as regras dispensam, mas que o jogador percebe.',

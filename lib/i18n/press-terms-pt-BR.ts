@@ -16,6 +16,7 @@ export const pressTermsPtBR: Record<string, string> = {
   'OutBrick 4.2 is on the App Store: 2,000 solver-verified boards, 167 brick villages and nine brick friends':
     'OutBrick 4.2 está na App Store: 2.000 tabuleiros verificados por um solucionador, 167 vilarejos de tijolos e nove amigos de tijolo',
   'OutBrick 4.2 arrives on the App Store': 'OutBrick 4.2 chega à App Store',
+  'OutBrick 4.2 is on the App Store: 2,000 solver-verified boards, 167 brick villages and nine brick friends, on iPhone, iPad, Mac, Apple TV, Vision Pro and Watch.': 'OutBrick 4.2 chegou à App Store com 2.000 fases verificadas, 167 vilarejos de blocos e nove amigos, para iPhone, iPad, Mac, Apple TV, Vision Pro e Watch.',
   'The sliding-brick colour-sort puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, where a board looks impossible and never is.':
     'O quebra-cabeça de blocos deslizantes e separação por cor para iPhone, iPad, Mac, Apple TV, Apple Vision Pro e Apple Watch. O tabuleiro pode parecer impossível, mas nunca é.',
   '24 September 2026': '24 de setembro de 2026',

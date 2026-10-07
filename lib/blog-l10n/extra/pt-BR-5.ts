@@ -282,7 +282,7 @@ export const ptBR5: ExtraGuides = {
     ],
   },
   'video-game-nostalgia': {
-    title: 'Nostalgia dos videogames: por que ainda gostamos dos jogos antigos',
+    title: 'Nostalgia dos videogames: por que gostamos dos jogos antigos',
     dek: 'Por que jogos da infância ainda atraem você, o que pesquisas dizem sobre nostalgia, humor e conexão, e por que remakes e jogos retrô vendem tanto.',
     imageAlt: 'Um amigo de tijolo rosa com uma varinha de estrela e um amigo de tijolo verde em cada lado de um celular que mostra o mapa da jornada de OutBrick nas Fontes de Bambu',
     tags: ['nostalgia de videogames', 'jogos retrô', 'nostalgia', 'bem-estar', 'sucesso de jogos'],

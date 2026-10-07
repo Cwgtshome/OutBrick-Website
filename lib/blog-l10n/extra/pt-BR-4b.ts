@@ -6,7 +6,7 @@ export const ptBR4b: ExtraGuides = {
     title: 'O som da vitória: como o áudio molda a experiência nos jogos',
     dek: 'O som muda a imersão e a confiança do jogador; a música também altera a percepção do tempo. Veja como projetar para jogar no mudo.',
     imageAlt: 'Um iPhone com o mapa Jornada do OutBrick em Cherry Blossom Town, entre Moss com seu cinto de ferramentas e Zippy, amarelo, piscando',
-    tags: ['áudio em jogos', 'design de som', 'feedback', 'criação de jogos', 'experiência do jogador'],
+    tags: ['áudio em jogos', 'design de som', 'retorno', 'criação de jogos', 'experiência do jogador'],
     intro: 'Desative o som de um jogo que você conhece bem e algo estranho acontece. As regras continuam iguais, mas tudo parece mais sem graça, mais lento e menos nítido. O clique de uma peça ao parar, a nota que sobe quando você está perto de concluir o tabuleiro, o acorde curto da vitória: esses sons transmitiam informações que você nem percebia estar recebendo. O som é uma das partes mais poderosas e menos visíveis do design de jogos. Pesquisadores mediram seus efeitos na imersão, nas emoções e até na duração que as pessoas acham que jogaram. Como muita gente joga no celular sem áudio, os estudos também deixam uma lição: o som nunca deve ser a única forma de comunicar algo importante.',
     keyTakeaways: [
       'Em um experimento controlado, o áudio melhorou todas as dimensões avaliadas da experiência, da imersão e do fluxo à sensação de competência e às emoções positivas.',

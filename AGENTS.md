@@ -16,8 +16,9 @@ Check Git status, remote, branch and concurrent ownership. Preserve unrelated ch
 - Keep released App Store functionality separate from work in development. The dated checkpoint
   is iOS 5.0.1 released, with 5.1 Slide & Match still in development; verify again before changing
   release claims. Do not announce a release from a branch, simulator build or planned What's New.
-- Update all five languages: English, French, German, Spanish and Japanese. English routes are
-  unprefixed; the others use `/fr`, `/de`, `/es`, `/ja`. Preserve localized navigation and metadata.
+- Update all six languages: English, French, German, Spanish, Japanese and Brazilian Portuguese.
+  English routes are unprefixed; translated routes use `/fr`, `/de`, `/es`, `/ja` and `/pt-BR`.
+  Preserve localized navigation and metadata.
 - Follow the existing `.ob-site` design, typography, colors and components in `app/globals.css`
   and `app/styles/`. Reuse the established cards, sections, focus states and responsive layouts.
   A `.ledger` row has a marker column: include its `.mark` before the content so prose has room.

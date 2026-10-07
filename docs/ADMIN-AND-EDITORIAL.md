@@ -65,3 +65,7 @@ readback and an actual verified owner sign-in; local PGlite tests do not establi
 
 
 Release: PR #15 merged at `d0cc7d6`; Netlify production deploy `6ac66d5741587b000833a715` published with migrations applied. All 13 cloud checks and all 233 local community/auth cases passed. News team draft/save/reload/private-404 and 390px layout are verified on the deployment preview. Fresh production news/support sign-in and role acceptance remain pending Mail access while the Mac is locked. See CURRENT-STATUS.md for the complete release and Brazil translation coordination receipts.
+
+## Brazilian Portuguese locale work
+
+The isolated `codex/pt-br-localization` branch adds Brazilian Portuguese forum navigation, feedback, auth and notification email, eleven FAQ entries and nine editorial guide threads in new additive migrations. The existing guide and admin migrations are unchanged, and PR #15 authorization remains intact. It is based on main checkpoint `a247aa6`; no localization PR or deployment preview exists yet. See [CURRENT-STATUS.md](CURRENT-STATUS.md) for the full scope and local checks. Do not amend the admin release receipt above when integrating this work.

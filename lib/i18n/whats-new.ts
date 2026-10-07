@@ -136,7 +136,7 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
     },
   },
   'pt-BR': {
-    meta: { title: 'Novidades da OutBrick: atualizações da mais recente para a mais antiga', description: 'Notas de versão da OutBrick, da mais recente para a mais antiga. Versão 5.0.1: VoiceOver mais rápido, dicas faladas, portões mais claros, estrelas por pontuação e recursos do sistema Apple.' },
+    meta: { title: 'Novidades da OutBrick: notas de versão', description: 'Histórico de atualizações do OutBrick. Versão 5.0.1: melhorias no VoiceOver, dicas faladas, portões mais claros, estrelas por pontuação e recursos da Apple.' },
     crumb: 'Novidades', label: 'Notas da versão', title: ['Novidades na ', 'OutBrick.'],
     lede: (version, date) => `As notas publicadas com cada atualização da App Store, palavra por palavra. A versão atual é ${version}, lançada em ${date}.`,
     getUpdate: 'Obter a atualização', rss: 'Acompanhar por RSS (em inglês)', current: 'Versão atual', version: 'Versão', released: 'Lançada em',

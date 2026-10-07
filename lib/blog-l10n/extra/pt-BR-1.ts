@@ -395,7 +395,7 @@ export const ptBR1: ExtraGuides = {
     title: 'O momento eureca: como o insight aparece no cérebro',
     dek: 'A solução que surge de repente tem sinais próprios no cérebro. Veja por que palpites eureca costumam acertar — e quando podem falhar.',
     imageAlt: 'Jogadora percebe de repente uma solução ao olhar para um quebra-cabeça de blocos deslizantes',
-    tags: ['momento eureca', 'insight', 'psicologia dos quebra-cabeças', 'cérebro', 'resolução de problemas'],
+    tags: ['momento eureca', 'percepção', 'psicologia dos quebra-cabeças', 'cérebro', 'resolução de problemas'],
     intro: 'Há duas maneiras de resolver um quebra-cabeça. Às vezes, você avança passo a passo, com a sensação constante de estar chegando perto. Em outras, nada parece andar e, de repente, a resposta aparece inteira, óbvia, acompanhada de uma onda de prazer. Esse segundo tipo de experiência, o momento eureca, fascina psicólogos há um século. Nos últimos vinte anos, a neurociência começou a mostrar que não é apenas um sentimento sobreposto ao raciocínio comum: pode ser outro caminho para chegar à solução.',
     keyTakeaways: [
       'Em problemas de insight, as pessoas muitas vezes não percebem que estão se aproximando da resposta: ela surge sem aviso.',

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { extractRenderedCopy, extractMetadataCopy, findCarryovers } from './lib/rendered-copy.mjs';
+import { extractRenderedCopy, extractMetadataCopy, findCarryovers, carryoverException } from './lib/rendered-copy.mjs';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
 const outDir = fileURLToPath(new URL('../outputs/', import.meta.url));
 fs.mkdirSync(outDir, { recursive: true });
@@ -23,12 +23,13 @@ const firstUndoRule = {
   de:'Auf jedem Spielfeld ist das erste Rückgängigmachen kostenlos und wird nicht von deinem Vorrat abgezogen.',
   es:'En cada tablero, la primera acción de deshacer es gratuita y no consume tu reserva.',
   ja:'各盤面では最初の1回の「元に戻す」が無料で、ストックを消費しません。',
+  'pt-BR':'A primeira ação de desfazer em cada tabuleiro é grátis e não consome sua reserva.',
 };
 async function verifyChrome(page, locale) {
   if(locale !== 'en' && new URL(page.url()).pathname.match(/^\/(fr|de|es|ja|pt-BR)\/c(?:\/|$)/)) {
     const appCopy=await page.locator('.challenge .lede,.challenge .facts,.grid.g3 .card:nth-child(2) p').allTextContents();
     assert.ok(appCopy.join(' ').includes(firstUndoRule[locale]), `${locale}: first undo consumes no reserve`);
-    assert.doesNotMatch(appCopy.join(' '), /sans limite|unbegrenzt|ilimitada|何度でも/);
+    assert.doesNotMatch(appCopy.join(' '), /sans limite|unbegrenzt|ilimitada|何度でも|não acaba|sem limite|ilimitado/i);
   }
   for (const nav of await page.locator('header.site nav').all()) {
     const links = await nav.locator('a').evaluateAll(anchors => anchors.map(a => ({ href: new URL(a.href).pathname, label: a.textContent.trim() })));
@@ -73,7 +74,7 @@ try {
     const currentPage = await currentContext.newPage();
     try {
       for (const locale of locales) for (const [section, destination] of Object.entries(currentSections)) {
-        const response = await currentPage.goto(`${base}${localized(locale, `/${section}`)}`, { waitUntil: 'networkidle' });
+        const response = await currentPage.goto(`${base}${localized(locale, `/${section}`)}`, { waitUntil: 'load' });
         assert.equal(response.status(), 200);
         const navs = currentPage.locator('header.site nav');
         assert.equal(await navs.count(), 2, `${locale}/${section}: desktop and mobile navigation`);
@@ -90,13 +91,13 @@ try {
     let englishCopy;
     for (const locale of locales) {
       const suffix = /^\/c(?:\/|$)/.test(route) ? (route === '/c' ? '?lv=42&par=8&beat=0#main' : '?par=8&beat=0#main') : '?navqa=1#main';
-      const response = await page.goto(`${base}${localized(locale, route)}${suffix}`, { waitUntil: 'networkidle' });
+      const response = await page.goto(`${base}${localized(locale, route)}${suffix}`, { waitUntil: 'load' });
       await identity(locale, response);
       await verifyChrome(page, locale);
       const html = await page.content();
       const renderedCopy = [...extractRenderedCopy(html, {localized:locale !== 'en'}), ...extractMetadataCopy(html)];
       if(locale === 'en') englishCopy = renderedCopy;
-      else assert.deepEqual(findCarryovers(englishCopy, renderedCopy, locale).filter(item => item.text !== 'Português (Brasil)'), [], `${locale}${route}: hydrated English carryover`);
+      else assert.deepEqual(findCarryovers(englishCopy, renderedCopy, locale).filter(item => !carryoverException(item, locale)), [], `${locale}${route}: hydrated English carryover`);
       const links = await languageLinks();
       assert.equal(links.length, locales.length);
       for (const target of locales) {
@@ -111,33 +112,33 @@ try {
   for (const [route, from, to] of [['/c', 'fr', 'de'], ['/c/42', 'de', 'ja'], ['/privacy', 'es', 'fr'], ['/blog/designing-for-real-life-play', 'ja', 'es']]) {
     const suffix = /^\/c(?:\/|$)/.test(route) ? (route === '/c' ? '?lv=42&par=8&beat=0#main' : '?par=8&beat=0#main') : '?navqa=1#main';
     const start = `${base}${localized(from, route)}${suffix}`;
-    await page.goto(start, { waitUntil: 'networkidle' });
+    await page.goto(start, { waitUntil: 'load' });
     await languageLinks();
     await page.locator(`footer.site details.langs a[hreflang="${to}"]`).click();
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
     assert.equal(page.url(), `${base}${localized(to, route)}${suffix}`);
     assert.equal(await page.locator('html').getAttribute('lang'), to);
-    await page.goBack({ waitUntil: 'networkidle' });
+    await page.goBack({ waitUntil: 'load' });
     assert.equal(page.url(), start);
     assert.equal(await page.locator('html').getAttribute('lang'), from);
     evidence.clicks.push({ route, from, to, queryHashPreserved: true, back: 'passed' });
   }
   for (const locale of locales.slice(1)) {
-    await page.goto(`${base}/${locale}/blog/designing-for-real-life-play`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}/${locale}/blog/designing-for-real-life-play`, { waitUntil: 'load' });
     for (const kind of ['category', 'tag']) {
       const link = page.locator(`main a[href^="/${locale}/blog/${kind}/"]`).first();
       const href = await link.getAttribute('href');
-      await link.click(); await page.waitForLoadState('networkidle');
+      await link.click(); await page.waitForLoadState('load');
       assert.equal(new URL(page.url()).pathname, href);
       assert.equal(await page.locator('html').getAttribute('lang'), locale);
       evidence.internalNavigation.push({ locale, kind, href });
-      await page.goBack({ waitUntil: 'networkidle' });
+      await page.goBack({ waitUntil: 'load' });
     }
     for (const [kind, selector] of [['author', `main a[href^="/${locale}/authors/"]`], ['footer-help', `footer.site a[href="/${locale}/support"]`], ['header-journal', `header a[href="/${locale}/blog"]`]]) {
-      await page.goto(`${base}/${locale}/blog/designing-for-real-life-play`, { waitUntil: 'networkidle' });
+      await page.goto(`${base}/${locale}/blog/designing-for-real-life-play`, { waitUntil: 'load' });
       const link = page.locator(selector).first();
       const href = await link.getAttribute('href');
-      await link.click(); await page.waitForLoadState('networkidle');
+      await link.click(); await page.waitForLoadState('load');
       assert.equal(new URL(page.url()).pathname, href);
       assert.equal(await page.locator('html').getAttribute('lang'), locale);
       evidence.internalNavigation.push({ locale, kind, href });
@@ -145,7 +146,7 @@ try {
   }
   for (const locale of locales) {
     for (const route of ['/404', '/__locale_navigation_missing__']) {
-      const response = await page.goto(`${base}${localized(locale, route)}`, { waitUntil: 'networkidle' });
+      const response = await page.goto(`${base}${localized(locale, route)}`, { waitUntil: 'load' });
       await identity(locale, response, route === '/404' ? 200 : 404);
       const robots = await page.locator('meta[name="robots"]').evaluateAll(tags => tags.map(tag => tag.content));
       assert.match(robots.join(', '), /noindex/);
@@ -161,9 +162,9 @@ try {
       await verifyChrome(plain, locale);
       const links = await plain.locator('footer.site details.langs a[hreflang]').evaluateAll(anchors => anchors.map(anchor => ({ locale: anchor.hreflang, href: anchor.href, flag: anchor.querySelector('svg.flag')?.innerHTML ?? '' })));
       verifyFlags(links);
-      assert.equal(links.length, 5);
+      assert.equal(links.length, locales.length);
       for (const target of locales) assert.equal(new URL(links.find(link => link.locale === target)?.href ?? '').pathname, localized(target, route));
-      evidence.noScriptLanguages.push({ locale, route, targets: 5 });
+      evidence.noScriptLanguages.push({ locale, route, targets: locales.length });
     }
   }
   await noScript.close();

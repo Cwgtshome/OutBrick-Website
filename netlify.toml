@@ -441,7 +441,7 @@
   status = 301
   force = true
 
-+[[redirects]]
+[[redirects]]
   from = "/pt-BR/privacy-policy"
   to = "/pt-BR/privacy"
   status = 301

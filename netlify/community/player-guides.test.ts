@@ -7,7 +7,7 @@ import { locales } from '../../lib/i18n/locales.ts';
 import { homeStaticHtml } from '../../lib/community/static-html.ts';
 import { guideWords } from '../../lib/community/player-guides.ts';
 
-void test('all five languages: team guides resolve every internal thread link, survive replay, and notify nobody', async () => {
+void test('all six languages: team guides resolve every internal thread link, survive replay, and notify nobody', async () => {
   const pg = await freshDatabase();
   try {
     const { rows } = await pg.query<{
@@ -21,7 +21,7 @@ void test('all five languages: team guides resolve every internal thread link, s
     }>(
       `SELECT g.locale,g.key,t.id,t.slug,p.body_md,p.body_html,m.role FROM player_guides g JOIN threads t ON t.id=g.thread_id JOIN posts p ON p.thread_id=t.id AND p.number=1 JOIN members m ON m.id=p.author_id`,
     );
-    assert.equal(rows.length, 45);
+    assert.equal(rows.length, locales.length * 9);
     const paths = new Set(
       rows.map(
         (g) =>
@@ -59,7 +59,17 @@ void test('all five languages: team guides resolve every internal thread link, s
           'SELECT count(*)::int n FROM player_guides',
         )
       ).rows[0].n,
-      45,
+      locales.length * 9,
+    );
+    await pg.exec(
+      fs.readFileSync(
+        'netlify/database/migrations/20261007180000_brazilian_portuguese_player_guides/migration.sql',
+        'utf8',
+      ),
+    );
+    assert.equal(
+      (await pg.query<{ n: number }>('SELECT count(*)::int n FROM player_guides')).rows[0].n,
+      locales.length * 9,
     );
     assert.equal(
       (

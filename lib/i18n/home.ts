@@ -861,7 +861,7 @@ const es: HomeCopy = {
 const ptBR: HomeCopy = {
   meta: {
     title: 'OutBrick — uma avenida construída bloco por bloco',
-    description: 'Um quebra-cabeça de blocos deslizantes para separar por cor: 2.000 tabuleiros verificados, 167 vilarejos de blocos e nove amigos. Sem cronômetro; funciona offline. Grátis na App Store.',
+    description: 'Um quebra-cabeça de blocos deslizantes, com 2.000 fases verificadas, 167 vilarejos e nove amigos. Sem cronômetro; funciona offline. Grátis na App Store.',
     ogTitle: 'OutBrick — uma avenida construída bloco por bloco',
     ogDescription: '2.000 tabuleiros verificados por um solucionador, 167 vilarejos de blocos e nove amigos. Um dedo, sem cronômetro e nada interrompe uma partida.',
     ogImageAlt: 'Bricko, Peach e Sprout ao lado de blocos coloridos em uma ilustração de OutBrick',
@@ -926,7 +926,7 @@ const ptBR: HomeCopy = {
     quote: 'OutBrick foi lançado com essas duas promessas, e ambas mudaram. As mecânicas continuam aqui, mas são generosas — e esta página explica isso.',
     ledger: [
       { title: 'Uma vida é o custo de perder um tabuleiro, nunca de jogar ou concluí-lo.', body: 'Abrir um tabuleiro exige uma vida, mas não consome nenhuma. Concluí-lo não custa nada. Você só perde uma vida quando uma tentativa termina sem concluir o tabuleiro. São cinco vidas, oito com o Brick Pass, e você recupera uma a cada trinta minutos.' },
-      { title: 'A primeira vez que você desfaz uma jogada em cada tabuleiro é grátis e não acaba.', body: 'Depois disso, cada desfazer usa uma reserva de cinco, que recupera uma a cada vinte e cinco minutos. A opção de desfazer oferecida quando um tabuleiro trava também é grátis e não mexe na reserva.' },
+      { title: 'A primeira vez que você desfaz uma jogada em cada tabuleiro é grátis e não consome sua reserva.', body: 'Depois disso, cada desfazer usa uma reserva de cinco, que recupera uma a cada vinte e cinco minutos. A opção de desfazer oferecida quando um tabuleiro trava também é grátis e não mexe na reserva.' },
       { title: 'O limite é de movimentos, não de tempo.', body: 'Cada tabuleiro mostra o objetivo e o limite desde o primeiro toque. Não há contagem regressiva no jogo. Se os movimentos acabarem, você pode comprar mais cinco: 300 moedas, depois 500 e depois 900 na mesma tentativa.' },
       { title: 'Oito opções de vídeos com recompensa, todas voluntárias e limitadas.', body: 'Vídeos podem oferecer vidas (até 8 por dia), desfazer (8), movimentos extras (6), uma dica grátis quando os movimentos acabam (4), moedas dobradas na conclusão (4), uma rodada na Brick Wheel (1), o balão de presente (2) e o Brick Cinema (6): até 39 vídeos por dia no total. Sem banners ou anúncios intersticiais: nada começa sem você tocar para assistir, e nada interrompe um tabuleiro. Recusar não custa nada.' },
       { title: 'Moedas e reforços são opcionais. Não há assinatura.', body: 'Remover Anúncios desativa a publicidade para sempre e ainda concede o que os vídeos renderiam. O Brick Pass aumenta o limite de vidas de cinco para oito e desativa os anúncios enquanto estiver ativo.' },

@@ -8,7 +8,8 @@ The native OutBrick game and its active Claude Code work are maintained separate
 
 Use the shared guidance and dated status as the handoff record. Recheck live Git, deployment,
 App Store version and provider state before relying on a prior receipt. Keep release copy
-distinct from development copy, use the existing design system, and update all five languages.
+distinct from development copy, use the existing design system, and update all six languages
+(English, French, German, Spanish, Japanese and Brazilian Portuguese).
 
 Documentation map: [docs/README.md](docs/README.md). Backend behavior and test commands:
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Email template/campaign workflow:

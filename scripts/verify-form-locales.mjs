@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const outDir = fileURLToPath(new URL('../outputs/', import.meta.url));
 fs.mkdirSync(outDir, { recursive: true });
 const base = process.env.QA_BASE ?? process.argv[2] ?? 'http://127.0.0.1:4321';
-const browser = await chromium.launch({headless:true});
+const browser = await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
 const report={base,browser:'Isolated Playwright Chromium; all POSTs intercepted locally',flows:[],noJS:[],errors:[]};
 for(const locale of ['fr','de','es','ja','pt-BR']) {
  const context=await browser.newContext(); const page=await context.newPage(); let status=500;let posts=[];const interceptedFailures=new Set();
@@ -43,6 +43,7 @@ for(const locale of ['fr','de','es','ja','pt-BR']) {
 }
 await browser.close();fs.writeFileSync(path.join(outDir, 'form-locale-qa.json'),JSON.stringify(report,null,2));console.log(JSON.stringify({flows:report.flows.map(({initial:_initial,invalid:_invalid,badEmail:_badEmail,consent:_consent,failure:_failure,success,posts,...item})=>({...item,postCount:posts.length,success})),noJS:report.noJS,errors:report.errors},null,2));
 
-const valid = report.flows.length === 16 && report.noJS.length === 16 && report.errors.length === 0 && report.flows.every(flow => flow.passed) && report.noJS.every(flow => !flow.error && flow.sourceStatus === 200 && flow.thanksStatus === 200 && flow.lang === flow.locale && flow.action.startsWith(`/${flow.locale}/`) && flow.englishLinks === 0 && flow.h1.some(text => text.trim()));
+const expectedFlows = 20; // Four forms × five non-English locales.
+const valid = report.flows.length === expectedFlows && report.noJS.length === expectedFlows && report.errors.length === 0 && report.flows.every(flow => flow.passed) && report.noJS.every(flow => !flow.error && flow.sourceStatus === 200 && flow.thanksStatus === 200 && flow.lang === flow.locale && flow.action.startsWith(`/${flow.locale}/`) && flow.englishLinks === 0 && flow.h1.some(text => text.trim()));
 if (!valid) process.exitCode = 1;
-console.log(`Localized forms: ${report.flows.filter(flow => flow.passed).length}/16 hydrated flows; ${report.noJS.filter(flow => !flow.error && flow.lang === flow.locale && flow.thanksStatus === 200).length}/16 no-JS destinations; ${report.errors.length} browser errors`);
+console.log(`Localized forms: ${report.flows.filter(flow => flow.passed).length}/${expectedFlows} hydrated flows; ${report.noJS.filter(flow => !flow.error && flow.lang === flow.locale && flow.thanksStatus === 200).length}/${expectedFlows} no-JS destinations; ${report.errors.length} browser errors`);

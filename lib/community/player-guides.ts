@@ -125,6 +125,27 @@ export const guideWords = {
     undo: '各盤面の最初の取り消しは無料です。その後は5回分のタンクを使い、25分に1回回復します。報酬動画では2回分を受け取れます。次に使う前に表示数を確認してください。無制限の取り消しはクラシックなブラウザデモだけです。',
     help: '読むだけならアカウントは不要です。質問・返信・投票にはApple、Google、メールリンクでサインインします。Appleでメールを非公開にすると、プライベートリレーのアドレスが共有される場合があります。同じ方法で戻ってください。不具合はゲームのバージョンとビルド、端末、iOS、レベル、手順、期待した結果、実際の結果を記載します。アクセシビリティはVoiceOver、音声コントロール、スイッチコントロール等の設定と、問題の読み上げや操作を具体的に伝えてください。画像のアカウント情報は隠し、パスワード・コード・購入明細は投稿しないでください。遊び方はヘルプ、再現可能な問題は不具合、利用の障壁はアクセシビリティへ。スレッドをフォローし、メール通知設定を確認してください。',
   },
+  'pt-BR': {
+    label: 'Guias para jogadores',
+    intro: 'Comece por aqui para aprender a jogar, explorar a Jornada e usar VoiceOver e os recursos de acessibilidade. Estes guias descrevem o iOS 5.0.1; a prévia da versão 5.1 está identificada à parte.',
+    titles: [
+      'Primeiros passos: seu primeiro tabuleiro',
+      'Peças especiais, objetivos e estrelas',
+      'Como se orientar na Jornada',
+      'Jogue com o VoiceOver',
+      'Acessibilidade e ajustes confortáveis',
+      'Vidas, movimentos, desfazer e vídeos opcionais',
+      'Peça ajuda e relate uma barreira de acessibilidade',
+      'Qual versão do jogo estou usando?',
+    ],
+    related: 'Continue lendo',
+    checkpoint: 'Revisado em 7 de outubro de 2026 · iOS 5.0.1 lançado',
+    hub: 'Biblioteca de guias do OutBrick',
+    settings: 'Abra Ajustes e toque na aba Acessibilidade. Experimente uma opção de cada vez em um tabuleiro conhecido: símbolos para daltonismo, alto contraste, velocidade das animações, nível de detalhes das falas, bandeja para canhotos e confirmação de trocas ao manter pressionado. Os símbolos oferecem pistas além da cor. Ajuste a velocidade e os detalhes para acompanhar melhor as mudanças. A confirmação ao manter pressionado dá tempo para conferir a direção antes de trocar. Os ajustes do jogo também controlam música, efeitos sonoros e háptica. Os personagens continuam com animações e balões de texto, sem vozes; os anúncios do VoiceOver permanecem. VoiceOver e Reduzir Movimento do iPhone são ajustes separados.',
+    journey: 'A Jornada tem 2.000 fases em 167 vilarejos. Um vilarejo completo tem doze tabuleiros; o último tem oito. O mapa é uma avenida móvel construída com blocos, formada por lugares diferentes e nove amigos. Encontre sua fase atual, abra-a, leia os objetivos e conclua-a para seguir. Tabuleiros já liberados permitem praticar e melhorar as estrelas. Vilarejo e capítulo são coisas diferentes: são doze tabuleiros por vilarejo e vinte por capítulo. Com VoiceOver, use a ação “Onde estou?” na Jornada para ouvir sua posição e o próximo objetivo, ou “Ir para minha próxima fase” para levar o foco até lá. Na Jornada, toque duas vezes com dois dedos para ouvir o guia; em um tabuleiro, o mesmo gesto pede uma dica.',
+    undo: 'A primeira ação de desfazer de cada tabuleiro é grátis. As seguintes usam um tanque com cinco, que recupera uma ação a cada vinte e cinco minutos; um vídeo com recompensa concede duas. Confira a quantidade exibida antes de desfazer novamente. A ação ilimitada de desfazer existe somente na demonstração clássica de blocos no navegador.',
+    help: 'Você pode ler sem ter uma conta. Entre com Apple, Google ou um link enviado por e-mail para fazer uma pergunta, responder ou votar. Se escolher Ocultar Meu E-mail, a Apple pode fornecer um endereço privado de retransmissão; entre pelo mesmo método para voltar à conta. Ao relatar um erro, inclua a versão e a compilação do jogo, dispositivo, versão do iOS, fase, etapas, resultado esperado e o que aconteceu. Para acessibilidade, informe se usou VoiceOver, Controle por Voz, Controle Assistivo ou outro ajuste, além do anúncio ou controle que causou dificuldade. Envie uma captura somente se ajudar e esconda dados da conta. Nunca publique senha, código de acesso ou comprovante de compra. Use Ajuda para dúvidas de jogo, Bugs para problemas reproduzíveis e Acessibilidade para barreiras de uso. Acompanhe a conversa e confira suas preferências de notificação por e-mail.',
+  },
 } as const;
 
 export const guideKeys = [
@@ -168,6 +189,10 @@ const steps = {
       '1. Journeyから現在のレベルを開き、目標と残り手数を確認します。\n2. ブロックと隣のブロックを順にタップするか、隣に向かってスワイプします。3つの列や特殊ブロックの組み合わせを探します。\n3. 連鎖が終わってから残りの目標を確認します。マッチや特殊の組み合わせがない交換は元に戻り、手数を使いません。\n4. 必要ならヒントを求めます。すべての目標を達成すると、残り手数がスコアに加わります。',
     voice:
       '1. iPhoneのアクセシビリティ設定でVoiceOverを有効にします。触ったり要素間をスワイプしたりして盤面を調べます。\n2. ブロックの種類・色・状態を聞き、用意されたアクションで交換方向を選ぶか特殊ブロックを発動します。\n3. 次の操作の前に結果を聞きます。特殊・目標・障害物・ゲートのローターも試してください。\n4. 盤面の2本指ダブルタップはヒントを求めます。2本指のスクラブは挑戦を終了せずに一時停止を開き、盤面以外では画面を閉じます。\n5. 任意の行の音や読み上げの詳しさを調整できます。不明な読み上げはレベルと正確な言葉をアクセシビリティで報告してください。',
+  },
+  'pt-BR': {
+    first: '1. Abra sua fase atual pela Jornada. Leia os objetivos e os movimentos restantes antes de escolher uma peça.\n2. Toque em uma peça e depois em uma vizinha, ou deslize em direção a ela. Procure uma linha de pelo menos três peças ou uma combinação especial.\n3. Espere a cascata terminar e confira os objetivos restantes. Uma troca que não forma combinação volta ao lugar e não gasta movimento.\n4. Peça uma dica se precisar. Quando todos os objetivos forem cumpridos, o tabuleiro termina e os movimentos restantes aumentam sua pontuação.',
+    voice: '1. Ative o VoiceOver nos ajustes de Acessibilidade do iPhone e abra o jogo. Explore o tabuleiro pelo toque ou deslizando entre os elementos.\n2. Ouça o tipo, a cor e o estado da peça. Use as ações disponíveis para escolher a direção da troca ou ativar uma peça especial.\n3. Ouça o resultado antes de fazer outro movimento. Experimente os rotores de Especiais, Objetivos, Bloqueios e Portões.\n4. Um toque duplo com dois dedos no tabuleiro pede uma dica. O gesto de esfregar com dois dedos abre a pausa sem abandonar sua tentativa; fora do tabuleiro, ele fecha a tela atual.\n5. Se quiser outra pista sonora, experimente a ação opcional de som da fileira. Ajuste o nível de detalhes dos anúncios se a fala ficar carregada. Se algo não estiver claro, informe a fase e o anúncio exato em Acessibilidade.',
   },
 } as const;
 export function playerGuides(locale: Locale) {

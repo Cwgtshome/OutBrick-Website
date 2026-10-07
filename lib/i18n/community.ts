@@ -380,7 +380,7 @@ const pluralEn = (one: string, many: string): N => (n, f) => `${f} ${n === 1 ? o
 const en: CommunityCopy = {
   meta: {
     homeTitle: 'OutBrick Community: help, bug reports and ideas',
-    homeDescription: 'Ask for help with OutBrick, report a bug, vote on ideas and talk boards with other players. Built for VoiceOver first, in five languages.',
+    homeDescription: 'Ask for help with OutBrick, report a bug, vote on ideas and talk boards with other players. Built for VoiceOver first, in six languages.',
     faqTitle: 'OutBrick Community FAQ: answers to common questions',
     faqDescription: 'Answers to the questions OutBrick players ask most: lives, undos, ads, purchases, accessibility, plus the replies the community marked as solved.',
     guidelinesTitle: 'OutBrick Community guidelines: how we talk here',
