@@ -65,11 +65,11 @@ const linkAttrs = 'rel="ugc nofollow noopener"';
  */
 export function mentionCandidates(md: string): string[] {
   const out = new Set<string>();
-  const re = /(^|[^\p{L}\p{N}_@])@([^\s@][^\n@]{0,60})/gu;
+  const re = /(?<![\p{L}\p{N}_@])@([^\s@][^\n@]{0,60})/gu;
   let m: RegExpExecArray | null;
   let guard = 0;
   while ((m = re.exec(md)) && guard++ < 200) {
-    const words = m[2].split(' ');
+    const words = m[1].split(' ');
     let acc = '';
     for (let i = 0; i < Math.min(words.length, 5); i++) {
       if (!words[i]) break;

@@ -285,3 +285,51 @@ export function communityPath(locale: CommunityLocale, path = ''): string {
 export function threadPath(locale: CommunityLocale, thread: { id: number; slug: string }, postNumber?: number | null): string {
   return communityPath(locale, `/t/${thread.id}/${thread.slug}`) + (postNumber && postNumber > 1 ? `#post-${postNumber}` : '');
 }
+
+// Moderation (added with the forum backend, 7 October 2026) -----------------------------------
+
+/** GET /mod/reports: open reports, oldest first, one entry per report. */
+export type ModReport = {
+  id: number;
+  reason: ReportReason;
+  note: string;
+  createdAt: string;
+  reporter: PublicMember;
+  post: Post;
+  thread: { id: number; slug: string; title: string };
+  /** How many open reports the same post has, this one included. */
+  openReports: number;
+};
+export type ModReportsResponse = { reports: ModReport[] };
+
+/** POST /mod/reports/:id/resolve. 'hide' hides the post with `note` as the reason; either way every open report on that post is resolved. */
+export type ResolveReportRequest = { action: 'dismiss' | 'hide'; note?: string };
+
+/** GET /mod/queue: posts waiting for review, oldest first. */
+export type ModQueueItem = {
+  post: Post;
+  thread: { id: number; slug: string; title: string; category: { slug: string; kind: CategoryKind } };
+};
+export type ModQueueResponse = { posts: ModQueueItem[] };
+
+/** POST /posts/:id/hide → { post: Post }. `hidden: false` shows the post again (reason not needed). */
+export type HidePostRequest = { reason?: string; hidden?: boolean };
+
+/** POST /posts/:id/approve → { post: Post }. */
+
+/** POST /mod/members/:id/ban → ModMemberResponse. `days: 0` lifts a ban. */
+export type BanRequest = { days: number; reason: string };
+/** POST /mod/members/:id/role (admin) → ModMemberResponse. */
+export type RoleRequest = { role: MemberRole };
+export type ModMemberResponse = { member: PublicMember & { bannedUntil: string | null; banReason: string | null } };
+
+/** POST /faq and PATCH /faq/:id (team+) → { entry: FaqEntry }. With `threadId` and no question/answer, a solved thread is promoted: its title and the solution's text. */
+export type FaqWriteRequest = {
+  locale?: CommunityLocale;
+  topic?: string;
+  question?: string;
+  /** Markdown, rendered like a post. */
+  answer?: string;
+  threadId?: number | null;
+  position?: number;
+};
