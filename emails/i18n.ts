@@ -105,7 +105,7 @@ export function greetingName(locale: EmailLocale, fullName: string): string {
 const en: EmailCopy = {
   logoAlt: 'OutBrick',
   signoff: 'Bloo and the OutBrick team',
-  tagline: 'OutBrick: the sliding-brick colour-sort puzzle',
+  tagline: 'OutBrick: the calm slide-and-match brick puzzle',
   links: { support: 'Support', privacy: 'Privacy', appStore: 'App Store', careers: 'Careers', affiliates: 'Affiliates' },
   contact: {
     subject: 'We’ve got your message — OutBrick Support',
@@ -188,7 +188,7 @@ const en: EmailCopy = {
 const fr: EmailCopy = {
   logoAlt: 'OutBrick',
   signoff: 'Bloo et l’équipe OutBrick',
-  tagline: 'OutBrick : le puzzle de briques coulissantes à trier par couleur',
+  tagline: 'OutBrick : le puzzle de briques paisible, à faire glisser et à assortir',
   links: { support: 'Assistance', privacy: 'Confidentialité', appStore: 'App Store', careers: 'Carrières', affiliates: 'Affiliation' },
   contact: {
     subject: 'Nous avons bien reçu votre message — Assistance OutBrick',
@@ -271,7 +271,7 @@ const fr: EmailCopy = {
 const de: EmailCopy = {
   logoAlt: 'OutBrick',
   signoff: 'Bloo und das OutBrick-Team',
-  tagline: 'OutBrick: das Schiebestein-Farbsortierpuzzle',
+  tagline: 'OutBrick: das entspannte Schiebe-und-Kombinier-Puzzle mit Bausteinen',
   links: { support: 'Support', privacy: 'Datenschutz', appStore: 'App Store', careers: 'Karriere', affiliates: 'Partnerprogramm' },
   contact: {
     subject: 'Ihre Nachricht ist angekommen — OutBrick-Support',
@@ -354,7 +354,7 @@ const de: EmailCopy = {
 const es: EmailCopy = {
   logoAlt: 'OutBrick',
   signoff: 'Bloo y el equipo de OutBrick',
-  tagline: 'OutBrick: el puzle de ladrillos deslizantes para ordenar por colores',
+  tagline: 'OutBrick: el puzle tranquilo de ladrillos para deslizar y combinar',
   links: { support: 'Ayuda', privacy: 'Privacidad', appStore: 'App Store', careers: 'Empleo', affiliates: 'Afiliados' },
   contact: {
     subject: 'Hemos recibido tu mensaje — Ayuda de OutBrick',
@@ -437,7 +437,7 @@ const es: EmailCopy = {
 const ja: EmailCopy = {
   logoAlt: 'OutBrick',
   signoff: 'BlooとOutBrickチーム',
-  tagline: 'OutBrick：ブロックをスライドして色ごとに出すパズル',
+  tagline: 'OutBrick：ブロックをスライドしてそろえる、穏やかなパズル',
   links: { support: 'サポート', privacy: 'プライバシー', appStore: 'App Store', careers: '採用情報', affiliates: 'アフィリエイト' },
   contact: {
     subject: 'メッセージを受け付けました — OutBrickサポート',
@@ -518,7 +518,7 @@ const ja: EmailCopy = {
 };
 
 const ptBR: EmailCopy = {
-  logoAlt: 'OutBrick', signoff: 'Bloo e a equipe OutBrick', tagline: 'OutBrick: o quebra-cabeça de separar cores deslizando blocos',
+  logoAlt: 'OutBrick', signoff: 'Bloo e a equipe OutBrick', tagline: 'OutBrick: o quebra-cabeça tranquilo de deslizar e combinar blocos',
   links: { support: 'Suporte', privacy: 'Privacidade', appStore: 'App Store', careers: 'Carreiras', affiliates: 'Programa de afiliados' },
   contact: {
     subject: 'Recebemos sua mensagem — Suporte OutBrick',

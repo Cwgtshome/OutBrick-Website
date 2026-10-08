@@ -294,3 +294,54 @@ export async function createReleaseDrafts(apiKey: string, env: Env, version: str
   }
   return created;
 }
+
+// ---------------------------------------------------------------------------------------
+// Readers who confirmed before this table existed live only in Resend. Once, they are copied in
+// (welcome series already done, engagement clock starting at the import), so "still want
+// these?" can include them 120 days later. Idempotent: existing rows are left alone.
+
+type ContactPage = { data?: { id: string; email: string; unsubscribed?: boolean }[]; has_more?: boolean };
+
+async function listSegment(apiKey: string, segmentId: string): Promise<{ email: string; unsubscribed: boolean }[]> {
+  const out: { email: string; unsubscribed: boolean }[] = [];
+  let after = '';
+  for (let page = 0; page < 200; page++) {
+    const q = new URLSearchParams({ segment_id: segmentId, limit: '100', ...(after ? { after } : {}) });
+    const r = await resend(apiKey, `/contacts?${q.toString()}`, { method: 'GET' });
+    if (!r.ok) throw new Error(r.error);
+    const body = r.data as ContactPage | null;
+    const rows = body?.data ?? [];
+    for (const c of rows) out.push({ email: c.email.toLowerCase(), unsubscribed: Boolean(c.unsubscribed) });
+    if (!body?.has_more || !rows.length) break;
+    after = rows[rows.length - 1].id;
+  }
+  return out;
+}
+
+export async function backfillSubscribers(apiKey: string, env: Env): Promise<number> {
+  const main = env.RESEND_SEGMENT_ID ?? env.RESEND_AUDIENCE_ID ?? '';
+  if (!main) return 0;
+  const localeOfEmail = new Map<string, EmailLocale>();
+  for (const l of emailLocales) {
+    const seg = env[`RESEND_SEGMENT_ID_${l === 'pt-BR' ? 'PT_BR' : l.toUpperCase()}`];
+    if (seg && seg !== main) for (const c of await listSegment(apiKey, seg)) localeOfEmail.set(c.email, l);
+  }
+  let added = 0;
+  for (const c of await listSegment(apiKey, main)) {
+    const email = normalizeEmail(c.email);
+    if (!email) continue;
+    const rows = await sql`
+      INSERT INTO newsletter_subscribers (email, locale, status, welcome_step, last_engaged_at)
+      VALUES (${email}, ${localeOfEmail.get(email) ?? 'en'}, ${c.unsubscribed ? 'unsubscribed' : 'subscribed'}, 3, now())
+      ON CONFLICT (email) DO NOTHING RETURNING email`;
+    added += rows.length;
+  }
+  return added;
+}
+
+/** Daily retention, as the privacy policy states it. */
+export async function applyRetention(): Promise<void> {
+  await sql`DELETE FROM support_cases WHERE status IN ('resolved','closed') AND updated_at < now() - interval '24 months'`;
+  await sql`DELETE FROM applications WHERE status IN ('approved','next_step','declined') AND COALESCE(decided_at, updated_at) < now() - interval '24 months'`;
+  await sql`DELETE FROM newsletter_subscribers WHERE status <> 'subscribed' AND updated_at < now() - interval '30 days'`;
+}

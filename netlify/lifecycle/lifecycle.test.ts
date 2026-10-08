@@ -13,7 +13,7 @@ import { signedUrl, unsubscribeUrl } from '../../emails/links.ts';
 import type { OutgoingEmail } from '../../emails/resend.ts';
 import { createCase, handleFeedback, notifyFixedCases, setCaseSenderForTests, versionAtLeast } from './cases.ts';
 import { createApplication, setApplicationSenderForTests } from './applications.ts';
-import { handlePreferences, onConfirmed, onUnsubscribed, preferencesUrl } from './newsletter.ts';
+import { applyRetention, handlePreferences, onConfirmed, onUnsubscribed, preferencesUrl } from './newsletter.ts';
 import { deviceLabel, onSessionStarted, setSecuritySenderForTests } from './security.ts';
 import { outboxGate, setOutboxStoreForTests, signalOutbox } from './outbox.ts';
 import { lifecycleTick } from './run.ts';
@@ -243,4 +243,19 @@ void test('the outbox gate keeps the database asleep until something is due', as
   setOutboxStoreForTests(memorySignalStore());
   // Restore an open gate for any later test by signalling now.
   await signalOutbox(0);
+});
+
+void test('retention deletes what the privacy policy says, and nothing younger', async () => {
+  const old = await createCase({ submissionId: 'old-1', email: 'old@example.com', name: '', locale: 'en', topic: '', message: 'x', device: '', appVersion: '', iosVersion: '' });
+  const open = await createCase({ submissionId: 'old-2', email: 'open@example.com', name: '', locale: 'en', topic: '', message: 'x', device: '', appVersion: '', iosVersion: '' });
+  await pg.query(`UPDATE support_cases SET status = 'closed', updated_at = now() - interval '25 months' WHERE id = $1`, [old.id]);
+  await pg.query(`UPDATE support_cases SET status = 'open', updated_at = now() - interval '25 months' WHERE id = $1`, [open.id]);
+  await onConfirmed('gone@example.com', 'en');
+  await onUnsubscribed('gone@example.com');
+  await pg.query(`UPDATE newsletter_subscribers SET updated_at = now() - interval '31 days' WHERE email = 'gone@example.com'`);
+  await applyRetention();
+  const cases = await pg.query(`SELECT id FROM support_cases WHERE id IN ($1, $2)`, [old.id, open.id]);
+  assert.deepEqual(cases.rows.map((r) => (r as { id: number }).id), [open.id], 'an open case is kept however old');
+  const subs = await pg.query(`SELECT 1 FROM newsletter_subscribers WHERE email = 'gone@example.com'`);
+  assert.equal(subs.rows.length, 0);
 });
