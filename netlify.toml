@@ -119,6 +119,45 @@
 #
 # There are no approved-code lists here on purpose: any code redirects, and only codes the team
 # has approved are ever paid, because only those were given out.
+# Google Search Console reported /de/play-514 as a 404 (October 2026): not a link anywhere, but a
+# React list key (`/de/play-514`) inside a page's embedded RSC payload, which a crawler read as a
+# URL. Any such /<locale>/play-<n> lands on that language's play page instead of a 404.
+[[redirects]]
+  from = "/play-*"
+  to = "/play"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fr/play-*"
+  to = "/fr/play"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/de/play-*"
+  to = "/de/play"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/es/play-*"
+  to = "/es/play"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/ja/play-*"
+  to = "/ja/play"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pt-BR/play-*"
+  to = "/pt-BR/play"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/r/:code"
   to = "https://apps.apple.com/us/app/outbrick/id6807997465?mt=8&ct=aff-:code"
