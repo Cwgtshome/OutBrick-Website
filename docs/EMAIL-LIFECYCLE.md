@@ -72,7 +72,7 @@ Copy for all six languages is in `emails/lifecycle-i18n*.ts`. Previews are built
 | `RESEND_EVENTS_WEBHOOK_SECRET` | Optional. A Resend webhook for `email.opened` and `email.clicked` → `/.netlify/functions/resend-events`. |
 | `NEWSLETTER_ENGAGEMENT_TRACKING=on` | Optional. Switches on "still want these?" and the 14-day sunset. **Leave it off until the events webhook delivers.** Otherwise silence would look like disinterest and remove real readers. |
 
-**Open and click tracking is off** on the Resend domain today (see the root README). Resend only sends `email.opened`/`email.clicked` events when tracking is on. Turning it on is an owner decision: it adds a tracking pixel and rewrites links, and the privacy policy would need to say so. Until then, re-engagement stays off and nobody is removed.
+**Switched on 8 October 2026:** open and click tracking on the Resend domain, the `email.opened`/`email.clicked` webhook (`resend-events`, secret in Netlify), the three topics (New versions, Tips and events, Events and seasons; ids in `RESEND_TOPIC_*`) and `NEWSLETTER_ENGAGEMENT_TRACKING=on` in production. The privacy policy (#email-tracking) discloses it. Readers who confirmed before that day are imported once by the daily sweep with their 120-day clock starting then.
 
 ## Owner checks after the first deploy
 

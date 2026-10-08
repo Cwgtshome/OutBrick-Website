@@ -6,7 +6,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/privacy-choices',
   title: 'Your OutBrick privacy choices and controls',
   description:
-    'Manage OutBrick data on your device, Apple services, purchases and advertising choices, your website analytics choice and our emails, and find out who to ask about privacy.',
+    'Manage your OutBrick data, Apple services, purchases, ad and website analytics choices and our emails, and find out who to ask about privacy.',
 });
 
 export default function PrivacyChoicesPage() {

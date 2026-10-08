@@ -52,7 +52,7 @@ series, release drafts, preferences, account security and policy notices) are do
 [docs/EMAIL-LIFECYCLE.md](docs/EMAIL-LIFECYCLE.md).
 
 Every verified form submission also sends the visitor an email, through
-[Resend](https://resend.com) (domain `outbrick.site`, region eu-west-1, open and click tracking off).
+[Resend](https://resend.com) (domain `outbrick.site`, region eu-west-1). Open and click tracking are on since 8 October 2026, for the newsletter's "still want these?" check; see [docs/EMAIL-LIFECYCLE.md](docs/EMAIL-LIFECYCLE.md) and the privacy policy's #email-tracking section.
 
 | Form | Email | From |
 | --- | --- | --- |

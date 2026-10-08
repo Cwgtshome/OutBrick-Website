@@ -8,7 +8,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/privacy',
   title: 'OutBrick privacy policy: data, ads and choices',
   description:
-    'The OutBrick privacy policy: no analytics in the app, optional consent-based analytics on the website, what the rewarded-ad SDK collects, what the community and our emails store, and your choices.',
+    'OutBrick privacy policy: no analytics in the app, website analytics only with consent, what ads, the community and our emails store, and your choices.',
 });
 
 export default function PrivacyPage() {
@@ -324,11 +324,9 @@ export default function PrivacyPage() {
       </section>
 
       <section className="brick" id="community-next">
-        <h2>Coming to the community</h2>
+        <h2>Community features</h2>
         <p>
-          These features are planned for the OutBrick Community. They are described here now so that
-          this policy is accurate on the day each one arrives; until a feature is live, none of the data
-          below is collected.
+          These OutBrick Community features are live, except reply by email, which is not switched on yet; until it is, none of its data is collected.
         </p>
         <ul className="points">
           <li><b>Images in posts:</b> images you attach to a post are stored with Netlify Blobs, Netlify&rsquo;s file storage. Each image needs a text description (alt text) for people who cannot see it, and the location and other metadata embedded in the file are removed when you upload it. An image is public, like the post it belongs to.</li>
