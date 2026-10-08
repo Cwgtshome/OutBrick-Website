@@ -24,7 +24,7 @@ Recheck live Git, `/build-info.json`, `/api/community/session` and relevant prov
 Every email, and every page drawn with the email shell, now ends with the website footer's
 social tiles (all five `socialProfiles` rows, handle `@outbrick`), a "Follow OutBrick: @outbrick"
 line and `© <year> OutBrick. All rights reserved.`, centred, in all six languages. Apple's App
-Store badge sits in the footer's bottom-right corner. It is in the reader's badge language and
+Store badge sits centred between the handle and the copyright. It is in the reader's badge language and
 links to their storefront with campaign `web-email-footer`. The header logo is centred. They are added
 by `shell()` (`emails/brand.ts`) and by the text/plain footer helpers, so no template can omit them.
 The year is the year of rendering. The tiles are PNGs in `public/assets/email/`, drawn from the

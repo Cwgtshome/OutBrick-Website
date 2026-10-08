@@ -1,5 +1,6 @@
 // The brand line at the foot of every email and email-shell page: the social tiles, the handle,
-// the copyright and, in the bottom-right corner, Apple's App Store badge linking to the game. shell() in core.ts appends it under each template's own footer, so no
+// Apple's App Store badge linking to the game, and the copyright, all centred: social, then the
+// badge, then the legal line last, as the brand block of a well-made email footer runs. shell() in core.ts appends it under each template's own footer, so no
 // template can leave it out; brandFooterText() is the same in the text/plain part.
 //
 // The profiles are the website footer's (lib/site.ts socialProfiles, every row, as the site
@@ -50,7 +51,7 @@ export function copyright(locale: EmailLocale, year: number = new Date().getUTCF
 }
 
 /**
- * Centred under the template's footer, with the App Store badge alone in the bottom-right corner. The tiles wrap as inline blocks, so five of them fit a 280 px Galaxy Fold cover screen on two
+ * Centred under the template's footer: tiles, handle, App Store badge, copyright. The tiles wrap as inline blocks, so five of them fit a 280 px Galaxy Fold cover screen on two
  * rows and one row anywhere wider; Outlook on Windows, which ignores inline-block margins, gets
  * them in a table with the same gaps. Each tile is a 44 × 44 touch target on its 4 px foot.
  */
@@ -70,10 +71,12 @@ ${tiles.join('\n')}
 </td></tr>
 <tr><td align="center" style="padding:6px 0 0;text-align:center;">
 <p style="margin:0 0 6px;text-align:center;font-family:${f.text};font-size:15px;line-height:1.55;color:${color.title};font-weight:700;">${esc(brandCopy[ctx.locale].follow(HANDLE))}</p>
-<p style="margin:0;text-align:center;font-family:${f.text};font-size:14px;line-height:1.55;color:${color.lilac};">${esc(copyright(ctx.locale, year))}</p>
 </td></tr>
-<tr><td align="right" style="padding:18px 0 0;text-align:right;font-size:0;line-height:0;">
-<a href="${esc(footerStoreUrl(ctx.locale))}" style="display:inline-block;text-decoration:none;"><img src="${esc(`${ctx.assetBase}/assets/email/app-store-${badge.file}.png`)}" width="${badge.width}" height="40" alt="${esc(chromeCopy[ctx.locale].badgeAlt)}" style="display:inline-block;width:${badge.width}px;height:40px;border:0;color:${color.title};font-family:${f.text};font-size:13px;line-height:1.2;"></a>
+<tr><td align="center" style="padding:14px 0 16px;text-align:center;font-size:0;line-height:0;">
+<a href="${esc(footerStoreUrl(ctx.locale))}" style="display:inline-block;text-decoration:none;"><img src="${esc(`${ctx.assetBase}/assets/email/app-store-${badge.file}.png`)}" width="${badge.width}" height="40" alt="${esc(chromeCopy[ctx.locale].badgeAlt)}" style="display:block;margin:0 auto;width:${badge.width}px;height:40px;border:0;color:${color.title};font-family:${f.text};font-size:13px;line-height:1.2;"></a>
+</td></tr>
+<tr><td align="center" style="text-align:center;">
+<p style="margin:0;text-align:center;font-family:${f.text};font-size:14px;line-height:1.55;color:${color.lilac};">${esc(copyright(ctx.locale, year))}</p>
 </td></tr>
 </table>`;
 }
