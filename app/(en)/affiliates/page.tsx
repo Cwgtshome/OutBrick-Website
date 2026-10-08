@@ -256,7 +256,7 @@ export default function AffiliatesPage() {
 
       <section className="ed-band-ink ed-band-tight" aria-labelledby="kit-title">
         <div className="ed-wrap bz-teaser">
-          <img src="/assets/stickers/beat-the-target-160.webp" srcSet="/assets/stickers/beat-the-target-160.webp 1x, /assets/stickers/beat-the-target-320.webp 2x" alt="" width={120} height={120} />
+          <img src="/assets/stickers/beat-the-target-160.webp" srcSet="/assets/stickers/beat-the-target-160.webp 1x, /assets/stickers/beat-the-target-320.webp 2x" alt="" width={120} height={120} loading="lazy" decoding="async" />
           <div>
             <h2 id="kit-title" className="ed-h3">Not sure what to post?</h2>
             <p>The creators kit has ideas that work, the brand dos and don’ts, hashtags and the art.</p>

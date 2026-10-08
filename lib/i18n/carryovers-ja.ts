@@ -4,6 +4,7 @@ export const ja: Record<string, string> = {
   '. The stickers are here.': '。ステッカーはこちらにあります。',
   '167 brick-built villages on the Journey': 'Journeyに登場する、ブロックでできた167の村',
   '167 villages built stud by stud out of brick, twelve levels each, carried by twenty-eight distinct places.': 'ブロックの突起を一つずつ組み合わせて作られた167の村。それぞれに12のレベルがあり、28の異なる場所に広がっています。',
+  '167 villages built stud by stud out of brick, up to twelve levels each, carried by twenty-eight distinct places.': 'ブロックの突起を一つずつ組み合わせて作られた167の村。それぞれに最大12のレベルがあり、28の異なる場所に広がっています。',
   '2,000 solver-verified boards across 100 chapters, a Journey of 167 brick-built villages, nine brick friends': '100章にわたる、ソルバーで検証済みの2,000の盤面、ブロックでできた167の村を巡るJourney、9人のブロックの仲間たち',
   '2,000 solver-verified boards across 100 chapters; a Journey of 167 brick-built villages; nine brick friends': '100章にわたる、ソルバーで検証済みの2,000の盤面。ブロックでできた167の村を巡るJourney。9人のブロックの仲間たち。',
   '2,000, across 100 chapters of twenty. A solver cleared every one before it shipped.': '20の盤面ずつ、100章にわたる2,000の盤面。公開前にソルバーがすべてをクリアしました。',
@@ -61,7 +62,6 @@ export const ja: Record<string, string> = {
   'Tea, scarves and a gentle wave. The scarf tail swings a beat late.': 'お茶とマフラー、そして穏やかに振る手。マフラーの端は一拍遅れて揺れます。',
   'Tells fairy tales, and waves a wand that bursts into stars.': 'おとぎ話を語り、星が飛び出す魔法の杖を振ります。',
   'The challenge': '挑戦状',
-  'The match-three brick puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, where a board looks impossible and never is.': 'iPhone、iPad、Mac、Apple TV、Apple Vision Pro、Apple Watchで楽しめる、ブロックを滑らせて色ごとに分けるパズル。解けそうに見えない盤面も、必ず解けます。',
   'Three steps, and you are on the board.': '3つのステップで、盤面へ進めます。',
   'Warm up first': 'まずはウォームアップ',
   'You have been challenged': '挑戦状が届きました',
@@ -69,6 +69,5 @@ export const ja: Record<string, string> = {
   'a free undo every board': '各盤面の最初の1回は無料で、ストックを使わずに元に戻せる',
   'no ad between levels': 'レベルの合間に広告なし',
   'works offline': 'オフラインで遊べる',
-  'Someone dared you to a board of OutBrick — a relaxed match-three brick puzzle. Match every brick to its gate, take the free undo the board comes with, and beat their move count.': '誰かからOutBrickの盤面への挑戦状が届きました。OutBrickは、ブロックを滑らせて色ごとに分ける、ゆったり楽しめるパズルです。それぞれのブロックを同じ色のゲートへ導き、その盤面の最初の1回の無料の「元に戻す」をストックを消費せずに活用して、相手より少ない手数でクリアしましょう。',
   'Warm-up OutBrick board': 'OutBrickのウォームアップ用盤面',
 };

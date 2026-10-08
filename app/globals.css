@@ -3020,6 +3020,43 @@ html.js .ob-site .reveal:not(.in) {
 }
 .ob-site .backlink:hover { color: #fff; }
 
+/* the breadcrumb trail on a document page: the backlink's gold brick, then home › this page */
+.ob-site .doc-crumbs { margin-bottom: 20px; }
+.ob-site .doc-crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 0.92rem;
+  color: var(--lilac);
+}
+.ob-site .doc-crumbs li { display: inline-flex; align-items: center; gap: 10px; }
+.ob-site .doc-crumbs li:first-child::before {
+  content: '';
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  background: var(--gold);
+  box-shadow: 0 3px 0 var(--gold-dark);
+  flex: none;
+}
+.ob-site .doc-crumbs li + li::before {
+  content: '';
+  width: 8px;
+  height: 6px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.55;
+}
+.ob-site .doc-crumbs a { color: var(--lilac); text-decoration: none; }
+.ob-site .doc-crumbs a:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+.ob-site .doc-crumbs [aria-current] { color: #fff; }
+
 /* the revision stamp */
 .ob-site .stamp {
   display: inline-block;

@@ -18,6 +18,7 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode, type SubmitEvent } from 'react';
 
 import { formWords } from '../../lib/i18n/forms';
+import { track } from '../../lib/track';
 import { useLocale } from './locale-context';
 import type { Locale } from '../../lib/i18n/locales';
 
@@ -186,6 +187,8 @@ export function NetlifyForm({
       if (!response.ok) throw new Error(String(response.status));
       setStatus('sent');
       setSent(values);
+      // Only the form's name: never a field value (lib/track.ts; sent only after analytics consent).
+      track(name === 'contact' ? 'contact_submit' : 'form_submit', { form_name: name });
     } catch {
       setStatus('failed');
     }

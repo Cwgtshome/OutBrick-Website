@@ -32,7 +32,7 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
     meta: {
       title: 'What’s new in OutBrick: every update, newest first',
       description:
-        'Release notes for OutBrick, newest first. Version 5.0.1: faster VoiceOver, spoken hints, clearer gates, score-based stars and Apple system features.',
+        'Release notes for OutBrick, newest first. Version 5.1.1 fixes a board that could seem frozen; 5.1 brought Slide & Match to all 2,000 boards.',
     },
     crumb: 'What’s new',
     label: 'Release notes',
@@ -51,9 +51,9 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
   },
   fr: {
     meta: {
-      title: 'Nouveautés d’OutBrick : les notes de la version 5.0.1',
+      title: 'Nouveautés d’OutBrick : les notes de la version 5.1.1',
       description:
-        'OutBrick 5.0.1 : VoiceOver plus rapide, indices parlés, portes expliquées, fin de plateau dès la victoire et fonctions Apple.',
+        'OutBrick 5.1.1 corrige un plateau qui pouvait sembler figé ; la 5.1 a apporté Glisse et aligne aux 2 000 plateaux, avec VoiceOver.',
     },
     crumb: 'Nouveautés',
     label: 'Notes de version',
@@ -73,9 +73,9 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
   },
   de: {
     meta: {
-      title: 'Neu in OutBrick: die Versionshinweise zu 5.0.1',
+      title: 'Neu in OutBrick: die Versionshinweise zu 5.1.1',
       description:
-        'OutBrick 5.0.1: schnelleres VoiceOver, gesprochene Hinweise, erklärte Tore, sofortiger Abschluss erfüllter Ziele und Apple-Systemfunktionen.',
+        'OutBrick 5.1.1 behebt ein Spielfeld, das eingefroren wirken konnte; 5.1 brachte „Schieben und kombinieren“ auf alle 2.000 Spielfelder.',
     },
     crumb: 'Neuigkeiten',
     label: 'Versionshinweise',
@@ -95,9 +95,9 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
   },
   es: {
     meta: {
-      title: 'Novedades de OutBrick: las notas de la versión 5.0.1',
+      title: 'Novedades de OutBrick: las notas de la versión 5.1.1',
       description:
-        'OutBrick 5.0.1: VoiceOver más rápido, pistas habladas, puertas explicadas, final inmediato al cumplir objetivos y funciones del sistema Apple.',
+        'OutBrick 5.1.1 corrige un tablero que podía parecer congelado; la 5.1 trajo Desliza y combina a los 2000 tableros, también con VoiceOver.',
     },
     crumb: 'Novedades',
     label: 'Notas de la versión',
@@ -117,8 +117,8 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
   },
   ja: {
     meta: {
-      title: 'OutBrick の新機能：バージョン 5.0.1 のリリースノート',
-      description: 'OutBrick 5.0.1：VoiceOverの高速化、音声ヒント、ゲートの説明、目標達成時の即時終了、Appleのシステム機能。',
+      title: 'OutBrick の新機能：バージョン 5.1.1 のリリースノート',
+      description: 'OutBrick 5.1.1：盤面が止まったように見える問題を修正。5.1で全2,000盤面にスライド＆マッチが登場しました。',
     },
     crumb: '新機能',
     label: 'リリースノート',
@@ -136,7 +136,7 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
     },
   },
   'pt-BR': {
-    meta: { title: 'Novidades da OutBrick: notas de versão', description: 'Histórico de atualizações do OutBrick. Versão 5.0.1: melhorias no VoiceOver, dicas faladas, portões mais claros, estrelas por pontuação e recursos da Apple.' },
+    meta: { title: 'Novidades da OutBrick: notas de versão', description: 'Histórico de atualizações do OutBrick. A versão 5.1.1 corrige um tabuleiro que podia parecer travado; a 5.1 trouxe Deslize e combine aos 2.000 tabuleiros.' },
     crumb: 'Novidades', label: 'Notas da versão', title: ['Novidades na ', 'OutBrick.'],
     lede: (version, date) => `As notas publicadas com cada atualização da App Store, palavra por palavra. A versão atual é ${version}, lançada em ${date}.`,
     getUpdate: 'Obter a atualização', rss: 'Acompanhar por RSS (em inglês)', current: 'Versão atual', version: 'Versão', released: 'Lançada em',

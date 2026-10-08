@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { siteUrl } from '../lib/site';
 import { breadcrumbNode, graph, isoDay, ref, ids, webPageNode } from '../lib/structured-data';
 import { JsonLd } from './editorial-shell';
+import { journalUi } from '../lib/i18n/blog';
 import { AlsoRead, Course, docNav, VillageFooter, VillageHeader } from './village-shell';
 
 /** The breadcrumb name of each document, and the schema.org page type where it is not a plain WebPage. */
@@ -72,7 +73,17 @@ export function LegalPage({ eyebrow, title, summary, updated, current, children,
       <main id="main">
         <div className="doc-head">
           <div className="wrap">
-            <a className="backlink" href={localePath(locale, '/')}>{ui[2]}</a>
+            {current ? (
+              // The visible trail the BreadcrumbList below describes: home, then this document.
+              <nav className="doc-crumbs" aria-label={locale === 'en' ? 'Breadcrumb' : journalUi[locale].breadcrumb}>
+                <ol>
+                  <li><a href={localePath(locale, '/')}>OutBrick</a></li>
+                  <li aria-current="page">{doc?.crumb ?? eyebrow}</li>
+                </ol>
+              </nav>
+            ) : (
+              <a className="backlink" href={localePath(locale, '/')}>{ui[2]}</a>
+            )}
             <Course />
             <p className="eyebrow">{eyebrow}</p>
             <h1>{title}</h1>

@@ -4,6 +4,7 @@ export const fr: Record<string, string> = {
   ". The stickers are here.": ". Les autocollants sont ici.",
   "167 brick-built villages on the Journey": "167 villages construits en briques dans le Voyage",
   "167 villages built stud by stud out of brick, twelve levels each, carried by twenty-eight distinct places.": "167 villages construits en briques, tenon par tenon, avec douze niveaux chacun, répartis dans vingt-huit lieux distincts.",
+  "167 villages built stud by stud out of brick, up to twelve levels each, carried by twenty-eight distinct places.": "167 villages construits en briques, tenon par tenon, avec jusqu’à douze niveaux chacun, répartis dans vingt-huit lieux distincts.",
   "2,000 solver-verified boards across 100 chapters, a Journey of 167 brick-built villages, nine brick friends": "2 000 plateaux vérifiés par un solveur répartis en 100 chapitres, un Voyage de 167 villages construits en briques et neuf amis en briques",
   "2,000 solver-verified boards across 100 chapters; a Journey of 167 brick-built villages; nine brick friends": "2 000 plateaux vérifiés par un solveur répartis en 100 chapitres ; un Voyage de 167 villages construits en briques ; neuf amis en briques",
   "2,000, across 100 chapters of twenty. A solver cleared every one before it shipped.": "2 000, répartis en 100 chapitres de vingt. Un solveur les a tous résolus avant leur publication.",
@@ -61,7 +62,6 @@ export const fr: Record<string, string> = {
   "Tea, scarves and a gentle wave. The scarf tail swings a beat late.": "Du thé, des écharpes et un petit signe de la main. Le bout de l’écharpe se balance avec un temps de retard.",
   "Tells fairy tales, and waves a wand that bursts into stars.": "Raconte des contes de fées et agite une baguette qui fait jaillir des étoiles.",
   "The challenge": "Le défi",
-  "The match-three brick puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, where a board looks impossible and never is.": "Le casse-tête de tri par couleur à briques coulissantes pour iPhone, iPad, Mac, Apple TV, Apple Vision Pro et Apple Watch, où un plateau peut sembler impossible, mais ne l’est jamais.",
   "Three steps, and you are on the board.": "Trois étapes, et vous voilà sur le plateau.",
   "Warm up first": "Entraînez-vous d’abord",
   "You have been challenged": "On vous a lancé un défi",
@@ -69,6 +69,5 @@ export const fr: Record<string, string> = {
   "a free undo every board": "première annulation gratuite par plateau, sans consommer la réserve",
   "no ad between levels": "aucune publicité entre les niveaux",
   "works offline": "fonctionne hors ligne",
-  "Someone dared you to a board of OutBrick — a relaxed match-three brick puzzle. Match every brick to its gate, take the free undo the board comes with, and beat their move count.": "Quelqu’un vous a lancé un défi sur un plateau d’OutBrick, un casse-tête paisible de tri par couleur à briques coulissantes. Faites sortir chaque brique par la porte de sa couleur, profitez de la première annulation gratuite du plateau sans puiser dans votre réserve, et terminez le plateau en moins de coups que la personne qui vous a lancé le défi.",
   "Warm-up OutBrick board": "Plateau d’entraînement OutBrick",
 };

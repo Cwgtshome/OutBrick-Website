@@ -78,6 +78,8 @@ export function carryoverException(entry, locale) {
   if (nativeShared[locale]?.has(text)) return 'native-shared-spelling';
   if (/^(?:https?:\/\/\S*|(?:www\.)?[\w.-]+\.(?:com|site)(?:\/\S*)?|YOURCODE\d+)$/.test(text)) return 'URL-or-example-identifier';
   if (/^(?:PNG|SVG|WEBP|JPG|JPEG|PDF)(?:,?\s+\d+\s*[×x]\s*\d+)?$/.test(text)) return 'file-format-and-dimensions';
+  // Storage keys and cookie names the privacy policy lists in <code>: the same in every language.
+  if (/^(?:ob-consent|_ga(?:_<container-id>)?)$/.test(text)) return 'storage-key-or-cookie-name';
   if (citationTitles.has(text) && (/source|reference/.test(entry.sectionId ?? '') || (entry.href ?? '').startsWith('https://'))) return 'original-citation-title';
   return null;
 }

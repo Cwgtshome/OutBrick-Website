@@ -800,6 +800,13 @@
 }
 .ed-toc ol a[aria-current='true']::before { color: inherit; }
 .ed-toc-back { font-size: 0.93rem; }
+/* The contents list is a <details>: a sidebar label on wide screens, a fold on phones. */
+.ed-toc-fold > summary { list-style: none; }
+.ed-toc-fold > summary::-webkit-details-marker { display: none; }
+.ed-toc-fold > nav { margin-top: 18px; }
+@media (min-width: 961px) {
+  .ed-toc-fold > summary { pointer-events: none; }
+}
 
 .ed-col { max-width: 70ch; min-width: 0; }
 .ed-intro {
@@ -2108,6 +2115,20 @@ p.ed-coll-more { display: block; }
   .ed-read { grid-template-columns: minmax(0, 1fr); }
   .ed-toc { position: static; padding: 20px; border-radius: 16px; background: #fff; box-shadow: 0 4px 0 var(--ed-paper-edge); }
   .ed-toc-back { display: none; }
+  .ed-toc-fold > summary { display: flex; align-items: center; justify-content: space-between; min-height: 32px; cursor: pointer; }
+  .ed-toc-fold > summary::after {
+    content: '';
+    width: 9px;
+    height: 9px;
+    margin-right: 6px;
+    border-right: 2.5px solid currentColor;
+    border-bottom: 2.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+  .ed-toc-fold[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
+  .ed-toc-fold > summary:focus-visible { outline: 3px solid #5a3fd4; outline-offset: 4px; border-radius: 6px; }
+  .ed-toc-fold:not([open]) > nav { display: none; }
   .ed-related { grid-template-columns: minmax(0, 1fr); }
   .ed-pair { grid-template-columns: minmax(0, 1fr); }
   .ed-steps { grid-template-columns: minmax(0, 1fr); }

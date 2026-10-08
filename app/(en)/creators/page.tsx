@@ -87,7 +87,7 @@ export default function CreatorsPage() {
             <ul className="bz-stickerwall" aria-hidden="true">
               {stickers.map((id) => (
                 <li key={id}>
-                  <img src={`/assets/stickers/${id}-160.webp`} srcSet={`/assets/stickers/${id}-160.webp 1x, /assets/stickers/${id}-320.webp 2x`} alt="" width={160} height={160} />
+                  <img src={`/assets/stickers/${id}-160.webp`} srcSet={`/assets/stickers/${id}-160.webp 1x, /assets/stickers/${id}-320.webp 2x`} alt="" width={160} height={160} loading="lazy" decoding="async" />
                 </li>
               ))}
             </ul>
@@ -222,7 +222,7 @@ export default function CreatorsPage() {
 
       <section className="ed-band-ink ed-band" aria-labelledby="earn-title">
         <div className="ed-wrap bz-teaser">
-          <img src="/assets/friends/bloo.webp" alt="" width={120} height={120} />
+          <img src="/assets/friends/bloo.webp" alt="" width={120} height={120} loading="lazy" decoding="async" />
           <div>
             <h2 id="earn-title" className="ed-h3">Posting regularly? Earn from it.</h2>
             <p>The affiliate programme pays 30% of our net proceeds from purchases Apple attributes to your link.</p>

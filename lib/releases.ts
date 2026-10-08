@@ -627,15 +627,196 @@ const notes501: Record<ReleaseLocale, ReleaseNotes> = {
   }
 };
 
+/** 5.1's notes (Slide & Match), word for word from the App Store's What's New, in every language the site is published in. */
+const notes51: Record<ReleaseLocale, ReleaseNotes> = {
+  "en": {
+    "headline": "OutBrick 5.1 changes how every board plays.",
+    "sections": [
+      {
+        "title": "In this update",
+        "bullets": [
+          "Slide & Match, on all 2,000 boards. Boards have room to move now. Swipe a brick toward an empty space and it stops where you let go. Slide it into the gate of its colour and it goes home. Swipe it into a neighbour to swap them, and lines of three or more still clear. A gate's goal counts both the bricks you send home and the ones of its colour you clear.",
+          "Twelve kinds of board, village after village. On some, bricks fall and new ones drop in; on others nothing falls, and the board opens up as you play. Long, big, L and T bricks slide as one piece and leave only through a gate as wide as they are. Crates, ice, locks, moss, statues, sealed beds, iced gates and counted gates get in the way, and the gates now fill the board's border.",
+          "Learn as you go. Each new idea gets a short card the first time you meet it, and a solver finds a winning line for every board before it ships.",
+          "Slide with VoiceOver. Every brick that can move offers its slides as actions, such as \"Slide right 1 cell\", \"Slide up to the end, 3 cells\" or \"Slide left, out through the red gate\". VoiceOver says where the brick stopped and what went home, and hints name slides as well as swaps.",
+          "The OutBrick Community. Community and Report a bug, new in Settings, open our community on the website: ask for help, report a bug or vote for ideas. Report a bug fills in your device, its system version, the app version, your level and whether VoiceOver, Switch Control or Larger Text is on, so you can go straight to what happened.",
+          "Settings in Liquid Glass. The switches and choices in Settings are now Liquid Glass, in OutBrick's own green and red.",
+          "Easier to watch. Blasts and falling bricks play a little slower, so you can see what happened, and the board takes your next move as soon as it is still."
+        ]
+      }
+    ]
+  },
+  "fr": {
+    "headline": "OutBrick 5.1 change la façon de jouer sur chaque plateau.",
+    "sections": [
+      {
+        "title": "Dans cette mise à jour",
+        "bullets": [
+          "Glisse et aligne, sur les 2 000 plateaux. Les plateaux ont maintenant de la place pour bouger. Glisse une brique vers une case vide : elle s’arrête là où tu la lâches. Fais-la entrer dans la porte de sa couleur et elle rentre chez elle. Pousse-la vers une voisine pour les échanger : les lignes de trois ou plus s’effacent toujours. L’objectif d’une porte compte à la fois les briques que tu fais rentrer et celles de sa couleur que tu effaces.",
+          "Douze sortes de plateaux, village après village. Sur certains, les briques tombent et de nouvelles arrivent ; sur d’autres, rien ne tombe et le plateau s’ouvre à mesure que tu joues. Les briques longues, grandes, en L et en T glissent d’un seul bloc et ne sortent que par une porte aussi large qu’elles. Caisses, glace, verrous, mousse, statues, parterres scellés, portes gelées et portes à compteur te barrent la route, et les portes occupent désormais toute la bordure du plateau.",
+          "Tu apprends en jouant. Chaque nouvelle idée a sa petite carte la première fois que tu la rencontres, et un solveur trouve une solution gagnante pour chaque plateau avant sa sortie.",
+          "Glisser avec VoiceOver. Chaque brique qui peut bouger propose ses glissements comme actions, par exemple « Faire glisser vers la droite de 1 case », « Faire glisser vers le haut jusqu’au bout, 3 cases » ou « Faire glisser vers la gauche et sortir par la porte : rouge ». VoiceOver te dit où la brique s’est arrêtée et ce qui est rentré, et les indices proposent aussi des glissements, pas seulement des échanges.",
+          "La Communauté OutBrick. Communauté et Signaler un bug, nouveaux dans les Réglages, ouvrent notre communauté sur le site : demande de l’aide, signale un bug ou vote pour des idées. Signaler un bug remplit pour toi ton appareil, sa version du système, la version de l’app et ton niveau, et indique si VoiceOver, Contrôle de sélection ou Texte plus grand est activé : tu n’as plus qu’à raconter ce qui s’est passé.",
+          "Réglages en Liquid Glass. Les interrupteurs et les choix des Réglages passent en Liquid Glass, dans le vert et le rouge d’OutBrick.",
+          "Plus agréable à regarder. Les explosions et les briques qui tombent ralentissent un peu pour que tu voies ce qui se passe, et le plateau accepte ton coup suivant dès qu’il est immobile."
+        ]
+      }
+    ]
+  },
+  "de": {
+    "headline": "OutBrick 5.1 verändert, wie jedes Spielfeld gespielt wird.",
+    "sections": [
+      {
+        "title": "In diesem Update",
+        "bullets": [
+          "Schieben und kombinieren, auf allen 2.000 Spielfeldern. Die Spielfelder haben jetzt Platz. Wisch einen Stein zu einem freien Feld, und er bleibt stehen, wo du loslässt. Schieb ihn ins Tor seiner Farbe, dann geht er nach Hause. Wisch ihn in einen Nachbarn, um die beiden zu tauschen – Reihen aus drei oder mehr verschwinden weiterhin. Das Ziel eines Tors zählt die Steine, die du nach Hause schickst, und die Steine seiner Farbe, die du abräumst.",
+          "Zwölf Arten von Spielfeldern, Dorf für Dorf. Auf manchen fallen Steine und neue kommen nach, auf anderen fällt nichts, und das Spielfeld öffnet sich, während du spielst. Lange, große, L- und T-Steine gleiten als ein Stück und gehen nur durch ein Tor, das so breit ist wie sie. Kisten, Eis, Schlösser, Moos, Statuen, versiegelte Beete, vereiste Tore und Zähltore stehen im Weg, und die Tore füllen jetzt den ganzen Rand des Spielfelds.",
+          "Lernen beim Spielen. Jede neue Idee bekommt beim ersten Mal eine kurze Karte, und ein Solver findet für jedes Spielfeld einen Gewinnweg, bevor es erscheint.",
+          "Schieben mit VoiceOver. Jeder Stein, der sich bewegen kann, bietet seine Züge als Aktionen an, etwa „Schieben nach rechts um 1 Feld“, „Schieben nach oben bis zum Ende, 3 Felder“ oder „Schieben nach links, hinaus durch das Tor: rot“. VoiceOver sagt dir, wo der Stein stehen geblieben ist und was nach Hause gegangen ist, und ein Tipp nennt dir den passenden Zug.",
+          "Die OutBrick-Community. „Community“ und „Fehler melden“, neu in den Einstellungen, öffnen unsere Community auf der Website: Hol dir Hilfe, melde einen Fehler oder stimm für Ideen ab. „Fehler melden“ trägt dein Gerät, seine Systemversion, die App-Version, dein Level und ob VoiceOver, Schaltersteuerung oder Größerer Text an ist schon ein, damit du gleich beschreiben kannst, was passiert ist.",
+          "Einstellungen in Liquid Glass. Die Schalter und Auswahlknöpfe in den Einstellungen sind jetzt aus Liquid Glass, im Grün und Rot von OutBrick.",
+          "Besser zu verfolgen. Explosionen und fallende Steine laufen etwas langsamer, damit du siehst, was passiert, und das Spielfeld nimmt deinen nächsten Zug an, sobald es stillsteht."
+        ]
+      }
+    ]
+  },
+  "es": {
+    "headline": "OutBrick 5.1 cambia la forma de jugar en todos los tableros.",
+    "sections": [
+      {
+        "title": "En esta actualización",
+        "bullets": [
+          "Desliza y combina, en los 2000 tableros. Ahora los tableros tienen sitio para moverse. Desliza un ladrillo hacia un hueco y se para donde lo sueltes. Llévalo hasta la puerta de su color y volverá a casa. Empújalo contra un vecino para cambiarlos: las líneas de tres o más siguen desapareciendo. El objetivo de una puerta cuenta tanto los ladrillos que mandas a casa como los de su color que eliminas.",
+          "Doce tipos de tablero, pueblo tras pueblo. En unos, los ladrillos caen y llegan otros nuevos; en otros no cae nada y el tablero se va abriendo mientras juegas. Los ladrillos largos, grandes, en L y en T se deslizan en una pieza y solo salen por una puerta tan ancha como ellos. Cajas, hielo, candados, musgo, estatuas, bancales sellados, puertas heladas y puertas con contador se interponen, y las puertas ocupan ahora todo el borde del tablero.",
+          "Aprende jugando. Cada idea nueva trae una tarjeta breve la primera vez que la encuentras, y un solucionador encuentra una jugada ganadora para cada tablero antes de publicarlo.",
+          "Desliza con VoiceOver. Cada ladrillo que puede moverse ofrece sus deslizamientos como acciones, como «Deslizar hacia la derecha 1 casilla», «Deslizar hacia arriba hasta el final, 3 casillas» o «Deslizar hacia la izquierda y salir por la puerta: rojo». VoiceOver te dice dónde se paró el ladrillo y qué volvió a casa, y las pistas también te proponen deslizamientos, no solo intercambios.",
+          "La Comunidad de OutBrick. Comunidad e Informar de un error, nuevos en Ajustes, abren nuestra comunidad en la web: pide ayuda, informa de un error o vota ideas. Informar de un error rellena tu dispositivo, su versión del sistema, la versión de la app, tu nivel y si tienes activado VoiceOver, Control por botón o Texto más grande, para que vayas directo a lo que pasó.",
+          "Ajustes en Liquid Glass. Los interruptores y las opciones de Ajustes son ahora de Liquid Glass, en el verde y el rojo de OutBrick.",
+          "Más fácil de seguir. Las explosiones y los ladrillos que caen van un poco más despacio para que veas lo que pasa, y el tablero acepta tu siguiente jugada en cuanto se queda quieto."
+        ]
+      }
+    ]
+  },
+  "ja": {
+    "headline": "OutBrick 5.1で、すべてのボードの遊び方が変わります。",
+    "sections": [
+      {
+        "title": "このアップデート",
+        "bullets": [
+          "スライド＆マッチを全2,000ボードで。ボードに動けるすき間ができました。ブロックを空いたマスへスワイプすると、指をはなした所で止まります。同じ色の門まですべらせると、おうちに帰ります。となりのブロックに向けてスワイプすれば入れ替わり、3つ以上そろった列はこれまでどおり消えます。門の目標には、おうちに帰したブロックと、消したその色のブロックの両方が数えられます。",
+          "12種類のボードが、村から村へ。ブロックが落ちて新しいブロックが入ってくるボードもあれば、何も落ちず、遊ぶほど広がっていくボードもあります。長いブロック、大きなブロック、L字とT字のブロックはひとかたまりですべり、同じ幅の門からしか出られません。木箱、氷、ロック、コケ、像、封じられた花壇、凍った門、数字つきの門が行く手をはばみます。門はボードのふちいっぱいの太さになりました。",
+          "遊びながら覚えられます。新しいしくみには、初めて出会ったときに短いカードが1枚ずつ出ます。どのボードも、公開前にソルバーが勝ち筋を見つけています。",
+          "VoiceOverでスライド。動かせるブロックには、すべらせ方がアクションとして並びます。たとえば「右に1マスすべらせる」「上に端まですべらせる（3マス）」「左にすべらせて赤の門から出す」。ブロックがどこで止まったか、何がおうちに帰ったかをVoiceOverが伝え、ヒントは入れ替えだけでなく、すべらせる手も教えてくれます。",
+          "OutBrickコミュニティ。設定に新しく加わった「コミュニティ」と「不具合を報告」から、ウェブサイトのコミュニティを開けます。質問したり、不具合を報告したり、アイデアに投票したりできます。「不具合を報告」では、デバイス、システムのバージョン、アプリのバージョン、いまのレベル、そしてVoiceOver・スイッチコントロール・さらに大きな文字がオンかどうかが自動で入るので、起きたことを書くだけです。",
+          "設定がLiquid Glassに。設定のスイッチと選択ボタンがLiquid Glassになり、OutBrickのグリーンとレッドで表示されます。",
+          "見やすい動き。爆発や落ちるブロックの動きを少しゆっくりにして、何が起きたか見えるようにしました。ボードが止まれば、すぐに次の手を打てます。"
+        ]
+      }
+    ]
+  },
+  "pt-BR": {
+    "headline": "O OutBrick 5.1 muda o jeito de jogar em todos os tabuleiros.",
+    "sections": [
+      {
+        "title": "Nesta atualização",
+        "bullets": [
+          "Deslize e combine, nos 2.000 tabuleiros. Agora os tabuleiros têm espaço para se mexer. Deslize um tijolo para um espaço vazio: ele para onde você soltar. Leve-o até o portão da cor dele e ele volta para casa. Empurre-o contra um vizinho para trocar os dois, e linhas de três ou mais continuam sumindo. O objetivo de um portão conta os tijolos que você manda para casa e também os da cor dele que você elimina.",
+          "Doze tipos de tabuleiro, vila após vila. Em alguns, os tijolos caem e chegam novos; em outros, nada cai e o tabuleiro vai se abrindo enquanto você joga. Tijolos longos, grandes, em L e em T deslizam como uma peça só e só saem por um portão tão largo quanto eles. Caixas, gelo, cadeados, musgo, estátuas, canteiros lacrados, portões congelados e portões com contador atrapalham o caminho, e os portões agora ocupam toda a borda do tabuleiro.",
+          "Aprenda jogando. Cada ideia nova ganha um cartão curto na primeira vez que você a encontra, e um solucionador encontra uma sequência vencedora para cada tabuleiro antes do lançamento.",
+          "Deslize com o VoiceOver. Cada tijolo que pode se mover oferece seus deslizes como ações, como “Deslizar para a direita 1 casa”, “Deslizar para cima até o fim, 3 casas” ou “Deslizar para a esquerda e sair pelo portão: vermelho”. O VoiceOver diz onde o tijolo parou e o que voltou para casa, e as dicas também mostram deslizes, não só trocas.",
+          "A Comunidade OutBrick. Comunidade e Relatar um bug, novos em Ajustes, abrem nossa comunidade no site (em inglês): peça ajuda, relate um bug ou vote em ideias. Relatar um bug já preenche o seu aparelho, a versão do sistema, a versão do app, o seu nível e se o VoiceOver, o Controle Assistivo ou o Texto Maior estão ativados, para você ir direto ao que aconteceu.",
+          "Ajustes em Liquid Glass. Os interruptores e as opções em Ajustes agora são de Liquid Glass, no verde e no vermelho do OutBrick.",
+          "Mais fácil de acompanhar. Explosões e tijolos caindo ficaram um pouco mais lentos, para você ver o que aconteceu, e o tabuleiro aceita sua próxima jogada assim que para."
+        ]
+      }
+    ]
+  }
+};
+
+/** 5.1.1's notes, word for word from the App Store's What's New. */
+const notes511: Record<ReleaseLocale, ReleaseNotes> = {
+  "en": {
+    "headline": "OutBrick 5.1.1 fixes a board that could seem frozen.",
+    "sections": [
+      {
+        "title": "In this update",
+        "bullets": [
+          "When extra moves arrived while a tip card was on screen, the card could vanish while still blocking the board. VoiceOver found only the card, and your next swipe was spent putting it away. The tip card now stays until you're done with it, and the board takes your next move straight away."
+        ]
+      }
+    ]
+  },
+  "fr": {
+    "headline": "OutBrick 5.1.1 corrige un plateau qui pouvait sembler figé.",
+    "sections": [
+      {
+        "title": "Dans cette mise à jour",
+        "bullets": [
+          "Quand des coups supplémentaires arrivaient pendant qu'une carte d'astuce était affichée, la carte pouvait disparaître tout en bloquant encore le plateau. VoiceOver ne trouvait que la carte, et votre glissement suivant servait à la ranger. La carte d'astuce reste désormais affichée jusqu'à ce que vous en ayez fini, et le plateau accepte aussitôt votre coup suivant."
+        ]
+      }
+    ]
+  },
+  "de": {
+    "headline": "OutBrick 5.1.1 behebt ein Spielfeld, das eingefroren wirken konnte.",
+    "sections": [
+      {
+        "title": "In diesem Update",
+        "bullets": [
+          "Kamen Extrazüge, während eine Tippkarte angezeigt wurde, konnte die Karte verschwinden und das Spielfeld trotzdem weiter blockieren. VoiceOver fand nur die Karte, und dein nächstes Wischen wurde zum Wegräumen verbraucht. Die Tippkarte bleibt jetzt, bis du mit ihr fertig bist, und das Spielfeld nimmt deinen nächsten Zug sofort an."
+        ]
+      }
+    ]
+  },
+  "es": {
+    "headline": "OutBrick 5.1.1 corrige un tablero que podía parecer congelado.",
+    "sections": [
+      {
+        "title": "En esta actualización",
+        "bullets": [
+          "Si llegaban movimientos extra mientras se mostraba una tarjeta de consejo, la tarjeta podía desaparecer y seguir bloqueando el tablero. VoiceOver solo encontraba la tarjeta, y tu siguiente deslizamiento se usaba para cerrarla. Ahora la tarjeta de consejo se queda hasta que termines con ella, y el tablero acepta tu siguiente movimiento al instante."
+        ]
+      }
+    ]
+  },
+  "ja": {
+    "headline": "OutBrick 5.1.1では、盤面が止まったように見えることがある問題を修正しました。",
+    "sections": [
+      {
+        "title": "このアップデート",
+        "bullets": [
+          "ヒントカードの表示中に追加の手数が届くと、カードが見えなくなったまま盤面をふさぐことがありました。VoiceOverではカードしか見つからず、次のスワイプはカードを閉じるのに使われていました。ヒントカードは閉じるまで表示されたままになり、盤面はすぐに次の手を受け付けます。"
+        ]
+      }
+    ]
+  },
+  "pt-BR": {
+    "headline": "O OutBrick 5.1.1 corrige um tabuleiro que podia parecer travado.",
+    "sections": [
+      {
+        "title": "Nesta atualização",
+        "bullets": [
+          "Quando jogadas extras chegavam com um cartão de dica na tela, o cartão podia sumir e continuar bloqueando o tabuleiro. O VoiceOver encontrava só o cartão, e o seu próximo deslize era gasto para fechá-lo. Agora o cartão de dica fica até você terminar com ele, e o tabuleiro aceita a sua próxima jogada na hora."
+        ]
+      }
+    ]
+  }
+};
+
 /** Every release with notes on this site, newest first. English. */
-export const releases: Release[] = [{ version: '5.0.1', date: '2026-10-06', ...notes501.en }, { version: '4.2', date: '2026-09-22', ...notes42.en }];
+export const releases: Release[] = [
+  { version: '5.1.1', date: '2026-10-08', ...notes511.en },
+  { version: '5.1', date: '2026-10-08', ...notes51.en },
+  { version: '5.0.1', date: '2026-10-06', ...notes501.en },
+  { version: '4.2', date: '2026-09-22', ...notes42.en },
+];
 
 /** The current release. */
 export const currentRelease: Release = releases[0];
 
 /** The current release's notes in `locale`, with the same version and date. */
 export function currentReleaseIn(locale: ReleaseLocale): Release {
-  return { version: currentRelease.version, date: currentRelease.date, ...notes501[locale] };
+  return { version: currentRelease.version, date: currentRelease.date, ...notes511[locale] };
 }
 
 /**
@@ -647,5 +828,10 @@ export const firstRelease = { version: '1.0', date: '2026-09-06' };
 
 /** Published notes including stable anchors for older translated links. */
 export function releasesIn(locale: ReleaseLocale): Release[] {
-  return [currentReleaseIn(locale), { version: '4.2', date: '2026-09-22', ...notes42[locale] }];
+  return [
+    currentReleaseIn(locale),
+    { version: '5.1', date: '2026-10-08', ...notes51[locale] },
+    { version: '5.0.1', date: '2026-10-06', ...notes501[locale] },
+    { version: '4.2', date: '2026-09-22', ...notes42[locale] },
+  ];
 }

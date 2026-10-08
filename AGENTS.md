@@ -14,16 +14,17 @@ Check Git status, remote, branch and concurrent ownership. Preserve unrelated ch
 ## Product and design
 
 - Keep released App Store functionality separate from work in development. The dated checkpoint
-  is iOS 5.0.1 released, with 5.1 Slide & Match still in development; verify again before changing
-  release claims. Do not announce a release from a branch, simulator build or planned What's New.
+  (8 October 2026) is iOS 5.1.1 released, the release after 5.1 Slide & Match; verify again with
+  Apple's lookup before changing release claims. Do not announce a release from a branch,
+  simulator build or planned What's New.
 - Update all six languages: English, French, German, Spanish, Japanese and Brazilian Portuguese.
   English routes are unprefixed; translated routes use `/fr`, `/de`, `/es`, `/ja` and `/pt-BR`.
   Preserve localized navigation and metadata.
 - Follow the existing `.ob-site` design, typography, colors and components in `app/globals.css`
   and `app/styles/`. Reuse the established cards, sections, focus states and responsive layouts.
   A `.ledger` row has a marker column: include its `.mark` before the content so prose has room.
-- Keep the classic browser sliding demo explicitly distinct from the released iOS game and
-  upcoming Slide & Match. Do not transfer its unlimited undo rule to the native game.
+- Keep the classic browser sliding demo explicitly distinct from the released iOS game (Slide &
+  Match). Do not transfer its unlimited undo rule to the native game.
 - Preserve historical release notes and dated articles. Label older screenshots as archival
   instead of presenting them as proof of current gameplay.
 - Character animations and text bubbles remain; character vocalizations and vocal praise are

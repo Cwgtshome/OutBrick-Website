@@ -40,7 +40,7 @@ export default function PressPage() {
       { '@type': 'ListItem', position: 2, name: 'Press room', item: `${siteUrl}/press` },
     ],
   };
-  const latest = { href: '/whats-new', dateline: '6 October 2026', short: 'OutBrick 5.0.1 is on the App Store', dek: currentGameCopy.en.description };
+  const latest = { href: '/whats-new', dateline: '8 October 2026', short: 'OutBrick 5.1.1 is on the App Store, with Slide & Match', dek: currentGameCopy.en.description };
 
   return (
     <EditorialPage page={'/press'} current="press" className="bz">
@@ -128,7 +128,7 @@ export default function PressPage() {
             <div><dt>Company</dt><dd>OutBrick, founded by Mourad Hamdi (Founder &amp; CEO)</dd></div>
             <div><dt>Website</dt><dd><a className="ed-link" style={{ fontSize: 'inherit' }} href="/">www.outbrick.site</a></dd></div>
             <div><dt>App Store</dt><dd><a className="ed-link" style={{ fontSize: 'inherit', overflowWrap: 'anywhere' }} href={APP_STORE_URL}>{APP_STORE_URL.replace('https://', '')}</a></dd></div>
-            <div><dt>Describe it as</dt><dd>A match-three brick puzzle. More wording, and what to avoid, is in the <a className="ed-link" style={{ fontSize: 'inherit' }} href="/press-kit">press kit</a>.</dd></div>
+            <div><dt>Describe it as</dt><dd>A slide-and-match brick puzzle. More wording, and what to avoid, is in the <a className="ed-link" style={{ fontSize: 'inherit' }} href="/press-kit">press kit</a>.</dd></div>
           </dl>
         </div>
       </section>

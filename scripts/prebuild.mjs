@@ -50,3 +50,12 @@ try {
 await mkdir(new URL('.', out), { recursive: true });
 await writeFile(out, `${JSON.stringify(record, null, 2)}\n`);
 console.log(`[prebuild] App Store: ${record.userRatingCount} ratings, average ${record.averageUserRating}`);
+
+// Google Analytics 4: the build-time `GA_MEASUREMENT_ID` (a Netlify environment variable), copied
+// for lib/analytics.ts, which validates it. Pages are prerendered in the Workers runtime, which
+// does not see the build's environment, so the value travels through this generated file. When it
+// is unset, the file says null and the site renders no analytics code at all.
+const analyticsOut = new URL('../lib/generated/analytics.json', import.meta.url);
+const measurementId = process.env.GA_MEASUREMENT_ID?.trim() || null;
+await writeFile(analyticsOut, `${JSON.stringify({ measurementId }, null, 2)}\n`);
+console.log(`[prebuild] Google Analytics: ${measurementId ? 'GA_MEASUREMENT_ID is set (consent banner on)' : 'GA_MEASUREMENT_ID unset, no analytics code'}`);

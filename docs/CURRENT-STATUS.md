@@ -52,17 +52,53 @@ at 280 px; that is fixed with a ≤360 px breakpoint and wrapping long words in 
 a browser check only. It is not a Litmus or real-client test, and Outlook/Gmail app rendering
 has not been checked on devices.
 
+## Search, structured data and analytics (8 October 2026, branch `claude/email-footer-responsive`)
+
+Not deployed. Local evidence from one build without `GA_MEASUREMENT_ID` and one with a test ID:
+
+- `pnpm audit:seo`: 0 errors. The 8 warnings are long meta descriptions on the privacy and
+  privacy-choices pages, which another agent is rewriting. The audit now also checks heading
+  levels (no skips), `<html lang>`, and that every hreflang set names the page and an x-default.
+- `pnpm check:links`: every internal link and anchor resolves. `--external` (live network) found
+  two dead links: the ThinkFun Rush Hour article (now cited from the Internet Archive) and
+  `snapchat.com/add/outbrick`, which answers 404. The Snapchat profile stays in the footer until
+  the owner creates it or removes the row from `socialProfiles` in `lib/site.ts`.
+- `node scripts/check-jsonld.mjs` (new): every JSON-LD block parses, with `@context` and a type.
+  Contact pages used to carry a second ContactPage and BreadcrumbList; they now carry one.
+- Legal and help pages show a visible breadcrumb trail matching their BreadcrumbList. Journal
+  articles' contents list folds shut on phones. The English 404 no longer prints `index, follow`
+  next to its `noindex`.
+- `/about.html` and `/index.html` still answer 200 on Netlify. Their canonical tags point to the
+  clean URL, so they were left alone.
+
+Google Analytics 4 is off unless `GA_MEASUREMENT_ID` is set in Netlify at build time.
+`scripts/prebuild.mjs` copies it into `lib/generated/analytics.json`, and `lib/analytics.ts` validates
+it. Without it, no analytics code is rendered and `scripts/postbuild.mjs` removes Google's origins
+from the published CSP. With it, the head sets Consent Mode v2 defaults (all denied) and
+`app/components/consent-banner.tsx` asks in six languages. gtag.js is requested only after Accept.
+The answer is stored in localStorage `ob-consent` (`{analytics, at, v: 1}`) and asked again after
+12 months. Any `[data-ob-consent-open]` element, `window.obConsent.open()` or an
+`ob-consent:open` event reopens the banner. Events: `page_view`, sent by the banner with the query
+string reduced to utm tags, plus `click_app_store` (location = link campaign), `click_social`,
+`newsletter_signup`, `contact_submit` and `form_submit` (form name only). There is no banner and
+no page view on the 404 pages, the community admin screens or the email previews. Owner steps
+before turning it on: in the GA4 web stream, turn off enhanced measurement's "Page changes based on
+browser history events", or the community's in-page navigation is counted twice. Then set the
+variable, deploy, and check the live CSP and the banner. The test-ID build confirmed the head
+script, the banner chunk and the CSP. Nothing has run in a browser yet.
+
 ## Product content
 
-The verified App Store checkpoint is iOS **5.0.1**, released 6 October 2026. Website home/play,
-release notes, about, support, accessibility, press/creator copy, metadata and shared footer now
-describe released match-three gameplay: swaps, cascades, specials, goals, score stars, VoiceOver
-controls and supported Apple system integrations.
-
-**5.1 Slide & Match is in development**, with final board audits and release checks still ongoing
-at this checkpoint. The website labels slides, matching exits, neighbor swaps, twelve board types
-per village and related Settings work as upcoming. A native test build or approved draft of App
-Store copy is not an App Store release.
+The verified App Store checkpoint is iOS **5.1.1**, released 8 October 2026 (Apple lookup,
+all six storefronts: version 5.1.1, `currentVersionReleaseDate` 2026-10-08T18:19:09Z). 5.1 "Slide &
+Match" shipped the same day. Since branch `claude/email-footer-responsive` (8 October 2026) the
+site describes Slide & Match in all six languages, in the store's own wording: slide a brick into
+space or home through the gate of its colour, swap neighbours, three in a line clear, twelve kinds
+of board village after village (not "in every village": the last has eight), 2,000 solver-proven
+boards. `/whats-new` lists 5.1.1, 5.1, 5.0.1 and 4.2, with the 5.1 and 5.1.1 notes copied from the
+iOS repository's approved store metadata. Lives, ads and move-continue facts were rechecked against
+the live store description and are unchanged. The community guides' intro no longer names a
+version; the seeded guide bodies in the database still describe 5.0.1 until they are re-seeded.
 
 Classic browser sliding boards are labelled separately. Historical 4.2 release notes and their
 anchors remain; older press screenshots are archival. Character voice assets remain retired.

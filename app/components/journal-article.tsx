@@ -335,7 +335,9 @@ export function ArticleView({
         <div className="ed-paper ed-band-paper">
           <div className="ed-wrap ed-read">
             <aside className="ed-toc" aria-label={ui.inThisStory}>
-              <p className="ed-label no-mark">{ui.inThisStory}</p>
+              {/* Open by default; on a phone reading-aids.tsx folds it shut so the story starts sooner. */}
+              <details className="ed-toc-fold" open data-toc-fold="">
+              <summary className="ed-label no-mark">{ui.inThisStory}</summary>
               <nav aria-label={ui.toc}>
                 <ol>
                   {article.sections.map((section) => (
@@ -345,6 +347,7 @@ export function ArticleView({
                   <li><a href="#references">{ui.references}</a></li>
                 </ol>
               </nav>
+              </details>
               <a className="ed-link ed-toc-back" href={journal}>{ui.allStories}</a>
             </aside>
 

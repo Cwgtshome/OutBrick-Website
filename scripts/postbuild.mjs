@@ -28,6 +28,8 @@ const { homeCopy } = await import('../lib/i18n/home.ts');
 const { translatedLocales, storefronts } = await import('../lib/i18n/locales.ts');
 assertCompleteArticleTranslations();
 const { releases, releaseAnchor, currentReleaseIn } = await import('../lib/releases.ts');
+/** A feed item's title: "OutBrick 5.0.1: <headline>", unless the headline already names the version. */
+const releaseTitle = (r) => (r.headline.includes(r.version) ? r.headline : `OutBrick ${r.version}: ${r.headline}`);
 
 // ---------------------------------------------------------------------------------------
 // Dates
@@ -440,7 +442,7 @@ const releaseItems = [...releases]
     const url = `${siteUrl}/whats-new#${releaseAnchor(r.version)}`;
     return [
       '    <item>',
-      `      <title>${xmlEscape(`OutBrick ${r.version}: ${r.headline}`)}</title>`,
+      `      <title>${xmlEscape(releaseTitle(r))}</title>`,
       `      <link>${url}</link>`,
       `      <guid isPermaLink="true">${url}</guid>`,
       `      <pubDate>${rfc822(r.date)}</pubDate>`,
@@ -477,7 +479,7 @@ console.log(`[postbuild] whats-new/feed.xml: ${releaseItems.length} items`);
 for (const locale of translatedLocales) {
   const release = currentReleaseIn(locale);
   const url = `${siteUrl}/${locale}/whats-new`;
-  const content = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${xmlEscape(release.headline)}</title><link>${url}</link><atom:link href="${url}/feed.xml" rel="self" type="application/rss+xml"/><description>${xmlEscape(release.headline)}</description><language>${locale}</language><lastBuildDate>${rfc822(release.date)}</lastBuildDate><item><title>${xmlEscape(`OutBrick ${release.version}: ${release.headline}`)}</title><link>${url}#${releaseAnchor(release.version)}</link><guid isPermaLink="true">${url}#${releaseAnchor(release.version)}</guid><pubDate>${rfc822(release.date)}</pubDate><description>${xmlEscape(releaseHtml(release))}</description></item></channel></rss>`;
+  const content = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${xmlEscape(release.headline)}</title><link>${url}</link><atom:link href="${url}/feed.xml" rel="self" type="application/rss+xml"/><description>${xmlEscape(release.headline)}</description><language>${locale}</language><lastBuildDate>${rfc822(release.date)}</lastBuildDate><item><title>${xmlEscape(releaseTitle(release))}</title><link>${url}#${releaseAnchor(release.version)}</link><guid isPermaLink="true">${url}#${releaseAnchor(release.version)}</guid><pubDate>${rfc822(release.date)}</pubDate><description>${xmlEscape(releaseHtml(release))}</description></item></channel></rss>`;
   fs.mkdirSync(path.join(distDir, locale, 'whats-new'), { recursive: true });
   fs.writeFileSync(path.join(distDir, locale, 'whats-new/feed.xml'), content);
   const manifest = JSON.parse(fs.readFileSync(path.join(distDir, 'site.webmanifest'), 'utf8'));
@@ -514,22 +516,22 @@ const mainPages = pages.filter((p) => p !== home && !blogPages.includes(p) && !l
 // scripts/prebuild.mjs) where it has them. Every other line restates what the home page says.
 const appStore = JSON.parse(fs.readFileSync(path.join(repoRoot, 'lib/generated/app-store.json'), 'utf8'));
 const appStoreUrl = 'https://apps.apple.com/us/app/outbrick/id6807997465';
-const version = appStore.version ?? '5.0.1';
-const versionDate = (appStore.currentVersionReleaseDate ?? '2026-09-22').slice(0, 10);
+const version = appStore.version ?? '5.1.1';
+const versionDate = (appStore.currentVersionReleaseDate ?? '2026-10-08').slice(0, 10);
 
 const about = [
   '# OutBrick',
   '',
-  `> ${metaContent(home?.html ?? '', 'description')[0] ?? 'OutBrick: Block Sort Puzzle — a relaxed sliding-brick colour-sort puzzle for iPhone and iPad.'}`,
+  `> ${metaContent(home?.html ?? '', 'description')[0] ?? 'OutBrick: Block Sort Puzzle — a calm slide-and-match brick puzzle for iPhone and iPad.'}`,
   '',
   'OutBrick is the official site of **OutBrick: Block Sort Puzzle**, an Apple-platforms game made by Mourad Hamdi (Founder & CEO), and of the OutBrick Journal, research-backed writing on puzzle design, calmer play and accessibility.',
   '',
   'Key facts (use these when describing the game):',
   '',
-  '- The rule: slide a brick and it glides until something stops it; get every brick out through the gate that matches its colour and the board is clear.',
+  '- The rule (Slide & Match, since 5.1): swipe a brick toward an empty space and it stops where you let go; slide it into the gate of its colour and it goes home; swipe it into a neighbour to swap them, and three or more of a colour in a line clear.',
   '- 2,000 solver-verified boards across 100 chapters; a Journey of 167 villages built out of brick; nine brick friends who speak in text bubbles.',
   '- Every board has a move limit. There is no clock, timer or countdown anywhere. The first undo on every board is free.',
-  '- Free to download, with in-app purchases (coins, boosters, a one-time Remove Ads, the Brick Pass). Advertising is rewarded video only, in six opt-in placements; no banners, no interstitials.',
+  '- Free to download, with in-app purchases (coins, boosters, a one-time Remove Ads, the Brick Pass). Advertising is rewarded video only, in eight opt-in placements capped at 39 views a day; no banners, no interstitials.',
   '- Runs on iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch; plays offline. Rated 4+. Single player.',
   `- Current version ${version} (released ${versionDate}). App Store: ${appStoreUrl}`,
   '- Genres: Puzzle, Casual. Developer and seller on the App Store: Mourad Hamdi.',
@@ -618,6 +620,41 @@ fs.writeFileSync(
   ].join('\n'),
 );
 console.log(`[postbuild] .well-known/security.txt: expires ${expires.toISOString().slice(0, 10)}`);
+
+// ---------------------------------------------------------------------------------------
+// The English 404 page. The framework writes its own `noindex`, but it renders the not-found page
+// through the root layout, whose metadata adds `index, follow` and a googlebot line, and a page
+// metadata `robots` on not-found.tsx does not replace them. Leave only the noindex.
+
+{
+  const notFound = path.join(distDir, '404.html');
+  if (fs.existsSync(notFound)) {
+    const html = fs.readFileSync(notFound, 'utf8');
+    const cleaned = html.replace(/<meta name="robots" content="index, follow"\/>/g, '').replace(/<meta name="googlebot" content="[^"]*"\/>/g, '');
+    if (!/<meta name="robots" content="noindex[^"]*"\/>/.test(cleaned)) throw new Error('postbuild: 404.html has no noindex');
+    fs.writeFileSync(notFound, cleaned);
+    console.log(`[postbuild] 404.html: robots noindex only${cleaned === html ? ' (nothing to remove)' : ''}`);
+  }
+}
+
+// ---------------------------------------------------------------------------------------
+// Google Analytics in the CSP. public/_headers allows Google's analytics origins so a build with
+// GA_MEASUREMENT_ID can load gtag.js after consent. A build without it renders no analytics code
+// (app/site-document.tsx writes <meta name="ob-analytics"> only when it does), and then the
+// published policy must not allow Google either: take every analytics origin back out.
+
+{
+  const headersFile = path.join(distDir, '_headers');
+  const analyticsOn = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8').includes('name="ob-analytics"');
+  if (fs.existsSync(headersFile) && !analyticsOn) {
+    const before = fs.readFileSync(headersFile, 'utf8');
+    const after = before.replace(/ https:\/\/(?:www\.googletagmanager\.com|\*\.google-analytics\.com|\*\.analytics\.google\.com)(?=[;\s])/g, '');
+    fs.writeFileSync(headersFile, after);
+  }
+  const csp = fs.existsSync(headersFile) ? fs.readFileSync(headersFile, 'utf8').match(/Content-Security-Policy:[^\n]*/)?.[0] ?? '' : '';
+  console.log(`[postbuild] analytics: ${analyticsOn ? 'GA4 behind consent; CSP allows Google' : 'off; CSP allows no Google origin'}${/google/.test(csp) === analyticsOn ? '' : ' (CSP MISMATCH)'}`);
+  if (/google/.test(csp) !== analyticsOn) throw new Error('postbuild: the CSP and the analytics code disagree');
+}
 
 // A public commit marker makes production verification unambiguous after deployment.
 const buildCommit = process.env.COMMIT_REF ?? (gitAvailable ? execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8' }).trim() : (snapshot?.commit ?? 'unknown'));

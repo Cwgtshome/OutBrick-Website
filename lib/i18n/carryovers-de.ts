@@ -1,5 +1,4 @@
 export const de: Record<string, string> = {
-  "Someone dared you to a board of OutBrick — a relaxed match-three brick puzzle. Match every brick to its gate, take the free undo the board comes with, and beat their move count.": "Jemand hat dich zu einem Spielfeld in OutBrick herausgefordert — einem entspannten Farbsortierpuzzle mit verschiebbaren Bausteinen. Schiebe jeden Baustein zu seinem passenden Tor, nutze das erste kostenlose Rückgängigmachen auf dem Spielfeld, ohne deinen Vorrat zu verbrauchen, und schaffe es mit weniger Zügen als dein Gegenüber.",
   "Warm-up OutBrick board": "OutBrick-Spielfeld zum Aufwärmen",
   "Remote": "Ortsunabhängig",
   "· Remote ·": "· Ortsunabhängig ·",
@@ -8,6 +7,7 @@ export const de: Record<string, string> = {
   ". The stickers are here.": ". Die Sticker sind hier.",
   "167 brick-built villages on the Journey": "167 aus Bausteinen gebaute Dörfer auf der Reise",
   "167 villages built stud by stud out of brick, twelve levels each, carried by twenty-eight distinct places.": "167 Dörfer, Noppe für Noppe aus Bausteinen gebaut, mit jeweils zwölf Leveln, verteilt auf achtundzwanzig unterschiedliche Orte.",
+  "167 villages built stud by stud out of brick, up to twelve levels each, carried by twenty-eight distinct places.": "167 Dörfer, Noppe für Noppe aus Bausteinen gebaut, mit jeweils bis zu zwölf Leveln, verteilt auf achtundzwanzig unterschiedliche Orte.",
   "2,000 solver-verified boards across 100 chapters, a Journey of 167 brick-built villages, nine brick friends": "2.000 von einem Lösungsprogramm geprüfte Spielfelder in 100 Kapiteln, eine Reise durch 167 aus Bausteinen gebaute Dörfer, neun Bausteinfreunde",
   "2,000 solver-verified boards across 100 chapters; a Journey of 167 brick-built villages; nine brick friends": "2.000 von einem Lösungsprogramm geprüfte Spielfelder in 100 Kapiteln; eine Reise durch 167 aus Bausteinen gebaute Dörfer; neun Bausteinfreunde",
   "2,000, across 100 chapters of twenty. A solver cleared every one before it shipped.": "2.000, verteilt auf 100 Kapitel mit je zwanzig Spielfeldern. Ein Lösungsprogramm hat jedes davon vor der Veröffentlichung gelöst.",
@@ -65,7 +65,6 @@ export const de: Record<string, string> = {
   "Tea, scarves and a gentle wave. The scarf tail swings a beat late.": "Tee, Schals und ein sanftes Winken. Das Schalende schwingt einen Takt später nach.",
   "Tells fairy tales, and waves a wand that bursts into stars.": "Erzählt Märchen und schwenkt einen Zauberstab, aus dem Sterne hervorsprühen.",
   "The challenge": "Die Herausforderung",
-  "The match-three brick puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, where a board looks impossible and never is.": "Das Farbsortierpuzzle mit verschiebbaren Bausteinen für iPhone, iPad, Mac, Apple TV, Apple Vision Pro und Apple Watch: Ein Spielfeld sieht unmöglich aus, ist es aber nie.",
   "Three steps, and you are on the board.": "In drei Schritten bist du auf dem Spielfeld.",
   "Warm up first": "Erst einmal aufwärmen",
   "You have been challenged": "Du wurdest herausgefordert",

@@ -8,7 +8,7 @@ export const guideWords = {
   en: {
     label: 'Player guides',
     intro:
-      'Start here for gameplay, Journey, VoiceOver and accessibility. These team guides describe iOS 5.0.1; the 5.1 preview is labelled separately.',
+      'Start here for gameplay, Journey, VoiceOver and accessibility. Each team guide says which iOS version it was checked against.',
     titles: [
       'Start here: playing your first board',
       'Special bricks, goals and score stars',
@@ -32,7 +32,7 @@ export const guideWords = {
   fr: {
     label: 'Guides de jeu',
     intro:
-      'Commencez par le jeu, le Voyage, VoiceOver et l’accessibilité. Ces guides de l’équipe décrivent iOS 5.0.1 ; l’aperçu 5.1 est indiqué séparément.',
+      'Commencez par le jeu, le Voyage, VoiceOver et l’accessibilité. Chaque guide de l’équipe indique la version d’iOS avec laquelle il a été vérifié.',
     titles: [
       'Premiers pas : jouer un tableau',
       'Briques spéciales, objectifs et étoiles',
@@ -56,7 +56,7 @@ export const guideWords = {
   de: {
     label: 'Spielanleitungen',
     intro:
-      'Hier findest du Hilfe zu Spiel, Reise, VoiceOver und Bedienungshilfen. Die Team-Anleitungen beschreiben iOS 5.0.1; die Vorschau auf 5.1 ist gesondert gekennzeichnet.',
+      'Hier findest du Hilfe zu Spiel, Reise, VoiceOver und Bedienungshilfen. Jede Team-Anleitung nennt die iOS-Version, mit der sie geprüft wurde.',
     titles: [
       'Erste Schritte: dein erstes Spielbrett',
       'Spezialsteine, Ziele und Punktesterne',
@@ -80,7 +80,7 @@ export const guideWords = {
   es: {
     label: 'Guías de juego',
     intro:
-      'Empieza con el juego, el Viaje, VoiceOver y la accesibilidad. Estas guías del equipo describen iOS 5.0.1; la vista previa de 5.1 se identifica aparte.',
+      'Empieza con el juego, el Viaje, VoiceOver y la accesibilidad. Cada guía del equipo indica con qué versión de iOS se comprobó.',
     titles: [
       'Primeros pasos: tu primer tablero',
       'Ladrillos especiales, objetivos y estrellas',
@@ -104,7 +104,7 @@ export const guideWords = {
   ja: {
     label: 'プレイヤーガイド',
     intro:
-      '遊び方、Journey、VoiceOver、アクセシビリティの案内です。チームのガイドは公開済みiOS 5.0.1について説明し、5.1のプレビューは別に示します。',
+      '遊び方、Journey、VoiceOver、アクセシビリティの案内です。チームの各ガイドには、確認したiOSのバージョンを記載しています。',
     titles: [
       'はじめに：最初の盤面を遊ぶ',
       '特殊ブロック・目標・スコアの星',
@@ -127,7 +127,7 @@ export const guideWords = {
   },
   'pt-BR': {
     label: 'Guias para jogadores',
-    intro: 'Comece por aqui para aprender a jogar, explorar a Jornada e usar VoiceOver e os recursos de acessibilidade. Estes guias descrevem o iOS 5.0.1; a prévia da versão 5.1 está identificada à parte.',
+    intro: 'Comece por aqui para aprender a jogar, explorar a Jornada e usar VoiceOver e os recursos de acessibilidade. Cada guia da equipe informa com qual versão do iOS foi verificado.',
     titles: [
       'Primeiros passos: seu primeiro tabuleiro',
       'Peças especiais, objetivos e estrelas',
@@ -206,7 +206,7 @@ export function playerGuides(locale: Locale) {
     [w.settings, c.voiceover],
     [c.lives, c.moves, w.undo, c.ads],
     [w.help, c.community],
-    [c.summary, c.upcomingTitle, c.upcoming, c.demoTitle, c.demo],
+    [c.summary, c.releaseTitle, c.release, c.demoTitle, c.demo],
   ];
   return guideKeys.map((key, i) => ({
     key,

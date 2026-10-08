@@ -46,6 +46,7 @@ separate and preserve existing permissions, session checks and origin validation
 | Inbound replies | `COMMUNITY_REPLY_DOMAIN`, `RESEND_WEBHOOK_SECRET` (secret), plus Resend key; requires receiving DNS/webhook setup |
 | Translation | `ANTHROPIC_API_KEY` (secret), optional `ANTHROPIC_BASE_URL`; configuration is not proof of a successful translation |
 | Optional feature overrides | `COMMUNITY_PASSKEYS=off`, `COMMUNITY_UPLOADS=off` |
+| Website analytics (optional) | `GA_MEASUREMENT_ID` (G-XXXXXXXXXX, build time). Unset or malformed: no analytics code and no Google origin in the CSP. Set: GA4 behind a consent banner; see [current status](CURRENT-STATUS.md) |
 | Lifecycle email (optional) | `RESEND_TOPIC_RELEASES/TIPS/EVENTS`, `RESEND_EVENTS_WEBHOOK_SECRET`, `NEWSLETTER_ENGAGEMENT_TRACKING=on` (only once the events webhook delivers); see [EMAIL-LIFECYCLE.md](EMAIL-LIFECYCLE.md) |
 
 Provider visibility comes from `auth/util.ts`; feature flags come from `features.ts` and are

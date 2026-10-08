@@ -6,7 +6,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/privacy-choices',
   title: 'Your OutBrick privacy choices and controls',
   description:
-    'Manage OutBrick data on your device, Apple services, purchases and advertising choices, and find out who to ask about privacy.',
+    'Manage OutBrick data on your device, Apple services, purchases and advertising choices, your website analytics choice and our emails, and find out who to ask about privacy.',
 });
 
 export default function PrivacyChoicesPage() {
@@ -14,8 +14,8 @@ export default function PrivacyChoicesPage() {
     <LegalPage
       eyebrow="User privacy choices"
       title="Your choices, clearly."
-      summary="The OutBrick app has no account system and no analytics. These are the controls available to you — over your advertising choices, over what is stored on your device, and over what Apple services hold."
-      updated="7 October 2026"
+      summary="The OutBrick app has no account system and no analytics; this website uses analytics only if you accept them. These are the controls available to you — over advertising, what is stored on your device, what Apple services hold, website analytics and our emails."
+      updated="8 October 2026"
       current="/privacy-choices"
     >
       <div className="brick headline">
@@ -102,6 +102,38 @@ export default function PrivacyChoicesPage() {
         </p>
       </section>
 
+      <section className="brick" id="analytics">
+        <h2>Website analytics</h2>
+        <p>
+          New as of 8 October 2026. This website can measure visits with Google Analytics, but only if
+          you accept it in the cookie banner; until you do, nothing loads from Google. Your answer is
+          kept in this browser for 12 months, and you can change it here at any time. The app is not
+          affected either way: it has no analytics.
+        </p>
+        <div className="act">
+          <button type="button" className="btn" data-ob-consent-open>Change my analytics choice</button>
+        </div>
+        <p>
+          If the button does nothing, for example because JavaScript is switched off, Google Analytics
+          cannot run either. You can also remove your answer and any Google Analytics cookies by clearing
+          this site&rsquo;s data in your browser settings. What is measured, and for how long, is
+          explained in the <a href="/privacy#analytics">privacy policy</a> under Website analytics.
+        </p>
+      </section>
+
+      <section className="brick" id="emails">
+        <h2>Our emails</h2>
+        <ul className="points">
+          <li><b>The newsletter:</b> every OutBrick News email links to a preferences page where you can choose your topics — new versions, tips and guides, events and seasons — change the language, or unsubscribe with one click. The newsletter records opens and clicks; if you stop reading it, we ask you once whether you still want it, and remove you if you do not answer within 14 days.</li>
+          <li><b>Community emails:</b> switch each kind of notification off in your community settings; every notification email has a one-click unsubscribe link. Security emails, such as a sign-in from a new browser, cannot be switched off while you have an account.</li>
+          <li><b>Support and applications:</b> we keep a support case for 24 months after it is closed or resolved, and an application for 24 months after our decision. Ask us through the contact form if you want either deleted sooner.</li>
+        </ul>
+        <p>
+          How email opens and clicks are recorded is explained in the{' '}
+          <a href="/privacy#email-tracking">privacy policy</a> under Email open and click tracking.
+        </p>
+      </section>
+
       <section className="brick" id="community">
         <h2>The OutBrick Community</h2>
         <p>
@@ -120,13 +152,13 @@ export default function PrivacyChoicesPage() {
           The game has no account database, so for the app there is normally no server profile for us
           to retrieve or delete. If you have sent us something — a support message, or a contact,
           affiliate or job form on this website — use the <a href="/contact?topic=privacy">OutBrick contact form</a>{' '}
-          with the topic set to Privacy, and tell us what you want removed; we delete it from our inbox and
-          from the form service that stores website submissions (see <a href="/privacy#forms">Forms on this
+          with the topic set to Privacy, and tell us what you want removed; we delete it from our inbox, from
+          our database and from the form service that stores website submissions (see <a href="/privacy#forms">Forms on this
           website</a>). Please do not send payment details, passwords, or government identifiers.
         </p>
       </section>
 
-      <Pills items={['No account in the app', 'Apple-managed services', 'Ads only when you ask', 'Local reset in Settings']} />
+      <Pills items={['No account in the app', 'Apple-managed services', 'Ads only when you ask', 'Website analytics only with consent', 'Local reset in Settings']} />
     </LegalPage>
   );
 }

@@ -1,4 +1,5 @@
 import { CurrentGameFeatures } from '../../components/current-game-features';
+import { currentGameCopy } from '../../../lib/i18n/current-game';
 import { localeAlternates } from '../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd } from '../../editorial-shell';
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
 
 const factSheet: [string, string][] = [
   ['Title', 'OutBrick (App Store listing: OutBrick: Block Sort Puzzle)'],
-  ['Genre', 'Match-three brick puzzle'],
+  ['Genre', 'Slide-and-match brick puzzle'],
   ['Developer', 'Mourad Hamdi, independent'],
   ['Platforms', 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro, and a standalone Apple Watch game'],
   ['Price', 'Free. Optional coins, boosters, Remove Ads and the Brick Pass. No subscription.'],
@@ -83,7 +84,7 @@ export default function PressKitPage() {
               <p className="ed-label">Press kit</p>
               <h1 className="ed-display">Everything you need to write about <em>OutBrick.</em></h1>
               <p className="ed-lede">
-                A calm match-three puzzle with 2,000 boards, 167 brick-built villages and nine 3D brick friends. Swap neighbouring bricks, match three or more, and meet each board’s goals. No timer; every board plays offline.
+                {currentGameCopy.en.summary}
               </p>
               <div className="ed-actions">
                 <a className="ed-btn" href="/contact?topic=press#form">Contact the developer</a>
@@ -106,7 +107,7 @@ export default function PressKitPage() {
             <h2 id="short-title" className="ed-h2" style={{ marginTop: 14 }}>A board looks impossible, and isn’t.</h2>
             <div className="ed-prose" style={{ marginTop: 20 }}>
               <p>
-                A calm match-three puzzle with 2,000 boards, 167 brick-built villages and nine 3D brick friends. Swap neighbouring bricks, match three or more, and meet each board’s goals. No timer; every board plays offline.
+                {currentGameCopy.en.summary}
               </p>
               <p>
                 OutBrick has lives and it has advertising, and it says exactly how both work: a life is
@@ -114,7 +115,7 @@ export default function PressKitPage() {
                 and every video is one the player pressed a button to see.
               </p>
               <p>
-                The current iOS version is 5.0.1. Everything it changed is in the release notes on{' '}
+                The current iOS version is 5.1.1. Everything it changed is in the release notes on{' '}
                 <a className="ed-link" style={{ marginTop: 0 }} href="/whats-new">What’s new</a>.
               </p>
             </div>
@@ -129,7 +130,7 @@ export default function PressKitPage() {
         <div className="ed-wrap">
           <p className="ed-label">Earlier game captures</p>
           <h2 id="captures-title" className="ed-h2" style={{ marginTop: 14 }}>Earlier boards and the Journey.</h2>
-          <p className="ed-lede" style={{ marginTop: 16 }}>These captures document earlier releases. Current iOS gameplay is match-three; 5.1 Slide & Match is still in development. Select a file to download it.</p>
+          <p className="ed-lede" style={{ marginTop: 16 }}>These captures document earlier releases. Current iOS gameplay is Slide & Match, introduced in 5.1. Select a file to download it.</p>
           {/* Each link is named by its visible caption (aria-labelledby), so the name a speech-input
               user reads off the screen is the name the link answers to (WCAG 2.5.3, Label in Name).
               An aria-label such as "Download capture: …" did not contain that text. */}
@@ -215,7 +216,7 @@ export default function PressKitPage() {
               <h3 className="ed-h3">Please write</h3>
               <ul>
                 <li>OutBrick, one word, capital O and B</li>
-                <li>Match-three brick puzzle</li>
+                <li>Slide-and-match brick puzzle</li>
                 <li>Nine brick friends (Bloo, Peach, Sprout, Bricko, Flurry, Moss, Poppy, Vio, Zippy)</li>
                 <li>167 brick-built villages on the Journey</li>
                 <li>A move limit, not a clock</li>

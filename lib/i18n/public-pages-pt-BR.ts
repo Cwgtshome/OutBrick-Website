@@ -2,7 +2,6 @@
 export const ptBR: Record<string, string> = {
   Menu: 'Navegação',
   Journal: 'Blog',
-  'OutBrick is a match-three brick puzzle for the moments between things. It is an independent project by': 'OutBrick é um quebra-cabeça de blocos deslizantes para os intervalos entre uma coisa e outra. É um projeto independente de',
   '. The stickers are here.': '. As figurinhas chegaram.',
   Breadcrumb: 'Navegação estrutural',
   Cookies: 'Cookies',

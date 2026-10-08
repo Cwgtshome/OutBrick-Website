@@ -148,13 +148,13 @@ export function Badge({ locale }: { locale?: TranslatedLocale } = {}) {
     const copy = chromeCopy[locale];
     return (
       <a className="ed-badge" href={localeStoreUrl('journal', locale)} aria-label={copy.badgeLabel}>
-        <img src={locale === 'pt-BR' ? '/assets/badge/appstore-black.svg' : `/assets/badge/appstore-black-${locale}.svg`} alt={copy.badgeAlt} width={132} height={44} />
+        <img src={locale === 'pt-BR' ? '/assets/badge/appstore-black.svg' : `/assets/badge/appstore-black-${locale}.svg`} alt={copy.badgeAlt} width={132} height={44} loading="lazy" decoding="async" />
       </a>
     );
   }
   return (
     <a className="ed-badge" href={appStoreUrl('journal')} aria-label="Download OutBrick on the App Store">
-      <img src="/assets/badge/appstore-black.svg" alt="Download on the App Store" width={132} height={44} />
+      <img src="/assets/badge/appstore-black.svg" alt="Download on the App Store" width={132} height={44} loading="lazy" decoding="async" />
     </a>
   );
 }

@@ -4,6 +4,7 @@ export const es: Record<string, string> = {
   ". The stickers are here.": ". Las pegatinas están aquí.",
   "167 brick-built villages on the Journey": "167 pueblos construidos con bloques en el recorrido",
   "167 villages built stud by stud out of brick, twelve levels each, carried by twenty-eight distinct places.": "167 pueblos construidos bloque a bloque, cada uno con doce niveles, repartidos entre veintiocho lugares distintos.",
+  "167 villages built stud by stud out of brick, up to twelve levels each, carried by twenty-eight distinct places.": "167 pueblos construidos bloque a bloque, cada uno con hasta doce niveles, repartidos entre veintiocho lugares distintos.",
   "2,000 solver-verified boards across 100 chapters, a Journey of 167 brick-built villages, nine brick friends": "2.000 tableros verificados por un solucionador en 100 capítulos, un recorrido por 167 pueblos construidos con bloques y nueve amigos de bloques",
   "2,000 solver-verified boards across 100 chapters; a Journey of 167 brick-built villages; nine brick friends": "2.000 tableros verificados por un solucionador en 100 capítulos; un recorrido por 167 pueblos construidos con bloques; nueve amigos de bloques",
   "2,000, across 100 chapters of twenty. A solver cleared every one before it shipped.": "2.000, repartidos en 100 capítulos de veinte. Un solucionador resolvió todos y cada uno antes de su publicación.",
@@ -61,7 +62,6 @@ export const es: Record<string, string> = {
   "Tea, scarves and a gentle wave. The scarf tail swings a beat late.": "Té, bufandas y un saludo suave con la mano. El extremo de la bufanda se mueve un instante después.",
   "Tells fairy tales, and waves a wand that bursts into stars.": "Cuenta cuentos de hadas y agita una varita de la que brotan estrellas.",
   "The challenge": "El reto",
-  "The match-three brick puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, where a board looks impossible and never is.": "El puzle de combinar tres con ladrillos para iPhone, iPad, Mac, Apple TV, Apple Vision Pro y Apple Watch, en el que un tablero parece imposible, pero nunca lo es.",
   "Three steps, and you are on the board.": "Tres pasos y ya estás jugando en el tablero.",
   "Warm up first": "Practica primero",
   "You have been challenged": "Te han lanzado un reto",
@@ -69,6 +69,5 @@ export const es: Record<string, string> = {
   "a free undo every board": "primer deshacer gratuito por tablero, sin consumir la reserva",
   "no ad between levels": "sin anuncios entre niveles",
   "works offline": "funciona sin conexión",
-  "Someone dared you to a board of OutBrick — a relaxed match-three brick puzzle. Match every brick to its gate, take the free undo the board comes with, and beat their move count.": "Alguien te ha retado a un tablero de OutBrick, un tranquilo puzle de combinar tres con ladrillos. Lleva cada bloque hasta su puerta, usa la primera acción gratuita de deshacer de ese tablero sin gastar tu reserva y resuélvelo con menos movimientos que la otra persona.",
   "Warm-up OutBrick board": "Tablero de práctica de OutBrick",
 };

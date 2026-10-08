@@ -9,7 +9,8 @@ import { useEffect } from 'react';
  * - Reading progress: sets `--read` (0–1) on the brick bar. Browsers with
  *   scroll-driven animations draw the bar from CSS alone; this keeps the rest
  *   in step.
- * - Table of contents: marks the section being read with aria-current.
+ * - Table of contents: marks the section being read with aria-current, and folds
+ *   shut on phones (a <details> that stays open, label inert, as a sidebar).
  * - Section links: the link icon beside each heading still jumps to the
  *   section, and also copies its address, announced as "Link copied".
  * - Share: the system share sheet where there is one, else the address is
@@ -64,6 +65,8 @@ export function ReadingAids({ messages = englishMessages }: { messages?: Reading
     let toastTimer = 0;
     const say = (message: string) => {
       if (!toast) return;
+      wide.removeEventListener('change', syncFold);
+      fold?.removeEventListener('toggle', keepOpen);
       window.clearTimeout(toastTimer);
       toast.textContent = message;
       toast.dataset.show = '';
@@ -142,6 +145,26 @@ export function ReadingAids({ messages = englishMessages }: { messages?: Reading
         delete details.dataset.printOpened;
       }
     };
+
+    // The table of contents folds on narrow screens (where it sits above the story instead of
+    // beside it) and stays open, its label inert, where it is a sidebar.
+    const fold = document.querySelector<HTMLDetailsElement>('[data-toc-fold]');
+    const wide = window.matchMedia('(min-width: 961px)');
+    const syncFold = () => {
+      if (!fold) return;
+      const summary = fold.querySelector('summary');
+      if (wide.matches) {
+        fold.open = true;
+        summary?.setAttribute('tabindex', '-1');
+      } else summary?.removeAttribute('tabindex');
+    };
+    const keepOpen = () => {
+      if (fold && wide.matches && !fold.open) fold.open = true;
+    };
+    if (fold && !wide.matches && !window.location.hash) fold.open = false;
+    syncFold();
+    wide.addEventListener('change', syncFold);
+    fold?.addEventListener('toggle', keepOpen);
 
     update();
     window.addEventListener('scroll', onScroll, { passive: true });

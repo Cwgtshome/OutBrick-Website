@@ -97,14 +97,14 @@ const en: HomeCopy = {
   meta: {
     title: 'OutBrick — a boulevard built out of brick',
     description:
-      'A sliding-brick colour-sort puzzle: 2,000 solver-verified boards, 167 brick-built villages, nine brick friends. No clock, plays offline. Free on the App Store.',
+      'A calm slide-and-match brick puzzle: 2,000 solver-proven boards, 167 villages, nine friends, VoiceOver and offline play. Free on the App Store.',
     ogTitle: 'OutBrick — a boulevard built out of brick',
     ogDescription:
       '2,000 solver-verified boards, 167 brick-built villages, nine brick friends. One finger, no clock, nothing that interrupts a board.',
     ogImageAlt: 'The OutBrick Journey map in Garden City, with Bloo, Peach and Sprout',
   },
   appDescription:
-    'A sliding-brick colour-sort puzzle: 2,000 solver-verified boards across 100 chapters, a Journey of 167 brick-built villages, and nine brick friends.',
+    'A calm slide-and-match brick puzzle: 2,000 solver-proven boards across 100 chapters, a Journey of 167 brick-built villages, and nine brick friends.',
   headline: [
     { word: 'A', line: 0 },
     { word: 'boulevard', line: 0 },
@@ -1143,7 +1143,7 @@ const ja: HomeCopy = {
 export const homeCopy: Record<Locale, HomeCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
 
 // Keep current app facts separate from the classic browser demo below the hero.
-for (const locale of ['en', 'fr', 'de', 'es', 'ja'] as const) {
+for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'] as const) {
   const t = currentGameCopy[locale];
   const h = homeCopy[locale];
   h.meta.description = t.description;

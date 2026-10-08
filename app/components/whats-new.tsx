@@ -120,7 +120,8 @@ export function WhatsNewPage({ locale }: { locale: Locale }) {
         '@type': 'ListItem',
         position: index + 1,
         url: `${pageUrl}#${releaseAnchor(release.version)}`,
-        name: `OutBrick ${release.version}: ${release.headline}`,
+        // The 5.1 and later notes open with their own "OutBrick 5.1 …" sentence: do not say it twice.
+        name: release.headline.includes(release.version) ? release.headline : `OutBrick ${release.version}: ${release.headline}`,
       })),
     },
   };

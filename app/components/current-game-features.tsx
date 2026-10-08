@@ -19,8 +19,8 @@ export function CurrentGameFeatures({ locale = 'en' }: { locale?: Locale }) {
           ))}
         </ul>
         <p><a href={localePath(locale, '/community')}>{chromeCopy[locale].footer.community}</a></p>
-        <h3>{t.upcomingTitle}</h3>
-        <p>{t.upcoming}</p>
+        <h3>{t.releaseTitle}</h3>
+        <p>{t.release}</p>
       </div>
     </section></div>
   );

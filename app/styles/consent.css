@@ -1,0 +1,95 @@
+/* The analytics consent banner (app/components/consent-banner.tsx): a cream brick slab with an
+   ink keyline and the site's 3D foot, pinned to the bottom corner so it never covers a page's
+   content or blocks reading. Accept and Decline share one button style: equal weight, no nudge. */
+
+.ob-consent {
+  position: fixed;
+  z-index: 60;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  max-width: 460px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 18px 20px 20px;
+  color: var(--ink);
+  background: #fff3dd;
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 0 6px 0 var(--ink), 0 18px 32px rgb(0 0 0 / 28%);
+  font-family: 'Figtree', ui-rounded, 'SF Pro Rounded', system-ui, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  animation: ob-consent-rise 0.28s ease-out both;
+}
+.ob-consent:focus { outline: none; }
+.ob-consent:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+
+.ob-consent-title {
+  margin: 0 0 6px;
+  font-family: 'Fredoka', ui-rounded, 'SF Pro Rounded', system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.ob-consent-body { margin: 0; }
+.ob-consent-body a {
+  color: var(--purple-dark);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ob-consent-body a:focus-visible { outline: 3px solid var(--purple); outline-offset: 2px; border-radius: 4px; }
+
+.ob-consent-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+.ob-consent-btn {
+  min-height: 44px;
+  padding: 10px 14px;
+  color: #fff;
+  background: var(--panel-dark);
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 4px 0 var(--ink);
+  font-family: 'Fredoka', ui-rounded, 'SF Pro Rounded', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.15;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.ob-consent-btn:hover { background: var(--purple-dark); }
+.ob-consent-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+.ob-consent-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+/* The announcement after an answer: read by screen readers, not shown. */
+.ob-consent-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 380px) {
+  .ob-consent-actions { grid-template-columns: 1fr; }
+}
+
+@keyframes ob-consent-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ob-consent { animation: none; }
+  .ob-consent-btn { transition: none; }
+}
+@media print {
+  .ob-consent { display: none; }
+}

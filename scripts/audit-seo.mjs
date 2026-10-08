@@ -167,6 +167,28 @@ for (const file of listHtmlFiles()) {
     // <h1>
     const h1s = [...body.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
     if (h1s.length !== 1) err(`${h1s.length} <h1> elements (want 1)`);
+
+    // Heading outline: each heading at most one level below the one before it (h2 → h4 skips).
+    let previous = 0;
+    for (const [, level] of body.matchAll(/<h([1-6])\b/gi)) {
+      const n = Number(level);
+      if (previous && n > previous + 1) {
+        warn(`heading level skipped: <h${previous}> is followed by <h${n}>`);
+        break;
+      }
+      previous = n;
+    }
+
+    // Language: <html lang>, and a hreflang set that names this page and an x-default.
+    const lang = html.match(/<html\b[^>]*\slang="([^"]+)"/i)?.[1];
+    if (!lang) err('<html> has no lang attribute');
+    const alternates = [...head.matchAll(/<link\b[^>]*>/gi)].map(([tag]) => tag).filter((tag) => /\shreflang="/i.test(tag));
+    if (alternates.length) {
+      const hreflangs = alternates.map((tag) => attr(tag, 'hreflang') ?? attr(tag, 'hrefLang'));
+      if (!hreflangs.includes('x-default')) err('hreflang set without x-default');
+      const self = canonicals[0] && alternates.some((tag) => (attr(tag, 'href') ?? '').replace(/\/$/, '') === canonicals[0].replace(/\/$/, ''));
+      if (!self) err('hreflang set does not include the page itself');
+    }
   }
 
   // JSON-LD: parsed into one graph per page and checked per type (scripts/lib/structured-data-rules.mjs)

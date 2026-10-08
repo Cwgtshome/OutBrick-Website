@@ -151,7 +151,7 @@ export default function CareersPage() {
 
       <section className="ed-band-ink ed-band-tight" aria-labelledby="none-title">
         <div className="ed-wrap bz-teaser">
-          <img src="/assets/friends/peach.webp" alt="" width={120} height={120} />
+          <img src="/assets/friends/peach.webp" alt="" width={120} height={120} loading="lazy" decoding="async" />
           <div>
             <h2 id="none-title" className="ed-h3">Not quite your role?</h2>
             <p>Tell us what you do anyway. Use the contact form with the topic set to Careers.</p>

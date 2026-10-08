@@ -48,13 +48,13 @@ type AppStoreRecord = {
 const record = stats as unknown as AppStoreRecord;
 
 /**
- * Last known values from Apple's record (iTunes Lookup, 7 October 2026), used only when the
+ * Last known values from Apple's record (iTunes Lookup, 8 October 2026), used only when the
  * build could not reach Apple. Nothing here is a guess: each one is what the record said.
  */
 const appStoreFallback = {
-  version: '5.0.1',
+  version: '5.1.1',
   releaseDate: '2026-09-06T07:00:00Z',
-  currentVersionReleaseDate: '2026-10-06T00:20:52Z',
+  currentVersionReleaseDate: '2026-10-08T18:19:09Z',
   minimumOsVersion: '15.0',
   languages: ['nl', 'en', 'fr', 'de', 'it', 'ja', 'ko', 'pt', 'ru', 'zh', 'es', 'tr'],
   genres: ['Casual', 'Puzzle'],
@@ -89,7 +89,7 @@ export function organizationNode(): Node {
       caption: 'The OutBrick app icon',
     },
     image: ref(ids.logo),
-    description: 'The studio behind OutBrick: Block Sort Puzzle, a relaxed match-three brick puzzle, and the OutBrick Journal on puzzle design and calmer play.',
+    description: 'The studio behind OutBrick: Block Sort Puzzle, a calm slide-and-match brick puzzle, and the OutBrick Journal on puzzle design and calmer play.',
     founder: ref(ids.founder),
     contactPoint: {
       '@type': 'ContactPoint',
@@ -123,7 +123,7 @@ export function websiteNode(): Node {
     name: 'OutBrick',
     alternateName: 'outbrick.site',
     url: `${siteUrl}/`,
-    description: 'The official site of OutBrick: Block Sort Puzzle, a relaxed match-three brick puzzle, and the OutBrick Journal.',
+    description: 'The official site of OutBrick: Block Sort Puzzle, a calm slide-and-match brick puzzle, and the OutBrick Journal.',
     inLanguage: siteLanguages,
     publisher: ref(ids.organization),
     // The journal's search answers /blog?q=… (app/(en)/blog/journal-finder.tsx reads the query

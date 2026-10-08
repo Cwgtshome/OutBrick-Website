@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { pageMetadata, siteUrl } from '../../../lib/site';
-import { JsonLd } from '../../editorial-shell';
+import { pageMetadata } from '../../../lib/site';
 import { LegalPage, Pills } from '../../legal-page';
 import { ContactForm } from './contact-form';
 
@@ -21,33 +20,8 @@ const elsewhere = [
 ];
 
 export default function ContactPage() {
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'ContactPage',
-    '@id': `${siteUrl}/contact#page`,
-    url: `${siteUrl}/contact`,
-    name: 'Contact OutBrick',
-    description,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    about: {
-      '@type': 'Organization',
-      name: 'OutBrick',
-      url: siteUrl,
-      contactPoint: [
-        { '@type': 'ContactPoint', contactType: 'customer support', url: `${siteUrl}/contact` },
-        { '@type': 'ContactPoint', contactType: 'press', url: `${siteUrl}/press` },
-      ],
-    },
-  };
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'OutBrick', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Contact', item: `${siteUrl}/contact` },
-    ],
-  };
-
+  // LegalPage writes this page's ContactPage and BreadcrumbList nodes; the site graph carries the
+  // organisation and its support contact point.
   return (
     <LegalPage
       eyebrow="Contact OutBrick"
@@ -97,8 +71,6 @@ export default function ContactPage() {
       </section>
 
       <Pills items={['A person replies', 'Never sold or shared', 'No mail app needed']} />
-      <JsonLd data={structuredData} />
-      <JsonLd data={breadcrumbData} />
     </LegalPage>
   );
 }

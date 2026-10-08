@@ -8,7 +8,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/privacy',
   title: 'OutBrick privacy policy: data, ads and choices',
   description:
-    'The OutBrick privacy policy: no analytics, what the rewarded-ad SDK collects, what the optional OutBrick Community stores, and how to make your choices.',
+    'The OutBrick privacy policy: no analytics in the app, optional consent-based analytics on the website, what the rewarded-ad SDK collects, what the community and our emails store, and your choices.',
 });
 
 export default function PrivacyPage() {
@@ -16,12 +16,12 @@ export default function PrivacyPage() {
     <LegalPage
       eyebrow="OutBrick privacy policy"
       title="Your board stays yours."
-      summary="OutBrick is designed to work entirely on your device. This policy explains what the app does and does not collect, how Apple services fit in, what the optional OutBrick Community on this website stores, and how to make privacy choices."
-      updated="7 October 2026"
+      summary="OutBrick is designed to work entirely on your device. This policy explains what the app does and does not collect, how Apple services fit in, what this website and the optional OutBrick Community store, what our emails record, and how to make privacy choices."
+      updated="8 October 2026"
       current="/privacy"
     >
       <div className="brick headline">
-        <h2>No accounts in the app, no analytics, and no ad you did not ask for.</h2>
+        <h2>No accounts in the app, no analytics in the app, and no ad you did not ask for.</h2>
         <p>
           The app has no accounts, and there is no analytics SDK in OutBrick. The developer does not
           receive your gameplay or face data. The app stores gameplay data locally and can sync
@@ -37,7 +37,26 @@ export default function PrivacyPage() {
           forum. It is described in its own section below, and joining it or not changes nothing in the
           game.
         </p>
+        <p>
+          This website is separate from the app. It measures visits with Google Analytics only if you
+          accept it in the cookie banner; until then nothing loads from Google. Our newsletter emails
+          record opens and clicks. Both are explained below, with how to say no.
+        </p>
       </div>
+
+      <section className="brick" id="changes">
+        <h2>What changed on 8 October 2026</h2>
+        <p>
+          This revision covers four changes to the website and our emails. Nothing changed in the app:
+          it still has no analytics.
+        </p>
+        <ul className="points">
+          <li><b>Website analytics:</b> Google Analytics can now measure visits to this website, but only if you accept it in the cookie banner. Nothing loads from Google until you do, and you can change your answer at any time.</li>
+          <li><b>Newsletter open and click tracking:</b> OutBrick News emails now record whether they were opened and which links were clicked, so that we can stop writing to people who no longer read them.</li>
+          <li><b>Support cases, applications and newsletter topics:</b> contact-form messages now become support cases that the team can reply to, applications keep the decision we made, and newsletter readers can choose topics. Each is kept in our database for a set period, listed below.</li>
+          <li><b>Sign-in alerts:</b> the community now remembers which browser and operating system you sign in with, so that it can warn you about a sign-in from a new one.</li>
+        </ul>
+      </section>
 
       <section className="brick" id="ads">
         <h2>Rewarded video advertising</h2>
@@ -149,8 +168,8 @@ export default function PrivacyPage() {
           <li><b>Contact form:</b> the topic, your name, email address and message, and — only if you fill them in — your device, iOS version and app version.</li>
           <li><b>Affiliate application:</b> your name, email address, the links to your channels, an audience-size range, your country, how you would promote OutBrick, your preferred handle and the code proposed from it.</li>
           <li><b>Job application:</b> the role, your name, email address, a link to your portfolio or profile, where you live and your time zone, and your note.</li>
-          <li><b>Newsletter:</b> your email address, the language you chose for the emails, and a record that you ticked the consent box. We use it only to send occasional emails about new villages and major OutBrick updates, about once a month at most. Sign-up is double opt-in: your address joins the list only when you press the button in the confirmation email, which works for 7 days. Every newsletter email has a one-click unsubscribe link that stops them at once; you can also unsubscribe by replying to any newsletter email or through the <a href="/contact?topic=privacy">contact form</a>, and we delete your address from the list. Signing up or not changes nothing in the app.</li>
-          <li><b>Emails we send you:</b> after the contact form, an affiliate application or a job application, one acknowledgement email to the address you gave, with a copy of what you sent; for the newsletter, the confirmation email and then a welcome email. They are sent through Resend, our email delivery provider, which acts as our processor under its own <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>. Resend receives the address, the language and the content of each email and keeps a delivery log; for newsletter subscribers it also stores the address, the date you confirmed and whether you have unsubscribed. Open and click tracking are switched off, and our Resend account sends from the EU (Ireland).</li>
+          <li><b>Newsletter:</b> your email address, the language you chose for the emails, and a record that you ticked the consent box. Sign-up is double opt-in: your address joins the list only when you press the button in the confirmation email, which works for 7 days. What we keep while you are subscribed, and how to change your topics or unsubscribe, is set out in the next two sections. Signing up or not changes nothing in the app.</li>
+          <li><b>Emails we send you:</b> after the contact form, an affiliate application or a job application, an acknowledgement email to the address you gave, with a copy of what you sent, and later the team&rsquo;s replies, the decision on an application, a note when a fix you reported ships, and one short &ldquo;Did we solve it?&rdquo; email; for the newsletter, the confirmation email and then the welcome letters. They are sent through Resend, our email delivery provider, which acts as our processor under its own <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>. Resend receives the address, the language and the content of each email and keeps a delivery log; for newsletter subscribers it also stores the address, the date you confirmed and whether you have unsubscribed. Our Resend account sends from the EU (Ireland), and it can record opens and clicks, as explained under Email open and click tracking below.</li>
           <li><b>With every form:</b> your consent tick, the language of the page you used, and the technical details Netlify records with a submission, such as the time, your IP address and your browser&rsquo;s user agent, which it uses to keep out spam.</li>
         </ul>
         <p>
@@ -160,16 +179,70 @@ export default function PrivacyPage() {
           sign up for.
         </p>
         <p>
-          <b>How long we keep them.</b> We delete form submissions, and the emails they arrive as, within
-          12 months of our last exchange with you — unless there is an ongoing relationship that needs
-          them: a support case still open, an approved affiliate (for as long as they take part, plus
-          what tax and accounting law requires for payments), or someone we hire.
+          <b>How long we keep them.</b> We delete the copies of form submissions that Netlify Forms
+          stores, and the emails they arrive as, within 12 months of our last exchange with you — unless
+          there is an ongoing relationship that needs them: a support case still open, an approved
+          affiliate (for as long as they take part, plus what tax and accounting law requires for
+          payments), or someone we hire. The records kept in our own database have their own periods,
+          set out in the next section.
         </p>
         <p>
           <b>Deleting them sooner.</b> Ask us through the <a href="/contact?topic=privacy">contact form</a>{' '}
           with the topic set to Privacy, or by replying to any email from us, and we will delete your submissions from Netlify and
           from our inbox and confirm when it is done. You can also ask for a copy of what we hold, or for
           a correction.
+        </p>
+      </section>
+
+      <section className="brick" id="website-data">
+        <h2>What our website&rsquo;s database keeps</h2>
+        <p>
+          Since 8 October 2026 the contact form, the applications and the newsletter also keep a record
+          in Netlify Database, the database that runs the OutBrick Community, so that a reply, a decision
+          or a welcome letter can refer back to what you sent. Netlify runs it for us in the United States
+          (US East). Each record has a fixed lifetime, and an automatic job deletes it when that time is up.
+        </p>
+        <ul className="points">
+          <li><b>Support cases:</b> when you use the contact form, we keep your message, name, email address, language and topic, the device, app and iOS versions you gave us, a case reference, the team&rsquo;s replies, the case&rsquo;s status, the version a fix shipped in, and your answer to &ldquo;Did we solve it?&rdquo; with any comment you add. We keep a case for 24 months after it is closed or resolved, then delete it.</li>
+          <li><b>Affiliate and job applications:</b> what you submitted and the decision we made. We keep an application for 24 months after the decision, then delete it.</li>
+          <li><b>Newsletter subscription:</b> your address and language, the date you confirmed, the topics you chose (new versions, tips and guides, events and seasons), how far you are through the welcome letters, the date you last opened or clicked a newsletter, and whether we have asked you &ldquo;Still want these?&rdquo;. We keep this while you are subscribed and delete it 30 days after you unsubscribe or are removed.</li>
+          <li><b>Scheduled emails:</b> emails due later — welcome letters, &ldquo;Did we solve it?&rdquo; requests and notices — wait in a queue with your address and language. Each is deleted no later than 90 days after it is sent or cancelled.</li>
+        </ul>
+        <p>
+          The device record used for community sign-in alerts is described in the community section
+          below.
+        </p>
+      </section>
+
+      <section className="brick" id="email-tracking">
+        <h2>Email open and click tracking</h2>
+        <p>
+          This section is new as of 8 October 2026. OutBrick News, our newsletter, records whether each
+          email was opened and which of its links were clicked. Resend, which sends it from the EU
+          (Ireland), adds a tiny invisible image that is fetched when the email is displayed, and routes
+          each link through Resend before it takes you to the page.
+        </p>
+        <p>
+          We use this for one thing: to notice readers who no longer read the letters. If 120 days pass
+          without you opening or clicking any newsletter, we send one email asking &ldquo;Still want
+          these?&rdquo;. If you do not answer within 14 days, we take you off the list. We do not use it
+          to build a profile of you, and nobody but Resend receives it.
+        </p>
+        <p>
+          Our legal basis is our legitimate interest in not emailing people who no longer read our
+          letters. You can object at any time: unsubscribe with the link in every newsletter, or change
+          your topics on the preferences page it links to.
+        </p>
+        <p>
+          Opens are approximate. Some mail apps, such as Apple Mail with Mail Privacy Protection, load
+          images in advance, so an email can count as opened when you never read it; if your mail app
+          blocks images, an open is never recorded.
+        </p>
+        <p>
+          Resend&rsquo;s tracking is switched on for our whole sending domain, so opens and clicks may
+          also be recorded on our other emails, such as support replies and account notices. We use those
+          records only to diagnose delivery problems; only newsletter opens and clicks count towards the
+          check described above.
         </p>
       </section>
 
@@ -185,6 +258,7 @@ export default function PrivacyPage() {
           <li><b>Your account:</b> a display name, which is public; your email address, which is never shown to anyone else; the language you chose; an optional bio; your email preferences; and your role, such as member or moderator. You can sign in with a one-time link sent to your email address, or with Apple, Google or Facebook. If you use one of those, we store the user id that company gives us for you and the email address it shares with us; we never see your password. Apple&rsquo;s Hide My Email relay addresses work like any other address.</li>
           <li><b>What you do in the community:</b> your threads and posts, including earlier versions of a post you have edited, your votes, the threads and categories you follow, how far you have read each thread, your notifications, the reports you make, and any moderation action taken on your posts or your account.</li>
           <li><b>Bug reports:</b> a bug report can also include your device model, iOS version, app version and the assistive technologies you use. Each of these is optional, and only what you choose to fill in is stored.</li>
+          <li><b>Devices you sign in from:</b> the browser and operating-system family you sign in with, such as &ldquo;Safari on macOS&rdquo; — never your IP address or a device identifier — so that we can email you when your account is used from a new one. This record is deleted with your account.</li>
           <li><b>Signed-in sessions:</b> for each browser you sign in on, when the session started, when it expires and the browser&rsquo;s user agent, so the sign-in can be recognised. The token that keeps you signed in is stored only as a one-way hash.</li>
           <li><b>IP addresses:</b> the community&rsquo;s database does not store them. To slow down spam and abuse, the community briefly keeps a salted one-way hash of your IP address to count requests, and records older than two days are deleted.</li>
           <li><b>Public posts:</b> everything you post — threads, replies, your display name and your bio — is public. Anyone can read it without an account, and search engines index it. Please do not post your own or anyone else&rsquo;s personal information.</li>
@@ -213,6 +287,12 @@ export default function PrivacyPage() {
           moderation notices about your posts or your account. You can switch each kind of
           notification off in your community settings, and every notification email has a one-click
           unsubscribe link.
+        </p>
+        <p>
+          <b>Security emails.</b> We also email you when your account is signed in to from a new browser
+          or operating system, when a passkey is added, when your account is deleted, and with the
+          download link for your data when you ask for one. These cannot be switched off while you have
+          an account, because they protect it.
         </p>
         <p>
           <b>How long we keep it.</b> Your account and what you post stay for as long as you keep the
@@ -259,16 +339,47 @@ export default function PrivacyPage() {
         </ul>
       </section>
 
-      <section className="brick" id="cookies">
-        <h2>Cookies</h2>
+      <section className="brick" id="analytics">
+        <h2>Website analytics</h2>
         <p>
-          This website uses no advertising or analytics cookies, and reading it sets none at all. The
-          OutBrick Community uses two first-party cookies, both strictly necessary for signing in, and
-          neither is used to follow you around the web.
+          This section is new as of 8 October 2026, and it is about this website only. The OutBrick app
+          contains no analytics SDK, and nothing described here happens in the app.
+        </p>
+        <p>
+          With your consent, this website uses Google Analytics 4, provided by Google Ireland Limited
+          and Google LLC, which process the data on our behalf as our processor. Until you press Accept
+          in the cookie banner, nothing is loaded from Google and no analytics cookie is set: Google&rsquo;s
+          consent mode starts with every kind of storage denied. If you decline, or never answer, the
+          site works exactly the same.
+        </p>
+        <ul className="points">
+          <li><b>What is measured:</b> the pages you view, the page that brought you here, your type of device and browser, your approximate country and city, which Google works out itself, and clicks on App Store buttons, sending the newsletter or contact form, and links to our social channels.</li>
+          <li><b>What is not:</b> Google Analytics 4 does not log or store IP addresses. Google signals and ad personalisation are switched off, so the data is not combined with your Google account or used for advertising.</li>
+          <li><b>Why:</b> to understand which pages help people, and to improve the site.</li>
+          <li><b>Legal basis:</b> where EU or UK law applies, your consent. Withdrawing it stops future measurement; it does not undo what was measured before.</li>
+          <li><b>How long:</b> analytics data is kept for 14 months at most, then deleted.</li>
+          <li><b>Where:</b> Google may process the data outside your country, including in the United States.</li>
+        </ul>
+        <p>
+          You can change your answer at any time with this button, or from the Privacy choices page.
+        </p>
+        <div className="act">
+          <button type="button" className="btn" data-ob-consent-open>Change my analytics choice</button>
+        </div>
+      </section>
+
+      <section className="brick" id="cookies">
+        <h2>Cookies and browser storage</h2>
+        <p>
+          Reading this website sets no cookies unless you accept analytics. The OutBrick Community uses
+          two first-party cookies, both strictly necessary for signing in, and neither is used to follow
+          you around the web. Everything the site keeps in your browser is listed here.
         </p>
         <ul className="points">
           <li><b>Session cookie:</b> set when you sign in to the community. It holds a random token that keeps you signed in, cannot be read by scripts on the page (it is HttpOnly), and lasts 30 days, renewed while you keep visiting. Signing out removes it.</li>
           <li><b>Sign-in cookie:</b> when you start signing in with Google or Facebook, a cookie that lasts at most 10 minutes ties the sign-in to the browser that started it, so nobody else can finish it. It is removed as soon as the sign-in completes.</li>
+          <li><b>Your analytics choice (<code>ob-consent</code>):</b> your answer to the cookie banner, kept in your browser&rsquo;s local storage for 12 months so that the banner does not ask again on every page. It is stored whichever answer you give.</li>
+          <li><b>Google Analytics cookies (<code>_ga</code>, <code>_ga_&lt;container-id&gt;</code>):</b> first-party cookies that let Google Analytics recognise a returning browser, kept for about 13 months. They are set only after you accept analytics. You can delete them at any time in your browser settings.</li>
         </ul>
       </section>
 
@@ -290,6 +401,29 @@ export default function PrivacyPage() {
           Your OutBrick Community account is kept and deleted as described in the community section
           above.
         </p>
+        <p>
+          On the website, each kind of record has its own period, set out in the sections above: form
+          submissions, support cases and applications, the newsletter, scheduled emails, and website
+          analytics.
+        </p>
+      </section>
+
+      <section className="brick" id="rights">
+        <h2>Your rights</h2>
+        <p>
+          You can ask us for a copy of the personal information we hold about you, ask us to correct or
+          delete it, and object to or restrict how we use it. Where we rely on your consent, you can
+          withdraw it at any time. Ask through the contact form with the topic set to Privacy. If you are
+          in the European Economic Area, the United Kingdom or Switzerland, you can also complain to your
+          local data protection authority.
+        </p>
+        <p>Some of this you can do yourself, without asking us:</p>
+        <ul className="points">
+          <li><b>Your community data:</b> download everything we hold about your account from your community settings, straight away or as a link we email you that works for 24 hours, and delete the account yourself.</li>
+          <li><b>The newsletter:</b> every newsletter links to a preferences page where you can choose your topics, change the language or unsubscribe.</li>
+          <li><b>Website analytics:</b> change your answer at any time on the Privacy choices page.</li>
+          <li><b>Game data:</b> Delete My Data in OutBrick Settings, described under Retention and deletion.</li>
+        </ul>
       </section>
 
       <section className="brick">
@@ -316,13 +450,14 @@ export default function PrivacyPage() {
           Apple services, App Store purchases, Game Center, iCloud sync, and iCloud backups are operated
           under their own terms and privacy policies. Google is the one advertising partner in the app,
           described above. On this website, Netlify hosts the pages, handles the forms and runs the
-          OutBrick Community and its database, and Resend sends the emails that answer the forms and
-          the community&rsquo;s emails, all described above. If you sign in to the community with
-          Apple, Google or Facebook, that company handles the sign-in under its own terms and privacy
-          policy. We do not add a third-party analytics or advertising partner without updating
-          this policy and the relevant App Store privacy information first — which is what this revision
-          is. We may update this page when the app or its practices change; the effective date above
-          will show the latest revision.
+          OutBrick Community and its database; Resend sends our emails and records newsletter opens and
+          clicks; and Google Analytics measures visits when you allow it, all described above. If you
+          sign in to the community with Apple, Google or Facebook, that company handles the sign-in under
+          its own terms and privacy policy. We do not add a third-party analytics or advertising partner
+          without updating this policy first, and, for the app, its App Store privacy information too;
+          this revision adds Google Analytics on the website, and the app is unchanged. We may update this
+          page when the app, the website or our practices change; the effective date above shows the
+          latest revision, and the latest changes are summarised at the top.
         </p>
       </section>
 
@@ -332,9 +467,13 @@ export default function PrivacyPage() {
           Questions about this policy? Use the <a href="/contact">OutBrick contact form</a> or visit{' '}
           <a href="/privacy-choices">User privacy choices</a>.
         </p>
+        <p>
+          OutBrick decides how the personal information described in this policy is used, which makes it
+          the controller under data protection law. By post: OutBrick · P.O. Box 330279.
+        </p>
       </section>
 
-      <Pills items={['Device-first progress', 'Apple-managed services', 'Ads only when you ask']} />
+      <Pills items={['Device-first progress', 'Apple-managed services', 'Ads only when you ask', 'Website analytics only with consent']} />
     </LegalPage>
   );
 }

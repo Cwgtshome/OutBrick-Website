@@ -564,8 +564,9 @@ const refs = {
   rushHourHistory: {
     id: 'rush-hour-thinkfun-2018',
     label: 'Contreras (2018)',
-    citation: 'Contreras, M. (2018, February 1). The evolution of ThinkFun’s Rush Hour. ThinkFun.',
-    url: 'https://info.thinkfun.com/stem-education/the-evolution-of-thinkfuns-rush-hour',
+    citation: 'Contreras, M. (2018, February 1). The evolution of ThinkFun’s Rush Hour. ThinkFun. Archived by the Internet Archive, 25 December 2022.',
+    // info.thinkfun.com no longer answers (October 2026); the Wayback Machine copy is the source.
+    url: 'https://web.archive.org/web/20221225031423/https://info.thinkfun.com/stem-education/the-evolution-of-thinkfuns-rush-hour',
   },
   rushHourPspace: {
     id: 'rush-hour-pspace-2002',

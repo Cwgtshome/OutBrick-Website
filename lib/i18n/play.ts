@@ -362,7 +362,7 @@ const ptBR: PlayCopy = {
 
 export const playCopy: Record<Locale, PlayCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
 
-for (const locale of ['en', 'fr', 'de', 'es', 'ja'] as const) {
+for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'] as const) {
   const t = currentGameCopy[locale];
   const p = playCopy[locale];
   p.meta.description = t.playDescription;

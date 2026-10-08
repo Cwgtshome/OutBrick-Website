@@ -18,6 +18,9 @@ import { journalUi } from '../lib/i18n/blog';
 import { siteWords } from '../lib/i18n/site';
 import './styles/fonts.css';
 import './globals.css';
+import './styles/consent.css';
+import { consentDefaultsScript, gaMeasurementId } from '../lib/analytics';
+import { ConsentBanner } from './components/consent-banner';
 import { siteUrl } from '../lib/site';
 import { siteGraph } from '../lib/structured-data';
 import { APP_STORE_ID } from './store-badge';
@@ -25,10 +28,10 @@ import { APP_STORE_ID } from './store-badge';
 export const rootMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'OutBrick — Match bricks. Clear goals.',
+    default: 'OutBrick — Slide, match, send them home',
     template: '%s — OutBrick',
   },
-  description: 'OutBrick is a match-three brick puzzle: 2,000 solver-verified boards across 100 chapters, a Journey of 167 villages built stud by stud out of brick, and nine brick friends. One finger, no clock, and nothing that interrupts a board.',
+  description: 'OutBrick is a calm slide-and-match brick puzzle: 2,000 solver-proven boards across 100 chapters, a Journey of 167 villages built stud by stud out of brick, and nine brick friends. No timer, ever, and nothing that interrupts a board.',
   applicationName: 'OutBrick',
   authors: [{ name: 'Mourad Hamdi', url: `${siteUrl}/authors/mourad-hamdi` }],
   creator: 'Mourad Hamdi',
@@ -38,7 +41,8 @@ export const rootMetadata: Metadata = {
   formatDetection: { telephone: false },
   keywords: [
     'OutBrick',
-    'match three brick puzzle',
+    'slide and match puzzle',
+    'brick puzzle game',
     'colour sort puzzle',
     'offline puzzle game',
     'calm mobile games',
@@ -59,14 +63,14 @@ export const rootMetadata: Metadata = {
     type: 'website',
     url: siteUrl,
     siteName: 'OutBrick',
-    title: 'OutBrick — Match bricks. Clear goals.',
-    description: 'A relaxed match-three brick puzzle with real mascots, widgets, and no ad you did not press a button to see.',
+    title: 'OutBrick — Slide, match, send them home',
+    description: 'A calm slide-and-match brick puzzle with real mascots, widgets, and no ad you did not press a button to see.',
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'OutBrick mascots and home screen' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OutBrick — Match bricks. Clear goals.',
-    description: 'A one-finger colour-sort puzzle with real mascots and widgets. Nothing interrupts a board, and every board comes with a free undo.',
+    title: 'OutBrick — Slide, match, send them home',
+    description: 'A calm slide-and-match brick puzzle: slide bricks home through the gate of their colour and line up three to clear them. No timer, ever.',
     images: [{ url: '/og.png', alt: 'OutBrick mascots and home screen' }],
   },
   icons: {
@@ -160,11 +164,24 @@ export function SiteDocument({ lang, children }: { lang: string; children: React
               "(function(d){d.classList.add('js');setTimeout(function(){if(!window.__obMotion)d.classList.remove('js')},4000);try{var n=new Date(),v=(n.getMonth()+1)*100+n.getDate(),o=new URLSearchParams(location.search).get('season'),s=v>=1201||v<=106?'winter':v>=1010&&v<=1102?'autumn':'';if(o==='winter'||o==='autumn'||o==='none')s=o==='none'?'':o;if(s)d.dataset.season=s}catch(e){}})(document.documentElement)",
           }}
         />
+        {/*
+          Google Analytics, only when GA_MEASUREMENT_ID is configured (lib/analytics.ts): Consent
+          Mode v2 defaults, everything denied. This writes to a local array and requests nothing;
+          gtag.js loads only after the visitor accepts in the banner below. Without an ID, none of
+          this is rendered. `ob-analytics` tells scripts/postbuild.mjs to keep Google in the CSP.
+        */}
+        {gaMeasurementId ? (
+          <>
+            <meta name="ob-analytics" content="ga4-consent" />
+            <script dangerouslySetInnerHTML={{ __html: consentDefaultsScript() }} />
+          </>
+        ) : null}
         <meta name="theme-color" content="#1a1350" />
         <link rel="author" href="/humans.txt" />
       </head>
       <body className="antialiased">
         <LocaleProvider locale={lang as Locale}>{children}</LocaleProvider>
+        {gaMeasurementId ? <ConsentBanner measurementId={gaMeasurementId} locale={(isTranslatedLocale(lang) ? lang : 'en') as Locale} /> : null}
         {/* The organisation, its founder and the website: the graph every page's own JSON-LD points into. */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localizedSiteGraph(isTranslatedLocale(lang) ? lang : 'en')).replace(/</g, '\\u003c') }} />
       </body>

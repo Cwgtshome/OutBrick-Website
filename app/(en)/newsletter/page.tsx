@@ -75,7 +75,7 @@ export default function NewsletterPage() {
         <div className="ed-wrap">
           <h2 id="meanwhile-title" className="ed-h3">In the meantime</h2>
           <div className="ed-actions" style={{ marginTop: 18 }}>
-            <a className="ed-btn" href="/whats-new">Read what’s new in 5.0.1</a>
+            <a className="ed-btn" href="/whats-new">Read what’s new in 5.1.1</a>
             <a className="ed-link" href="/blog">Browse the journal</a>
             <a className="ed-link" href="/feed.xml" type="application/rss+xml">Journal RSS</a>
           </div>

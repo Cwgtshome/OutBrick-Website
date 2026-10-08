@@ -4,7 +4,6 @@ export const challengePtBR: Record<string, string> = {
   'Someone dared you to an OutBrick board. Get the game and clear it.': 'Alguém desafiou você para um tabuleiro do OutBrick. Baixe o jogo e conclua o desafio.',
   'Skip to content': 'Pular para o conteúdo',
   'You have been challenged': 'Você recebeu um desafio',
-  'Someone dared you to a board of OutBrick — a relaxed match-three brick puzzle. Match every brick to its gate, take the free undo the board comes with, and beat their move count.': 'Alguém desafiou você para um tabuleiro do OutBrick, um quebra-cabeça tranquilo de blocos deslizantes. Leve cada peça até a porta da mesma cor, aproveite a ação de desfazer gratuita do tabuleiro e termine com menos movimentos que a outra pessoa.',
   'a free undo every board': 'Uma ação de desfazer grátis em cada tabuleiro',
   'no ad between levels': 'Sem anúncios entre as fases',
   'works offline': 'Funciona sem conexão',

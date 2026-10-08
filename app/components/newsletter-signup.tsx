@@ -7,6 +7,7 @@ import { newsletterWords } from '../../lib/i18n/newsletter';
 import { localePath } from '../../lib/i18n/locales';
 import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
 import '../styles/growth.css';
+import { track } from '../../lib/track';
 
 /**
  * The newsletter sign-up: new villages and big updates, about once a month.
@@ -87,6 +88,7 @@ export function NewsletterSignup({
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       setState('done');
+      track('newsletter_signup', { form_name: 'newsletter' });
     } catch {
       // Let the browser post it the old way: /newsletter/thanks still records it.
       setState('idle');
