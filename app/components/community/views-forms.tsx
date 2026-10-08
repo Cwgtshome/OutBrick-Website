@@ -480,6 +480,8 @@ export function SignInView({ route }: { route: Extract<Route, { name: 'signin' }
 export function WelcomeView({ route }: { route: Extract<Route, { name: 'welcome' }> }) {
   const { copy, path, session, refreshSession, navigate, announce } = useApp();
   const [name, setName] = useState(session?.member?.displayName ?? '');
+  // "Also send me OutBrick News": unticked unless the member ticks it (8 October 2026).
+  const [newsletter, setNewsletter] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [general, setGeneral] = useState('');
   const [busy, setBusy] = useState(false);
@@ -497,9 +499,9 @@ export function WelcomeView({ route }: { route: Extract<Route, { name: 'welcome'
     }
     setBusy(true);
     try {
-      await api.updateMe({ displayName: value });
+      const result = await api.updateMe(newsletter ? { displayName: value, newsletter: true } : { displayName: value });
       await refreshSession();
-      announce(copy.welcome.saved);
+      announce(result.newsletterConfirmationSent ? `${copy.welcome.saved} ${copy.welcome.newsletterSent}` : copy.welcome.saved);
       navigate(route.returnTo, { replace: true });
     } catch (error) {
       const f = failureOf(error);
@@ -518,6 +520,13 @@ export function WelcomeView({ route }: { route: Extract<Route, { name: 'welcome'
         <Field id={`${id}-name`} label={copy.welcome.name} hint={copy.welcome.nameHint} error={errors.displayName}>
           {(props) => <input {...props} type="text" autoComplete="off" maxLength={40} value={name} onChange={(e) => setName(e.target.value)} />}
         </Field>
+        <div className="cm-check">
+          <input type="checkbox" id={`${id}-news`} checked={newsletter} onChange={(e) => setNewsletter(e.target.checked)} aria-describedby={`${id}-news-d`} />
+          <label htmlFor={`${id}-news`}>{copy.welcome.newsletter}</label>
+          <p className="cm-hint" id={`${id}-news-d`}>
+            {copy.welcome.newsletterHint}
+          </p>
+        </div>
         <button type="submit" className="btn" disabled={busy}>
           {copy.welcome.save}
         </button>

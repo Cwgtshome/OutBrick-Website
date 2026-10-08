@@ -3,6 +3,35 @@
 Updated 7 October 2026. This is a dated handoff, not a claim that account state remains unchanged.
 Recheck live Git, `/build-info.json`, `/api/community/session` and relevant providers before acting.
 
+## Branch `claude/news-growth` (8 October 2026, not merged or deployed)
+
+Growing OutBrick News with consent (owner-approved). Release state to know: iOS **5.1 (67)** is
+READY_FOR_SALE since 8 October 2026 and 5.1.1 (68) is waiting for review; the app's Settings now
+links to `/newsletter` (the game repo, main `dacdb11b`; ships after 5.1.1).
+
+- **Language on the contact.** `newsletter-confirm` stores the subscriber's language as the Resend
+  contact property `language` (created 8 October, fallback `en`). The Resend plan holds three
+  segments (General, OutBrick News, and an unused "OutBrick News · English" made before the limit
+  showed), so per-language segments are not possible; `send-newsletter.mjs --by-language [--go]`
+  sends each contact the issue in their language through `/emails/batch`, with their own signed
+  unsubscribe link. `RESEND_SEGMENT_ID_PT_BR` (not `_PT-BR`) is now the name everywhere.
+- **Topics.** Resend topics "New versions" and "Tips and events" exist (both `opt_in` by default,
+  so every confirmed subscriber hears both until they turn one off). An issue's `"topic":
+  "releases" | "tips"` files a broadcast under it; `--by-language` skips contacts who opted out.
+  New environment variables for Netlify and the send script (topic IDs, not secrets):
+  `RESEND_TOPIC_RELEASES=bc2217a0-cfcd-443b-ae0e-5f3ddf9c1446`,
+  `RESEND_TOPIC_TIPS=6a5e6a38-394b-43e1-bf49-082f5b4f3966`.
+- **Invitation, never a subscription.** The contact acknowledgement and the new `supportReply`
+  template end with a "Join OutBrick News" panel linking to `/newsletter` (six languages).
+  `scripts/send-support-reply.mjs` sends a team-written reply from support@ (dry-run, test, send;
+  optional `inReplyTo` threads it). Reply files hold customer data and live in ignored `replies/`.
+- **Community.** The welcome step (choose a display name) has an unticked "Also send me OutBrick
+  News". Ticked, `PATCH /me { newsletter: true }` sends the same double opt-in email as the form,
+  to a verified address only, at most one a day (`askToSubscribe`); nothing reaches Resend's
+  contacts until the link is used. Tests in `account.test.ts`.
+- **Not run locally** (no Node on the Mac that wrote it): needs CI on a pull request and a Deploy
+  Preview check of the welcome step and the email previews before merging.
+
 ## Production checkpoint
 
 - Repository: <https://github.com/Cwgtshome/OutBrick-Website>, default branch `main`.

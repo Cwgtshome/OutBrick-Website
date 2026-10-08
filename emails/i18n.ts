@@ -35,6 +35,10 @@ export type EmailCopy = {
     cta: string;
     why: string;
   };
+  /** "Join OutBrick News": a link to the newsletter page, never a subscription (8 October 2026). */
+  newsInvite: { title: string; body: string; cta: string };
+  /** A support reply written by the team (`supportReply`, scripts/send-support-reply.mjs). */
+  supportReply: { why: string; doneTitle: string };
   careers: {
     subject: (role: string) => string;
     preheader: string;
@@ -121,6 +125,8 @@ const en: EmailCopy = {
     cta: 'Visit the support page',
     why: 'You’re receiving this one-off email because this address was used on the contact form at outbrick.site. It doesn’t add you to any mailing list.',
   },
+  newsInvite: { title: 'Hear about new versions', body: 'Want an email when a new version of OutBrick lands? Join OutBrick News on our website. You confirm by email, and every issue has a one-click unsubscribe.', cta: 'Join OutBrick News' },
+  supportReply: { why: 'You’re receiving this because you wrote to OutBrick Support. It doesn’t add you to any mailing list.', doneTitle: 'What we’ve done' },
   careers: {
     subject: (role) => `Application received: ${role} — OutBrick`,
     preheader: 'Thank you for applying. A person reads every application.',
@@ -204,6 +210,8 @@ const fr: EmailCopy = {
     cta: 'Consulter la page d’assistance',
     why: 'Vous recevez cet e-mail unique parce que cette adresse a été saisie dans le formulaire de contact d’outbrick.site. Il ne vous inscrit à aucune liste de diffusion.',
   },
+  newsInvite: { title: 'Soyez prévenu des nouvelles versions', body: 'Vous voulez un e-mail quand une nouvelle version d’OutBrick sort ? Inscrivez-vous à OutBrick News sur notre site. Vous confirmez par e-mail, et chaque numéro se désabonne en un clic.', cta: 'S’inscrire à OutBrick News' },
+  supportReply: { why: 'Vous recevez cet e-mail parce que vous avez écrit à l’assistance OutBrick. Il ne vous inscrit à aucune liste de diffusion.', doneTitle: 'Ce que nous avons fait' },
   careers: {
     subject: (role) => `Candidature reçue : ${role} — OutBrick`,
     preheader: 'Merci pour votre candidature. Une personne lit chaque candidature.',
@@ -287,6 +295,8 @@ const de: EmailCopy = {
     cta: 'Zur Support-Seite',
     why: 'Sie erhalten diese einmalige E-Mail, weil diese Adresse im Kontaktformular auf outbrick.site angegeben wurde. Sie werden dadurch in keine Mailingliste aufgenommen.',
   },
+  newsInvite: { title: 'Neue Versionen nicht verpassen', body: 'Möchtest du eine E-Mail, wenn eine neue Version von OutBrick erscheint? Melde dich auf unserer Website für OutBrick News an. Du bestätigst per E-Mail, und jede Ausgabe lässt sich mit einem Klick abbestellen.', cta: 'OutBrick News abonnieren' },
+  supportReply: { why: 'Du erhältst diese E-Mail, weil du dem OutBrick-Support geschrieben hast. Sie trägt dich in keinen Verteiler ein.', doneTitle: 'Was wir getan haben' },
   careers: {
     subject: (role) => `Bewerbung eingegangen: ${role} — OutBrick`,
     preheader: 'Vielen Dank für Ihre Bewerbung. Ein Mensch liest jede Bewerbung.',
@@ -370,6 +380,8 @@ const es: EmailCopy = {
     cta: 'Ir a la página de ayuda',
     why: 'Recibes este correo único porque esta dirección se usó en el formulario de contacto de outbrick.site. No te añade a ninguna lista de correo.',
   },
+  newsInvite: { title: 'Entérate de las nuevas versiones', body: '¿Quieres un correo cuando salga una nueva versión de OutBrick? Suscríbete a OutBrick News en nuestra web. Lo confirmas por correo, y cada número se puede cancelar con un clic.', cta: 'Suscribirme a OutBrick News' },
+  supportReply: { why: 'Recibes este correo porque escribiste al soporte de OutBrick. No te añade a ninguna lista de correo.', doneTitle: 'Lo que hemos hecho' },
   careers: {
     subject: (role) => `Solicitud recibida: ${role} — OutBrick`,
     preheader: 'Gracias por tu solicitud. Una persona lee cada solicitud.',
@@ -453,6 +465,8 @@ const ja: EmailCopy = {
     cta: 'サポートページを見る',
     why: 'このメールは、outbrick.siteのお問い合わせフォームでこのアドレスが使われたため、一度だけお送りしています。メーリングリストに登録されることはありません。',
   },
+  newsInvite: { title: '新しいバージョンのお知らせ', body: 'OutBrickの新しいバージョンが出たらメールで知りたいですか？ウェブサイトでOutBrick Newsにご登録ください。登録はメールで確認し、毎号ワンクリックで配信を停止できます。', cta: 'OutBrick Newsに登録' },
+  supportReply: { why: 'このメールは、OutBrickサポートにお問い合わせいただいたためお送りしています。メーリングリストには登録されません。', doneTitle: '対応した内容' },
   careers: {
     subject: (role) => `応募を受け付けました：${role} — OutBrick`,
     preheader: 'ご応募ありがとうございます。すべての応募を担当者が読みます。',
@@ -531,6 +545,8 @@ const ptBR: EmailCopy = {
     meanwhile: 'Enquanto isso, talvez a página de suporte já tenha a resposta.', cta: 'Acessar a página de suporte',
     why: 'Você recebeu este e-mail porque este endereço foi usado no formulário de contato em outbrick.site. Ele não adiciona você a nenhuma lista de e-mails.',
   },
+  newsInvite: { title: 'Fique sabendo das novas versões', body: 'Quer receber um e-mail quando sair uma nova versão do OutBrick? Assine o OutBrick News no nosso site. Você confirma por e-mail, e cada edição tem cancelamento com um clique.', cta: 'Assinar o OutBrick News' },
+  supportReply: { why: 'Você está recebendo este e-mail porque escreveu para o suporte do OutBrick. Ele não inclui você em nenhuma lista de e-mails.', doneTitle: 'O que fizemos' },
   careers: {
     subject: (role) => `Candidatura recebida: ${role} — OutBrick`, preheader: 'Obrigado por se candidatar. Uma pessoa lê cada candidatura.',
     heading: (name) => name ? `Obrigado por se candidatar, ${name}.` : 'Obrigado por se candidatar.',

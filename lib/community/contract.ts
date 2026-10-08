@@ -137,10 +137,15 @@ export type UpdateMeRequest = {
   emailPrefs?: Record<string, boolean>;
   /** A new address: a "Confirm your email" goes to it, and it replaces the old one only once confirmed. */
   email?: string;
+  /** "Also send me OutBrick News" (unticked by default): sends the newsletter's double opt-in. */
+  newsletter?: boolean;
 };
 
-/** PATCH /me answers with the member; `emailConfirmationSent` is present when `email` was sent. */
-export type UpdateMeResponse = { member: SelfMember; emailConfirmationSent?: boolean };
+/**
+ * PATCH /me answers with the member; `emailConfirmationSent` is present when `email` was sent,
+ * `newsletterConfirmationSent` when `newsletter` was asked for.
+ */
+export type UpdateMeResponse = { member: SelfMember; emailConfirmationSent?: boolean; newsletterConfirmationSent?: boolean };
 
 export type Category = {
   id: number;

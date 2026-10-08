@@ -290,7 +290,7 @@ export type CommunityCopy = {
     privacy: string;
     noProviders: string;
   };
-  welcome: { title: string; lede: string; name: string; nameHint: string; save: string; saved: string };
+  welcome: { title: string; lede: string; name: string; nameHint: string; save: string; saved: string; newsletter: string; newsletterHint: string; newsletterSent: string };
   settings: {
     title: string;
     lede: string;
@@ -783,6 +783,9 @@ const en: CommunityCopy = {
     nameHint: '3 to 30 characters: letters, numbers, spaces, dots, dashes and underscores. Not your email address.',
     save: 'Save and continue',
     saved: 'Welcome to OutBrick Community.',
+    newsletter: 'Also send me OutBrick News',
+    newsletterHint: 'An email when a new version or village arrives. We send a link to confirm first, and you can leave any time.',
+    newsletterSent: 'Check your inbox to confirm OutBrick News.',
   },
   settings: {
     title: 'Settings',
@@ -1320,6 +1323,9 @@ const fr: CommunityCopy = {
     nameHint: 'De 3 à 30 caractères : lettres, chiffres, espaces, points, tirets et tirets bas. Pas votre adresse e-mail.',
     save: 'Enregistrer et continuer',
     saved: 'Bienvenue dans la communauté OutBrick.',
+    newsletter: 'M’envoyer aussi OutBrick News',
+    newsletterHint: 'Un e-mail à chaque nouvelle version ou nouveau village. Nous envoyons d’abord un lien de confirmation, et vous pouvez vous désinscrire à tout moment.',
+    newsletterSent: 'Consultez votre boîte de réception pour confirmer OutBrick News.',
   },
   settings: {
     title: 'Réglages',
@@ -1857,6 +1863,9 @@ const de: CommunityCopy = {
     nameHint: '3 bis 30 Zeichen: Buchstaben, Ziffern, Leerzeichen, Punkte, Binde- und Unterstriche. Nicht deine E-Mail-Adresse.',
     save: 'Sichern und weiter',
     saved: 'Willkommen in der OutBrick-Community.',
+    newsletter: 'Schick mir auch OutBrick News',
+    newsletterHint: 'Eine E-Mail, wenn eine neue Version oder ein neues Dorf erscheint. Zuerst schicken wir einen Bestätigungslink, und du kannst dich jederzeit abmelden.',
+    newsletterSent: 'Sieh in deinem Posteingang nach, um OutBrick News zu bestätigen.',
   },
   settings: {
     title: 'Einstellungen',
@@ -2394,6 +2403,9 @@ const es: CommunityCopy = {
     nameHint: 'De 3 a 30 caracteres: letras, números, espacios, puntos, guiones y guiones bajos. No tu correo electrónico.',
     save: 'Guardar y continuar',
     saved: 'Te damos la bienvenida a la comunidad de OutBrick.',
+    newsletter: 'Envíame también OutBrick News',
+    newsletterHint: 'Un correo cuando llegue una nueva versión o un nuevo pueblo. Primero te enviamos un enlace para confirmar, y puedes darte de baja cuando quieras.',
+    newsletterSent: 'Revisa tu bandeja de entrada para confirmar OutBrick News.',
   },
   settings: {
     title: 'Ajustes',
@@ -2931,6 +2943,9 @@ const ja: CommunityCopy = {
     nameHint: '3〜30文字。文字、数字、スペース、ピリオド、ハイフン、アンダースコアが使えます。メールアドレスは使わないでください。',
     save: '保存して続ける',
     saved: 'OutBrickコミュニティへようこそ。',
+    newsletter: 'OutBrick Newsも受け取る',
+    newsletterHint: '新しいバージョンや村が登場したときにメールでお知らせします。まず確認用のリンクをお送りします。配信はいつでも停止できます。',
+    newsletterSent: '受信箱を確認して、OutBrick Newsの登録を完了してください。',
   },
   settings: {
     title: '設定',
@@ -3138,7 +3153,7 @@ const ptBR: CommunityCopy = {
     or: 'Ou', emailHeading: 'Entre com um link por e-mail', email: 'E-mail', emailHint: 'Enviaremos um link válido por 20 minutos e de uso único.', emailButton: 'Enviar um link de acesso', sent: 'Confira seu e-mail', sentNote: 'Se este endereço puder entrar, o link já está a caminho. Ele pode ser usado uma vez e vale por 20 minutos. Você pode fechar esta página.',
     errors: { expired: 'Este link de acesso expirou. Os links valem por 20 minutos. Peça outro abaixo.', invalid: 'Este link de acesso não funcionou. Talvez já tenha sido usado. Peça outro abaixo.', failed: 'Não foi possível concluir o acesso por um problema do outro lado. Tente novamente ou use um link por e-mail.', denied: 'O acesso foi cancelado. Nada foi compartilhado. Você pode tentar novamente quando quiser.', unavailable: 'Esta forma de entrar não está disponível agora. Use um link por e-mail ou tente mais tarde.', email_taken: 'Este e-mail já pertence a outra conta. Entre da mesma forma que usou na primeira vez.' }, already: (name) => `Você já entrou como ${name}.`, privacy: 'Como tratamos seus dados está explicado na política de privacidade e nas diretrizes da comunidade.', noProviders: 'O acesso com outras contas ainda não está ativado. Use um link por e-mail.',
   },
-  welcome: { title: 'Escolha seu nome de exibição', lede: 'Este é o único nome que os outros membros veem. Você pode alterá-lo depois nas Configurações.', name: 'Nome de exibição', nameHint: 'De 3 a 30 caracteres: letras, números, espaços, pontos, hífens e sublinhados. Não use seu e-mail.', save: 'Salvar e continuar', saved: 'Boas-vindas à comunidade OutBrick.' },
+  welcome: { title: 'Escolha seu nome de exibição', lede: 'Este é o único nome que os outros membros veem. Você pode alterá-lo depois nas Configurações.', name: 'Nome de exibição', nameHint: 'De 3 a 30 caracteres: letras, números, espaços, pontos, hífens e sublinhados. Não use seu e-mail.', save: 'Salvar e continuar', saved: 'Boas-vindas à comunidade OutBrick.', newsletter: 'Também quero receber o OutBrick News', newsletterHint: 'Um e-mail quando chegar uma nova versão ou um novo vilarejo. Primeiro enviamos um link para confirmar, e você pode sair quando quiser.', newsletterSent: 'Confira sua caixa de entrada para confirmar o OutBrick News.' },
   settings: {
     title: 'Configurações', lede: 'Seu perfil, seus e-mails e seus dados. Salve as alterações pelo botão de cada seção.', profile: 'Perfil', displayName: 'Nome de exibição', displayNameHint: 'O único nome que os outros membros veem.', bio: 'Sobre você', bioHint: 'Até 300 caracteres. Aparece no seu perfil.', language: 'Idioma da comunidade e dos e-mails', languageHint: 'Por padrão, as listas mostram conversas neste idioma e em inglês.', saveProfile: 'Salvar perfil', profileSaved: 'Perfil salvo.', emails: 'E-mails', emailsLede: (address) => `Enviamos mensagens para ${address}. Todos os e-mails também incluem um link para cancelar a inscrição com um toque.`,
     emailKinds: { reply: ['Respostas', 'Alguém responde à sua conversa ou a uma publicação sua.'], mention: ['Menções', 'Alguém escreve @ e seu nome de exibição.'], watched: ['Conversas e categorias acompanhadas', 'Novas publicações nos assuntos que você acompanha.'], status: ['Mudanças de status', 'Seu relato ou sua ideia muda de status, por exemplo: “Corrigido na versão 5.1”.'], solved: ['Soluções', 'Sua resposta é marcada como solução.'], release: ['Novas versões', 'Uma nova versão do OutBrick é lançada (em Novidades).'], moderation: ['Avisos da moderação', 'Um moderador ocultou uma publicação sua e informou o motivo. Recomendamos manter esta opção ativada.'] },

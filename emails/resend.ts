@@ -108,16 +108,21 @@ export function sendEmail(apiKey: string, email: OutgoingEmail, idempotencyKey?:
  * Put a confirmed address in the newsletter segment, subscribed. A new address is created
  * straight into the segment; an address Resend already knows (someone who left and came back)
  * is switched back to subscribed and added to the segment.
+ *
+ * `properties` are the contact's custom properties: `language` (8 October 2026) is the language
+ * the subscriber chose, which `send-newsletter.mjs --by-language` sends each issue in. The plan's
+ * three segments cannot hold one segment per language, so the language rides on the contact.
  */
-export async function subscribeContact(apiKey: string, email: string, segmentIds: string[]): Promise<ResendResult> {
+export async function subscribeContact(apiKey: string, email: string, segmentIds: string[], properties: Record<string, string> = {}): Promise<ResendResult> {
   const segments = segmentIds.filter(Boolean);
+  const props = Object.keys(properties).length ? { properties } : {};
   const created = await resend(apiKey, '/contacts', {
-    body: { email, unsubscribed: false, segments: segments.map((id) => ({ id })) },
+    body: { email, unsubscribed: false, segments: segments.map((id) => ({ id })), ...props },
   });
   if (created.ok || (created.status !== 409 && created.status !== 422)) return created;
   // Already a contact (Resend answers 409 or 422 for a duplicate): update it instead.
   const contact = `/contacts/${encodeURIComponent(email)}`;
-  const updated = await resend(apiKey, contact, { method: 'PATCH', body: { unsubscribed: false } });
+  const updated = await resend(apiKey, contact, { method: 'PATCH', body: { unsubscribed: false, ...props } });
   if (!updated.ok) return { ...updated, error: `${created.error}; then ${updated.error}` };
   for (const id of segments) {
     const added = await resend(apiKey, `${contact}/segments/${encodeURIComponent(id)}`, { method: 'POST' });
@@ -134,10 +139,27 @@ export async function unsubscribeContact(apiKey: string, email: string): Promise
   return result;
 }
 
+/** The environment-variable suffix for a language: `FR`, `JA`, and `PT_BR` for Brazilian Portuguese. */
+export function localeEnvSuffix(locale: string): string {
+  return locale === 'pt-BR' ? 'PT_BR' : locale.toUpperCase();
+}
+
 /** The newsletter segment, plus an optional per-language segment (RESEND_SEGMENT_ID_FR …). */
 export function newsletterSegments(env: Record<string, string | undefined>, locale: string): string[] {
   const main = env.RESEND_SEGMENT_ID ?? env.RESEND_AUDIENCE_ID ?? '';
-  const segmentSuffix: Record<string, string> = { 'pt-BR': 'PT_BR' };
-  const perLanguage = env[`RESEND_SEGMENT_ID_${segmentSuffix[locale] ?? locale.toUpperCase()}`] ?? '';
+  const perLanguage = env[`RESEND_SEGMENT_ID_${localeEnvSuffix(locale)}`] ?? '';
   return [...new Set([main, perLanguage].filter(Boolean))];
+}
+
+/**
+ * The Resend topics an issue can be filed under (8 October 2026): `releases` ("New versions")
+ * and `tips` ("Tips and events"). Both default to opt_in, so a subscriber hears both until they
+ * turn one off on Resend's preference page.
+ */
+export const NEWSLETTER_TOPICS = { releases: 'RESEND_TOPIC_RELEASES', tips: 'RESEND_TOPIC_TIPS' } as const;
+export type NewsletterTopic = keyof typeof NEWSLETTER_TOPICS;
+
+export function topicId(env: Record<string, string | undefined>, topic: unknown): string | undefined {
+  if (topic !== 'releases' && topic !== 'tips') return undefined;
+  return env[NEWSLETTER_TOPICS[topic]] || undefined;
 }

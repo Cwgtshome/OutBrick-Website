@@ -16,6 +16,7 @@ import { displayNameProblem, selfMember, tidyName } from './members.ts';
 import { asLocale, configuredProviders, isPlaceholderEmail } from './util.ts';
 import { communityFeatures } from '../features.ts';
 import { deleteUnattachedUploads } from '../uploads.ts';
+import { askToSubscribe } from '../../../emails/newsletter.ts';
 
 /** Email kinds a member can switch off. The welcome is sent once and has no switch. */
 export const switchableKinds: readonly (NotificationKind | 'digest')[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation', 'badge', 'merged', 'digest'];
@@ -79,6 +80,7 @@ export async function updateMe(req: Request): Promise<Response> {
       if (!fields.emailPrefs) changes.prefs = clean;
     }
   }
+  if (body.newsletter !== undefined && typeof body.newsletter !== 'boolean') fields.newsletter = 'invalid';
   let newEmail: string | null = null;
   if (body.email !== undefined && body.email !== '' && body.email !== null) {
     const email = normalizeEmail(body.email);
@@ -114,8 +116,18 @@ export async function updateMe(req: Request): Promise<Response> {
 
   let emailConfirmationSent: boolean | undefined;
   if (newEmail) emailConfirmationSent = await sendConfirmEmail(req, viewer.id, newEmail, 'change', asLocale(changes.locale ?? viewer.locale));
+  // "Also send me OutBrick News": only to a verified address, and only the double opt-in.
+  let newsletterConfirmationSent: boolean | undefined;
+  const apiKey = process.env.RESEND_API_KEY;
+  if (body.newsletter === true && viewer.email_verified && !isPlaceholderEmail(viewer.email) && apiKey && (await rateAllow(`newsletter-ask:member:${viewer.id}`, 3, 86400))) {
+    newsletterConfirmationSent = await askToSubscribe(apiKey, viewer.email.toLowerCase(), asLocale(changes.locale ?? viewer.locale));
+  } else if (body.newsletter === true) newsletterConfirmationSent = false;
   const fresh = await currentMember(req);
-  return json({ member: fresh ? await selfMember(fresh) : null, ...(emailConfirmationSent === undefined ? {} : { emailConfirmationSent }) });
+  return json({
+    member: fresh ? await selfMember(fresh) : null,
+    ...(emailConfirmationSent === undefined ? {} : { emailConfirmationSent }),
+    ...(newsletterConfirmationSent === undefined ? {} : { newsletterConfirmationSent }),
+  });
 }
 
 export async function exportMe(req: Request): Promise<Response> {

@@ -6,6 +6,7 @@ import {
   affiliateAcknowledgement,
   careersAcknowledgement,
   contactAcknowledgement,
+  supportReply,
   newsletterCampaign,
   newsletterConfirm,
   newsletterWelcome,
@@ -63,6 +64,7 @@ export type CommunityTemplateName =
 export type TemplateName =
   | 'contact'
   | 'contact-bug'
+  | 'support-reply'
   | 'careers'
   | 'affiliate'
   | 'newsletter-confirm'
@@ -95,7 +97,7 @@ export const communityTemplateNames: CommunityTemplateName[] = [
   'community-reply-bounce',
 ];
 
-export const templateNames: TemplateName[] = ['contact', 'contact-bug', 'careers', 'affiliate', 'newsletter-confirm', 'newsletter-welcome', 'newsletter-campaign', 'team-contact', 'team-careers', 'team-affiliate', 'team-newsletter', ...communityTemplateNames];
+export const templateNames: TemplateName[] = ['contact', 'contact-bug', 'support-reply', 'careers', 'affiliate', 'newsletter-confirm', 'newsletter-welcome', 'newsletter-campaign', 'team-contact', 'team-careers', 'team-affiliate', 'team-newsletter', ...communityTemplateNames];
 
 /** The team's copies are always in English; the preview's language is the visitor's. */
 export function templateLang(name: TemplateName, locale: EmailLocale): EmailLocale {
@@ -105,6 +107,7 @@ export function templateLang(name: TemplateName, locale: EmailLocale): EmailLoca
 export const templateTitles: Record<TemplateName, string> = {
   contact: 'Contact acknowledgement (Support topic)',
   'contact-bug': 'Contact acknowledgement (Bug report, no device given)',
+  'support-reply': 'Support reply written by the team (scripts/send-support-reply.mjs)',
   careers: 'Careers acknowledgement',
   affiliate: 'Affiliate acknowledgement',
   'newsletter-confirm': 'Newsletter: confirm your subscription',
@@ -191,6 +194,18 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
       return contactAcknowledgement({ locale, assetBase, name: sampleNames[locale], topic: 'support', message: sampleMessages[locale], device: 'iPhone 17 Pro', iosVersion: '27.0', appVersion: '4.5' });
     case 'contact-bug':
       return contactAcknowledgement({ locale, assetBase, name: sampleNames[locale], topic: 'bug', message: sampleMessages[locale] });
+    case 'support-reply':
+      return supportReply({
+        locale,
+        assetBase,
+        subject: `Re: ${sampleTitles[locale].replace(/<[^>]+>/g, '')}`,
+        preheader: sampleNotes[locale],
+        heading: sampleActors[locale],
+        paragraphs: [`${sampleNotes[locale]} <b>Not bold</b>`],
+        done: [{ title: '**OutBrick 5.1.**', body: sampleNotes[locale] }],
+        cta: { label: 'App Store', url: 'https://apps.apple.com/us/app/outbrick/id6807997465' },
+        after: [sampleNotes[locale]],
+      });
     case 'careers':
       return careersAcknowledgement({ locale, assetBase, name: sampleNames[locale], role: 'Content Marketing Lead' });
     case 'affiliate':

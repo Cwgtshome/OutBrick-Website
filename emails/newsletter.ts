@@ -3,9 +3,9 @@
 // newsletter-unsubscribe.mts for what each URL does.
 
 import { isEmailLocale, type EmailLocale } from './i18n.ts';
-import { addressTag, unsubscribeUrl, verifyConfirm, verifyUnsubscribe } from './links.ts';
+import { addressTag, confirmUrl, unsubscribeUrl, verifyConfirm, verifyUnsubscribe } from './links.ts';
 import { SENDERS, newsletterSegments, sendEmail, subscribeContact, unsubscribeContact } from './resend.ts';
-import { newsletterWelcome, unsubscribePage, confirmPage } from './templates.ts';
+import { newsletterConfirm, newsletterWelcome, unsubscribePage, confirmPage } from './templates.ts';
 import { SITE } from './core.ts';
 
 type Env = Record<string, string | undefined>;
@@ -73,7 +73,7 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
     console.error('[newsletter] confirm: RESEND_SEGMENT_ID is not set');
     return redirect(req, locale, '/newsletter/link-expired');
   }
-  const added = await subscribeContact(apiKey, email, segments);
+  const added = await subscribeContact(apiKey, email, segments, { language: locale });
   if (!added.ok) {
     console.error(`[newsletter] confirm ${tag}: ${added.error}`);
     return redirect(req, locale, '/newsletter/link-expired');
@@ -138,4 +138,22 @@ export async function handleUnsubscribe(req: Request, env: Env): Promise<Respons
   }
   console.log(`[newsletter] unsubscribed ${tag}${oneClick ? ' (one-click)' : ''}`);
   return oneClick ? new Response('Unsubscribed', { status: 200, headers: { 'Content-Type': 'text/plain; charset=utf-8' } }) : redirect(req, locale, '/newsletter/unsubscribed');
+}
+
+/**
+ * The newsletter's double opt-in, asked for from elsewhere (8 October 2026): a Community member
+ * ticked "Also send me OutBrick News" when choosing their name. The same "confirm your
+ * subscription" email the newsletter form sends, so nobody is subscribed until they click it.
+ * One email per address per day, however often the box is ticked.
+ */
+export async function askToSubscribe(apiKey: string, email: string, locale: EmailLocale): Promise<boolean> {
+  const rendered = newsletterConfirm({ locale, confirmUrl: confirmUrl(SITE, apiKey, email, locale) });
+  const day = new Date().toISOString().slice(0, 10);
+  const sent = await sendEmail(
+    apiKey,
+    { ...SENDERS.news, to: email, subject: rendered.subject, html: rendered.html, text: rendered.text, tags: [{ name: 'form', value: 'newsletter-community' }, { name: 'locale', value: locale }] },
+    `newsletter-ask-${addressTag(apiKey, email)}-${day}`,
+  );
+  if (!sent.ok) console.error(`[newsletter] community ask ${addressTag(apiKey, email)}: ${sent.error}`);
+  return sent.ok;
 }

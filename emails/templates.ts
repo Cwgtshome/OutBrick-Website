@@ -136,6 +136,7 @@ export function contactAcknowledgement(input: ContactInput): Rendered {
     rule(),
     para(ctx, esc(c.meanwhile)),
     button(ctx, sitePath(input.locale, '/support'), esc(c.cta)),
+    newsInvite(ctx),
     signoff(ctx),
   ].join('\n');
 
@@ -157,11 +158,82 @@ export function contactAcknowledgement(input: ContactInput): Rendered {
     '',
     `${c.meanwhile} ${sitePath(input.locale, '/support')}`,
     '',
+    ...newsInviteText(input.locale),
     `— ${t.signoff}`,
     '',
     ...supportFooterText(input.locale, c.why, 'contact'),
   ]);
   return { subject: c.subject, html, text };
+}
+
+/**
+ * "Join OutBrick News" (8 October 2026): a link to the newsletter page, where the double opt-in
+ * happens. It never subscribes anyone; the footer's "doesn't add you to any mailing list" holds.
+ */
+function newsInvite(ctx: Ctx): string {
+  const n = emailCopy[ctx.locale].newsInvite;
+  return panel(ctx, eyebrow(ctx, esc(n.title)) + para(ctx, `${esc(n.body)} ${link(sitePath(ctx.locale, '/newsletter'), esc(n.cta))}`), color.goldFoot);
+}
+
+function newsInviteText(locale: EmailLocale): string[] {
+  const n = emailCopy[locale].newsInvite;
+  return [n.title, `${n.body} ${n.cta}: ${sitePath(locale, '/newsletter')}`, ''];
+}
+
+// ---------------------------------------------------------------------------------------
+// Support reply: an answer the team writes (scripts/send-support-reply.mjs)
+
+/**
+ * A reply file's content. Text fields take the issue files' tiny Markdown (**bold**, *italic*,
+ * [text](url)) and are escaped first, so a reply can never inject markup.
+ */
+export type SupportReplyInput = {
+  locale: EmailLocale;
+  subject: string;
+  preheader: string;
+  heading: string;
+  paragraphs: string[];
+  /** "What we've done": a short list, each item a bold title and a sentence. */
+  done?: { title: string; body: string }[];
+  /** One action, such as "Get OutBrick 5.1". */
+  cta?: { label: string; url: string };
+  /** Paragraphs after the action: a feature request noted, thanks. */
+  after?: string[];
+  assetBase?: string;
+};
+
+export function supportReply(input: SupportReplyInput): Rendered {
+  const ctx = ctxOf(input.locale, input.assetBase);
+  const t = emailCopy[input.locale];
+  const r = t.supportReply;
+  const done = input.done ?? [];
+  const body = [
+    heading(ctx, inlineMarkdown(input.heading)),
+    ...input.paragraphs.map((p) => para(ctx, inlineMarkdown(p))),
+    done.length ? panel(ctx, eyebrow(ctx, esc(r.doneTitle)) + bricks(ctx, done.map((d) => ({ title: inlineMarkdown(d.title), body: inlineMarkdown(d.body) })))) : '',
+    input.cta ? button(ctx, safeUrl(input.cta.url), esc(input.cta.label)) : '',
+    rule(),
+    ...(input.after ?? []).map((p) => para(ctx, inlineMarkdown(p))),
+    newsInvite(ctx),
+    signoff(ctx),
+  ].join('\n');
+  const html = shell({ ctx, title: input.subject, preheader: input.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, r.why, 'support-reply') });
+  const text = textBlock([
+    plainMarkdown(input.heading),
+    '',
+    ...input.paragraphs.flatMap((p) => [plainMarkdown(p), '']),
+    done.length ? r.doneTitle.toUpperCase() : false,
+    ...done.map((d) => `- ${plainMarkdown(d.title)} ${plainMarkdown(d.body)}`),
+    done.length ? '' : false,
+    input.cta && `${input.cta.label}: ${safeUrl(input.cta.url)}`,
+    input.cta && '',
+    ...(input.after ?? []).flatMap((p) => [plainMarkdown(p), '']),
+    ...newsInviteText(input.locale),
+    `— ${t.signoff}`,
+    '',
+    ...supportFooterText(input.locale, r.why, 'support-reply'),
+  ]);
+  return { subject: input.subject, html, text };
 }
 
 // ---------------------------------------------------------------------------------------

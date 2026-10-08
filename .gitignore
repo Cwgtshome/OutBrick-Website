@@ -36,6 +36,8 @@ next-env.d.ts
 /dist/
 /.wrangler/
 /outputs/
+# Support replies hold a customer's address and words (scripts/send-support-reply.mjs).
+/replies/
 /work/
 
 # written by scripts/prebuild.mjs on every build

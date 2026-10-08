@@ -162,6 +162,32 @@ void describe('PATCH /me', () => {
     assert.equal((await one<{ email: string }>(pg, `SELECT email FROM members WHERE id = $1`, [id])).email, 'new@example.com');
   });
 
+  void test('"Also send me OutBrick News" sends only the double opt-in, from news@, once a day', async () => {
+    const { cookie } = await member();
+    const res = await patch(cookie, { displayName: `News fan ${n}`, newsletter: true });
+    assert.equal(res.status, 200);
+    const body = await res.json<any>();
+    assert.equal(body.newsletterConfirmationSent, true);
+    const mails = fetchStub.emails();
+    assert.equal(mails.length, 1);
+    assert.equal(mails[0].from, 'OutBrick News <news@outbrick.site>');
+    assert.equal(mails[0].subject, 'Confirm your OutBrick News subscription');
+    assert.match(mails[0].text, /\/api\/newsletter\/confirm|newsletter-confirm|confirm/i);
+    assert.match(mails[0].idempotencyKey ?? '', /^newsletter-ask-/);
+    // No contact is created: nothing reaches Resend's contacts until the link is used.
+    assert.equal(fetchStub.calls.filter((c) => c.url.includes('/contacts')).length, 0);
+  });
+
+  void test('the newsletter box unticked sends nothing, and a non-boolean is refused', async () => {
+    const { cookie } = await member();
+    const res = await patch(cookie, { displayName: `Quiet ${n}` });
+    assert.equal(res.status, 200);
+    assert.equal((await res.json<any>()).newsletterConfirmationSent, undefined);
+    assert.equal(fetchStub.emails().length, 0);
+    const bad = await patch(cookie, { newsletter: 'yes' });
+    assert.equal((await bad.json<any>()).error.fields.newsletter, 'invalid');
+  });
+
   void test('an email that belongs to someone else is refused', async () => {
     const { cookie } = await member();
     await pg.query(`INSERT INTO members (display_name, email, email_verified) VALUES ('Holder', 'held@example.com', true)`);

@@ -12,6 +12,17 @@
 //             segment. Without --send they are left as drafts to review in the Resend dashboard;
 //             with --send --locale LANG --broadcast-id ID the reviewed draft goes out (optionally --schedule).
 //
+// --by-language [--go]  (8 October 2026) Sends every language at once without per-language
+//             segments, which the Resend plan (three segments) cannot hold: each confirmed
+//             contact in RESEND_SEGMENT_ID gets the issue in their "language" property (set by
+//             newsletter-confirm; English when absent), through POST /emails/batch, with their
+//             own signed unsubscribe link and List-Unsubscribe headers. Contacts who turned the
+//             issue's topic off are skipped. Without --go it only counts who would get what.
+//
+// Topics: an issue's "topic" ("releases" or "tips") files it under Resend's "New versions" or
+// "Tips and events" topic (RESEND_TOPIC_RELEASES / RESEND_TOPIC_TIPS); a broadcast then skips
+// anyone who opted out of that topic on Resend's preference page.
+//
 // Segments: RESEND_SEGMENT_ID is "OutBrick News", everyone who confirmed. If per-language
 // segments exist (RESEND_SEGMENT_ID_EN, _FR, _DE, _ES, _JA; newsletter-confirm adds each
 // subscriber to theirs), each language goes to its own segment. Without them, pass --locale to
@@ -30,7 +41,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { newsletterCampaign, emailLocales, isEmailLocale, PLACEHOLDER_ADDRESS } = await import('../emails/index.ts');
-const { SENDERS, resend, sendEmail } = await import('../emails/resend.ts');
+const { SENDERS, resend, sendEmail, localeEnvSuffix, topicId } = await import('../emails/resend.ts');
 const { toText } = await import('../emails/core.ts');
 const { unsubscribeUrl, normalizeEmail } = await import('../emails/links.ts');
 const { listUnsubscribeHeaders } = await import('../emails/newsletter.ts');
@@ -119,9 +130,77 @@ if (send) {
 }
 
 const main = process.env.RESEND_SEGMENT_ID;
-const segmentFor = (locale) => process.env[`RESEND_SEGMENT_ID_${locale.toUpperCase()}`] ?? (onlyLocale ? main : undefined);
+const topic = topicId(process.env, issue.topic);
+if (issue.topic && !topic) die(`the issue's topic "${issue.topic}" needs ${issue.topic === 'tips' ? 'RESEND_TOPIC_TIPS' : 'RESEND_TOPIC_RELEASES'} (topics are "releases" or "tips")`);
+
+// --- every language, one email per contact -------------------------------------------------
+if (flag('--by-language')) {
+  if (!main) die('--by-language needs RESEND_SEGMENT_ID');
+  const go = flag('--go');
+  if (go && (!address || address === PLACEHOLDER_ADDRESS)) die('set NEWSLETTER_POSTAL_ADDRESS (or "address" in the issue) before a real send');
+  const contacts = [];
+  for (let after; ; ) {
+    const page = await resend(apiKey, `/segments/${encodeURIComponent(main)}/contacts?limit=100${after ? `&after=${encodeURIComponent(after)}` : ''}`, { method: 'GET' });
+    if (!page.ok) die(page.error);
+    const rows = Array.isArray(page.data?.data) ? page.data.data : [];
+    contacts.push(...rows);
+    if (!page.data?.has_more || !rows.length) break;
+    after = toText(rows[rows.length - 1].id);
+  }
+  const byLocale = new Map();
+  let skipped = 0;
+  for (const c of contacts) {
+    if (c.unsubscribed) { skipped++; continue; }
+    const id = toText(c.id);
+    const full = await resend(apiKey, `/contacts/${encodeURIComponent(id)}`, { method: 'GET' });
+    if (!full.ok) die(full.error);
+    if (topic) {
+      const topics = await resend(apiKey, `/contacts/${encodeURIComponent(id)}/topics`, { method: 'GET' });
+      if (!topics.ok) die(topics.error);
+      const rows = Array.isArray(topics.data?.data) ? topics.data.data : [];
+      if (rows.some((t) => t.id === topic && t.subscription === 'opt_out')) { skipped++; continue; }
+    }
+    const asked = toText(full.data?.properties?.language);
+    const locale = isEmailLocale(asked) && issue.locales[asked] ? asked : 'en';
+    if (onlyLocale && locale !== onlyLocale) continue;
+    if (!byLocale.has(locale)) byLocale.set(locale, []);
+    byLocale.get(locale).push(normalizeEmail(c.email));
+  }
+  for (const [locale, list] of byLocale) console.log(`${locale}: ${list.length} recipient(s)`);
+  console.log(`skipped (unsubscribed or topic off): ${skipped}`);
+  if (!go) {
+    console.log('counted only; rerun with --go to send');
+    process.exit(0);
+  }
+  for (const [locale, list] of byLocale) {
+    for (let i = 0; i < list.length; i += 100) {
+      const chunk = list.slice(i, i + 100).filter(Boolean);
+      const batch = chunk.map((to) => {
+        const unsub = unsubscribeUrl('https://www.outbrick.site', apiKey, to, locale);
+        const email = render(locale, unsub);
+        return {
+          from: SENDERS.news.from,
+          to: [to],
+          reply_to: SENDERS.news.replyTo,
+          subject: email.subject,
+          html: email.html,
+          text: email.text,
+          headers: listUnsubscribeHeaders(unsub),
+          tags: [{ name: 'form', value: 'newsletter' }, { name: 'issue', value: String(issue.id).replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 256) }, { name: 'locale', value: locale.replace('-', '_') }],
+        };
+      });
+      // One key per issue, language and chunk: a rerun after a failure never sends a chunk twice.
+      const sent = await resend(apiKey, '/emails/batch', { body: batch, idempotencyKey: `newsletter-${issue.id}-${locale}-${i / 100}` });
+      console.log(sent.ok ? `${locale}: sent ${batch.length} (chunk ${i / 100 + 1})` : `${locale}: ${sent.error}`);
+      if (!sent.ok) process.exitCode = 1;
+    }
+  }
+  process.exit();
+}
+
+const segmentFor = (locale) => process.env[`RESEND_SEGMENT_ID_${localeEnvSuffix(locale)}`] ?? (onlyLocale ? main : undefined);
 for (const locale of locales) {
-  if (!segmentFor(locale)) die(`no segment for ${locale}: set RESEND_SEGMENT_ID_${locale.toUpperCase()}, or pass --locale ${locale} to send it to RESEND_SEGMENT_ID`);
+  if (!segmentFor(locale)) die(`no segment for ${locale}: set RESEND_SEGMENT_ID_${localeEnvSuffix(locale)}, pass --locale ${locale} to send it to RESEND_SEGMENT_ID, or use --by-language`);
 }
 
 for (const locale of locales) {
@@ -129,6 +208,7 @@ for (const locale of locales) {
   const created = await resend(apiKey, '/broadcasts', {
     body: {
       segment_id: segmentFor(locale),
+      ...(topic ? { topic_id: topic } : {}),
       from: SENDERS.news.from,
       reply_to: SENDERS.news.replyTo,
       subject: email.subject,
