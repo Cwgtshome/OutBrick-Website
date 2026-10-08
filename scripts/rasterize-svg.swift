@@ -1,5 +1,5 @@
 // Rasterizes SVG files to PNG at a fixed pixel size with macOS's own SVG renderer (NSImage).
-// Used by scripts/build-email-social-icons.mjs; macOS only.
+// Used by scripts/build-email-images.mjs; macOS only.
 //
 //   swift scripts/rasterize-svg.swift <width> <height> <in.svg> <out.png> [<in.svg> <out.png> ...]
 

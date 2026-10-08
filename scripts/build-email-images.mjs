@@ -1,4 +1,6 @@
-// Draws the email footer's social tiles: the website footer's square icon tiles
+// Draws the email footer's images: the social tiles and the App Store badges.
+//
+// Social tiles: the website footer's square icon tiles
 // (app/globals.css and app/styles/business.css, `footer.site .social a`) as PNGs, because
 // Gmail, Outlook and Yahoo strip inline SVG.
 //
@@ -8,9 +10,14 @@
 // foot (#120c3a), with the 20 px glyph in white, all baked into the image so a client's dark
 // mode cannot recolour one part and not the other.
 //
-//   node --experimental-strip-types scripts/build-email-social-icons.mjs
+// App Store badges: Apple's official, unmodified badges the site already uses
+// (public/assets/badge, see SOURCES.md there), rasterized at 3× their 40 px height, one per
+// badge language (pt-BR uses the English badge, as the site does).
 //
-// Output: public/assets/email/social-<network>.png at 3× (132 × 144, shown at 44 × 48).
+//   node --experimental-strip-types scripts/build-email-images.mjs
+//
+// Output: public/assets/email/social-<network>.png at 3× (132 × 144, shown at 44 × 48) and
+// public/assets/email/app-store-<lang>.png (height 120, shown at 40).
 // Rasterized by macOS's SVG renderer (scripts/rasterize-svg.swift), so run it on a Mac and
 // commit the PNGs; the build does not run it. Rerun it when a glyph or a network changes.
 
@@ -57,6 +64,17 @@ for (const { network } of socialProfiles) {
   fs.writeFileSync(svg, tile(glyphs[network]));
   pairs.push(svg, path.join(outDir, `social-${network}.png`));
 }
-execFileSync('swift', [path.join(root, 'scripts/rasterize-svg.swift'), String(44 * SCALE), String(48 * SCALE), ...pairs], { stdio: 'inherit' });
+const rasterize = (w, h, files) => execFileSync('swift', [path.join(root, 'scripts/rasterize-svg.swift'), String(w), String(h), ...files], { stdio: 'inherit' });
+rasterize(44 * SCALE, 48 * SCALE, pairs);
 fs.rmSync(tmp, { recursive: true, force: true });
-console.log(`[email-social-icons] ${pairs.length / 2} tiles written to ${path.relative(root, outDir)}/`);
+
+const badgeDir = path.join(root, 'public/assets/badge');
+let badges = 0;
+for (const lang of ['en', 'fr', 'de', 'es', 'ja']) {
+  const svg = path.join(badgeDir, lang === 'en' ? 'appstore-black.svg' : `appstore-black-${lang}.svg`);
+  const [, w, h] = fs.readFileSync(svg, 'utf8').match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/) ?? [];
+  if (!w) throw new Error(`no viewBox in ${svg}`);
+  rasterize(Math.round((Number(w) / Number(h)) * 40 * SCALE), 40 * SCALE, [svg, path.join(outDir, `app-store-${lang}.png`)]);
+  badges++;
+}
+console.log(`[email-images] ${pairs.length / 2} tiles and ${badges} badges written to ${path.relative(root, outDir)}/`);

@@ -296,8 +296,8 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
 <!--[if mso]><table role="presentation" width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
 <div style="max-width:600px;margin:0 auto;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
-<tr><td class="ob-head" align="left" bgcolor="${color.ink}" style="background:${color.ink};border-radius:20px 20px 0 0;padding:22px 32px;">
-<a href="${SITE}${ctx.locale === 'en' ? '/' : `/${ctx.locale}`}" style="text-decoration:none;"><img src="${esc(asset('/assets/logo/outbrick-wordmark.png'))}" width="168" height="33" alt="${esc(logoAlt)}" style="display:block;width:168px;height:33px;border:0;color:${color.title};font-family:${f.display};font-size:24px;font-weight:600;"></a>
+<tr><td class="ob-head" align="center" bgcolor="${color.ink}" style="background:${color.ink};border-radius:20px 20px 0 0;padding:22px 32px;text-align:center;">
+<a href="${SITE}${ctx.locale === 'en' ? '/' : `/${ctx.locale}`}" style="display:inline-block;text-decoration:none;"><img src="${esc(asset('/assets/logo/outbrick-wordmark.png'))}" width="168" height="33" alt="${esc(logoAlt)}" style="display:block;margin:0 auto;width:168px;height:33px;border:0;color:${color.title};font-family:${f.display};font-size:24px;font-weight:600;"></a>
 </td></tr>
 <tr><td style="font-size:0;line-height:0;">${courseStripe()}</td></tr>
 <tr><td class="ob-paper ob-pad" bgcolor="${color.paper}" style="background:${color.paper};padding:36px 40px 18px;overflow-wrap:break-word;word-wrap:break-word;border-left:1px solid ${color.paperEdge};border-right:1px solid ${color.paperEdge};">
