@@ -114,7 +114,7 @@ export const es11: ExtraGuides = {
         paragraphs: [
           'Otro jugador explicó que le funcionaba mejor la navegación con deslizamientos rápidos del dedo, pero que necesitaba recorrer el tablero con el dedo para entender su distribución. Lo que faltaba era un anuncio explícito de las casillas vacías. Sin él, no podía interpretar con seguridad una zona silenciosa como espacio disponible. Es una observación precisa sobre lo que un puzle necesita comunicar.',
           'Imagina un tablero con un ladrillo, una puerta y un hueco entre ambos. Para predecir el deslizamiento, necesitas saber si ese hueco está despejado. El silencio por sí solo deja abiertas varias posibilidades: espacio vacío, un elemento que no se ha detectado o un punto fuera de la zona del tablero. Un anuncio claro de casilla vacía eliminaría una fuente de incertidumbre.',
-          'El espacio vacío forma parte de la información del puzle. Ayuda a distinguir un recorrido bloqueado de uno posible y facilita explorar la relación entre las piezas. Aun así, no garantiza que un ladrillo se detenga en ese espacio: un deslizamiento completo estándar de OutBrick continúa hasta que algo frena el ladrillo. Nuestra [guía de movimiento](/blog/outbrick-voiceover-slide-actions) explica por qué el punto de parada importa tanto como el hueco libre.',
+          'El espacio vacío forma parte de la información del puzle. Ayuda a distinguir un recorrido bloqueado de uno posible y facilita explorar la relación entre las piezas. Aun así, no garantiza que un ladrillo se detenga en ese espacio: en OutBrick, un deslizamiento hasta el final continúa hasta que algo frena el ladrillo, y una acción de deslizamiento más corta indica cuántas casillas recorre. Nuestra [guía de movimiento](/blog/outbrick-voiceover-slide-actions) explica por qué el punto de parada importa tanto como el hueco libre.',
         ],
       },
       'a-small-orientation-routine': {
@@ -159,29 +159,29 @@ export const es11: ExtraGuides = {
   },
   'outbrick-voiceover-slide-actions': {
     title: 'Cómo deslizar ladrillos de OutBrick con VoiceOver',
-    dek: 'Aprende las cuatro direcciones de OutBrick, sus puertas y la regla de deslizamiento, con acciones de VoiceOver y las mejoras de aprendizaje previstas.',
+    dek: 'Aprende las cuatro direcciones de OutBrick, sus puertas y las distancias de deslizamiento, con acciones de VoiceOver y las mejoras de aprendizaje previstas.',
     imageAlt: 'Ilustración de OutBrick con un teléfono, ladrillos de colores y dos personajes de ladrillo sobre un fondo azul marino.',
     tags: ['accesibilidad', 'VoiceOver', 'diseño inclusivo', 'juegos de puzles', 'primeros pasos'],
     intro: 'Preguntarte cómo mover un ladrillo hacia abajo es completamente razonable cuando un juego no ha explicado bien sus controles. Un jugador de AppleVis entendía que los ladrillos de OutBrick tenían que salir del tablero, pero creía que solo podían moverse hacia arriba y no encontraba un tutorial. Nuestra respuesta explicó las cuatro direcciones, las puertas a juego y las acciones de VoiceOver, y prometió explicaciones más claras en la próxima actualización. Esta guía reúne esas piezas para ayudarte a distinguir entre elegir una dirección, entender un recorrido y decidir qué ladrillo debe moverse primero.',
     keyTakeaways: [
       'Un ladrillo puede deslizarse hacia arriba, abajo, izquierda o derecha cuando el recorrido está libre, y sale por una puerta de su mismo color.',
       'Con el foco en un ladrillo, los deslizamientos del dedo hacia arriba y abajo permiten elegir entre las acciones de deslizamiento de VoiceOver; esos gestos no limitan el movimiento a las direcciones verticales.',
-      'Para la próxima actualización están previstas tarjetas breves de explicación, tableros introductorios más asequibles y más movimientos en los primeros tableros.',
+      'Las tarjetas breves de explicación, prometidas para la próxima actualización, llegaron con la versión 5.1; los tableros introductorios más asequibles y más movimientos en los primeros tableros se prometieron a la vez.',
     ],
     sections: {
       'match-the-brick-to-its-gate': {
         title: 'Primero encuentra el destino, esté donde esté',
         paragraphs: [
-          'El objetivo básico es sacar los ladrillos por puertas de su mismo color. Un ladrillo rojo necesita su puerta roja; llegar a otra puerta no cumple esa regla de correspondencia. Las puertas pueden estar en cualquier lado del tablero. No hay una regla general que obligue a todos los ladrillos a moverse hacia arriba ni que sitúe siempre la salida correcta en el borde superior.',
+          'Un objetivo básico es llevar los ladrillos a casa por puertas de su mismo color. Un ladrillo rojo necesita su puerta roja; llegar a otra puerta no cumple esa regla de correspondencia. Las puertas pueden estar en cualquier lado del tablero. No hay una regla general que obligue a todos los ladrillos a moverse hacia arriba ni que sitúe siempre la salida correcta en el borde superior.',
           'OutBrick etiqueta el color, la forma y la posición de cada ladrillo para VoiceOver, y relaciona los ladrillos con sus puertas mediante símbolos distintos. Empieza por identificar la pieza que quieres mover y localizar su destino. Después examina el recorrido que los separa. Una salida puede estar cerca de un ladrillo y aun así exigir que otras piezas se muevan primero.',
           'Imagina una puerta del mismo color a la derecha, con otro ladrillo entre ella y la pieza que has seleccionado. El problema inmediato es ese ladrillo intermedio. Buscar una acción hacia arriba no despejará un recorrido que requiere moverse de lado. Para localizar las piezas antes de elegir una acción, consulta nuestra [guía para orientarte en el tablero con VoiceOver](/blog/outbrick-voiceover-spatial-board).',
         ],
       },
       'predict-the-stopping-point': {
-        title: 'El deslizamiento continúa hasta que algo lo frena',
+        title: 'Elige hasta dónde llega un deslizamiento',
         paragraphs: [
-          'En el deslizamiento direccional estándar, OutBrick aplica una regla de deslizamiento hasta el tope: el ladrillo recorre el camino disponible hasta que algo lo frena. Escucha el nombre completo de la acción y planifica dónde acabará la que elijas. Antes de decidirte por un recorrido, piensa tanto en si el ladrillo puede empezar a moverse como en dónde terminará ese movimiento.',
-          'Un ejemplo imaginado sencillo ayuda a entenderlo. A la izquierda de un ladrillo hay varios espacios libres y, después, otra pieza. Un deslizamiento completo estándar hacia la izquierda lleva el ladrillo seleccionado por el espacio disponible hasta que algo lo detiene. No se para automáticamente después de la primera casilla libre. Por tanto, la otra pieza puede ser un obstáculo o un punto de parada útil, según tu plan.',
+          'Desde la versión 5.1, cada acción de deslizamiento de OutBrick indica una distancia además de una dirección, como «Deslizar hacia la derecha 1 casilla» o «Deslizar hacia arriba hasta el final, 3 casillas»: el ladrillo recorre el camino disponible y se detiene donde dice la acción. Escucha el nombre completo de la acción y planifica dónde acabará la que elijas. Antes de decidirte por un recorrido, piensa tanto en si el ladrillo puede empezar a moverse como en dónde terminará ese movimiento.',
+          'Un ejemplo imaginado sencillo ayuda a entenderlo. A la izquierda de un ladrillo hay varios espacios libres y, después, otra pieza. Un deslizamiento hasta el final hacia la izquierda lleva el ladrillo seleccionado por el espacio disponible hasta que la otra pieza lo detiene; una acción más corta se para tras el número de casillas que indica. Por tanto, la otra pieza puede ser un obstáculo o un punto de parada útil, según tu plan.',
           'Esto hace que el orden importe. Apartar un ladrillo que bloquea el paso puede abrir una salida, pero mover demasiado pronto una pieza que servía de tope puede cambiar un deslizamiento posterior. Puedes pensar en esa secuencia antes de actuar. Nuestra [guía sobre el reto de los puzles sin reloj](/blog/outbrick-untimed-puzzle-challenge) explica la diferencia entre el tiempo para pensar y el número de movimientos disponibles: tener tiempo para examinar un tablero no te da movimientos ilimitados.',
         ],
       },
@@ -225,8 +225,8 @@ export const es11: ExtraGuides = {
     faqs: [
       { question: '¿Pueden moverse los ladrillos de OutBrick hacia abajo y hacia los lados con VoiceOver?', answer: 'Sí. Nuestras indicaciones como desarrolladores describen acciones de deslizamiento hacia arriba, abajo, izquierda y derecha cuando el espacio permite el movimiento. Las puertas pueden estar en cualquier lado del tablero.' },
       { question: '¿Los gestos de VoiceOver hacia arriba y abajo significan que el ladrillo solo se mueve en vertical?', answer: 'No. Con el foco en un ladrillo, nuestras indicaciones usan deslizamientos del dedo hacia arriba y abajo para elegir entre las acciones direccionales. Escucha el nombre de la acción seleccionada, que puede indicar izquierda, derecha, arriba o abajo.' },
-      { question: '¿Por qué un ladrillo de OutBrick pasa de largo por una casilla vacía?', answer: 'Un deslizamiento direccional completo estándar sigue la regla de deslizamiento hasta el tope, así que el ladrillo continúa hasta que algo lo frena. Escucha el nombre completo de la acción para entender qué movimiento estás eligiendo. Ten en cuenta tanto el punto de parada previsto como el recorrido disponible.' },
-      { question: '¿Dónde están las tarjetas de explicación descritas en las respuestas de AppleVis?', answer: 'Las respuestas del 2 de octubre de 2026 prometen tarjetas de explicación para la próxima actualización y no indican dónde encontrar un tutorial disponible actualmente. Los primeros tableros más asequibles y los movimientos introductorios adicionales también son compromisos futuros en esa conversación.' },
+      { question: '¿Por qué un ladrillo de OutBrick pasa de largo por una casilla vacía?', answer: 'Un deslizamiento hasta el final lleva el ladrillo hasta que algo lo frena; desde la versión 5.1, otras acciones indican una distancia más corta, como «Deslizar hacia la derecha 1 casilla». Escucha el nombre completo de la acción para entender qué movimiento estás eligiendo. Ten en cuenta tanto el punto de parada previsto como el recorrido disponible.' },
+      { question: '¿Dónde están las tarjetas de explicación descritas en las respuestas de AppleVis?', answer: 'Las respuestas del 2 de octubre de 2026 prometían tarjetas de explicación para la próxima actualización. La versión 5.1 las añadió: aparece una tarjeta breve la primera vez que encuentras cada idea nueva. Los primeros tableros más asequibles y los movimientos introductorios adicionales también eran compromisos de esa conversación.' },
     ],
   },
   'outbrick-untimed-puzzle-challenge': {
@@ -238,7 +238,7 @@ export const es11: ExtraGuides = {
     keyTakeaways: [
       'Jugar sin reloj deja espacio para explorar el tablero; el número de movimientos disponibles sigue limitando las acciones con las que lo resuelves.',
       'Describimos OutBrick como un juego sin reloj, aunque un jugador nos comunicó que había encontrado uno. La conversación deja esa discrepancia sin resolver.',
-      'Nuestros planes para la próxima actualización incluyen primeros tableros más asequibles, mecánicas presentadas de una en una y más movimientos en los tableros iniciales.',
+      'Nuestros planes del 2 de octubre incluían primeros tableros más asequibles, mecánicas presentadas de una en una y más movimientos en los tableros iniciales; la versión 5.1 añadió una tarjeta breve la primera vez que encuentras cada idea nueva.',
     ],
     sections: {
       'understanding-before-moving': {
@@ -297,7 +297,7 @@ export const es11: ExtraGuides = {
     faqs: [
       { question: '¿Promete OutBrick actualmente partidas sin límite de tiempo?', answer: 'Sí. Nuestra respuesta del 2 de octubre en AppleVis y las notas publicadas de la versión 4.2 dicen que OutBrick no tiene reloj. Antes, en esa misma conversación, un jugador había comunicado que había encontrado uno, y el hilo no determina las versiones afectadas ni explica esa discrepancia.' },
       { question: '¿No tener reloj significa tener movimientos ilimitados?', answer: 'No. OutBrick mantiene las restricciones de movimientos, así que puedes tomarte tiempo para examinar un tablero y seguir teniendo que resolverlo dentro del margen disponible. Las vidas y las compras son partes independientes de la experiencia.' },
-      { question: '¿Ya se han publicado los primeros tableros más asequibles?', answer: 'Los tableros iniciales más asequibles, las tarjetas de explicación cuando aparece una idea por primera vez y unos márgenes de movimientos iniciales más generosos están previstos para la próxima actualización. Ese trabajo sigue en curso.' },
+      { question: '¿Ya se han publicado los primeros tableros más asequibles?', answer: 'El 2 de octubre de 2026, los tableros iniciales más asequibles, las tarjetas de explicación cuando aparece una idea por primera vez y unos márgenes de movimientos iniciales más generosos estaban previstos para la próxima actualización. Desde entonces, la versión 5.1 añadió una tarjeta breve la primera vez que encuentras cada idea nueva; consulta las [notas de la versión](/whats-new) para los demás cambios.' },
       { question: '¿El diseño de puzles accesibles exige que los puzles sean fáciles?', answer: 'Los jugadores pueden valorar una complejidad considerable y, al mismo tiempo, necesitar información y controles fiables. En la práctica, un primer paso útil es identificar si la dificultad viene de planificar, aprender una regla o acceder a la interfaz.' },
     ],
   },
@@ -310,7 +310,7 @@ export const es11: ExtraGuides = {
     keyTakeaways: [
       'Que un botón se anuncie no demuestra que se active correctamente, y completar un tablero no demuestra que el progreso quede registrado.',
       'Nuestro trabajo para la próxima actualización abarca la activación de la tienda con VoiceOver, la pantalla de inicio, los anuncios de puertas congeladas y el progreso de las misiones.',
-      'Confirmamos que la app está disponible en italiano y un jugador también lo confirmó; los cinco idiomas de publicación del sitio web son una lista aparte.',
+      'Confirmamos que la app está disponible en italiano y un jugador también lo confirmó; los seis idiomas de publicación del sitio web son una lista aparte.',
     ],
     sections: {
       'follow-the-whole-session': {
@@ -352,7 +352,7 @@ export const es11: ExtraGuides = {
         title: 'El italiano en la app es una cuestión de idiomas aparte',
         paragraphs: [
           'Una persona de la comunidad preguntó si OutBrick estaba disponible en italiano. Confirmamos la compatibilidad completa con el italiano y otros once idiomas en la app, y otro jugador confirmó que el italiano estaba disponible por su propia experiencia. Nuestra respuesta no enumeraba los otros once idiomas, pero la respuesta a esta pregunta concreta es sencilla: sí, la app está disponible en italiano.',
-          'Nuestro sitio web publica en inglés, francés, alemán, español y japonés. Esa lista es independiente de los idiomas de la app: puedes usarla en italiano aunque el sitio web no tenga una edición en italiano. Cuando buscas ayuda, el idioma en el que juegas y los disponibles para un artículo concreto pueden ser distintos.',
+          'Nuestro sitio web publica en inglés, francés, alemán, español, japonés y portugués de Brasil. Esa lista es independiente de los idiomas de la app: puedes usarla en italiano aunque el sitio web no tenga una edición en italiano. Cuando buscas ayuda, el idioma en el que juegas y los disponibles para un artículo concreto pueden ser distintos.',
           'La confirmación de la comunidad también mencionaba una actualización que había llegado ese día, sin decir que los fallos anteriores se hubieran resuelto. Nuestra respuesta posterior seguía describiendo las correcciones como trabajo pendiente. Un aviso de actualización por sí solo no te dice qué problema concreto ha cambiado, así que consulta [las notas de versión publicadas](/whats-new) cuando quieras comprobar una mejora específica. Relacionar la versión con el cambio hace que esas conversaciones sean mucho más fáciles de seguir.',
           'Para un aviso relacionado con el idioma, identifica la pantalla y el texto que falta, no se entiende o aparece sin traducir cuando debería estar traducido. No hace falta explicar tu procedencia ni justificar por qué prefieres un idioma concreto.',
         ],
@@ -375,7 +375,7 @@ export const es11: ExtraGuides = {
     faqs: [
       { question: '¿Ya se han corregido los problemas comunicados de la tienda y la pantalla de inicio?', answer: 'Las mejoras de la tienda y la pantalla de inicio están previstas para la próxima actualización y siguen en desarrollo. Estamos trabajando para que los botones de los paquetes abran la pantalla de compra con VoiceOver y para que Inicio se abra más rápido.' },
       { question: '¿Qué deberían anunciar las puertas congeladas?', answer: 'Tenemos previsto que las puertas congeladas anuncien su estado de congelación y los movimientos que faltan para que se derrita el hielo. También queremos que derretirlo cuente para las misiones de puertas congeladas, de modo que el progreso que consigas quede reflejado en la misión.' },
-      { question: '¿Está OutBrick disponible en italiano?', answer: 'Sí. Confirmamos en AppleVis que la app está disponible en italiano y una persona de la comunidad también lo confirmó. Nuestra respuesta menciona doce idiomas de la app sin enumerarlos todos; el sitio web publica, por separado, en inglés, francés, alemán, español y japonés.' },
+      { question: '¿Está OutBrick disponible en italiano?', answer: 'Sí. Confirmamos en AppleVis que la app está disponible en italiano y una persona de la comunidad también lo confirmó. Nuestra respuesta menciona doce idiomas de la app sin enumerarlos todos; el sitio web publica, por separado, en inglés, francés, alemán, español, japonés y portugués de Brasil.' },
       { question: '¿Cuál es la forma más útil de comunicar un problema de accesibilidad?', answer: 'Cuéntanos la tarea, los pasos que seguiste, el resultado que esperabas y lo que ocurrió en su lugar; añade la versión de la app si la tienes a mano. Nuestro [artículo sobre el compromiso con la accesibilidad](/blog/outbrick-accessibility-commitment) explica cómo abordamos los comentarios de los jugadores; no necesitas comprar nada ni compartir información privada de tu cuenta.' },
     ],
   },

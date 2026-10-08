@@ -282,7 +282,7 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
         submissionId: sampleId,
         createdAt: sampleAt,
         acknowledgement: 'sent',
-        data: { name: sampleNames[locale], email: sampleEmails[locale], topic: 'bug', message: sampleMessages[locale], device: 'iPhone 17 Pro', 'ios-version': '27.0', 'app-version': '5.0.1', locale, referrer: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/contact`, user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 27_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Mobile/15E148 Safari/604.1', ip: '203.0.113.7', 'bot-field': '' },
+        data: { name: sampleNames[locale], email: sampleEmails[locale], topic: 'bug', message: sampleMessages[locale], device: 'iPhone 17 Pro', 'ios-version': '27.0', 'app-version': '5.1.1', locale, referrer: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/contact`, user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 27_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Mobile/15E148 Safari/604.1', ip: '203.0.113.7', 'bot-field': '' },
       });
     case 'team-careers':
       return teamNotification({

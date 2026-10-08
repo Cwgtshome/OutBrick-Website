@@ -328,7 +328,7 @@ export const es5: ExtraGuides = {
         title: 'Por qué los juegos sencillos envejecen bien',
         paragraphs: [
           'Algunos juegos se quedan anticuados enseguida: sus gráficos, sus interfaces, sus supuestos. Otros son casi atemporales porque su núcleo es una regla que cabe en la cabeza. Bloques que caen, fichas que se deslizan, la cuadrícula de un crucigrama. La historia de estas formas es larga, y la contamos en [por qué perduran los crucigramas, los puzles y los rompecabezas deslizantes](/blog/why-puzzles-endure) y en la [historia de los rompecabezas de bloques deslizantes](/blog/history-of-sliding-block-puzzles).',
-          'OutBrick es un juego nuevo construido sobre una de esas reglas antiguas: desliza un ladrillo y avanzará hasta que algo lo detenga, y cada ladrillo sale por la puerta de su color. Para muchos jugadores, parte del placer es reconocerlo: la sensación de un rompecabezas de bandeja de madera o de un puzle de aparcamiento de la infancia, ahora en color. Si te suena, [prueba un tablero en tu navegador](/play) y mira qué te trae de vuelta.',
+          'OutBrick es un juego nuevo nacido de una de esas reglas antiguas: en sus tableros clásicos, que se pueden seguir jugando en el navegador, un ladrillo avanza hasta que algo lo detiene y sale por la puerta de su color. En iPhone y iPad ahora suma al deslizamiento intercambios y combinaciones de tres en línea. Para muchos jugadores, parte del placer es reconocerlo: la sensación de un rompecabezas de bandeja de madera o de un puzle de aparcamiento de la infancia, ahora en color. Si te suena, [prueba un tablero en tu navegador](/play) y mira qué te trae de vuelta.',
         ],
       },
       'enjoying-nostalgia-well': {
@@ -477,7 +477,7 @@ export const es5: ExtraGuides = {
         title: 'Los rompecabezas como cultura, no solo como pasatiempo',
         paragraphs: [
           'La última razón por la que perduran los rompecabezas es social. Los crucigramas vienen con un vocabulario propio, autores con personalidad y aficionados que hablan de ellos en el desayuno. Los puzles se quedan a medio hacer en la mesa familiar durante las vacaciones, y todo el que pasa añade una pieza. Los rompecabezas dan a la gente algo que hacer codo con codo y algo de lo que hablar después, quizá la cualidad más duradera de todas. Exploramos ese lado diario y compartido en [por qué un rompecabezas diario se convierte en un ritual compartido](/blog/daily-puzzle-shared-ritual).',
-          'OutBrick es nuestra pequeña aportación a una de estas familias antiguas. Su regla la reconocería un aficionado victoriano: desliza un ladrillo hasta que se detenga y saca cada ladrillo por la puerta de su color. Puedes [probar un tablero en tu navegador](/play) y ver cuál de los viejos placeres te devuelve.',
+          'OutBrick es nuestra pequeña aportación a una de estas familias antiguas. Su regla clásica, que se puede seguir jugando en el navegador, la reconocería un aficionado victoriano: desliza un ladrillo hasta que se detenga y saca cada ladrillo por la puerta de su color. En iPhone y iPad, los ladrillos ahora también se intercambian y se combinan de tres en tres. Puedes [probar un tablero en tu navegador](/play) y ver cuál de los viejos placeres te devuelve.',
         ],
       },
     },
@@ -631,10 +631,10 @@ export const es5: ExtraGuides = {
   },
   'playing-across-devices': {
     title: 'Jugar en varios dispositivos: continuidad y sincronización',
-    dek: 'Móvil en el tren, tablet en el sofá, tele por la noche: qué dicen los estudios sobre la continuidad y cómo sincroniza OutBrick en seis plataformas.',
+    dek: 'Móvil en el tren, tablet en el sofá, tele por la noche: qué dicen los estudios sobre la continuidad y cómo sincroniza OutBrick en cinco plataformas.',
     imageAlt: 'Un amigo de ladrillo rosa con una varita de estrella y Bloo a ambos lados de un teléfono que muestra el mapa del Viaje de OutBrick en la Fábrica de Botones',
     tags: ['jugar en varios dispositivos', 'sincronización con iCloud', 'dispositivos Apple', 'diseño de juegos', 'juegos para móvil'],
-    intro: 'Muchos vivimos ya repartidos entre varias pantallas. Un juego que empieza en el móvil durante el trayecto al trabajo continúa por la tarde en una tablet, y quizá en la tele el fin de semana. Cuando funciona, apenas te das cuenta. Cuando no, llega esa irritación tan particular de ver bloqueado un nivel que sabes que despejaste, o de tener el progreso varado en un dispositivo que está en otra habitación. Los investigadores de interacción persona-ordenador llevan más de una década estudiando la vida con varios dispositivos, sobre todo en entornos de trabajo, y sus resultados se trasladan muy bien al juego. Hacemos OutBrick para seis plataformas de Apple, así que esto también es un repaso a las decisiones que tomamos.',
+    intro: 'Muchos vivimos ya repartidos entre varias pantallas. Un juego que empieza en el móvil durante el trayecto al trabajo continúa por la tarde en una tablet, y quizá en la tele el fin de semana. Cuando funciona, apenas te das cuenta. Cuando no, llega esa irritación tan particular de ver bloqueado un nivel que sabes que despejaste, o de tener el progreso varado en un dispositivo que está en otra habitación. Los investigadores de interacción persona-ordenador llevan más de una década estudiando la vida con varios dispositivos, sobre todo en entornos de trabajo, y sus resultados se trasladan muy bien al juego. Hacemos OutBrick para cinco plataformas de Apple, así que esto también es un repaso a las decisiones que tomamos.',
     keyTakeaways: [
       'La gente usa los dispositivos uno tras otro mucho más que todos a la vez, lo que convierte la continuidad en el principal problema que resolver.',
       'En todos los estudios, trasladar la información y el estado entre dispositivos es sistemáticamente lo más difícil de usar varios.',
@@ -673,9 +673,9 @@ export const es5: ExtraGuides = {
         ],
       },
       'how-outbrick-does-it': {
-        title: 'Cómo gestiona OutBrick seis plataformas',
+        title: 'Cómo gestiona OutBrick cinco plataformas',
         paragraphs: [
-          'OutBrick funciona en iPhone, iPad, Mac, Apple TV, Apple Vision Pro y Apple Watch, y tu progreso se sincroniza a través de iCloud, así que tu punto del Viaje te sigue a cualquier dispositivo que cojas. El juego también funciona sin conexión, de modo que una mala cobertura en un dispositivo no te impide jugar. Las notas de la versión 4.2 en [novedades](/whats-new) mencionan Handoff junto a los widgets y a los enlaces de reto que ahora abren la pantalla que indican.',
+          'OutBrick funciona en iPhone, iPad, Mac, Apple Vision Pro y Apple Watch, y tu progreso se sincroniza a través de iCloud, así que tu punto del Viaje te sigue a cualquier dispositivo que cojas. El juego también funciona sin conexión, de modo que una mala cobertura en un dispositivo no te impide jugar. Las notas de la versión 4.2 en [novedades](/whats-new) mencionan Handoff junto a los widgets y a los enlaces de reto que ahora abren la pantalla que indican.',
           'Las reglas son las mismas en todas partes: los mismos tableros, los mismos límites de movimientos, sin reloj, con los símbolos para daltónicos activados por defecto. Lo que cambia es la adaptación a la pantalla. Hemos escrito por separado sobre cómo diseñar para la más pequeña y la más inusual de ellas, en [juegos de rompecabezas para Apple Watch](/blog/apple-watch-puzzle-games) y [juegos de rompecabezas para Apple Vision Pro](/blog/apple-vision-pro-puzzle-games).',
         ],
       },
@@ -697,7 +697,7 @@ export const es5: ExtraGuides = {
     faqs: [
       { question: '¿Cómo usa la gente varios dispositivos?', answer: 'Sobre todo uno tras otro. Un estudio de diario sobre el uso cotidiano de varios dispositivos encontró que pasar una tarea de un dispositivo a otro era uno de los patrones principales, junto con tomar prestadas las capacidades de un dispositivo para otro y usar dispositivos en paralelo.' },
       { question: '¿Qué es lo más difícil de usar varios dispositivos?', answer: 'Los estudios desde 2008 han encontrado sistemáticamente que es trasladar la información y el progreso entre ellos. La gente quiere una sincronización en la que pueda confiar, para que el segundo dispositivo sepa exactamente dónde lo dejó el primero.' },
-      { question: '¿OutBrick se sincroniza entre iPhone, iPad y Apple TV?', answer: 'Sí. OutBrick funciona en iPhone, iPad, Mac, Apple TV, Apple Vision Pro y Apple Watch y sincroniza tu progreso a través de iCloud. También funciona sin conexión.' },
+      { question: '¿OutBrick se sincroniza entre iPhone, iPad y Mac?', answer: 'Sí. OutBrick funciona en iPhone, iPad, Mac, Apple Vision Pro y Apple Watch y sincroniza tu progreso a través de iCloud. También funciona sin conexión.' },
       { question: '¿Qué hace bueno a un juego multidispositivo?', answer: 'Una sincronización fiable sin cuentas extra, juego sin conexión que se pone al día después, controles adaptados a cada pantalla y las mismas reglas y tableros en todas partes, para que puedas parar en un dispositivo y seguir limpiamente en otro.' },
     ],
   },

@@ -66,7 +66,7 @@ export default function DailyPage() {
       '@type': 'MobileApplication',
       name: 'OutBrick: Block Sort Puzzle',
       applicationCategory: 'GameApplication',
-      operatingSystem: 'iOS, iPadOS, macOS, tvOS, visionOS, watchOS',
+      operatingSystem: 'iOS, iPadOS, macOS, visionOS, watchOS',
       installUrl: APP_STORE_URL,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     },

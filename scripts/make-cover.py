@@ -7,7 +7,8 @@
 Each cover is 1600 x 900 WebP: the navy brick grid, a floor band, a phone showing a real
 capture (a board, the Journey map, the collection, a village), two of the nine friends and a few
 floating bricks. The slug seeds every choice, so a cover is stable across runs, and the
-category colour tints the floor and one brick. Output: public/blog/<slug>.webp (about 60 KB).
+category colour tints the floor and one brick. Output: public/blog/<slug>.webp (about 60 KB)
+plus its 960px srcset sibling <slug>-960.webp.
 """
 
 import hashlib
@@ -137,7 +138,10 @@ def make(slug, colour, force=False):
         im.alpha_composite(f, (x + rng.randint(-30, 10), H - size - 40 + rng.randint(-20, 10)))
 
     out.parent.mkdir(parents=True, exist_ok=True)
-    im.convert('RGB').save(out, 'WEBP', quality=80, method=6)
+    rgb = im.convert('RGB')
+    rgb.save(out, 'WEBP', quality=80, method=6)
+    # The 960px sibling the pages offer in srcset (lib/images.ts coverSrcSet).
+    rgb.resize((960, 540), Image.LANCZOS).save(out.with_name(f'{slug}-960.webp'), 'WEBP', quality=80, method=6)
     return True
 
 

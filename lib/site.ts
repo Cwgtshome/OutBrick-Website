@@ -4,21 +4,29 @@ export const siteUrl = 'https://www.outbrick.site';
 export type SocialNetwork = 'tiktok' | 'youtube' | 'instagram' | 'snapchat' | 'x';
 
 /**
- * OutBrick's social profiles, all on the handle `outbrick`. Every row is shown in the footer;
- * only `live` rows are listed as `sameAs` in the Organization structured data (lib/structured-data.ts),
- * because `sameAs` tells search engines "this profile is us" and a reserved-but-empty profile
- * should not be vouched for yet. Flip `live` to true once a profile has posted.
+ * OutBrick's social profiles, all on the handle `outbrick`. Rows with `shown` are linked from the
+ * website footer and the email footer; only `live` and `shown` rows are listed as `sameAs` in the
+ * Organization structured data (lib/structured-data.ts), because `sameAs` tells search engines
+ * "this profile is us" and a reserved-but-empty profile should not be vouched for yet. Flip `live`
+ * to true once a profile has posted.
+ *
+ * Snapchat is kept but not shown: on 8 October 2026 both snapchat.com/add/outbrick and
+ * snapchat.com/@outbrick answered 404, so the profile does not exist yet. Set `shown: true` once
+ * it does (the footer icon and the email tile, public/assets/email/social-snapchat.png, are ready).
  */
-export const socialProfiles: { network: SocialNetwork; label: string; url: string; live: boolean }[] = [
-  { network: 'tiktok', label: 'TikTok', url: 'https://www.tiktok.com/@outbrick', live: true },
-  { network: 'youtube', label: 'YouTube', url: 'https://www.youtube.com/@outbrick', live: false },
-  { network: 'instagram', label: 'Instagram', url: 'https://www.instagram.com/outbrick', live: false },
-  { network: 'snapchat', label: 'Snapchat', url: 'https://www.snapchat.com/add/outbrick', live: false },
-  { network: 'x', label: 'X (Twitter)', url: 'https://x.com/outbrick', live: false },
+export const socialProfiles: { network: SocialNetwork; label: string; url: string; live: boolean; shown: boolean }[] = [
+  { network: 'tiktok', label: 'TikTok', url: 'https://www.tiktok.com/@outbrick', live: true, shown: true },
+  { network: 'youtube', label: 'YouTube', url: 'https://www.youtube.com/@outbrick', live: false, shown: true },
+  { network: 'instagram', label: 'Instagram', url: 'https://www.instagram.com/outbrick', live: false, shown: true },
+  { network: 'snapchat', label: 'Snapchat', url: 'https://www.snapchat.com/add/outbrick', live: false, shown: false },
+  { network: 'x', label: 'X (Twitter)', url: 'https://x.com/outbrick', live: false, shown: true },
 ];
 
+/** The profiles the footers link to. */
+export const shownSocialProfiles = () => socialProfiles.filter((profile) => profile.shown);
+
 /** The profiles the Organization structured data vouches for. */
-export const liveSocialUrls = () => socialProfiles.filter((profile) => profile.live).map((profile) => profile.url);
+export const liveSocialUrls = () => shownSocialProfiles().filter((profile) => profile.live).map((profile) => profile.url);
 
 
 /**

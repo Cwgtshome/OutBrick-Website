@@ -5,6 +5,7 @@ import { cast, passes, villages } from '../../lib/villages';
 import { chromeCopy } from '../../lib/i18n/chrome';
 import { homeCopy } from '../../lib/i18n/home';
 import { localizedAsset } from '../../lib/i18n/assets';
+import { coverSrcSet, friendSrcSet } from '../../lib/images';
 import { localizedVillageName } from '../../lib/i18n/village-names';
 import { localeAlternates, localePath, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { articles as journalArticles } from '../../lib/blog';
@@ -54,10 +55,11 @@ const stickers = ['cleared', 'bloo-cheer', 'beat-the-target', 'peach-think', 'on
 const stepShots = [
   // Steps 1 and 2 are cut from the current store frames at full resolution (public/assets/screens).
   // The clear card in the store set still shows the withdrawn Rush bonus, so step 3 keeps the
-  // older, smaller capture until a new one is shot (docs/CAPTURES.md).
-  { n: 1, src: '/assets/screens/iphone-board-360.webp', srcSet: '/assets/screens/iphone-board-360.webp 360w, /assets/screens/iphone-board-720.webp 720w', w: 737, h: 1564 },
-  { n: 2, src: '/assets/screens/iphone-board-shaped-360.webp', srcSet: '/assets/screens/iphone-board-shaped-360.webp 360w, /assets/screens/iphone-board-shaped-720.webp 720w', w: 737, h: 1564 },
-  { n: 3, src: '/assets/shots/b-clear.jpg', srcSet: undefined, w: 560, h: 1217 },
+  // older, smaller capture until a new one is shot (docs/CAPTURES.md). On a phone the shots are
+  // 116px thumbnails, hence the 240w variants; step 3 is the same capture as WebP.
+  { n: 1, src: '/assets/screens/iphone-board-360.webp', srcSet: '/assets/screens/iphone-board-240.webp 240w, /assets/screens/iphone-board-360.webp 360w, /assets/screens/iphone-board-720.webp 720w', w: 737, h: 1564 },
+  { n: 2, src: '/assets/screens/iphone-board-shaped-360.webp', srcSet: '/assets/screens/iphone-board-shaped-240.webp 240w, /assets/screens/iphone-board-shaped-360.webp 360w, /assets/screens/iphone-board-shaped-720.webp 720w', w: 737, h: 1564 },
+  { n: 3, src: '/assets/shots/b-clear.webp', srcSet: undefined, w: 560, h: 1217 },
 ];
 
 const plaqueStyle = [
@@ -84,7 +86,7 @@ const devices = [
   { name: 'iPhone', b: '#d42f29', ink: '#fff' },
   { name: 'iPad', b: '#ffc53d' },
   { name: 'Mac', b: '#26b9b0' },
-  { name: 'Apple TV', b: '#7b5cf0', ink: '#fff' },
+  // Apple TV is not on the App Store (checked 8 October 2026); add it back when it is.
   { name: 'Apple Vision Pro', b: '#3b8bf0' },
   { name: 'Apple Watch', b: '#3fc544' },
 ];
@@ -186,22 +188,22 @@ export function HomePage({ locale }: { locale: Locale }) {
                 {/* The friends peeking round the phone lean toward the pointer, and play their
                     move when it comes close (village-motion.tsx; moves in styles/friend-moves.css). */}
                 <span className="peek peek-sprout" data-friend-move="sprout" data-peek="">
-                  <img className="fm-actor" src="/assets/friends/sprout.webp" alt="" width={180} height={180} fetchPriority="low" decoding="async" />
+                  <img className="fm-actor" src="/assets/friends/sprout.webp" srcSet={friendSrcSet('sprout')} sizes="(max-width: 520px) 92px, 150px" alt="" width={180} height={180} fetchPriority="low" decoding="async" />
                 </span>
                 <div className="phone">
                   <img
-                    src={localizedAsset("/assets/villages/garden-city.jpg", locale)}
+                    src={localizedAsset("/assets/villages/garden-city.webp", locale)}
                     width={520}
                     height={1131}
-                    fetchPriority="high"
+                    decoding="async"
                     alt={t.hero.phoneAlt}
                   />
                 </div>
                 <span className="peek peek-bloo" data-friend-move="bloo" data-peek="">
-                  <img className="fm-actor" src="/assets/friends/bloo.webp" alt="" width={200} height={200} fetchPriority="low" decoding="async" />
+                  <img className="fm-actor" src="/assets/friends/bloo.webp" srcSet={friendSrcSet('bloo')} sizes="(max-width: 520px) 120px, 195px" alt="" width={200} height={200} fetchPriority="low" decoding="async" />
                 </span>
                 <span className="peek peek-peach" data-friend-move="peach" data-peek="">
-                  <img className="fm-actor" src="/assets/friends/peach.webp" alt="" width={180} height={180} fetchPriority="low" decoding="async" />
+                  <img className="fm-actor" src="/assets/friends/peach.webp" srcSet={friendSrcSet('peach')} sizes="(max-width: 520px) 104px, 170px" alt="" width={180} height={180} fetchPriority="low" decoding="async" />
                 </span>
                 <div className="stage-plinth" aria-hidden="true"><i /><i /><i /></div>
               </div>
@@ -238,7 +240,7 @@ export function HomePage({ locale }: { locale: Locale }) {
                 return (
                   <li className="step" key={shot.n} data-reveal="slide" style={{ '--d': `${(shot.n - 1) * 110}ms` } as Vars}>
                     <figure className="step-shot">
-                      <img loading="lazy" decoding="async" src={localizedAsset(shot.src, locale)} srcSet={shot.srcSet ? localizedAsset(shot.srcSet, locale) : undefined} sizes="(max-width: 760px) 80vw, 320px" width={shot.w} height={shot.h} alt={step.alt} />
+                      <img loading="lazy" decoding="async" src={localizedAsset(shot.src, locale)} srcSet={shot.srcSet ? localizedAsset(shot.srcSet, locale) : undefined} sizes="(max-width: 720px) 116px, (max-width: 1260px) 30vw, 380px" width={shot.w} height={shot.h} alt={step.alt} />
                     </figure>
                     <div className="step-copy">
                       <span className="step-n" aria-hidden="true">{shot.n}</span>
@@ -305,7 +307,7 @@ export function HomePage({ locale }: { locale: Locale }) {
                         <img
                           loading="lazy"
                           decoding="async"
-                          src={localizedAsset(`/assets/villages/${village.slug}.jpg`, locale)}
+                          src={localizedAsset(`/assets/villages/${village.slug}.webp`, locale)}
                           width={520}
                           height={1131}
                           alt={t.journey.villageAlt(name)}
@@ -512,7 +514,7 @@ export function HomePage({ locale }: { locale: Locale }) {
                 <li key={article.slug} data-reveal="rise" style={{ '--d': `${index * 80}ms` } as Vars}>
                   <article className="journal-card">
                     <span className="journal-card-art" aria-hidden="true">
-                      <img loading="lazy" decoding="async" src={article.image} width={1600} height={900} alt="" />
+                      <img loading="lazy" decoding="async" src={article.image} srcSet={coverSrcSet(article.image)} sizes="(max-width: 600px) 92vw, (max-width: 960px) 560px, 400px" width={1600} height={900} alt="" />
                     </span>
                     <div className="journal-card-copy">
                       <span className="tag">{locale === 'en' ? article.category : journalUi[locale].categories[article.category] ?? article.category}</span>

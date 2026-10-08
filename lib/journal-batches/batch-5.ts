@@ -758,7 +758,7 @@ export const batch5: BlogArticle[] = [
         title: 'Why simple games age well',
         paragraphs: [
           'Some games date quickly: their graphics, their interfaces, their assumptions. Others are close to timeless because their core is a rule you can hold in your head. Falling blocks, sliding tiles, a crossword grid. The history of these forms is long, and we cover it in [why crosswords, jigsaws and sliding puzzles endure](/blog/why-puzzles-endure) and in the [history of sliding block puzzles](/blog/history-of-sliding-block-puzzles).',
-          'OutBrick is a new game built on one of those old rules: slide a brick and it glides until something stops it, and every brick leaves through the gate of its own colour. Part of the pleasure, for many players, is recognition, the feeling of a wooden tray puzzle or a parking-lot puzzle from childhood, now in colour. If that rings a bell, [try a board in your browser](/play) and see what it brings back.',
+          'OutBrick is a new game that grew from one of those old rules: in its classic boards, still playable in the browser, a brick glides until something stops it and leaves through the gate of its own colour. On iPhone and iPad it now adds swaps and three-in-a-row matches to the slide. Part of the pleasure, for many players, is recognition, the feeling of a wooden tray puzzle or a parking-lot puzzle from childhood, now in colour. If that rings a bell, [try a board in your browser](/play) and see what it brings back.',
         ],
       },
       {
@@ -949,7 +949,7 @@ export const batch5: BlogArticle[] = [
         title: 'Puzzles as culture, not just pastime',
         paragraphs: [
           'The final reason puzzles endure is social. Crosswords come with a vocabulary, setters with personalities and solvers who talk about them over breakfast. Jigsaws sit half-finished on family tables through the holidays, with everyone adding a piece in passing. Puzzles give people something to do side by side and something to talk about afterwards, which may be the most durable quality of all. We explore that daily, shared side in [why a daily puzzle becomes a shared ritual](/blog/daily-puzzle-shared-ritual).',
-          'OutBrick is our small addition to one of these old families. Its rule is one a Victorian puzzler would recognise: slide a brick until it stops, and send every brick out through the gate of its colour. You can [try a board in your browser](/play) and see which of the old pleasures it brings back for you.',
+          'OutBrick is our small addition to one of these old families. Its classic rule, still playable in the browser, is one a Victorian puzzler would recognise: slide a brick until it stops, and send every brick out through the gate of its colour. On iPhone and iPad, bricks now also swap and match in threes. You can [try a board in your browser](/play) and see which of the old pleasures it brings back for you.',
         ],
         sourceIds: ['curiosity-gap-1994'],
       },
@@ -1146,7 +1146,7 @@ export const batch5: BlogArticle[] = [
   {
     slug: 'playing-across-devices',
     title: 'Playing across devices: what research says about continuity',
-    dek: 'Phone on the train, tablet on the sofa, TV at night: what studies of multi-device life say about continuity, and how OutBrick syncs across six platforms.',
+    dek: 'Phone on the train, tablet on the sofa, TV at night: what studies of multi-device life say about continuity, and how OutBrick syncs across five platforms.',
     category: 'OutBrick practice',
     categoryColor: 'green',
     ...published,
@@ -1155,7 +1155,7 @@ export const batch5: BlogArticle[] = [
     image: '/blog/playing-across-devices.webp',
     imageAlt: 'A pink brick friend with a star wand and Bloo either side of a phone showing the OutBrick Journey map at Button Factory',
     tags: ['cross-device play', 'iCloud sync', 'Apple devices', 'game design', 'mobile gaming'],
-    intro: 'Many of us now live across several screens. A game started on a phone during the commute is continued on a tablet in the evening, and perhaps on a television at the weekend. When it works, you barely notice. When it does not, you get the particular irritation of a level you know you cleared showing as locked, or of progress stranded on a device in another room. Researchers in human-computer interaction have studied multi-device life for well over a decade, mostly in work settings, and their findings translate neatly to play. We make OutBrick for six Apple platforms, so this is also a look at the choices we made.',
+    intro: 'Many of us now live across several screens. A game started on a phone during the commute is continued on a tablet in the evening, and perhaps on a television at the weekend. When it works, you barely notice. When it does not, you get the particular irritation of a level you know you cleared showing as locked, or of progress stranded on a device in another room. Researchers in human-computer interaction have studied multi-device life for well over a decade, mostly in work settings, and their findings translate neatly to play. We make OutBrick for five Apple platforms, so this is also a look at the choices we made.',
     keyTakeaways: [
       'People use devices in sequence far more than all at once, which makes continuity the main problem to solve.',
       'Across studies, moving information and state between devices is consistently the hardest part of using several of them.',
@@ -1203,9 +1203,9 @@ export const batch5: BlogArticle[] = [
       },
       {
         id: 'how-outbrick-does-it',
-        title: 'How OutBrick handles six platforms',
+        title: 'How OutBrick handles five platforms',
         paragraphs: [
-          'OutBrick runs on iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, and your progress syncs through iCloud, so where you are on the Journey follows you to whichever device you pick up. The game also plays offline, so a weak signal on one device does not stop you playing. The 4.2 notes on [what’s new](/whats-new) mention Handoff alongside widgets and challenge links now opening the screen they name.',
+          'OutBrick runs on iPhone, iPad, Mac, Apple Vision Pro and Apple Watch, and your progress syncs through iCloud, so where you are on the Journey follows you to whichever device you pick up. The game also plays offline, so a weak signal on one device does not stop you playing. The 4.2 notes on [what’s new](/whats-new) mention Handoff alongside widgets and challenge links now opening the screen they name.',
           'The rules stay the same everywhere: the same boards, the same move limits, no clock, colour-blind glyphs on by default. What changes is the fit to the screen. We have written separately about designing for the smallest and the most unusual of them, in [Apple Watch puzzle games](/blog/apple-watch-puzzle-games) and [Apple Vision Pro puzzle games](/blog/apple-vision-pro-puzzle-games).',
         ],
         sourceIds: ['multi-device-diary-2015', 'other-computer-2008'],
@@ -1232,7 +1232,7 @@ export const batch5: BlogArticle[] = [
     faqs: [
       { question: 'How do people use multiple devices?', answer: 'Mostly in sequence. A diary study of everyday multi-device use found moving a task from one device to another was a main pattern, alongside borrowing one device’s capabilities for another and using devices in parallel.' },
       { question: 'What is the hardest part of using several devices?', answer: 'Studies since 2008 have consistently found it is moving information and progress between them. People want synchronisation they can trust, so the second device knows exactly where the first left off.' },
-      { question: 'Does OutBrick sync between iPhone, iPad and Apple TV?', answer: 'Yes. OutBrick runs on iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch and syncs your progress through iCloud. It also plays offline.' },
+      { question: 'Does OutBrick sync between iPhone, iPad and Mac?', answer: 'Yes. OutBrick runs on iPhone, iPad, Mac, Apple Vision Pro and Apple Watch and syncs your progress through iCloud. It also plays offline.' },
       { question: 'What makes a good cross-device game?', answer: 'Reliable sync without extra accounts, offline play that catches up later, controls suited to each screen, and the same rules and boards everywhere so you can stop on one device and continue cleanly on another.' },
     ],
   },

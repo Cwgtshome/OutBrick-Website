@@ -1,9 +1,9 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-/* The journal, mascots, press kit, about, authors and research routes. All of
-   it is scoped under `.ed`; see the header of that file. */
-@import './styles/editorial.css';
+/* The journal, mascots, press kit, about, authors and research routes (app/styles/editorial.css,
+   all scoped under `.ed`) are not imported here: app/editorial-shell.tsx imports that stylesheet,
+   so the pages outside the editorial side do not download it. */
 /* The friends' signature moves, shared by the home page and the mascots pages. */
 @import './styles/friend-moves.css';
 /* Contact, affiliates, creators, press and careers, and the forms they share. */

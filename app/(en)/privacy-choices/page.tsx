@@ -33,7 +33,8 @@ export default function PrivacyChoicesPage() {
         <h2>Advertising choices</h2>
         <p>
           OutBrick shows rewarded video only — an ad plays when, and only when, you press a button
-          asking for a life, an undo, or more moves. There are three controls, and all three are yours:
+          asking for something, such as a life, undos or more moves. There are three controls, and all
+          three are yours:
         </p>
         <ul className="points">
           <li>

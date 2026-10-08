@@ -10,6 +10,7 @@ import { getShelves, minutesOf } from '../../../lib/journal';
 import { localePath, type Locale } from '../../../lib/i18n/locales';
 import { journalUi } from '../../../lib/i18n/blog';
 import { siteUrl } from '../../../lib/site';
+import { coverSrcSet } from '../../../lib/images';
 import { FeedCopy } from './feed-copy';
 
 
@@ -106,7 +107,7 @@ export function StoryRow({
         <p className="ed-meta">{author.name} · {article.readingTime}</p>
       </div>
       <div className="ed-thumb" aria-hidden="true">
-        <img src={article.image} alt="" width={1600} height={900} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+        <img src={article.image} srcSet={coverSrcSet(article.image)} sizes="320px" alt="" width={1600} height={900} loading={eager ? 'eager' : 'lazy'} decoding="async" />
       </div>
     </li>
   );
@@ -138,7 +139,7 @@ export function StoryCard({
       </div>
       <div className="ed-card-body">
         <div className="ed-thumb" aria-hidden="true">
-          <img src={article.image} alt="" width={1600} height={900} loading="lazy" decoding="async" />
+          <img src={article.image} srcSet={coverSrcSet(article.image)} sizes="320px" alt="" width={1600} height={900} loading="lazy" decoding="async" />
         </div>
         <Heading className="ed-h3"><a href={href}>{article.title}</a></Heading>
         <p>{article.dek}</p>

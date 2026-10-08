@@ -9,7 +9,7 @@
  * what lets the new chrome sit above the old body copy without rewriting it.
  */
 
-import { socialProfiles, type SocialNetwork } from '../lib/site';
+import { shownSocialProfiles, type SocialNetwork } from '../lib/site';
 import type { CSSProperties, ReactNode } from 'react';
 import { publicPages } from '../lib/i18n/public-pages';
 import { legalPages } from '../lib/i18n/legal-pages';
@@ -64,14 +64,22 @@ export function AppStoreBadge({ campaign = 'badge', locale = 'en' }: { campaign?
  * embedded on the web), trimmed and exported to public/assets/logo/. Both images are
  * decorative: the link or heading around the mark carries the name.
  */
-export function BrandMark({ className = '' }: { className?: string }) {
+/** The wordmark's drawn width (about 5.1 × its CSS height) in the masthead: 28px tall, at most 22px on phones. */
+const MASTHEAD_WORDMARK_SIZES = '(max-width: 420px) 112px, 143px';
+
+export function BrandMark({ className = '', sizes }: { className?: string; sizes?: string }) {
+  // Width descriptors rather than 1x/2x, so a phone takes the 48px-tall file for a 22px-tall
+  // mark instead of the 192px one its device pixel ratio used to pick. `sizes` is the drawn
+  // width: 28px tall by default, 30px in the journal's game note, up to 54px for the closer.
+  const drawn = sizes ?? (className.includes('brandmark-lg') ? '275px' : className.includes('gamenote-mark') ? '153px' : '143px');
   return (
     <span className={`brandmark ${className}`} aria-hidden="true">
       <img className="brandmark-icon" src="/assets/icon/logo-96.webp" alt="" width={42} height={42} />
       <img
         className="brandmark-word"
         src="/assets/logo/outbrick-wordmark-96.webp"
-        srcSet="/assets/logo/outbrick-wordmark-96.webp 1x, /assets/logo/outbrick-wordmark-192.webp 2x"
+        srcSet="/assets/logo/outbrick-wordmark-48.webp 245w, /assets/logo/outbrick-wordmark-96.webp 489w, /assets/logo/outbrick-wordmark-192.webp 978w"
+        sizes={drawn}
         alt=""
         width={489}
         height={96}
@@ -225,7 +233,7 @@ export function VillageHeader({
     <header className={`site ${links.length > 5 ? 'many' : ''}`} data-site-header="">
       <div className="wrap">
         <a className="logo" href={home}>
-          <BrandMark />
+          <BrandMark sizes={MASTHEAD_WORDMARK_SIZES} />
           <span className="sr-only">OutBrick</span>
           {home.startsWith('#') ? <span className="sr-only">{copy.backToTop}</span> : null}
         </a>
@@ -358,7 +366,7 @@ export function VillageFooter({ locale = 'en', page, languages }: { locale?: Loc
             </p>
             <ul className="social" aria-label={siteWords[locale].social}>
               {/* Icons only: the network's name is in the link for screen readers and on hover. */}
-              {socialProfiles.map((profile) => (
+              {shownSocialProfiles().map((profile) => (
                 <li key={profile.network} className={profile.live ? 'live' : 'soon'}>
                   <a href={profile.url} rel={profile.live ? 'me noopener' : 'noopener'} target="_blank" title={siteWords[locale].on(profile.label)}>
                     <SocialIcon network={profile.network} />

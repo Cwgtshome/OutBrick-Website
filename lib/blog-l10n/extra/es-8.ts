@@ -16,7 +16,7 @@ export const es8: ExtraGuides = {
     intro:
       'Una cuadrícula de bloques de colores puede ocultar puzles muy distintos. En uno eliges dónde colocar una forma nueva. En otro todas las piezas están colocadas y debes encontrar su salida. Block Blast!+ y OutBrick hacen útil esa distinción: ambos recompensan leer el espacio, pero plantean preguntas diferentes. Si buscabas un juego como Block Blast, la respuesta más útil no es una lista de capturas parecidas, sino explicar qué harás realmente. Es una guía de mecánicas basada en fuentes, comprobadas el 30 de septiembre de 2026, escrita por el equipo de OutBrick. No hemos realizado una comparación directa ni medido preferencias de jugadores.',
     keyTakeaways: [
-      'Block Blast!+ se centra en colocar formas y completar filas o columnas; OutBrick, en deslizar ladrillos existentes por puertas correspondientes.',
+      'Block Blast!+ se centra en colocar formas y completar filas o columnas; OutBrick, en llevar ladrillos existentes a casa por puertas correspondientes e intercambiarlos para combinar tres o más.',
       'Block Blast!+ es la edición de Apple Arcade. No traslades sus condiciones de suscripción, publicidad o compras a la aplicación estándar Block Blast!, con ficha separada.',
       'Elige colocar si disfrutas de encajar y conservar espacio; deslizar si disfrutas de rutas, puntos de parada y orden de movimientos.',
     ],
@@ -25,7 +25,7 @@ export const es8: ExtraGuides = {
         title: 'La primera diferencia es el verbo',
         paragraphs: [
           'Apple describe Block Blast!+ como encajar bloques en una cuadrícula, completar filas y columnas y formar combinaciones (Apple, 2026). Pregunta «¿Dónde va esta forma?». Un hueco permite colocar algo; una línea casi completa puede recuperar espacio. Comparas la superficie de una forma con los espacios disponibles.',
-          'OutBrick pregunta «¿Qué debe moverse antes de que salga este ladrillo?». Seleccionas uno ya colocado y lo deslizas hasta que algo lo detiene, hacia la puerta de su color. Un hueco puede ser una ruta, pero también dejar que viaje más de lo que querías. Más espacio libre no implica automáticamente una posición mejor.',
+          'OutBrick pregunta «¿Qué debe moverse antes de que salga este ladrillo?». Seleccionas uno ya colocado y lo deslizas: se detiene donde lo sueltas, vuelve a casa por la puerta de su color o se intercambia con un vecino, y tres o más de un color en línea desaparecen. En los tableros clásicos, que se pueden seguir jugando en el navegador, se desliza hasta que algo lo detiene, así que un hueco puede ser una ruta, pero también dejar que viaje más de lo que querías. Más espacio libre no implica automáticamente una posición mejor.',
           'Piensa en un pasillo largo y recto. Al colocar, mantenerlo libre puede reservar sitio para una forma larga. Al deslizar, puede hacer que un ladrillo sobrepase el giro necesario. Otro ladrillo quizá deba servir de freno temporal. El mismo aspecto visual cambia de significado estratégico porque la regla cambia lo que puedes hacer.',
           'Nuestra [introducción a los puzles deslizantes](/blog/how-to-solve-sliding-block-puzzles) explica la regla. Para una visión de colocar, piezas que caen y rutas, lee [qué hace duraderos los juegos como Tetris](/blog/games-like-tetris). Ninguna mecánica es una versión más avanzada de la otra: son maneras distintas de volver interesante un espacio limitado.',
         ],
@@ -34,7 +34,7 @@ export const es8: ExtraGuides = {
         title: 'Dos formas de pensar el siguiente movimiento',
         paragraphs: [
           'En un puzle de colocar, examina la forma ofrecida, sus posibles destinos y el tablero resultante. Una posición legal puede ser incómoda si deja un hueco pequeño o consume el único sitio de otra forma. Completar una línea cambia cantidad y forma del espacio disponible. Es un problema general de colocación, no una estrategia óptima para todos los modos de Block Blast.',
-          'En OutBrick, examina toda la trayectoria y el punto final. Apartar un obstáculo puede abrir una ruta, pero hacerlo pronto puede quitar el freno necesario para otro ladrillo. Un plan útil describe dependencias: el azul debe parar aquí antes de que el rojo se alinee con su salida. Reorganizas un sistema en vez de elegir solo un destino vacío.',
+          'En los tableros clásicos de OutBrick, examina toda la trayectoria y el punto final. Apartar un obstáculo puede abrir una ruta, pero hacerlo pronto puede quitar el freno necesario para otro ladrillo. Un plan útil describe dependencias: el azul debe parar aquí antes de que el rojo se alinee con su salida. Reorganizas un sistema en vez de elegir solo un destino vacío.',
           'Isaksen et al. (2017) separaron elección estratégica y exigencias de ejecución en simulaciones de variantes de Tetris y Puzzle Bobble. Explican por qué una única etiqueta de dificultad puede esconder requisitos distintos. No estudiaron Block Blast!+ ni OutBrick. Usamos la distinción para preguntar si te gusta decidir un movimiento y también ejecutarlo.',
           'Eso importa si te gustan los puzles reflexivos pero no cierto control. Arrastrar una forma y dar dirección a un ladrillo existente son interacciones distintas. Las capturas no deciden cuál entiendes mejor. Prueba algo sencillo, lee instrucciones y observa un movimiento rechazado antes de atribuir a demasiada dificultad un control desconocido.',
         ],
@@ -60,9 +60,9 @@ export const es8: ExtraGuides = {
       'a-small-fit-test': {
         title: 'Una pequeña prueba es mejor que un veredicto general',
         paragraphs: [
-          'Primero, explícate la regla: al colocar, pon una forma en sitio legal y avanza hacia una línea completa; en OutBrick, dirige un ladrillo, predice dónde para y busca su salida. Juega despacio para observar si cada acción confirma la explicación. Comparar debe ayudarte a entrar en el puzle adecuado, no convencerte de tolerar el equivocado.',
+          'Primero, explícate la regla: al colocar, pon una forma en sitio legal y avanza hacia una línea completa; en OutBrick, desliza un ladrillo hacia su puerta o intercámbialo para formar una línea de tres o más de su color. Juega despacio para observar si cada acción confirma la explicación. Comparar debe ayudarte a entrar en el puzle adecuado, no convencerte de tolerar el equivocado.',
           'Iacovides et al. (2015) usaron casos con observación y entrevistas para examinar aprendizaje e implicación. Relacionaron avances en comprensión con implicación, especialmente al sentirse responsable del progreso. Son resultados cualitativos de otros juegos. Invitan a atender tu comprensión sin prometer que una prueba breve revele una preferencia universal.',
-          `Puedes [probar un tablero de OutBrick en el navegador](/play) para examinar cómo se desliza hasta parar. Muestra la mecánica, no todas las funciones, costes o accesibilidad de la aplicación instalada. Si te gusta, [consulta OutBrick en el App Store](${appStoreUrl('journal-block-blast-comparison')}) y revisa requisitos y compras antes de descargar.`,
+          `Puedes [probar un tablero de OutBrick en el navegador](/play) para examinar cómo se desliza hasta parar en las reglas clásicas. Muestra la mecánica anterior, sin los intercambios ni las combinaciones del juego del App Store, no todas las funciones, costes o accesibilidad de la aplicación instalada. Si te gusta, [consulta OutBrick en el App Store](${appStoreUrl('journal-block-blast-comparison')}) y revisa requisitos y compras antes de descargar.`,
           'El resultado puede ser algo sencillo: «Prefiero encajar formas nuevas a redirigir las existentes», o al revés. Basta. Los puzles de bloques comparten un vocabulario visual, pero sus verbos deciden la experiencia. Elige el verbo que quieres seguir haciendo.',
         ],
       },
@@ -79,7 +79,7 @@ export const es8: ExtraGuides = {
       {
         question: '¿OutBrick es el mismo tipo de puzle que Block Blast!+?',
         answer:
-          'Sus mecánicas principales difieren. Block Blast!+ pide colocar formas y completar filas y columnas; OutBrick, deslizar ladrillos existentes por puertas correspondientes.',
+          'Sus mecánicas principales difieren. Block Blast!+ pide colocar formas y completar filas y columnas; OutBrick, llevar ladrillos existentes a casa por puertas correspondientes e intercambiarlos para combinar tres o más.',
       },
       {
         question:
@@ -90,12 +90,12 @@ export const es8: ExtraGuides = {
       {
         question: '¿Cuál sirve más para planificar?',
         answer:
-          'Ambos permiten planificar restricciones distintas. Colocar trata cómo una forma afecta al espacio restante; OutBrick, cómo el orden y las paradas afectan a las rutas.',
+          'Ambos permiten planificar restricciones distintas. Colocar trata cómo una forma afecta al espacio restante; OutBrick, cómo el orden, los intercambios y las puertas afectan a las rutas.',
       },
       {
         question: '¿Puedo probar OutBrick sin instalarlo?',
         answer:
-          'El [tablero del navegador](/play) permite probar cómo deslizar hasta parar. Comprueba aparte la ficha del App Store para compatibilidad, funciones y costes de la aplicación instalada.',
+          'El [tablero del navegador](/play) permite probar la regla clásica de deslizar hasta parar. Comprueba aparte la ficha del App Store para compatibilidad, funciones y costes de la aplicación instalada.',
       },
     ],
   },
@@ -114,7 +114,7 @@ export const es8: ExtraGuides = {
     intro:
       'Una caja está a una casilla de su objetivo. Moverla parece obvio hasta ver que quien debe empujar no puede situarse detrás. Un ladrillo de color está junto a su salida. También parece obvio moverlo, hasta que un pasillo abierto lo manda más allá. Sokoban y los puzles de deslizamiento comparten espacio y orden, pero cambia el obstáculo que planificas. Comparamos las reglas clásicas de Sokoban con deslizar hasta parar en OutBrick. Explicamos mecánicas, no clasificamos dificultad; los ejemplos son posiciones inventadas para enseñar, no soluciones de niveles identificados.',
     keyTakeaways: [
-      'En Sokoban clásico un personaje debe llegar al lado correcto para empujar cajas; en OutBrick seleccionas un ladrillo y lo deslizas hasta que algo lo detiene.',
+      'En Sokoban clásico un personaje debe llegar al lado correcto para empujar cajas; en los tableros clásicos de OutBrick seleccionas un ladrillo y lo deslizas hasta que algo lo detiene.',
       'Una esquina de Sokoban puede atrapar una caja para siempre. Al deslizar, quitar un obstáculo puede quitar la parada necesaria para otra ruta.',
       'Algunos hábitos coinciden, pero una estrategia solo se traslada si lo permiten las reglas de movimiento y objetivo. Léelas antes de importar un plan conocido.',
     ],
@@ -124,7 +124,7 @@ export const es8: ExtraGuides = {
         paragraphs: [
           'Sokoban clásico coloca personaje, cajas, paredes y objetivos de almacenamiento en una cuadrícula. El personaje camina por espacios vacíos y empuja una caja si está vacía la casilla detrás de ella. No puede tirar, empujar cadenas ni atravesar paredes. Se completa colocando cajas en objetivos. Hay variantes; describimos las reglas clásicas, no toda aplicación con ese nombre.',
           'La posición del personaje forma parte del puzle. Aunque haya espacio a la derecha de una caja, solo se empuja hacia allí si el personaje llega al lado izquierdo. Pensar solo en el destino omite media acción. Una ruta corta para ponerse detrás puede ser esencial aunque no acerque ninguna caja al objetivo.',
-          'En OutBrick seleccionas directamente un ladrillo y le das dirección. Se desliza hasta detenerse y sale por la puerta de su color. No hay trabajador cuya ruta a pie debas conservar. Te centras en trayectoria, paradas y relación con otros ladrillos. Llaves, cerraduras y cajas aparecen después, pero no vuelven su movimiento básico idéntico al de Sokoban.',
+          'En los tableros clásicos de OutBrick, que se pueden seguir jugando en el navegador, seleccionas directamente un ladrillo y le das dirección. Se desliza hasta detenerse y sale por la puerta de su color. (El juego del App Store se juega ahora con Slide & Match: un ladrillo se detiene donde lo sueltas y los intercambios forman combinaciones.) No hay trabajador cuya ruta a pie debas conservar. Te centras en trayectoria, paradas y relación con otros ladrillos. Llaves, cerraduras y cajas aparecen después, pero no vuelven su movimiento básico idéntico al de Sokoban.',
           '«Puzle de bloques deslizantes» es amplio. Algunos admiten pequeños desplazamientos o una sola dirección; otros deslizan hasta parar. Nuestra [historia de estos puzles](/blog/history-of-sliding-block-puzzles) amplía el contexto. Identifica siempre la regla concreta antes de decidir que ya sabes resolverlo.',
         ],
       },
@@ -141,7 +141,7 @@ export const es8: ExtraGuides = {
         title: 'Conserva los accesos, además de los destinos',
         paragraphs: [
           'Piensa en un pasillo de Sokoban entre dos habitaciones. Empujar una caja a la entrada puede acercarla al objetivo y cortar el paso del personaje. Quizá luego debas llegar al lado lejano, pero perdiste la única ruta. Antes de empujar, pregunta por dónde caminará después y qué lados de las cajas restantes seguirán accesibles.',
-          'En OutBrick la pregunta equivalente trata tránsito y paradas. Si el azul debe cruzar antes de salir el rojo, sacar primero el rojo puede quitar un freno o alterar la ruta. Dejarlo siempre también puede bloquear al azul. Es una dependencia temporal: conserva la pieza mientras sirve y quítala al terminar su función.',
+          'En los tableros clásicos de OutBrick la pregunta equivalente trata tránsito y paradas. Si el azul debe cruzar antes de salir el rojo, sacar primero el rojo puede quitar un freno o alterar la ruta. Dejarlo siempre también puede bloquear al azul. Es una dependencia temporal: conserva la pieza mientras sirve y quítala al terminar su función.',
           'Escribe relaciones, no una larga cadena de direcciones. En Sokoban: «Mantén abierta la puerta hasta ponerme detrás de la caja superior». Al deslizar: «Conserva este ladrillo como parada hasta alinear el otro». Así se ve el motivo. Si cambia el tablero, comprueba si sigue válido en vez de recordar una secuencia perdida.',
           'Para leer dependencias, consulta nuestra [guía para examinar el tablero antes de mover](/blog/how-to-read-a-puzzle-before-moving). No necesitas un plan perfecto completo. A menudo basta identificar un acceso que debe sobrevivir y una posición útil que todavía no conviene tocar.',
         ],
@@ -161,13 +161,13 @@ export const es8: ExtraGuides = {
           'Sokoban encaja si disfrutas de planificar accesos del personaje y consecuencias de empujes irreversibles. Prueba deslizamiento si disfrutas de crear paradas y redirigir piezas directamente. No hace falta afirmar que un género mejora más el cerebro. Las mecánicas pueden disfrutarse por sí mismas.',
           'Kotovsky et al. (1985) investigaron por qué representaciones distintas de problemas formalmente equivalentes de la Torre de Hanói tenían dificultades distintas. No trataban estos géneros. Invita a distinguir estructura y facilidad de comprender reglas: una presentación desconocida puede parecer más difícil sin añadir piezas. Dificultad y encaje personal son preguntas distintas.',
           `Puedes [jugar una demostración de OutBrick](/play) para ver cómo cambia un pasillo al deslizar. Lee nuestros [consejos para ordenar colores](/blog/colour-sort-puzzle-tips) para conectar movimiento y puertas. Si te atrae, [consulta OutBrick en el App Store](${appStoreUrl('journal-sokoban-comparison')}) para compatibilidad y compras actuales. Tiene límites de movimientos, vidas y publicidad con recompensa opcional; jugar sin tiempo no es acceso ilimitado.`,
-          'Lleva una pregunta al siguiente tablero: «¿Qué debe seguir disponible después?». En Sokoban puede ser la casilla donde debe estar el personaje; en OutBrick, una superficie de parada. Ver la diferencia convierte un parecido vago de bloques en una elección mucho más clara.',
+          'Lleva una pregunta al siguiente tablero: «¿Qué debe seguir disponible después?». En Sokoban puede ser la casilla donde debe estar el personaje; en los tableros clásicos de OutBrick, una superficie de parada. Ver la diferencia convierte un parecido vago de bloques en una elección mucho más clara.',
         ],
       },
       'classic-rules-source': {
         title: 'Reglas clásicas y límites de la evidencia',
         paragraphs: [
-          'Sokoban.jp. (n.d.). Rules. [Reglas clásicas de Sokoban](https://sokoban.jp/rule.html). Consultado el 30 de septiembre de 2026. Los ejemplos son ilustraciones originales de esas reglas y del movimiento de OutBrick. La investigación siguiente contextualiza búsqueda, implicación y motivación; no evalúa OutBrick de forma independiente.',
+          'Sokoban.jp. (n.d.). Rules. [Reglas clásicas de Sokoban](https://sokoban.jp/rule.html). Consultado el 30 de septiembre de 2026. Los ejemplos son ilustraciones originales de esas reglas y del movimiento clásico de OutBrick. La investigación siguiente contextualiza búsqueda, implicación y motivación; no evalúa OutBrick de forma independiente.',
         ],
       },
     },
@@ -186,7 +186,7 @@ export const es8: ExtraGuides = {
       {
         question: '¿OutBrick mueve una casilla cada vez como Sokoban?',
         answer:
-          'Los ladrillos se deslizan en la dirección elegida hasta que algo los detiene. Planificas paradas y salidas del mismo color, no la posición desde la que empuja un personaje.',
+          'No. En los tableros clásicos, los ladrillos se deslizan en la dirección elegida hasta que algo los detiene; en el Slide & Match del juego del App Store, un ladrillo se detiene donde lo sueltas. Planificas paradas y salidas del mismo color, no la posición desde la que empuja un personaje.',
       },
       {
         question: '¿Saber Sokoban vuelve fácil OutBrick automáticamente?',

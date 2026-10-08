@@ -80,7 +80,7 @@ export const ptBR11: ExtraGuides = {
         'Gonçalves et al. (2023) também mostram que uma solução acessível envolve mais do que chegar ao objetivo: controle, compreensão e envolvimento fazem parte da experiência. Nenhum desses estudos avaliou a implementação atual do OutBrick.'
       ] },
       'why-empty-cells-matter': { title: 'Uma célula vazia também traz informação', paragraphs: [
-        'Os espaços vazios ajudam a distinguir uma rota bloqueada de uma possível e deixam mais claras as relações entre peças. Eles não garantem, por si só, que uma peça pare ali: no OutBrick, um deslize comum continua até algo parar a peça. Nosso [guia de movimentos](/blog/outbrick-voiceover-slide-actions) explica por que o ponto de parada importa tanto quanto o início.',
+        'Os espaços vazios ajudam a distinguir uma rota bloqueada de uma possível e deixam mais claras as relações entre peças. Eles não garantem, por si só, que uma peça pare ali: no OutBrick, um deslize até o fim continua até algo parar a peça, e uma ação de deslize mais curta diz quantas casas percorre. Nosso [guia de movimentos](/blog/outbrick-voiceover-slide-actions) explica por que o ponto de parada importa tanto quanto o início.',
         'Na [resposta no AppleVis sobre exploração pelo toque](https://www.applevis.com/comment/217455#comment-217455), nos comprometemos a tornar cada peça e porta encontrável em sua posição real e a anunciar as células livres como vazias. A sugestão posterior sobre espaços vazios reforçou essa prioridade. Em 2 de outubro de 2026, as correções ainda estavam em andamento para a próxima atualização.',
         'Um estudo pequeno nos incentiva a acolher diferentes preferências de exploração. O contexto era diferente do OutBrick, mas a pergunta é útil: você consegue investigar o tabuleiro da maneira que prefere? A [página de acessibilidade](/accessibility) reúne as informações mais amplas sobre recursos.'
       ] },
@@ -111,23 +111,23 @@ export const ptBR11: ExtraGuides = {
   },
   'outbrick-voiceover-slide-actions': {
     title: 'Como deslizar peças no OutBrick usando ações do VoiceOver',
-    dek: 'Conheça as quatro direções, as portas correspondentes e a regra de deslizar até parar, com orientações do VoiceOver e as melhorias de ensino prometidas.',
+    dek: 'Conheça as quatro direções, as portas correspondentes e as distâncias de deslize, com orientações do VoiceOver e as melhorias de ensino prometidas.',
     imageAlt: 'Ilustração do OutBrick com um celular, peças coloridas e dois personagens de tijolo sobre fundo azul-marinho',
     tags: ['acessibilidade', 'VoiceOver', 'quebra-cabeças', 'jogos para celular', 'design inclusivo'],
     intro: 'É razoável não saber como mover uma peça para baixo quando o jogo não explica os controles. Uma pessoa no AppleVis entendeu que as peças do OutBrick precisavam sair do tabuleiro, mas achou que só podiam subir e não encontrou um tutorial. Nossa resposta explicou as quatro direções, as portas correspondentes e as ações do VoiceOver, além de prometer instruções mais claras na próxima atualização. Este guia reúne essas informações para separar a escolha da direção, a leitura de uma rota e a decisão sobre qual peça mover primeiro.',
     keyTakeaways: [
       'Uma peça pode deslizar para cima, para baixo, para a esquerda ou para a direita e só sai pela porta da própria cor.',
-      'O gesto do VoiceOver seleciona uma ação; o nome da ação anuncia a direção. A peça desliza até algo interromper seu caminho.',
-      'Em 2 de outubro de 2026, cartões de ensino mais claros e ideias apresentadas uma por vez ainda eram planos para a próxima atualização.'
+      'O gesto do VoiceOver seleciona uma ação; o nome da ação anuncia a direção. Cada ação também diz até onde a peça desliza.',
+      'Em 2 de outubro de 2026, cartões de ensino mais claros e ideias apresentadas uma por vez ainda eram planos para a próxima atualização; a versão 5.1 trouxe os cartões curtos.'
     ],
     sections: {
       'match-the-brick-to-its-gate': { title: 'Encontre o destino, onde quer que esteja', paragraphs: [
-        'Cada peça precisa sair pela porta da mesma cor. Primeiro, encontre a peça e sua porta correspondente; depois, planeje uma rota. A porta pode estar acima, abaixo ou em qualquer lado do tabuleiro. Não há uma direção única para todas as peças.',
+        'Uma meta básica é levar cada peça para casa pela porta da mesma cor. Primeiro, encontre a peça e sua porta correspondente; depois, planeje uma rota. A porta pode estar acima, abaixo ou em qualquer lado do tabuleiro. Não há uma direção única para todas as peças.',
         'Imagine uma porta correspondente à direita, com outra peça entre ela e a peça selecionada. O obstáculo imediato é a peça no caminho. Procurar uma ação para cima não resolve uma rota que precisa ser liberada pela lateral. Para encontrar peças antes de escolher uma ação, leia nosso [guia de orientação do tabuleiro com VoiceOver](/blog/outbrick-voiceover-spatial-board).',
         'Antes de mover, confirme a cor da peça e a porta correspondente. Uma peça pode estar perto da borda e ainda precisar que outra seja deslocada para liberar o caminho. A direção disponível depende da posição e dos bloqueios, não só de onde está a saída.'
       ] },
-      'predict-the-stopping-point': { title: 'O deslize continua até algo parar a peça', paragraphs: [
-        'No OutBrick, ao escolher uma direção, a peça continua deslizando até encontrar uma parede, outra peça ou o limite do tabuleiro. Ela não para em qualquer célula que você escolher. O ponto final faz parte do planejamento: uma peça pode precisar ficar em um lugar específico para ajudar outra a alcançar sua porta.',
+      'predict-the-stopping-point': { title: 'Escolha até onde vai o deslize', paragraphs: [
+        'Desde a versão 5.1, cada ação de deslize do OutBrick diz a distância além da direção, como “Deslizar para a direita 1 casa” ou “Deslizar para cima até o fim, 3 casas”. Um deslize até o fim continua até encontrar uma parede, outra peça ou o limite do tabuleiro; um mais curto para onde a ação diz. O ponto final faz parte do planejamento: uma peça pode precisar ficar em um lugar específico para ajudar outra a alcançar sua porta.',
         'A ordem também importa. Tirar um bloqueio do caminho pode abrir uma saída, mas mover cedo demais uma peça que serviria de apoio pode mudar um deslize posterior. Você pode pensar nessa sequência antes de agir. Nosso [guia sobre desafio sem cronômetro](/blog/outbrick-untimed-puzzle-challenge) explica a diferença entre tempo para pensar e limite de movimentos: poder observar o tabuleiro com calma não significa ter movimentos ilimitados.',
         'Uma boa previsão inclui o que vai interromper a peça. Se o caminho ficar vazio até a parede, ela pode passar do ponto que você imaginava; outra peça no caminho talvez seja justamente o apoio de que você precisa.'
       ] },
@@ -158,8 +158,8 @@ export const ptBR11: ExtraGuides = {
     pullQuote: 'Um relato claro pode começar com um único movimento.',
     faqs: [
       { question: 'Como deslizo uma peça com o VoiceOver?', answer: 'Coloque o foco na peça e deslize para cima ou para baixo para percorrer as ações: deslizar para cima, baixo, esquerda ou direita. Ouça o nome e, com o gesto padrão, toque duas vezes para executar.' },
-      { question: 'Por que a peça continua deslizando?', answer: 'No OutBrick, a peça segue na direção escolhida até algo pará-la, como uma parede, outra peça ou a borda do tabuleiro. Planeje o ponto final da rota.' },
-      { question: 'As instruções mais claras já estão disponíveis?', answer: 'Em 2 de outubro de 2026, cartões curtos de ensino e mudanças nos primeiros tabuleiros ainda eram trabalho planejado para a próxima atualização. Consulte as [notas de versão](/whats-new).' },
+      { question: 'Por que a peça continua deslizando?', answer: 'Num deslize até o fim, a peça segue na direção escolhida até algo pará-la, como uma parede, outra peça ou a borda do tabuleiro. Desde a versão 5.1, outras ações dizem uma distância menor, como “Deslizar para a direita 1 casa”. Planeje o ponto final da rota.' },
+      { question: 'As instruções mais claras já estão disponíveis?', answer: 'Em 2 de outubro de 2026, cartões curtos de ensino e mudanças nos primeiros tabuleiros ainda eram trabalho planejado para a próxima atualização. A versão 5.1 trouxe um cartão curto na primeira vez que você encontra cada ideia nova. Consulte as [notas de versão](/whats-new).' },
       { question: 'Como relato uma ação do VoiceOver que não entendi?', answer: 'Conte a fase, a peça em foco, a ação escolhida e o que foi anunciado ou aconteceu. Envie pelo [formulário de contato](/contact); não é preciso saber a causa técnica.' }
     ]
   },
@@ -172,7 +172,7 @@ export const ptBR11: ExtraGuides = {
     keyTakeaways: [
       'Tempo para entender o tabuleiro e limite de movimentos são decisões distintas: o OutBrick não usa cronômetro, mas seus tabuleiros têm metas de movimentos.',
       'A versão 4.2 publicada retirou o modo Rush e deixou o jogo sem tempo contado; um relato de cronômetro ainda merece investigação caso apareça.',
-      'As mudanças planejadas para o começo incluem menos ideias de uma vez, cartões curtos de ensino e mais movimentos para aprender.'
+      'As mudanças planejadas em 2 de outubro para o começo incluíam menos ideias de uma vez, cartões curtos de ensino e mais movimentos para aprender; a versão 5.1 trouxe os cartões curtos.'
     ],
     sections: {
       'understanding-before-moving': { title: 'Dê tempo para entender antes de mover', paragraphs: [
@@ -213,7 +213,7 @@ export const ptBR11: ExtraGuides = {
     faqs: [
       { question: 'O OutBrick tem cronômetro?', answer: 'As notas da versão 4.2 dizem que o modo Rush foi retirado e que nada no OutBrick é cronometrado. Os tabuleiros têm uma meta de movimentos. Se aparecer uma contagem regressiva, informe a tela e a versão pelo [contato](/contact).' },
       { question: 'Posso pensar o tempo que quiser antes de jogar?', answer: 'Não há contagem de tempo por jogada. A meta de movimentos é uma regra separada do tempo que você leva para observar e planejar.' },
-      { question: 'O que mudará nas primeiras fases?', answer: 'Em 2 de outubro de 2026, planos para a próxima atualização incluíam tabuleiros iniciais mais tranquilos, uma ideia por vez, cartões curtos e mais movimentos. Consulte as [notas de versão](/whats-new) para mudanças publicadas.' },
+      { question: 'O que mudará nas primeiras fases?', answer: 'Em 2 de outubro de 2026, planos para a próxima atualização incluíam tabuleiros iniciais mais tranquilos, uma ideia por vez, cartões curtos e mais movimentos. A versão 5.1 trouxe um cartão curto na primeira vez que você encontra cada ideia nova. Consulte as [notas de versão](/whats-new) para mudanças publicadas.' },
       { question: 'Onde posso relatar uma dificuldade com VoiceOver?', answer: 'Use o [formulário de contato](/contact) e descreva a fase, a informação ou ação difícil de encontrar e o que foi anunciado.' }
     ]
   },

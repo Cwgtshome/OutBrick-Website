@@ -2,7 +2,7 @@ import { localePath, type Locale } from '../lib/i18n/locales';
 import type { ReactNode } from 'react';
 import { siteUrl } from '../lib/site';
 import { breadcrumbNode, graph, isoDay, ref, ids, webPageNode } from '../lib/structured-data';
-import { JsonLd } from './editorial-shell';
+import { JsonLd } from './json-ld';
 import { journalUi } from '../lib/i18n/blog';
 import { AlsoRead, Course, docNav, VillageFooter, VillageHeader } from './village-shell';
 

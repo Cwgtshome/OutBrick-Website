@@ -15,7 +15,7 @@ export const fr9: ExtraGuides = {
       'habitudes de jeu',
     ],
     intro:
-      'Un tube presque trié peut encore être le mauvais endroit où verser. Une brique près de sa sortie assortie peut encore être mal placée pour sortir. Tri d’eau et tri de blocs rendent l’association des couleurs évidente tout en cachant la décision intéressante dans l’ordre des coups. Mais la ressource gérée diffère : la place dans les récipients d’un côté, les trajets et arrêts de l’autre. Ce guide compare les décisions sans désigner de vainqueur. Pour l’eau, nous utilisons les règles publiées de Water Sort Puzzle d’IEC Global ; pour les blocs, le glissement jusqu’à l’arrêt d’OutBrick. D’autres jeux aux mêmes noms peuvent différer. Nous créons OutBrick ; nos exemples portent ce regard, sans prétendre à des essais indépendants.',
+      'Un tube presque trié peut encore être le mauvais endroit où verser. Une brique près de sa sortie assortie peut encore être mal placée pour sortir. Tri d’eau et tri de blocs rendent l’association des couleurs évidente tout en cachant la décision intéressante dans l’ordre des coups. Mais la ressource gérée diffère : la place dans les récipients d’un côté, les trajets et arrêts de l’autre. Ce guide compare les décisions sans désigner de vainqueur. Pour l’eau, nous utilisons les règles publiées de Water Sort Puzzle d’IEC Global ; pour les blocs, le glissement jusqu’à l’arrêt des plateaux classiques d’OutBrick, que gardent ses plateaux web. D’autres jeux aux mêmes noms peuvent différer. Nous créons OutBrick ; nos exemples portent ce regard, sans prétendre à des essais indépendants.',
     keyTakeaways: [
       'Le tri d’eau demande où le liquide peut aller légalement ; le tri de blocs coulissants demande quels trajets et arrêts créer.',
       'Un tube vide et une case vide servent différemment. Préservez l’espace du prochain pas au lieu d’associer les couleurs dès que possible.',
@@ -26,7 +26,7 @@ export const fr9: ExtraGuides = {
         title: 'Établissez d’abord ce que signifie un mouvement',
         paragraphs: [
           'La description de Water Sort Puzzle d’IEC Global indique qu’on touche un verre pour verser dans un autre, avec même couleur et place suffisante à la réception. Le but est de regrouper chaque couleur dans son verre. Ce sont les règles examinées ici, pas une promesse pour toutes les apps de tri d’eau. La fiche décrit aussi la reprise des niveaux et le jeu sans chrono. Ces points donnent un départ utile sans régler tous les cas limites, comme la quantité exacte transférée par un toucher (IEC Global Pty Ltd, n.d.).',
-          'Dans OutBrick, vous déplacez directement la brique. Elle glisse jusqu’à un obstacle et sort par une porte de sa couleur. Vous ne la posez pas sur la case de votre choix. Un couloir dégagé peut l’emporter trop loin ; une autre brique peut fournir l’arrêt nécessaire. Notre [guide des blocs coulissants](/blog/how-to-solve-sliding-block-puzzles) explique cette distinction et une méthode plus large.',
+          'Sur les plateaux classiques d’OutBrick, vous déplacez directement la brique. Elle glisse jusqu’à un obstacle et sort par une porte de sa couleur. Vous ne la posez pas sur la case de votre choix. Un couloir dégagé peut l’emporter trop loin ; une autre brique peut fournir l’arrêt nécessaire. (Le jeu de l’App Store se joue désormais en Slide & Match : une brique s’arrête là où vous la lâchez et peut s’échanger pour former des alignements.) Notre [guide des blocs coulissants](/blog/how-to-solve-sliding-block-puzzles) explique cette distinction et une méthode plus large.',
           'Les deux sont des puzzles de tri par couleur, mais cette étiquette décrit la destination plutôt que tout le trajet. Verser change les couches accessibles en haut d’un récipient. Glisser change les obstacles d’un plateau commun. Avant de trouver le jeu confus, énoncez la règle de mouvement. Une prévision juste est une meilleure première étape qu’une réussite rapide.',
           'Les variantes peuvent modifier mouvements, restrictions ou récipients. Commencez par le tutoriel du jeu avant de transférer les conseils d’un puzzle semblable.',
         ],
@@ -43,7 +43,7 @@ export const fr9: ExtraGuides = {
       'route-example': {
         title: 'Tri de blocs : un obstacle peut servir de frein',
         paragraphs: [
-          'Imaginez une rouge devant s’aligner avec sa porte au bord droit. Glisser vers le haut dans une colonne vide l’emporte au-delà de la rangée où tourner. Une bleue placée au-dessus pourrait l’arrêter à la bonne hauteur. La tâche immédiate est donc de placer la bleue, même si la rouge semble plus proche d’une sortie. C’est une situation illustrative de type OutBrick, pas la solution d’un plateau numéroté.',
+          'Imaginez une rouge devant s’aligner avec sa porte au bord droit. Glisser vers le haut dans une colonne vide l’emporte au-delà de la rangée où tourner. Une bleue placée au-dessus pourrait l’arrêter à la bonne hauteur. La tâche immédiate est donc de placer la bleue, même si la rouge semble plus proche d’une sortie. C’est une situation illustrative des plateaux classiques d’OutBrick, pas la solution d’un plateau numéroté.',
           'Une fois la rouge alignée, une seconde dépendance peut apparaître : la bleue a aussi besoin du couloir pour sa porte. Sortir trop tôt la rouge peut supprimer un arrêt encore utile à la bleue. Contrairement au tube libre précédent, la ressource est une position et sa relation à un trajet. Davantage d’espace vide ne signifie pas automatiquement une meilleure position. Parfois la disposition devient utile précisément parce que la bonne case est occupée.',
           'Kirsh et Maglio (1994) ont étudié Tetris et distingué les actions vers l’objectif de celles révélant des informations difficiles à calculer mentalement. Ils n’ont testé ni OutBrick ni le tri d’eau. Nous empruntons la distinction pour lire un essai : un coup peut révéler l’arrêt sans améliorer le trajet. « Elle s’est arrêtée une rangée trop haut » est une observation utilisable, pas un jugement de capacité.',
           'Essayez notre [page de jeu dans le navigateur](/play) et prévoyez l’arrêt avant de bouger. Comparez ensuite prévision et résultat. Pour lire plus attentivement, le [guide avant le premier coup](/blog/how-to-read-a-puzzle-before-moving) aide à identifier sorties et dépendances. Ce test concerne votre intérêt pour les trajets spatiaux, pas la vitesse d’apprentissage d’un jeu inconnu.',
@@ -75,7 +75,7 @@ export const fr9: ExtraGuides = {
       {
         question: 'Quelle différence centrale entre tri d’eau et de blocs ?',
         answer:
-          'Le tri d’eau organise le liquide coloré entre récipients selon capacité et association. Le tri de type OutBrick déplace des briques sur un plateau vers les portes assorties, chaque glissement continuant jusqu’à un obstacle.',
+          'Le tri d’eau organise le liquide coloré entre récipients selon capacité et association. Le tri classique d’OutBrick déplace des briques sur un plateau vers les portes assorties, chaque glissement continuant jusqu’à un obstacle ; le jeu de l’App Store y ajoute désormais échanges et alignements.',
       },
       {
         question: 'Un tube vide équivaut-il à une case vide de puzzle ?',
@@ -90,7 +90,7 @@ export const fr9: ExtraGuides = {
       {
         question: 'Puis-je essayer OutBrick avant de télécharger ?',
         answer:
-          'La [page de jeu OutBrick](/play) propose quelques plateaux web. Elle montre la règle sans représenter toute l’app ou promettre une progression commune.',
+          'La [page de jeu OutBrick](/play) propose quelques plateaux web. Elle montre la règle classique sans représenter toute l’app ou promettre une progression commune.',
       },
     ],
   },

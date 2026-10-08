@@ -216,7 +216,7 @@ const en: HomeCopy = {
       },
       {
         title: 'The first undo on every board is free and cannot run out.',
-        body: 'Beyond that, undos come from a tank of five that refills one every twenty-five minutes. The undo offered when a board wedges is free too, and sits outside the tank.',
+        body: 'Beyond that, undos come from a tank of five that refills one every twenty-five minutes. A board with no possible move left reshuffles itself for free.',
       },
       {
         title: 'The rope is a move limit, not a clock.',
@@ -234,8 +234,8 @@ const en: HomeCopy = {
   },
   apple: {
     eyebrow: 'Built for Apple',
-    title: 'One purchase. One progress. Six places to play it.',
-    lede: 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro and a standalone Apple Watch game. Signed in to iCloud, a new device picks up exactly where the old one stopped — level, coins, streak, Collection and all. It lives in your iCloud, not ours.',
+    title: 'One purchase. One progress. Five places to play it.',
+    lede: 'iPhone, iPad, Mac, Apple Vision Pro and a standalone Apple Watch game. Signed in to iCloud, a new device picks up exactly where the old one stopped — level, coins, streak, Collection and all. It lives in your iCloud, not ours.',
     platforms: 'Platforms',
     showcase: {
       label: 'OutBrick on iPad and iPhone',
@@ -408,7 +408,7 @@ const fr: HomeCopy = {
       },
       {
         title: 'La première annulation de chaque plateau est gratuite, et elle ne s’épuise jamais.',
-        body: 'Au-delà, les annulations puisent dans une réserve de cinq, qui en regagne une toutes les vingt-cinq minutes. L’annulation proposée quand un plateau se bloque est gratuite elle aussi, et ne touche pas à la réserve.',
+        body: 'Au-delà, les annulations puisent dans une réserve de cinq, qui en regagne une toutes les vingt-cinq minutes. Un plateau sans plus aucun coup possible se mélange de nouveau gratuitement.',
       },
       {
         title: 'La corde est une limite de coups, pas un chrono.',
@@ -426,8 +426,8 @@ const fr: HomeCopy = {
   },
   apple: {
     eyebrow: 'Pensé pour Apple',
-    title: 'Un seul achat. Une seule progression. Six appareils pour y jouer.',
-    lede: 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro et un jeu autonome sur Apple Watch. Connecté à iCloud, un nouvel appareil reprend exactement là où l’ancien s’était arrêté — niveau, pièces, série, Collection, tout y est. Vos données vivent dans votre iCloud, pas chez nous.',
+    title: 'Un seul achat. Une seule progression. Cinq appareils pour y jouer.',
+    lede: 'iPhone, iPad, Mac, Apple Vision Pro et un jeu autonome sur Apple Watch. Connecté à iCloud, un nouvel appareil reprend exactement là où l’ancien s’était arrêté — niveau, pièces, série, Collection, tout y est. Vos données vivent dans votre iCloud, pas chez nous.',
     platforms: 'Plateformes',
     showcase: {
       label: 'OutBrick sur iPad et iPhone',
@@ -599,7 +599,7 @@ const de: HomeCopy = {
       },
       {
         title: 'Die erste Zugrücknahme auf jedem Feld ist gratis und geht nie aus.',
-        body: 'Darüber hinaus kommen Zugrücknahmen aus einem Vorrat von fünf, der sich alle fünfundzwanzig Minuten um eine auffüllt. Die Zugrücknahme, die dir angeboten wird, wenn ein Feld festsitzt, ist ebenfalls gratis und zählt nicht zum Vorrat.',
+        body: 'Darüber hinaus kommen Zugrücknahmen aus einem Vorrat von fünf, der sich alle fünfundzwanzig Minuten um eine auffüllt. Ist auf einem Feld kein Zug mehr möglich, mischt es sich kostenlos neu.',
       },
       {
         title: 'Das Seil ist ein Zuglimit, keine Uhr.',
@@ -617,8 +617,8 @@ const de: HomeCopy = {
   },
   apple: {
     eyebrow: 'Für Apple gebaut',
-    title: 'Ein Kauf. Ein Spielstand. Sechs Geräte zum Spielen.',
-    lede: 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro und ein eigenständiges Spiel für die Apple Watch. Bei iCloud angemeldet, macht ein neues Gerät genau dort weiter, wo das alte aufgehört hat – Level, Münzen, Serie, Sammlung, alles. Das liegt in deiner iCloud, nicht bei uns.',
+    title: 'Ein Kauf. Ein Spielstand. Fünf Geräte zum Spielen.',
+    lede: 'iPhone, iPad, Mac, Apple Vision Pro und ein eigenständiges Spiel für die Apple Watch. Bei iCloud angemeldet, macht ein neues Gerät genau dort weiter, wo das alte aufgehört hat – Level, Münzen, Serie, Sammlung, alles. Das liegt in deiner iCloud, nicht bei uns.',
     platforms: 'Plattformen',
     showcase: {
       label: 'OutBrick auf iPad und iPhone',
@@ -789,7 +789,7 @@ const es: HomeCopy = {
       },
       {
         title: 'Deshacer la primera vez en cada tablero es gratis y nunca se agota.',
-        body: 'A partir de ahí, cada vez que deshaces se tira de una reserva de cinco que recupera una cada veinticinco minutos. La opción de deshacer que se ofrece cuando un tablero se atasca también es gratis y no toca la reserva.',
+        body: 'A partir de ahí, cada vez que deshaces se tira de una reserva de cinco que recupera una cada veinticinco minutos. Un tablero sin ningún movimiento posible se reordena gratis.',
       },
       {
         title: 'La cuerda es un límite de movimientos, no un reloj.',
@@ -807,8 +807,8 @@ const es: HomeCopy = {
   },
   apple: {
     eyebrow: 'Hecho para Apple',
-    title: 'Una compra. Un progreso. Seis sitios donde jugar.',
-    lede: 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro y un juego independiente para Apple Watch. Con tu sesión de iCloud iniciada, un dispositivo nuevo continúa exactamente donde lo dejó el anterior: nivel, monedas, racha, Colección y todo lo demás. Vive en tu iCloud, no en el nuestro.',
+    title: 'Una compra. Un progreso. Cinco sitios donde jugar.',
+    lede: 'iPhone, iPad, Mac, Apple Vision Pro y un juego independiente para Apple Watch. Con tu sesión de iCloud iniciada, un dispositivo nuevo continúa exactamente donde lo dejó el anterior: nivel, monedas, racha, Colección y todo lo demás. Vive en tu iCloud, no en el nuestro.',
     platforms: 'Plataformas',
     showcase: {
       label: 'OutBrick en iPad y iPhone',
@@ -926,15 +926,15 @@ const ptBR: HomeCopy = {
     quote: 'OutBrick foi lançado com essas duas promessas, e ambas mudaram. As mecânicas continuam aqui, mas são generosas — e esta página explica isso.',
     ledger: [
       { title: 'Uma vida é o custo de perder um tabuleiro, nunca de jogar ou concluí-lo.', body: 'Abrir um tabuleiro exige uma vida, mas não consome nenhuma. Concluí-lo não custa nada. Você só perde uma vida quando uma tentativa termina sem concluir o tabuleiro. São cinco vidas, oito com o Brick Pass, e você recupera uma a cada trinta minutos.' },
-      { title: 'A primeira vez que você desfaz uma jogada em cada tabuleiro é grátis e não consome sua reserva.', body: 'Depois disso, cada desfazer usa uma reserva de cinco, que recupera uma a cada vinte e cinco minutos. A opção de desfazer oferecida quando um tabuleiro trava também é grátis e não mexe na reserva.' },
+      { title: 'A primeira vez que você desfaz uma jogada em cada tabuleiro é grátis e não consome sua reserva.', body: 'Depois disso, cada desfazer usa uma reserva de cinco, que recupera uma a cada vinte e cinco minutos. Um tabuleiro sem nenhuma jogada possível se embaralha de novo de graça.' },
       { title: 'O limite é de movimentos, não de tempo.', body: 'Cada tabuleiro mostra o objetivo e o limite desde o primeiro toque. Não há contagem regressiva no jogo. Se os movimentos acabarem, você pode comprar mais cinco: 300 moedas, depois 500 e depois 900 na mesma tentativa.' },
       { title: 'Oito opções de vídeos com recompensa, todas voluntárias e limitadas.', body: 'Vídeos podem oferecer vidas (até 8 por dia), desfazer (8), movimentos extras (6), uma dica grátis quando os movimentos acabam (4), moedas dobradas na conclusão (4), uma rodada na Brick Wheel (1), o balão de presente (2) e o Brick Cinema (6): até 39 vídeos por dia no total. Sem banners ou anúncios intersticiais: nada começa sem você tocar para assistir, e nada interrompe um tabuleiro. Recusar não custa nada.' },
       { title: 'Moedas e reforços são opcionais. Não há assinatura.', body: 'Remover Anúncios desativa a publicidade para sempre e ainda concede o que os vídeos renderiam. O Brick Pass aumenta o limite de vidas de cinco para oito e desativa os anúncios enquanto estiver ativo.' },
     ],
   },
   apple: {
-    eyebrow: 'Feito para Apple', title: 'Uma compra. Um progresso. Seis lugares para jogar.',
-    lede: 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro e um jogo independente no Apple Watch. Com a sessão do iCloud iniciada, um aparelho novo continua exatamente de onde o antigo parou: fase, moedas, sequência, coleção e tudo mais. Seu progresso fica no seu iCloud, não no nosso.',
+    eyebrow: 'Feito para Apple', title: 'Uma compra. Um progresso. Cinco lugares para jogar.',
+    lede: 'iPhone, iPad, Mac, Apple Vision Pro e um jogo independente no Apple Watch. Com a sessão do iCloud iniciada, um aparelho novo continua exatamente de onde o antigo parou: fase, moedas, sequência, coleção e tudo mais. Seu progresso fica no seu iCloud, não no nosso.',
     platforms: 'Plataformas',
     showcase: {
       label: 'OutBrick no iPad e no iPhone', ipad: 'OutBrick no iPad: a tela inicial com Peach, Bloo e Sprout diante de um vilarejo de blocos.',
@@ -1073,7 +1073,7 @@ const ja: HomeCopy = {
       },
       {
         title: '各ステージ最初のアンドゥは無料で、なくなることもありません。',
-        body: 'それ以降のアンドゥは5回分のタンクから使い、25分ごとに1回分ずつ回復します。ステージが詰まったときに提案されるアンドゥも無料で、タンクとは別枠です。',
+        body: 'それ以降のアンドゥは5回分のタンクから使い、25分ごとに1回分ずつ回復します。動かせる手がなくなったステージは、無料でシャッフルされます。',
       },
       {
         title: 'ロープは手数の上限であって、時計ではありません。',
@@ -1091,8 +1091,8 @@ const ja: HomeCopy = {
   },
   apple: {
     eyebrow: 'Appleのためにつくりました',
-    title: '一度の購入で、進行はひとつ。遊べる場所は6つ。',
-    lede: 'iPhone、iPad、Mac、Apple TV、Apple Vision Pro、そして単体で遊べるApple Watch版。iCloudにサインインしていれば、新しいデバイスでも前のデバイスの続きからそのまま遊べます。レベルもコインも連続記録もコレクションも、すべて。データはあなたのiCloudにあり、私たちのところにはありません。',
+    title: '一度の購入で、進行はひとつ。遊べる場所は5つ。',
+    lede: 'iPhone、iPad、Mac、Apple Vision Pro、そして単体で遊べるApple Watch版。iCloudにサインインしていれば、新しいデバイスでも前のデバイスの続きからそのまま遊べます。レベルもコインも連続記録もコレクションも、すべて。データはあなたのiCloudにあり、私たちのところにはありません。',
     platforms: 'プラットフォーム',
     showcase: {
       label: 'iPad と iPhone の OutBrick',
@@ -1153,6 +1153,7 @@ for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'] as const) {
   h.fair.ledger[0].body = t.lives;
   h.rule.eyebrow = t.demoTitle;
   h.rule.lede = t.demo;
+  h.rule.steps[2].title = t.starsTitle;
   h.rule.steps[2].body = t.stars;
   h.fair.ledger[2].body = t.moves;
   h.fair.ledger[3] = { title: t.adsTitle, body: t.ads };

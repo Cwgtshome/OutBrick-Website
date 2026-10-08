@@ -3,7 +3,7 @@
 // badge, then the legal line last, as the brand block of a well-made email footer runs. shell() in core.ts appends it under each template's own footer, so no
 // template can leave it out; brandFooterText() is the same in the text/plain part.
 //
-// The profiles are the website footer's (lib/site.ts socialProfiles, every row, as the site
+// The profiles are the website footer's (lib/site.ts shownSocialProfiles(), as the site
 // shows them), with the site's own accessible names (lib/i18n/site.ts). The tiles are PNGs
 // drawn from the site's glyphs by scripts/build-email-images.mjs, since email clients
 // strip inline SVG; the badges are Apple's official ones from public/assets/badge, rasterized
@@ -11,7 +11,7 @@
 // the Resend templates, which are rendered at build time, are rebuilt and pushed on every
 // production deploy (scripts/build-resend-templates.mjs).
 
-import { socialProfiles } from '../lib/site.ts';
+import { shownSocialProfiles } from '../lib/site.ts';
 import { siteWords } from '../lib/i18n/site.ts';
 import { chromeCopy } from '../lib/i18n/chrome.ts';
 import { storefronts } from '../lib/i18n/locales.ts';
@@ -97,7 +97,7 @@ export function brandFooter(ctx: Ctx, year?: number): string {
   const f = fonts(ctx.locale);
   const words = siteWords[ctx.locale];
   const badge = badges[ctx.locale];
-  const tiles = socialProfiles.map((p) => {
+  const tiles = shownSocialProfiles().map((p) => {
     const name = esc(words.on(p.label));
     return `<!--[if mso]><td style="padding:0 4px;"><![endif]--><a href="${esc(p.url)}" title="${name}" style="display:inline-block;margin:0 3px 8px;text-decoration:none;"><img src="${esc(`${ctx.assetBase}/assets/email/social-${p.network}.png`)}" width="44" height="48" alt="${name}" style="display:block;width:44px;height:48px;border:0;color:${color.title};font-family:${f.text};font-size:11px;line-height:1.2;"></a><!--[if mso]></td><![endif]-->`;
   });
@@ -122,5 +122,5 @@ ${tiles.join('\n')}
 
 /** The same, for the text/plain part: one line per profile, then the copyright. */
 export function brandFooterText(locale: EmailLocale, year?: number): string[] {
-  return ['', brandCopy[locale].follow(HANDLE), ...socialProfiles.map((p) => `${p.label}: ${p.url}`), '', `${chromeCopy[locale].badgeAlt}: ${footerStoreUrl(locale)}`, '', copyright(locale, year), postalAddress(locale)];
+  return ['', brandCopy[locale].follow(HANDLE), ...shownSocialProfiles().map((p) => `${p.label}: ${p.url}`), '', `${chromeCopy[locale].badgeAlt}: ${footerStoreUrl(locale)}`, '', copyright(locale, year), postalAddress(locale)];
 }

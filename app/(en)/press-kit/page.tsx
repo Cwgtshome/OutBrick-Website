@@ -31,7 +31,7 @@ const factSheet: [string, string][] = [
   ['Title', 'OutBrick (App Store listing: OutBrick: Block Sort Puzzle)'],
   ['Genre', 'Slide-and-match brick puzzle'],
   ['Developer', 'Mourad Hamdi, independent'],
-  ['Platforms', 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro, and a standalone Apple Watch game'],
+  ['Platforms', 'iPhone, iPad, Mac, Apple Vision Pro, and a standalone Apple Watch game'],
   ['Price', 'Free. Optional coins, boosters, Remove Ads and the Brick Pass. No subscription.'],
   ['Content', '2,000 solver-verified boards across 100 chapters; a Journey of 167 brick-built villages; nine brick friends'],
   ['Lives', 'Five (eight with the Brick Pass), one back every thirty minutes. A life is spent only when an attempt ends without a clear.'],

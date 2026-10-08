@@ -169,7 +169,8 @@ export function authorByline(authorId: string): Node {
 // ---------------------------------------------------------------------------------------
 // The game
 
-const platforms = ['iPhone', 'iPad', 'Mac', 'Apple TV', 'Apple Vision Pro', 'Apple Watch'];
+// The App Store lists no Apple TV version (checked 8 October 2026).
+const platforms = ['iPhone', 'iPad', 'Mac', 'Apple Vision Pro', 'Apple Watch'];
 
 const screenshots = [
   { file: 'iphone-home.png', w: 737, h: 1564, caption: 'OutBrick on iPhone: the Home screen with three brick friends' },
@@ -216,7 +217,7 @@ export function appNode({ description, url = `${siteUrl}/`, showsRating = false 
     description: description ?? currentGameCopy.en.summary,
     applicationCategory: 'GameApplication',
     applicationSubCategory: 'Puzzle game',
-    operatingSystem: `iOS ${record.minimumOsVersion ?? appStoreFallback.minimumOsVersion} or later, iPadOS, macOS, tvOS, visionOS, watchOS`,
+    operatingSystem: `iOS ${record.minimumOsVersion ?? appStoreFallback.minimumOsVersion} or later, iPadOS, macOS, visionOS, watchOS`,
     gamePlatform: platforms,
     genre: record.genres?.length ? record.genres : appStoreFallback.genres,
     contentRating: record.contentRating ?? appStoreFallback.contentRating,

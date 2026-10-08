@@ -3,6 +3,17 @@
 Updated 8 October 2026. This is a dated handoff, not a claim that account state remains unchanged.
 Recheck live Git, `/build-info.json`, `/api/community/session` and relevant providers before acting.
 
+
+## Performance pass (8 October 2026, on main; not deployed — Netlify production deploys paused for credits)
+
+Mobile Lighthouse, same local setup before/after (HTTP/1.1, noisy machine): home 79–82 → 84–85, page
+weight 690 → 455 KiB; journal article 85–87 → 86–88, 395 → 334 KiB; Accessibility, Best Practices and
+SEO 100, CLS 0. The italic Figtree no longer loads where no italic text exists (`i:empty`),
+editorial CSS ships only with the editorial shell (site-wide CSS 38.9 → 27.4 KB gz), and images get
+WebP twins and right-sized `srcset` variants (covers at 960w, friends 240w, wordmark 48/96/192 px).
+Not done on purpose: inlining critical CSS, framework JS, longer caches for non-hashed assets, and
+the hero headline's fade-in (a design call; real-user LCP may count it).
+
 ## Production checkpoint
 
 - Repository: <https://github.com/Cwgtshome/OutBrick-Website>, default branch `main`.
@@ -37,7 +48,7 @@ browser. Not verified: real delivery, real mail clients, the release-draft call 
 ## Email footer and responsive check (8 October 2026, branch `claude/email-footer-responsive`)
 
 Every email, and every page drawn with the email shell, now ends with the website footer's
-social tiles (all five `socialProfiles` rows, handle `@outbrick`), a "Follow OutBrick: @outbrick"
+social tiles (the `shownSocialProfiles()` rows, handle `@outbrick`; Snapchat hidden since the fact-check), a "Follow OutBrick: @outbrick"
 line and `© <year> OutBrick. All rights reserved.`, centred, in all six languages. Apple's App
 Store badge sits centred between the handle and the copyright. It is in the reader's badge language and
 links to their storefront with campaign `web-email-footer`. The header logo is centred. They are added
@@ -61,8 +72,8 @@ Not deployed. Local evidence from one build without `GA_MEASUREMENT_ID` and one 
   levels (no skips), `<html lang>`, and that every hreflang set names the page and an x-default.
 - `pnpm check:links`: every internal link and anchor resolves. `--external` (live network) found
   two dead links: the ThinkFun Rush Hour article (now cited from the Internet Archive) and
-  `snapchat.com/add/outbrick`, which answers 404. The Snapchat profile stays in the footer until
-  the owner creates it or removes the row from `socialProfiles` in `lib/site.ts`.
+  `snapchat.com/add/outbrick`, which answers 404. Since the fact-check below, the Snapchat row is
+  kept in `socialProfiles` but has `shown: false`, so neither footer links to it.
 - `node scripts/check-jsonld.mjs` (new): every JSON-LD block parses, with `@context` and a type.
   Contact pages used to carry a second ContactPage and BreadcrumbList; they now carry one.
 - Legal and help pages show a visible breadcrumb trail matching their BreadcrumbList. Journal
@@ -125,9 +136,47 @@ articles and minor translated pages). The sitemap then listed 1,272 URLs, 402 of
 
 Owner checks after deploy: resubmit `/sitemap.xml` in Search Console and confirm the twelve
 children are read; confirm the migration applied (FAQ at `/community` shows 39); watch the
-"Crawled/Discovered – currently not indexed" counts over the following weeks. Unused strings in
-`lib/i18n/legal-pages*.ts` and `lib/i18n/current-public.ts` still mention "six places"/"six
-rewarded video placements"/"Thirty-one"; they are dictionary keys no page renders.
+"Crawled/Discovered – currently not indexed" counts over the following weeks. The unused
+"six places"/"six rewarded video placements"/"Thirty-one" dictionary keys were removed in the
+fact-check below.
+
+## Fact-check against 5.1.1 (8 October 2026, branch `claude/email-footer-responsive`)
+
+Not deployed. Sources: Apple's lookup (us, fr, de, es, jp, br: 5.1.1, released 2026-10-08), the US
+App Store page's platform list, and the game repository's `origin/main` (5.1.1 source and dated
+docs). Corrected in all six languages:
+
+- **Platforms.** The App Store lists iPhone, iPad, Mac, Apple Vision and Apple Watch, not Apple TV
+  (tvOS was still in review or rejected in the game repo's notes). Platform lists, "six places/
+  platforms", the home device chips and JSON-LD `operatingSystem` no longer claim Apple TV. The
+  footer's trademark line and the dated 4.2 press release are unchanged.
+- **Out-of-moves continue.** Coins still buy five moves at 300 → 500 → 900, but a rewarded video
+  adds two moves, then one, then a free UFO (`ContinueOffer`, flag `continueboosters` on by
+  default). `lib/i18n/current-game.ts` gains `extraMoves`; support page, support FAQ and play guide.
+- **No "Wedged!" sheet on iOS.** A Slide & Match board with no move reshuffles itself for free;
+  home ledger, play guide and support page say so.
+- **Ads lists.** Privacy policy and privacy choices no longer list "a booster for the board ahead"
+  or only "a life, an undo, or more moves".
+- **Smaller fixes.** About page "prints its target" → goals and move limit; careers role copy
+  (one-finger Slide & Match gesture, five platforms); challenge warm-up board described as the
+  classic board, not "board one of the Journey"; the home stars step is titled from
+  `currentGameCopy`; Settings guide describes "Hold to confirm swaps" as it works (a swap chosen
+  with VoiceOver, Voice Control, Switch Control or a keyboard plays when chosen a second time).
+- **Journal.** Sentences stating OutBrick's own rule as glide-to-stop, the wedge undo, "six
+  placements"/"thirty-one a day", Apple TV, the undo-based star rule and "five website languages"
+  now match 5.1.1; research and general design discussion unchanged; the classic rule is named as
+  the browser demo's where an article keeps it.
+- **Community copy.** Migration `20261008150000_faq-guides-continue` (generated by
+  `scripts/build-player-guide-seed.mts`, which now layers on `20261008120000`) updates FAQ
+  positions 3 and 6 and the first-board, VoiceOver, Settings and economy guides, only where rows
+  still hold seeded text. New test in `netlify/community/player-guides.test.ts`.
+- **Snapchat** is hidden (`shown: false`) from both footers; data kept. Unused "six places"/
+  "Thirty-one" dictionary keys and their inventory entries are removed.
+
+Open for the owner: the out-of-moves free-Hint row is switched off in 5.x source
+(`WallFreeHint.removed`), so 7 of the 8 capped placements are reachable (35 of 39 views); the site
+keeps the App Store's "eight placements, 39 a day". Game Center's achievement count (57 live, 65 in
+App Store Connect, 8 not yet released) is unverified on the store.
 
 ## Product content
 

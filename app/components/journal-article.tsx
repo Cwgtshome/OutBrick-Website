@@ -27,6 +27,7 @@ import { authorByline, breadcrumbNode, graph, ids, isoDateTime, ref, webPageNode
 import { isoDate, plain, Rich, StoryCard } from '../(en)/blog/journal-kit';
 import { ReadingAids } from '../(en)/blog/[slug]/reading-aids';
 import { BrandMark } from '../village-shell';
+import { coverSrcSet } from '../../lib/images';
 
 const CJK = /[ᄀ-ᇿ⺀-鿿가-힯豈-﫿︰-﹏＀-｠￠-￦]/u;
 /** Length as a search result shows it: a CJK character is about twice as wide as a Latin one. */
@@ -322,8 +323,10 @@ export function ArticleView({
                 </div>
                 {tr ? <LanguageLinks locale={tr} pathFor={(l) => guidePath(l, article.slug)} /> : null}
               </div>
+              {/* `sizes` is the width the square crop draws the 16:9 cover at (about 480 CSS px at
+                  every breakpoint), not the frame's width, so retina screens still get the full cover. */}
               <figure className="ed-frame">
-                <img src={article.image} alt={article.imageAlt} width={1600} height={900} decoding="async" fetchPriority="high" />
+                <img src={article.image} srcSet={coverSrcSet(article.image)} sizes="480px" alt={article.imageAlt} width={1600} height={900} decoding="async" fetchPriority="high" />
                 <figcaption>{ui.figcaption}</figcaption>
               </figure>
             </div>

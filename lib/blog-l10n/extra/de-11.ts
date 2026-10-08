@@ -114,7 +114,7 @@ export const de11: ExtraGuides = {
         paragraphs: [
           'Ein weiterer Spieler erklärte, dass die Navigation durch Wischgesten am besten funktioniere, er für das räumliche Verständnis aber mit dem Finger über das Spielfeld fahren müsse. Was fehlte, war eine ausdrückliche Ansage leerer Felder. Ohne sie ließ sich ein stiller Bereich nicht verlässlich als verfügbarer Raum verstehen. Das ist eine genaue Beobachtung dazu, welche Informationen ein Puzzle vermitteln muss.',
           'Stellen Sie sich ein Spielfeld mit einem Stein, einem Tor und einer Lücke dazwischen vor. Um die Schiebebewegung vorherzusagen, muss ein Spieler wissen, ob diese Lücke frei ist. Stille allein lässt mehrere Möglichkeiten offen: freier Raum, ein übersehenes Objekt oder eine Position außerhalb des eigentlichen Spielfelds. Eine eindeutige Ansage eines leeren Felds würde eine Quelle der Unsicherheit beseitigen.',
-          'Freier Raum gehört zu den Informationen eines Puzzles. Er hilft, einen versperrten von einem möglichen Weg zu unterscheiden und die Beziehungen zwischen den Steinen leichter zu untersuchen. Das bedeutet noch nicht, dass ein Stein dort anhält: Bei einer normalen vollständigen Schiebebewegung in OutBrick gleitet der Stein weiter, bis ihn etwas stoppt. Unser [Ratgeber zur Bewegung](/blog/outbrick-voiceover-slide-actions) erklärt, warum der Haltepunkt ebenso wichtig ist wie die Lücke.',
+          'Freier Raum gehört zu den Informationen eines Puzzles. Er hilft, einen versperrten von einem möglichen Weg zu unterscheiden und die Beziehungen zwischen den Steinen leichter zu untersuchen. Das bedeutet noch nicht, dass ein Stein dort anhält: Bei einem Schiebezug bis zum Ende gleitet der Stein in OutBrick weiter, bis ihn etwas stoppt, und eine kürzere Schiebeaktion nennt, wie viele Felder sie zurücklegt. Unser [Ratgeber zur Bewegung](/blog/outbrick-voiceover-slide-actions) erklärt, warum der Haltepunkt ebenso wichtig ist wie die Lücke.',
         ],
       },
       'a-small-orientation-routine': {
@@ -159,29 +159,29 @@ export const de11: ExtraGuides = {
   },
   'outbrick-voiceover-slide-actions': {
     title: 'OutBrick-Steine mit VoiceOver-Aktionen verschieben',
-    dek: 'OutBricks vier Schieberichtungen, passende Tore und das Gleiten bis zum Halt: mit VoiceOver-Anleitung und den zugesagten Hilfen für den Einstieg.',
+    dek: 'OutBricks vier Schieberichtungen, passende Tore und Schiebeweiten: mit VoiceOver-Anleitung und den zugesagten Hilfen für den Einstieg.',
     imageAlt: 'Illustration zu OutBrick mit einem Smartphone, bunten Steinen und zwei Steinfiguren auf dunkelblauem Hintergrund.',
     tags: ['Barrierefreiheit', 'VoiceOver', 'inklusives Design', 'Puzzlespiele', 'Spieleinstieg'],
     intro: 'Sich zu fragen, wie ein Stein nach unten bewegt wird, ist völlig nachvollziehbar, wenn ein Spiel seine Steuerung nicht klar erklärt. Ein Spieler auf AppleVis hatte verstanden, dass OutBricks Steine das Spielfeld verlassen müssen, dachte aber, sie könnten nur nach oben bewegt werden, und fand keine Anleitung. In unserer Antwort erklärten wir die vier Richtungen, die passenden Tore und die VoiceOver-Aktionen. Außerdem sagten wir für das nächste Update klarere Erklärungen zu. Dieser Ratgeber bringt die einzelnen Punkte zusammen, damit Sie die Wahl einer Richtung, das Verstehen eines Wegs und die Entscheidung über den zuerst zu bewegenden Stein auseinanderhalten können.',
     keyTakeaways: [
       'Ein Stein kann nach oben, unten, links oder rechts gleiten, wenn der Weg frei ist. Er verlässt das Spielfeld durch ein Tor seiner eigenen Farbe.',
       'Ist ein Stein fokussiert, wählen Wischgesten nach oben und unten zwischen VoiceOver-Schiebeaktionen. Diese Gesten beschränken die Bewegung nicht auf senkrechte Richtungen.',
-      'Für das nächste Update sind kurze Erklärungskarten, leichtere Einstiegsspielfelder und mehr Züge auf den ersten Spielfeldern geplant.',
+      'Kurze Erklärungskarten, für das nächste Update zugesagt, sind mit Version 5.1 gekommen; leichtere Einstiegsspielfelder und mehr Züge auf den ersten Spielfeldern wurden zugleich zugesagt.',
     ],
     sections: {
       'match-the-brick-to-its-gate': {
         title: 'Zuerst das Ziel finden, wo immer es liegt',
         paragraphs: [
-          'Das grundlegende Ziel ist, die Steine durch Tore ihrer eigenen Farbe hinauszubringen. Ein roter Stein braucht sein rotes Tor. Ein anderes Tor zu erreichen erfüllt diese Zuordnungsregel nicht. Tore können an jeder Seite des Spielfelds liegen. Es gibt keine allgemeine Regel, nach der jeder Stein nach oben wandern muss oder der richtige Ausgang immer am oberen Rand liegt.',
+          'Ein grundlegendes Ziel ist, die Steine durch Tore ihrer eigenen Farbe nach Hause zu bringen. Ein roter Stein braucht sein rotes Tor. Ein anderes Tor zu erreichen erfüllt diese Zuordnungsregel nicht. Tore können an jeder Seite des Spielfelds liegen. Es gibt keine allgemeine Regel, nach der jeder Stein nach oben wandern muss oder der richtige Ausgang immer am oberen Rand liegt.',
           'OutBrick beschriftet Farbe, Form und Position jedes Steins für VoiceOver und kennzeichnet Steine und passende Tore mit jeweils zugeordneten Symbolen. Bestimmen Sie zuerst den Stein, den Sie bewegen möchten, und finden Sie sein Ziel. Untersuchen Sie dann den Weg dazwischen. Ein Ausgang kann nahe bei einem Stein liegen und dennoch erfordern, dass zunächst andere Steine bewegt werden.',
           'Stellen Sie sich ein passendes Tor auf der rechten Seite vor, mit einem weiteren Stein zwischen dem Tor und Ihrem ausgewählten Stein. Das unmittelbare Problem ist der Stein dazwischen. Die Suche nach einer Aktion nach oben löst keinen Weg, der seitlich freigemacht werden muss. Wenn Sie vor der Aktionswahl Hilfe beim Verorten der Steine brauchen, lesen Sie unseren [Ratgeber zur Spielfeldorientierung mit VoiceOver](/blog/outbrick-voiceover-spatial-board).',
         ],
       },
       'predict-the-stopping-point': {
-        title: 'Ein voller Schiebezug geht weiter, bis etwas ihn stoppt',
+        title: 'Wählen Sie, wie weit ein Schiebezug geht',
         paragraphs: [
-          'Für eine normale vollständige Schiebebewegung in eine Richtung gilt in OutBrick die Regel „Gleiten bis zum Halt“: Der Stein bewegt sich entlang des verfügbaren Wegs, bis ihn etwas stoppt. Hören Sie auf den vollständigen Aktionsnamen und planen Sie den Endpunkt der gewählten Aktion. Überlegen Sie vor der Entscheidung für einen Weg sowohl, ob sich der Stein in Bewegung setzen kann, als auch, wo diese Bewegung enden wird.',
-          'Ein einfaches gedankliches Beispiel hilft. Links von einem Stein liegen mehrere freie Felder und dahinter ein weiterer Stein. Eine normale vollständige Schiebebewegung nach links trägt den ausgewählten Stein durch den verfügbaren Raum, bis er gestoppt wird. Er hält nicht automatisch nach dem ersten freien Feld an. Der andere Stein kann daher je nach Plan ein Hindernis oder ein hilfreicher Haltepunkt sein.',
+          'Seit Version 5.1 nennt jede Schiebeaktion in OutBrick neben der Richtung auch eine Weite, etwa „Schieben nach rechts um 1 Feld“ oder „Schieben nach oben bis zum Ende, 3 Felder“: Der Stein bewegt sich entlang des verfügbaren Wegs und hält dort, wo die Aktion es sagt. Hören Sie auf den vollständigen Aktionsnamen und planen Sie den Endpunkt der gewählten Aktion. Überlegen Sie vor der Entscheidung für einen Weg sowohl, ob sich der Stein in Bewegung setzen kann, als auch, wo diese Bewegung enden wird.',
+          'Ein einfaches gedankliches Beispiel hilft. Links von einem Stein liegen mehrere freie Felder und dahinter ein weiterer Stein. Ein Schiebezug nach links bis zum Ende trägt den ausgewählten Stein durch den verfügbaren Raum, bis der andere Stein ihn stoppt; eine kürzere Aktion hält nach der Zahl von Feldern, die sie nennt. Der andere Stein kann daher je nach Plan ein Hindernis oder ein hilfreicher Haltepunkt sein.',
           'Deshalb ist die Reihenfolge wichtig. Einen blockierenden Stein wegzubewegen kann einen Ausgang öffnen. Einen nützlichen Haltestein zu früh wegzubewegen kann aber eine spätere Schiebebewegung verändern. Sie können diese Abfolge vor dem Handeln bedenken. Unser [Ratgeber zu Puzzle-Herausforderungen ohne Zeitdruck](/blog/outbrick-untimed-puzzle-challenge) erklärt den Unterschied zwischen Bedenkzeit und Zuglimit: Zeit zum Untersuchen des Spielfelds bedeutet nicht, dass Sie unbegrenzt viele Züge haben.',
         ],
       },
@@ -225,8 +225,8 @@ export const de11: ExtraGuides = {
     faqs: [
       { question: 'Können OutBrick-Steine mit VoiceOver nach unten und zur Seite bewegt werden?', answer: 'Ja. Unsere Entwickleranleitung beschreibt Aktionen zum Schieben nach oben, unten, links und rechts, sofern der verfügbare Platz die Bewegung erlaubt. Tore können an jeder Seite des Spielfelds liegen.' },
       { question: 'Bedeuten VoiceOver-Wischgesten nach oben und unten, dass sich der Stein nur senkrecht bewegt?', answer: 'Nein. Ist ein Stein fokussiert, dienen Wischgesten nach oben und unten in unserer Anleitung dazu, zwischen Richtungsaktionen zu wählen. Hören Sie auf den Namen der ausgewählten Aktion. Er kann links, rechts, oben oder unten angeben.' },
-      { question: 'Warum gleitet ein OutBrick-Stein über ein leeres Feld hinweg?', answer: 'Eine normale vollständige Schiebebewegung in eine Richtung folgt der Regel „Gleiten bis zum Halt“. Der Stein bewegt sich also weiter, bis ihn etwas stoppt. Hören Sie auf den vollständigen Aktionsnamen, um zu verstehen, welche Bewegung Sie auswählen. Bedenken Sie neben dem verfügbaren Weg auch den erwarteten Haltepunkt.' },
-      { question: 'Wo sind die in den AppleVis-Antworten beschriebenen Erklärungskarten?', answer: 'Die Antworten vom 2. Oktober 2026 sagen Erklärungskarten für das nächste Update zu und nennen keinen Ort für eine derzeit verfügbare Anleitung. Leichtere erste Spielfelder und mehr Züge zum Einstieg sind in dieser Diskussion ebenfalls Zusagen für die Zukunft.' },
+      { question: 'Warum gleitet ein OutBrick-Stein über ein leeres Feld hinweg?', answer: 'Ein Schiebezug bis zum Ende trägt den Stein weiter, bis ihn etwas stoppt. Seit Version 5.1 nennen andere Schiebeaktionen eine kürzere Weite, etwa „Schieben nach rechts um 1 Feld“. Hören Sie auf den vollständigen Aktionsnamen, um zu verstehen, welche Bewegung Sie auswählen. Bedenken Sie neben dem verfügbaren Weg auch den erwarteten Haltepunkt.' },
+      { question: 'Wo sind die in den AppleVis-Antworten beschriebenen Erklärungskarten?', answer: 'Die Antworten vom 2. Oktober 2026 sagten Erklärungskarten für das nächste Update zu. Version 5.1 hat sie gebracht: Eine kurze Karte erscheint, wenn Sie einer neuen Idee zum ersten Mal begegnen. Leichtere erste Spielfelder und mehr Züge zum Einstieg waren in dieser Diskussion ebenfalls Zusagen.' },
     ],
   },
   'outbrick-untimed-puzzle-challenge': {
@@ -238,7 +238,7 @@ export const de11: ExtraGuides = {
     keyTakeaways: [
       'Spielen ohne Zeitlimit lässt Raum, ein Spielfeld zu erkunden. Ein Zuglimit begrenzt weiterhin die Aktionen, mit denen es gelöst werden kann.',
       'Wir beschreiben OutBrick als Spiel ohne Zeitlimit, während ein Spieler von einem Timer berichtete. Diese Abweichung bleibt in der Diskussion ungeklärt.',
-      'Zu unseren Plänen für das nächste Update gehören leichtere erste Spielfelder, einzeln eingeführte Mechaniken und mehr Züge auf den frühen Spielfeldern.',
+      'Zu unseren Plänen vom 2. Oktober gehörten leichtere erste Spielfelder, einzeln eingeführte Mechaniken und mehr Züge auf den frühen Spielfeldern; Version 5.1 hat eine kurze Karte ergänzt, wenn Sie einer neuen Idee zum ersten Mal begegnen.',
     ],
     sections: {
       'understanding-before-moving': {
@@ -297,7 +297,7 @@ export const de11: ExtraGuides = {
     faqs: [
       { question: 'Sagt OutBrick derzeit Spielen ohne Zeitlimit zu?', answer: 'Ja. Unsere AppleVis-Antwort vom 2. Oktober und die veröffentlichten Hinweise zu Version 4.2 sagen, dass OutBrick keinen Timer hat. Zuvor hatte ein Spieler in der Diskussion von einem Timer berichtet. Das Gespräch klärt weder die betroffenen Versionen noch die Ursache dieser Abweichung.' },
       { question: 'Bedeutet kein Zeitlimit auch unbegrenzt viele Züge?', answer: 'Nein. In OutBrick bleiben die Züge begrenzt. Sie können sich Zeit nehmen, ein Spielfeld zu untersuchen, müssen es aber weiterhin innerhalb seines Zuglimits lösen. Leben und Käufe sind eigenständige Bestandteile des Spielerlebnisses.' },
-      { question: 'Sind die leichteren ersten Spielfelder schon veröffentlicht?', answer: 'Leichtere erste Spielfelder, Erklärungskarten beim ersten Auftreten einer Idee und großzügigere Zuglimits zu Beginn sind für das nächste Update geplant. Diese Arbeiten laufen noch.' },
+      { question: 'Sind die leichteren ersten Spielfelder schon veröffentlicht?', answer: 'Am 2. Oktober 2026 waren leichtere erste Spielfelder, Erklärungskarten beim ersten Auftreten einer Idee und großzügigere Zuglimits zu Beginn für das nächste Update geplant. Version 5.1 hat seitdem eine kurze Karte ergänzt, wenn Sie einer neuen Idee zum ersten Mal begegnen; die übrigen Änderungen finden Sie in den [Versionshinweisen](/whats-new).' },
       { question: 'Verlangt barrierefreies Puzzle-Design einfache Puzzles?', answer: 'Spieler können erhebliche Komplexität schätzen und zugleich verlässliche Informationen und Bedienelemente benötigen. Ein hilfreicher erster Schritt ist in der Praxis, festzustellen, ob die Schwierigkeit aus der Planung, dem Lernen einer Regel oder dem Zugang zur Oberfläche entsteht.' },
     ],
   },
@@ -310,7 +310,7 @@ export const de11: ExtraGuides = {
     keyTakeaways: [
       'Dass eine Schaltfläche angesagt wird, belegt noch nicht, dass sie sich korrekt aktivieren lässt. Ein abgeschlossenes Spielfeld belegt noch nicht, dass Fortschritt gespeichert wird.',
       'Unsere Arbeiten für das nächste Update betreffen die Shop-Aktivierung mit VoiceOver, den Startbildschirm, Ansagen zu eingefrorenen Toren und die Anrechnung von Missionsfortschritten.',
-      'Wir haben Italienisch für die App bestätigt, und ein Spieler hat es ebenfalls bestätigt. Die fünf Veröffentlichungssprachen der Website bilden eine separate Liste.',
+      'Wir haben Italienisch für die App bestätigt, und ein Spieler hat es ebenfalls bestätigt. Die sechs Veröffentlichungssprachen der Website bilden eine separate Liste.',
     ],
     sections: {
       'follow-the-whole-session': {
@@ -352,7 +352,7 @@ export const de11: ExtraGuides = {
         title: 'Italienisch in der App ist eine eigene Sprachfrage',
         paragraphs: [
           'Ein Community-Mitglied fragte, ob OutBrick auf Italienisch verfügbar sei. Wir bestätigten die vollständige Unterstützung für Italienisch und elf weitere App-Sprachen. Ein anderer Spieler bestätigte die Verfügbarkeit auf Italienisch aus eigener Erfahrung. Unsere Antwort listete die elf weiteren Sprachen nicht auf, doch diese konkrete Frage lässt sich klar beantworten: Ja, die App ist auf Italienisch verfügbar.',
-          'Unsere Website veröffentlicht auf Englisch, Französisch, Deutsch, Spanisch und Japanisch. Diese Liste ist von den unterstützten App-Sprachen getrennt: Sie können die App auf Italienisch nutzen, obwohl die Website keine italienische Ausgabe hat. Wenn Sie Hilfe suchen, können sich Ihre Spielsprache und die verfügbaren Sprachen eines bestimmten Artikels unterscheiden.',
+          'Unsere Website veröffentlicht auf Englisch, Französisch, Deutsch, Spanisch, Japanisch und brasilianischem Portugiesisch. Diese Liste ist von den unterstützten App-Sprachen getrennt: Sie können die App auf Italienisch nutzen, obwohl die Website keine italienische Ausgabe hat. Wenn Sie Hilfe suchen, können sich Ihre Spielsprache und die verfügbaren Sprachen eines bestimmten Artikels unterscheiden.',
           'Die Bestätigung aus der Community erwähnte auch ein an diesem Tag eingetroffenes Update, ohne zu sagen, dass die zuvor genannten Fehler behoben seien. Unsere spätere Antwort beschrieb die Korrekturen weiterhin als bevorstehende Arbeit. Eine Update-Mitteilung allein verrät nicht, welches konkrete Problem sich verändert hat. Ziehen Sie deshalb [die veröffentlichten Versionshinweise](/whats-new) heran, wenn Sie eine bestimmte Verbesserung prüfen. Version und Änderung gemeinsam zu betrachten macht solche Gespräche deutlich nachvollziehbarer.',
           'Nennen Sie bei einer sprachbezogenen Meldung den Bildschirm und die Formulierung, die fehlt, unklar ist oder unerwartet unübersetzt bleibt. Sie müssen weder Ihren Hintergrund erklären noch begründen, warum Sie eine bestimmte Sprache bevorzugen.',
         ],
@@ -375,7 +375,7 @@ export const de11: ExtraGuides = {
     faqs: [
       { question: 'Sind die gemeldeten Probleme mit Shop und Startbildschirm behoben?', answer: 'Unsere Verbesserungen an Shop und Startbildschirm sind für das nächste Update geplant und noch in Arbeit. Wir arbeiten daran, dass die Paket-Schaltflächen mit VoiceOver den Kaufbildschirm öffnen und sich der Startbildschirm schneller öffnet.' },
       { question: 'Was sollten eingefrorene Tore ansagen?', answer: 'Wir planen, eingefrorene Tore ihren eingefrorenen Zustand und die Anzahl der Züge bis zum Schmelzen ansagen zu lassen. Außerdem soll schmelzendes Eis für Missionen mit eingefrorenen Toren zählen, damit Ihr erspielter Fortschritt in der Mission sichtbar wird.' },
-      { question: 'Ist OutBrick auf Italienisch verfügbar?', answer: 'Ja. Wir haben auf AppleVis die Unterstützung für Italienisch in der App bestätigt, ebenso ein Community-Mitglied. Unsere Antwort erwähnt zwölf App-Sprachen, ohne alle aufzuzählen. Die Website veröffentlicht unabhängig davon auf Englisch, Französisch, Deutsch, Spanisch und Japanisch.' },
+      { question: 'Ist OutBrick auf Italienisch verfügbar?', answer: 'Ja. Wir haben auf AppleVis die Unterstützung für Italienisch in der App bestätigt, ebenso ein Community-Mitglied. Unsere Antwort erwähnt zwölf App-Sprachen, ohne alle aufzuzählen. Die Website veröffentlicht unabhängig davon auf Englisch, Französisch, Deutsch, Spanisch, Japanisch und brasilianischem Portugiesisch.' },
       { question: 'Wie melde ich ein Problem mit der Barrierefreiheit am hilfreichsten?', answer: 'Nennen Sie uns die Aufgabe, Ihre Schritte, das erwartete Ergebnis und was stattdessen passiert ist. Ergänzen Sie die App-Version, wenn sie leicht verfügbar ist. Unser [Artikel zum Einsatz für Barrierefreiheit](/blog/outbrick-accessibility-commitment) erklärt, wie wir mit Spielerfeedback umgehen. Sie müssen dafür weder einen Kauf tätigen noch private Kontoinformationen teilen.' },
     ],
   },

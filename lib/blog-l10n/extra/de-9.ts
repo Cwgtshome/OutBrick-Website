@@ -13,7 +13,7 @@ export const de9: ExtraGuides = {
       'Spielgewohnheiten',
     ],
     intro:
-      'Ein fast sortiertes Röhrchen kann trotzdem der falsche Ort zum Eingießen sein. Ein Stein neben seinem passenden Ausgang kann trotzdem falsch stehen, um hinauszukommen. Wasser- und Blocksortieren lassen Farbzuordnung einfach aussehen, während die interessante Entscheidung in der Zugreihenfolge steckt. Aber die verwaltete Ressource unterscheidet sich: Platz in Behältern beim einen, Wege und Haltepunkte beim anderen. Dieser Ratgeber vergleicht diese Entscheidungen, statt einen Sieger zu erklären. Für Wasser nutzen wir die veröffentlichten Regeln von Water Sort Puzzle von IEC Global, für gleitende Blöcke OutBricks Gleiten-bis-zum-Stopp-Regel. Andere Spiele mit diesen Bezeichnungen können anders funktionieren. Wir entwickeln OutBrick; unsere Beispiele bringen diese Perspektive mit, keine Behauptung unabhängiger Tests.',
+      'Ein fast sortiertes Röhrchen kann trotzdem der falsche Ort zum Eingießen sein. Ein Stein neben seinem passenden Ausgang kann trotzdem falsch stehen, um hinauszukommen. Wasser- und Blocksortieren lassen Farbzuordnung einfach aussehen, während die interessante Entscheidung in der Zugreihenfolge steckt. Aber die verwaltete Ressource unterscheidet sich: Platz in Behältern beim einen, Wege und Haltepunkte beim anderen. Dieser Ratgeber vergleicht diese Entscheidungen, statt einen Sieger zu erklären. Für Wasser nutzen wir die veröffentlichten Regeln von Water Sort Puzzle von IEC Global, für gleitende Blöcke die Gleiten-bis-zum-Stopp-Regel der klassischen OutBrick-Felder, die seine Browser-Felder beibehalten. Andere Spiele mit diesen Bezeichnungen können anders funktionieren. Wir entwickeln OutBrick; unsere Beispiele bringen diese Perspektive mit, keine Behauptung unabhängiger Tests.',
     keyTakeaways: [
       'Wassersortierpuzzles fragen, wohin Flüssigkeit nach den Regeln fließen darf; gleitendes Blocksortieren fragt, welche Wege und Haltepositionen du schaffen kannst.',
       'Ein leeres Röhrchen und ein leeres Feld helfen auf unterschiedliche Weise. Schütze den Raum für deinen nächsten Schritt, statt jede mögliche Farbzuordnung sofort auszuführen.',
@@ -24,7 +24,7 @@ export const de9: ExtraGuides = {
         title: 'Kläre zuerst, was ein Zug tatsächlich bedeutet',
         paragraphs: [
           'Die Beschreibung von Water Sort Puzzle von IEC Global sagt, dass du ein Glas antippst, um in ein anderes zu gießen; passende Farbe und ausreichend Platz im Ziel sind nötig. Ziel ist, jede Farbe in einem eigenen Glas zu sammeln. Diese Regeln besprechen wir hier, statt etwas über jede Wassersortier-App zu versprechen. Der Eintrag beschreibt auch Level-Neustart und Spielen ohne Zeitlimit. Das ist ein nützlicher Ausgangspunkt, klärt aber nicht jeden Sonderfall, etwa die genaue Flüssigkeitsmenge pro Antippen (IEC Global Pty Ltd, n.d.).',
-          'In OutBrick bewegst du den Stein direkt. Er gleitet, bis etwas ihn stoppt, und verlässt das Feld durch ein Tor seiner Farbe. Du ziehst ihn nicht auf irgendein frei gewähltes Feld. Ein freier Gang kann ihn weiter tragen als beabsichtigt; ein anderer Stein kann den benötigten Stopp liefern. Unser [Ratgeber zu Schiebepuzzles](/blog/how-to-solve-sliding-block-puzzles) erklärt diesen Unterschied in einem breiteren Lösungsansatz.',
+          'Auf den klassischen OutBrick-Feldern bewegst du den Stein direkt. Er gleitet, bis etwas ihn stoppt, und verlässt das Feld durch ein Tor seiner Farbe. Du ziehst ihn nicht auf irgendein frei gewähltes Feld. Ein freier Gang kann ihn weiter tragen als beabsichtigt; ein anderer Stein kann den benötigten Stopp liefern. (Das Spiel im App Store spielt sich inzwischen als Slide & Match: Ein Stein hält dort, wo du loslässt, und lässt sich zu Reihen tauschen.) Unser [Ratgeber zu Schiebepuzzles](/blog/how-to-solve-sliding-block-puzzles) erklärt diesen Unterschied in einem breiteren Lösungsansatz.',
           'Beides sind Farbsortierpuzzles, aber diese Bezeichnung beschreibt das Ziel statt des ganzen Wegs. Gießen verändert, welche Schichten oben in einem Behälter erreichbar sind. Schieben verändert die Hindernisanordnung auf einem gemeinsamen Feld. Bevor du ein Spiel verwirrend nennst, versuche seine Bewegungsregel laut zu formulieren. Eine richtige Vorhersage ist ein besserer erster Meilenstein als ein schneller Abschluss.',
           'Andere Varianten können andere Bewegungsregeln, Beschränkungen oder Behälter nutzen. Beginne mit dem Tutorial des Spiels, bevor du Rat aus einem ähnlich aussehenden Puzzle überträgst.',
         ],
@@ -41,7 +41,7 @@ export const de9: ExtraGuides = {
       'route-example': {
         title: 'Blocksortieren: Ein Hindernis kann eine nützliche Bremse sein',
         paragraphs: [
-          'Stell dir vor, ein roter Stein muss sich auf ein rotes Tor am rechten Rand ausrichten. Das Gleiten nach oben in einer leeren Spalte trägt ihn über die Reihe hinaus, in der er abbiegen soll. Ein blauer Stein über dieser Reihe könnte ihn auf der richtigen Höhe stoppen. Die unmittelbare Aufgabe ist deshalb, Blau zu positionieren, obwohl Rot näher an einem Ausgang wirkt. Das ist ein OutBrick-artiges Beispiel, keine Lösung eines nummerierten Felds.',
+          'Stell dir vor, ein roter Stein muss sich auf ein rotes Tor am rechten Rand ausrichten. Das Gleiten nach oben in einer leeren Spalte trägt ihn über die Reihe hinaus, in der er abbiegen soll. Ein blauer Stein über dieser Reihe könnte ihn auf der richtigen Höhe stoppen. Die unmittelbare Aufgabe ist deshalb, Blau zu positionieren, obwohl Rot näher an einem Ausgang wirkt. Das ist ein Beispiel auf den klassischen OutBrick-Feldern, keine Lösung eines nummerierten Felds.',
           'Nach der Ausrichtung von Rot kann eine zweite Abhängigkeit auftauchen: Auch Blau braucht vielleicht denselben Gang zu seinem Tor. Entfernst du Rot zu früh, verschwindet möglicherweise ein Stopp, den Blau noch benötigt. Anders als beim freien Röhrchen ist die Ressource hier ein Ort und seine Beziehung zu einem Weg. Mehr leerer Raum bedeutet nicht automatisch eine bessere Stellung. Manchmal wird die Anordnung gerade dadurch nützlich, dass das richtige Feld besetzt ist.',
           'Kirsh und Maglio (1994) untersuchten Tetris und unterschieden Handlungen zum Zielfortschritt von Handlungen, die schwer gedanklich ermittelbare Informationen sichtbar machen. Sie testeten weder OutBrick noch Wassersortier-Apps. Wir übernehmen die Unterscheidung zum Lesen eines Versuchs: Ein Zug kann zeigen, wo ein Stein stoppt, auch wenn er den Weg nicht verbessert. „Er stoppte eine Reihe zu hoch“ ist eine nutzbare Beobachtung statt eines Urteils über deine Fähigkeit.',
           'Probiere ein Feld auf unserer [Browser-Spielseite](/play) und sage vor der Bewegung voraus, wo ein Stein stoppt. Vergleiche anschließend Vorhersage und Ergebnis. Möchtest du die Anordnung bewusster lesen, zeigt der [Ratgeber vor dem ersten Zug](/blog/how-to-read-a-puzzle-before-moving), wie du zuerst Ausgänge und Abhängigkeiten erkennst. Dieser Test betrifft dein Interesse an räumlichen Wegen, nicht die Geschwindigkeit, mit der du ein unbekanntes Spiel meisterst.',
@@ -73,7 +73,7 @@ export const de9: ExtraGuides = {
       {
         question: 'Was unterscheidet Wasser- und Blocksortieren vor allem?',
         answer:
-          'Wassersortierpuzzles ordnen farbige Flüssigkeit zwischen Behältern nach Kapazitäts- und Farbregeln. Blocksortieren wie in OutBrick bewegt Steine über ein gemeinsames Feld zu passenden Toren, wobei jede Bewegung bis zu einem Hindernis weitergeht.',
+          'Wassersortierpuzzles ordnen farbige Flüssigkeit zwischen Behältern nach Kapazitäts- und Farbregeln. Das klassische Blocksortieren von OutBrick bewegt Steine über ein gemeinsames Feld zu passenden Toren, wobei jede Bewegung bis zu einem Hindernis weitergeht; das Spiel im App Store ergänzt inzwischen Tauschen und Reihen.',
       },
       {
         question: 'Ist ein leeres Röhrchen dasselbe wie ein freies Feld?',
@@ -88,7 +88,7 @@ export const de9: ExtraGuides = {
       {
         question: 'Kann ich OutBrick vor dem Download ausprobieren?',
         answer:
-          'Die [OutBrick-Spielseite](/play) bietet eine kleine Auswahl an Browser-Feldern. Sie zeigt die Schieberegel, repräsentiert aber nicht die vollständige App und verspricht keinen gemeinsamen App-Fortschritt.',
+          'Die [OutBrick-Spielseite](/play) bietet eine kleine Auswahl an Browser-Feldern. Sie zeigt die klassische Schieberegel, repräsentiert aber nicht die vollständige App und verspricht keinen gemeinsamen App-Fortschritt.',
       },
     ],
   },

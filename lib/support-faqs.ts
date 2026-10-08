@@ -1,3 +1,5 @@
+import { currentGameCopy } from './i18n/current-game.ts';
+
 /**
  * Short answers to the questions support hears most. Every answer restates a fact the sections
  * above already give in full; nothing here is new. The same list is the page's FAQPage JSON-LD,
@@ -11,7 +13,7 @@ export const supportFaqs: { question: string; answer: string }[] = [
   },
   {
     question: 'How many lives do I get, and when is one spent?',
-    answer: 'Five, or eight while you hold the Brick Pass, and one comes back every thirty minutes. A life is spent only when you run out of moves and choose Try again, or leave a board you have already made a move on.',
+    answer: currentGameCopy.en.lives,
   },
   {
     question: 'Does OutBrick show ads?',
@@ -19,7 +21,7 @@ export const supportFaqs: { question: string; answer: string }[] = [
   },
   {
     question: 'Is there a timer?',
-    answer: 'The board shows moves remaining; there is no clock or countdown. At the limit, five extra moves cost 300 coins, then 500, then 900 within the same attempt, or a rewarded video. Leaving or clearing resets the coin ladder.',
+    answer: currentGameCopy.en.moves,
   },
   {
     question: 'How do I restore a purchase?',
@@ -31,7 +33,7 @@ export const supportFaqs: { question: string; answer: string }[] = [
   },
   {
     question: 'How much do extra moves cost?',
-    answer: 'Five more moves cost 300 coins, then 500, then 900 within one attempt, or one rewarded video. The price goes back to 300 when you leave the board or clear it.',
+    answer: currentGameCopy.en.extraMoves,
   },
   {
     question: 'How many rewarded videos can I watch a day?',

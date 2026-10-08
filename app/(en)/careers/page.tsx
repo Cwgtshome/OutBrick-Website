@@ -11,7 +11,7 @@ const description =
 export const metadata: Metadata = pageMetadata({ path: '/careers', title, description });
 
 const why = [
-  { tone: 'gold', kicker: 'Small', title: 'Every person changes the game', body: 'OutBrick is a small company. What you make ships to players on six Apple platforms, and you will be able to point at it.' },
+  { tone: 'gold', kicker: 'Small', title: 'Every person changes the game', body: 'OutBrick is a small company. What you make ships to players on five Apple platforms, and you will be able to point at it.' },
   { tone: 'teal', kicker: 'Calm', title: 'A calm game, made calmly', body: 'We make a puzzle with no clock, and we try to work the same way: steady weeks, honest planning, no crunch culture.' },
   { tone: 'purple', kicker: 'Honest', title: 'We say how it works', body: 'Our players are told exactly how lives, ads and purchases work. We are as plain with each other, and with you in hiring.' },
   { tone: 'blue', kicker: 'Remote', title: 'Remote-first, from day one', body: 'We work from home, in writing, across time zones — with a few hours of overlap agreed with each person rather than imposed.' },

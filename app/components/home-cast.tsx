@@ -5,6 +5,7 @@ import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react';
 import type { Friend } from '../../lib/villages';
 import { useLocale } from './locale-context';
 import { playFriendMove } from './friend-moves';
+import { friendSrcSet } from '../../lib/images';
 
 type Vars = CSSProperties & Record<`--${string}`, string | number>;
 
@@ -166,6 +167,8 @@ export function HomeCast({
                       loading="lazy"
                       decoding="async"
                       src={`/assets/friends/${friend.slug}.webp`}
+                      srcSet={friendSrcSet(friend.slug)}
+                      sizes="(max-width: 520px) 110px, 150px"
                       width={180}
                       height={180}
                       alt=""

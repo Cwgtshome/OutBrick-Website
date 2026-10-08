@@ -1,5 +1,5 @@
 /** Check the explicit neutral-asset manifest without requiring image services or OCR in CI. */
-import { existsSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, statSync } from 'node:fs';
 import { localizedAsset, localizedAssetManifest } from '../lib/i18n/assets.ts';
 
 const locales = ['fr', 'de', 'es', 'ja', 'pt-BR'];
@@ -14,6 +14,14 @@ for (const [source, target] of Object.entries(localizedAssetManifest)) {
     const absolute = `https://www.outbrick.site${source}`;
     if (localizedAsset(absolute, locale) !== `https://www.outbrick.site${target}`) failures.push(`Incorrect absolute ${locale} asset URL: ${source}`);
     if (localizedAsset(`${source} 1x, ${source} 2x`, locale) !== `${target} 1x, ${target} 2x`) failures.push(`Incorrect ${locale} responsive asset mapping: ${source}`);
+  }
+}
+// Journal covers ship a 960px sibling for srcset (lib/images.ts coverSrcSet, scripts/make-cover.py).
+for (const dir of ['public/blog', 'public/blog/neutral']) {
+  for (const name of readdirSync(dir)) {
+    if (!name.endsWith('.webp') || name.endsWith('-960.webp')) continue;
+    const variant = `${dir}/${name.replace(/\.webp$/, '-960.webp')}`;
+    if (!existsSync(variant) || !statSync(variant).size) failures.push(`Missing 960px cover variant: ${variant.slice(6)}`);
   }
 }
 for (const locale of locales) {

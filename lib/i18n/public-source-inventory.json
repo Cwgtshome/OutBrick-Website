@@ -56,10 +56,6 @@
     "file": "app/(en)/about/page.tsx"
   },
   {
-    "text": "Free, with lives and six opt-in rewarded video placements. No banners, no interstitials, no subscription.",
-    "file": "app/(en)/about/page.tsx"
-  },
-  {
     "text": "Where it runs",
     "file": "app/(en)/about/page.tsx"
   },
@@ -2376,10 +2372,6 @@
     "file": "app/(en)/press-kit/page.tsx"
   },
   {
-    "text": "Rewarded video only, in six opt-in placements, each capped daily. No banners, no interstitials, nothing interrupts a board.",
-    "file": "app/(en)/press-kit/page.tsx"
-  },
-  {
     "text": "Pressure",
     "file": "app/(en)/press-kit/page.tsx"
   },
@@ -2953,10 +2945,6 @@
   },
   {
     "text": "How many rewarded videos can I watch a day?",
-    "file": "app/(en)/support/page.tsx"
-  },
-  {
-    "text": "Thirty-one at most across the six rewards, each capped daily. Declining never changes a reward, a board or a price.",
     "file": "app/(en)/support/page.tsx"
   },
   {
@@ -3565,10 +3553,6 @@
   },
   {
     "text": "Remote. Open to applicants living in",
-    "file": "lib/business.ts"
-  },
-  {
-    "text": "OutBrick is an independent games company founded by Mourad Hamdi. Its game, OutBrick: Block Sort Puzzle, is a sliding-brick colour-sort puzzle for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch: 2,000 solver-verified boards across 100 chapters, a Journey of 167 brick-built villages, and nine brick friends. It is free on the App Store, with optional in-app purchases and no subscription. More at outbrick.site.",
     "file": "lib/business.ts"
   },
   {

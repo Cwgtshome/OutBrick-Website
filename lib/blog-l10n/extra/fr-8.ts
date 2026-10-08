@@ -18,7 +18,7 @@ export const fr8: ExtraGuides = {
     intro:
       'Une grille de blocs colorés peut cacher deux puzzles très différents. Dans l’un, vous choisissez où placer une nouvelle forme. Dans l’autre, toutes les pièces sont déjà en place et vous devez trouver leur sortie. Block Blast!+ et OutBrick rendent cette distinction utile : tous deux récompensent la lecture de l’espace, mais posent des questions différentes. Si vous cherchez un jeu comme Block Blast, la réponse la plus utile n’est pas une liste de captures similaires, mais une explication de vos actions réelles. Ce guide des règles repose sur des sources consultées le 30 septembre 2026 et vient de l’équipe d’OutBrick. Nous n’avons ni fait de comparaison directe ni mesuré les préférences des joueurs.',
     keyTakeaways: [
-      'Block Blast!+ consiste à placer des formes et effacer des rangées ou colonnes complètes ; OutBrick consiste à faire glisser des briques existantes par les portes assorties.',
+      'Block Blast!+ consiste à placer des formes et effacer des rangées ou colonnes complètes ; OutBrick consiste à faire rentrer des briques existantes par les portes assorties et à les échanger pour en aligner trois ou plus.',
       'Block Blast!+ est l’édition Apple Arcade. N’appliquez pas ses conditions d’abonnement, publicité ou achats à l’application standard Block Blast!, dont la fiche est distincte.',
       'Préférez le placement si vous aimez ajuster les formes et préserver l’espace ; le glissement si vous aimez les trajets, points d’arrêt et ordre des coups.',
     ],
@@ -27,7 +27,7 @@ export const fr8: ExtraGuides = {
         title: 'La première différence est le verbe',
         paragraphs: [
           'Apple décrit Block Blast!+ comme un jeu où l’on ajuste des blocs sur une grille, complète des rangées et colonnes et construit des combinaisons (Apple, 2026). Sa question centrale est : « Où placer cette forme ? » Une zone vide permet de poser quelque chose. Une ligne presque complète peut rendre de l’espace. Vous comparez l’empreinte d’une forme aux emplacements disponibles.',
-          'La question d’OutBrick est : « Qu’est-ce qui doit bouger avant que cette brique sorte ? » Vous sélectionnez une brique déjà sur le plateau et la faites glisser. Elle avance jusqu’à un obstacle et vise la porte de sa couleur. Une zone vide peut être un trajet, mais aussi laisser la brique aller plus loin que prévu. Plus d’espace libre n’est pas automatiquement une meilleure position.',
+          'La question d’OutBrick est : « Qu’est-ce qui doit bouger avant que cette brique sorte ? » Vous sélectionnez une brique déjà sur le plateau et la faites glisser. Elle s’arrête là où vous la lâchez, rentre par la porte de sa couleur ou s’échange avec une voisine, et trois briques d’une couleur alignées ou plus disparaissent. Sur les plateaux classiques, toujours jouables dans le navigateur, une brique avance jusqu’à un obstacle : une zone vide peut être un trajet, mais aussi laisser la brique aller plus loin que prévu. Plus d’espace libre n’est pas automatiquement une meilleure position.',
           'Considérez une longue voie droite. Dans un puzzle de placement, la garder ouverte peut réserver la place pour une longue forme. Dans un puzzle de glissement, elle peut emporter une brique au-delà du point nécessaire pour tourner. Une autre brique devra peut-être y servir de frein temporaire. Le même élément visuel change de sens stratégique parce que la règle de déplacement change son usage.',
           'Notre [introduction aux puzzles de blocs coulissants](/blog/how-to-solve-sliding-block-puzzles) détaille cette règle. Pour une vue plus large du placement, des pièces qui tombent et des trajets, voyez [pourquoi les jeux comme Tetris durent](/blog/games-like-tetris). Aucune règle n’est une version plus avancée de l’autre. Ce sont deux façons de rendre un espace limité intéressant.',
         ],
@@ -36,7 +36,7 @@ export const fr8: ExtraGuides = {
         title: 'Deux façons de penser le prochain coup',
         paragraphs: [
           'Dans un puzzle de placement, examinez la forme proposée, ses emplacements possibles et le plateau qui restera. Une position peut être légale mais gênante : elle laisse un petit trou malcommode ou consomme le seul espace adapté à une autre forme. Compléter une ligne attire parce que cela change la quantité et la forme de l’espace disponible. C’est un problème général de placement, pas la stratégie optimale de tous les modes Block Blast.',
-          'Dans OutBrick, examinez tout le trajet de la brique sélectionnée et son point d’arrêt. Retirer un obstacle peut ouvrir la route d’une porte, mais le faire trop tôt peut supprimer la surface d’arrêt nécessaire à une autre brique. Un plan utile décrit donc des dépendances : la bleue doit s’arrêter ici avant que la rouge s’aligne avec sa sortie. Il faut réorganiser un système, pas simplement choisir une destination vide.',
+          'Sur les plateaux classiques d’OutBrick, examinez tout le trajet de la brique sélectionnée et son point d’arrêt. Retirer un obstacle peut ouvrir la route d’une porte, mais le faire trop tôt peut supprimer la surface d’arrêt nécessaire à une autre brique. Un plan utile décrit donc des dépendances : la bleue doit s’arrêter ici avant que la rouge s’aligne avec sa sortie. Il faut réorganiser un système, pas simplement choisir une destination vide.',
           'Isaksen et al. (2017) ont distingué choix stratégique et exigences d’exécution dans des simulations de variantes de Tetris et Puzzle Bobble. Leur travail montre pourquoi une seule étiquette de difficulté peut cacher des besoins différents. Il n’étudiait ni Block Blast!+ ni OutBrick. Nous utilisons cette distinction pour demander si vous aimez décider d’un coup et si vous aimez l’exécuter.',
           'Cela compte si vous aimez les puzzles réfléchis mais pas un type de commande. Glisser une forme à un endroit et donner une direction à une brique existante sont deux interactions différentes. Les captures ne décident pas laquelle vous paraît plus claire. Essayez un exemple simple, lisez les instructions et observez le sens d’un coup refusé avant de considérer une commande inconnue comme preuve de difficulté excessive.',
         ],
@@ -62,9 +62,9 @@ export const fr8: ExtraGuides = {
       'a-small-fit-test': {
         title: 'Un petit essai vaut mieux qu’un verdict général',
         paragraphs: [
-          'D’abord, reformulez la règle. Placement : mettre une forme dans un espace autorisé et viser une ligne complète. OutBrick : donner une direction à une brique, prévoir son arrêt et viser sa sortie assortie. Jouez ensuite assez lentement pour voir si l’action confirme l’explication. La comparaison doit vous aider à choisir le bon puzzle, pas à supporter le mauvais.',
+          'D’abord, reformulez la règle. Placement : mettre une forme dans un espace autorisé et viser une ligne complète. OutBrick : faire glisser une brique vers sa porte assortie, ou l’échanger pour aligner trois briques de sa couleur ou plus. Jouez ensuite assez lentement pour voir si l’action confirme l’explication. La comparaison doit vous aider à choisir le bon puzzle, pas à supporter le mauvais.',
           'Iacovides et al. (2015) ont utilisé plusieurs études de cas, avec observation et entretiens, pour examiner apprentissage et implication. Leurs récits reliaient les déclics à l’implication, surtout quand les joueurs se sentaient responsables de leur progression. Ces résultats qualitatifs viennent d’autres jeux. Ils encouragent à observer votre compréhension sans promettre qu’un bref essai révèle une préférence universelle.',
-          `Vous pouvez [essayer un plateau OutBrick dans le navigateur](/play) pour examiner le glissement jusqu’à l’arrêt. La démonstration présente la règle ; elle ne reproduit pas toutes les fonctions, coûts ou comportements d’accessibilité de l’app installée. Si elle vous plaît, [consultez OutBrick sur l’App Store](${appStoreUrl('journal-block-blast-comparison')}) et vérifiez les exigences de l’appareil et les achats avant le téléchargement.`,
+          `Vous pouvez [essayer un plateau OutBrick dans le navigateur](/play) pour examiner le glissement classique jusqu’à l’arrêt. La démonstration présente l’ancienne règle, sans les échanges et alignements du jeu de l’App Store ; elle ne reproduit pas toutes les fonctions, coûts ou comportements d’accessibilité de l’app installée. Si elle vous plaît, [consultez OutBrick sur l’App Store](${appStoreUrl('journal-block-blast-comparison')}) et vérifiez les exigences de l’appareil et les achats avant le téléchargement.`,
           'Le résultat utile peut être une phrase ordinaire : « J’aime mieux ajuster de nouvelles formes que rediriger celles en place », ou l’inverse. Cela suffit. Les puzzles de blocs partagent un vocabulaire visuel, mais leurs verbes définissent l’expérience. Choisissez le verbe que vous voulez répéter.',
         ],
       },
@@ -81,7 +81,7 @@ export const fr8: ExtraGuides = {
       {
         question: 'OutBrick est-il le même type de puzzle que Block Blast!+ ?',
         answer:
-          'Leurs règles centrales diffèrent. Block Blast!+ demande de placer des formes pour compléter rangées et colonnes ; OutBrick demande de faire glisser des briques existantes par les portes assorties.',
+          'Leurs règles centrales diffèrent. Block Blast!+ demande de placer des formes pour compléter rangées et colonnes ; OutBrick demande de faire rentrer des briques existantes par les portes assorties et de les échanger pour en aligner trois ou plus.',
       },
       {
         question: 'Block Blast!+ est-il l’application standard Block Blast! ?',
@@ -91,12 +91,12 @@ export const fr8: ExtraGuides = {
       {
         question: 'Lequel convient mieux à la planification ?',
         answer:
-          'Les deux peuvent en demander, avec des contraintes différentes. Le placement examine l’effet d’une forme sur l’espace restant ; OutBrick examine l’effet de l’ordre et des points d’arrêt sur les trajets.',
+          'Les deux peuvent en demander, avec des contraintes différentes. Le placement examine l’effet d’une forme sur l’espace restant ; OutBrick examine l’effet de l’ordre, des échanges et des portes sur les trajets.',
       },
       {
         question: 'Puis-je essayer OutBrick sans l’installer ?',
         answer:
-          'Le [plateau du navigateur](/play) permet d’essayer le glissement jusqu’à l’arrêt. Vérifiez séparément la fiche App Store pour la compatibilité, les fonctions et les coûts de l’app installée.',
+          'Le [plateau du navigateur](/play) permet d’essayer le glissement classique jusqu’à l’arrêt. Vérifiez séparément la fiche App Store pour la compatibilité, les fonctions et les coûts de l’app installée.',
       },
     ],
   },
@@ -113,9 +113,9 @@ export const fr8: ExtraGuides = {
       'puzzles de tri de blocs',
     ],
     intro:
-      'Une caisse est à une case de son objectif. Le déplacement semble évident, jusqu’à voir que la personne chargée de pousser ne peut pas passer derrière. Une brique colorée est près de sa sortie. Là aussi, le mouvement semble évident, jusqu’à ce qu’une voie ouverte l’emporte trop loin. Sokoban et les puzzles de blocs qui glissent partagent un intérêt pour l’espace et l’ordre, mais l’obstacle à prévoir diffère. Ce guide compare les règles classiques de Sokoban au glissement jusqu’à l’arrêt d’OutBrick. Il explique les règles sans classer la difficulté ; les positions pédagogiques sont inventées et ne résolvent pas de niveaux nommés.',
+      'Une caisse est à une case de son objectif. Le déplacement semble évident, jusqu’à voir que la personne chargée de pousser ne peut pas passer derrière. Une brique colorée est près de sa sortie. Là aussi, le mouvement semble évident, jusqu’à ce qu’une voie ouverte l’emporte trop loin. Sokoban et les puzzles de blocs qui glissent partagent un intérêt pour l’espace et l’ordre, mais l’obstacle à prévoir diffère. Ce guide compare les règles classiques de Sokoban au glissement jusqu’à l’arrêt des plateaux classiques d’OutBrick, que garde sa démo dans le navigateur. Il explique les règles sans classer la difficulté ; les positions pédagogiques sont inventées et ne résolvent pas de niveaux nommés.',
     keyTakeaways: [
-      'Dans Sokoban classique, un personnage pousse les caisses et doit atteindre le bon côté ; OutBrick permet de sélectionner une brique et de la faire glisser jusqu’à l’arrêt.',
+      'Dans Sokoban classique, un personnage pousse les caisses et doit atteindre le bon côté ; les plateaux classiques d’OutBrick permettent de sélectionner une brique et de la faire glisser jusqu’à l’arrêt.',
       'Un coin peut piéger définitivement une caisse Sokoban. Dans un puzzle de glissement, retirer un obstacle peut supprimer l’arrêt nécessaire à un trajet ultérieur.',
       'Les habitudes utiles se recoupent, mais une stratégie ne se transfère que si les règles de mouvement et d’objectif le permettent. Lisez-les avant d’importer un plan familier.',
     ],
@@ -125,7 +125,7 @@ export const fr8: ExtraGuides = {
         paragraphs: [
           'Sokoban classique place un personnage, des caisses, des murs et des objectifs de stockage sur une grille. Le personnage marche dans l’espace vide et pousse une caisse si la case derrière est libre. Il ne peut ni tirer, ni pousser une chaîne de caisses, ni traverser les murs. On termine en plaçant les caisses sur les objectifs. Certaines versions ajoutent des variantes ; cette description vise les règles classiques, pas toutes les apps portant ce nom.',
           'La position du personnage fait partie du puzzle. Une caisse ayant de la place à droite ne peut pas forcément y être poussée : le personnage doit aussi atteindre son côté gauche. Ne penser qu’à la destination manque la moitié du mouvement. Un court trajet pour passer derrière peut être indispensable même sans rapprocher aucune caisse d’un objectif.',
-          'Dans OutBrick, vous sélectionnez directement une brique et donnez une direction. Elle glisse jusqu’à un obstacle, puis sort par la porte de sa couleur. Aucun magasinier n’a besoin d’un trajet piéton préservé. L’attention porte sur la trajectoire, les arrêts et les relations entre briques. Des clés, verrous et caisses apparaissent plus tard, sans rendre le mouvement de base identique à Sokoban.',
+          'Sur les plateaux classiques d’OutBrick, toujours jouables dans le navigateur, vous sélectionnez directement une brique et donnez une direction. Elle glisse jusqu’à un obstacle, puis sort par la porte de sa couleur. (Le jeu de l’App Store se joue désormais en Slide & Match : une brique s’arrête là où vous la lâchez, et les échanges forment des alignements.) Aucun magasinier n’a besoin d’un trajet piéton préservé. L’attention porte sur la trajectoire, les arrêts et les relations entre briques. Des clés, verrous et caisses apparaissent plus tard, sans rendre le mouvement de base identique à Sokoban.',
           '« Puzzle de blocs coulissants » est une catégorie large. Certains autorisent de petits déplacements ou un seul axe ; d’autres utilisent le glissement jusqu’à l’arrêt. Notre [histoire des puzzles de blocs coulissants](/blog/history-of-sliding-block-puzzles) donne ce contexte. Identifiez toujours la règle particulière avant de penser savoir résoudre le jeu.',
         ],
       },
@@ -142,7 +142,7 @@ export const fr8: ExtraGuides = {
         title: 'Préservez les accès autant que les destinations',
         paragraphs: [
           'Considérez un couloir Sokoban reliant deux salles. Pousser une caisse à l’entrée peut la rapprocher d’un objectif tout en coupant l’accès du personnage à l’autre salle. Il faudra peut-être ensuite aborder cette caisse de l’autre côté, alors que le seul passage est perdu. Avant de pousser, demandez où le personnage pourra marcher ensuite et quels côtés des caisses restantes resteront accessibles.',
-          'Dans OutBrick, la question comparable concerne passage et arrêts. Si une bleue doit traverser une voie avant la sortie de la rouge, sortir d’abord la rouge peut supprimer un frein utile ou changer le trajet. À l’inverse, la laisser toujours peut bloquer la bleue. La dépendance est temporaire : gardez la pièce pendant son rôle, puis retirez-la quand il est terminé.',
+          'Sur les plateaux classiques d’OutBrick, la question comparable concerne passage et arrêts. Si une bleue doit traverser une voie avant la sortie de la rouge, sortir d’abord la rouge peut supprimer un frein utile ou changer le trajet. À l’inverse, la laisser toujours peut bloquer la bleue. La dépendance est temporaire : gardez la pièce pendant son rôle, puis retirez-la quand il est terminé.',
           'Exprimez le plan par des relations plutôt qu’une longue série de directions. Sokoban : « Garder la porte ouverte jusqu’à pouvoir passer derrière la caisse du haut. » Glissement : « Garder cette brique comme arrêt jusqu’à aligner l’autre. » Cela rend la raison visible. Si le plateau change, vous pouvez vérifier si elle vaut encore au lieu de mémoriser une séquence disparue.',
           'Pour lire les dépendances, voyez notre [guide d’examen du plateau avant de bouger](/blog/how-to-read-a-puzzle-before-moving). Vous n’avez pas besoin d’un plan parfait pour tout le plateau. Identifier un accès à conserver et une position utile à ne pas perturber suffit souvent.',
         ],
@@ -162,13 +162,13 @@ export const fr8: ExtraGuides = {
           'Sokoban convient si vous aimez prévoir l’accès d’un personnage et les conséquences de poussées irréversibles. Les puzzles de glissement méritent un essai si vous aimez construire des arrêts et rediriger directement les pièces. Aucune préférence n’exige de prétendre qu’un genre améliore davantage le cerveau. Ces règles peuvent être agréables pour elles-mêmes.',
           'Kotovsky et al. (1985) ont étudié pourquoi différentes présentations de problèmes de la tour de Hanoï formellement équivalents produisaient des difficultés différentes. Leur travail porte sur ces problèmes expérimentaux, pas sur ces genres. Il invite à distinguer structure de la tâche et facilité de compréhension : une présentation inconnue peut rendre le problème plus difficile à ressentir sans ajouter de pièces. Difficulté et adéquation personnelle restent distinctes.',
           `Vous pouvez [jouer à une démonstration OutBrick](/play) pour voir comment le glissement change une voie. Lisez nos [conseils de tri par couleur](/blog/colour-sort-puzzle-tips) pour relier le mouvement aux portes assorties. Si la règle vous plaît, [consultez OutBrick sur l’App Store](${appStoreUrl('journal-sokoban-comparison')}) pour la compatibilité et les achats actuels. L’app comporte limites de coups, vies et publicité récompensée facultative ; un puzzle sans chrono n’est pas un accès illimité.`,
-          'Emportez une question vers le prochain plateau : « Qu’est-ce qui doit rester disponible après ce coup ? » Dans Sokoban, ce peut être une case où le personnage doit se tenir. Dans OutBrick, une surface d’arrêt. Voir cette différence transforme une vague ressemblance de blocs colorés en choix plus clair du jeu voulu.',
+          'Emportez une question vers le prochain plateau : « Qu’est-ce qui doit rester disponible après ce coup ? » Dans Sokoban, ce peut être une case où le personnage doit se tenir. Sur les plateaux classiques d’OutBrick, une surface d’arrêt. Voir cette différence transforme une vague ressemblance de blocs colorés en choix plus clair du jeu voulu.',
         ],
       },
       'classic-rules-source': {
         title: 'Règles classiques et limites des données',
         paragraphs: [
-          'Sokoban.jp. (n.d.). Rules. [Règles classiques de Sokoban](https://sokoban.jp/rule.html). Consulté le 30 septembre 2026. Les exemples ci-dessus sont des illustrations originales de ces règles et du mouvement d’OutBrick. Les recherches ci-dessous donnent le contexte de recherche de solution, d’implication et de motivation ; elles n’évaluent pas indépendamment OutBrick.',
+          'Sokoban.jp. (n.d.). Rules. [Règles classiques de Sokoban](https://sokoban.jp/rule.html). Consulté le 30 septembre 2026. Les exemples ci-dessus sont des illustrations originales de ces règles et du mouvement classique d’OutBrick. Les recherches ci-dessous donnent le contexte de recherche de solution, d’implication et de motivation ; elles n’évaluent pas indépendamment OutBrick.',
         ],
       },
     },
@@ -188,7 +188,7 @@ export const fr8: ExtraGuides = {
       {
         question: 'OutBrick avance-t-il d’une case comme Sokoban ?',
         answer:
-          'Les briques glissent dans la direction choisie jusqu’à un obstacle. Le plan comprend arrêts et sorties de même couleur plutôt que la position d’un personnage qui pousse.',
+          'Non. Sur les plateaux classiques, les briques glissent dans la direction choisie jusqu’à un obstacle ; dans le Slide & Match du jeu de l’App Store, une brique s’arrête là où vous la lâchez. Le plan comprend arrêts et sorties de même couleur plutôt que la position d’un personnage qui pousse.',
       },
       {
         question:

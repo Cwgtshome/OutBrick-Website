@@ -10,6 +10,8 @@ type GameCopy = {
   /** What the current release line brought, for the "New in 5.1" block. */
   releaseTitle: string; release: string; demoTitle: string; demo: string;
   stars: string; starsTitle: string; adsTitle: string; ads: string; moves: string;
+  /** The support FAQ's "How much do extra moves cost?" answer (coin ladder and the video chain). */
+  extraMoves: string;
 };
 export const currentGameCopy: Record<Locale, GameCopy> = {
   'pt-BR': {
@@ -33,7 +35,8 @@ export const currentGameCopy: Record<Locale, GameCopy> = {
     stars: 'O jogo atual para iOS concede estrelas de acordo com as faixas de pontuação da fase. Combinações, especiais, cascatas e jogadas restantes contribuem para a pontuação. A demonstração no navegador mantém a antiga regra de estrelas baseada no objetivo de jogadas.',
     adsTitle: 'Oito opções de vídeos, no máximo 39 por dia',
     ads: 'Limites diários: 8 vídeos para vidas, 8 para desfazer, 6 para jogadas extras, 4 para a dica gratuita ao ficar sem jogadas, 4 para dobrar as moedas da vitória, 1 para a Brick Wheel, 2 para o balão-surpresa e 6 para o Brick Cinema. Sem banners nem anúncios intersticiais. O vídeo só começa se você escolher; recusar não custa nada.',
-    moves: 'A fase mostra as jogadas restantes; não há relógio nem contagem regressiva. Ao atingir o limite, cinco jogadas extras custam 300 moedas, depois 500 e então 900 na mesma tentativa, ou podem ser obtidas com um vídeo com recompensa. Sair ou concluir a fase reinicia essa sequência de preços.',
+    moves: 'A fase mostra as jogadas restantes; não há relógio nem contagem regressiva. Ao atingir o limite, cinco jogadas extras custam 300 moedas, depois 500 e então 900 na mesma tentativa; um vídeo com recompensa dá duas jogadas, depois uma e então um OVNI grátis. Sair ou concluir a fase reinicia essa sequência de preços.',
+    extraMoves: 'Cinco movimentos extras custam 300 moedas, depois 500 e 900 na mesma tentativa. Um vídeo com recompensa dá duas jogadas, depois uma e então um OVNI grátis. O preço em moedas volta a 300 quando você sai do tabuleiro ou vence.',
   },
   en: {
     description: "A calm slide-and-match brick puzzle: 2,000 solver-proven boards, 167 villages, nine friends, VoiceOver and offline play. Free on the App Store.",
@@ -55,7 +58,8 @@ export const currentGameCopy: Record<Locale, GameCopy> = {
     starsTitle: 'Stars follow your score', stars: 'The current iOS game awards stars from the board’s score thresholds. Matches, specials, cascades and the leftover-move finish contribute to the score. The browser demo keeps its earlier move-target star rule.',
     adsTitle: 'Eight opt-in video placements, capped at 39 a day',
     ads: 'Daily caps: lives 8, undos 8, extra moves 6, a free Hint at the out-of-moves wall 4, doubled clear coins 4, Brick Wheel 1, the gift balloon 2 and Brick Cinema 6. No banners or interstitials. A video starts only when you choose it; declining costs nothing.',
-    moves: 'The board shows moves remaining; there is no clock or countdown. At the limit, five extra moves cost 300 coins, then 500, then 900 within the same attempt, or a rewarded video. Leaving or clearing resets the coin ladder.',
+    moves: 'The board shows moves remaining; there is no clock or countdown. At the limit, five extra moves cost 300 coins, then 500, then 900 within the same attempt; a rewarded video adds two moves, then one, then a free UFO. Leaving or clearing resets the coin ladder.',
+    extraMoves: 'Five more moves cost 300 coins, then 500, then 900 within one attempt. A rewarded video adds two moves instead, then one, then a free UFO. The coin price goes back to 300 when you leave the board or clear it.',
   },
   fr: {
     description: "Glisse et aligne : un puzzle de briques apaisant, 2 000 plateaux prouvés par un solveur, 167 villages, neuf amis, VoiceOver, hors ligne. Gratuit.",
@@ -77,7 +81,8 @@ export const currentGameCopy: Record<Locale, GameCopy> = {
     starsTitle: 'Les étoiles suivent le score', stars: 'Sur iOS, les étoiles dépendent des seuils de score du plateau. Alignements, spéciaux, cascades et coups restants contribuent au score. La démo web conserve son ancienne règle d’étoiles selon les coups.',
     adsTitle: 'Huit vidéos facultatives, au plus 39 par jour',
     ads: 'Plafonds quotidiens : vies 8, annulations 8, coups supplémentaires 6, indice gratuit à la limite des coups 4, pièces de victoire doublées 4, Brick Wheel 1, ballon cadeau 2 et Brick Cinema 6. Ni bannières ni publicités imposées. Une vidéo ne démarre que si vous la choisissez ; refuser ne coûte rien.',
-    moves: 'Le plateau affiche les coups restants, sans chrono. À la limite, cinq coups supplémentaires coûtent 300 pièces, puis 500, puis 900 dans la même tentative, ou une vidéo récompensée. Quitter ou terminer le plateau remet le tarif à zéro.',
+    moves: 'Le plateau affiche les coups restants, sans chrono. À la limite, cinq coups supplémentaires coûtent 300 pièces, puis 500, puis 900 dans la même tentative ; une vidéo récompensée ajoute deux coups, puis un, puis un OVNI gratuit. Quitter ou terminer le plateau remet le tarif à zéro.',
+    extraMoves: 'Cinq coups coûtent 300 pièces, puis 500, puis 900 dans un même essai. Une vidéo récompensée ajoute plutôt deux coups, puis un, puis un OVNI gratuit. Le prix en pièces revient à 300 en quittant ou terminant le plateau.',
   },
   de: {
     description: "Schieben und kombinieren: ruhiges Steinrätsel mit 2.000 bewiesenen Spielfeldern, 167 Dörfern, neun Freunden, VoiceOver und Offline-Spiel. Gratis im App Store.",
@@ -99,7 +104,8 @@ export const currentGameCopy: Record<Locale, GameCopy> = {
     starsTitle: 'Sterne folgen der Punktzahl', stars: 'In der aktuellen iOS-App richten sich Sterne nach den Punktschwellen des Feldes. Kombinationen, Spezialsteine, Kaskaden und übrige Züge tragen dazu bei. Die Webdemo behält ihre frühere Zugvorgabenregel.',
     adsTitle: 'Acht freiwillige Videoplatzierungen, höchstens 39 täglich',
     ads: 'Tageslimits: Leben 8, Rückgängig 8, Extrazüge 6, kostenloser Hinweis am Zuglimit 4, doppelte Münzen 4, Brick Wheel 1, Geschenkballon 2 und Brick Cinema 6. Keine Banner oder Zwischenwerbung. Videos starten nur auf Wunsch; Ablehnen kostet nichts.',
-    moves: 'Das Feld zeigt die übrigen Züge; es gibt keinen Timer. Am Limit kosten fünf Extrazüge 300, dann 500, dann 900 Münzen im selben Versuch oder ein Belohnungsvideo. Verlassen oder Lösen setzt die Preisleiter zurück.',
+    moves: 'Das Feld zeigt die übrigen Züge; es gibt keinen Timer. Am Limit kosten fünf Extrazüge 300, dann 500, dann 900 Münzen im selben Versuch; ein Belohnungsvideo gibt zwei Züge, dann einen, dann ein kostenloses UFO. Verlassen oder Lösen setzt die Preisleiter zurück.',
+    extraMoves: 'Fünf weitere Züge kosten innerhalb eines Versuchs 300, dann 500, dann 900 Münzen. Ein Belohnungsvideo gibt stattdessen zwei Züge, dann einen, dann ein kostenloses UFO. Beim Verlassen oder Lösen des Feldes kehrt der Münzpreis zu 300 zurück.',
   },
   es: {
     description: "Desliza y combina: un puzle de ladrillos tranquilo con 2000 tableros demostrados, 167 pueblos, nueve amigos, VoiceOver y juego sin conexión. Gratis.",
@@ -121,7 +127,8 @@ export const currentGameCopy: Record<Locale, GameCopy> = {
     starsTitle: 'Las estrellas dependen de la puntuación', stars: 'En iOS, las estrellas dependen de los umbrales de puntuación del tablero. Combinaciones, especiales, cascadas y movimientos restantes contribuyen al total. La demo web conserva su antigua regla por movimientos.',
     adsTitle: 'Ocho vídeos opcionales, hasta 39 al día',
     ads: 'Límites diarios: vidas 8, deshacer 8, movimientos extra 6, pista gratis al agotar movimientos 4, monedas duplicadas 4, Brick Wheel 1, globo de regalo 2 y Brick Cinema 6. Sin banners ni anuncios intermedios. Un vídeo solo empieza si lo eliges; rechazarlo no cuesta nada.',
-    moves: 'El tablero muestra movimientos restantes, sin temporizador. Al agotarlos, cinco más cuestan 300 monedas, luego 500 y luego 900 dentro del mismo intento, o un vídeo con recompensa. Salir o completar reinicia la escala.',
+    moves: 'El tablero muestra movimientos restantes, sin temporizador. Al agotarlos, cinco más cuestan 300 monedas, luego 500 y luego 900 dentro del mismo intento; un vídeo con recompensa añade dos movimientos, luego uno y luego un OVNI gratis. Salir o completar reinicia la escala.',
+    extraMoves: 'Cinco movimientos más cuestan 300 monedas, después 500 y después 900 en un intento. Un vídeo con recompensa añade en cambio dos movimientos, luego uno y luego un OVNI gratis. El precio en monedas vuelve a 300 cuando sales o despejas.',
   },
   ja: {
     description: "すべらせてそろえる落ち着いたブロックパズル。証明済みの2,000盤面、167の村、9人の仲間。VoiceOverとオフライン対応、App Storeで無料。",
@@ -143,6 +150,7 @@ export const currentGameCopy: Record<Locale, GameCopy> = {
     starsTitle: '星はスコアで決まります', stars: '現在のiOSゲームでは盤面のスコア基準で星を獲得します。マッチ、特殊ブロック、連鎖、残り手数のフィニッシュがスコアに加わります。ウェブデモは以前の手数目標による星のルールを残しています。',
     adsTitle: '任意の動画は8種類、1日最大39回',
     ads: '1日の上限：ライフ8、取り消し8、追加手数6、手数切れ画面の無料ヒント4、クリア時のコイン倍増4、Brick Wheel 1、ギフト風船2、Brick Cinema 6。バナーや強制広告はありません。選んだときだけ再生し、断っても不利益はありません。',
-    moves: '盤面には残り手数を表示し、時計やタイマーはありません。手数切れでは5手追加が同じ挑戦中に300、500、900コインと上がるか、報酬動画を選べます。退出やクリアで価格はリセットされます。',
+    moves: '盤面には残り手数を表示し、時計やタイマーはありません。手数切れでは5手追加が同じ挑戦中に300、500、900コインと上がります。報酬動画では2手、次に1手、その次に無料のUFOがもらえます。退出やクリアで価格はリセットされます。',
+    extraMoves: '一回の挑戦内で5手が300、次に500、次に900コインです。リワード動画なら2手、次に1手、その次に無料のUFOがもらえます。コインの価格は離れるかクリアで300へ戻ります。',
   },
 };

@@ -81,3 +81,11 @@
     --ease-bounce: linear(0, 0.109, 0.363, 0.663, 0.932, 1.126, 1.23, 1.253, 1.217, 1.148, 1.072, 1.007, 0.962, 0.939, 0.937, 0.948, 0.966, 0.985, 1.001, 1.011, 1.016, 1.016, 1);
   }
 }
+
+/* The site draws studs, clouds and plinths with empty <i> elements. An empty inline box still
+   sets a line strut in its own font, which made browsers fetch the italic Figtree on pages with
+   no italic text at all (about 20 KB at the highest priority). Empty ones stay upright, so the
+   italic face loads only for real italic text. */
+i:empty {
+  font-style: normal;
+}

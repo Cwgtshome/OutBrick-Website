@@ -20,7 +20,7 @@ export const batch9: BlogArticle[] = [
       "game design",
       "player habits"
     ],
-    "intro": "A nearly sorted tube can still be the wrong place to pour. A brick beside its matching exit can still be in the wrong position to leave. Water sort and block sort both make colour matching look straightforward while hiding the interesting decision in the order of moves. But the resource you manage differs: room inside containers in one, routes and stopping places in the other. This guide compares those decisions rather than declaring a winner. For water sort, we use the published rules of IEC Global’s Water Sort Puzzle; for sliding block sort, we use OutBrick’s glide-to-stop rule. Other games using either name may behave differently. We make OutBrick, so our examples come with that perspective rather than a claim to independent testing.",
+    "intro": "A nearly sorted tube can still be the wrong place to pour. A brick beside its matching exit can still be in the wrong position to leave. Water sort and block sort both make colour matching look straightforward while hiding the interesting decision in the order of moves. But the resource you manage differs: room inside containers in one, routes and stopping places in the other. This guide compares those decisions rather than declaring a winner. For water sort, we use the published rules of IEC Global’s Water Sort Puzzle; for sliding block sort, we use the glide-to-stop rule of OutBrick’s classic boards, which its browser boards keep. Other games using either name may behave differently. We make OutBrick, so our examples come with that perspective rather than a claim to independent testing.",
     "keyTakeaways": [
       "Water-sort puzzles ask where liquid can legally go; sliding block sort asks which routes and stopping positions you can create.",
       "An empty tube and an empty square are useful in different ways. Protect the space needed by your next step, rather than matching colour at every opportunity.",
@@ -32,7 +32,7 @@ export const batch9: BlogArticle[] = [
         "title": "First, establish what a move actually means",
         "paragraphs": [
           "IEC Global’s Water Sort Puzzle description says you tap a glass to pour into another, with matching colour and enough receiving space required. The goal is to group each colour into its own glass. That is the rule set discussed here, rather than a promise about every water-sort app. The listing also describes restarting a level and untimed play. Those details establish a useful starting point, but do not settle every edge case, such as exactly how much liquid a particular tap transfers (IEC Global Pty Ltd, n.d.).",
-          "In OutBrick, you move the brick directly. It glides until something stops it, and it leaves through a gate of its own colour. You do not drag a brick to any square you choose. A clear corridor may let it travel further than you intended; another brick can provide the stopping point you need. Our [guide to sliding-block puzzles](/blog/how-to-solve-sliding-block-puzzles) explains that distinction with a broader solving approach.",
+          "On OutBrick’s classic boards, you move the brick directly. It glides until something stops it, and it leaves through a gate of its own colour. You do not drag a brick to any square you choose. A clear corridor may let it travel further than you intended; another brick can provide the stopping point you need. (The App Store game now plays Slide & Match, where a brick stops where you let go and can swap into matches.) Our [guide to sliding-block puzzles](/blog/how-to-solve-sliding-block-puzzles) explains that distinction with a broader solving approach.",
           "Both are colour-sort puzzles, but that label describes the destination rather than the entire journey. Pouring changes which layers can be reached at the top of a container. Sliding changes the arrangement of obstacles on a shared board. Before judging a game as confusing, try stating its movement rule aloud. A correct prediction is a better first milestone than a quick clear.",
           "Other variants can use different movement rules, restrictions or containers. Begin with the game’s own tutorial before transferring advice from a similar-looking puzzle."
         ]
@@ -54,7 +54,7 @@ export const batch9: BlogArticle[] = [
         "id": "route-example",
         "title": "Block sort: an obstacle can be a useful brake",
         "paragraphs": [
-          "Imagine a red brick needs to line up with a red gate on the right-hand edge. Sliding upwards along an empty column carries it past the row where it should turn. A blue brick placed above that row could stop it at the useful height. The immediate task is therefore positioning blue, even though red looks nearer to an exit. This is an illustrative OutBrick-style situation, not a walkthrough for a numbered board.",
+          "Imagine a red brick needs to line up with a red gate on the right-hand edge. Sliding upwards along an empty column carries it past the row where it should turn. A blue brick placed above that row could stop it at the useful height. The immediate task is therefore positioning blue, even though red looks nearer to an exit. This is an illustrative situation on OutBrick’s classic boards, not a walkthrough for a numbered board.",
           "Once red is aligned, a second dependency can appear: blue may also need that corridor to reach its own gate. Removing red too soon could erase a stopping point blue still needs. Unlike the spare tube in the previous example, the relevant resource is a location and its relationship to a route. More empty space does not automatically mean a better position. Sometimes the arrangement becomes useful precisely because something occupies the right square.",
           "Kirsh and Maglio (1994) studied Tetris and distinguished actions that progress towards a goal from actions that reveal information difficult to work out mentally. They did not test OutBrick or water-sort apps. We borrow the distinction as a way to read an attempt: a move can show you where a brick stops even when it does not improve the route. “It stopped one row too high” is an observation you can use, rather than a verdict on your ability.",
           "Try a board on our [browser play page](/play) and predict where a brick will stop before moving it. Then compare prediction and result. If you want to read the arrangement more deliberately, the [before-you-move guide](/blog/how-to-read-a-puzzle-before-moving) suggests a way to identify exits and dependencies first. This test is about your interest in spatial routes, not how quickly you can master an unfamiliar game."
@@ -140,7 +140,7 @@ export const batch9: BlogArticle[] = [
     "faqs": [
       {
         "question": "What is the main difference between water sort and block sort?",
-        "answer": "Water-sort puzzles organise coloured liquid between containers under capacity and matching rules. OutBrick-style block sort moves bricks through a shared board to matching gates, with each slide continuing until something stops it."
+        "answer": "Water-sort puzzles organise coloured liquid between containers under capacity and matching rules. OutBrick’s classic block sort moves bricks through a shared board to matching gates, with each slide continuing until something stops it; the App Store game now adds swaps and matches."
       },
       {
         "question": "Is an empty tube the same as an empty space in a block puzzle?",
@@ -152,7 +152,7 @@ export const batch9: BlogArticle[] = [
       },
       {
         "question": "Can I try OutBrick before downloading it?",
-        "answer": "The [OutBrick play page](/play) offers a small set of browser boards. It demonstrates the sliding rule without representing the full app or promising shared app progress."
+        "answer": "The [OutBrick play page](/play) offers a small set of browser boards. It demonstrates the classic sliding rule without representing the full app or promising shared app progress."
       }
     ]
   },

@@ -19,7 +19,7 @@ import { localeAlternates, localePath, ogLocales, type Locale } from '../lib/i18
 import { siteUrl } from '../lib/site';
 import { supportFaqs } from '../lib/support-faqs';
 import { breadcrumbNode, graph, webPageNode } from '../lib/structured-data';
-import { JsonLd } from './editorial-shell';
+import { JsonLd } from './json-ld';
 import { translatedText } from './localized-public-page';
 import { editorialNavFor, VillageFooter, VillageHeader } from './village-shell';
 import { chromeCopy } from '../lib/i18n/chrome';

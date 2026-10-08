@@ -9,6 +9,10 @@
  */
 
 import type { ReactNode } from 'react';
+// The editorial stylesheet travels with this shell, so only the pages that render `.ed` load it
+// (it was part of the site-wide stylesheet until 8 October 2026). Pages outside the editorial
+// side import JsonLd from ./json-ld rather than from here, or they would pull it in too.
+import './styles/editorial.css';
 import { chromeCopy } from '../lib/i18n/chrome';
 import { journalUi } from '../lib/i18n/blog';
 import { localePath, type Locale, type TranslatedLocale } from '../lib/i18n/locales';
@@ -159,7 +163,4 @@ export function Badge({ locale }: { locale?: TranslatedLocale } = {}) {
   );
 }
 
-/** Serialise JSON-LD. `<` is escaped so a string can never close the script. */
-export function JsonLd({ data }: { data: object }) {
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, '\\u003c') }} />;
-}
+export { JsonLd } from './json-ld';

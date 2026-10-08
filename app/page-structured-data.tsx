@@ -11,9 +11,9 @@ import { playCopy } from '../lib/i18n/play';
 import { chromeCopy } from '../lib/i18n/chrome';
 import { localeUrl, type Locale } from '../lib/i18n/locales';
 import { appNode, breadcrumbNode, graph, ids, ref, webPageNode } from '../lib/structured-data';
-import { JsonLd } from './editorial-shell';
+import { JsonLd } from './json-ld';
 
-/** The home hero's phone screen: the largest thing in the first viewport, so the LCP image. */
+/** The home hero's phone screen, named as the page's primary image (the <img> serves its WebP twin). */
 export const HOME_HERO_IMAGE = '/assets/villages/garden-city.jpg';
 
 export function HomeStructuredData({ locale }: { locale: Locale }) {
@@ -32,11 +32,10 @@ export function HomeStructuredData({ locale }: { locale: Locale }) {
   return (
     <>
       {/*
-        Ask for the hero image from the <head>, before the stylesheet has been parsed. React
-        hoists a <link> rendered anywhere into the head. The <img> itself already carries
-        fetchpriority="high", but React's own automatic image preloads do not include it.
+        No high-priority preload for the hero image: Lighthouse (8 October 2026) measured the
+        hero headline, not the phone, as the largest paint, and on a phone the phone sits below
+        the fold, so a preload only competed with the stylesheet and the fonts the headline needs.
       */}
-      <link rel="preload" as="image" href={localizedAsset(HOME_HERO_IMAGE, locale)} fetchPriority="high" />
       <JsonLd data={graph(page, localizedApplicationNode(appNode({ description: t.appDescription, url: localeUrl('en', '/') }), locale))} />
     </>
   );

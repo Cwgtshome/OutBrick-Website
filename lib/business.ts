@@ -128,13 +128,13 @@ export const jobs: Job[] = [
     employmentType: 'FULL_TIME',
     employmentLabel: 'Full-time',
     summary:
-      'Shape how OutBrick feels in the hand — from the first board to the 2,000th — across iPhone, iPad, Mac, Apple TV, Vision Pro and Apple Watch.',
+      'Shape how OutBrick feels in the hand — from the first board to the 2,000th — across iPhone, iPad, Mac, Vision Pro and Apple Watch.',
     about: [
-      'OutBrick is a one-finger game: slide a brick and it glides until something stops it. Everything around that gesture — the clear card, the shop, lives, undos, the Journey map of 167 villages — has to feel calm, fair and obvious. That is your job.',
+      'OutBrick is a one-finger game: slide a brick into space or home through its gate, or swap it with a neighbour. Everything around that gesture — the clear card, the shop, lives, undos, the Journey map of 167 villages — has to feel calm, fair and obvious. That is your job.',
       'You will design flows and screens, prototype them, watch real people play, and turn what you see into changes that ship. Accessibility is not a pass at the end here: colour-blind glyphs are on by default and every brick is a VoiceOver element, and you will keep it that way.',
     ],
     responsibilities: [
-      'Design and prototype new features and improvements across all six Apple platforms the game runs on',
+      'Design and prototype new features and improvements across all five Apple platforms the game runs on',
       'Run lightweight playtests and usability sessions, and write up what players actually did',
       'Own the clarity of monetisation screens: lives, the shop, Brick Pass and Remove Ads must be understood at a glance, never pushed',
       'Work with engineering on onboarding and difficulty, using the solver data behind every board',

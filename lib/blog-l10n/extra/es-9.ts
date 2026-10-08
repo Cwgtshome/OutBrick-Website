@@ -13,7 +13,7 @@ export const es9: ExtraGuides = {
       'hábitos de juego',
     ],
     intro:
-      'Un tubo casi ordenado puede ser el destino equivocado para verter. Un ladrillo junto a su salida puede estar mal colocado para salir. Ordenar agua y bloques hace parecer sencillo emparejar colores, pero esconde la decisión interesante en el orden de movimientos. Cambia el recurso: espacio en recipientes frente a rutas y paradas. Comparamos esas decisiones sin declarar ganador. Para agua usamos las reglas publicadas de Water Sort Puzzle de IEC Global; para bloques, deslizar hasta parar en OutBrick. Otros juegos con esos nombres pueden diferir. Creamos OutBrick y nuestros ejemplos tienen esa perspectiva, no pretenden pruebas independientes.',
+      'Un tubo casi ordenado puede ser el destino equivocado para verter. Un ladrillo junto a su salida puede estar mal colocado para salir. Ordenar agua y bloques hace parecer sencillo emparejar colores, pero esconde la decisión interesante en el orden de movimientos. Cambia el recurso: espacio en recipientes frente a rutas y paradas. Comparamos esas decisiones sin declarar ganador. Para agua usamos las reglas publicadas de Water Sort Puzzle de IEC Global; para bloques, deslizar hasta parar en los tableros clásicos de OutBrick, que conservan sus tableros del navegador. Otros juegos con esos nombres pueden diferir. Creamos OutBrick y nuestros ejemplos tienen esa perspectiva, no pretenden pruebas independientes.',
     keyTakeaways: [
       'Ordenar agua pregunta dónde puede ir legalmente el líquido; ordenar bloques deslizantes, qué rutas y paradas puedes crear.',
       'Un tubo vacío y una casilla vacía sirven de formas distintas. Protege el espacio del siguiente paso en vez de emparejar colores en cada ocasión.',
@@ -24,7 +24,7 @@ export const es9: ExtraGuides = {
         title: 'Primero, establece qué significa un movimiento',
         paragraphs: [
           'La descripción de Water Sort Puzzle de IEC Global dice que tocas un vaso para verter en otro, con color correspondiente y espacio suficiente. La meta es agrupar cada color en su vaso. Tratamos esas reglas, no prometemos que valgan en todas las aplicaciones. La ficha también describe reiniciar y jugar sin tiempo. Es un punto de partida, no resuelve casos como cuánto líquido transfiere exactamente cada toque (IEC Global Pty Ltd, n.d.).',
-          'En OutBrick mueves directamente el ladrillo. Se desliza hasta detenerse y sale por su puerta del mismo color. No lo arrastras a cualquier casilla. Un pasillo libre puede llevarlo más allá y otro ladrillo puede darle la parada necesaria. Nuestra [guía de puzles deslizantes](/blog/how-to-solve-sliding-block-puzzles) explica la distinción y un enfoque de resolución.',
+          'En los tableros clásicos de OutBrick mueves directamente el ladrillo. Se desliza hasta detenerse y sale por su puerta del mismo color. No lo arrastras a cualquier casilla. Un pasillo libre puede llevarlo más allá y otro ladrillo puede darle la parada necesaria. (El juego del App Store se juega ahora con Slide & Match: un ladrillo se detiene donde lo sueltas y puede intercambiarse para formar combinaciones.) Nuestra [guía de puzles deslizantes](/blog/how-to-solve-sliding-block-puzzles) explica la distinción y un enfoque de resolución.',
           'Ambos ordenan colores, pero esa etiqueta describe el destino, no todo el viaje. Verter cambia las capas accesibles en lo alto de un recipiente; deslizar reorganiza obstáculos en un tablero compartido. Antes de juzgar confuso un juego, di su regla en voz alta. Predecir bien es un primer hito mejor que terminar rápido.',
           'Las variantes pueden cambiar reglas, restricciones o recipientes. Empieza por el tutorial del propio juego antes de trasladar consejos de otro parecido.',
         ],
@@ -41,7 +41,7 @@ export const es9: ExtraGuides = {
       'route-example': {
         title: 'Ordenar bloques: un obstáculo puede ser un freno útil',
         paragraphs: [
-          'Imagina que el rojo debe alinearse con una puerta roja a la derecha. Subir por una columna vacía lo lleva más allá de la fila del giro. El azul encima de esa fila podría detenerlo a la altura útil. La tarea inmediata es colocar el azul aunque el rojo parezca más cerca de salir. Es un ejemplo del estilo OutBrick, no una solución de nivel numerado.',
+          'Imagina que el rojo debe alinearse con una puerta roja a la derecha. Subir por una columna vacía lo lleva más allá de la fila del giro. El azul encima de esa fila podría detenerlo a la altura útil. La tarea inmediata es colocar el azul aunque el rojo parezca más cerca de salir. Es un ejemplo de los tableros clásicos de OutBrick, no una solución de nivel numerado.',
           'Tras alinear el rojo puede surgir otra dependencia: el azul también necesita el pasillo. Sacar pronto el rojo puede borrar una parada necesaria. A diferencia del tubo libre, el recurso es una ubicación relacionada con la ruta. Más espacio vacío no significa automáticamente una posición mejor. A veces sirve precisamente porque la casilla adecuada está ocupada.',
           'Kirsh y Maglio (1994) estudiaron Tetris y distinguieron acciones que avanzan hacia una meta de las que revelan información difícil de calcular mentalmente. No probaron OutBrick ni aplicaciones de agua. Tomamos la distinción para leer intentos: un movimiento puede mostrar la parada sin mejorar la ruta. «Paró una fila demasiado arriba» es información, no un juicio sobre tu capacidad.',
           'Prueba un tablero en nuestra [página de juego](/play) y predice la parada antes de mover. Compara después. Para leer con más intención, la [guía antes de mover](/blog/how-to-read-a-puzzle-before-moving) ayuda a identificar salidas y dependencias. Pruebas tu interés por las rutas, no la rapidez para dominar un juego desconocido.',
@@ -74,7 +74,7 @@ export const es9: ExtraGuides = {
         question:
           '¿Cuál es la diferencia principal entre ordenar agua y bloques?',
         answer:
-          'Ordenar agua reparte líquido entre recipientes con reglas de capacidad y color. El estilo OutBrick mueve ladrillos por un tablero compartido hacia puertas, deslizando hasta que algo los detiene.',
+          'Ordenar agua reparte líquido entre recipientes con reglas de capacidad y color. El estilo clásico de OutBrick mueve ladrillos por un tablero compartido hacia puertas, deslizando hasta que algo los detiene; el juego del App Store ahora añade intercambios y combinaciones.',
       },
       {
         question: '¿Un tubo vacío equivale a un hueco en un puzle de bloques?',
@@ -89,7 +89,7 @@ export const es9: ExtraGuides = {
       {
         question: '¿Puedo probar OutBrick antes de descargar?',
         answer:
-          'La [página de juego de OutBrick](/play) ofrece unos pocos tableros de navegador. Demuestra deslizamiento sin representar toda la aplicación ni prometer progreso compartido.',
+          'La [página de juego de OutBrick](/play) ofrece unos pocos tableros de navegador. Demuestra el deslizamiento clásico sin representar toda la aplicación ni prometer progreso compartido.',
       },
     ],
   },

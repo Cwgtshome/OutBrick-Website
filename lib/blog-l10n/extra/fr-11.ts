@@ -151,7 +151,7 @@ export const fr11: ExtraGuides = {
         paragraphs: [
           'Un autre joueur expliquait que la navigation par balayages était la plus efficace pour lui, mais que déplacer un doigt sur le plateau restait nécessaire pour en comprendre l’organisation spatiale. Il manquait une annonce explicite des cases vides. Sans elle, impossible d’interpréter avec certitude une zone silencieuse comme de l’espace disponible. C’est une observation précise sur ce qu’un puzzle doit communiquer.',
           'Imaginez un plateau avec une brique, une porte et un espace entre elles. Pour prévoir le glissement, il faut savoir si cet espace est dégagé. Le silence seul laisse plusieurs possibilités : un espace vide, un objet qui n’a pas été annoncé ou un emplacement situé hors de la zone du plateau. Une annonce claire de case vide lèverait une partie de cette incertitude.',
-          'L’espace vide fait partie des informations du puzzle. Il permet de distinguer un trajet bloqué d’un trajet possible et facilite l’examen des relations entre les pièces. Cela ne garantit toutefois pas qu’une brique s’arrêtera dans cet espace : dans OutBrick, un glissement complet standard se poursuit jusqu’à ce que quelque chose arrête la brique. Notre [guide des déplacements](/blog/outbrick-voiceover-slide-actions) explique pourquoi le point d’arrêt compte autant que le passage dégagé.',
+          'L’espace vide fait partie des informations du puzzle. Il permet de distinguer un trajet bloqué d’un trajet possible et facilite l’examen des relations entre les pièces. Cela ne garantit toutefois pas qu’une brique s’arrêtera dans cet espace : dans OutBrick, un glissement jusqu’au bout se poursuit jusqu’à ce que quelque chose arrête la brique, et une action de glissement plus courte indique le nombre de cases parcourues. Notre [guide des déplacements](/blog/outbrick-voiceover-slide-actions) explique pourquoi le point d’arrêt compte autant que le passage dégagé.',
         ],
       },
       'a-small-orientation-routine': {
@@ -229,22 +229,22 @@ export const fr11: ExtraGuides = {
     keyTakeaways: [
       'Une brique peut glisser vers le haut, le bas, la gauche ou la droite lorsque le passage est libre, et elle sort par une porte de sa couleur.',
       'Lorsque le focus est sur une brique, les balayages vers le haut et le bas permettent de choisir parmi les actions de glissement de VoiceOver ; ces gestes ne limitent pas les déplacements à la verticale.',
-      'De courtes fiches explicatives, des plateaux d’introduction plus doux et davantage de coups sur les premiers plateaux sont prévus pour la prochaine mise à jour.',
+      'De courtes fiches explicatives, promises pour la prochaine mise à jour, sont arrivées avec la version 5.1 ; des plateaux d’introduction plus doux et davantage de coups sur les premiers plateaux ont été promis en même temps.',
     ],
     sections: {
       'match-the-brick-to-its-gate': {
         title: 'Trouver d’abord la destination, où qu’elle soit',
         paragraphs: [
-          'Le but de base est de faire sortir les briques par les portes de leur couleur. Une brique rouge a besoin de sa porte rouge ; atteindre une autre porte ne remplit pas cette condition. Les portes peuvent se trouver sur n’importe quel côté du plateau. Aucune règle générale n’impose à toutes les briques de monter ni ne place systématiquement la bonne sortie sur le bord supérieur.',
+          'Un but de base est de faire rentrer les briques par les portes de leur couleur. Une brique rouge a besoin de sa porte rouge ; atteindre une autre porte ne remplit pas cette condition. Les portes peuvent se trouver sur n’importe quel côté du plateau. Aucune règle générale n’impose à toutes les briques de monter ni ne place systématiquement la bonne sortie sur le bord supérieur.',
           'OutBrick indique à VoiceOver la couleur, la forme et la position de chaque brique, et associe les briques et les portes correspondantes à des symboles distincts. Commencez par identifier la pièce que vous voulez déplacer et par trouver sa destination. Examinez ensuite ce qui les sépare. Une sortie peut être proche d’une brique tout en exigeant que d’autres pièces bougent d’abord.',
           'Imaginez une porte de la bonne couleur à droite, avec une autre brique entre elle et la pièce sélectionnée. Le problème immédiat est cette brique intermédiaire. Chercher une action vers le haut ne dégagera pas un trajet qui doit s’ouvrir sur le côté. Pour vous aider à situer les pièces avant de choisir les actions, consultez notre [guide du repérage sur le plateau avec VoiceOver](/blog/outbrick-voiceover-spatial-board).',
         ],
       },
       'predict-the-stopping-point': {
-        title: 'Le glissement se poursuit jusqu’à un obstacle',
+        title: 'Choisir jusqu’où va un glissement',
         paragraphs: [
-          'Pour un glissement directionnel standard, OutBrick applique la règle du glissement jusqu’à l’arrêt : la brique suit le trajet disponible jusqu’à ce que quelque chose l’arrête. Écoutez le nom complet de l’action et prévoyez le point d’arrivée de celle que vous choisissez. Avant de vous engager sur un trajet, demandez-vous à la fois si la brique peut commencer à bouger et où son déplacement se terminera.',
-          'Un exemple imaginaire simple peut aider. À gauche d’une brique se trouvent plusieurs cases libres, puis une autre pièce. Un glissement complet standard vers la gauche fait avancer la brique sélectionnée dans l’espace disponible jusqu’à ce qu’elle soit arrêtée. Elle ne s’arrête pas automatiquement après la première case libre. L’autre pièce peut donc être un obstacle ou un point d’arrêt utile, selon votre plan.',
+          'Depuis la version 5.1, chaque action de glissement d’OutBrick indique une distance en plus d’une direction, par exemple « Faire glisser vers la droite de 1 case » ou « Faire glisser vers le haut jusqu’au bout, 3 cases » : la brique suit le trajet disponible et s’arrête là où l’action l’indique. Écoutez le nom complet de l’action et prévoyez le point d’arrivée de celle que vous choisissez. Avant de vous engager sur un trajet, demandez-vous à la fois si la brique peut commencer à bouger et où son déplacement se terminera.',
+          'Un exemple imaginaire simple peut aider. À gauche d’une brique se trouvent plusieurs cases libres, puis une autre pièce. Un glissement jusqu’au bout vers la gauche fait avancer la brique sélectionnée dans l’espace disponible jusqu’à ce que l’autre pièce l’arrête ; une action plus courte s’arrête après le nombre de cases qu’elle indique. L’autre pièce peut donc être un obstacle ou un point d’arrêt utile, selon votre plan.',
           'L’ordre des coups devient alors important. Déplacer une brique qui fait obstacle peut ouvrir une sortie, mais retirer trop tôt une pièce qui sert de butée peut modifier un glissement ultérieur. Vous pouvez réfléchir à cet enchaînement avant d’agir. Notre [guide du défi sans chrono](/blog/outbrick-untimed-puzzle-challenge) explique la différence entre le temps de réflexion et le nombre de coups autorisés ; avoir le temps d’examiner un plateau ne donne pas un nombre illimité de coups.',
         ],
       },
@@ -302,13 +302,13 @@ export const fr11: ExtraGuides = {
         question:
           'Pourquoi une brique d’OutBrick traverse-t-elle une case vide sans s’y arrêter ?',
         answer:
-          'Un glissement directionnel complet standard suit la règle du glissement jusqu’à l’arrêt : la brique continue donc jusqu’à ce que quelque chose l’arrête. Écoutez le nom complet de l’action pour comprendre le déplacement choisi. Tenez compte du point d’arrêt prévu autant que du trajet disponible.',
+          'Un glissement jusqu’au bout fait avancer la brique jusqu’à ce que quelque chose l’arrête ; depuis la version 5.1, d’autres actions indiquent une distance plus courte, comme « Faire glisser vers la droite de 1 case ». Écoutez le nom complet de l’action pour comprendre le déplacement choisi. Tenez compte du point d’arrêt prévu autant que du trajet disponible.',
       },
       {
         question:
           'Où se trouvent les fiches explicatives décrites dans les réponses sur AppleVis ?',
         answer:
-          'Les réponses du 2 octobre 2026 promettent des fiches explicatives pour la prochaine mise à jour et n’indiquent pas où trouver un tutoriel actuellement disponible. Des premiers plateaux plus doux et davantage de coups d’introduction sont aussi des engagements pour l’avenir dans cette discussion.',
+          'Les réponses du 2 octobre 2026 promettaient des fiches explicatives pour la prochaine mise à jour. La version 5.1 les a ajoutées : une courte fiche apparaît la première fois que vous rencontrez chaque nouvelle notion. Des premiers plateaux plus doux et davantage de coups d’introduction faisaient aussi partie des engagements de cette discussion.',
       },
     ],
   },
@@ -329,7 +329,7 @@ export const fr11: ExtraGuides = {
     keyTakeaways: [
       'Jouer sans chrono laisse le temps d’explorer un plateau ; le nombre de coups autorisés continue de limiter les actions pour le résoudre.',
       'Nous présentons OutBrick comme un jeu sans chrono, alors qu’un joueur a signalé en avoir rencontré un. Cette divergence n’est pas résolue dans la discussion.',
-      'Pour la prochaine mise à jour, nous prévoyons des premiers plateaux plus doux, des mécaniques présentées une par une et davantage de coups au début.',
+      'Le 2 octobre, nous prévoyions des premiers plateaux plus doux, des mécaniques présentées une par une et davantage de coups au début ; la version 5.1 a ajouté une courte fiche la première fois que vous rencontrez chaque nouvelle notion.',
     ],
     sections: {
       'understanding-before-moving': {
@@ -401,7 +401,7 @@ export const fr11: ExtraGuides = {
       {
         question: 'Les premiers plateaux plus doux sont-ils déjà disponibles ?',
         answer:
-          'Les premiers plateaux plus doux, les fiches explicatives à la découverte d’une notion et les limites de coups plus généreuses au début sont prévus pour la prochaine mise à jour. Ce travail est encore en cours.',
+          'Le 2 octobre 2026, les premiers plateaux plus doux, les fiches explicatives à la découverte d’une notion et les limites de coups plus généreuses au début étaient prévus pour la prochaine mise à jour. La version 5.1 a depuis ajouté une courte fiche la première fois que vous rencontrez chaque nouvelle notion ; consultez les [notes de version](/whats-new) pour les autres changements.',
       },
       {
         question:
@@ -428,7 +428,7 @@ export const fr11: ExtraGuides = {
     keyTakeaways: [
       'Qu’un bouton soit annoncé ne garantit pas qu’il s’active correctement, et terminer un plateau ne garantit pas que la progression est enregistrée.',
       'Notre travail pour la prochaine mise à jour concerne l’activation de la boutique avec VoiceOver, l’écran d’accueil, les annonces des portes gelées et la progression des missions.',
-      'Nous avons confirmé la prise en charge de l’italien dans l’app, et un joueur l’a confirmée aussi ; les cinq langues de publication du site constituent une liste distincte.',
+      'Nous avons confirmé la prise en charge de l’italien dans l’app, et un joueur l’a confirmée aussi ; les six langues de publication du site constituent une liste distincte.',
     ],
     sections: {
       'follow-the-whole-session': {
@@ -470,7 +470,7 @@ export const fr11: ExtraGuides = {
         title: 'L’italien dans l’app est une question distincte',
         paragraphs: [
           'Un membre de la communauté a demandé si OutBrick était disponible en italien. Nous avons confirmé une prise en charge complète de l’italien et de onze autres langues dans l’app, et un autre joueur a confirmé la disponibilité de l’italien à partir de sa propre expérience. Notre réponse ne donnait pas la liste des onze autres langues, mais la réponse à cette question précise est simple : oui, l’app est disponible en italien.',
-          'Notre site publie en anglais, français, allemand, espagnol et japonais. Cette liste est distincte des langues prises en charge par l’app : vous pouvez jouer en italien même si le site n’a pas d’édition italienne. Lorsque vous cherchez de l’aide, votre langue de jeu peut donc être différente de celles proposées pour un article donné.',
+          'Notre site publie en anglais, français, allemand, espagnol, japonais et portugais du Brésil. Cette liste est distincte des langues prises en charge par l’app : vous pouvez jouer en italien même si le site n’a pas d’édition italienne. Lorsque vous cherchez de l’aide, votre langue de jeu peut donc être différente de celles proposées pour un article donné.',
           'La confirmation de la communauté mentionnait aussi une mise à jour arrivée ce jour-là, sans dire que les problèmes antérieurs avaient été résolus. Notre réponse ultérieure présentait toujours les correctifs comme du travail à venir. Une notification de mise à jour ne permet pas, à elle seule, de savoir quel problème précis a changé : consultez donc les [notes de version publiées](/whats-new) pour vérifier une amélioration donnée. Associer la version au changement rend ces échanges beaucoup plus faciles à suivre.',
           'Pour un signalement lié à la langue, indiquez l’écran et le texte manquant, peu clair ou resté dans une autre langue de manière inattendue. Vous n’avez pas à expliquer votre parcours ni à justifier votre préférence pour une langue.',
         ],
@@ -505,7 +505,7 @@ export const fr11: ExtraGuides = {
       {
         question: 'OutBrick est-il disponible en italien ?',
         answer:
-          'Oui. Nous avons confirmé la prise en charge de l’italien dans l’app sur AppleVis, et un membre de la communauté l’a confirmée aussi. Notre réponse mentionne douze langues dans l’app sans toutes les énumérer ; le site publie séparément en anglais, français, allemand, espagnol et japonais.',
+          'Oui. Nous avons confirmé la prise en charge de l’italien dans l’app sur AppleVis, et un membre de la communauté l’a confirmée aussi. Notre réponse mentionne douze langues dans l’app sans toutes les énumérer ; le site publie séparément en anglais, français, allemand, espagnol, japonais et portugais du Brésil.',
       },
       {
         question:

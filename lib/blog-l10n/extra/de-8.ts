@@ -16,7 +16,7 @@ export const de8: ExtraGuides = {
     intro:
       'Ein Raster voller bunter Blöcke kann zwei sehr unterschiedliche Puzzles verbergen. In einem entscheidest du, wohin eine neue Form gehört. Im anderen hat jedes Teil bereits einen Platz, und du musst seinen Weg hinaus finden. Block Blast!+ und OutBrick machen diese Unterscheidung nützlich: Beide belohnen das Lesen von Raum, stellen aber unterschiedliche Fragen dazu. Suchst du ein Spiel wie Block Blast, hilft keine Liste ähnlicher Bildschirmfotos am meisten, sondern eine Erklärung dessen, was du tatsächlich tust. Dieser Ratgeber zu Spielmechaniken basiert auf Quellen, geprüft am 30. September 2026, und stammt vom Team hinter OutBrick. Wir haben weder einen praktischen Vergleich durchgeführt noch gemessen, welches Spiel Menschen bevorzugen.',
     keyTakeaways: [
-      'Bei Block Blast!+ platzierst du Formen und löschst vollständige Reihen oder Spalten; bei OutBrick schiebst du vorhandene Steine durch passende Tore.',
+      'Bei Block Blast!+ platzierst du Formen und löschst vollständige Reihen oder Spalten; bei OutBrick schiebst du vorhandene Steine durch passende Tore nach Hause und tauschst sie zu Reihen aus drei oder mehr.',
       'Block Blast!+ ist die Apple-Arcade-Ausgabe. Übertrage ihre Abo-, Werbe- und Kaufbedingungen nicht auf die separat angebotene Standard-App Block Blast!.',
       'Wähle Platzieren, wenn du gern Formen einpasst und Raum erhältst; wähle Schieben, wenn du Wege, Haltepunkte und Zugreihenfolgen magst.',
     ],
@@ -25,7 +25,7 @@ export const de8: ExtraGuides = {
         title: 'Der erste Unterschied ist das Tätigkeitswort',
         paragraphs: [
           'Apple beschreibt Block Blast!+ als Spiel, in dem du Blöcke in ein Raster einpasst, Reihen und Spalten vervollständigst und Kombinationen aufbaust (Apple, 2026). Die Kernfrage lautet: „Wohin soll diese Form?“ Ein freier Bereich bietet die Möglichkeit, etwas zu platzieren. Eine fast vollständige Reihe kann Raum zurückgeben. Du vergleichst den Umriss einer Form mit den noch verfügbaren Flächen.',
-          'OutBricks Frage lautet: „Was muss sich bewegen, bevor dieser Stein hinauskommt?“ Du wählst einen vorhandenen Stein und schiebst ihn. Er gleitet, bis etwas ihn stoppt, und sein Ziel ist das Tor seiner eigenen Farbe. Ein freier Bereich kann ein Weg sein, einen Stein aber auch weiter tragen, als du wolltest. Mehr freier Raum ist nicht automatisch die bessere Stellung.',
+          'OutBricks Frage lautet: „Was muss sich bewegen, bevor dieser Stein hinauskommt?“ Du wählst einen vorhandenen Stein und schiebst ihn. Er hält dort, wo du loslässt, geht durch das Tor seiner eigenen Farbe nach Hause oder tauscht mit einem Nachbarn, und drei oder mehr Steine einer Farbe in einer Reihe verschwinden. Auf den klassischen Feldern, die im Browser weiter spielbar sind, gleitet ein Stein, bis etwas ihn stoppt; dort kann ein freier Bereich ein Weg sein, einen Stein aber auch weiter tragen, als du wolltest. Mehr freier Raum ist nicht automatisch die bessere Stellung.',
           'Betrachte eine lange gerade Bahn. In einem Platzierpuzzle könnte das Freihalten dieser Bahn Platz für eine lange Form bewahren. In einem Gleitpuzzle könnte sie einen Stein über den benötigten Abbiegepunkt hinausführen. Ein anderer Stein muss vielleicht vorübergehend als Bremse in der Bahn stehen. Dasselbe sichtbare Merkmal hat eine andere strategische Bedeutung, weil die Bewegungsregel verändert, was du damit tun kannst.',
           'Unsere [Einführung in Schiebepuzzles](/blog/how-to-solve-sliding-block-puzzles) erklärt die Bewegungsregel ausführlicher. Einen breiteren Blick auf Platzieren, fallende Teile und Wegeplanung bietet [Warum Spiele wie Tetris dauerhaft begeistern](/blog/games-like-tetris). Keine Mechanik ist eine fortgeschrittenere Version der anderen. Es sind unterschiedliche Wege, begrenzten Raum interessant zu machen.',
         ],
@@ -34,7 +34,7 @@ export const de8: ExtraGuides = {
         title: 'Zwei Arten, über den nächsten Zug nachzudenken',
         paragraphs: [
           'Prüfe in einem Platzierpuzzle die angebotene Form, ihre möglichen Plätze und das Feld, das danach bleibt. Eine Position kann erlaubt und trotzdem unpraktisch sein: Sie hinterlässt vielleicht eine ungünstige kleine Lücke oder verbraucht den einzigen Raum für eine andere Form. Eine Reihe zu vervollständigen kann reizvoll sein, weil sich Menge und Form des verfügbaren Raums ändern. Das beschreibt ein allgemeines Platzierproblem, keine optimale Strategie für jeden Block-Blast-Modus.',
-          'Prüfe in OutBrick den gesamten Weg und endgültigen Haltepunkt des gewählten Steins. Ein Hindernis zu entfernen kann den Weg zum Tor öffnen. Entfernst du es zu früh, fehlt vielleicht die Haltefläche für einen anderen Stein. Ein nützlicher Plan beschreibt deshalb Abhängigkeiten: Blau muss hier stoppen, bevor Rot seinen Ausgang ausrichten kann. Das Feld verlangt, ein System umzuordnen, statt einfach ein freies Ziel zu wählen.',
+          'Prüfe auf den klassischen Gleitfeldern von OutBrick den gesamten Weg und endgültigen Haltepunkt des gewählten Steins. Ein Hindernis zu entfernen kann den Weg zum Tor öffnen. Entfernst du es zu früh, fehlt vielleicht die Haltefläche für einen anderen Stein. Ein nützlicher Plan beschreibt deshalb Abhängigkeiten: Blau muss hier stoppen, bevor Rot seinen Ausgang ausrichten kann. Das Feld verlangt, ein System umzuordnen, statt einfach ein freies Ziel zu wählen.',
           'Isaksen et al. (2017) trennten strategische Entscheidungen von Ausführungsanforderungen in Simulationen von Tetris- und Puzzle-Bobble-Varianten. Ihre Arbeit zeigt, warum eine einzelne Schwierigkeitsangabe unterschiedliche Anforderungen verbergen kann. Sie untersuchte weder Block Blast!+ noch OutBrick. Wir nutzen die Unterscheidung als Vergleichswerkzeug: Frage sowohl, ob du einen Zug gern entscheidest, als auch, ob du ihn gern ausführst.',
           'Das zählt, wenn du durchdachte Puzzles magst, aber eine bestimmte Eingabeform nicht. Eine Form an einen Ort zu ziehen und einem vorhandenen Stein eine Richtung zu geben sind getrennte Interaktionen. Bildschirmfotos entscheiden nicht, was für dich klarer wirkt. Probiere ein einfaches Beispiel, lies die Anleitung und beobachte, was ein abgelehnter Zug bedeutet, bevor du eine unbekannte Steuerung als Beleg für ein zu schwieriges Puzzle ansiehst.',
         ],
@@ -60,9 +60,9 @@ export const de8: ExtraGuides = {
       'a-small-fit-test': {
         title: 'Ein kleiner Test hilft mehr als ein pauschales Urteil',
         paragraphs: [
-          'Erkläre dir zuerst die Regel selbst. Beim Platzieren: Setze eine Form in einen erlaubten Bereich und arbeite auf eine vollständige Reihe hin. Bei OutBrick: Gib einem Stein eine Richtung, sage seinen Haltepunkt voraus und arbeite auf seinen passenden Ausgang hin. Spiele dann langsam genug, um zu sehen, ob jede Handlung diese Erklärung bestätigt. Ein Vergleich soll dir ins passende Puzzle helfen, nicht dich zum Ertragen des falschen bewegen.',
+          'Erkläre dir zuerst die Regel selbst. Beim Platzieren: Setze eine Form in einen erlaubten Bereich und arbeite auf eine vollständige Reihe hin. Bei OutBrick: Schieb einen Stein zu seinem passenden Tor oder tausche ihn in eine Reihe aus drei oder mehr Steinen seiner Farbe. Spiele dann langsam genug, um zu sehen, ob jede Handlung diese Erklärung bestätigt. Ein Vergleich soll dir ins passende Puzzle helfen, nicht dich zum Ertragen des falschen bewegen.',
           'Iacovides et al. (2015) untersuchten Lernen und Beteiligung anhand mehrerer Fallstudien mit Beobachtungen und Interviews. Ihre Berichte verbanden Erkenntnisdurchbrüche mit Beteiligung, besonders wenn Spielende sich für den Fortschritt verantwortlich fühlten. Das sind qualitative Ergebnisse aus anderen Spielen. Sie sprechen dafür, auf dein Verständnis zu achten, ohne zu versprechen, dass ein kurzer Versuch eine allgemeingültige Vorliebe offenbart.',
-          `Du kannst [ein OutBrick-Feld im Browser ausprobieren](/play), um Gleiten bis zum Stopp zu untersuchen. Diese Demonstration probiert die Mechanik aus, bildet aber nicht jede Funktion, Kostenstruktur oder Barrierefreiheit der installierten App nach. Gefällt sie dir, [sieh dir OutBrick im App Store an](${appStoreUrl('journal-block-blast-comparison')}) und prüfe vor dem Download aktuelle Geräteanforderungen und Kaufinformationen.`,
+          `Du kannst [ein OutBrick-Feld im Browser ausprobieren](/play), um das klassische Gleiten bis zum Stopp zu untersuchen. Diese Demonstration probiert die ältere Mechanik ohne das Tauschen und die Dreierreihen des App-Store-Spiels aus, bildet aber nicht jede Funktion, Kostenstruktur oder Barrierefreiheit der installierten App nach. Gefällt sie dir, [sieh dir OutBrick im App Store an](${appStoreUrl('journal-block-blast-comparison')}) und prüfe vor dem Download aktuelle Geräteanforderungen und Kaufinformationen.`,
           'Das nützliche Ergebnis kann ein ganz gewöhnlicher Satz sein: „Ich passe lieber neue Formen ein, als vorhandene Teile umzuleiten“, oder umgekehrt. Das genügt. Blockpuzzles teilen eine Bildsprache, aber ihre Tätigkeitswörter bestimmen das Erlebnis. Wähle die Tätigkeit, die du gern weiter ausführen möchtest.',
         ],
       },
@@ -78,7 +78,7 @@ export const de8: ExtraGuides = {
       {
         question: 'Ist OutBrick dieselbe Art Puzzle wie Block Blast!+?',
         answer:
-          'Die Kernmechaniken unterscheiden sich. Block Blast!+ verlangt, Formen für vollständige Reihen und Spalten zu platzieren; OutBrick verlangt, vorhandene Steine durch passende Tore zu schieben.',
+          'Die Kernmechaniken unterscheiden sich. Block Blast!+ verlangt, Formen für vollständige Reihen und Spalten zu platzieren; OutBrick verlangt, vorhandene Steine durch passende Tore nach Hause zu schieben und sie zu Reihen aus drei oder mehr zu tauschen.',
       },
       {
         question:
@@ -89,12 +89,12 @@ export const de8: ExtraGuides = {
       {
         question: 'Welches eignet sich besser zum Planen?',
         answer:
-          'Beide können Planung verlangen, aber unter verschiedenen Einschränkungen. Beim Platzieren geht es darum, wie eine Form den übrigen Raum verändert; bei OutBrick darum, wie Bewegungsreihenfolge und Haltepunkte Wege beeinflussen.',
+          'Beide können Planung verlangen, aber unter verschiedenen Einschränkungen. Beim Platzieren geht es darum, wie eine Form den übrigen Raum verändert; bei OutBrick darum, wie Bewegungsreihenfolge, Tauschzüge und Tore Wege beeinflussen.',
       },
       {
         question: 'Kann ich OutBrick ohne Installation ausprobieren?',
         answer:
-          'Das [Browser-Spielfeld](/play) lässt dich Gleiten bis zum Stopp testen. Prüfe den App-Store-Eintrag gesondert für Kompatibilität, Funktionen und Kosten der installierten App.',
+          'Das [Browser-Spielfeld](/play) lässt dich das klassische Gleiten bis zum Stopp testen. Prüfe den App-Store-Eintrag gesondert für Kompatibilität, Funktionen und Kosten der installierten App.',
       },
     ],
   },
@@ -111,9 +111,9 @@ export const de8: ExtraGuides = {
       'Block-Sortierpuzzles',
     ],
     intro:
-      'Eine Kiste steht ein Feld vor ihrem Ziel. Sie zu bewegen scheint offensichtlich, bis du merkst, dass die Person, die sie schieben muss, nicht hinter sie gelangt. Ein farbiger Stein liegt neben seinem Ausgang. Auch diese Bewegung wirkt offensichtlich, bis eine offene Bahn ihn weiter als beabsichtigt trägt. Sokoban und Gleitpuzzles interessieren sich beide für Raum und Reihenfolge, aber das Hindernis, um das du herumplanst, unterscheidet sich. Dieser Ratgeber vergleicht klassische Sokoban-Regeln mit OutBricks Gleiten-bis-zum-Stopp-Regel. Er erklärt Mechaniken, bewertet nicht den Schwierigkeitsgrad, und seine Beispiele sind erfundene Lehrstellungen statt Lösungen benannter Levels.',
+      'Eine Kiste steht ein Feld vor ihrem Ziel. Sie zu bewegen scheint offensichtlich, bis du merkst, dass die Person, die sie schieben muss, nicht hinter sie gelangt. Ein farbiger Stein liegt neben seinem Ausgang. Auch diese Bewegung wirkt offensichtlich, bis eine offene Bahn ihn weiter als beabsichtigt trägt. Sokoban und Gleitpuzzles interessieren sich beide für Raum und Reihenfolge, aber das Hindernis, um das du herumplanst, unterscheidet sich. Dieser Ratgeber vergleicht klassische Sokoban-Regeln mit der Gleiten-bis-zum-Stopp-Regel der klassischen OutBrick-Felder, die seine Browser-Demo beibehält. Er erklärt Mechaniken, bewertet nicht den Schwierigkeitsgrad, und seine Beispiele sind erfundene Lehrstellungen statt Lösungen benannter Levels.',
     keyTakeaways: [
-      'Im klassischen Sokoban schiebt eine Figur Kisten und muss die richtige Seite erreichen; in OutBrick wählst du einen Stein und lässt ihn bis zu einem Hindernis gleiten.',
+      'Im klassischen Sokoban schiebt eine Figur Kisten und muss die richtige Seite erreichen; auf den klassischen OutBrick-Feldern wählst du einen Stein und lässt ihn bis zu einem Hindernis gleiten.',
       'Eine Sokoban-Ecke kann eine Kiste dauerhaft festsetzen. In Gleitpuzzles kann das Entfernen eines Hindernisses den Haltepunkt beseitigen, den ein späterer Weg braucht.',
       'Nützliche Gewohnheiten überschneiden sich, doch eine Strategie überträgt sich nur, wenn Bewegungs- und Zielregeln sie unterstützen. Lies diese Regeln, bevor du einen vertrauten Plan übernimmst.',
     ],
@@ -123,7 +123,7 @@ export const de8: ExtraGuides = {
         paragraphs: [
           'Klassisches Sokoban platziert eine Figur, Kisten, Wände und Lagerziele auf einem Raster. Die Figur geht durch freie Felder und schiebt eine Kiste, wenn das Feld dahinter leer ist. Sie kann weder Kisten ziehen noch Kistenketten schieben oder durch Wände gehen. Abgeschlossen ist das Puzzle, wenn die Kisten auf den Zielen stehen. Einzelne Umsetzungen können Varianten ergänzen; diese Beschreibung betrifft die klassischen Regeln, nicht jede App mit diesem Namen.',
           'Die Position der Figur ist Teil des Puzzles. Eine Kiste mit freiem Raum rechts lässt sich nicht unbedingt nach rechts schieben: Die Figur muss auch ihre linke Seite erreichen. Wer nur an das Ziel der Kiste denkt, übersieht die Hälfte des Zugs. Ein kurzer Gehweg hinter eine Kiste kann unverzichtbar sein, obwohl er keine Ladung einem Ziel näherbringt.',
-          'In OutBrick wählst du einen Stein direkt und gibst ihm eine Richtung. Er gleitet, bis etwas ihn stoppt, und verlässt das Feld durch das Tor seiner Farbe. Es gibt keine Lagerfigur, deren Gehweg du erhalten musst. Deine Aufmerksamkeit gilt Bewegungsbahn, verfügbaren Stopps und Beziehungen zu anderen Steinen. Auf späteren Feldern erscheinen Schlüssel, Schlösser und Kisten; das macht die Kernbewegung aber nicht identisch mit Sokoban.',
+          'Auf den klassischen OutBrick-Feldern, die im Browser weiter spielbar sind, wählst du einen Stein direkt und gibst ihm eine Richtung. Er gleitet, bis etwas ihn stoppt, und verlässt das Feld durch das Tor seiner Farbe. (Das Spiel im App Store spielt sich inzwischen als Slide & Match: Ein Stein hält dort, wo du loslässt, und Tauschzüge bilden Reihen.) Es gibt keine Lagerfigur, deren Gehweg du erhalten musst. Deine Aufmerksamkeit gilt Bewegungsbahn, verfügbaren Stopps und Beziehungen zu anderen Steinen. Auf späteren Feldern erscheinen Schlüssel, Schlösser und Kisten; das macht die Kernbewegung aber nicht identisch mit Sokoban.',
           '„Schiebepuzzle“ ist eine breite Kategorie. Manche erlauben kleine Schritte oder beschränken Teile auf eine Achse; andere nutzen Gleitregeln. Unsere [Geschichte der Schiebepuzzles](/blog/history-of-sliding-block-puzzles) liefert diesen weiteren Kontext. Bestimme immer die Bewegungsregel des jeweiligen Spiels, bevor du annimmst, bereits zu wissen, wie du es löst.',
         ],
       },
@@ -140,7 +140,7 @@ export const de8: ExtraGuides = {
         title: 'Erhalte den Zugang ebenso wie die Ziele',
         paragraphs: [
           'Betrachte einen Sokoban-Gang zwischen zwei Räumen. Eine Kiste in seinen Eingang zu schieben kann sie einem Lagerfeld näherbringen und zugleich den Weg der Figur in den anderen Raum versperren. Vielleicht musst du später von der anderen Seite an die Kiste, hast aber den einzigen Weg dorthin verloren. Frage vor einem Schub, wo die Figur danach gehen kann und welche Seite jeder übrigen Kiste erreichbar bleibt.',
-          'OutBricks vergleichbare Frage betrifft Durchgang und Stopps. Muss ein blauer Stein eine Bahn kreuzen, bevor ein roter hinausgeht, kann das frühe Entfernen von Rot eine nützliche Bremse beseitigen oder den Weg verändern. Bleibt Rot dagegen für immer stehen, blockiert es vielleicht Blau. Die Abhängigkeit ist vorübergehend: Behalte das Teil, solange es nützlich ist, und entferne es, wenn seine Aufgabe erledigt ist.',
+          'Auf den klassischen OutBrick-Feldern betrifft die vergleichbare Frage Durchgang und Stopps. Muss ein blauer Stein eine Bahn kreuzen, bevor ein roter hinausgeht, kann das frühe Entfernen von Rot eine nützliche Bremse beseitigen oder den Weg verändern. Bleibt Rot dagegen für immer stehen, blockiert es vielleicht Blau. Die Abhängigkeit ist vorübergehend: Behalte das Teil, solange es nützlich ist, und entferne es, wenn seine Aufgabe erledigt ist.',
           'Formuliere einen Plan als Beziehungen statt als lange Richtungsfolge. In Sokoban: „Die Türöffnung bleibt frei, bis ich hinter die obere Kiste komme.“ In einem Gleitpuzzle: „Dieser Stein bleibt als Stopp, bis der andere ausgerichtet ist.“ Diese Beschreibungen machen den Grund eines Zugs sichtbar. Ändert sich das Feld, kannst du prüfen, ob der Grund noch gilt, statt dich an eine verschwundene Folge zu erinnern.',
           'Mehr über das Lesen von Abhängigkeiten findest du in unserem [Ratgeber zum Prüfen eines Felds vor dem ersten Zug](/blog/how-to-read-a-puzzle-before-moving). Du brauchst keinen perfekten Plan fürs ganze Feld. Oft genügt es, einen zu erhaltenden Zugangsweg und eine nützliche Position zu erkennen, die noch nicht verändert werden sollte.',
         ],
@@ -160,13 +160,13 @@ export const de8: ExtraGuides = {
           'Sokoban ist ein guter Kandidat, wenn du gern um den Zugang einer Figur und die Folgen unumkehrbarer Schübe herumplanst. Gleitpuzzles lohnen sich, wenn du gern Stopps konstruierst und Teile direkt umleitest. Keine Vorliebe braucht die Behauptung, ein Genre verbessere dein Gehirn stärker. Diese Mechaniken können für sich genommen Freude machen.',
           'Kotovsky et al. (1985) untersuchten, warum unterschiedliche Darstellungen formal gleichwertiger Turm-von-Hanoi-Probleme unterschiedliche Schwierigkeit erzeugten. Die Arbeit betrifft diese experimentellen Probleme, nicht diese beiden Puzzlegenres. Sie spricht dafür, Aufgabenstruktur und Verständlichkeit der Regeln zu unterscheiden: Eine unbekannte Darstellung kann schwieriger wirken, ohne mehr Teile hinzuzufügen. Schwierigkeit und persönliche Eignung bleiben unterschiedliche Fragen.',
           `Du kannst [eine OutBrick-Demonstration spielen](/play), um zu sehen, wie eine Gleitregel eine Bahn verändert. Lies unsere [Farbsortierpuzzle-Tipps](/blog/colour-sort-puzzle-tips), wenn du diese Bewegung mit passenden Toren verbinden möchtest. Gefällt dir die Mechanik, [sieh OutBrick im App Store an](${appStoreUrl('journal-sokoban-comparison')}) für aktuelle Kompatibilität und Kaufinformationen. Die App hat Zuglimits, Leben und freiwillige Belohnungswerbung; ein Puzzle ohne Zeitlimit ist kein unbegrenzter Zugang.`,
-          'Nimm für beide Familien eine nützliche Frage aufs nächste Feld mit: „Was muss nach diesem Zug verfügbar bleiben?“ In Sokoban kann das ein Feld sein, auf dem die Figur stehen muss. In OutBrick kann es eine Haltefläche sein. Dieser Unterschied verwandelt eine vage Ähnlichkeit bunter Blöcke in eine deutlichere Wahl dessen, was du spielen möchtest.',
+          'Nimm für beide Familien eine nützliche Frage aufs nächste Feld mit: „Was muss nach diesem Zug verfügbar bleiben?“ In Sokoban kann das ein Feld sein, auf dem die Figur stehen muss. Auf den klassischen OutBrick-Feldern kann es eine Haltefläche sein. Dieser Unterschied verwandelt eine vage Ähnlichkeit bunter Blöcke in eine deutlichere Wahl dessen, was du spielen möchtest.',
         ],
       },
       'classic-rules-source': {
         title: 'Klassische Regeln und Grenzen der Evidenz',
         paragraphs: [
-          'Sokoban.jp. (n.d.). Rules. [Klassische Sokoban-Regeln](https://sokoban.jp/rule.html). Abgerufen am 30. September 2026. Die Beispiele oben sind eigene Veranschaulichungen dieser Regeln und der Bewegung in OutBrick. Die Forschung unten liefert Kontext zu Suche, Beteiligung und Motivation; sie bewertet OutBrick nicht unabhängig.',
+          'Sokoban.jp. (n.d.). Rules. [Klassische Sokoban-Regeln](https://sokoban.jp/rule.html). Abgerufen am 30. September 2026. Die Beispiele oben sind eigene Veranschaulichungen dieser Regeln und der klassischen Bewegung in OutBrick. Die Forschung unten liefert Kontext zu Suche, Beteiligung und Motivation; sie bewertet OutBrick nicht unabhängig.',
         ],
       },
     },
@@ -186,7 +186,7 @@ export const de8: ExtraGuides = {
       {
         question: 'Bewegt OutBrick sich wie Sokoban um ein Feld pro Zug?',
         answer:
-          'OutBrick-Steine gleiten in der gewählten Richtung, bis etwas sie stoppt. Die Planung umfasst deshalb Haltepunkte und Ausgänge passender Farbe statt der Schubposition einer Figur.',
+          'Nein. Auf den klassischen Feldern gleiten OutBrick-Steine in der gewählten Richtung, bis etwas sie stoppt; im Slide & Match des App-Store-Spiels hält ein Stein dort, wo du loslässt. Die Planung umfasst deshalb Haltepunkte und Ausgänge passender Farbe statt der Schubposition einer Figur.',
       },
       {
         question: 'Machen Sokoban-Fähigkeiten OutBrick automatisch leicht?',

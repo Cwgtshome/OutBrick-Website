@@ -15,7 +15,7 @@ export default function AccessibilityPage() {
     <LegalPage
       eyebrow="OutBrick accessibility"
       title="Make room to play."
-      summary="OutBrick aims to keep the board readable, calm, and comfortable across iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch. Tell us what would make the next clear easier."
+      summary="OutBrick aims to keep the board readable, calm, and comfortable across iPhone, iPad, Mac, Apple Vision Pro and Apple Watch. Tell us what would make the next clear easier."
       updated="7 October 2026"
       current="/accessibility"
     >
@@ -40,10 +40,9 @@ export default function AccessibilityPage() {
       <section className="brick">
         <h2>Device size and input</h2>
         <p>
-          The game adapts its layouts for iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch.
+          The game adapts its layouts for iPhone, iPad, Mac, Apple Vision Pro and Apple Watch.
           Play is touch-first on iPhone, iPad and Apple Vision Pro, with one-finger brick movement and a
-          free undo on every board; Apple TV is played with the Siri Remote, and Apple Watch with the
-          Digital Crown as well as touch. If a control is clipped, hard to reach, or not announced as
+          free undo on every board; Apple Watch is played with the Digital Crown as well as touch. If a control is clipped, hard to reach, or not announced as
           expected, please include the device model, iOS version, and the name of the affected screen.
         </p>
       </section>

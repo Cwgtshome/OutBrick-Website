@@ -27,9 +27,9 @@ export default function PrivacyPage() {
           receive your gameplay or face data. The app stores gameplay data locally and can sync
           progress through your own iCloud account. There is one third party in the app:
           Google&rsquo;s advertising SDK, which runs only when you choose to watch a rewarded video in
-          exchange for something you pressed a button to ask for — a life, undos, more moves, a booster
-          for the board ahead, the clear card&rsquo;s coins paid again, or a second spin of the Brick
-          Wheel. It is described in full below, and buying Remove Ads or holding the Brick Pass switches
+          exchange for something you pressed a button to ask for — a life, undos, more moves, the clear
+          card&rsquo;s coins paid again, a spin of the Brick Wheel, or a prize from the gift balloon or
+          Brick Cinema. It is described in full below, and buying Remove Ads or holding the Brick Pass switches
           it off entirely.
         </p>
         <p>

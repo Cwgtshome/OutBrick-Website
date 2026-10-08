@@ -14,7 +14,6 @@ export const ptBR1: Record<string, string> = {
   "The pressure": "A pressão",
   "A move limit on every board. No clock, timer or countdown anywhere in the game.": "Cada tabuleiro tem um limite de movimentos. Não há relógio, cronômetro nem contagem regressiva no jogo.",
   "What it costs": "Quanto custa",
-  "Free, with lives and six opt-in rewarded video placements. No banners, no interstitials, no subscription.": "Grátis, com vidas e seis espaços opcionais para vídeos premiados. Sem banners, anúncios em tela cheia ou assinatura.",
   "Where it runs": "Onde funciona",
   "iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, offline, with progress in your own iCloud.": "iPhone, iPad, Mac, Apple TV, Apple Vision Pro e Apple Watch, mesmo offline, com o progresso no seu próprio iCloud.",
   "Time": "Tempo",

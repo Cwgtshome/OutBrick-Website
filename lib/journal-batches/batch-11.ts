@@ -225,7 +225,7 @@ export const batch11: BlogArticle[] = [
         "paragraphs": [
           "Another player explained that flick navigation worked best, but moving a finger over the board was necessary for spatial understanding. The missing piece was an explicit announcement for empty cells. Without it, a quiet area could not confidently be understood as available space. That is a precise observation about what a puzzle needs to communicate.",
           "Consider an imagined board with a brick, a gate and a gap between them. A player needs to know whether the gap is clear before predicting the slide. Silence alone leaves several possibilities: empty space, an object that was missed, or a location outside the intended board area. A clear empty-cell announcement would remove one source of uncertainty.",
-          "Empty space is part of the puzzle’s information. It helps distinguish a blocked route from a possible route and makes the relationship between pieces easier to investigate. It still does not promise that a brick will stop in that space: a standard full slide in OutBrick continues until something stops the brick. Our [movement guide](/blog/outbrick-voiceover-slide-actions) explains why the stopping point matters as much as the opening."
+          "Empty space is part of the puzzle’s information. It helps distinguish a blocked route from a possible route and makes the relationship between pieces easier to investigate. It still does not promise that a brick will stop in that space: in OutBrick, a slide to the end continues until something stops the brick, and a shorter slide action names how many cells it covers. Our [movement guide](/blog/outbrick-voiceover-slide-actions) explains why the stopping point matters as much as the opening."
         ]
       },
       {
@@ -335,7 +335,7 @@ export const batch11: BlogArticle[] = [
   {
     "slug": "outbrick-voiceover-slide-actions",
     "title": "How to slide OutBrick bricks with VoiceOver actions",
-    "dek": "Learn OutBrick’s four slide directions, matching gates and glide-to-stop rule, with VoiceOver action guidance and the promised teaching changes.",
+    "dek": "Learn OutBrick’s four slide directions, matching gates and slide distances, with VoiceOver action guidance and the promised teaching changes.",
     "category": "Inclusive design",
     "categoryColor": "teal",
     "publishedAt": "October 2, 2026",
@@ -355,24 +355,24 @@ export const batch11: BlogArticle[] = [
     "keyTakeaways": [
       "A brick can slide up, down, left or right when the route is free, and leaves through a gate of its own colour.",
       "With a brick focused, up and down swipes choose among VoiceOver slide actions; those gestures do not restrict movement to vertical directions.",
-      "Short teaching cards, gentler introductory boards and more moves on early boards are planned for the next update."
+      "Short teaching cards, promised for the next update, arrived in version 5.1; gentler introductory boards and more moves on early boards were promised alongside them."
     ],
     "sections": [
       {
         "id": "match-the-brick-to-its-gate",
         "title": "First find the destination, wherever it sits",
         "paragraphs": [
-          "The basic aim is to clear the bricks through gates of their own colour. A red brick needs its red gate; reaching a different gate does not fulfil that matching rule. Gates can be on any side of the board. There is no general rule that every brick must travel upwards or that the correct exit is always along the top edge.",
+          "One basic aim is to send bricks home through gates of their own colour. A red brick needs its red gate; reaching a different gate does not fulfil that matching rule. Gates can be on any side of the board. There is no general rule that every brick must travel upwards or that the correct exit is always along the top edge.",
           "OutBrick labels each brick’s colour, shape and position for VoiceOver, and pairs bricks and matching gates with distinct glyphs. Begin by identifying the piece you want to move and locating its destination. Then examine the intervening route. An exit can be close to a brick while still requiring other pieces to move first.",
           "Imagine a matching gate to the right with another brick between it and your selected piece. The immediate problem is the intervening brick. Looking for an upward action will not resolve a route that needs to be cleared sideways. For help locating pieces before choosing actions, read our [VoiceOver board-orientation guide](/blog/outbrick-voiceover-spatial-board)."
         ]
       },
       {
         "id": "predict-the-stopping-point",
-        "title": "A slide continues until something stops it",
+        "title": "Choose how far a slide goes",
         "paragraphs": [
-          "For the standard directional slide, OutBrick uses a glide-to-stop rule: the brick travels along the available route until something stops it. Listen to the full action name and plan the endpoint of the action you choose. Before committing to a route, consider both whether the brick can start moving and where that movement will end.",
-          "A simple imagined example helps. There are several free spaces to the left of a brick, followed by another piece. A standard full leftward slide carries the selected brick along the available space until it is stopped. It does not automatically stop after the first free cell. The other piece can therefore be an obstacle or a useful stopping point, depending on your plan.",
+          "Since version 5.1, each OutBrick slide action names a distance as well as a direction, such as “Slide right 1 cell” or “Slide up to the end, 3 cells”: the brick travels along the available route and stops where the action says. Listen to the full action name and plan the endpoint of the action you choose. Before committing to a route, consider both whether the brick can start moving and where that movement will end.",
+          "A simple imagined example helps. There are several free spaces to the left of a brick, followed by another piece. A slide to the end carries the selected brick along the available space until the other piece stops it; a shorter slide action stops after the number of cells it names. The other piece can therefore be an obstacle or a useful stopping point, depending on your plan.",
           "This makes order important. Moving a blocker away may open an exit, but moving a useful stopping piece too soon may change a later slide. You can consider that sequence before acting. Our [guide to untimed puzzle challenge](/blog/outbrick-untimed-puzzle-challenge) explains the distinction between thinking time and the move allowance; having time to inspect a board does not give you unlimited moves."
         ]
       },
@@ -484,11 +484,11 @@ export const batch11: BlogArticle[] = [
       },
       {
         "question": "Why does an OutBrick brick pass over an empty cell?",
-        "answer": "A standard full directional slide follows the glide-to-stop rule, so the brick continues until something stops it. Listen to the full action name to understand which movement you are choosing. Consider the expected stopping point as well as the available route."
+        "answer": "A slide to the end carries the brick on until something stops it; since version 5.1, other slide actions name a shorter distance, such as “Slide right 1 cell”. Listen to the full action name to understand which movement you are choosing. Consider the expected stopping point as well as the available route."
       },
       {
         "question": "Where are the teaching cards described in the AppleVis replies?",
-        "answer": "The 2 October 2026 replies promise teaching cards for the next update and do not identify a currently available tutorial location. Gentler early boards and more introductory moves are also future commitments in that discussion."
+        "answer": "The 2 October 2026 replies promised teaching cards for the next update. Version 5.1 added them: a short card appears the first time you meet each new idea. Gentler early boards and more introductory moves were also commitments in that discussion."
       }
     ]
   },
@@ -515,7 +515,7 @@ export const batch11: BlogArticle[] = [
     "keyTakeaways": [
       "Untimed play leaves room to explore a board; a move allowance still constrains the actions used to solve it.",
       "We describe OutBrick as untimed, while one player reported encountering a timer. The discussion leaves that discrepancy unresolved.",
-      "Our next-update plans include gentler opening boards, individual introductions to mechanics and more moves on early boards."
+      "Our 2 October plans included gentler opening boards, individual introductions to mechanics and more moves on early boards; version 5.1 added a short card the first time you meet each new idea."
     ],
     "sections": [
       {
@@ -643,7 +643,7 @@ export const batch11: BlogArticle[] = [
       },
       {
         "question": "Have the gentler opening boards already shipped?",
-        "answer": "The gentler early boards, first-encounter teaching cards and more generous early move allowances are planned for the next update. That work is still in progress."
+        "answer": "On 2 October 2026, the gentler early boards, first-encounter teaching cards and more generous early move allowances were planned for the next update. Version 5.1 has since added a short card the first time you meet each new idea; check the [release notes](/whats-new) for the other changes."
       },
       {
         "question": "Does accessible puzzle design require easy puzzles?",
@@ -674,7 +674,7 @@ export const batch11: BlogArticle[] = [
     "keyTakeaways": [
       "A button being announced does not establish that it activates correctly, and a completed board does not establish that progress is recorded.",
       "Our next-update work covers VoiceOver shop activation, the home screen, frozen-gate announcements and mission credit.",
-      "We confirmed Italian app support, and a player confirmed it too; the website’s five publishing languages are a separate list."
+      "We confirmed Italian app support, and a player confirmed it too; the website’s six publishing languages are a separate list."
     ],
     "sections": [
       {
@@ -730,7 +730,7 @@ export const batch11: BlogArticle[] = [
         "title": "Italian in the app is a separate language question",
         "paragraphs": [
           "A community member asked whether OutBrick was available in Italian. We confirmed full Italian support and eleven other app languages, and another player confirmed Italian availability from their own experience. Our reply did not list the other eleven languages, but the answer to this particular question is straightforward: yes, the app is available in Italian.",
-          "Our website publishes in English, French, German, Spanish and Japanese. That list is separate from the app’s language support: you can use the app in Italian even though the website has no Italian edition. When you are looking for help, the language you play in and those available for a particular article may differ.",
+          "Our website publishes in English, French, German, Spanish, Japanese and Brazilian Portuguese. That list is separate from the app’s language support: you can use the app in Italian even though the website has no Italian edition. When you are looking for help, the language you play in and those available for a particular article may differ.",
           "The community confirmation also mentioned an update arriving that day, without saying the earlier bugs had been resolved. Our later reply still described the fixes as upcoming work. An update notification alone cannot tell you which particular issue changed, so consult [the published release notes](/whats-new) when checking a specific improvement. Keeping the version and the change together makes those conversations much easier to follow.",
           "For a language-related report, identify the screen and the wording that is missing, unclear or unexpectedly untranslated. There is no need to explain your background or justify why you prefer a particular language."
         ]
@@ -808,7 +808,7 @@ export const batch11: BlogArticle[] = [
       },
       {
         "question": "Is OutBrick available in Italian?",
-        "answer": "Yes. We confirmed Italian app support on AppleVis, and a community member confirmed it too. Our reply mentions twelve app languages without listing them all; the website separately publishes in English, French, German, Spanish and Japanese."
+        "answer": "Yes. We confirmed Italian app support on AppleVis, and a community member confirmed it too. Our reply mentions twelve app languages without listing them all; the website separately publishes in English, French, German, Spanish, Japanese and Brazilian Portuguese."
       },
       {
         "question": "What is the most useful way to report an accessibility problem?",

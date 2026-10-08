@@ -57,7 +57,7 @@ const en: PlayCopy = {
       },
       {
         title: 'The first undo on every board is free',
-        body: 'Beyond that, undos come from a tank of five that refills one every twenty-five minutes. The undo offered when a board wedges is free too, and sits outside the tank.',
+        body: 'Beyond that, undos come from a tank of five that refills one every twenty-five minutes. A board with no possible move left reshuffles itself for free.',
       },
       {
         title: 'A life goes only when an attempt fails',
@@ -120,7 +120,7 @@ const fr: PlayCopy = {
       },
       {
         title: 'La première annulation de chaque plateau est gratuite',
-        body: 'Au-delà, les annulations puisent dans une réserve de cinq, qui en regagne une toutes les vingt-cinq minutes. L’annulation proposée quand un plateau se bloque est gratuite elle aussi, et ne touche pas à la réserve.',
+        body: 'Au-delà, les annulations puisent dans une réserve de cinq, qui en regagne une toutes les vingt-cinq minutes. Un plateau sans plus aucun coup possible se mélange de nouveau gratuitement.',
       },
       {
         title: 'Une vie ne part que si une tentative échoue',
@@ -183,7 +183,7 @@ const de: PlayCopy = {
       },
       {
         title: 'Die erste Zugrücknahme auf jedem Feld ist gratis',
-        body: 'Darüber hinaus kommen Zugrücknahmen aus einem Vorrat von fünf, der sich alle fünfundzwanzig Minuten um eine auffüllt. Die Zugrücknahme, die dir angeboten wird, wenn ein Feld festsitzt, ist ebenfalls gratis und zählt nicht zum Vorrat.',
+        body: 'Darüber hinaus kommen Zugrücknahmen aus einem Vorrat von fünf, der sich alle fünfundzwanzig Minuten um eine auffüllt. Ist auf einem Feld kein Zug mehr möglich, mischt es sich kostenlos neu.',
       },
       {
         title: 'Ein Leben geht nur verloren, wenn ein Versuch scheitert',
@@ -246,7 +246,7 @@ const es: PlayCopy = {
       },
       {
         title: 'Deshacer la primera vez en cada tablero es gratis',
-        body: 'A partir de ahí, cada vez que deshaces se tira de una reserva de cinco que recupera una cada veinticinco minutos. La opción de deshacer que se ofrece cuando un tablero se atasca también es gratis y no toca la reserva.',
+        body: 'A partir de ahí, cada vez que deshaces se tira de una reserva de cinco que recupera una cada veinticinco minutos. Un tablero sin ningún movimiento posible se reordena gratis.',
       },
       {
         title: 'Solo pierdes una vida si un intento falla',
@@ -309,7 +309,7 @@ const ja: PlayCopy = {
       },
       {
         title: '各ステージ最初のアンドゥは無料',
-        body: 'それ以降のアンドゥは5回分のタンクから使い、25分ごとに1回分ずつ回復します。ステージが詰まったときに提案されるアンドゥも無料で、タンクとは別枠です。',
+        body: 'それ以降のアンドゥは5回分のタンクから使い、25分ごとに1回分ずつ回復します。動かせる手がなくなったステージは、無料でシャッフルされます。',
       },
       {
         title: 'ライフが減るのは挑戦に失敗したときだけ',
@@ -350,7 +350,7 @@ const ptBR: PlayCopy = {
   loop: { eyebrow: 'Ao redor do tabuleiro', title: 'O ciclo do jogo, sem arredondar nada a nosso favor.', lede: 'O jogo completo acrescenta limite de movimentos, estrelas, vidas e opções para desfazer. Veja exatamente como cada uma funciona.', rows: [
     { title: 'A corda é um limite de movimentos, não um relógio', body: 'Cada tabuleiro mostra sua meta e seu limite desde o primeiro toque. Não há contagem regressiva em nenhum ponto do jogo. Quando os movimentos ficam curtos, você pode receber mais cinco antes de qualquer outra coisa.' },
     { title: 'Três estrelas, sem rodeios', body: 'Concluir um tabuleiro vale uma estrela. Concluir dentro da meta de movimentos do solver vale duas. Fazer isso sem desfazer nenhuma jogada vale três.' },
-    { title: 'A primeira vez que você desfaz em cada tabuleiro é grátis', body: 'Depois disso, os usos vêm de uma reserva de cinco, que recupera um a cada vinte e cinco minutos. A opção oferecida quando um tabuleiro trava também é grátis e não usa a reserva.' },
+    { title: 'A primeira vez que você desfaz em cada tabuleiro é grátis', body: 'Depois disso, os usos vêm de uma reserva de cinco, que recupera um a cada vinte e cinco minutos. Um tabuleiro sem nenhuma jogada possível se embaralha de novo de graça.' },
     { title: 'Uma vida só é perdida quando uma tentativa falha', body: 'É preciso ter uma vida para abrir um tabuleiro, mas isso não consome uma; concluir também não custa nada. Você tem cinco vidas, oito com o Brick Pass, e recupera uma a cada trinta minutos.' },
     { title: 'Impulsos e vídeos são opcionais', body: 'Moedas compram impulsos; vídeos com recompensa são opcionais, têm limite e nunca interrompem um tabuleiro. Recusar não custa nada.' },
   ] },

@@ -58,8 +58,8 @@ export type BlogArticle = {
  * - Facts about the game come from the home page (app/page.tsx): nine brick
  *   friends with no voices (text bubbles only since 21 September 2026), five
  *   lives (eight with the Brick Pass) refilling one every thirty minutes, a
- *   free first undo on every board, a move limit and never a clock, and six
- *   opt-in rewarded video placements. Never write "no ads" or "no lives".
+ *   free first undo on every board, a move limit and never a clock, and eight
+ *   opt-in rewarded video placements (39 views a day at most). Never write "no ads" or "no lives".
  * - British spelling, to match the rest of the domain.
  */
 
@@ -619,7 +619,7 @@ const baseArticles: BlogArticle[] = [
         id: 'the-outbrick-loop',
         title: 'The OutBrick loop is intentionally small',
         paragraphs: [
-          'OutBrick starts with a board that can be understood at a glance. There is no quest log to remember and no clock to beat; the two numbers that matter, the target and the move limit, sit beside your move count from the first tap. The board tells you the rest: the bricks, the open lanes, and the matching gates.',
+          'OutBrick starts with a board that can be understood at a glance. There is no quest log to remember and no clock to beat; the board’s goals and its move limit sit in plain view from the first tap. The board tells you the rest: the bricks, the open lanes, and the matching gates.',
           'Undo is part of the loop rather than a punishment for using it, which is why the first undo on every board is free and cannot run out. That changes the emotional temperature of experimentation. You can try a move, learn from the result, and keep the useful part of the attempt. Boards are still meant to push back. What changes is that trying something costs less than hesitating. The home page sets out [exactly what lives, undos and ads cost](/#fair).',
         ],
         bullets: ['One readable board at a time', 'A clear action-to-feedback relationship', 'Recovery tools that preserve curiosity', 'A finish line that arrives before the session feels heavy'],
@@ -741,7 +741,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Make the core readable',
         paragraphs: [
           'Angry Birds made a launch, aim, and collision legible enough to understand quickly. The interaction was playful, but it still gave the player a clean mental model: pull, release, watch the structure respond. That readability is one reason a simple mechanic could carry many levels and many kinds of player.',
-          'OutBrick is built from the same respect for the first few seconds. Slide a brick and it glides until something stops it; get every brick out through the gate that matches its colour and the board is clear. The rule takes about five seconds to learn. After that, the game’s job is to give the player enough signal to get clever with it.',
+          'OutBrick is built from the same respect for the first few seconds. Slide a brick home through the gate of its colour, or swipe it into a neighbour to swap them and line up three of a colour; meet the board’s goals and it is clear. The rule takes about five seconds to learn. After that, the game’s job is to give the player enough signal to get clever with it.',
         ],
         sourceIds: ['rovio-history', 'motivation-2010'],
       },
@@ -811,7 +811,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Complete does not mean easy',
         paragraphs: [
           'A complete experience can still ask for concentration. The important difference is whether the player can understand the purpose of the challenge and whether the game respects the player after the challenge is over.',
-          'OutBrick lets a board be knotty without making the whole app feel hostile. A free first undo on every board, and a free undo whenever a board wedges itself, keep the emotional arc attached to solving rather than to paying for a mistake. The board can be difficult. The relationship does not have to be.',
+          'OutBrick lets a board be knotty without making the whole app feel hostile. A free first undo on every board, and a free reshuffle whenever a board runs out of moves to make, keep the emotional arc attached to solving rather than to paying for a mistake. The board can be difficult. The relationship does not have to be.',
         ],
         sourceIds: ['monument-valley-ustwo', 'flow-review-2019'],
       },
@@ -863,7 +863,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Layers that reward curiosity',
         paragraphs: [
           'A layer works when it makes the player look back at the original verb differently. Crafting changes what gathering means. Survival changes what a safe place means. Multiplayer changes what a build means when another person can see it.',
-          'That is different from adding noise. OutBrick’s chapters, stars, widgets, brick friends and [the Journey of 167 villages](/#journey) all orbit the same core action: slide a brick out through the gate that matches it. Each layer should give the move a new context without asking the player to learn a second game.',
+          'That is different from adding noise. OutBrick’s chapters, stars, widgets, brick friends and [the Journey of 167 villages](/#journey) all orbit the same core action: slide a brick home through its gate, or swap it into a match. Each layer should give the move a new context without asking the player to learn a second game.',
         ],
         bullets: ['Add depth to an existing action', 'Let players choose how much system they want', 'Make progress visible without turning discovery into homework', 'Allow personal stories to emerge from repeated play'],
         sourceIds: ['minecraft-xbox-2024', 'mit-fabo-2022'],
@@ -925,7 +925,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Constraint creates meaning',
         paragraphs: [
           'A falling shape only becomes urgent because the board has limited space. The same piece can be a gift, a problem, or a setup depending on what is already there. Simple rules create variety when the player’s previous decisions change the meaning of the next one.',
-          'OutBrick’s sliding bricks work the same way. “Move the brick to its gate” is easy to say. The interesting part is that every move changes which lanes are open, which bricks are blocking one another, and which solution remains possible. The rule stays small while the situation keeps moving.',
+          'OutBrick’s bricks work the same way. “Slide it home or swap it into a match” is easy to say. The interesting part is that every move changes which lanes are open, which bricks are blocking one another, and which solution remains possible. The rule stays small while the situation keeps moving.',
         ],
         sourceIds: ['tetris-history', 'flow-review-2019'],
       },
@@ -943,7 +943,7 @@ const baseArticles: BlogArticle[] = [
         id: 'the-next-piece',
         title: 'The next piece',
         paragraphs: [
-          'Tetris stays alive because the next piece always creates a new question. OutBrick’s version is quieter: across 2,000 solver-verified boards, the next one is another small question with a different shape, a different bottleneck, and another chance to notice more than you noticed last time. Keys, locks, frozen bricks, conveyors and crates arrive slowly, each one a new angle on the same rule.',
+          'Tetris stays alive because the next piece always creates a new question. OutBrick’s version is quieter: across 2,000 solver-verified boards, the next one is another small question with a different shape, a different bottleneck, and another chance to notice more than you noticed last time. Crates, ice, locks, moss, statues and counted gates arrive slowly, each one a new angle on the same rule.',
           'Simple does not mean shallow. It means the player can see where the depth is coming from.',
         ],
         sourceIds: ['tetris-history', 'flow-review-2019'],
@@ -1183,7 +1183,7 @@ const baseArticles: BlogArticle[] = [
         id: 'our-tools-for-a-kinder-curve',
         title: 'Our tools for a kinder curve',
         paragraphs: [
-          'A solver cleared all 2,000 of OutBrick’s boards before any of them shipped, so the game can ask for planning without accidentally asking for the impossible. Every board’s move limit is checked against the route the solver actually found, so no board ships with a rope shorter than its own proven solution. When a position becomes wedged, the recovery sheet says so and offers a way forward, and the undo on that sheet is free and sits outside the undo tank, because a board that wedged itself is the game’s doing, not the player’s. The pressure a board applies is a move limit, never a clock: the optional Rush timer was withdrawn, and there is no countdown anywhere in the game.',
+          'A solver cleared all 2,000 of OutBrick’s boards before any of them shipped, so the game can ask for planning without accidentally asking for the impossible. Every board’s move limit is checked against the route the solver actually found, so no board ships with a rope shorter than its own proven solution. When a board runs out of moves to make, it reshuffles itself for free, because a board with nothing left to try is the game’s doing, not the player’s. The pressure a board applies is a move limit, never a clock: the optional Rush timer was withdrawn, and there is no countdown anywhere in the game.',
           'None of this removes challenge. It separates useful friction from accidental friction, so the player spends their attention on the puzzle’s idea instead of defending themselves from the interface.',
         ],
         bullets: ['Verified solvability before a board ships', 'Undo that teaches instead of scolds', 'A free way out when the state is genuinely stuck', 'Pressure from a move limit, never from a clock'],
@@ -1874,7 +1874,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Find the one move that makes space',
         paragraphs: [
           'A packed board has far fewer legal moves than it looks. Before you commit, count them. On a tightly packed board there may be only a few, and one of them is usually the move the board was built around: the slide that opens a pocket of space and lets the pile come apart section by section. Empty cells are the currency of a sliding puzzle. The best opening move usually buys room for the moves after it, and it rarely clears anything by itself.',
-          'Where you leave a block matters as much as which block you move. In OutBrick a brick travels as far as you drag it, up to whatever stops it: a wall, a neighbour, or a gate that refuses its colour. A block parked halfway down a lane may be fine now and in the way in four moves. Before letting go, check that you have not sealed a lane you will need later.',
+          'Where you leave a block matters as much as which block you move. In OutBrick a brick slides as far as you drag it and stops where you let go, short of a wall or a gate that refuses its colour; swipe it into a neighbour and the two swap places. A block parked halfway down a lane may be fine now and in the way in four moves. Before letting go, check that you have not sealed a lane you will need later.',
           'There is a mathematical reason these puzzles resist shortcuts. Hearn and Demaine proved that generalised sliding-block puzzles are PSPACE-complete, which in plain terms means no known method solves every large board efficiently. Human solvers get by on heuristics like the ones in this guide. It also means a well-made puzzle has to be designed so that there is a way in. OutBrick checks that the hard way: a solver cleared all 2,000 boards before any of them shipped, so if you feel stuck, the knot is in the position you have made, not in the board.',
         ],
         sourceIds: ['sliding-block-pspace-2005'],
@@ -1884,7 +1884,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Count moves before you commit',
         paragraphs: [
           'Plan in short chains. Working memory holds only a handful of items at once (Cowan’s review of the evidence puts the figure at around four chunks), so trying to see ten moves ahead usually means seeing four clearly and guessing the rest. Group moves into intentions instead: “open the left column” is one chunk, even if it takes three slides. Plan two or three chunks, play them, then look again.',
-          'If your puzzle has a move limit, this is where it pays off. OutBrick has no clock anywhere; the rope on each board is a move limit, and the target and the limit are both printed from the first tap. That changes what is scarce. Moves cost you, and thinking costs you nothing, so spend time freely and moves carefully. Before each slide, run through a short check.',
+          'If your puzzle has a move limit, this is where it pays off. OutBrick has no clock anywhere; the rope on each board is a move limit, and the limit and the board’s goals are both shown from the first tap. That changes what is scarce. Moves cost you, and thinking costs you nothing, so spend time freely and moves carefully. Before each slide, run through a short check.',
         ],
         bullets: [
           'What does this move make possible?',
@@ -1899,8 +1899,8 @@ const baseArticles: BlogArticle[] = [
         title: 'Use undo as a thinking tool',
         paragraphs: [
           'Undo works best as an experiment. When two moves look equally good, play one, look at what it opens, and take it back. You have learned something about the board that no amount of staring would have shown you, at the cost of one undo. Players who treat undo as an admission of failure tend to stare longer and learn less.',
-          'OutBrick is built around that idea. The first undo on every board is free and cannot run out. Beyond that, undos come from a tank of five that refills one every twenty-five minutes, and when a board wedges, the undo it offers is free too and sits outside the tank. So spend the free one early and on purpose, on the move you are least sure of, rather than saving it for an emergency.',
-          'There is one trade-off to know about. The third star on an OutBrick board asks for a clear inside the solver’s move target with no undo at all. If you are playing for a clear, experiment freely. If you are playing for three stars, do the experimenting in your head first.',
+          'OutBrick is built around that idea. The first undo on every board is free and cannot run out. Beyond that, undos come from a tank of five that refills one every twenty-five minutes, and a board with no move left reshuffles itself for free. So spend the free one early and on purpose, on the move you are least sure of, rather than saving it for an emergency.',
+          'There is one thing to know about stars. Stars on an OutBrick board follow its score rather than an undo count, and every move you still have when the goals are met becomes a blaster for a bigger score. If you are playing for a clear, experiment freely. If you are playing for three stars, spend moves carefully and do the experimenting in your head first.',
         ],
       },
       {
@@ -1920,13 +1920,13 @@ const baseArticles: BlogArticle[] = [
       { question: 'What is the trick to solving sliding block puzzles?', answer: 'There is no single trick, but one habit does most of the work: start from the exit and work backwards. List what blocks the piece you need to move, then what blocks those, until you reach a piece that can already move. Then look for the one move that opens the most space.' },
       { question: 'Are all sliding block puzzles solvable?', answer: 'No. Some arrangements of classic sliding puzzles have no solution at all; half the possible starting positions of the 15 puzzle are unsolvable, for example. Designed puzzles should be checked before release. Every one of OutBrick’s 2,000 boards was cleared by a solver before it shipped.' },
       { question: 'How many moves ahead should I plan?', answer: 'Two or three small goals, each a few moves long, is plenty for most people. Working memory holds only a handful of items at once, so plan in chunks such as “free the left lane”, play them, and then look at the board again.' },
-      { question: 'Is using undo cheating?', answer: 'No. Undo is one of the best ways to learn how a board behaves. In OutBrick the first undo on every board is free. The only thing it affects is the third star, which asks for a clear inside the move target with no undo.' },
+      { question: 'Is using undo cheating?', answer: 'No. Undo is one of the best ways to learn how a board behaves. In OutBrick the first undo on every board is free, and stars follow the board’s score, not an undo count.' },
     ],
   },
   {
     slug: 'colour-sort-puzzle-tips',
     title: 'Colour sort puzzle tips: clear boards in fewer moves',
-    dek: 'How to read a colour sort board, choose which colour to clear first and beat the move target, with the star rules explained. From OutBrick’s designer.',
+    dek: 'How to read a colour sort board, choose which colour to clear first and make every move count, with the star rules explained. From OutBrick’s designer.',
     category: 'OutBrick practice',
     categoryColor: 'green',
     publishedAt: 'September 24, 2026',
@@ -1936,11 +1936,11 @@ const baseArticles: BlogArticle[] = [
     image: '/blog/colour-sort-puzzle-tips.webp',
     imageAlt: 'Rows of studded bricks in red, yellow, teal, violet, blue and green on a cream ground, with a real OutBrick board and a three-star clear card',
     tags: ['colour sort puzzle', 'block sort puzzle tips', 'color sort puzzle strategy', 'move targets'],
-    intro: 'Colour sort puzzles come in a few families: liquids poured between tubes, stacks sorted onto pegs, and blocks slid out through gates of their own colour. OutBrick is the last kind, and these tips are written around it, but the core skill carries across the whole family. You are reading which colour is ready to leave, which is buried, and which one is quietly in everybody’s way. Doing it in fewer moves is mostly a matter of doing that reading before your first move rather than after your tenth.',
+    intro: 'Colour sort puzzles come in a few families: liquids poured between tubes, stacks sorted onto pegs, and blocks slid out through gates of their own colour. OutBrick still sends its bricks home through gates of their own colour, and these tips are written around it, but the core skill carries across the whole family. You are reading which colour is ready to leave, which is buried, and which one is quietly in everybody’s way. Doing it in fewer moves is mostly a matter of doing that reading before your first move rather than after your tenth.',
     keyTakeaways: [
       'Read the whole board before the first move: which colours have a clear run to their exit, which bricks block more than one colour, and where the empty space is.',
       'Clear the colour whose departure frees the most, not the one that is easiest to reach.',
-      'In OutBrick, one star is a clear, two is a clear inside the solver’s target, and three is that with no undo, so the free undo keeps two stars within reach but not three.',
+      'In OutBrick, stars follow the board’s score, and moves you still have when the goals are met become blasters for a bigger score, so a careful clear scores best.',
     ],
     sections: [
       {
@@ -1948,7 +1948,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Read the board before your first move',
         paragraphs: [
           'The moves you save come from the look you take before the first one. Scan the board for three things. First, which colours already have a clear run to their gate. Second, which bricks are blocking more than one colour, because those are the bricks the whole board turns on. Third, where the empty space is, since every plan you make has to pass through it.',
-          'Then read the two numbers. Every OutBrick board prints its move target and its move limit from the first tap, so you know the budget before you spend anything. The target is the solver’s own count for the board, which makes it a useful hint: if the target is low, there is a tidy route, and a plan that needs twice as many moves is probably missing something.',
+          'Then read the header. Every OutBrick board shows its goals and its move limit from the first tap, so you know the budget before you spend anything. The limit is set from the solver’s own winning line for the board, which makes it a useful hint: if the limit is tight, there is a tidy route, and a plan that needs twice as many moves is probably missing something.',
           'Use every channel the game gives you to tell colours apart. OutBrick’s colour-blind mode is on by default and stamps a glyph on every brick and every gate, so hue, shape and studs all carry the colour. Even with full colour vision, the glyphs make it quicker to separate neighbours like red and pink or violet and blue at a glance. Accessibility guidance has long recommended this: colour should never be the only way information is shown.',
           'Finally, look at the shape of the board itself. Not every OutBrick board is a rectangle; some arenas are shaped like an H, an L or a cross. A narrow neck between two halves of an arena is where bricks jam, so work out early which bricks have to pass through it and in what order.',
         ],
@@ -1974,18 +1974,18 @@ const baseArticles: BlogArticle[] = [
         title: 'Plan in chunks, not single moves',
         paragraphs: [
           'Working memory is small. Cowan’s influential review puts its capacity at about four chunks, which is why planning ten single moves ahead rarely works. Plan in intentions instead: “get the yellows out”, “open the right lane”, “thaw the frozen brick”. Working [backwards from the exit](/blog/how-to-solve-sliding-block-puzzles) is a good way to find them. Each intention is a chunk of two to four moves, and you can hold two or three of them comfortably.',
-          'Before each chunk, count what it will cost and compare that with what you have left under the target. If the chunk costs more than you have, it is the wrong chunk, and it is far cheaper to find that out now than halfway through. Most wasted moves in colour sort puzzles come from the same few habits: shuffling a brick back and forth, moving it twice when one longer slide would have done, and fixing the same lane twice because a brick got parked back in it.',
+          'Before each chunk, count what it will cost and compare that with what you have left under the limit. If the chunk costs more than you have, it is the wrong chunk, and it is far cheaper to find that out now than halfway through. Most wasted moves in colour sort puzzles come from the same few habits: shuffling a brick back and forth, moving it twice when one longer slide would have done, and fixing the same lane twice because a brick got parked back in it.',
           'One small routine helps with all three. Before a chunk, say its last move to yourself: where will each brick be when it is done? If you cannot picture the end state, the chunk is too long, so split it. If you can, play it without stopping to reconsider halfway, because second thoughts in the middle of a chunk are where back-and-forth shuffles come from.',
         ],
         sourceIds: ['working-memory-2001'],
       },
       {
         id: 'targets-and-stars',
-        title: 'How targets and stars work in OutBrick',
+        title: 'How moves and stars work in OutBrick',
         paragraphs: [
-          'Stars in OutBrick are easy to explain. A clear earns one star. Clearing inside the solver’s own move target earns two. Doing that without a single undo earns three. The limit, which the game draws as a rope, is a move limit rather than a clock; there is no countdown anywhere in the game.',
-          'That has one consequence people often miss. The first undo on every board is free and cannot run out, and using it still counts as an undo, so it keeps two stars within reach but not three. If three stars matter to you, treat undo as a last resort and do your experimenting in your head. If you only want the clear, use it freely: that is what it is for.',
-          'When you run low on moves, you are offered five more before anything else, for 300 coins, then 500, then 900 inside one attempt. Extra moves can rescue a clear. They will not bring back the second star, because by the time you are near the limit you have usually used up the target. The better fix is upstream: a slower read of the board at the start.',
+          'Stars in OutBrick are easy to explain. They follow the board’s score: the board is clear when its goals are met, and every move you still have at that point becomes a blaster for a bigger score. The limit, which the game draws as a rope, is a move limit rather than a clock; there is no countdown anywhere in the game.',
+          'That has one consequence people often miss: a move saved is score earned. The first undo on every board is free and cannot run out, and stars no longer count undos (the old rule, where any undo cost the third star, lives on only in the browser demo). If three stars matter to you, treat every move as worth points and do your experimenting in your head. If you only want the clear, use undo freely: that is what it is for.',
+          'When you run low on moves, you are offered five more before anything else, for 300 coins, then 500, then 900 inside one attempt. Extra moves can rescue a clear. They will rarely lift the stars, because by then there are few moves left to turn into blasters. The better fix is upstream: a slower read of the board at the start.',
         ],
       },
       {
@@ -2008,8 +2008,8 @@ const baseArticles: BlogArticle[] = [
     pullQuote: 'The moves you save come from the look you take before the first one.',
     faqs: [
       { question: 'What is the best strategy for colour sort puzzles?', answer: 'Read the whole board before moving: find which colours have a clear run to their exit, which pieces block more than one colour, and where the empty space is. Then clear the colour whose departure frees the most, and plan in short chunks of two to four moves.' },
-      { question: 'How do I get three stars in OutBrick?', answer: 'Clear the board inside the solver’s move target without using any undo. Two stars need a clear inside the target; one star is any clear.' },
-      { question: 'Does the free undo cost me a star?', answer: 'It can cost the third star, because three stars ask for no undo at all. You can still earn two stars after using it, as long as you clear inside the move target.' },
+      { question: 'How do I get three stars in OutBrick?', answer: 'Score well. Stars follow the board’s score, and every move you still have when the goals are met becomes a blaster for a bigger score, so the fewer moves a clear takes, the more stars it earns.' },
+      { question: 'Does the free undo cost me a star?', answer: 'No. Stars follow the board’s score rather than an undo count, so the free undo is there to learn with. The old rule, where any undo cost the third star, belongs to the classic boards in the browser demo.' },
       { question: 'Can I play colour sort puzzles if I am colour-blind?', answer: 'Yes, if the game gives you more than colour to go on. OutBrick’s colour-blind mode is on by default and puts a matching glyph on every brick and gate, so shape carries the sort as well as hue. The [accessibility page](/accessibility) has the details.' },
     ],
   },
@@ -2047,7 +2047,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Why a move limit feels different from a clock',
         paragraphs: [
           'A clock punishes thinking. Every second you spend reading the board is a second you lose, so the game rewards reflex and guessing. A move limit punishes waste instead. You can look at a board for as long as you like, and the only thing that costs you is a careless slide. For a puzzle game that wants to be restful, that difference matters more than any colour palette.',
-          'OutBrick has no clock anywhere. The rope on each board is a move limit. Every board prints its move target and its limit from the first tap, so the budget is known before you spend any of it. When you run low, you are offered five more moves before anything else happens.',
+          'OutBrick has no clock anywhere. The rope on each board is a move limit. Every board shows its goals and its move limit from the first tap, so the budget is known before you spend any of it. When you run low, you are offered five more moves before anything else happens.',
           'There is an accessibility argument too. The web’s accessibility guidelines ask that time limits be possible to turn off, adjust or extend, because some people need more time to complete a task. A game without a clock has nothing to adjust. And the wider research on time pressure points the same way: in a study of interrupted office work, Mark, Gudith and Klocke found people compensated by working faster, and reported more stress, frustration and time pressure as they did.',
         ],
         sourceIds: ['w3c-timing-adjustable', 'interrupted-work-2008'],
@@ -2057,7 +2057,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Lives, energy and what fair looks like',
         paragraphs: [
           'Plenty of calm games have lives, including ours, so the useful question is how they work. A fair lives system tells you exactly what costs a life, gives you enough of them to play a proper session, refills them without asking for money, and never takes one for simply trying.',
-          'OutBrick used to ship with no lives and no adverts, and both of those changed, which is why the home page sets out [exactly what lives, undos and adverts cost](/#fair). Opening a board needs a life and spends none. Clearing a board costs nothing at all. A life goes only when an attempt ends without a clear. You hold five, eight with the Brick Pass, and one comes back every thirty minutes. Undo works the same way: the first one on every board is free and cannot run out, then a tank of five refills one every twenty-five minutes, and the undo offered when a board wedges is free and outside the tank.',
+          'OutBrick used to ship with no lives and no adverts, and both of those changed, which is why the home page sets out [exactly what lives, undos and adverts cost](/#fair). Opening a board needs a life and spends none. Clearing a board costs nothing at all. A life goes only when an attempt ends without a clear. You hold five, eight with the Brick Pass, and one comes back every thirty minutes. Undo works the same way: the first one on every board is free and cannot run out, then a tank of five refills one every twenty-five minutes, and a board with no move left reshuffles itself for free.',
           'Watch what happens when you run out, too. In a fair system, running out is a pause with a known length. In OutBrick you can wait for the next life, or, if you choose, watch a rewarded video for one; both routes are stated before you ever need them. A game that greets an empty tank with a purchase screen and no clear refill time is using scarcity as a sales tool, and that rarely feels calm.',
         ],
         bullets: [
@@ -2072,7 +2072,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Interruptions are the real enemy of calm',
         paragraphs: [
           'The quickest way to break a relaxing game is to interrupt it. A full-screen advert after every third level teaches you to brace before you tap “next”. A pop-up offer at the moment you fail turns a small disappointment into a sales pitch. Neither has anything to do with the puzzle, and both are where many puzzle games lose the calm they advertise.',
-          'Here is how OutBrick handles it. There are six rewarded video placements: a life, five more moves, two undos, a booster armed before the first move, the clear card’s coins paid again, and a second spin of the Brick Wheel. Every one is opt-in and carries its own daily cap. There are no banners and no interstitials, nothing plays that you did not press a button to see, and nothing interrupts a board. Remove Ads switches advertising off for good.',
+          'Here is how OutBrick handles it. There are eight rewarded video placements: a life, two undos, extra moves, a free Hint, the clear card’s coins paid again, a second spin of the Brick Wheel, a gift balloon on the map and Brick Cinema. Every one is opt-in and carries its own daily cap, with 39 views a day at most across all of them. There are no banners and no interstitials, nothing plays that you did not press a button to see, and nothing interrupts a board. Remove Ads switches advertising off for good.',
           'Why it matters is partly our opinion and partly the evidence. Studies of casual play have found short-term benefits to mood after a demanding task, and one found reduced stress after a casual game, though a mindfulness exercise did better on self-reported stress. Those effects depend on the player getting a spell of uninterrupted play. An advert every few minutes is a poor way to protect that.',
         ],
         sourceIds: ['restoration-2017', 'casual-stress-2021'],
@@ -2100,7 +2100,7 @@ const baseArticles: BlogArticle[] = [
     pullQuote: 'A clock punishes thinking. A move limit punishes waste.',
     faqs: [
       { question: 'What makes a puzzle game relaxing?', answer: 'Mostly the absence of pressure from outside the puzzle: no countdown, clear limits shown before you start, a small and stated cost for failing, and nothing that interrupts play without your say-so. A hard puzzle can still be relaxing if it leaves you alone to think.' },
-      { question: 'Are there puzzle games without timers?', answer: 'Yes. Many puzzle games use a move limit or no limit at all. OutBrick has no clock anywhere; each board has a move limit, shown as a rope, alongside its move target.' },
+      { question: 'Are there puzzle games without timers?', answer: 'Yes. Many puzzle games use a move limit or no limit at all. OutBrick has no clock anywhere; each board has a move limit, shown as a rope, alongside its goals.' },
       { question: 'Does OutBrick have lives and adverts?', answer: 'Yes. You hold five lives, eight with the Brick Pass, and one comes back every thirty minutes; a life goes only when an attempt ends without a clear. Adverts are rewarded videos you choose to watch, each with a daily cap, and there are no banners or interstitials.' },
       { question: 'Is a move limit stressful?', answer: 'Usually less than a clock, because thinking is free and only careless moves cost you. In OutBrick you are also offered five more moves when you run low, before anything else happens.' },
     ],
@@ -2146,7 +2146,7 @@ const baseArticles: BlogArticle[] = [
         paragraphs: [
           'On a busy train you are often holding a rail, a coffee or a bag with the other hand. Steven Hoober’s field study of how people actually hold their phones, based on 1,333 observations in streets, airports, cafés and on public transport, found 49% of people using one hand, 36% cradling the phone in one hand and tapping with the other, and 15% using both hands. A travel game has to work for the first group.',
           'Hoober also noted that people who use one hand hold the phone in a variety of positions, so a game cannot assume one grip. On the larger phones most people now carry, the top corners of the screen are hard to reach with the thumb of the hand holding the phone. Reaching them means shuffling the phone in your hand, which is exactly what you do not want to do on a moving train with a coffee in the other hand.',
-          'Look for controls that are gestures rather than small buttons, a portrait layout, and nothing you need to reach in the top corners in the middle of a level. OutBrick is played with one finger: you drag a brick and it travels until something stops it. If you need them, every brick is also a VoiceOver element with an action for each way it can slide, and Larger Text scales throughout.',
+          'Look for controls that are gestures rather than small buttons, a portrait layout, and nothing you need to reach in the top corners in the middle of a level. OutBrick is played with one finger: you swipe a brick to slide it home or swap it with a neighbour. If you need them, every brick is also a VoiceOver element with an action for each slide and swap it can make, and Larger Text scales throughout.',
         ],
         sourceIds: ['hoober-mobile-grip-2013'],
       },
@@ -2174,7 +2174,7 @@ const baseArticles: BlogArticle[] = [
         id: 'beyond-the-phone',
         title: 'Beyond the phone',
         paragraphs: [
-          'On a long flight, a bigger screen is kinder to your eyes and your neck. If a game runs on iPad as well as iPhone and shares progress between them, the tablet on the tray table and the phone in the queue for passport control can be the same game. OutBrick runs on iPhone, iPad, Mac, Apple TV and Apple Vision Pro, and there is a standalone Apple Watch game for when the phone is in the overhead locker.',
+          'On a long flight, a bigger screen is kinder to your eyes and your neck. If a game runs on iPad as well as iPhone and shares progress between them, the tablet on the tray table and the phone in the queue for passport control can be the same game. OutBrick runs on iPhone, iPad, Mac and Apple Vision Pro, and there is a standalone Apple Watch game for when the phone is in the overhead locker.',
           'Before your next trip, run through the list below once. It takes a few minutes at home and saves a frustrating hour later.',
         ],
         bullets: [
@@ -2194,7 +2194,7 @@ const baseArticles: BlogArticle[] = [
       { question: 'Which puzzle games work offline on iPhone?', answer: 'Many do, but “offline” can mean full play or only part of it. The reliable way to know is to test: switch on Airplane Mode, close the game, reopen it and play a few levels. OutBrick plays offline.' },
       { question: 'Does OutBrick work in Airplane Mode?', answer: 'Yes. OutBrick plays offline, so you can play boards with no connection at all. Progress is kept in your iCloud, and a new device signed in to the same account picks up where you left off.' },
       { question: 'Do offline games use less battery?', answer: 'Turning the network off removes one drain, but the screen and the game still use power. On long trips, lower the brightness and switch on Low Power Mode, which reduces background activity.' },
-      { question: 'Can I play OutBrick on Apple Watch?', answer: 'Yes. There is a standalone Apple Watch game, alongside versions for iPhone, iPad, Mac, Apple TV and Apple Vision Pro.' },
+      { question: 'Can I play OutBrick on Apple Watch?', answer: 'Yes. There is a standalone Apple Watch game, alongside versions for iPhone, iPad, Mac and Apple Vision Pro.' },
     ],
   },
   {
@@ -2262,7 +2262,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Standalone or companion',
         paragraphs: [
           'A watch game can arrive in two ways. Apple’s developer documentation describes watch-only apps, which have no iPhone app at all, and watch apps that come with a companion iPhone app but can be installed and run without it. Apple encourages independent apps either way, because people expect watch apps to work when their phone is not with them. When there is a companion app, in-app purchases are universal, so something bought once is available on both devices.',
-          'For players the useful question is simpler: does the watch game run on its own, or is it a remote control for the phone? A standalone game is the one you can play on a walk with the phone left at home. OutBrick has a standalone Apple Watch game, alongside versions for iPhone, iPad, Mac, Apple TV and Apple Vision Pro. Progress lives in your iCloud, so a new device signed in to the same account picks up where the old one stopped.',
+          'For players the useful question is simpler: does the watch game run on its own, or is it a remote control for the phone? A standalone game is the one you can play on a walk with the phone left at home. OutBrick has a standalone Apple Watch game, alongside versions for iPhone, iPad, Mac and Apple Vision Pro. Progress lives in your iCloud, so a new device signed in to the same account picks up where the old one stopped.',
           'If you are trying out puzzle games on your wrist, this is the short list I use. Most games pass some of these and fail others; the ones that pass all six tend to stay on the watch.',
         ],
         bullets: [
@@ -2282,7 +2282,7 @@ const baseArticles: BlogArticle[] = [
     faqs: [
       { question: 'What makes a good Apple Watch puzzle game?', answer: 'A board you can read in one glance, pieces big enough to hit with a fingertip, no clock, and a game that saves after every move so you can drop your wrist at any time. Haptics help when each pattern means one thing and they are used sparingly.' },
       { question: 'Do Apple Watch games need an iPhone?', answer: 'Not always. Apple lets developers ship watch-only apps, and watch apps that can be installed and run independently of their iPhone companion. The simplest check is to try the game with your phone out of range.' },
-      { question: 'Is OutBrick on Apple Watch?', answer: 'Yes. OutBrick has a standalone Apple Watch game, and it also runs on iPhone, iPad, Mac, Apple TV and Apple Vision Pro.' },
+      { question: 'Is OutBrick on Apple Watch?', answer: 'Yes. OutBrick has a standalone Apple Watch game, and it also runs on iPhone, iPad, Mac and Apple Vision Pro.' },
       { question: 'Can watch games use the Digital Crown?', answer: 'Yes. Apps receive turns of the Digital Crown and can use them for scrolling, selecting or adjusting values. Presses of the Crown are reserved for the system, and Apple asks that anything done with the Crown can also be done by touch.' },
     ],
   },
@@ -2341,7 +2341,7 @@ const baseArticles: BlogArticle[] = [
         title: 'Built for sitting still',
         paragraphs: [
           'Vision Pro brings content to people instead of asking them to move to it, and Apple’s guidance is to let people use an app with little or no physical movement unless movement is essential to it. For a puzzle game that is easy, since nothing about sliding a piece needs the player to walk anywhere. It also matters for safety: Apple says the device should not be used while operating a vehicle, and is not designed for moving around near hazards such as stairs, balconies or streets.',
-          'Seated play changes the rhythm of a session as well. Someone on a sofa or at a desk may play for longer than they would on a phone in a queue, and that is where fair limits count. A game with no clock, and a move limit shown from the start, lets a player think for as long as they like. OutBrick has no countdown anywhere, and every board prints its move target and its limit from the first tap.',
+          'Seated play changes the rhythm of a session as well. Someone on a sofa or at a desk may play for longer than they would on a phone in a queue, and that is where fair limits count. A game with no clock, and a move limit shown from the start, lets a player think for as long as they like. OutBrick has no countdown anywhere, and every board shows its goals and its move limit from the first tap.',
           'Apple also points out that people can press and hold the Digital Crown at any time to bring content back in front of them, so an app does not need its own control for that. A puzzle that stays where the player put it, and comes back on request, is doing the right thing.',
         ],
         sourceIds: ['apple-hig-visionos', 'apple-hig-spatial-layout', 'apple-hig-immersive'],
@@ -2369,7 +2369,7 @@ const baseArticles: BlogArticle[] = [
     relatedSlugs: ['apple-watch-puzzle-games', 'color-shape-accessibility', 'relaxing-puzzle-games-what-makes-one-calm'],
     pullQuote: 'A board is a still object that waits for you.',
     faqs: [
-      { question: 'Are there puzzle games for Apple Vision Pro?', answer: 'Yes. OutBrick is one: it runs on Apple Vision Pro as well as iPhone, iPad, Mac and Apple TV, and has a standalone Apple Watch game.' },
+      { question: 'Are there puzzle games for Apple Vision Pro?', answer: 'Yes. OutBrick is one: it runs on Apple Vision Pro as well as iPhone, iPad and Mac, and has a standalone Apple Watch game.' },
       { question: 'How do you control games on Apple Vision Pro?', answer: 'Mostly with your eyes and hands. You look at an object to target it and tap your finger and thumb together to select it. You can also touch nearby objects directly, and Apple lists game controllers, keyboards, mice, trackpads and spatial game controllers as further options for games.' },
       { question: 'Do Vision Pro games have to be immersive?', answer: 'No. Apps start in the Shared Space, in windows alongside other apps, and Apple recommends using only as much immersion as each moment needs. For most puzzle games, a window is the right place to start.' },
       { question: 'Do I need to stand up or move around to play?', answer: 'Not for a well-designed puzzle game. Apple’s guidance is to let people play with little or no physical movement, using gestures they can make with their hands resting in their lap.' },
@@ -2388,7 +2388,7 @@ const baseArticles: BlogArticle[] = [
     image: '/blog/games-like-tetris.webp',
     imageAlt: 'Studded bricks in red, yellow, teal, violet, blue and green falling towards a real OutBrick board on an indigo ground, watched by Bricko and Zippy',
     tags: ['games like Tetris', 'block puzzle games', 'puzzle design', 'Tetris'],
-    intro: 'Search for games like Tetris and you will find hundreds of block puzzles: pieces that fall, pieces that slide, pieces you drop onto a grid, pieces you sort by colour. Most are forgotten within a week of being installed. A few get played for years. We make one of them, OutBrick, a sliding-brick puzzle, so we are not neutral, and we will not rank anybody else’s game. What we can do is set out the design qualities that help a block puzzle last, with Tetris as the reference point, so you can judge any game in the genre for yourself.',
+    intro: 'Search for games like Tetris and you will find hundreds of block puzzles: pieces that fall, pieces that slide, pieces you drop onto a grid, pieces you sort by colour. Most are forgotten within a week of being installed. A few get played for years. We make one of them, OutBrick, a slide-and-match brick puzzle, so we are not neutral, and we will not rank anybody else’s game. What we can do is set out the design qualities that help a block puzzle last, with Tetris as the reference point, so you can judge any game in the genre for yourself.',
     keyTakeaways: [
       'The block puzzles that last have a rule you can learn in seconds and a board whose whole state you can read at a glance.',
       'Fair difficulty means every loss can be traced to a decision, whether the pressure comes from speed, as in Tetris, or from a move limit.',
@@ -2410,7 +2410,7 @@ const baseArticles: BlogArticle[] = [
         paragraphs: [
           'Tetris can be explained in one sentence: fit the falling pieces together so that rows fill and clear. Nearly every lasting block puzzle has a rule of that size, and its depth comes from the situations the rule creates. When a game needs a tutorial chapter before the first real level, it is usually because the rules are carrying weight that the board ought to carry.',
           'Small rules also resist brute force, which is part of why they stay interesting. Breukelaar and colleagues proved that even the offline version of Tetris, where you know every piece in advance, is NP-complete for goals such as clearing the most rows. Sliding-block puzzles are harder still in the formal sense: Hearn and Demaine showed the general case is PSPACE-complete. For players, that means no known shortcut solves every board, so each board is a fresh problem.',
-          'OutBrick’s rule is the same size. Slide a brick and it glides until something stops it; get every brick out through the gate that matches its colour. New pieces arrive over a long game, including keys and locks, frozen bricks, generators, conveyors and crates, but each one is a new angle on the same rule rather than a new rule to learn.',
+          'OutBrick’s rule is the same size. Slide a brick home through the gate of its colour, or swap it with a neighbour so three of a colour line up and clear. New pieces arrive over a long game, including crates, ice, locks, moss, statues and counted gates, but each one is a new angle on the same rule rather than a new rule to learn.',
         ],
         sourceIds: ['tetris-hard-2004', 'sliding-block-pspace-2005'],
       },
@@ -2430,7 +2430,7 @@ const baseArticles: BlogArticle[] = [
         paragraphs: [
           'Tetris gets harder by getting faster. That works because the rules never change: the player loses to their own placements under pressure, and can see exactly where the stack went wrong. Fair difficulty means that when you lose, you can see why. Unfair difficulty is a board that could never have been cleared, a twist the player had no way to see coming, or a rule revealed only after it has cost them.',
           'Speed is one kind of pressure, and there are others. A sliding or placing puzzle can ask for efficiency instead of reflexes, with a move limit in place of a clock. That trades the rush of Tetris at high levels for time to think, which suits a different mood and often a different player. Both are fair when the limit is visible before you start.',
-          'Fairness also depends on every board being possible. A puzzle, whether made by hand or generated, should be checked before a player sees it. OutBrick’s 2,000 boards were each cleared by a solver before they shipped, and every board shows its move target and limit from the first tap. Difficulty should then rise in steps the player can feel, with new ideas introduced one at a time; our piece on [a kinder difficulty curve](/blog/kinder-difficulty-curve) goes into how.',
+          'Fairness also depends on every board being possible. A puzzle, whether made by hand or generated, should be checked before a player sees it. OutBrick’s 2,000 boards were each cleared by a solver before they shipped, and every board shows its goals and its move limit from the first tap. Difficulty should then rise in steps the player can feel, with new ideas introduced one at a time; our piece on [a kinder difficulty curve](/blog/kinder-difficulty-curve) goes into how.',
         ],
       },
       {
@@ -2455,10 +2455,10 @@ const baseArticles: BlogArticle[] = [
     relatedSlugs: ['tetris-simple-rules-infinite-variation', 'how-to-solve-sliding-block-puzzles', 'kinder-difficulty-curve'],
     pullQuote: 'Fair difficulty means that when you lose, you can see why.',
     faqs: [
-      { question: 'What kinds of games are like Tetris?', answer: 'Tetris belongs to a large family of block puzzles: falling-block games, grid games where you place pieces onto a board, and sliding-block puzzles where fixed pieces move around a crowded board. OutBrick is a sliding-brick colour-sort puzzle. Rather than trusting a ranking, try the checklist in this article on any game you are considering.' },
+      { question: 'What kinds of games are like Tetris?', answer: 'Tetris belongs to a large family of block puzzles: falling-block games, grid games where you place pieces onto a board, and sliding-block puzzles where fixed pieces move around a crowded board. OutBrick is a slide-and-match brick puzzle. Rather than trusting a ranking, try the checklist in this article on any game you are considering.' },
       { question: 'What is the difference between falling and sliding block puzzles?', answer: 'In a falling-block game, new pieces keep arriving and the pressure usually comes from speed. In a sliding-block puzzle, the pieces are usually all on the board from the start and the challenge is finding the order of moves that clears it, often within a move limit.' },
       { question: 'Why has Tetris lasted so long?', answer: 'A rule you can learn in seconds, a board whose whole state is visible, difficulty that comes from speed rather than hidden rules, and a round short enough for a spare few minutes. The Tetris Company dates the first version to 1984.' },
-      { question: 'Is OutBrick like Tetris?', answer: 'It shares the family traits: bricks made of square cells, a small rule and short rounds. The difference is that OutBrick’s bricks slide rather than fall, there is no clock, and each board has a move limit instead.' },
+      { question: 'Is OutBrick like Tetris?', answer: 'It shares the family traits: bricks made of square cells, a small rule and short rounds. The difference is that you slide and swap OutBrick’s bricks rather than steer falling ones, there is no clock, and each board has a move limit instead.' },
     ],
   },
   {
@@ -2545,7 +2545,7 @@ const baseArticles: BlogArticle[] = [
       { question: 'Do puzzle games improve memory?', answer: 'They reliably improve your skill at the puzzles you practise. Reviews of brain-training research have found little evidence that those gains carry over to everyday memory or thinking.' },
       { question: 'Can puzzles prevent dementia?', answer: 'No study has shown that puzzle games prevent dementia. People who do puzzles often tend to score better on thinking tests, but those studies cannot show that the puzzles caused it. Regulators have acted against brain-training companies that claimed otherwise.' },
       { question: 'Are crosswords better than brain-training apps?', answer: 'In one 78-week trial of people with mild cognitive impairment, web-based crosswords did slightly better than a set of computerised brain games on the main cognitive measure. The trial had no no-training group, so it does not show that either beats doing neither.' },
-      { question: 'Is OutBrick a brain-training game?', answer: 'No. OutBrick is a sliding-brick colour-sort puzzle made to be enjoyed, and it makes no health claims. Its boards are short, solvable and have no clock.' },
+      { question: 'Is OutBrick a brain-training game?', answer: 'No. OutBrick is a slide-and-match brick puzzle made to be enjoyed, and it makes no health claims. Its boards are short, solvable and have no clock.' },
     ],
   },
   {
@@ -2651,7 +2651,7 @@ const baseArticles: BlogArticle[] = [
     keyTakeaways: [
       'The 15 Puzzle came from Canastota, New York, and swept the United States in 1880; Sam Loyd did not invent it.',
       'Almost as soon as it appeared, mathematicians proved that half of all starting positions can never be solved.',
-      'Klotski-style and Rush Hour puzzles moved the challenge from ordering tiles to getting one block out, the idea OutBrick is built on.',
+      'Klotski-style and Rush Hour puzzles moved the challenge from ordering tiles to getting one block out, the idea OutBrick grew from.',
     ],
     sections: [
       {
@@ -2705,7 +2705,7 @@ const baseArticles: BlogArticle[] = [
         id: 'where-outbrick-fits',
         title: 'Where OutBrick fits',
         paragraphs: [
-          'OutBrick belongs to the get-one-block-out branch of the family, with a twist of its own: every brick has somewhere to go. A brick glides until something stops it, and it leaves the board only through the gate that matches its colour. Clearing a board means working out the order, as it did for Hardy’s blocks and Yoshigahara’s cars.',
+          'OutBrick belongs to the get-one-block-out branch of the family, with a twist of its own: every brick has somewhere to go. A brick leaves the board only through the gate of its colour, and today it can also swap with a neighbour so that three of a colour line up and clear. Clearing a board means working out the order, as it did for Hardy’s blocks and Yoshigahara’s cars.',
           'The modern tools help in ways the 1880 players would have envied. Every one of OutBrick’s 2,000 boards was cleared by a solver before it shipped, so no player ever meets a 14–15 swap. If you want the practical side of all this history, our guide on [how to solve sliding block puzzles](/blog/how-to-solve-sliding-block-puzzles) sets out the strategies, and you can [try a board in your browser](/play).',
         ],
         bullets: [

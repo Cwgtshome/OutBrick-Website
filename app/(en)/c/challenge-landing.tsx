@@ -152,8 +152,9 @@ export function ChallengeLanding({ qr }: { qr?: ReactNode }) {
               <h2 id="warmup-title">Learn the rule in your browser.</h2>
               <p className="lede">
                 Slide each brick out through the gate of its own colour. A brick glides until something
-                stops it, so plan the order. This is board one of the Journey; the one you were dared to
-                is waiting in the app.
+                stops it, so plan the order. This classic board is simpler than the app&rsquo;s Slide &amp;
+                Match boards, where you can also swap neighbours and line up three; the one you were dared
+                to is waiting in the app.
               </p>
             </div>
             <div className="play-board-wrap">
@@ -173,8 +174,8 @@ export function ChallengeLanding({ qr }: { qr?: ReactNode }) {
                 <span className="step-n">1</span>
                 <h3>Get the game</h3>
                 <p>
-                  OutBrick is a free download on iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple
-                  Watch. No subscription, no clock anywhere, and nothing plays that you did not press a
+                  OutBrick is a free download on iPhone, iPad, Mac, Apple Vision Pro and Apple Watch.
+                  No subscription, no clock anywhere, and nothing plays that you did not press a
                   button to see.
                 </p>
               </div>

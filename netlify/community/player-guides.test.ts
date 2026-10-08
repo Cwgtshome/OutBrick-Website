@@ -143,3 +143,41 @@ void test('8 October 2026 correction: FAQ and guides state released 5.1.1 facts,
     await pg.close();
   }
 });
+
+void test('8 October 2026 fact-check: moves answers and guides describe the video continue and Hold to confirm swaps', async () => {
+  const pg = await freshDatabase();
+  const correction = 'netlify/database/migrations/20261008150000_faq-guides-continue/migration.sql';
+  try {
+    // Positions 3 (timer/moves) and 6 (extra moves): a video adds two moves, then one, then a UFO.
+    const moves = await pg.query<{ locale: string; position: number; answer_md: string; answer_html: string }>(
+      `SELECT locale, position, answer_md, answer_html FROM faq_entries WHERE position IN (3, 6) ORDER BY locale, position`,
+    );
+    assert.equal(moves.rows.length, locales.length * 2);
+    for (const row of moves.rows) {
+      assert.match(row.answer_md, /UFO|OVNI/, `${row.locale}/${row.position} names the free UFO`);
+      assert.match(row.answer_md, /300/, `${row.locale}/${row.position} keeps the coin ladder`);
+      assert.equal(renderMarkdown(row.answer_md).html, row.answer_html);
+    }
+
+    // Guides: Hold to confirm swaps is a second choice, not a hold; the moves text matches.
+    const posts = await pg.query<{ locale: string; key: string; body_md: string; body_html: string }>(
+      `SELECT g.locale, g.key, p.body_md, p.body_html FROM player_guides g JOIN posts p ON p.thread_id = g.thread_id AND p.number = 1`,
+    );
+    const settings = posts.rows.find((row) => row.locale === 'en' && row.key === 'settings')!;
+    assert.match(settings.body_md, /plays only when you choose it a second time/);
+    assert.doesNotMatch(settings.body_md, /gives you time to check a direction/);
+    for (const row of posts.rows.filter((r) => r.key === 'first-board' || r.key === 'lives-moves-undos')) {
+      assert.match(row.body_md, /UFO|OVNI/, `${row.locale}/${row.key} moves text`);
+      assert.equal(renderMarkdown(row.body_md).html, row.body_html);
+    }
+
+    // A team edit survives a replay.
+    await pg.query(`UPDATE faq_entries SET answer_md='Team answer', answer_html='<p>Team answer</p>' WHERE locale='de' AND position=6`);
+    await pg.exec(fs.readFileSync(correction, 'utf8'));
+    const faq = await pg.query<{ answer_md: string }>(`SELECT answer_md FROM faq_entries WHERE locale='de' AND position=6`);
+    assert.equal(faq.rows[0].answer_md, 'Team answer');
+    assert.equal((await pg.query<{ n: number }>('SELECT count(*)::int n FROM notifications')).rows[0].n, 0);
+  } finally {
+    await pg.close();
+  }
+});

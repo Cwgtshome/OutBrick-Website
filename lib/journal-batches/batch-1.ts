@@ -155,8 +155,8 @@ export const batch1: BlogArticle[] = [
         id: 'reading-an-outbrick-board',
         title: 'Reading an OutBrick board',
         paragraphs: [
-          'OutBrick puts several of its rules into the board itself, which is the Zhang and Norman lesson in practice. A brick glides until something stops it, so where it can end up is fixed by the board rather than by your aim. Each brick leaves only through the gate of its own colour, so the gates enforce the colour rule for you. The move target and the move limit are printed from the first tap. And the colour-blind glyphs, on by default, give every brick and gate a shape as well as a hue, which makes it easier to read the board as structure rather than a wash of colour.',
-          'What remains for you is the structural read: which brick is holding up which colour, where the space is, where the board forks. On later boards, keys, locks, crates and gates add dependencies worth tracing before anything moves, because a lock opened too late can turn a tidy chain into a long detour.',
+          'OutBrick puts several of its rules into the board itself, which is the Zhang and Norman lesson in practice. A brick goes home only through the gate of its own colour, and a long brick only through a gate as wide as it is, so the gates enforce those rules for you. The goals and the move limit are shown from the first tap. And the colour-blind glyphs, on by default, give every brick and gate a shape as well as a hue, which makes it easier to read the board as structure rather than a wash of colour.',
+          'What remains for you is the structural read: which brick is holding up which colour, where the space is, where the board forks. On later boards, crates, ice, locks, moss and counted gates add dependencies worth tracing before anything moves, because a lock opened too late can turn a tidy chain into a long detour.',
           'There is no clock on any board, so reading costs you nothing but a few seconds. The [browser board](/play) is a good place to try the routine, and the [daily board](/daily) gives everyone the same puzzle each day, which makes it easy to compare how you read it with how a friend did.',
         ],
         sourceIds: ['zhang-norman-1994'],
@@ -169,7 +169,7 @@ export const batch1: BlogArticle[] = [
       { question: 'How should you approach a puzzle you have never seen before?', answer: 'Read it before you move. Find the goal, the free space and what blocks the piece closest to leaving, then look for the points where two moves compete, because those forks are where most of the thinking belongs.' },
       { question: 'Why do some puzzles feel harder than others with the same rules?', answer: 'Much of a puzzle’s difficulty lies in how it is represented in your head. In a classic study of Tower of Hanoi versions with identical structure, some took people many times longer to solve, largely because their rules were harder to hold in mind.' },
       { question: 'Should I plan the whole solution before my first move?', answer: 'Rarely. Plan up to the next point where the board forks, play that stretch, then read the board again. Studies of planning puzzles find that effort rises with the number of competing choices, so that is where your attention is best spent.' },
-      { question: 'Does OutBrick have a timer?', answer: 'No. Every OutBrick board shows a move target and a move limit from the first tap, but there is no clock anywhere in the game, so time spent reading the board is free.' },
+      { question: 'Does OutBrick have a timer?', answer: 'No. Every OutBrick board shows its goals and a move limit from the first tap, but there is no clock anywhere in the game, so time spent reading the board is free.' },
     ],
   },
 
@@ -241,8 +241,8 @@ export const batch1: BlogArticle[] = [
         id: 'undo-in-outbrick',
         title: 'How undo works in OutBrick',
         paragraphs: [
-          'OutBrick is built around this balance. The first undo on every board is free and cannot run out, so the first correction is always cheap, which is the same message error management training tries to send. Beyond that, undos come from a small tank that refills over time, and the undo offered when a board wedges is free as well. The exact terms are in the [fair-play ledger on the home page](/#fair).',
-          'The stars pull the other way, on purpose. One star is a clear. Two stars is a clear inside the move target. Three stars is a clear inside the target with no undo at all. So the game rewards both kinds of learning: explore freely when you want the clear, and plan in your head when you want the third star. Our guide to [earning three stars](/blog/how-to-get-three-stars-puzzle-games) covers the planning side.',
+          'OutBrick is built around this balance. The first undo on every board is free and cannot run out, so the first correction is always cheap, which is the same message error management training tries to send. Beyond that, undos come from a small tank that refills over time, and a board left with no move reshuffles itself for free. The exact terms are in the [fair-play ledger on the home page](/#fair).',
+          'On the classic boards, which the browser demo still plays, the stars pull the other way, on purpose. One star is a clear. Two stars is a clear inside the move target. Three stars is a clear inside the target with no undo at all. (On iPhone and iPad, stars now follow each board’s score.) So the game rewards both kinds of learning: explore freely when you want the clear, and plan in your head when you want the third star. Our guide to [earning three stars](/blog/how-to-get-three-stars-puzzle-games) covers the planning side.',
           'To feel the difference, try the [browser board](/play) twice: once experimenting freely, once without touching undo. Notice how differently you look at the board the second time.',
         ],
       },
@@ -254,7 +254,7 @@ export const batch1: BlogArticle[] = [
       { question: 'Is using undo in puzzle games cheating?', answer: 'No. Undo lets you correct a mistake while the reasoning behind it is still fresh, which research on learning from errors suggests is valuable. Its main risk is that very cheap undo can tempt you to plan less.' },
       { question: 'Does trial and error help you learn puzzles?', answer: 'It can. A meta-analysis of error management training found that encouraging exploration and mistakes led to better transfer to new tasks than error-avoidant training. It works best when each trial tests a specific idea.' },
       { question: 'Why do I plan less when undo is unlimited?', answer: 'Experiments with the 8-puzzle found that when moves were cheap to make, people relied on trial and error, and when moves were costly, they planned more. Undo makes mistakes cheap, so it shifts effort from planning to trying.' },
-      { question: 'Does undo cost stars in OutBrick?', answer: 'Only the third. One star is a clear, two stars is a clear inside the move target, and three stars is a clear inside the target with no undo. The first undo on every board is free.' },
+      { question: 'Does undo cost stars in OutBrick?', answer: 'On iPhone and iPad the stars follow each board’s score, and the first undo on every board is free. On the classic boards of the browser demo, undo costs only the third star: one star is a clear, two stars is a clear inside the move target, and three stars is a clear inside the target with no undo.' },
     ],
   },
 
@@ -328,7 +328,7 @@ export const batch1: BlogArticle[] = [
         paragraphs: [
           'It is tempting to think that the pattern-reading skill of a chess master or an expert puzzler must make them better thinkers in general. The evidence says otherwise. In 2017 Giovanni Sala and Fernand Gobet reviewed chess and music instruction for children, alongside working memory training. The better controlled a study was, the smaller its effects on broader cognitive and academic skills, and they concluded that far transfer of learning rarely occurs.',
           'That is not a disappointing result for anyone who simply enjoys puzzles. Getting better at a game you like is a real pleasure, and the chunks you build are a genuine kind of knowledge. It is just knowledge about the game. We looked at the wider question in [are puzzle games good for your brain?](/blog/are-puzzle-games-good-for-your-brain)',
-          'OutBrick’s boards are a good place to watch chunks form, because the mechanic stays constant while the arrangements change: a brick always glides until something stops it, and always leaves through the gate of its own colour. Play a few [daily boards](/daily) on successive days and notice which arrangements start to look like one thing. That noticing is a chunk forming.',
+          'OutBrick’s boards are a good place to watch chunks form, because the mechanic stays constant while the arrangements change: a brick swiped into space stops where you let go, a brick swiped into a neighbour swaps with it, and every brick goes home only through the gate of its own colour. Play a few [daily boards](/daily) on successive days and notice which arrangements start to look like one thing. That noticing is a chunk forming.',
         ],
         sourceIds: ['sala-gobet-2017'],
       },
@@ -434,7 +434,7 @@ export const batch1: BlogArticle[] = [
     image: '/blog/how-to-get-three-stars-puzzle-games.webp',
     imageAlt: 'Bricko and Sprout either side of an iPhone showing the Autumn Orchard stretch of the OutBrick Journey map',
     tags: ['move targets', 'puzzle tips', 'planning', 'sliding puzzle strategy', 'problem solving'],
-    intro: 'Clearing a board and clearing it well are different skills. The first asks whether you can find a solution. The second asks whether you can find a good one inside a budget of moves, and that draws on a different kind of thinking. I design boards for OutBrick, where the third star asks for a clear inside the move target without any undo, so I spend a lot of time watching the gap between a clear and a clean clear. Here is what the psychology of planning says about closing it.',
+    intro: 'Clearing a board and clearing it well are different skills. The first asks whether you can find a solution. The second asks whether you can find a good one inside a budget of moves, and that draws on a different kind of thinking. I design boards for OutBrick, where the stars follow each board’s score and every move left at the end becomes a blaster for a bigger score, so I spend a lot of time watching the gap between a clear and a clean clear. Here is what the psychology of planning says about closing it.',
     keyTakeaways: [
       'Most of the time people satisfice, taking the first solution that works; three stars asks you to optimise, and that needs deliberate planning.',
       'Planning before moving leads to better solutions, and in one set of experiments the benefit lasted after people were no longer told to plan.',
@@ -478,7 +478,7 @@ export const batch1: BlogArticle[] = [
           'When I test boards, the same few leaks account for most of the gap between a clear and a clean clear.',
         ],
         bullets: [
-          'Two short slides where one long one would do. When bricks glide until something stops them, one slide can often do the work of two.',
+          'Two short slides where one long one would do. When a brick can slide as far as the open space allows, one slide can often do the work of two.',
           'Parking a brick in a lane you will need, then having to move it again.',
           'Clearing the easy colour first instead of the one whose exit frees the most.',
           'Repairing a mistake with three new moves when one reread would have prevented it.',
@@ -489,8 +489,8 @@ export const batch1: BlogArticle[] = [
         id: 'outbrick-three-stars',
         title: 'How OutBrick’s three stars work',
         paragraphs: [
-          'On every OutBrick board, one star is a clear, two stars is a clear inside the move target, and three stars is a clear inside the target with no undo. The target and the move limit are printed from the first tap, and there is never a clock, so the planning time is yours. The target is the solver’s own count for the board and the benchmark for two and three stars. The limit, drawn as a rope, is the ceiling for the attempt. The gap between them is yours to spend while you learn the board, and when moves run low you are offered five more before the attempt ends.',
-          'That design separates the two modes. The first undo on every board is free, so when you want the clear you can explore as much as you like; [why undo makes you a better solver](/blog/why-undo-makes-you-a-better-puzzle-solver) explains why that is worth doing. Three stars asks you to do the exploring in your head instead. On a new board that is genuinely hard, it is fine to settle for the clear. The planning habit will pay off on the next one.',
+          'On iPhone and iPad, an OutBrick board’s stars follow its score, and every move left when the goals are met becomes a blaster for a bigger score, so a clear in fewer moves tends to earn more stars. The goals and the move limit are shown from the first tap, and there is never a clock, so the planning time is yours. The limit is the ceiling for the attempt, and when the moves run out you are offered five more before the attempt ends. On the classic boards the browser demo still plays, one star is a clear, two stars is a clear inside the move target, and three stars is a clear inside the target with no undo.',
+          'That design separates the two modes. The first undo on every board is free, so when you want the clear you can explore as much as you like; [why undo makes you a better solver](/blog/why-undo-makes-you-a-better-puzzle-solver) explains why that is worth doing. On the classic boards, three stars asks you to do the exploring in your head instead. On a new board that is genuinely hard, it is fine to settle for the clear. The planning habit will pay off on the next one.',
           'To practise the planning side, try the [browser board](/play) with a rule of your own: no move until you can say where the next three will leave every brick you touch.',
         ],
       },
@@ -499,7 +499,7 @@ export const batch1: BlogArticle[] = [
     relatedSlugs: ['colour-sort-puzzle-tips', 'how-to-read-a-puzzle-before-moving', 'why-undo-makes-you-a-better-puzzle-solver'],
     pullQuote: 'Each leak is a satisficing move: it makes progress now and costs later.',
     faqs: [
-      { question: 'How do you get three stars in OutBrick?', answer: 'Clear the board inside the move target without using undo. One star is any clear, and two stars is a clear inside the target.' },
+      { question: 'How do you get three stars in OutBrick?', answer: 'On iPhone and iPad the stars follow the board’s score, and every move left when the goals are met becomes a blaster for a bigger score, so finish in as few moves as you can. On the classic boards of the browser demo, three stars is a clear inside the move target without undo, one star is any clear and two stars is a clear inside the target.' },
       { question: 'How can I solve puzzles in fewer moves?', answer: 'Plan before you move, prefer one long slide to two short ones, and ask what each move closes off as well as what it opens. Most wasted moves come from taking the first move that makes progress.' },
       { question: 'What is satisficing?', answer: 'Satisficing, a term coined by Herbert Simon, means choosing the first option that is good enough rather than searching for the best one. It is usually sensible, but a move target asks you to optimise instead.' },
       { question: 'Do better players plan more moves ahead?', answer: 'Yes, according to a 2023 study of a complex board game, which found robust evidence that planning depth increases with expertise in both lab and large-scale mobile data.' },
@@ -570,7 +570,7 @@ export const batch1: BlogArticle[] = [
         title: 'What this means if you play puzzles',
         paragraphs: [
           'Put together, the evidence supports a modest, honest claim. Moving and turning shapes in your head is a skill, and puzzles that ask for it give you practice at it. You will get better at the puzzle, and you may get better at spatial tasks that resemble it. Anyone promising more than that is ahead of the research.',
-          'Sliding-block puzzles like OutBrick lean on a particular spatial skill: predicting where a piece will end up when it glides until something stops it, and how that changes the space around it. That is closer to reasoning about paths and obstacles than to rotating shapes, and we know of no study that has tested whether it transfers. We make no such claim for the game. It is a pleasant way to exercise the skill the game itself teaches, and that is enough.',
+          'Sliding-brick puzzles like OutBrick lean on a particular spatial skill: seeing where a brick can slide or swap, what it will line up with, and how that changes the space around it. That is closer to reasoning about paths and obstacles than to rotating shapes, and we know of no study that has tested whether it transfers. We make no such claim for the game. It is a pleasant way to exercise the skill the game itself teaches, and that is enough.',
           'If spatial skill itself is what you are after, the training studies suggest looking for tasks that directly ask you to rotate, fold or navigate, at a level that stretches you. A puzzle game can be part of that mix. It is unlikely to be all of it.',
           'To see which spatial habits a sliding board asks for, try the [browser board](/play). Our piece on [chunking](/blog/chunking-how-expert-puzzlers-see-patterns) explains how those habits turn into patterns you read at a glance, and [games like Tetris](/blog/games-like-tetris) looks at what keeps spatial-fitting games interesting.',
         ],
@@ -655,7 +655,7 @@ export const batch1: BlogArticle[] = [
         id: 'keeping-the-load-on-the-puzzle',
         title: 'How OutBrick keeps the load on the puzzle',
         paragraphs: [
-          'A good puzzle should spend your working memory on the puzzle, not on bookkeeping. OutBrick tries to keep that incidental load low. Every brick shows its colour and, with colour-blind mode on by default, a matching glyph, so you are not spending a memory slot on which similar shade is which; the case for that is in [why colour should never be the only clue in a puzzle](/blog/color-shape-accessibility). The gates enforce the colour rule themselves, the target and move limit stay on screen, and nothing is timed, so you are never holding a plan while watching a clock.',
+          'A good puzzle should spend your working memory on the puzzle, not on bookkeeping. OutBrick tries to keep that incidental load low. Every brick shows its colour and, with colour-blind mode on by default, a matching glyph, so you are not spending a memory slot on which similar shade is which; the case for that is in [why colour should never be the only clue in a puzzle](/blog/color-shape-accessibility). The gates enforce the colour rule themselves, the goals and move limit stay on screen, and nothing is timed, so you are never holding a plan while watching a clock.',
           'What remains is the hard part you came for: the positions, the blockers, the order. When a board feels impossible, ask which kind of difficulty you are facing. If it is a search problem, keep reading the board. If it is a memory problem, and you notice yourself losing plans halfway, shrink the plan. The [accessibility page](/accessibility) lists other ways the game can fit how you play, and the [browser board](/play) is a quick place to practise planning in chunks.',
         ],
       },
@@ -742,7 +742,7 @@ export const batch1: BlogArticle[] = [
         title: 'Keep it play',
         paragraphs: [
           'There is a risk in all this. Deliberate practice, as Ericsson and colleagues defined it, is not inherently enjoyable; it is work. A puzzle game turned into a training regime can stop being the thing you loved. Most casual players are better served by a light version: enjoy most boards, and practise on a few.',
-          'That is roughly how OutBrick is meant to be played. Its 2,000 boards are spread across 100 chapters, a shape of challenge we discussed in [how to build a kinder difficulty curve](/blog/kinder-difficulty-curve). The move target and stars give feedback if you want it and stay out of the way if you do not. And the patterns you build along the way, described in our piece on [chunking](/blog/chunking-how-expert-puzzlers-see-patterns), are the real result of practice: not a number, but a way of seeing the board.',
+          'That is roughly how OutBrick is meant to be played. Its 2,000 boards are spread across 100 chapters, a shape of challenge we discussed in [how to build a kinder difficulty curve](/blog/kinder-difficulty-curve). The goals, the score and the stars give feedback if you want it and stay out of the way if you do not. And the patterns you build along the way, described in our piece on [chunking](/blog/chunking-how-expert-puzzlers-see-patterns), are the real result of practice: not a number, but a way of seeing the board.',
         ],
       },
     ],
@@ -822,7 +822,7 @@ export const batch1: BlogArticle[] = [
         paragraphs: [
           'On a sliding puzzle, the lesson is to enjoy the aha and then check it. A move that suddenly looks brilliant usually is, but it costs nothing to trace it two steps forward before you commit, especially when a move target is at stake.',
           'You can also invite the click. At an impasse, list the assumptions you are making about the board, out loud if it helps: this brick must leave last, that lane must stay open, the key has to come first. Then drop them one at a time and look again. It is the constraint relaxation that Knoblich and Ohlsson described, done on purpose.',
-          'Puzzle designers build boards around that click. In OutBrick, the most satisfying boards are often the ones where a slide you had ruled out turns out to unlock everything, because it changes what you thought the board was about. The rules are simple on purpose, bricks glide until something stops them and leave through the gate of their own colour, so the surprise lives in the arrangement rather than in hidden rules. Games that leave room for that kind of discovery teach through curiosity rather than instruction, a theme we explored in [when a game teaches curiosity without a lecture](/blog/games-teach-curiosity-without-lecture).',
+          'Puzzle designers build boards around that click. In OutBrick, the most satisfying boards are often the ones where a slide you had ruled out turns out to unlock everything, because it changes what you thought the board was about. The rules are simple on purpose, bricks slide or swap, three or more of a colour in a line clear, and each brick goes home through the gate of its own colour, so the surprise lives in the arrangement rather than in hidden rules. Games that leave room for that kind of discovery teach through curiosity rather than instruction, a theme we explored in [when a game teaches curiosity without a lecture](/blog/games-teach-curiosity-without-lecture).',
           'If you want to hunt for the click yourself, the [browser board](/play) is a quick way to meet a board you have never seen.',
         ],
       },

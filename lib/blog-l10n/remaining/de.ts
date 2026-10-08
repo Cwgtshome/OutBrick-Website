@@ -94,7 +94,7 @@ export const remainingDe: ExtraGuides = {
         "title": "Den Kern verständlich machen",
         "paragraphs": [
           "Angry Birds stellte Abschuss, Zielen und Zusammenstoß so nachvollziehbar dar, dass man sie schnell verstand. Die Interaktion war spielerisch, gab aber dennoch ein klares mentales Modell: ziehen, loslassen, beobachten, wie das Bauwerk reagiert. Diese Verständlichkeit ist ein Grund dafür, dass eine einfache Mechanik viele Level und viele Arten von Spielern tragen konnte.",
-          "OutBrick beruht auf derselben Achtung vor den ersten Sekunden. Schiebe einen Stein, und er gleitet, bis etwas ihn stoppt; bring alle Steine durch das Tor ihrer Farbe hinaus, und das Feld ist gelöst. Die Regel lässt sich in etwa fünf Sekunden lernen. Danach muss das Spiel dem Spieler genügend Hinweise geben, um damit klug umzugehen."
+          "OutBrick beruht auf derselben Achtung vor den ersten Sekunden. Schieb einen Stein durch das Tor seiner Farbe nach Hause, oder wisch ihn gegen einen Nachbarn, damit die beiden tauschen und drei einer Farbe in einer Reihe stehen; erfüllst du die Ziele des Felds, ist es gelöst. Die Regel lässt sich in etwa fünf Sekunden lernen. Danach muss das Spiel dem Spieler genügend Hinweise geben, um damit klug umzugehen."
         ]
       },
       "a-franchise-is-a-conversation": {
@@ -150,7 +150,7 @@ export const remainingDe: ExtraGuides = {
         "title": "Vollständig bedeutet nicht einfach",
         "paragraphs": [
           "Ein vollständiges Erlebnis kann trotzdem Konzentration verlangen. Entscheidend ist, ob der Spieler den Zweck der Herausforderung versteht und ob das Spiel ihn nach deren Ende respektiert.",
-          "Bei OutBrick darf ein Feld knifflig sein, ohne dass die ganze App feindselig wirkt. Die erste kostenlose Zugrücknahme auf jedem Feld und eine kostenlose Zugrücknahme, sobald ein Feld feststeckt, binden den emotionalen Verlauf ans Lösen statt ans Bezahlen für einen Fehler. Das Feld darf schwierig sein. Die Beziehung muss es nicht sein."
+          "Bei OutBrick darf ein Feld knifflig sein, ohne dass die ganze App feindselig wirkt. Die erste kostenlose Zugrücknahme auf jedem Feld und ein kostenloses Neumischen, sobald auf einem Feld kein Zug mehr geht, binden den emotionalen Verlauf ans Lösen statt ans Bezahlen für einen Fehler. Das Feld darf schwierig sein. Die Beziehung muss es nicht sein."
         ]
       },
       "the-outbrick-translation": {
@@ -192,7 +192,7 @@ export const remainingDe: ExtraGuides = {
         "title": "Ebenen, die Neugier belohnen",
         "paragraphs": [
           "Eine Ebene funktioniert, wenn sie den Spieler die ursprüngliche Handlung anders sehen lässt. Handwerk verändert, was Sammeln bedeutet. Überleben verändert, was ein sicherer Ort bedeutet. Mehrspieler verändert, was ein Bauwerk bedeutet, wenn andere es sehen können.",
-          "Das unterscheidet sich vom Hinzufügen bloßen Lärms. OutBricks Kapitel, Sterne, Widgets, Freunde aus Steinen und [die Reise durch 167 Dörfer](/#journey) kreisen alle um dieselbe Kernhandlung: einen Stein durch das passende Tor hinausschieben. Jede Ebene sollte dem Zug einen neuen Kontext geben, ohne den Spieler ein zweites Spiel lernen zu lassen."
+          "Das unterscheidet sich vom Hinzufügen bloßen Lärms. OutBricks Kapitel, Sterne, Widgets, Freunde aus Steinen und [die Reise durch 167 Dörfer](/#journey) kreisen alle um dieselbe Kernhandlung: einen Stein durch sein Tor nach Hause schieben oder ihn in eine Reihe tauschen. Jede Ebene sollte dem Zug einen neuen Kontext geben, ohne den Spieler ein zweites Spiel lernen zu lassen."
         ],
         "bullets": [
           "Eine vorhandene Handlung vertiefen",
@@ -247,7 +247,7 @@ export const remainingDe: ExtraGuides = {
         "title": "Begrenzung schafft Bedeutung",
         "paragraphs": [
           "Eine fallende Form wird nur deshalb dringlich, weil das Feld begrenzten Platz bietet. Dasselbe Teil kann ein Geschenk, ein Problem oder eine Vorbereitung sein, je nachdem, was schon dort liegt. Einfache Regeln erzeugen Vielfalt, wenn frühere Entscheidungen des Spielers die Bedeutung der nächsten verändern.",
-          "OutBricks Schiebesteine funktionieren genauso. ‚Bring den Stein zu seinem Tor‘ ist leicht gesagt. Interessant ist, dass jeder Zug verändert, welche Bahnen offen sind, welche Steine einander blockieren und welche Lösung noch möglich bleibt. Die Regel bleibt klein, während sich die Situation ständig verändert."
+          "OutBricks Steine funktionieren genauso. ‚Schieb ihn nach Hause oder tausch ihn in eine Reihe‘ ist leicht gesagt. Interessant ist, dass jeder Zug verändert, welche Bahnen offen sind, welche Steine einander blockieren und welche Lösung noch möglich bleibt. Die Regel bleibt klein, während sich die Situation ständig verändert."
         ]
       },
       "rhythm-over-noise": {
@@ -266,7 +266,7 @@ export const remainingDe: ExtraGuides = {
       "the-next-piece": {
         "title": "Das nächste Teil",
         "paragraphs": [
-          "Tetris bleibt lebendig, weil das nächste Teil immer eine neue Frage aufwirft. OutBricks Variante ist ruhiger: Unter 2.000 solvergeprüften Feldern ist das nächste eine weitere kleine Frage mit einer anderen Form, einem anderen Engpass und einer neuen Chance, mehr zu erkennen als beim letzten Mal. Schlüssel, Schlösser, gefrorene Steine, Förderbänder und Kisten kommen langsam hinzu – jeweils ein neuer Blickwinkel auf dieselbe Regel.",
+          "Tetris bleibt lebendig, weil das nächste Teil immer eine neue Frage aufwirft. OutBricks Variante ist ruhiger: Unter 2.000 solvergeprüften Feldern ist das nächste eine weitere kleine Frage mit einer anderen Form, einem anderen Engpass und einer neuen Chance, mehr zu erkennen als beim letzten Mal. Kisten, Eis, Schlösser, Moos, Statuen und Zähltore kommen langsam hinzu – jeweils ein neuer Blickwinkel auf dieselbe Regel.",
           "Einfach bedeutet nicht oberflächlich. Es bedeutet, dass der Spieler erkennen kann, woher die Tiefe kommt."
         ]
       }
@@ -470,7 +470,7 @@ export const remainingDe: ExtraGuides = {
       "our-tools-for-a-kinder-curve": {
         "title": "Unsere Werkzeuge für eine freundlichere Kurve",
         "paragraphs": [
-          "Ein Solver löste alle 2.000 OutBrick-Felder, bevor eines veröffentlicht wurde; so darf das Spiel Planung verlangen, ohne versehentlich Unmögliches zu fordern. Das Zuglimit jedes Feldes wird mit dem tatsächlich gefundenen Lösungsweg abgeglichen, damit kein Feld ein kürzeres Seil als seine nachgewiesene Lösung erhält. Wenn eine Stellung feststeckt, sagt das Hilfefenster dies und bietet einen Weg weiter; seine Zugrücknahme ist kostenlos und unabhängig vom Vorrat, denn ein festgefahrenes Feld fällt in die Verantwortung des Spiels, nicht des Spielers. Der Druck eines Feldes kommt von einem Zuglimit, nie von einer Uhr: Der optionale Rush-Timer wurde entfernt, und nirgends im Spiel gibt es einen Countdown.",
+          "Ein Solver löste alle 2.000 OutBrick-Felder, bevor eines veröffentlicht wurde; so darf das Spiel Planung verlangen, ohne versehentlich Unmögliches zu fordern. Das Zuglimit jedes Feldes wird mit dem tatsächlich gefundenen Lösungsweg abgeglichen, damit kein Feld ein kürzeres Seil als seine nachgewiesene Lösung erhält. Geht auf einem Feld kein Zug mehr, mischt es sich kostenlos von selbst neu, denn ein Feld, auf dem nichts mehr zu versuchen ist, fällt in die Verantwortung des Spiels, nicht des Spielers. Der Druck eines Feldes kommt von einem Zuglimit, nie von einer Uhr: Der optionale Rush-Timer wurde entfernt, und nirgends im Spiel gibt es einen Countdown.",
           "Das nimmt die Herausforderung nicht weg. Es trennt sinnvolle von unbeabsichtigter Reibung, damit der Spieler seine Aufmerksamkeit auf die Puzzle-Idee richtet, statt sich gegen die Oberfläche zu verteidigen."
         ],
         "bullets": [
@@ -1109,7 +1109,7 @@ export const remainingDe: ExtraGuides = {
         "title": "Eigenständig oder Begleiter",
         "paragraphs": [
           "Ein Uhrenspiel kann auf zwei Wegen kommen. Apples Entwicklerdokumentation beschreibt reine Watch-Apps ohne iPhone-App und Watch-Apps mit iPhone-Begleiter, die sich dennoch ohne ihn installieren und ausführen lassen. Apple ermutigt in beiden Fällen zu unabhängigen Apps, weil Menschen erwarten, dass Uhren-Apps ohne mitgeführtes Handy funktionieren. Gibt es eine Begleit-App, sind In-App-Käufe universell: Ein einmal gekaufter Inhalt steht auf beiden Geräten bereit.",
-          "Für Spieler ist die nützliche Frage einfacher: Läuft das Uhrenspiel allein oder ist es eine Fernbedienung fürs Handy? Ein eigenständiges Spiel kannst du beim Spaziergang spielen, während das Handy zu Hause bleibt. OutBrick hat ein eigenständiges Apple-Watch-Spiel neben Versionen für iPhone, iPad, Mac, Apple TV und Apple Vision Pro. Fortschritt liegt in deiner iCloud; ein neues Gerät mit demselben Konto setzt dort fort, wo das alte aufgehört hat.",
+          "Für Spieler ist die nützliche Frage einfacher: Läuft das Uhrenspiel allein oder ist es eine Fernbedienung fürs Handy? Ein eigenständiges Spiel kannst du beim Spaziergang spielen, während das Handy zu Hause bleibt. OutBrick hat ein eigenständiges Apple-Watch-Spiel neben Versionen für iPhone, iPad, Mac und Apple Vision Pro. Fortschritt liegt in deiner iCloud; ein neues Gerät mit demselben Konto setzt dort fort, wo das alte aufgehört hat.",
           "Beim Ausprobieren von Puzzles am Handgelenk nutze ich diese kurze Liste. Die meisten Spiele bestehen einige Punkte und scheitern an anderen; die, die alle sechs bestehen, bleiben meist auf der Uhr."
         ],
         "bullets": [
@@ -1134,7 +1134,7 @@ export const remainingDe: ExtraGuides = {
       },
       {
         "question": "Gibt es OutBrick auf Apple Watch?",
-        "answer": "Ja. OutBrick hat ein eigenständiges Apple-Watch-Spiel und läuft außerdem auf iPhone, iPad, Mac, Apple TV und Apple Vision Pro."
+        "answer": "Ja. OutBrick hat ein eigenständiges Apple-Watch-Spiel und läuft außerdem auf iPhone, iPad, Mac und Apple Vision Pro."
       },
       {
         "question": "Können Uhrenspiele die Digital Crown nutzen?",
@@ -1187,7 +1187,7 @@ export const remainingDe: ExtraGuides = {
         "title": "Für ruhiges Sitzen gebaut",
         "paragraphs": [
           "Vision Pro bringt Inhalte zu Menschen, statt sie zu ihnen gehen zu lassen; Apple empfiehlt wenig oder keine körperliche Bewegung, sofern sie nicht wesentlich ist. Für ein Puzzle ist das leicht, denn ein Teil zu verschieben erfordert keinen Weg. Es zählt auch für Sicherheit: Apple sagt, das Gerät solle nicht beim Führen eines Fahrzeugs genutzt werden und sei nicht für Bewegung nahe Gefahren wie Treppen, Balkonen oder Straßen gedacht.",
-          "Spielen im Sitzen verändert auch den Rundenrhythmus. Auf Sofa oder am Schreibtisch spielt jemand vielleicht länger als am Handy in einer Schlange; hier zählen faire Grenzen. Ein Spiel ohne Uhr mit von Anfang an sichtbarem Zuglimit lässt beliebig lang nachdenken. OutBrick hat nirgends einen Countdown, und jedes Feld zeigt ab dem ersten Tippen Zugvorgabe und Limit.",
+          "Spielen im Sitzen verändert auch den Rundenrhythmus. Auf Sofa oder am Schreibtisch spielt jemand vielleicht länger als am Handy in einer Schlange; hier zählen faire Grenzen. Ein Spiel ohne Uhr mit von Anfang an sichtbarem Zuglimit lässt beliebig lang nachdenken. OutBrick hat nirgends einen Countdown, und jedes Feld zeigt ab dem ersten Tippen seine Ziele und sein Zuglimit.",
           "Apple weist außerdem darauf hin, dass langes Drücken der Digital Crown Inhalte jederzeit zurück nach vorn bringt; eine App braucht dafür keine eigene Schaltfläche. Ein Puzzle, das an seinem platzierten Ort bleibt und auf Wunsch zurückkommt, macht es richtig."
         ]
       },
@@ -1212,7 +1212,7 @@ export const remainingDe: ExtraGuides = {
     "faqs": [
       {
         "question": "Gibt es Puzzlespiele für Apple Vision Pro?",
-        "answer": "Ja. OutBrick ist eines: Es läuft auf Apple Vision Pro sowie iPhone, iPad, Mac und Apple TV und hat ein eigenständiges Apple-Watch-Spiel."
+        "answer": "Ja. OutBrick ist eines: Es läuft auf Apple Vision Pro sowie iPhone, iPad und Mac und hat ein eigenständiges Apple-Watch-Spiel."
       },
       {
         "question": "Wie steuert man Spiele auf Apple Vision Pro?",
@@ -1238,7 +1238,7 @@ export const remainingDe: ExtraGuides = {
       "Puzzledesign",
       "Tetris"
     ],
-    "intro": "Wer Spiele wie Tetris sucht, findet Hunderte Blockpuzzles: fallende Teile, gleitende Teile, Teile zum Platzieren auf einem Raster oder zum Sortieren nach Farbe. Die meisten sind eine Woche nach der Installation vergessen. Einige werden jahrelang gespielt. Wir entwickeln mit OutBrick selbst eines, ein Schiebesteinpuzzle, sind also nicht neutral und werden keine Rangliste anderer Spiele erstellen. Wir können aber die Designqualitäten erläutern, die ein Blockpuzzle langlebig machen, mit Tetris als Bezugspunkt, damit du jedes Spiel des Genres selbst beurteilen kannst.",
+    "intro": "Wer Spiele wie Tetris sucht, findet Hunderte Blockpuzzles: fallende Teile, gleitende Teile, Teile zum Platzieren auf einem Raster oder zum Sortieren nach Farbe. Die meisten sind eine Woche nach der Installation vergessen. Einige werden jahrelang gespielt. Wir entwickeln mit OutBrick selbst eines, ein Schiebe-und-Match-Steinpuzzle, sind also nicht neutral und werden keine Rangliste anderer Spiele erstellen. Wir können aber die Designqualitäten erläutern, die ein Blockpuzzle langlebig machen, mit Tetris als Bezugspunkt, damit du jedes Spiel des Genres selbst beurteilen kannst.",
     "keyTakeaways": [
       "Langlebige Blockpuzzles haben eine in Sekunden lernbare Regel und ein Feld, dessen ganzer Zustand auf einen Blick lesbar ist.",
       "Faire Schwierigkeit bedeutet, dass jede Niederlage auf eine Entscheidung zurückführbar ist, ob der Druck wie bei Tetris vom Tempo oder von einem Zuglimit kommt.",
@@ -1257,7 +1257,7 @@ export const remainingDe: ExtraGuides = {
         "paragraphs": [
           "Tetris lässt sich in einem Satz erklären: Füge fallende Teile so zusammen, dass Reihen voll werden und verschwinden. Fast jedes langlebige Blockpuzzle hat eine Regel dieses Umfangs; die Tiefe entsteht aus den Situationen, die sie erzeugt. Braucht ein Spiel vor dem ersten echten Level ein Tutorial-Kapitel, tragen meist die Regeln eine Last, die das Feld tragen sollte.",
           "Kleine Regeln widerstehen auch systematischem Durchprobieren, was sie interessant hält. Breukelaar und Kollegen bewiesen, dass selbst die Offline-Version von Tetris, in der alle Teile vorher bekannt sind, für Ziele wie möglichst viele gelöschte Reihen NP-vollständig ist. Schiebepuzzles sind im formalen Sinn noch schwieriger: Hearn und Demaine zeigten PSPACE-Vollständigkeit im allgemeinen Fall. Für Spieler heißt das, dass keine bekannte Abkürzung jedes Feld löst und jedes ein neues Problem bleibt.",
-          "OutBricks Regel ist ebenso klein. Schiebe einen Stein; er gleitet, bis etwas ihn stoppt. Bringe jeden Stein durch das Tor seiner Farbe hinaus. Über ein langes Spiel kommen neue Teile hinzu, darunter Schlüssel und Schlösser, gefrorene Steine, Generatoren, Förderbänder und Kisten; jedes ist aber ein neuer Blickwinkel auf dieselbe Regel statt einer neu zu lernenden Regel."
+          "OutBricks Regel ist ebenso klein. Schieb einen Stein durch das Tor seiner Farbe nach Hause, oder tausch ihn mit einem Nachbarn, damit drei einer Farbe in einer Reihe stehen und verschwinden. Über ein langes Spiel kommen neue Teile hinzu, darunter Kisten, Eis, Schlösser, Moos, Statuen und Zähltore; jedes ist aber ein neuer Blickwinkel auf dieselbe Regel statt einer neu zu lernenden Regel."
         ]
       },
       "readable-state": {
@@ -1273,7 +1273,7 @@ export const remainingDe: ExtraGuides = {
         "paragraphs": [
           "Tetris wird schwieriger, indem es schneller wird. Das funktioniert, weil die Regeln gleich bleiben: Der Spieler verliert durch eigene Platzierungen unter Druck und sieht genau, wo der Stapel schieflief. Faire Schwierigkeit bedeutet, dass man beim Verlieren den Grund erkennt. Unfair sind ein niemals lösbares Feld, eine unvorhersehbare Wendung oder eine Regel, die erst nach ihren Kosten offengelegt wird.",
           "Tempo ist eine Druckform; es gibt andere. Ein Schiebe- oder Platzierpuzzle kann mit einem Zuglimit statt einer Uhr Effizienz statt Reflexe verlangen. Das tauscht den Rausch hoher Tetris-Level gegen Denkzeit, passend zu anderer Stimmung und oft anderen Spielern. Beide sind fair, wenn die Grenze vor dem Start sichtbar ist.",
-          "Fairness hängt auch davon ab, dass jedes Feld möglich ist. Ein handgemachtes oder generiertes Puzzle sollte geprüft werden, bevor es ein Spieler sieht. OutBricks 2.000 Felder wurden vor der Veröffentlichung jeweils von einem Solver gelöst; jedes zeigt Zugvorgabe und Limit ab dem ersten Tippen. Danach sollte die Schwierigkeit in spürbaren Schritten steigen, mit neuen Ideen einzeln eingeführt. Unser Beitrag über [eine freundlichere Schwierigkeitskurve](/blog/kinder-difficulty-curve) erklärt, wie."
+          "Fairness hängt auch davon ab, dass jedes Feld möglich ist. Ein handgemachtes oder generiertes Puzzle sollte geprüft werden, bevor es ein Spieler sieht. OutBricks 2.000 Felder wurden vor der Veröffentlichung jeweils von einem Solver gelöst; jedes zeigt seine Ziele und sein Zuglimit ab dem ersten Tippen. Danach sollte die Schwierigkeit in spürbaren Schritten steigen, mit neuen Ideen einzeln eingeführt. Unser Beitrag über [eine freundlichere Schwierigkeitskurve](/blog/kinder-difficulty-curve) erklärt, wie."
         ]
       },
       "short-loop": {
@@ -1297,7 +1297,7 @@ export const remainingDe: ExtraGuides = {
     "faqs": [
       {
         "question": "Welche Arten von Spielen ähneln Tetris?",
-        "answer": "Tetris gehört zu einer großen Blockpuzzle-Familie: Spiele mit fallenden Blöcken, Rasterspiele zum Platzieren von Teilen und Schiebepuzzles, in denen feste Teile über ein volles Feld bewegt werden. OutBrick ist ein Schiebesteinpuzzle zum Sortieren nach Farbe. Statt einer Rangliste zu vertrauen, prüfe jedes erwogene Spiel mit der Checkliste dieses Artikels."
+        "answer": "Tetris gehört zu einer großen Blockpuzzle-Familie: Spiele mit fallenden Blöcken, Rasterspiele zum Platzieren von Teilen und Schiebepuzzles, in denen feste Teile über ein volles Feld bewegt werden. OutBrick ist ein Schiebe-und-Match-Steinpuzzle. Statt einer Rangliste zu vertrauen, prüfe jedes erwogene Spiel mit der Checkliste dieses Artikels."
       },
       {
         "question": "Was unterscheidet fallende Blöcke von Schiebepuzzles?",
@@ -1309,7 +1309,7 @@ export const remainingDe: ExtraGuides = {
       },
       {
         "question": "Ist OutBrick wie Tetris?",
-        "answer": "Es teilt Familienmerkmale: Steine aus quadratischen Zellen, eine kleine Regel und kurze Runden. Der Unterschied: OutBricks Steine gleiten statt zu fallen, es gibt keine Uhr, und jedes Feld hat stattdessen ein Zuglimit."
+        "answer": "Es teilt Familienmerkmale: Steine aus quadratischen Zellen, eine kleine Regel und kurze Runden. Der Unterschied: Du schiebst und tauschst OutBricks Steine, statt fallende Teile zu lenken, es gibt keine Uhr, und jedes Feld hat stattdessen ein Zuglimit."
       }
     ]
   },
@@ -1393,7 +1393,7 @@ export const remainingDe: ExtraGuides = {
       },
       {
         "question": "Ist OutBrick ein Gehirntrainingsspiel?",
-        "answer": "Nein. OutBrick ist ein Schiebesteinpuzzle zum Sortieren nach Farben, das Freude machen soll und keine Gesundheitsversprechen gibt. Seine Felder sind kurz, lösbar und ohne Uhr."
+        "answer": "Nein. OutBrick ist ein Schiebe-und-Match-Steinpuzzle, das Freude machen soll und keine Gesundheitsversprechen gibt. Seine Felder sind kurz, lösbar und ohne Uhr."
       }
     ]
   },
@@ -1495,7 +1495,7 @@ export const remainingDe: ExtraGuides = {
     "keyTakeaways": [
       "Das 15er-Puzzle stammt aus Canastota, New York, und eroberte 1880 die USA; Sam Loyd erfand es nicht.",
       "Fast unmittelbar nach seinem Auftauchen bewiesen Mathematiker, dass die Hälfte aller Startstellungen niemals lösbar ist.",
-      "Klotski- und Rush-Hour-Puzzles verlagerten das Ziel vom Ordnen von Kacheln zum Herausbringen eines Blocks – darauf baut OutBrick auf."
+      "Klotski- und Rush-Hour-Puzzles verlagerten das Ziel vom Ordnen von Kacheln zum Herausbringen eines Blocks – daraus ist OutBrick hervorgegangen."
     ],
     "sections": {
       "before-the-craze": {
@@ -1538,7 +1538,7 @@ export const remainingDe: ExtraGuides = {
       "where-outbrick-fits": {
         "title": "Wo OutBrick dazugehört",
         "paragraphs": [
-          "OutBrick gehört zum Familienzweig ‚einen Block hinausbringen‘, mit einer eigenen Wendung: Jeder Stein hat ein Ziel. Ein Stein gleitet, bis ihn etwas stoppt, und verlässt das Feld nur durch sein farblich passendes Tor. Ein Feld zu lösen heißt die Reihenfolge herauszufinden, wie bei Hardys Blöcken und Yoshigaharas Autos.",
+          "OutBrick gehört zum Familienzweig ‚einen Block hinausbringen‘, mit einer eigenen Wendung: Jeder Stein hat ein Ziel. Ein Stein verlässt das Feld nur durch sein farblich passendes Tor, und heute kann er auch mit einem Nachbarn tauschen, damit drei einer Farbe in einer Reihe stehen und verschwinden. Ein Feld zu lösen heißt die Reihenfolge herauszufinden, wie bei Hardys Blöcken und Yoshigaharas Autos.",
           "Moderne Werkzeuge helfen auf eine Weise, die die Spieler von 1880 beneidet hätten. Jedes der 2.000 OutBrick-Felder wurde vor Veröffentlichung von einem Solver gelöst; kein Spieler trifft deshalb auf eine Vertauschung von 14 und 15. Zur praktischen Seite dieser Geschichte erklärt unser Ratgeber [wie man Schiebepuzzles löst](/blog/how-to-solve-sliding-block-puzzles) Strategien; du kannst auch [ein Feld im Browser ausprobieren](/play)."
         ],
         "bullets": [

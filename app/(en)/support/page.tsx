@@ -3,7 +3,7 @@ import { CurrentGameFeatures } from '../../components/current-game-features';
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
 import { Handoff, LegalPage } from '../../legal-page';
-import { JsonLd } from '../../editorial-shell';
+import { JsonLd } from '../../json-ld';
 import { graph } from '../../../lib/structured-data';
 import { siteUrl } from '../../../lib/site';
 import { HelpSearch } from '../../components/help-search';
@@ -33,10 +33,8 @@ export default function SupportPage() {
         <p>
           The first undo on any board is free, it never comes out of your tank, and it cannot run out.
           After that, undos come from a tank of five that fills itself back up one every twenty-five
-          minutes — or five for 250 coins, or two for a rewarded video. The undo on the
-          &ldquo;Wedged!&rdquo; sheet is free as well, and outside the tank too: that sheet only appears
-          when no clear is reachable from the current position, and getting out of a board the game
-          wedged is never charged for.
+          minutes — or five for 250 coins, or two for a rewarded video. If a board has no possible
+          move left, it reshuffles itself for free.
         </p>
       </div>
 
@@ -74,8 +72,9 @@ export default function SupportPage() {
           <li data-help-item><b>Colour-blind mode:</b> on by default, so every brick and gate already carries a readable glyph. It can be switched off, and back on, in Settings.</li>
           <li data-help-item>
             <b>Out of moves:</b> every board has a move limit, shown beside your move count from the
-            first tap. Reaching it is not the end of the board — the card offers five more moves for
-            coins or for a video before anything else happens. The coin price climbs within one
+            first tap. Reaching it is not the end of the board — the card offers more moves before
+            anything else happens: five for coins, or two for a video (then one, then a free UFO). The
+            coin price climbs within one
             attempt — 300, then 500, then 900 — and goes back to 300 when you leave the board or clear
             it.
           </li>

@@ -33,12 +33,12 @@ const facts: [string, string][] = [
   ['The cast', 'Nine brick friends. Three share your Home screen at a time; they animate and speak in text bubbles.'],
   ['The pressure', 'A move limit on every board. No clock, timer or countdown anywhere in the game.'],
   ['What it costs', 'Free, with lives and eight opt-in rewarded video placements. No banners, no interstitials, no subscription.'],
-  ['Where it runs', 'iPhone, iPad, Mac, Apple TV, Apple Vision Pro and Apple Watch, offline, with progress in your own iCloud.'],
+  ['Where it runs', 'iPhone, iPad, Mac, Apple Vision Pro and Apple Watch, offline, with progress in your own iCloud.'],
 ];
 
 const principles = [
   { tone: 'green', kicker: 'Time', title: 'Respect the pause', body: 'Sessions have natural edges. Being interrupted costs nothing, the clear card is a real ending, and nothing interrupts a board.' },
-  { tone: 'blue', kicker: 'Clarity', title: 'Make the rule readable', body: 'Challenge should come from the puzzle’s idea, not from unclear controls. Every board prints its target and its limit from the first tap.' },
+  { tone: 'blue', kicker: 'Clarity', title: 'Make the rule readable', body: 'Challenge should come from the puzzle’s idea, not from unclear controls. Every board shows its goals and its move limit from the first tap.' },
   { tone: 'teal', kicker: 'Access', title: 'Build access in', body: 'Colour-blind glyphs are on by default, every brick is a VoiceOver element, and Reduce Motion is honoured everywhere.' },
   { tone: 'gold', kicker: 'Honesty', title: 'Say what it costs', body: 'Lives and rewarded videos exist, and the home page says exactly how both work, with nothing rounded in our favour.' },
 ];
@@ -75,7 +75,7 @@ export default function AboutPage() {
               </div>
             </div>
             <figure className="ed-capture" style={{ width: 'min(100%, 250px)', justifySelf: 'center', transform: 'rotate(2deg)' }}>
-              <img src="/assets/villages/garden-city.jpg" alt="Garden City on the OutBrick Journey map: a brick road winding between toy-brick houses." width={239} height={520} decoding="async" fetchPriority="high" />
+              <img src="/assets/villages/garden-city.webp" alt="Garden City on the OutBrick Journey map: a brick road winding between toy-brick houses." width={239} height={520} decoding="async" fetchPriority="high" />
             </figure>
           </div>
         </div>
