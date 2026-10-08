@@ -1,35 +1,26 @@
-import { localeAlternates } from '../../../../../lib/i18n/locales';
+import { localeAlternates, localePath, isTranslatedLocale, type Locale } from '../../../../../lib/i18n/locales';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Bond, Crumbs, EditorialPage, JsonLd } from '../../../../editorial-shell';
 import { siteUrl } from '../../../../../lib/site';
-import { categoryPath, getTagPages } from '../../../../../lib/journal';
+import { categoryPath, getIndexedTagPages, getTagPages } from '../../../../../lib/journal';
+import { tagPageCopy } from '../../../../../lib/i18n/journal-tags';
 import { breadcrumbData, collectionData, FollowJournal, StoryRow } from '../../journal-kit';
 
-type TagPageProps = { params: Promise<{ tag: string }> };
+/** The translated routes (app/[locale]/blog/tag/[tag]) render this page with `locale` in params. */
+type TagPageProps = { params: Promise<{ tag: string; locale?: string }> };
 
 export function generateStaticParams() {
   return getTagPages().map((tag) => ({ tag: tag.slug }));
 }
 
-/** Cut at a word boundary so the description fits a search result. */
-function fit(text: string, max = 158): string {
-  if (text.length <= max) return text;
-  return `${text.slice(0, max - 1).replace(/[\s,;:–—-]+\S*$/, '')}…`;
+function copyFor(slug: string, locale: Locale = 'en') {
+  const copy = tagPageCopy(slug, locale);
+  if (!copy) return undefined;
+  return { ...copy, path: `/blog/tag/${copy.tag.slug}` };
 }
 
-function copyFor(slug: string) {
-  const tag = getTagPages().find((entry) => entry.slug === slug);
-  if (!tag) return undefined;
-  const [first, second] = tag.articles;
-  const titles = second ? `“${first!.title}” and “${second.title}”` : `“${first!.title}”`;
-  return {
-    tag,
-    title: `Stories tagged “${tag.label}” — The OutBrick Journal`,
-    description: fit(`${tag.articles.length} OutBrick Journal stories on ${tag.label}, including ${titles}. Every research claim is cited.`),
-    path: `/blog/tag/${tag.slug}`,
-  };
-}
+const localeOf = (value?: string): Locale => (value && isTranslatedLocale(value) ? value : 'en');
 
 export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
   const copy = copyFor((await params).tag);
@@ -38,6 +29,8 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
   return {
     title: { absolute: copy.title },
     description: copy.description,
+    // Tags with fewer than MIN_INDEXED_TAG stories stay reachable but out of the index (lib/journal.ts).
+    ...(copy.indexed ? {} : { robots: { index: false, follow: true } }),
     alternates: localeAlternates('en', copy.path ),
     openGraph: {
       type: 'website',
@@ -52,11 +45,14 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
 }
 
 export default async function TagPage({ params }: TagPageProps) {
-  const copy = copyFor((await params).tag);
+  const values = await params;
+  const locale = localeOf(values.locale);
+  const copy = copyFor(values.tag, locale);
   if (!copy) notFound();
   const { tag, path, description } = copy;
   const here = new Set(tag.articles.map((article) => article.slug));
-  const related = getTagPages()
+  // Only indexable topics are offered as navigation; a thin tag stays reachable from its stories.
+  const related = getIndexedTagPages()
     .filter((other) => other.slug !== tag.slug)
     .map((other) => ({ ...other, shared: other.articles.filter((article) => here.has(article.slug)).length }))
     .filter((other) => other.shared > 0)
@@ -73,11 +69,23 @@ export default async function TagPage({ params }: TagPageProps) {
           <div className="ed-coll-grid">
             <div>
               <p className="ed-label">Tagged</p>
-              <h1><span aria-hidden="true" className="ed-coll-hash">#</span>{tag.label}</h1>
-              <p className="ed-lede">
-                {tag.articles.length} stories from the journal share this topic, across{' '}
-                {categories.length === 1 ? 'one shelf' : `${categories.length} shelves`}.
-              </p>
+              {copy.indexed ? (
+                <>
+                  <h1 className="ed-coll-topic">{copy.h1}</h1>
+                  <p className="ed-lede">{copy.lede}</p>
+                  <p className="ed-lede">
+                    {copy.start.before}<a className="ed-link" href={localePath(locale, `/blog/${copy.start.slug}`)}>{copy.start.quote}</a>{copy.start.after} {copy.start.dek}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h1><span aria-hidden="true" className="ed-coll-hash">#</span>{tag.label}</h1>
+                  <p className="ed-lede">
+                    {tag.articles.length} stories from the journal share this topic, across{' '}
+                    {categories.length === 1 ? 'one shelf' : `${categories.length} shelves`}.
+                  </p>
+                </>
+              )}
             </div>
           </div>
           <ul className="ed-rail ed-coll-meta" aria-label="Shelves these stories sit on">

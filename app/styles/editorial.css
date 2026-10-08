@@ -1798,6 +1798,8 @@ ul.ed-rail { list-style: none; margin: 0; }
   max-width: 16ch;
 }
 .ed-coll-hash { color: var(--c); margin-right: 0.06em; }
+/* An indexable tag page names its topic in a sentence ("Stories about puzzle games"), so it runs smaller. */
+.ed-coll-head h1.ed-coll-topic { font-size: clamp(2.2rem, 1.2rem + 3.4vw, 4.4rem); line-height: 1.04; max-width: 20ch; overflow-wrap: break-word; }
 .ed-coll-head .ed-lede { margin-top: 20px; }
 .ed-coll-slab {
   display: grid;

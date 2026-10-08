@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { getTagPages } from '../journal';
-import { journalTextTranslations } from './public-dynamic';
+import { tagPageCopy } from './journal-tags';
 import type { TranslatedLocale } from './locales';
 
 // Search snippets are concise editorial summaries. The complete translated page,
@@ -112,38 +111,11 @@ const copy: Record<TranslatedLocale, Record<string, Snippet>> = {
     '/support': { description: 'OutBrickの操作、デイリーパズル、購入の復元などのよくある質問を確認できます。解決しない場合の問い合わせ先もご案内します。' },
   },
 };
-const distinctTags: Record<TranslatedLocale, Record<string,string>> = {
-  fr: { 'gaming-habits':'habitudes de jeu', 'player-habits':'habitudes des joueurs' },
-  de: { 'gaming-habits':'Spielgewohnheiten', 'player-habits':'Gewohnheiten der Spieler' },
-  es: { 'gaming-habits':'hábitos de juego', 'player-habits':'hábitos de los jugadores', 'mobile-games':'juegos móviles', 'mobile-gaming':'jugar en el móvil' },
-  ja: { 'mobile-games':'モバイルゲーム', 'mobile-gaming':'モバイルで遊ぶこと' },
-  'pt-BR': {
-    'accessibility':'acessibilidade em jogos', 'brain-training':'psicologia dos quebra-cabeças',
-    'colour-blindness':'pistas de cor e daltonismo', 'difficulty-design':'curvas de dificuldade',
-    'game-design':'design de jogos', 'game-craft':'técnicas de criação de jogos', 'game-development':'desenvolvimento de jogos',
-    'games-for-seniors':'jogos para pessoas mais velhas', 'gamification':'mecânicas de gamificação',
-    'inclusive-design':'design inclusivo', 'mobile-design':'jogos de quebra-cabeça no celular',
-    'mobile-games':'jogos para celular', 'puzzle-games-research':'pesquisa sobre quebra-cabeças',
-    'short-sessions':'partidas curtas', 'well-being':'bem-estar ao jogar',
-    'gaming-habits':'hábitos de jogo', 'player-habits':'hábitos dos jogadores', 'mobile-gaming':'jogos mobile',
-  },
-};
-
 export function publicMetadataSnippet(path: string, locale: TranslatedLocale): Snippet | undefined {
   if (path.startsWith('/blog/tag/')) {
-    const slug=path.split('/')[3];
-    const tag=getTagPages().find(item=>item.slug===slug);
-    if(!tag)return;
-    const label=distinctTags[locale][slug] ?? journalTextTranslations(locale)[tag.label] ?? tag.label;
-    const n=tag.articles.length;
-  const snippets={
-      fr: { title:`${label} : articles — Journal OutBrick`, description:`${n} articles du journal OutBrick : ${label}. Idées et expériences de jeu, avec des sources pour les affirmations de recherche.` },
-      de: { title:`${label}: Artikel — OutBrick-Journal`, description:`${n} Artikel im OutBrick-Journal zu ${label}. Entdecken Sie Ideen und Spielerfahrungen; Forschungsaussagen nennen ihre Quellen.` },
-    es: { title:`${label}: artículos — Diario OutBrick`, description:`${n} artículos del diario de OutBrick sobre ${label}. Ideas y experiencias de juego, con fuentes para las afirmaciones de investigación.` },
-    ja: { title:`「${label}」の記事 — OutBrickジャーナル`, description:`${label}に関するOutBrickジャーナルの記事${n}本。遊びやデザインの考え方を探ります。研究に関する主張は出典を示しています。` },
-    'pt-BR': { title:`${label}: artigos — Diário OutBrick`, description:`${n} artigos do diário do OutBrick sobre ${label}. Ideias e experiências de jogo, com fontes para afirmações de pesquisa.` },
-    };
-    return snippets[locale];
+    // Title, snippet and heading for tag pages live in one place, for every language.
+    const tag=tagPageCopy(path.split('/')[3]??'',locale);
+    return tag ? { title: tag.title, description: tag.description } : undefined;
   }
   return copy[locale][path];
 }

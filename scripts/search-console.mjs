@@ -93,9 +93,18 @@ console.log(`Search Console report for ${site}\n`);
 
 const { sitemap: sitemaps = [] } = await call('GET', `${sitePath}/sitemaps`);
 console.log('Sitemaps');
-for (const s of sitemaps) {
+const describe = (s, indent) => {
   const counts = (s.contents ?? []).map((c) => `${c.type}: ${c.submitted} submitted`).join(', ');
-  console.log(`  ${s.path}  last read ${s.lastDownloaded ?? 'never'}  errors ${s.errors ?? 0}  warnings ${s.warnings ?? 0}  ${counts}`);
+  console.log(`${indent}${s.path}  last read ${s.lastDownloaded ?? 'never'}  errors ${s.errors ?? 0}  warnings ${s.warnings ?? 0}  ${counts}`);
+};
+for (const s of sitemaps) {
+  describe(s, '  ');
+  // /sitemap.xml is an index of per-section sitemaps (scripts/postbuild.mjs); list each child,
+  // so a section that stops being read or indexed shows up on its own line.
+  if (s.isSitemapsIndex) {
+    const { sitemap: children = [] } = await call('GET', `${sitePath}/sitemaps?sitemapIndex=${encodeURIComponent(s.path)}`);
+    for (const child of children) describe(child, '    ');
+  }
 }
 if (!sitemaps.length) console.log('  none — run `submit`');
 

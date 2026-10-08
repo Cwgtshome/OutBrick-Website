@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../../../../editorial-shell';
 import { siteUrl } from '../../../../../lib/site';
-import { categoryPath, getShelf, getShelves, getTagPages } from '../../../../../lib/journal';
+import { categoryPath, getIndexedTagPages, getShelf, getShelves } from '../../../../../lib/journal';
 import { breadcrumbData, collectionData, FollowJournal, StoryRow } from '../../journal-kit';
 
 type CategoryPageProps = { params: Promise<{ category: string }> };
@@ -54,7 +54,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const { shelf, path, description } = copy;
   const others = getShelves().filter((other) => other.slug !== shelf.slug);
   const onShelf = new Set(shelf.articles.map((article) => article.slug));
-  const tags = getTagPages()
+  // Only indexable topics (lib/journal.ts MIN_INDEXED_TAG) are offered as navigation.
+  const tags = getIndexedTagPages()
     .map((tag) => ({ ...tag, here: tag.articles.filter((article) => onShelf.has(article.slug)).length }))
     .filter((tag) => tag.here > 0)
     .sort((a, b) => b.here - a.here || a.label.localeCompare(b.label))

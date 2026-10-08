@@ -92,6 +92,30 @@ export function getTagPages(): Tag[] {
   return getTags().filter((tag) => tag.articles.length >= MIN_TAG_PAGE);
 }
 
+/**
+ * A tag page is indexable only when it gathers at least this many stories. Thinner tag pages
+ * still exist (an article's tag chip leads to one) but carry `noindex, follow`, stay out of
+ * every sitemap and are not offered as "related topics" or "topics on this shelf".
+ *
+ * Why: Search Console (8 October 2026) reported tag pages as most of the site's "Crawled –
+ * currently not indexed" URLs, and 402 of the sitemap's 1,272 URLs were tag pages. Every
+ * article is published in all six languages (postbuild asserts complete translations), so a
+ * tag has the same number of stories in every locale and this one threshold applies to each.
+ * Indexable tag pages get a localized introduction built from their own stories
+ * (lib/i18n/journal-tags.ts). See "Search Console follow-up" in docs/CURRENT-STATUS.md.
+ */
+export const MIN_INDEXED_TAG = 3;
+
+/** Whether a tag page (already ≥ MIN_TAG_PAGE stories) is worth indexing. */
+export function isIndexedTag(tag: Tag): boolean {
+  return tag.articles.length >= MIN_INDEXED_TAG;
+}
+
+/** The tag pages search engines are told about and the journal promotes as navigation. */
+export function getIndexedTagPages(): Tag[] {
+  return getTagPages().filter(isIndexedTag);
+}
+
 /** Where a tag leads: its own page, or a search for it when one story is all it has. */
 export function tagHref(tag: string): string {
   const slug = slugify(tag);

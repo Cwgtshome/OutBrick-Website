@@ -1,7 +1,8 @@
 import { articles, authors } from '../blog';
 import { getJob } from '../business';
 import { getMascotStory } from '../mascots';
-import { getShelf, getTagPages } from '../journal';
+import { getShelf } from '../journal';
+import { tagPageCopy } from './journal-tags';
 import { journalUi, localizeArticle } from './blog';
 import type { TranslatedLocale } from './locales';
 
@@ -23,11 +24,11 @@ export function journalTextTranslations(locale: TranslatedLocale): Record<string
   return map;
 }
 const phrases = {
- fr: { journal:'Le journal OutBrick', author:(name:string)=>`${name}, auteur du journal OutBrick`, count:(n:number)=>`${n} articles dans le journal OutBrick.`, remote:(title:string)=>`${title} — emploi à distance chez OutBrick`, collection:(label:string)=>`${label} — Le journal OutBrick`, tag:(label:string)=>`Articles sur « ${label} » — Le journal OutBrick`, cited:(n:number)=>`${n} articles du journal OutBrick ; chaque affirmation issue de la recherche est sourcée.`, tagDesc:(n:number,label:string,titles:string)=>`${n} articles du journal OutBrick sur ${label}, dont ${titles}. Chaque affirmation issue de la recherche est sourcée.` },
- de: { journal:'Das OutBrick-Journal', author:(name:string)=>`${name}, Autor beim OutBrick-Journal`, count:(n:number)=>`${n} Artikel im OutBrick-Journal.`, remote:(title:string)=>`${title} — Remote-Stelle bei OutBrick`, collection:(label:string)=>`${label} — Das OutBrick-Journal`, tag:(label:string)=>`Artikel zu „${label}“ — Das OutBrick-Journal`, cited:(n:number)=>`${n} Artikel aus dem OutBrick-Journal; jede Forschungsaussage ist belegt.`, tagDesc:(n:number,label:string,titles:string)=>`${n} Artikel im OutBrick-Journal über ${label}, darunter ${titles}. Jede Forschungsaussage ist belegt.` },
- es: { journal:'El diario de OutBrick', author:(name:string)=>`${name}, autor del diario de OutBrick`, count:(n:number)=>`${n} artículos en el diario de OutBrick.`, remote:(title:string)=>`${title} — empleo a distancia en OutBrick`, collection:(label:string)=>`${label} — El diario de OutBrick`, tag:(label:string)=>`Artículos sobre «${label}» — El diario de OutBrick`, cited:(n:number)=>`${n} artículos del diario de OutBrick; cada afirmación basada en investigaciones cita su fuente.`, tagDesc:(n:number,label:string,titles:string)=>`${n} artículos del diario de OutBrick sobre ${label}, incluidos ${titles}. Cada afirmación basada en investigaciones cita su fuente.` },
- ja: { journal:'OutBrickジャーナル', author:(name:string)=>`${name} — OutBrickジャーナルの著者`, count:(n:number)=>`OutBrickジャーナルの記事${n}本。`, remote:(title:string)=>`${title} — OutBrickのリモート求人`, collection:(label:string)=>`${label} — OutBrickジャーナル`, tag:(label:string)=>`「${label}」の記事 — OutBrickジャーナル`, cited:(n:number)=>`OutBrickジャーナルの記事${n}本。研究に関する主張はすべて出典を示しています。`, tagDesc:(n:number,label:string,titles:string)=>`${label}に関するOutBrickジャーナルの記事${n}本。${titles}などを掲載しています。研究に関する主張はすべて出典を示しています。` },
- 'pt-BR': { journal:'Blog da OutBrick', author:(name:string)=>`${name}, autor(a) do blog da OutBrick`, count:(n:number)=>`${n} artigos no blog da OutBrick.`, remote:(title:string)=>`${title} — vaga remota na OutBrick`, collection:(label:string)=>`${label} — Blog da OutBrick`, tag:(label:string)=>`Artigos sobre ${label} — Blog da OutBrick`, cited:(n:number)=>`${n} artigos no blog da OutBrick; toda afirmação baseada em pesquisa tem sua fonte.`, tagDesc:(n:number,label:string,titles:string)=>`${n} artigos do blog da OutBrick sobre ${label}, incluindo ${titles}. Toda afirmação baseada em pesquisa tem sua fonte.` },
+ fr: { journal:'Le journal OutBrick', author:(name:string)=>`${name}, auteur du journal OutBrick`, count:(n:number)=>`${n} articles dans le journal OutBrick.`, remote:(title:string)=>`${title} — emploi à distance chez OutBrick`, collection:(label:string)=>`${label} — Le journal OutBrick`, cited:(n:number)=>`${n} articles du journal OutBrick ; chaque affirmation issue de la recherche est sourcée.` },
+ de: { journal:'Das OutBrick-Journal', author:(name:string)=>`${name}, Autor beim OutBrick-Journal`, count:(n:number)=>`${n} Artikel im OutBrick-Journal.`, remote:(title:string)=>`${title} — Remote-Stelle bei OutBrick`, collection:(label:string)=>`${label} — Das OutBrick-Journal`, cited:(n:number)=>`${n} Artikel aus dem OutBrick-Journal; jede Forschungsaussage ist belegt.` },
+ es: { journal:'El diario de OutBrick', author:(name:string)=>`${name}, autor del diario de OutBrick`, count:(n:number)=>`${n} artículos en el diario de OutBrick.`, remote:(title:string)=>`${title} — empleo a distancia en OutBrick`, collection:(label:string)=>`${label} — El diario de OutBrick`, cited:(n:number)=>`${n} artículos del diario de OutBrick; cada afirmación basada en investigaciones cita su fuente.` },
+ ja: { journal:'OutBrickジャーナル', author:(name:string)=>`${name} — OutBrickジャーナルの著者`, count:(n:number)=>`OutBrickジャーナルの記事${n}本。`, remote:(title:string)=>`${title} — OutBrickのリモート求人`, collection:(label:string)=>`${label} — OutBrickジャーナル`, cited:(n:number)=>`OutBrickジャーナルの記事${n}本。研究に関する主張はすべて出典を示しています。` },
+ 'pt-BR': { journal:'Blog da OutBrick', author:(name:string)=>`${name}, autor(a) do blog da OutBrick`, count:(n:number)=>`${n} artigos no blog da OutBrick.`, remote:(title:string)=>`${title} — vaga remota na OutBrick`, collection:(label:string)=>`${label} — Blog da OutBrick`, cited:(n:number)=>`${n} artigos no blog da OutBrick; toda afirmação baseada em pesquisa tem sua fonte.` },
 };
 export function dynamicPageCopy(path:string,locale:TranslatedLocale,t:(text:string)=>string): {title:string;description:string}|undefined {
   const p=phrases[locale];
@@ -50,9 +51,7 @@ export function dynamicPageCopy(path:string,locale:TranslatedLocale,t:(text:stri
     return {title:p.collection(label),description:`${t(shelf.note)} ${p.cited(shelf.articles.length)}`};
   }
   if(path.startsWith('/blog/tag/')) {
-    const tag=getTagPages().find(tag=>tag.slug===path.split('/')[3]);if(!tag)return;
-    const label=journalTextTranslations(locale)[tag.label]??t(tag.label);
-    const titles=tag.articles.slice(0,2).map(a=>`「${localizeArticle(a.slug,locale).title}」`).join(locale==='ja'?'、':' · ');
-    return {title:p.tag(label),description:p.tagDesc(tag.articles.length,label,titles)};
+    const tag=tagPageCopy(path.split('/')[3]??'',locale);if(!tag)return;
+    return {title:tag.title,description:tag.description};
   }
 }

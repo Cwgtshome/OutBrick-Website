@@ -1,7 +1,8 @@
 // Runs after `vinext build` (see package.json "build"). Writes, into dist/client:
 //
-//   sitemap.xml   — every indexable prerendered page, derived from the build output itself, with
-//                   the informative images each page shows (Google image sitemap extension)
+//   sitemap.xml   — a sitemap index of sitemap-{pages,journal}-<locale>.xml, which list every
+//                   indexable prerendered page, derived from the build output itself, with the
+//                   informative images each page shows (Google image sitemap extension)
 //   feed.xml      — RSS 2.0 for the journal, from lib/blog.ts
 //   llms.txt      — a plain-Markdown map of the site for AI assistants (llmstxt.org)
 //   llms-full.txt — the same, plus the full text of every journal article
@@ -241,10 +242,32 @@ const entries = pages.map((page) => {
 // Home first, then by path, so diffs between builds stay readable.
 entries.sort((a, b) => (a.loc === `${siteUrl}/` ? -1 : b.loc === `${siteUrl}/` ? 1 : a.loc.localeCompare(b.loc)));
 
-const sitemap = [
+// The sitemap is an index (/sitemap.xml, the address robots.txt and Search Console know) of one
+// child sitemap per section and language, so Search Console reports indexing per section:
+//   sitemap-pages-<locale>.xml    the home page, the game, help, legal and company pages
+//   sitemap-journal-<locale>.xml  the journal: its index, articles, shelves and indexable tags
+// Each child keeps the image entries and the hreflang alternates each page declares. A URL is
+// in exactly one child. Readers that need every URL (IndexNow, the audits) follow the index
+// with scripts/lib/sitemap.mjs; netlify/functions/deploy-succeeded.mjs does the same live.
+const sectionOf = (loc) => {
+  const route = new URL(loc).pathname;
+  const m = route.match(/^\/(fr|de|es|ja|pt-BR)(\/.*)?$/);
+  const locale = m ? m[1] : 'en';
+  const rest = m ? m[2] ?? '/' : route;
+  return `${/^\/blog(\/|$)/.test(rest) ? 'journal' : 'pages'}-${locale}`;
+};
+const sectionOrder = ['en', ...translatedLocales].flatMap((locale) => [`pages-${locale}`, `journal-${locale}`]);
+const sections = new Map(sectionOrder.map((key) => [key, []]));
+for (const e of entries) {
+  const key = sectionOf(e.loc);
+  if (!sections.has(key)) throw new Error(`[postbuild] no sitemap section for ${e.loc} (${key})`);
+  sections.get(key).push(e);
+}
+
+const urlset = (list) => [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
-  ...entries.map((e) => {
+  ...list.map((e) => {
     const alternates = e.alternates.map((a) => `\n    <xhtml:link rel="alternate" hreflang="${xmlEscape(a.lang)}" href="${xmlEscape(a.href)}"/>`).join('');
     const images = e.images.map((src) => `\n    <image:image><image:loc>${xmlEscape(src)}</image:loc></image:image>`).join('');
     const children = alternates + images;
@@ -253,8 +276,25 @@ const sitemap = [
   '</urlset>',
   '',
 ].join('\n');
-fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap);
-console.log(`[postbuild] sitemap.xml: ${entries.length} URLs, ${entries.reduce((n, e) => n + e.images.length, 0)} images`);
+
+const children = [];
+for (const [key, list] of sections) {
+  if (!list.length) continue;
+  const file = `sitemap-${key}.xml`;
+  fs.writeFileSync(path.join(distDir, file), urlset(list));
+  const lastmod = list.map((e) => e.lastmod).filter(Boolean).reduce((max, d) => (d > max ? d : max), '');
+  children.push({ loc: `${siteUrl}/${file}`, lastmod, count: list.length, images: list.reduce((n, e) => n + e.images.length, 0) });
+}
+const sitemapIndex = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  ...children.map((c) => `  <sitemap><loc>${xmlEscape(c.loc)}</loc>${c.lastmod ? `<lastmod>${c.lastmod}</lastmod>` : ''}</sitemap>`),
+  '</sitemapindex>',
+  '',
+].join('\n');
+fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemapIndex);
+console.log(`[postbuild] sitemap.xml: index of ${children.length} sitemaps, ${entries.length} URLs, ${entries.reduce((n, e) => n + e.images.length, 0)} images`);
+for (const c of children) console.log(`[postbuild]   ${c.loc.slice(siteUrl.length + 1)}: ${c.count} URLs, ${c.images} images`);
 
 // Every article in lib/blog.ts should have been prerendered; say so loudly if one was not.
 const builtRoutes = new Set(listHtmlFiles().map(fileToRoute));
@@ -567,7 +607,7 @@ const llms = [
   `- [Full text of the journal](${siteUrl}/llms-full.txt): every article in plain Markdown`,
   `- [RSS feed](${siteUrl}/feed.xml): every journal article, newest first`,
   `- [Release notes RSS](${siteUrl}/whats-new/feed.xml): every OutBrick update's App Store notes, newest first`,
-  `- [Sitemap](${siteUrl}/sitemap.xml): every indexable URL`,
+  `- [Sitemap](${siteUrl}/sitemap.xml): an index of per-section, per-language sitemaps listing every indexable URL`,
   `- [OutBrick on the App Store](${appStoreUrl})`,
   '',
 ].join('\n');

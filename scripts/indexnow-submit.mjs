@@ -1,31 +1,22 @@
 // Tell IndexNow (Bing, Yandex, Seznam, Naver…) about every URL in the sitemap.
 //
 //   node scripts/indexnow-submit.mjs            # read the live sitemap, submit
-//   node scripts/indexnow-submit.mjs --local    # read dist/client/sitemap.xml instead
+//   node scripts/indexnow-submit.mjs --local    # read dist/client/sitemap.xml (and its children) instead
 //   node scripts/indexnow-submit.mjs --dry-run  # print what would be sent, send nothing
 //
 // Run it AFTER a deploy: the engines fetch the key file from keyLocation to verify the
 // submission, so the key file has to be live before the POST goes out.
 
-import fs from 'node:fs';
-import path from 'node:path';
-import { distDir, siteUrl } from './lib/pages.mjs';
+import { siteUrl } from './lib/pages.mjs';
+import { loadLive, loadLocal, sitemapUrls } from './lib/sitemap.mjs';
 
 const KEY = '907d2eae112ce8af8b9eff3298561501';
 const host = new URL(siteUrl).host;
 const keyLocation = `${siteUrl}/${KEY}.txt`;
 const args = new Set(process.argv.slice(2));
 
-async function sitemapXml() {
-  if (args.has('--local')) return fs.readFileSync(path.join(distDir, 'sitemap.xml'), 'utf8');
-  const res = await fetch(`${siteUrl}/sitemap.xml`);
-  if (!res.ok) throw new Error(`GET ${siteUrl}/sitemap.xml -> ${res.status}`);
-  return res.text();
-}
-
-const urlList = [...(await sitemapXml()).matchAll(/<loc>([^<]+)<\/loc>/g)]
-  .map((m) => m[1].replace(/&amp;/g, '&'))
-  .filter((u) => new URL(u).host === host);
+// /sitemap.xml is an index of per-section sitemaps; sitemapUrls follows it to every page.
+const urlList = (await sitemapUrls(args.has('--local') ? loadLocal : loadLive)).filter((u) => new URL(u).host === host);
 
 if (!urlList.length) throw new Error('No URLs found in the sitemap.');
 

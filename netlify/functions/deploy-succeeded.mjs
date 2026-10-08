@@ -1,10 +1,10 @@
 // Netlify runs a function named `deploy-succeeded` by itself after every successful deploy
 // (an "event-triggered function" — nothing calls it, and it answers no public route).
 //
-// It does what `pnpm indexnow` does by hand: read the live sitemap and hand every URL to
-// IndexNow, which shares it with Bing, Yandex, Seznam, Naver and Yep. Bing's index is also
-// what ChatGPT search, Copilot and DuckDuckGo draw on, so this is the fastest way for a new
-// or changed page to reach them.
+// It does what `pnpm indexnow` does by hand: read the live sitemap (an index, followed to each
+// child sitemap) and hand every URL to IndexNow, which shares it with Bing, Yandex, Seznam,
+// Naver and Yep. Bing's index is also what ChatGPT search, Copilot and DuckDuckGo draw on, so
+// this is the fastest way for a new or changed page to reach them.
 //
 // Google has no equivalent: it retired its sitemap "ping" endpoint in 2023 and its Indexing
 // API is only for job postings and livestreams. Google finds changes through the sitemap
@@ -33,12 +33,8 @@ export const handler = async (event) => {
   }
 
   try {
-    const res = await fetch(`${SITE}/sitemap.xml`, { headers: { 'cache-control': 'no-cache' } });
-    if (!res.ok) throw new Error(`GET /sitemap.xml -> ${res.status}`);
-    const xml = await res.text();
-    const urlList = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
-      .map((m) => m[1].replace(/&amp;/g, '&'))
-      .filter((u) => new URL(u).host === HOST);
+    const urlList = (await sitemapPageUrls()).filter((u) => new URL(u).host === HOST);
+    if (!urlList.length) throw new Error('no page URLs in the sitemap');
     // The RSS feed changes whenever a post does; include it so feed readers used by
     // search and AI tools pick it up too.
     urlList.push(`${SITE}/feed.xml`);
@@ -59,6 +55,31 @@ export const handler = async (event) => {
   await submitToSearchConsole();
   return { statusCode: 200, body: 'ok' };
 };
+
+// ---------------------------------------------------------------------------------------
+// The sitemap: /sitemap.xml is a <sitemapindex> of per-section, per-language sitemaps
+// (sitemap-pages-<locale>.xml, sitemap-journal-<locale>.xml; see scripts/postbuild.mjs). Every
+// page URL is in a child, so follow the index. A plain <urlset> (an older deploy) still works.
+// The same logic lives in scripts/lib/sitemap.mjs; a function is bundled on its own.
+
+const decodeXml = (s) => s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+
+async function getXml(url) {
+  const res = await fetch(url, { headers: { 'cache-control': 'no-cache' } });
+  if (!res.ok) throw new Error(`GET ${new URL(url).pathname} -> ${res.status}`);
+  return res.text();
+}
+
+async function sitemapPageUrls() {
+  const root = await getXml(`${SITE}/sitemap.xml`);
+  const children = /<sitemapindex\b/.test(root)
+    ? [...root.matchAll(/<sitemap>\s*<loc>([^<]+)<\/loc>/g)].map((m) => decodeXml(m[1].trim())).filter((u) => new URL(u).host === HOST)
+    : null;
+  const documents = children ? await Promise.all(children.map(getXml)) : [root];
+  const urls = new Set();
+  for (const xml of documents) for (const m of xml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>/g)) urls.add(decodeXml(m[1].trim()));
+  return [...urls];
+}
 
 // ---------------------------------------------------------------------------------------
 // Google Search Console and Bing Webmaster Tools, when their keys are set (see the headers of

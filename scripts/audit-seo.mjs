@@ -7,7 +7,7 @@
 // noindex pages, get only the checks that still matter for them (links, JSON-LD, images).
 // Structured data is checked per type against Google's documentation by
 // scripts/lib/structured-data-rules.mjs. After the pages, the site-wide files are checked:
-// sitemap.xml (with its image entries), feed.xml, robots.txt, llms.txt, security.txt and the
+// sitemap.xml (an index) and its child sitemaps (with their image and hreflang entries), feed.xml, robots.txt, llms.txt, security.txt and the
 // web app manifest. Exit code is 1 when any error-level finding exists; CI runs this after
 // every build (.github/workflows/checks.yml). A "note" is printed but never fails the run.
 
@@ -312,23 +312,60 @@ function fileIssues(rel, check) {
 
 const indexableUrls = new Set(report.filter((p) => p.kind === 'indexable').map((p) => routeToUrl(p.route)));
 
+// /sitemap.xml is a sitemap index; each child is a urlset for one section in one language
+// (scripts/postbuild.mjs). Together the children list every indexable page exactly once.
+const sitemapChildren = [];
 fileIssues('sitemap.xml', (xml, err) => {
   xmlProblems(xml).forEach((p) => err(`not well-formed: ${p}`));
-  if (!xml.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')) err('missing the sitemap namespace');
-  if (xml.includes('<image:') && !xml.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"')) err('image entries without the image namespace');
-  const locs = [...xml.matchAll(/<url><loc>([^<]+)<\/loc>/g)].map((m) => decodeEntities(m[1]));
-  if (locs.length > 50000) err(`${locs.length} URLs (a sitemap holds at most 50,000)`);
-  for (const loc of locs) if (!indexableUrls.has(loc)) err(`lists ${loc}, which is not an indexable page`);
-  for (const u of indexableUrls) if (!locs.includes(u)) err(`does not list indexable page ${u}`);
-  for (const [, loc] of xml.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)) {
-    const u = new URL(decodeEntities(loc));
-    if (u.host !== siteHost || !resolves(u.pathname)) err(`image ${loc} does not exist`);
+  if (!/<sitemapindex xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9"/.test(xml)) err('not a sitemap index in the sitemap namespace');
+  for (const [block] of xml.matchAll(/<sitemap>[\s\S]*?<\/sitemap>/g)) {
+    const loc = decodeEntities(block.match(/<loc>([^<]+)<\/loc>/)?.[1] ?? '');
+    let u;
+    try { u = new URL(loc); } catch { err(`child sitemap ${loc} is not an absolute URL`); continue; }
+    if (u.host !== siteHost) err(`child sitemap ${loc} is on another host`);
+    else if (!/^\/sitemap-[a-z]+-[A-Za-z-]+\.xml$/.test(u.pathname)) err(`child sitemap ${loc} is not a sitemap-<section>-<locale>.xml`);
+    else sitemapChildren.push(u.pathname.slice(1));
+    const lastmod = block.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
+    if (lastmod && !/^\d{4}-\d{2}-\d{2}/.test(lastmod)) err(`child lastmod "${lastmod}" is not a W3C datetime`);
   }
-  for (const [, d] of xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)) if (!/^\d{4}-\d{2}-\d{2}/.test(d)) err(`lastmod "${d}" is not a W3C datetime`);
-  for (const [block] of xml.matchAll(/<url>[\s\S]*?<\/url>/g)) {
-    if ((block.match(/<image:image>/g) ?? []).length > 1000) err('more than 1,000 images on one URL');
-  }
+  if (!sitemapChildren.length) err('lists no child sitemaps');
+  if (sitemapChildren.length > 50000) err(`${sitemapChildren.length} children (an index holds at most 50,000)`);
 });
+
+const listed = new Map();
+for (const rel of sitemapChildren) {
+  fileIssues(rel, (xml, err) => {
+    xmlProblems(xml).forEach((p) => err(`not well-formed: ${p}`));
+    if (!xml.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')) err('missing the sitemap namespace');
+    if (xml.includes('<image:') && !xml.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"')) err('image entries without the image namespace');
+    if (xml.includes('<xhtml:') && !xml.includes('xmlns:xhtml="http://www.w3.org/1999/xhtml"')) err('hreflang entries without the xhtml namespace');
+    const locs = [...xml.matchAll(/<url><loc>([^<]+)<\/loc>/g)].map((m) => decodeEntities(m[1]));
+    if (locs.length > 50000) err(`${locs.length} URLs (a sitemap holds at most 50,000)`);
+    if (Buffer.byteLength(xml) > 50 * 1024 * 1024) err('larger than 50 MB uncompressed');
+    for (const loc of locs) {
+      if (!indexableUrls.has(loc)) err(`lists ${loc}, which is not an indexable page`);
+      if (listed.has(loc)) err(`lists ${loc}, already listed by ${listed.get(loc)}`);
+      listed.set(loc, rel);
+    }
+    for (const [, loc] of xml.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)) {
+      const u = new URL(decodeEntities(loc));
+      if (u.host !== siteHost || !resolves(u.pathname)) err(`image ${loc} does not exist`);
+    }
+    for (const [, href] of xml.matchAll(/<xhtml:link rel="alternate" hreflang="[^"]+" href="([^"]+)"\/>/g)) {
+      const u = new URL(decodeEntities(href));
+      if (u.host !== siteHost || !resolves(u.pathname)) err(`hreflang alternate ${href} does not exist`);
+    }
+    for (const [, d] of xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)) if (!/^\d{4}-\d{2}-\d{2}/.test(d)) err(`lastmod "${d}" is not a W3C datetime`);
+    for (const [block] of xml.matchAll(/<url>[\s\S]*?<\/url>/g)) {
+      if ((block.match(/<image:image>/g) ?? []).length > 1000) err('more than 1,000 images on one URL');
+    }
+  });
+}
+{
+  const missing = [...indexableUrls].filter((u) => !listed.has(u));
+  const issues = missing.map((u) => ({ level: 'error', msg: `no child sitemap lists indexable page ${u}` }));
+  report.push({ file: 'dist/client/sitemap-*.xml', route: '/sitemap-*.xml', kind: 'file', issues });
+}
 
 fileIssues('feed.xml', (xml, err) => {
   xmlProblems(xml).forEach((p) => err(`not well-formed: ${p}`));

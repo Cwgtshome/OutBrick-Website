@@ -10,7 +10,7 @@
 // IndexNow (scripts/indexnow-submit.mjs) already notifies Bing on each deploy without a key;
 // this adds the sitemap registration and the reports that only the Webmaster API gives.
 
-import { readFile } from 'node:fs/promises';
+import { loadLive, loadLocal, sitemapUrls } from './lib/sitemap.mjs';
 
 const site = 'https://www.outbrick.site/';
 const key = process.env.BING_WEBMASTER_API_KEY;
@@ -38,14 +38,14 @@ if (command === 'submit') {
   await call('POST', 'SubmitFeed', {}, { siteUrl: site, feedUrl: `${site}sitemap.xml` });
   console.log(`Submitted ${site}sitemap.xml`);
 
-  // Prefer the freshly built sitemap; fall back to the live one.
-  let xml;
+  // Prefer the freshly built sitemap; fall back to the live one. /sitemap.xml is an index of
+  // per-section sitemaps, and sitemapUrls follows it to every page URL.
+  let urls;
   try {
-    xml = await readFile(new URL('../dist/client/sitemap.xml', import.meta.url), 'utf8');
+    urls = await sitemapUrls(loadLocal);
   } catch {
-    xml = await (await fetch(`${site}sitemap.xml`)).text();
+    urls = await sitemapUrls(loadLive);
   }
-  const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   const quota = await call('GET', 'GetUrlSubmissionQuota', { siteUrl: site });
   const allowed = Math.min(urls.length, quota?.DailyQuota ?? urls.length);
   if (allowed) await call('POST', 'SubmitUrlBatch', {}, { siteUrl: site, urlList: urls.slice(0, allowed) });

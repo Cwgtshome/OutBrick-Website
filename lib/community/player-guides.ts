@@ -1,9 +1,14 @@
 import { currentGameCopy } from '../i18n/current-game.ts';
 import type { Locale } from '../i18n/locales.ts';
 
-/** Editorial team guides, checked against released 5.0.1 on 7 October 2026.
- * Keep future build screenshots and claims clearly separate. These are authored help,
- * never synthetic player questions or testimonials. */
+/** Editorial team guides, first checked against released 5.0.1 on 7 October 2026 and
+ * rechecked against released 5.1.1 (Slide & Match) and its App Store description on
+ * 8 October 2026. Keep future build screenshots and claims clearly separate. These are
+ * authored help, never synthetic player questions or testimonials.
+ *
+ * The community database holds a copy of each guide's opening post. After changing this
+ * file, run scripts/build-player-guide-seed.mts to write a NEW migration that updates the
+ * opening posts the team has not edited; applied migrations never change. */
 export const guideWords = {
   en: {
     label: 'Player guides',
@@ -20,7 +25,7 @@ export const guideWords = {
       'Which game version am I playing?',
     ],
     related: 'Continue reading',
-    checkpoint: 'Checked 7 October 2026 · released iOS 5.0.1',
+    checkpoint: 'Checked 8 October 2026 · released iOS 5.1.1 (Slide & Match)',
     hub: 'OutBrick player guide library',
     settings:
       'Open Settings, then the Accessibility tab. Try one adjustment at a time on a familiar board: colour-blind glyphs, high-contrast board, animation speed, announcement verbosity, left-handed tray and Hold to confirm swaps. Glyphs add a shape cue so colour is not the only clue. Use speed and verbosity to make changes easier to follow. Hold to confirm gives you time to check a direction before committing. Game settings also let you adjust music, sound effects and haptics. Character praise is visual text, without character vocalisations; VoiceOver announcements remain. Your iPhone’s own VoiceOver and Reduce Motion settings are separate from these game controls.',
@@ -44,7 +49,7 @@ export const guideWords = {
       'À quelle version est-ce que je joue ?',
     ],
     related: 'À lire ensuite',
-    checkpoint: 'Vérifié le 7 octobre 2026 · iOS 5.0.1 publié',
+    checkpoint: 'Vérifié le 8 octobre 2026 · iOS 5.1.1 publié (Glisse et aligne)',
     hub: 'Bibliothèque des guides OutBrick',
     settings:
       'Ouvrez Réglages, puis l’onglet Accessibilité. Essayez un réglage à la fois sur un tableau connu : symboles pour le daltonisme, contraste élevé, vitesse des animations, détail des annonces, outils pour gauchers et confirmation maintenue des échanges. Les symboles ajoutent un repère autre que la couleur. La vitesse et le détail des annonces aident à suivre les changements. La confirmation maintenue laisse le temps de vérifier la direction. Les réglages du jeu permettent aussi d’ajuster musique, effets sonores et vibrations. Les personnages gardent leurs animations et bulles, sans voix ; les annonces VoiceOver restent. VoiceOver et Réduire les animations de l’iPhone se règlent séparément.',
@@ -68,7 +73,7 @@ export const guideWords = {
       'Welche Spielversion spiele ich?',
     ],
     related: 'Weiterlesen',
-    checkpoint: 'Geprüft am 7. Oktober 2026 · veröffentlichtes iOS 5.0.1',
+    checkpoint: 'Geprüft am 8. Oktober 2026 · veröffentlichtes iOS 5.1.1 (Schieben und kombinieren)',
     hub: 'OutBrick-Spielanleitungen',
     settings:
       'Öffne Einstellungen und dann Bedienungshilfen. Probiere jeweils eine Änderung auf einem bekannten Brett: Symbole für Farbfehlsichtigkeit, hoher Kontrast, Animationstempo, Umfang der Ansagen, linkshändige Werkzeugleiste und Halten zum Bestätigen von Tauschaktionen. Symbole bieten Hinweise zusätzlich zur Farbe. Tempo und Ansagen helfen, Änderungen zu verfolgen. Halten zum Bestätigen gibt Zeit, die Richtung zu prüfen. Spieleinstellungen regeln auch Musik, Effekte und Haptik. Figuren behalten Animationen und Textblasen ohne eigene Stimmen; VoiceOver-Ansagen bleiben. VoiceOver und Bewegung reduzieren werden am iPhone separat eingestellt.',
@@ -92,7 +97,7 @@ export const guideWords = {
       '¿Qué versión estoy jugando?',
     ],
     related: 'Sigue leyendo',
-    checkpoint: 'Comprobado el 7 de octubre de 2026 · iOS 5.0.1 publicado',
+    checkpoint: 'Comprobado el 8 de octubre de 2026 · iOS 5.1.1 publicado (Desliza y combina)',
     hub: 'Biblioteca de guías OutBrick',
     settings:
       'Abre Ajustes y después Accesibilidad. Prueba un cambio cada vez en un tablero conocido: símbolos para daltonismo, contraste alto, velocidad de animación, detalle de los anuncios, herramientas para zurdos y mantener para confirmar intercambios. Los símbolos añaden una pista distinta del color. Velocidad y anuncios ayudan a seguir los cambios. Mantener para confirmar da tiempo para comprobar la dirección. Los ajustes del juego también permiten cambiar música, efectos y vibraciones. Los personajes conservan animaciones y bocadillos sin voces propias; los anuncios de VoiceOver siguen. VoiceOver y Reducir movimiento se configuran aparte en el iPhone.',
@@ -116,7 +121,7 @@ export const guideWords = {
       'どのバージョンを遊んでいますか？',
     ],
     related: 'あわせて読む',
-    checkpoint: '2026年10月7日確認 · 公開済みiOS 5.0.1',
+    checkpoint: '2026年10月8日確認 · 公開済みiOS 5.1.1（スライド＆マッチ）',
     hub: 'OutBrickプレイヤーガイド集',
     settings:
       '設定のアクセシビリティタブを開きます。慣れた盤面で1つずつ試してください：色覚対応の記号、高コントラスト、アニメーション速度、読み上げの詳しさ、左利き用のツール配置、長押しで交換を確定。記号は色以外の手がかりになります。速度と読み上げを調整すると変化を追いやすくなり、長押し確定では方向を確認できます。ゲーム設定では音楽・効果音・触覚も調整できます。仲間のアニメーションと吹き出しは残り、キャラクターの声はありません。VoiceOverの読み上げは残ります。iPhone自体のVoiceOverや視差効果を減らす設定は別です。',
@@ -139,7 +144,7 @@ export const guideWords = {
       'Qual versão do jogo estou usando?',
     ],
     related: 'Continue lendo',
-    checkpoint: 'Revisado em 7 de outubro de 2026 · iOS 5.0.1 lançado',
+    checkpoint: 'Revisado em 8 de outubro de 2026 · iOS 5.1.1 lançado (Deslize e combine)',
     hub: 'Biblioteca de guias do OutBrick',
     settings: 'Abra Ajustes e toque na aba Acessibilidade. Experimente uma opção de cada vez em um tabuleiro conhecido: símbolos para daltonismo, alto contraste, velocidade das animações, nível de detalhes das falas, bandeja para canhotos e confirmação de trocas ao manter pressionado. Os símbolos oferecem pistas além da cor. Ajuste a velocidade e os detalhes para acompanhar melhor as mudanças. A confirmação ao manter pressionado dá tempo para conferir a direção antes de trocar. Os ajustes do jogo também controlam música, efeitos sonoros e háptica. Os personagens continuam com animações e balões de texto, sem vozes; os anúncios do VoiceOver permanecem. VoiceOver e Reduzir Movimento do iPhone são ajustes separados.',
     journey: 'A Jornada tem 2.000 fases em 167 vilarejos. Um vilarejo completo tem doze tabuleiros; o último tem oito. O mapa é uma avenida móvel construída com blocos, formada por lugares diferentes e nove amigos. Encontre sua fase atual, abra-a, leia os objetivos e conclua-a para seguir. Tabuleiros já liberados permitem praticar e melhorar as estrelas. Vilarejo e capítulo são coisas diferentes: são doze tabuleiros por vilarejo e vinte por capítulo. Com VoiceOver, use a ação “Onde estou?” na Jornada para ouvir sua posição e o próximo objetivo, ou “Ir para minha próxima fase” para levar o foco até lá. Na Jornada, toque duas vezes com dois dedos para ouvir o guia; em um tabuleiro, o mesmo gesto pede uma dica.',
@@ -162,37 +167,37 @@ export type GuideKey = (typeof guideKeys)[number];
 const steps = {
   en: {
     first:
-      '1. Open your current level from the Journey. Read the goals and moves remaining before choosing a brick.\n2. Tap a brick, then an adjacent brick, or swipe toward that neighbour. Look for a line of at least three, or a special combination.\n3. Let the cascade finish, then read which goals remain. A swap that makes no match or special combination returns the bricks; it does not spend a move.\n4. Use a hint if you need a suggestion. When all displayed goals are met, the board finishes and the remaining moves add to your score.',
+      '1. Open your current level from the Journey. Read the goals and moves remaining before choosing a brick.\n2. Look for a brick that can go home: swipe it toward the gate of its colour. A brick swiped toward empty space stops where you let go.\n3. Swipe a brick into a neighbour to swap them and line up three or more of a colour. Read which goals remain after each move.\n4. Use a hint if you need one; hints name slides as well as swaps. When every goal is met the board finishes, and leftover moves become blasters for a bigger score.',
     voice:
-      '1. Turn on VoiceOver in your iPhone’s Accessibility settings, then open the game. Explore the board by touch or swipe between its elements.\n2. Listen to a brick’s kind, colour and state. Use the actions offered for that brick to choose a swap direction; activate a special when its action is offered.\n3. Listen to the move result before making another move. Try the Specials, Goals, Blockers and Gates rotors to find the information you need.\n4. A two-finger double tap on the board asks for a hint. The two-finger scrub opens Pause on a board; it does not silently abandon your attempt. Away from the board it dismisses the current screen.\n5. If you want an extra audio cue, try the optional Row sound action. If speech is too busy, adjust announcement verbosity. Ask in Accessibility with your level and the exact announcement if something is unclear.',
+      '1. Turn on VoiceOver in your iPhone’s Accessibility settings, then open the game. Explore the board by touch or swipe between its elements.\n2. Listen to a brick’s colour, shape and position. Its actions offer each slide and swap, such as “Slide left, out through the red gate”; activate a special when its action is offered.\n3. Listen to where the brick stopped and what went home before making another move. Try the Specials, Goals, Blockers and Gates rotors to find the information you need.\n4. A two-finger double tap on the board asks for a hint. The two-finger scrub opens Pause on a board; it does not silently abandon your attempt. Away from the board it dismisses the current screen.\n5. If you want an extra audio cue, try the optional Row sound action. If speech is too busy, adjust announcement verbosity. Ask in Accessibility with your level and the exact announcement if something is unclear.',
   },
   fr: {
     first:
-      '1. Ouvrez le niveau actuel dans le Voyage. Lisez les objectifs et les coups restants.\n2. Touchez une brique puis sa voisine, ou balayez vers celle-ci. Cherchez une ligne de trois ou une combinaison de briques spéciales.\n3. Attendez la fin de la cascade, puis relisez les objectifs. Un échange sans combinaison revient en place sans dépenser de coup.\n4. Demandez un indice si nécessaire. Une fois tous les objectifs atteints, les coups restants augmentent le score.',
+      '1. Ouvrez le niveau actuel dans le Voyage. Lisez les objectifs et les coups restants avant de choisir une brique.\n2. Cherchez une brique qui peut rentrer : faites-la glisser vers la porte de sa couleur. Glissée vers une case vide, une brique s’arrête là où vous la lâchez.\n3. Poussez une brique vers une voisine pour les échanger et alignez trois briques ou plus de même couleur. Relisez les objectifs restants après chaque coup.\n4. Demandez un indice si nécessaire ; les indices proposent aussi des glissements, pas seulement des échanges. Une fois tous les objectifs atteints, le plateau se termine et les coups restants deviennent des blasters qui augmentent le score.',
     voice:
-      '1. Activez VoiceOver dans l’accessibilité de l’iPhone. Explorez le tableau au toucher ou en balayant ses éléments.\n2. Écoutez le type, la couleur et l’état d’une brique. Utilisez ses actions pour choisir la direction de l’échange ou activer une brique spéciale.\n3. Écoutez le résultat avant le coup suivant. Essayez les rotors des briques spéciales, objectifs, obstacles et portes.\n4. Sur un tableau, le double toucher à deux doigts demande un indice ; le geste d’échappement à deux doigts ouvre Pause sans quitter la partie. Ailleurs, il ferme l’écran actuel.\n5. Essayez le son de ligne facultatif. Ajustez le détail des annonces si nécessaire. Pour une annonce confuse, indiquez le niveau et les mots exacts dans Accessibilité.',
+      '1. Activez VoiceOver dans l’accessibilité de l’iPhone. Explorez le plateau au toucher ou en balayant ses éléments.\n2. Écoutez la couleur, la forme et la position d’une brique. Ses actions proposent chaque glissement et chaque échange, par exemple « Faire glisser vers la gauche et sortir par la porte : rouge » ; activez une brique spéciale quand son action est proposée.\n3. Écoutez où la brique s’est arrêtée et ce qui est rentré avant le coup suivant. Essayez les rotors des briques spéciales, objectifs, obstacles et portes.\n4. Sur un plateau, le double toucher à deux doigts demande un indice ; le geste d’échappement à deux doigts ouvre Pause sans quitter la partie. Ailleurs, il ferme l’écran actuel.\n5. Essayez le son de ligne facultatif. Ajustez le détail des annonces si nécessaire. Pour une annonce confuse, indiquez le niveau et les mots exacts dans Accessibilité.',
   },
   de: {
     first:
-      '1. Öffne dein aktuelles Level auf der Reise. Lies Ziele und verbleibende Züge.\n2. Tippe einen Stein und dann seinen Nachbarn an oder wische zum Nachbarn. Suche eine Dreierreihe oder eine Kombination von Spezialsteinen.\n3. Warte auf die Kaskade und prüfe die übrigen Ziele. Ein Tausch ohne Kombination springt zurück und kostet keinen Zug.\n4. Fordere bei Bedarf einen Hinweis an. Sind alle Ziele erfüllt, erhöhen übrige Züge die Punktzahl.',
+      '1. Öffne dein aktuelles Level auf der Reise. Lies Ziele und verbleibende Züge, bevor du einen Stein wählst.\n2. Such einen Stein, der nach Hause kann: Wisch ihn zum Tor seiner Farbe. Ein Stein, den du zu einem freien Feld wischst, bleibt stehen, wo du loslässt.\n3. Wisch einen Stein in einen Nachbarn, um beide zu tauschen, und bring drei oder mehr einer Farbe in eine Reihe. Prüfe nach jedem Zug die übrigen Ziele.\n4. Fordere bei Bedarf einen Hinweis an; Hinweise nennen auch Schiebezüge, nicht nur Tauschzüge. Sind alle Ziele erfüllt, endet das Spielfeld, und übrige Züge werden zu Linienblastern für eine höhere Punktzahl.',
     voice:
-      '1. Aktiviere VoiceOver in den iPhone-Bedienungshilfen. Erkunde das Brett durch Berührung oder Wischen zwischen Elementen.\n2. Höre Art, Farbe und Zustand des Steins. Nutze seine angebotenen Aktionen für die Tauschrichtung oder zum Aktivieren eines Spezialsteins.\n3. Höre das Ergebnis vor dem nächsten Zug. Probiere die Rotoren für Spezialsteine, Ziele, Hindernisse und Tore.\n4. Auf dem Brett fordert der Doppeltipp mit zwei Fingern einen Hinweis an. Die Zickzackgeste mit zwei Fingern öffnet Pause, ohne den Versuch zu verlassen; außerhalb des Bretts schließt sie den Bildschirm.\n5. Probiere den freiwilligen Zeilenklang. Verringere bei Bedarf die Ansagen. Nenne bei unklaren Ansagen Level und genauen Wortlaut im Bereich Bedienungshilfen.',
+      '1. Aktiviere VoiceOver in den iPhone-Bedienungshilfen. Erkunde das Spielfeld durch Berührung oder Wischen zwischen Elementen.\n2. Höre Farbe, Form und Position des Steins. Seine Aktionen bieten jeden Schiebe- und Tauschzug an, etwa „Schieben nach links, hinaus durch das Tor: rot“; aktiviere einen Spezialstein, wenn seine Aktion angeboten wird.\n3. Höre vor dem nächsten Zug, wo der Stein stehen geblieben ist und was nach Hause gegangen ist. Probiere die Rotoren für Spezialsteine, Ziele, Hindernisse und Tore.\n4. Auf dem Spielfeld fordert der Doppeltipp mit zwei Fingern einen Hinweis an. Die Zickzackgeste mit zwei Fingern öffnet Pause, ohne den Versuch zu verlassen; außerhalb des Spielfelds schließt sie den Bildschirm.\n5. Probiere den freiwilligen Zeilenklang. Verringere bei Bedarf die Ansagen. Nenne bei unklaren Ansagen Level und genauen Wortlaut im Bereich Bedienungshilfen.',
   },
   es: {
     first:
-      '1. Abre el nivel actual desde el Viaje. Lee objetivos y movimientos restantes.\n2. Toca un ladrillo y después su vecino, o desliza hacia él. Busca una línea de tres o una combinación de especiales.\n3. Espera a la cascada y revisa los objetivos pendientes. Un intercambio sin combinación vuelve al sitio y no gasta movimiento.\n4. Pide una pista si hace falta. Al cumplir todos los objetivos, los movimientos restantes aumentan la puntuación.',
+      '1. Abre el nivel actual desde el Viaje. Lee los objetivos y los movimientos restantes antes de elegir un ladrillo.\n2. Busca un ladrillo que pueda volver a casa: deslízalo hacia la puerta de su color. Un ladrillo deslizado hacia un hueco se para donde lo sueltes.\n3. Empuja un ladrillo contra un vecino para cambiarlos y alinea tres o más de un color. Revisa los objetivos pendientes después de cada movimiento.\n4. Pide una pista si hace falta; las pistas también proponen deslizamientos, no solo intercambios. Al cumplir todos los objetivos, el tablero termina y los movimientos restantes se convierten en disparadores que aumentan la puntuación.',
     voice:
-      '1. Activa VoiceOver en Accesibilidad del iPhone. Explora el tablero al tacto o deslizando entre elementos.\n2. Escucha tipo, color y estado del ladrillo. Usa sus acciones para elegir dirección del intercambio o activar un especial.\n3. Escucha el resultado antes del siguiente movimiento. Prueba los rotores de especiales, objetivos, obstáculos y puertas.\n4. En el tablero, el doble toque con dos dedos pide una pista. El gesto de escape con dos dedos abre Pausa sin abandonar el intento; fuera del tablero cierra la pantalla.\n5. Prueba el sonido de fila opcional y ajusta el detalle de anuncios. Si algo no queda claro, comunica nivel y palabras exactas en Accesibilidad.',
+      '1. Activa VoiceOver en Accesibilidad del iPhone. Explora el tablero al tacto o deslizando entre elementos.\n2. Escucha el color, la forma y la posición del ladrillo. Sus acciones ofrecen cada deslizamiento e intercambio, como «Deslizar hacia la izquierda y salir por la puerta: rojo»; activa un especial cuando se ofrezca su acción.\n3. Antes del siguiente movimiento, escucha dónde se paró el ladrillo y qué volvió a casa. Prueba los rotores de especiales, objetivos, obstáculos y puertas.\n4. En el tablero, el doble toque con dos dedos pide una pista. El gesto de escape con dos dedos abre Pausa sin abandonar el intento; fuera del tablero cierra la pantalla.\n5. Prueba el sonido de fila opcional y ajusta el detalle de anuncios. Si algo no queda claro, comunica nivel y palabras exactas en Accesibilidad.',
   },
   ja: {
     first:
-      '1. Journeyから現在のレベルを開き、目標と残り手数を確認します。\n2. ブロックと隣のブロックを順にタップするか、隣に向かってスワイプします。3つの列や特殊ブロックの組み合わせを探します。\n3. 連鎖が終わってから残りの目標を確認します。マッチや特殊の組み合わせがない交換は元に戻り、手数を使いません。\n4. 必要ならヒントを求めます。すべての目標を達成すると、残り手数がスコアに加わります。',
+      '1. Journeyから現在のレベルを開き、ブロックを選ぶ前に目標と残り手数を確認します。\n2. おうちに帰せるブロックを探し、同じ色の門に向けてスワイプします。空いたマスへスワイプしたブロックは、指をはなした所で止まります。\n3. ブロックをとなりのブロックに向けてスワイプすると入れ替わります。同じ色を3つ以上並べましょう。1手ごとに残りの目標を確認します。\n4. 必要ならヒントを求めます。ヒントは入れ替えだけでなく、すべらせる手も教えてくれます。すべての目標を達成すると盤面が終わり、残りの手数はブラスターになってスコアを増やします。',
     voice:
-      '1. iPhoneのアクセシビリティ設定でVoiceOverを有効にします。触ったり要素間をスワイプしたりして盤面を調べます。\n2. ブロックの種類・色・状態を聞き、用意されたアクションで交換方向を選ぶか特殊ブロックを発動します。\n3. 次の操作の前に結果を聞きます。特殊・目標・障害物・ゲートのローターも試してください。\n4. 盤面の2本指ダブルタップはヒントを求めます。2本指のスクラブは挑戦を終了せずに一時停止を開き、盤面以外では画面を閉じます。\n5. 任意の行の音や読み上げの詳しさを調整できます。不明な読み上げはレベルと正確な言葉をアクセシビリティで報告してください。',
+      '1. iPhoneのアクセシビリティ設定でVoiceOverを有効にします。触ったり要素間をスワイプしたりして盤面を調べます。\n2. ブロックの色・形・位置を聞きます。アクションには、「左にすべらせて赤の門から出す」のように、すべらせる手と入れ替えがすべて並びます。特殊ブロックは、発動のアクションが出たときに使えます。\n3. 次の操作の前に、ブロックがどこで止まったか、何がおうちに帰ったかを聞きます。特殊・目標・障害物・門のローターも試してください。\n4. 盤面の2本指ダブルタップはヒントを求めます。2本指のスクラブは挑戦を終了せずに一時停止を開き、盤面以外では画面を閉じます。\n5. 任意の行の音や読み上げの詳しさを調整できます。不明な読み上げはレベルと正確な言葉をアクセシビリティで報告してください。',
   },
   'pt-BR': {
-    first: '1. Abra sua fase atual pela Jornada. Leia os objetivos e os movimentos restantes antes de escolher uma peça.\n2. Toque em uma peça e depois em uma vizinha, ou deslize em direção a ela. Procure uma linha de pelo menos três peças ou uma combinação especial.\n3. Espere a cascata terminar e confira os objetivos restantes. Uma troca que não forma combinação volta ao lugar e não gasta movimento.\n4. Peça uma dica se precisar. Quando todos os objetivos forem cumpridos, o tabuleiro termina e os movimentos restantes aumentam sua pontuação.',
-    voice: '1. Ative o VoiceOver nos ajustes de Acessibilidade do iPhone e abra o jogo. Explore o tabuleiro pelo toque ou deslizando entre os elementos.\n2. Ouça o tipo, a cor e o estado da peça. Use as ações disponíveis para escolher a direção da troca ou ativar uma peça especial.\n3. Ouça o resultado antes de fazer outro movimento. Experimente os rotores de Especiais, Objetivos, Bloqueios e Portões.\n4. Um toque duplo com dois dedos no tabuleiro pede uma dica. O gesto de esfregar com dois dedos abre a pausa sem abandonar sua tentativa; fora do tabuleiro, ele fecha a tela atual.\n5. Se quiser outra pista sonora, experimente a ação opcional de som da fileira. Ajuste o nível de detalhes dos anúncios se a fala ficar carregada. Se algo não estiver claro, informe a fase e o anúncio exato em Acessibilidade.',
+    first: '1. Abra sua fase atual pela Jornada. Leia os objetivos e as jogadas restantes antes de escolher um tijolo.\n2. Procure um tijolo que possa voltar para casa: deslize-o até o portão da cor dele. Um tijolo deslizado para um espaço vazio para onde você soltar.\n3. Empurre um tijolo contra um vizinho para trocar os dois e alinhe três ou mais da mesma cor. Confira os objetivos restantes depois de cada jogada.\n4. Peça uma dica se precisar; as dicas mostram deslizes, não só trocas. Quando todos os objetivos forem cumpridos, o tabuleiro termina e as jogadas restantes viram blasters para uma pontuação maior.',
+    voice: '1. Ative o VoiceOver nos ajustes de Acessibilidade do iPhone e abra o jogo. Explore o tabuleiro pelo toque ou deslizando entre os elementos.\n2. Ouça a cor, a forma e a posição do tijolo. As ações dele oferecem cada deslize e cada troca, como “Deslizar para a esquerda e sair pelo portão: vermelho”; ative uma peça especial quando a ação dela aparecer.\n3. Antes da próxima jogada, ouça onde o tijolo parou e o que voltou para casa. Experimente os rotores de Especiais, Objetivos, Bloqueios e Portões.\n4. Um toque duplo com dois dedos no tabuleiro pede uma dica. O gesto de esfregar com dois dedos abre a pausa sem abandonar sua tentativa; fora do tabuleiro, ele fecha a tela atual.\n5. Se quiser outra pista sonora, experimente a ação opcional de som da fileira. Ajuste o nível de detalhes dos anúncios se a fala ficar carregada. Se algo não estiver claro, informe a fase e o anúncio exato em Acessibilidade.',
   },
 } as const;
 export function playerGuides(locale: Locale) {

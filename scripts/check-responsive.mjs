@@ -7,15 +7,15 @@
 // are not indexed. The sweep scrolls each page to the bottom first, so lazy content and
 // scroll-driven layout are measured in their settled state.
 
-import { readFile } from 'node:fs/promises';
+import { loadLocal, sitemapUrls } from './lib/sitemap.mjs';
 
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
 const flag = process.argv.indexOf('--widths');
 const widths = flag > 0 ? process.argv[flag + 1].split(',').map(Number) : [320, 375, 768, 1024, 1440];
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
 
-const sitemap = await readFile(new URL('../dist/client/sitemap.xml', import.meta.url), 'utf8');
-const paths = [...new Set([...sitemap.matchAll(/<loc>https:\/\/www\.outbrick\.site([^<]*)<\/loc>/g)].map((m) => m[1] || '/'))];
+// The sitemap is an index of per-section sitemaps; sitemapUrls follows it to every page.
+const paths = [...new Set((await sitemapUrls(loadLocal)).map((url) => new URL(url).pathname))];
 for (const prefix of ['', '/fr', '/de', '/es', '/ja']) {
   paths.push(`${prefix}/c/42?par=18`, `${prefix}/contact/thanks`, `${prefix}/affiliates/thanks`, `${prefix}/careers/thanks`, `${prefix}/newsletter/thanks`, `${prefix}/does-not-exist`);
   for (let board = 1; board <= 17; board += 1) for (let stars = 1; stars <= 3; stars += 1) paths.push(`${prefix}/play/result/${board}-${stars}`);

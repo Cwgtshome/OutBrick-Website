@@ -6,7 +6,11 @@ import { chromeCopy } from '../../lib/i18n/chrome';
 import { homeCopy } from '../../lib/i18n/home';
 import { localizedAsset } from '../../lib/i18n/assets';
 import { localizedVillageName } from '../../lib/i18n/village-names';
-import { localeAlternates, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
+import { localeAlternates, localePath, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
+import { articles as journalArticles } from '../../lib/blog';
+import { byNewest } from '../../lib/journal';
+import { journalUi, localizeArticle } from '../../lib/i18n/blog';
+import { homeJournalCopy } from '../../lib/i18n/home-journal';
 import { AppStoreBadge, Course, homeNavFor, VillageFooter, VillageHeader, BrandMark } from '../village-shell';
 import { VillageMotion } from '../village-motion';
 import { GetAppQr } from './get-app-qr';
@@ -110,6 +114,8 @@ export function HomePage({ locale }: { locale: Locale }) {
   const chrome = chromeCopy[locale];
   const headline = t.headline;
   const friends = cast.map((friend) => ({ ...friend, line: t.cast.lines[friend.slug] ?? friend.line }));
+  const journal = homeJournalCopy[locale];
+  const latestStories = [...journalArticles].sort(byNewest).slice(0, 3).map((article) => (locale === 'en' ? article : localizeArticle(article.slug, locale)));
 
   return (
     <div className="ob-site ob-home">
@@ -486,6 +492,44 @@ export function HomePage({ locale }: { locale: Locale }) {
                 <h3>{t.apple.system.title}</h3>
                 <p>{t.apple.system.body}</p>
               </article>
+            </div>
+          </div>
+        </section>
+
+        {/* ============================ FROM THE JOURNAL ============================ */}
+        {/* The newest stories, so every article is within two clicks of this page. */}
+        <section id="journal" className="band-cream journal-latest" aria-labelledby="journal-latest-title">
+          <div className="wrap">
+            <div className="journal-latest-head">
+              <div>
+                <p className="eyebrow"><span className="idx">06</span>{journal.eyebrow}</p>
+                <h2 id="journal-latest-title" data-reveal="mask"><span className="mask-line">{journal.title}</span></h2>
+              </div>
+              <p className="lede">{journal.lede}</p>
+            </div>
+            <ul className="journal-latest-list" aria-label={journal.list}>
+              {latestStories.map((article, index) => (
+                <li key={article.slug} data-reveal="rise" style={{ '--d': `${index * 80}ms` } as Vars}>
+                  <article className="journal-card">
+                    <span className="journal-card-art" aria-hidden="true">
+                      <img loading="lazy" decoding="async" src={article.image} width={1600} height={900} alt="" />
+                    </span>
+                    <div className="journal-card-copy">
+                      <span className="tag">{locale === 'en' ? article.category : journalUi[locale].categories[article.category] ?? article.category}</span>
+                      {/* The headline's link covers the whole card (CSS), so the card reads as one target. */}
+                      <h3><a href={localePath(locale, `/blog/${article.slug}`)}>{article.title}</a></h3>
+                      <p>{article.dek}</p>
+                      <span className="journal-card-meta">{article.readingTime}</span>
+                    </div>
+                  </article>
+                </li>
+              ))}
+            </ul>
+            <div className="cta-row journal-latest-more">
+              <a className="btn brick-btn" href={localePath(locale, '/blog')}>
+                {journal.more}
+                <span className="arrow" aria-hidden="true" />
+              </a>
             </div>
           </div>
         </section>

@@ -1036,6 +1036,59 @@ html.js .ob-home .bubble-line[data-active] { margin: 0; animation: ob-say 420ms 
 }
 .ob-home .tile-siri p { color: #dce8ff; max-width: 52ch; }
 
+/* ============================ FROM THE JOURNAL ============================ */
+
+.ob-home .journal-latest :focus-visible { outline-color: var(--panel-dark); }
+.ob-home .journal-latest-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: clamp(24px, 5vw, 80px);
+  align-items: end;
+}
+.ob-home .journal-latest-head h2 { margin: 0; max-width: 14ch; }
+.ob-home .journal-latest-head .lede { margin: 0; }
+.ob-home .journal-latest-list {
+  list-style: none;
+  margin: clamp(40px, 5vw, 64px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+.ob-home .journal-latest-list li { display: flex; min-width: 0; }
+/* a white card standing on the cream, like the quote card in What it costs */
+.ob-home .journal-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 7px 0 #e3d2b0;
+  color: var(--ink-on-cream);
+  transition: transform var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out);
+}
+.ob-home .journal-card-art { display: block; aspect-ratio: 16 / 9; overflow: hidden; background: #efe3c8; }
+.ob-home .journal-card-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ob-home .journal-card-copy { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 24px; }
+.ob-home .journal-card .tag { align-self: flex-start; margin-bottom: 14px; }
+.ob-home .journal-card h3 { margin: 0 0 10px; color: var(--ink-on-cream); overflow-wrap: break-word; }
+.ob-home .journal-card h3 a { color: inherit; text-decoration: none; }
+.ob-home .journal-card h3 a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+.ob-home .journal-card h3 a:focus-visible { outline: none; }
+.ob-home .journal-card:has(a:focus-visible) { outline: 3px solid var(--panel-dark); outline-offset: 3px; }
+.ob-home .journal-card p { margin: 0 0 16px; color: var(--muted-on-cream); font-size: 1rem; line-height: 1.55; }
+.ob-home .journal-card-meta { margin-top: auto; color: var(--muted-on-cream); font-size: 0.9rem; }
+.ob-home .journal-latest-more { margin-top: clamp(32px, 4vw, 48px); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .ob-home .journal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 0 #e3d2b0; }
+}
+@media (max-width: 960px) {
+  .ob-home .journal-latest-head { grid-template-columns: 1fr; }
+  .ob-home .journal-latest-list { grid-template-columns: 1fr; max-width: 560px; }
+}
+
 /* ============================ CLOSE ============================ */
 
 .ob-home .close {

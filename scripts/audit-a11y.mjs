@@ -1,4 +1,4 @@
-// Runs axe-core (WCAG 2.1 A/AA + best practice) over every page in dist/client/sitemap.xml,
+// Runs axe-core (WCAG 2.1 A/AA + best practice) over every page in the built sitemap (dist/client/sitemap.xml and its children),
 // at desktop and phone widths, and fails on any violation. It also fails on a console error,
 // an uncaught page error, or a page wider than the viewport (sideways scroll).
 //
@@ -8,6 +8,7 @@
 //   node scripts/serve-dist.mjs 4321 &   node scripts/audit-a11y.mjs http://127.0.0.1:4321
 
 import { readFile } from 'node:fs/promises';
+import { loadLocal, sitemapUrls } from './lib/sitemap.mjs';
 import { createRequire } from 'node:module';
 import { extractRenderedCopy, extractMetadataCopy, findCarryovers } from './lib/rendered-copy.mjs';
 
@@ -16,8 +17,8 @@ const require = createRequire(import.meta.url);
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
 const axePath = process.env.AXE_PATH ?? require.resolve('axe-core/axe.min.js');
 
-const sitemap = await readFile(new URL('../dist/client/sitemap.xml', import.meta.url), 'utf8');
-const paths = [...sitemap.matchAll(/<loc>https:\/\/www\.outbrick\.site([^<]*)<\/loc>/g)].map((m) => m[1] || '/');
+// The sitemap is an index of per-section sitemaps; sitemapUrls follows it to every page.
+const paths = (await sitemapUrls(loadLocal)).map((url) => new URL(url).pathname);
 for (const prefix of ['', '/fr', '/de', '/es', '/ja', '/pt-BR']) {
   for (let board = 1; board <= 17; board += 1) for (let stars = 1; stars <= 3; stars += 1) paths.push(`${prefix}/play/result/${board}-${stars}`);
 }
