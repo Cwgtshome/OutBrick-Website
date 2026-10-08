@@ -181,7 +181,8 @@ test('Resend templates have separate plain bodies and only create after a genuin
   assert.ok(!run.stdout.includes('MOCK_ENDPOINT:POST:'));
   for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
     const template = JSON.parse(fs.readFileSync(new URL(`../outputs/resend-templates/${locale}.json`, import.meta.url), 'utf8'));
-    assert.equal(template.variables.length, 33);
+    // 32: the postal address is part of every footer now (emails/brand.ts), not a variable.
+    assert.equal(template.variables.length, 32);
     assert.ok(!template.html.includes('RESEND_UNSUBSCRIBE_URL'));
     assert.ok(template.html.includes('{{{UNSUBSCRIBE_URL}}}'));
     assert.equal(template.variables.find(v => v.key === 'UNSUBSCRIBE_URL').fallbackValue, undefined);

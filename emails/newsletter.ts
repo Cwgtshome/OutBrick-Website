@@ -7,6 +7,8 @@ import { addressTag, unsubscribeUrl, verifyConfirm, verifyUnsubscribe } from './
 import { SENDERS, newsletterSegments, sendEmail, subscribeContact, unsubscribeContact } from './resend.ts';
 import { newsletterWelcome, unsubscribePage, confirmPage } from './templates.ts';
 import { SITE } from './core.ts';
+import { databaseAvailable } from '../netlify/community/db.ts';
+import { onConfirmed, onUnsubscribed, preferencesUrl } from '../netlify/lifecycle/newsletter.ts';
 
 type Env = Record<string, string | undefined>;
 
@@ -79,7 +81,8 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
     return redirect(req, locale, '/newsletter/link-expired');
   }
   const unsub = unsubscribeUrl(SITE, apiKey, email, locale);
-  const welcome = newsletterWelcome({ locale, unsubscribeUrl: unsub });
+  const lifecycle = databaseAvailable(env);
+  const welcome = newsletterWelcome({ locale, unsubscribeUrl: unsub, preferencesUrl: lifecycle ? preferencesUrl(apiKey, email, locale) : undefined });
   const sent = await sendEmail(
     apiKey,
     {
@@ -95,6 +98,15 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
     `welcome-${tag}-${params.get('x') ?? ''}`,
   );
   if (!sent.ok) console.error(`[newsletter] welcome ${tag}: ${sent.error}`);
+  // The welcome series' letters 2 and 3, and the reader's own preferences (optional: the list
+  // itself lives in Resend, so a database hiccup never blocks a confirmation).
+  if (lifecycle) {
+    try {
+      await onConfirmed(email, locale);
+    } catch (error) {
+      console.error(`[newsletter] lifecycle ${tag}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
   console.log(`[newsletter] confirmed ${tag} [${locale}]`);
   return redirect(req, locale, '/newsletter/confirmed');
 }
@@ -135,6 +147,13 @@ export async function handleUnsubscribe(req: Request, env: Env): Promise<Respons
   if (!result.ok) {
     console.error(`[newsletter] unsubscribe ${tag}: ${result.error}`);
     return oneClick ? new Response('Could not unsubscribe right now', { status: 502 }) : redirect(req, locale, '/newsletter/link-expired');
+  }
+  if (databaseAvailable(env)) {
+    try {
+      await onUnsubscribed(email);
+    } catch (error) {
+      console.error(`[newsletter] lifecycle ${tag}: ${error instanceof Error ? error.message : String(error)}`);
+    }
   }
   console.log(`[newsletter] unsubscribed ${tag}${oneClick ? ' (one-click)' : ''}`);
   return oneClick ? new Response('Unsubscribed', { status: 200, headers: { 'Content-Type': 'text/plain; charset=utf-8' } }) : redirect(req, locale, '/newsletter/unsubscribed');

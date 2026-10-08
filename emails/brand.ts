@@ -22,14 +22,52 @@ import type { EmailLocale } from './i18n.ts';
 /** Every profile uses this handle (see lib/site.ts). */
 export const HANDLE = '@outbrick';
 
-const brandCopy: Record<EmailLocale, { follow: (handle: string) => string; rights: string }> = {
-  en: { follow: (h) => `Follow OutBrick: ${h}`, rights: 'All rights reserved.' },
-  fr: { follow: (h) => `Suivez OutBrick : ${h}`, rights: 'Tous droits réservés.' },
-  de: { follow: (h) => `Folgen Sie OutBrick: ${h}`, rights: 'Alle Rechte vorbehalten.' },
-  es: { follow: (h) => `Sigue a OutBrick: ${h}`, rights: 'Todos los derechos reservados.' },
-  ja: { follow: (h) => `OutBrickをフォロー：${h}`, rights: 'All rights reserved.' },
-  'pt-BR': { follow: (h) => `Siga a OutBrick: ${h}`, rights: 'Todos os direitos reservados.' },
+/**
+ * The sender's postal address, which commercial email must carry (CAN-SPAM, and the EU/UK rules).
+ * The owner supplied "OutBrick PO 330279" (docs/CURRENT-STATUS.md); each language writes the box
+ * the way its readers expect. Do not invent a fuller address here.
+ */
+export const PO_BOX = '330279';
+
+const brandCopy: Record<EmailLocale, { follow: (handle: string) => string; rights: string; postal: string }> = {
+  en: { follow: (h) => `Follow OutBrick: ${h}`, rights: 'All rights reserved.', postal: `P.O. Box ${PO_BOX}` },
+  fr: { follow: (h) => `Suivez OutBrick : ${h}`, rights: 'Tous droits réservés.', postal: `Boîte postale ${PO_BOX}` },
+  de: { follow: (h) => `Folgen Sie OutBrick: ${h}`, rights: 'Alle Rechte vorbehalten.', postal: `Postfach ${PO_BOX}` },
+  es: { follow: (h) => `Sigue a OutBrick: ${h}`, rights: 'Todos los derechos reservados.', postal: `Apartado de correos ${PO_BOX}` },
+  ja: { follow: (h) => `OutBrickをフォロー：${h}`, rights: 'All rights reserved.', postal: `私書箱 ${PO_BOX}` },
+  'pt-BR': { follow: (h) => `Siga a OutBrick: ${h}`, rights: 'Todos os direitos reservados.', postal: `Caixa Postal ${PO_BOX}` },
 };
+
+/** "OutBrick · P.O. Box 330279", in the reader's language. On every email. */
+export function postalAddress(locale: EmailLocale): string {
+  return `OutBrick · ${brandCopy[locale].postal}`;
+}
+
+const sitePath = (locale: EmailLocale, path: string) => `https://www.outbrick.site${locale === 'en' ? path : `/${locale}${path === '/' ? '' : path}`}`;
+
+/**
+ * The site menu for the header (see ShellOptions.nav in core.ts): the website's own labels and
+ * routes. A centred row of links in every client; on phones where checkboxes work, folded behind
+ * a hamburger in the header's top-right corner that drops the links down as full-width rows.
+ */
+export function navBlock(ctx: Ctx): string {
+  const f = fonts(ctx.locale);
+  const c = chromeCopy[ctx.locale];
+  const links: [string, string][] = [
+    [c.footer.playGuide, sitePath(ctx.locale, '/play')],
+    [c.footer.whatsNew, sitePath(ctx.locale, '/whats-new')],
+    [c.footer.daily, 'https://www.outbrick.site/daily'],
+    [c.footer.community, sitePath(ctx.locale, '/community')],
+    [c.footer.support, sitePath(ctx.locale, '/support')],
+  ];
+  const items = links
+    .map(([label, href]) => `<a class="ob-nav-a" href="${esc(href)}" style="display:inline-block;margin:0 9px 6px;font-family:${f.text};font-size:14px;line-height:1.4;font-weight:700;color:${color.lilac};text-decoration:none;">${esc(label)}</a>`)
+    .join('\n');
+  return `<!--[if !mso]><!--><input type="checkbox" id="ob-menu" class="ob-menu-input" style="display:none;mso-hide:all;"><label for="ob-menu" class="ob-burger" title="${esc(c.menu)}" aria-label="${esc(c.menu)}" style="display:none;mso-hide:all;"><span></span><span></span><span></span></label><!--<![endif]-->
+<div class="ob-nav" style="padding-top:14px;text-align:center;">
+${items}
+</div>`;
+}
 
 /** Badge artwork per language, and its width at the 40 px height Apple's artwork is drawn at. */
 const badges: Record<EmailLocale, { file: string; width: number }> = {
@@ -77,11 +115,12 @@ ${tiles.join('\n')}
 </td></tr>
 <tr><td align="center" style="text-align:center;">
 <p style="margin:0;text-align:center;font-family:${f.text};font-size:14px;line-height:1.55;color:${color.lilac};">${esc(copyright(ctx.locale, year))}</p>
+<p style="margin:2px 0 0;text-align:center;font-family:${f.text};font-size:13px;line-height:1.55;color:${color.lilac};">${esc(postalAddress(ctx.locale))}</p>
 </td></tr>
 </table>`;
 }
 
 /** The same, for the text/plain part: one line per profile, then the copyright. */
 export function brandFooterText(locale: EmailLocale, year?: number): string[] {
-  return ['', brandCopy[locale].follow(HANDLE), ...socialProfiles.map((p) => `${p.label}: ${p.url}`), '', `${chromeCopy[locale].badgeAlt}: ${footerStoreUrl(locale)}`, '', copyright(locale, year)];
+  return ['', brandCopy[locale].follow(HANDLE), ...socialProfiles.map((p) => `${p.label}: ${p.url}`), '', `${chromeCopy[locale].badgeAlt}: ${footerStoreUrl(locale)}`, '', copyright(locale, year), postalAddress(locale)];
 }

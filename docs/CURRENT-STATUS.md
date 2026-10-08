@@ -19,6 +19,21 @@ Recheck live Git, `/build-info.json`, `/api/community/session` and relevant prov
 - [PR #13](https://github.com/Cwgtshome/OutBrick-Website/pull/13): current game content in all
   five languages; merged and production publication independently verified.
 
+## Customer lifecycle email (8 October 2026, implemented; not yet verified in production)
+
+Twenty-one new emails and four signed web pages, in all six languages, with migration
+`20261008090000_customer-lifecycle`. Support cases have references, staff replies, "fixed in X"
+notices from the release bot and "did we solve it?". There are affiliate and careers decisions,
+a 3-letter welcome series, release Broadcast drafts (never auto-sent), event issues, a
+preferences page, and a re-engagement email that stays off until engagement tracking is on.
+Account emails cover new-device sign-in, passkey added, account deleted and an emailed data
+export. Admins can send policy-change notices. Every email carries the postal address
+"OutBrick · P.O. Box 330279". Newsletters get a header menu that folds into a hamburger on
+phones. See [EMAIL-LIFECYCLE.md](EMAIL-LIFECYCLE.md) for the flows, settings and the owner's
+post-deploy checks. Local evidence: 244 community/auth/lifecycle tests and 6 newsletter script
+tests pass on PGlite. All 294 sample emails show no horizontal overflow at 280–1440 px in a
+browser. Not verified: real delivery, real mail clients, the release-draft call against Resend.
+
 ## Email footer and responsive check (8 October 2026, branch `claude/email-footer-responsive`)
 
 Every email, and every page drawn with the email shell, now ends with the website footer's

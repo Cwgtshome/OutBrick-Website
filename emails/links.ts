@@ -87,3 +87,37 @@ export function verifyUnsubscribe(params: URLSearchParams, apiKey: string): Veri
 export function addressTag(apiKey: string, email: string): string {
   return mac(linkKey(apiKey), ['tag', email]).slice(0, 16);
 }
+
+// ---------------------------------------------------------------------------------------
+// General signed links for the lifecycle emails (feedback, keep-me, preferences, sign out
+// everywhere, data export). The payload is small JSON, base64url-encoded in the link; the
+// signature binds it to a purpose and an expiry, so a link for one thing can never be replayed
+// as another. Same key derivation as above: rotating RESEND_API_KEY invalidates them all.
+
+export type SignedPurpose = 'feedback' | 'keep' | 'prefs' | 'signout' | 'export';
+
+export function signedUrl(base: string, apiKey: string, purpose: SignedPurpose, payload: Record<string, string | number>, ttlSeconds: number, nowMs = Date.now()): string {
+  const p = b64(JSON.stringify(payload));
+  const x = String(Math.floor(nowMs / 1000) + ttlSeconds);
+  const t = mac(linkKey(apiKey), [purpose, p, x]);
+  const q = new URLSearchParams({ p, x, t });
+  return `${base}${base.includes('?') ? '&' : '?'}${q.toString()}`;
+}
+
+export type SignedResult = { ok: true; payload: Record<string, unknown> } | { ok: false; reason: 'invalid' | 'expired' };
+
+export function verifySigned(params: URLSearchParams, apiKey: string, purpose: SignedPurpose, nowMs = Date.now()): SignedResult {
+  const p = params.get('p') ?? '';
+  const x = params.get('x') ?? '';
+  const t = params.get('t') ?? '';
+  if (!p || p.length > 2000 || !/^\d{9,11}$/.test(x) || !t) return { ok: false, reason: 'invalid' };
+  if (!same(mac(linkKey(apiKey), [purpose, p, x]), t)) return { ok: false, reason: 'invalid' };
+  if (Number(x) * 1000 < nowMs) return { ok: false, reason: 'expired' };
+  try {
+    const payload = JSON.parse(unb64(p)) as unknown;
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return { ok: false, reason: 'invalid' };
+    return { ok: true, payload: payload as Record<string, unknown> };
+  } catch {
+    return { ok: false, reason: 'invalid' };
+  }
+}

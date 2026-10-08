@@ -38,7 +38,7 @@ const { listUnsubscribeHeaders } = await import('../emails/newsletter.ts');
 const args = process.argv.slice(2);
 const flag = (name) => args.includes(name);
 const value = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
-const file = args.find((a, i) => !a.startsWith('--') && !['--test', '--locale', '--schedule', '--broadcast-id'].includes(args[i - 1]));
+const file = args.find((a, i) => !a.startsWith('--') && !['--test', '--locale', '--schedule', '--broadcast-id', '--topic'].includes(args[i - 1]));
 const die = (message) => {
   console.error(`send-newsletter: ${message}`);
   process.exit(1);
@@ -60,8 +60,18 @@ for (const l of locales) {
   if (c.stories.length < 2 || c.stories.length > 3) die(`${l}: an issue has 2 or 3 stories (has ${c.stories.length})`);
 }
 
+// The postal address is printed by every email's brand footer, in the reader's language
+// (emails/brand.ts); an issue's "address" or NEWSLETTER_POSTAL_ADDRESS is still accepted.
 const address = toText(issue.address ?? process.env.NEWSLETTER_POSTAL_ADDRESS ?? PLACEHOLDER_ADDRESS).trim();
-const render = (locale, unsubscribe) => newsletterCampaign({ locale, issue: issue.locales[locale], unsubscribeUrl: unsubscribe, address });
+// Broadcasts can't sign a link per reader, so the footer's Preferences link opens the page that
+// emails each reader their own (netlify/lifecycle/newsletter.ts).
+const prefsAsk = (locale) => `https://www.outbrick.site/.netlify/functions/newsletter-preferences?l=${locale}`;
+const render = (locale, unsubscribe) => newsletterCampaign({ locale, issue: issue.locales[locale], unsubscribeUrl: unsubscribe, preferencesUrl: prefsAsk(locale), address });
+// --topic releases|tips|events: only readers who kept that topic on get it (needs RESEND_TOPIC_<TOPIC>).
+const topicName = value('--topic');
+if (topicName && !['releases', 'tips', 'events'].includes(topicName)) die('--topic must be releases, tips or events');
+const topicId = topicName ? process.env[`RESEND_TOPIC_${topicName.toUpperCase()}`] : undefined;
+if (topicName && !topicId) die(`--topic ${topicName} needs RESEND_TOPIC_${topicName.toUpperCase()}`);
 
 // --- dry run -----------------------------------------------------------------------------
 if (flag('--dry-run')) {
@@ -73,7 +83,6 @@ if (flag('--dry-run')) {
     fs.writeFileSync(path.join(out, `${locale}.txt`), `Subject: ${email.subject}\n\n${email.text}`);
     console.log(`${locale}: "${email.subject}" — ${Buffer.byteLength(email.html)} bytes -> ${path.relative(root, out)}/${locale}.html`);
   }
-  if (address === PLACEHOLDER_ADDRESS) console.warn('note: the footer still shows the placeholder postal address.');
   process.exit(0);
 }
 
@@ -107,7 +116,7 @@ if (testTo !== undefined) {
 const send = flag('--send');
 const schedule = value('--schedule');
 if (schedule && !send) die('--schedule needs --send');
-if (send && (!address || address === PLACEHOLDER_ADDRESS)) die('set NEWSLETTER_POSTAL_ADDRESS (or "address" in the issue) before a real send');
+if (send && !address) die('set NEWSLETTER_POSTAL_ADDRESS (or "address" in the issue) before a real send');
 
 const reviewedId = value('--broadcast-id');
 if (send && (!onlyLocale || !reviewedId || !/^[a-zA-Z0-9-]+$/.test(reviewedId))) die('--send needs --locale and --broadcast-id for the draft reviewed in Resend');
@@ -129,6 +138,7 @@ for (const locale of locales) {
   const created = await resend(apiKey, '/broadcasts', {
     body: {
       segment_id: segmentFor(locale),
+      ...(topicId ? { topic_id: topicId } : {}),
       from: SENDERS.news.from,
       reply_to: SENDERS.news.replyTo,
       subject: email.subject,

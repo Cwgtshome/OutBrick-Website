@@ -28,6 +28,15 @@ function live(): ReturnType<typeof getDatabase> {
   return netlify;
 }
 
+/**
+ * Whether a database is reachable from here: tests' PGlite, or Netlify's connection string. Code
+ * that works without one (the forms, which only add cases and applications as a bonus) checks
+ * this first rather than waiting on a connection that can't exist.
+ */
+export function databaseAvailable(env: Record<string, string | undefined> = process.env): boolean {
+  return Boolean(override) || Boolean(env.NETLIFY_DB_URL);
+}
+
 export const sql = (strings: TemplateStringsArray, ...values: unknown[]): Promise<Record<string, unknown>[]> =>
   override ? override.sql(strings, ...values) : (live().sql(strings, ...values) as unknown as Promise<Record<string, unknown>[]>);
 

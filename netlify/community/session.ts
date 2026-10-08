@@ -5,6 +5,7 @@
 // back as the member with `banned: true`, so the page can say so, but write handlers refuse).
 
 import type { MemberRole, SelfMember } from '../../lib/community/contract.ts';
+import { onSessionStarted } from '../lifecycle/security.ts';
 import { forbidden, unauthorized } from './http.ts';
 import { randomToken, sha256, sql } from './db.ts';
 
@@ -48,6 +49,8 @@ export async function startSession(req: Request, memberId: number): Promise<stri
   await sql`INSERT INTO sessions (token_hash, member_id, expires_at, user_agent)
             VALUES (${sha256(token)}, ${memberId}, now() + make_interval(days => ${SESSION_DAYS}), ${ua})`;
   await sql`UPDATE members SET last_seen_at = now() WHERE id = ${memberId}`;
+  // A browser or device this account hasn't used before gets a security email (never throws).
+  await onSessionStarted(req, memberId);
   return sessionCookie(req, token, SESSION_DAYS * 86400);
 }
 

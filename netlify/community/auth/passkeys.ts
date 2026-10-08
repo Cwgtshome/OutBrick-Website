@@ -20,6 +20,7 @@
 // challenge), 'unknown_credential', 'too_many' (10 passkeys), plus the usual 401/429.
 
 import type { PasskeyCreationOptions, PasskeyInfo, PasskeyRequestOptions } from '../../../lib/community/contract.ts';
+import { onPasskeyAdded } from '../../lifecycle/security.ts';
 import { ipHash, rateAllow, randomToken, sha256, sql, transaction } from '../db.ts';
 import { ApiError, badRequest, isAllowedOrigin, json, notFound, readJson, tooMany } from '../http.ts';
 import { currentMember, requireMember, startSession } from '../session.ts';
@@ -151,6 +152,7 @@ export async function register(req: Request): Promise<Response> {
     );
     return inserted;
   });
+  await onPasskeyAdded(viewer.id, nickname);
   return json({ passkey: passkeyView(row) }, { status: 201 });
 }
 

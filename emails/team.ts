@@ -26,6 +26,8 @@ export type TeamInput = {
   createdAt?: string;
   /** What happened to the visitor's own email: "sent", or why not. */
   acknowledgement: string;
+  /** Where the team answers it: the support case or application in /community/admin. */
+  dashboard?: { url: string; ref?: string };
   assetBase?: string;
 };
 
@@ -140,7 +142,7 @@ export function teamNotification(input: TeamInput): Rendered {
   const message = messageField[form] ? str(data[messageField[form]![0]]) : '';
   const referrer = str(data.referrer, 2000);
   const userAgent = str(data.user_agent, 400);
-  const subject = teamSubject(form, data);
+  const subject = input.dashboard?.ref ? `[${input.dashboard.ref}] ${teamSubject(form, data)}` : teamSubject(form, data);
   const title = headline(form, data);
   const ackSent = input.acknowledgement === 'sent';
   const ackLine =
@@ -163,6 +165,8 @@ export function teamNotification(input: TeamInput): Rendered {
     `<p style="margin:0 0 14px;">${form === 'contact' && str(data.topic, 40) ? chip(esc(topicName(str(data.topic, 40))), meta.accent, '#ffffff') : ''}${chip(esc(languageNames[input.locale]), color.cream, color.onPaper)}${chip(esc(ackSent ? (form === 'newsletter' ? 'Confirmation sent' : 'Acknowledged') : 'Not acknowledged'), ackSent ? '#dff5e1' : '#fde4e2', ackSent ? '#1f6b2a' : '#9b1c17')}${when(input.createdAt) ? chip(esc(when(input.createdAt)), color.cream, color.onPaper2) : ''}</p>`,
     message ? panel(ctx, eyebrow(ctx, esc(messageField[form]![1]), meta.accent) + para(ctx, escLines(message), { margin: '0 0 14px' }), meta.accent) : '',
     panel(ctx, fields.map((x) => field(ctx, esc(x.label), fieldValueHtml(x.key, x.value))).join(''), color.panel),
+    input.dashboard ? button(ctx, input.dashboard.url, esc(input.dashboard.ref ? `Answer ${input.dashboard.ref} in the dashboard` : 'Decide in the dashboard'), 320) : '',
+    input.dashboard ? para(ctx, esc('Answering in the dashboard keeps the case history, sends the designed reply and, later, the “did we solve it?” check-in. A plain email reply works too, but isn’t tracked.'), { muted: true, size: 14 }) : '',
     replyHref ? button(ctx, replyHref, esc(`Reply to ${name || email}`), 300) : '',
     para(ctx, esc(ackLine), { muted: true, size: 15 }),
     rule(),

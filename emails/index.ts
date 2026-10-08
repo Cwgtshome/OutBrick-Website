@@ -2,6 +2,10 @@
 // built into Deploy Previews, and scripts/send-newsletter.mjs --dry-run).
 
 import type { EmailLocale } from './i18n.ts';
+import { postalAddress } from './brand.ts';
+import { lifecycleTemplateNames, lifecycleTemplateTitles, renderLifecycleSample, type LifecycleTemplateName } from './lifecycle-samples.ts';
+export * from './lifecycle.ts';
+export { lifecycleTemplateNames } from './lifecycle-samples.ts';
 import {
   affiliateAcknowledgement,
   careersAcknowledgement,
@@ -27,7 +31,8 @@ export { emailCopy, emailLocales, isEmailLocale, type EmailLocale } from './i18n
 /** An issue file in emails/issues/: one IssueContent per language. */
 export type IssueFile = { id: string; name: string; note?: string; address?: string; locales: Partial<Record<EmailLocale, IssueContent>> };
 
-export const PLACEHOLDER_ADDRESS = 'OutBrick · [postal address goes here before the first send]';
+/** The postal address every email now prints in its brand footer (emails/brand.ts). Kept under its old name for the scripts. */
+export const PLACEHOLDER_ADDRESS = postalAddress('en');
 
 const sampleNames: Record<EmailLocale, string> = { en: 'Ada Lovelace', fr: 'Camille Martin', de: 'Lena Schmidt', es: 'Lucía García', ja: '山田 花子', 'pt-BR': 'Ana Souza' };
 
@@ -72,7 +77,8 @@ export type TemplateName =
   | 'team-careers'
   | 'team-affiliate'
   | 'team-newsletter'
-  | CommunityTemplateName;
+  | CommunityTemplateName
+  | LifecycleTemplateName;
 
 export const communityTemplateNames: CommunityTemplateName[] = [
   'community-signin',
@@ -95,7 +101,7 @@ export const communityTemplateNames: CommunityTemplateName[] = [
   'community-reply-bounce',
 ];
 
-export const templateNames: TemplateName[] = ['contact', 'contact-bug', 'careers', 'affiliate', 'newsletter-confirm', 'newsletter-welcome', 'newsletter-campaign', 'team-contact', 'team-careers', 'team-affiliate', 'team-newsletter', ...communityTemplateNames];
+export const templateNames: TemplateName[] = ['contact', 'contact-bug', 'careers', 'affiliate', 'newsletter-confirm', 'newsletter-welcome', 'newsletter-campaign', 'team-contact', 'team-careers', 'team-affiliate', 'team-newsletter', ...communityTemplateNames, ...lifecycleTemplateNames];
 
 /** The team's copies are always in English; the preview's language is the visitor's. */
 export function templateLang(name: TemplateName, locale: EmailLocale): EmailLocale {
@@ -131,6 +137,7 @@ export const templateTitles: Record<TemplateName, string> = {
   'community-reply-by-email': 'Community: reply notification with the reply-by-email hint',
   'community-weekly-digest': 'Community: weekly digest (opt-in, Mondays)',
   'community-reply-bounce': 'Community: a reply by email could not be posted',
+  ...lifecycleTemplateTitles,
 };
 
 const sampleTitles: Record<EmailLocale, string> = {
@@ -311,6 +318,11 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
       const content = issue.locales[locale] ?? issue.locales.en;
       if (!content) throw new Error(`issue ${issue.id} has no ${locale} or en content`);
       return newsletterCampaign({ locale, assetBase, issue: content, unsubscribeUrl: `${sampleLink}-unsubscribe`, address: issue.address ?? PLACEHOLDER_ADDRESS });
+    }
+    default: {
+      const content = issue.locales[locale] ?? issue.locales.en;
+      if (!content) throw new Error(`issue ${issue.id} has no ${locale} or en content`);
+      return renderLifecycleSample(name, locale, content, assetBase);
     }
   }
 }

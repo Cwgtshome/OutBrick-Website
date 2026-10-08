@@ -18,7 +18,7 @@
 // and are bundled by esbuild into the Netlify functions.
 
 import type { EmailLocale } from './i18n.ts';
-import { brandFooter } from './brand.ts';
+import { brandFooter, navBlock } from './brand.ts';
 
 export const SITE = 'https://www.outbrick.site';
 
@@ -117,7 +117,7 @@ export type Ctx = { locale: EmailLocale; assetBase: string };
 export function heading(ctx: Ctx, text: string, level: 1 | 2 | 3 = 1): string {
   const f = fonts(ctx.locale);
   const size = level === 1 ? 30 : level === 2 ? 23 : 19;
-  return `<h${level} class="ob-h${level === 1 ? ' ob-h1' : ''}" style="margin:0 0 14px;font-family:${f.display};font-size:${size}px;line-height:1.25;font-weight:600;color:${color.onPaper};mso-line-height-rule:exactly;">${text}</h${level}>`;
+  return `<h${level} class="ob-h${level === 1 ? ' ob-h1' : ''}" style="margin:0 0 14px;font-family:${f.display};font-size:${size}px;line-height:1.25;font-weight:600;color:${color.onPaper};mso-line-height-rule:exactly;overflow-wrap:anywhere;-webkit-hyphens:auto;hyphens:auto;">${text}</h${level}>`;
 }
 
 export function eyebrow(ctx: Ctx, text: string, tone: string = color.panel): string {
@@ -197,6 +197,52 @@ export function courseStripe(height = 10): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed;"><tr>${cells}</tr></table>`;
 }
 
+/**
+ * Tap to reveal: a tip's answer, a spoiler. Where checkboxes work (Apple Mail, iOS Mail) the
+ * body stays folded behind a button; everywhere else the body is simply shown under its label,
+ * so nobody misses the content. `id` must be unique within the email.
+ */
+export function reveal(ctx: Ctx, id: string, button: string, label: string, bodyHtml: string): string {
+  const f = fonts(ctx.locale);
+  return `<div style="margin:0 0 20px;">
+<!--[if !mso]><!--><input type="checkbox" id="${esc(id)}" class="ob-rv-input" style="display:none;mso-hide:all;"><label for="${esc(id)}" class="ob-rv-btn" style="display:none;cursor:pointer;background:${color.ink};color:${color.title};font-family:${f.display};font-size:16px;line-height:20px;font-weight:600;padding:12px 20px 10px;border-radius:12px;border-bottom:4px solid #120c3a;mso-hide:all;">${button}</label><!--<![endif]-->
+<div class="ob-rv-body"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="ob-quote" style="background:${color.cream};border-left:5px solid ${course[2]};border-radius:12px;padding:14px 18px 2px;">
+<p class="ob-eyebrow" style="margin:0 0 6px;font-family:${f.text};font-size:13px;line-height:1.4;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:${color.panel};">${label}</p>
+${bodyHtml}
+</td></tr></table></div>
+</div>`;
+}
+
+/**
+ * One-tap choices, each a real link (a signed URL that lands on a confirmation page, so a link
+ * scanner never records anything): rating faces, yes/no. Each is a 48 px brick tile with a
+ * caption; they wrap on narrow screens.
+ */
+export function picks(ctx: Ctx, items: { href: string; face?: string; img?: string; caption: string; tone?: string }[]): string {
+  const f = fonts(ctx.locale);
+  const cells = items
+    .map(
+      (item, i) => `<!--[if mso]><td style="padding:0 4px;" valign="top"><![endif]--><a class="ob-pick" href="${esc(item.href)}" style="display:inline-block;vertical-align:top;width:${item.img ? 104 : 76}px;margin:0 3px 10px;text-align:center;text-decoration:none;transition:transform .15s ease;">
+${
+  item.img
+    ? // A friend on a brick-coloured card: the caption is the alt text too, so blocked images still read.
+      `<span style="display:block;width:96px;margin:0 auto;border-radius:18px;background:${color.cream};border:3px solid ${item.tone ?? course[i % course.length]};border-bottom-width:6px;font-size:0;line-height:0;"><img src="${esc(item.img)}" width="88" height="88" alt="${item.caption}" style="display:block;width:88px;height:88px;margin:2px auto;border:0;color:${color.onPaper};font-family:${f.text};font-size:14px;line-height:1.3;"></span>`
+    : `<span style="display:block;width:52px;height:48px;margin:0 auto;border-radius:14px;background:${item.tone ?? course[i % course.length]};border-bottom:4px solid rgba(0,0,0,0.25);color:#ffffff;font-size:26px;line-height:48px;text-align:center;">${item.face ?? ''}</span>`
+}
+<span class="ob-muted" style="display:block;padding-top:6px;font-family:${f.text};font-size:13px;line-height:1.3;font-weight:700;color:${color.onPaper2};">${item.caption}</span></a><!--[if mso]></td><![endif]-->`,
+    )
+    .join('\n');
+  return `<div style="margin:4px 0 18px;text-align:center;font-size:0;"><!--[if mso]><table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0"><tr><![endif]-->
+${cells}
+<!--[if mso]></tr></table><![endif]--></div>`;
+}
+
+/** A secondary action: an outlined link-button, quieter than the gold one. */
+export function ghostButton(ctx: Ctx, href: string, label: string): string {
+  const f = fonts(ctx.locale);
+  return `<a class="ob-link" href="${esc(href)}" style="display:inline-block;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere;margin:0 0 18px;padding:12px 22px 10px;border:2px solid ${color.panel};border-radius:14px;color:${color.link};font-family:${f.display};font-size:16px;line-height:20px;font-weight:600;text-decoration:none;">${label}</a>`;
+}
+
 // ---------------------------------------------------------------------------------------
 // The document.
 
@@ -216,9 +262,15 @@ export type ShellOptions = {
   head?: string;
   /** The copyright year; the year of rendering unless a test pins it. */
   year?: number;
+  /**
+   * The site menu under the logo (newsletters, the welcome series, announcements). A row of
+   * links everywhere; on phones in clients that support it (Apple Mail, iOS Mail), a hamburger
+   * that opens it. Transactional mail leaves it off so the one action stays the one action.
+   */
+  nav?: boolean;
 };
 
-export function shell({ ctx, title, preheader, body, footer, logoAlt, head = '', year }: ShellOptions): string {
+export function shell({ ctx, title, preheader, body, footer, logoAlt, head = '', year, nav = false }: ShellOptions): string {
   const f = fonts(ctx.locale);
   const asset = (p: string) => `${ctx.assetBase}${p}`;
   // The inbox preview pads itself out with zero-width joiners so the client does not fill the
@@ -250,6 +302,16 @@ a{text-decoration-skip-ink:auto;}
 a[x-apple-data-detectors]{color:inherit !important;text-decoration:none !important;font-size:inherit !important;font-family:inherit !important;font-weight:inherit !important;line-height:inherit !important;}
 u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inherit;font-weight:inherit;line-height:inherit;}
 .ob-btn:hover{background:#ffd66e !important;}
+.ob-nav-a:hover{color:#ffffff !important;text-decoration:underline !important;}
+.ob-pick:hover{transform:translateY(-2px);}
+/* Interactive layer (checkbox toggles). Clients that strip <input> (Gmail, Outlook, Yahoo) never
+   match these rules, so they keep the plain layout: the menu as a row of links, a revealed
+   answer simply shown. Only where the input survives does the toggle take over. */
+.ob-burger,.ob-rv-btn{display:none;}
+.ob-rv-input + .ob-rv-btn{display:inline-block !important;}
+.ob-rv-input ~ .ob-rv-body{display:none;}
+.ob-rv-input:checked ~ .ob-rv-body{display:block !important;}
+.ob-rv-input:checked + .ob-rv-btn{display:none !important;}
 @media screen and (max-width:620px){
   .ob-outer{padding:12px 8px 24px !important;}
   .ob-pad{padding:28px 20px 12px !important;}
@@ -259,6 +321,15 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
   .ob-col{max-width:100% !important;width:100% !important;}
   .ob-col-img{padding:0 0 14px !important;}
   .ob-hero-img{width:100% !important;height:auto !important;}
+  .ob-menu-input + .ob-burger{display:block !important;position:absolute;top:16px;right:14px;width:44px;height:44px;border-radius:12px;background:#2a2364;cursor:pointer;}
+  .ob-burger span{display:block;width:20px;height:2px;margin:6px auto 0;border-radius:2px;background:${color.title};transition:transform .25s ease,opacity .2s ease;}
+  .ob-burger span:first-child{margin-top:15px;}
+  .ob-menu-input:checked + .ob-burger span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+  .ob-menu-input:checked + .ob-burger span:nth-child(2){opacity:0;}
+  .ob-menu-input:checked + .ob-burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+  .ob-menu-input ~ .ob-nav{max-height:0;overflow:hidden;padding-top:0 !important;transition:max-height .35s ease;}
+  .ob-menu-input:checked ~ .ob-nav{max-height:420px;padding-top:14px !important;}
+  .ob-menu-input ~ .ob-nav .ob-nav-a{display:block !important;margin:0 !important;padding:13px 6px !important;border-top:1px solid #3a3190;font-size:17px !important;text-align:left;}
 }
 @media screen and (max-width:360px){
   .ob-outer{padding:8px 4px 20px !important;}
@@ -267,6 +338,8 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
   .ob-foot{padding:20px 16px 24px !important;}
   .ob-h1{font-size:24px !important;}
   .ob-btn{padding:14px 18px 12px !important;}
+  .ob-logo{width:136px !important;height:auto !important;}
+  .ob-menu-input + .ob-burger{right:10px !important;}
 }
 @media (prefers-color-scheme:dark){
   .ob-page{background:${color.darkPage} !important;}
@@ -296,8 +369,9 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
 <!--[if mso]><table role="presentation" width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
 <div style="max-width:600px;margin:0 auto;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
-<tr><td class="ob-head" align="center" bgcolor="${color.ink}" style="background:${color.ink};border-radius:20px 20px 0 0;padding:22px 32px;text-align:center;">
-<a href="${SITE}${ctx.locale === 'en' ? '/' : `/${ctx.locale}`}" style="display:inline-block;text-decoration:none;"><img src="${esc(asset('/assets/logo/outbrick-wordmark.png'))}" width="168" height="33" alt="${esc(logoAlt)}" style="display:block;margin:0 auto;width:168px;height:33px;border:0;color:${color.title};font-family:${f.display};font-size:24px;font-weight:600;"></a>
+<tr><td class="ob-head" align="center" bgcolor="${color.ink}" style="background:${color.ink};border-radius:20px 20px 0 0;padding:22px 32px;text-align:center;position:relative;">
+<a href="${SITE}${ctx.locale === 'en' ? '/' : `/${ctx.locale}`}" style="display:inline-block;text-decoration:none;"><img class="ob-logo" src="${esc(asset('/assets/logo/outbrick-wordmark.png'))}" width="168" height="33" alt="${esc(logoAlt)}" style="display:block;margin:0 auto;width:168px;height:33px;border:0;color:${color.title};font-family:${f.display};font-size:24px;font-weight:600;"></a>
+${nav ? navBlock(ctx) : ''}
 </td></tr>
 <tr><td style="font-size:0;line-height:0;">${courseStripe()}</td></tr>
 <tr><td class="ob-paper ob-pad" bgcolor="${color.paper}" style="background:${color.paper};padding:36px 40px 18px;overflow-wrap:break-word;word-wrap:break-word;border-left:1px solid ${color.paperEdge};border-right:1px solid ${color.paperEdge};">

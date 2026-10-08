@@ -80,8 +80,8 @@ function build(locale) {
   };
   // Link fallbacks are registered here because their markers are made by urlMark() alone.
   issue.stories.forEach((_, i) => vars.push({ key: `STORY${i + 1}_LINK_URL`, type: 'string', fallbackValue: abs(c.stories[i]?.link?.href ?? '/whats-new') }));
-  const rendered = newsletterCampaign({ locale, issue, unsubscribeUrl: '{{{UNSUBSCRIBE_URL}}}', address: mark('POSTAL_ADDRESS') });
-  vars.push({ key: 'POSTAL_ADDRESS', type: 'string', fallbackValue: address });
+  // The postal address is part of the brand footer now (emails/brand.ts), not a variable.
+  const rendered = newsletterCampaign({ locale, issue, unsubscribeUrl: '{{{UNSUBSCRIBE_URL}}}', address });
   // Resend only fills RESEND_UNSUBSCRIBE_URL for Broadcasts, not transactional templates.
   // Require the caller's per-recipient signed link; never send a silent empty unsubscribe.
   vars.push({ key: 'UNSUBSCRIBE_URL', type: 'string' });
@@ -126,7 +126,6 @@ for (const { locale, t } of templates) {
   fs.writeFileSync(path.join(out, `${locale}.json`), JSON.stringify(t, null, 2));
   console.log(`${locale}: ${t.alias} — ${t.variables.length} variables, ${Buffer.byteLength(t.html)} bytes`);
 }
-if (!address) console.warn('note: NEWSLETTER_POSTAL_ADDRESS is not set, so POSTAL_ADDRESS has no fallback; fill it in on every send.');
 
 const onProduction = process.argv.includes('--push-on-production') && process.env.CONTEXT === 'production';
 if (process.argv.includes('--push') || onProduction) {

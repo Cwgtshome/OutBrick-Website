@@ -61,7 +61,15 @@ import type {
 } from '../../../lib/community/contract';
 import type {
   AdminSnapshot,
+  Application,
+  ApplicationDecisionRequest,
+  ApplicationKind,
   EditorialContent,
+  PolicyNoticeRequest,
+  SupportCase,
+  SupportCaseDetailResponse,
+  SupportCaseFilter,
+  SupportCaseListResponse,
 } from '../../../lib/community/admin-contract';
 
 export const API = '/api/community';
@@ -208,6 +216,34 @@ export const api = {
       `/admin/content/${id}/publish`,
       { revision, published },
     ),
+  cases: (params: { status: SupportCaseFilter; q?: string; page?: number }) =>
+    get<SupportCaseListResponse>(
+      `/admin/cases${query({ status: params.status, q: params.q?.trim(), page: params.page && params.page > 1 ? params.page : null })}`,
+      true,
+    ),
+  supportCase: (id: number) =>
+    get<SupportCaseDetailResponse>(`/admin/cases/${id}`, true),
+  replyToCase: (id: number, body: { message: string; signature?: string }) =>
+    write<{ case: SupportCase }>('POST', `/admin/cases/${id}/reply`, body),
+  setCaseStatus: (
+    id: number,
+    status: 'open' | 'replied' | 'resolved' | 'closed',
+  ) => write<{ case: SupportCase }>('POST', `/admin/cases/${id}/status`, { status }),
+  markCaseFixed: (id: number, body: { version: string; note?: string }) =>
+    write<{ case: SupportCase }>('POST', `/admin/cases/${id}/fixed`, body),
+  applications: (kind: ApplicationKind | 'all', includeDecided = false) =>
+    get<{ applications: Application[] }>(
+      `/admin/applications${query({ kind, status: includeDecided ? 'all' : null })}`,
+      true,
+    ),
+  decideApplication: (id: number, body: ApplicationDecisionRequest) =>
+    write<{ application: Application }>(
+      'POST',
+      `/admin/applications/${id}/decision`,
+      body,
+    ),
+  policyNotice: (body: PolicyNoticeRequest) =>
+    write<{ queued: number }>('POST', '/admin/notices/policy', body),
   content: (locale: string) =>
     get<{ content: EditorialContent[] }>(`/content?locale=${locale}`),
   contentItem: (locale: string, kind: string, slug: string) =>
@@ -220,6 +256,8 @@ export const api = {
   signOut: () => write<{ ok: true }>('POST', '/auth/signout'),
   updateMe: (body: UpdateMeRequest) =>
     write<UpdateMeResponse>('PATCH', '/me', body),
+  /** Email the account's own address a 24-hour link to its data export. */
+  emailExport: () => request<{ ok: true }>('POST', '/me/export/email', {}),
   deleteMe: () => write<{ ok: true }>('DELETE', '/me', { confirm: 'DELETE' }),
   notifications: (page: number) =>
     get<NotificationsResponse>(

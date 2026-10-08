@@ -15,6 +15,7 @@
 | Thread HTML and SEO at the edge | `netlify/edge-functions/community-thread.ts` |
 | Forms and newsletter functions | `netlify/functions/submission-created.mts`, `newsletter-confirm.mts`, `newsletter-unsubscribe.mts` |
 | Email design, signing and campaigns | `emails/`, `scripts/send-newsletter.mjs`, root README |
+| Lifecycle email (cases, applications, welcome series, notices, outbox) | `netlify/lifecycle/`, `emails/lifecycle*.ts`, [EMAIL-LIFECYCLE.md](EMAIL-LIFECYCLE.md) |
 | Routes, build and machine-file headers | `netlify.toml`, `public/_headers`, `scripts/postbuild.mjs` |
 | Automated site checks | `.github/workflows/checks.yml` |
 
@@ -45,6 +46,7 @@ separate and preserve existing permissions, session checks and origin validation
 | Inbound replies | `COMMUNITY_REPLY_DOMAIN`, `RESEND_WEBHOOK_SECRET` (secret), plus Resend key; requires receiving DNS/webhook setup |
 | Translation | `ANTHROPIC_API_KEY` (secret), optional `ANTHROPIC_BASE_URL`; configuration is not proof of a successful translation |
 | Optional feature overrides | `COMMUNITY_PASSKEYS=off`, `COMMUNITY_UPLOADS=off` |
+| Lifecycle email (optional) | `RESEND_TOPIC_RELEASES/TIPS/EVENTS`, `RESEND_EVENTS_WEBHOOK_SECRET`, `NEWSLETTER_ENGAGEMENT_TRACKING=on` (only once the events webhook delivers); see [EMAIL-LIFECYCLE.md](EMAIL-LIFECYCLE.md) |
 
 Provider visibility comes from `auth/util.ts`; feature flags come from `features.ts` and are
 reported by `/api/community/session`. Store credentials privately in Netlify. Apple web callbacks
@@ -55,7 +57,8 @@ Passkeys use the apex `outbrick.site` relying-party ID; do not casually change d
 ## Credit-aware scheduled work
 
 Schedules in source use UTC: notifier every five minutes; release polling hourly; digest every
-ten minutes Mondays 08:00–10:50; trust and badges daily at 08:00. Idle gates can skip database
+ten minutes Mondays 08:00–10:50; trust and badges daily at 08:00; the lifecycle outbox every ten
+minutes (Blobs-gated: it opens Postgres only when an email is due) with its daily sweep at 08:00. Idle gates can skip database
 queries when no work is due. Retain bounded retries and safety sweeps. Quiet-month simulations
 are estimates/tests, not a forecast for real visitors, crawlers or an active forum. Free credits
 are shared with deployments and all runtime traffic; consult live billing before plan decisions.

@@ -320,6 +320,8 @@ export type CommunityCopy = {
     data: string;
     dataLede: string;
     export: string;
+    exportEmail: string;
+    exportEmailSent: string;
     signOut: string;
     signedOut: string;
     deleteHeading: string;
@@ -821,6 +823,8 @@ const en: CommunityCopy = {
     data: 'Your data',
     dataLede: 'Download everything we hold about you: your profile, posts, votes, follows and email choices, as a JSON file.',
     export: 'Download my data',
+    exportEmail: 'Email me a download link',
+    exportEmailSent: 'Check your inbox: the link works for 24 hours.',
     signOut: 'Sign out',
     signedOut: 'You are signed out.',
     deleteHeading: 'Delete my account',
@@ -1358,6 +1362,8 @@ const fr: CommunityCopy = {
     data: 'Vos données',
     dataLede: 'Téléchargez tout ce que nous détenons sur vous : profil, messages, votes, suivis et choix d’e-mails, dans un fichier JSON.',
     export: 'Télécharger mes données',
+    exportEmail: 'M’envoyer un lien de téléchargement',
+    exportEmailSent: 'Consultez votre boîte de réception : le lien est valable 24 heures.',
     signOut: 'Se déconnecter',
     signedOut: 'Vous êtes déconnecté.',
     deleteHeading: 'Supprimer mon compte',
@@ -1895,6 +1901,8 @@ const de: CommunityCopy = {
     data: 'Deine Daten',
     dataLede: 'Lade alles herunter, was wir über dich speichern: Profil, Beiträge, Stimmen, Beobachtungen und E-Mail-Auswahl, als JSON-Datei.',
     export: 'Meine Daten herunterladen',
+    exportEmail: 'Download-Link per E-Mail senden',
+    exportEmailSent: 'Schau in dein Postfach: Der Link gilt 24 Stunden.',
     signOut: 'Abmelden',
     signedOut: 'Du bist abgemeldet.',
     deleteHeading: 'Mein Konto löschen',
@@ -2432,6 +2440,8 @@ const es: CommunityCopy = {
     data: 'Tus datos',
     dataLede: 'Descarga todo lo que guardamos sobre ti: perfil, mensajes, votos, seguimientos y preferencias de correo, en un archivo JSON.',
     export: 'Descargar mis datos',
+    exportEmail: 'Enviarme un enlace de descarga',
+    exportEmailSent: 'Revisa tu bandeja de entrada: el enlace funciona durante 24 horas.',
     signOut: 'Cerrar sesión',
     signedOut: 'Has cerrado sesión.',
     deleteHeading: 'Eliminar mi cuenta',
@@ -2969,6 +2979,8 @@ const ja: CommunityCopy = {
     data: 'あなたのデータ',
     dataLede: 'プロフィール、投稿、投票、ウォッチ、メールの設定など、保存しているすべてのデータをJSONファイルでダウンロードできます。',
     export: 'データをダウンロード',
+    exportEmail: 'ダウンロードリンクをメールで受け取る',
+    exportEmailSent: '受信トレイを確認してください。リンクの有効期限は24時間です。',
     signOut: 'サインアウト',
     signedOut: 'サインアウトしました。',
     deleteHeading: 'アカウントを削除',
@@ -3142,7 +3154,7 @@ const ptBR: CommunityCopy = {
   settings: {
     title: 'Configurações', lede: 'Seu perfil, seus e-mails e seus dados. Salve as alterações pelo botão de cada seção.', profile: 'Perfil', displayName: 'Nome de exibição', displayNameHint: 'O único nome que os outros membros veem.', bio: 'Sobre você', bioHint: 'Até 300 caracteres. Aparece no seu perfil.', language: 'Idioma da comunidade e dos e-mails', languageHint: 'Por padrão, as listas mostram conversas neste idioma e em inglês.', saveProfile: 'Salvar perfil', profileSaved: 'Perfil salvo.', emails: 'E-mails', emailsLede: (address) => `Enviamos mensagens para ${address}. Todos os e-mails também incluem um link para cancelar a inscrição com um toque.`,
     emailKinds: { reply: ['Respostas', 'Alguém responde à sua conversa ou a uma publicação sua.'], mention: ['Menções', 'Alguém escreve @ e seu nome de exibição.'], watched: ['Conversas e categorias acompanhadas', 'Novas publicações nos assuntos que você acompanha.'], status: ['Mudanças de status', 'Seu relato ou sua ideia muda de status, por exemplo: “Corrigido na versão 5.1”.'], solved: ['Soluções', 'Sua resposta é marcada como solução.'], release: ['Novas versões', 'Uma nova versão do OutBrick é lançada (em Novidades).'], moderation: ['Avisos da moderação', 'Um moderador ocultou uma publicação sua e informou o motivo. Recomendamos manter esta opção ativada.'] },
-    saveEmails: 'Salvar preferências de e-mail', emailsSaved: 'Preferências de e-mail salvas.', address: 'E-mail', addressHint: 'Nunca é exibido para ninguém. Um novo endereço substitui o anterior depois que você o confirma pelo e-mail que enviamos.', addressNeeded: 'Adicione um e-mail para publicar. Precisamos de um endereço confirmado para enviar respostas e links de acesso.', saveAddress: 'Alterar e-mail', addressSent: (a) => `Enviamos um link de confirmação para ${a}. O endereço mudará quando você abrir o link.`, addressConfirmed: 'Seu e-mail foi confirmado.', accounts: 'Formas de entrar', accountsLede: 'Você pode entrar com qualquer uma destas opções. Para adicionar outra, saia e entre com ela usando o mesmo endereço de e-mail.', providerNames: { apple: 'Apple', google: 'Google', facebook: 'Facebook', email: 'Link por e-mail' }, data: 'Seus dados', dataLede: 'Baixe tudo o que guardamos sobre você: perfil, publicações, votos, itens acompanhados e preferências de e-mail, em um arquivo JSON.', export: 'Baixar meus dados', signOut: 'Sair', signedOut: 'Você saiu da sua conta.', deleteHeading: 'Excluir minha conta', deleteLede: 'Isso exclui seu perfil, formas de entrar, itens acompanhados e e-mail. Suas publicações permanecem assinadas como “Ex-membro” para manter o contexto. Não é possível desfazer.', deleteConfirm: 'Digite DELETE para confirmar', deleteHint: 'Use letras maiúsculas para evitar uma exclusão acidental.', deleteButton: 'Excluir minha conta', deleted: 'Sua conta foi excluída. Obrigado por fazer parte da comunidade.', banned: 'Sua conta está suspensa: você pode ler, mas não publicar. O e-mail que enviamos explica o motivo e como recorrer.',
+    saveEmails: 'Salvar preferências de e-mail', emailsSaved: 'Preferências de e-mail salvas.', address: 'E-mail', addressHint: 'Nunca é exibido para ninguém. Um novo endereço substitui o anterior depois que você o confirma pelo e-mail que enviamos.', addressNeeded: 'Adicione um e-mail para publicar. Precisamos de um endereço confirmado para enviar respostas e links de acesso.', saveAddress: 'Alterar e-mail', addressSent: (a) => `Enviamos um link de confirmação para ${a}. O endereço mudará quando você abrir o link.`, addressConfirmed: 'Seu e-mail foi confirmado.', accounts: 'Formas de entrar', accountsLede: 'Você pode entrar com qualquer uma destas opções. Para adicionar outra, saia e entre com ela usando o mesmo endereço de e-mail.', providerNames: { apple: 'Apple', google: 'Google', facebook: 'Facebook', email: 'Link por e-mail' }, data: 'Seus dados', dataLede: 'Baixe tudo o que guardamos sobre você: perfil, publicações, votos, itens acompanhados e preferências de e-mail, em um arquivo JSON.', export: 'Baixar meus dados', exportEmail: 'Receber um link de download por e-mail', exportEmailSent: 'Confira sua caixa de entrada: o link vale por 24 horas.', signOut: 'Sair', signedOut: 'Você saiu da sua conta.', deleteHeading: 'Excluir minha conta', deleteLede: 'Isso exclui seu perfil, formas de entrar, itens acompanhados e e-mail. Suas publicações permanecem assinadas como “Ex-membro” para manter o contexto. Não é possível desfazer.', deleteConfirm: 'Digite DELETE para confirmar', deleteHint: 'Use letras maiúsculas para evitar uma exclusão acidental.', deleteButton: 'Excluir minha conta', deleted: 'Sua conta foi excluída. Obrigado por fazer parte da comunidade.', banned: 'Sua conta está suspensa: você pode ler, mas não publicar. O e-mail que enviamos explica o motivo e como recorrer.',
   },
   notifications: { title: 'Notificações', lede: 'Respostas, menções e novidades sobre o que você acompanha.', markAll: 'Marcar tudo como lido', marked: 'Todas as notificações foram marcadas como lidas.', none: 'Nenhuma novidade. Quando alguém responder, aparecerá aqui.', unreadTag: 'Nova', kinds: { reply: (actor, thread) => `${actor} respondeu em “${thread}”`, mention: (actor, thread) => `${actor} mencionou você em “${thread}”`, watched: (actor, thread) => `${actor} publicou em “${thread}”, que você acompanha`, status: (_actor, thread, extra) => `“${thread}” agora está: ${extra}`, solved: (actor, thread) => `${actor} marcou sua resposta em “${thread}” como solução`, release: (_actor, thread, extra) => extra ? `OutBrick ${extra} já está disponível: “${thread}”` : `Nova versão: “${thread}”`, moderation: (_actor, thread) => `Um moderador tomou uma medida sobre sua publicação em “${thread}”. Enviamos os detalhes por e-mail.`, welcome: () => 'Boas-vindas à comunidade OutBrick. Comece pelas diretrizes e depois diga olá em Assuntos gerais.' } },
   profile: { title: (name) => name, joined: (when) => `Membro desde ${when}`, posts: pluralPt('publicação'), solved: (n, f) => n === 1 ? '1 solução' : `${f} soluções`, recent: 'Conversas recentes', none: 'Ainda não há conversas.', noBio: 'Ainda não há descrição.' },

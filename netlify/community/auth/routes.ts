@@ -7,6 +7,7 @@
 // single-use state plus a verified ID token, a signed token, and a Svix signature.
 
 import { ApiError, handle, json, notFound, type Route } from '../http.ts';
+import { emailExport } from '../../lifecycle/security.ts';
 import { deleteMe, exportMe, getSession, signOut, updateMe } from './account.ts';
 import { confirmEmailPage, confirmEmailWithLink, requestEmailSignIn, signInPage, signInWithLink } from './email-link.ts';
 import { listNotifications, markRead, unsubscribe, unsubscribePage } from './inbox.ts';
@@ -42,6 +43,7 @@ export const routes: Route[] = [
   { method: 'PATCH', pattern: '/api/community/me', run: (req) => updateMe(req) },
   { method: 'DELETE', pattern: '/api/community/me', run: (req) => deleteMe(req) },
   { method: 'GET', pattern: '/api/community/me/export', run: (req) => exportMe(req) },
+  { method: 'POST', pattern: '/api/community/me/export/email', run: (req) => emailExport(req, {}, new URL(req.url)) },
   // community-fx: the member's bookmarks (the handler is netlify/community/reactions.ts).
   { method: 'GET', pattern: '/api/community/me/bookmarks', run: (req, _p, url) => listBookmarks(req, url) },
   { method: 'GET', pattern: '/api/community/notifications', run: (req, _p, url) => listNotifications(req, url) },

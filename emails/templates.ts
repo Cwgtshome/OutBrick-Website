@@ -31,6 +31,7 @@ import {
   type Ctx,
 } from './core.ts';
 import { emailCopy, greetingName, type EmailLocale } from './i18n.ts';
+import { lifecycleCopy } from './lifecycle-i18n.ts';
 
 export type Rendered = { subject: string; html: string; text: string };
 
@@ -47,12 +48,12 @@ export function topicLabel(locale: EmailLocale, value: string): string {
   return topic ? siteLabel(locale, topic.label) : siteLabel(locale, 'Other');
 }
 
-function sitePath(locale: EmailLocale, path: string): string {
+export function sitePath(locale: EmailLocale, path: string): string {
   const p = locale === 'en' ? path : path === '/' ? `/${locale}` : `/${locale}${path}`;
   return `${SITE}${p}`;
 }
 
-function store(locale: EmailLocale, campaign: string): string {
+export function store(locale: EmailLocale, campaign: string): string {
   return appStoreUrl(`email-${campaign}`, storefront[locale]);
 }
 
@@ -65,7 +66,7 @@ function signoff(ctx: Ctx): string {
 }
 
 /** The transactional footer: support, privacy, App Store; why this arrived; the tagline. */
-function supportFooter(ctx: Ctx, why: string, campaign: string): string {
+export function supportFooter(ctx: Ctx, why: string, campaign: string): string {
   const t = emailCopy[ctx.locale];
   return footerBlock(ctx, {
     links: [
@@ -77,7 +78,7 @@ function supportFooter(ctx: Ctx, why: string, campaign: string): string {
   });
 }
 
-function supportFooterText(locale: EmailLocale, why: string, campaign: string): string[] {
+export function supportFooterText(locale: EmailLocale, why: string, campaign: string): string[] {
   const t = emailCopy[locale];
   return [
     '—',
@@ -102,6 +103,8 @@ export type ContactInput = {
   device?: string;
   iosVersion?: string;
   appVersion?: string;
+  /** The support case's reference (OB-XXXXXX), when the case was stored. */
+  caseRef?: string;
   assetBase?: string;
 };
 
@@ -124,6 +127,9 @@ export function contactAcknowledgement(input: ContactInput): Rendered {
     .join(' · ');
 
   const body = [
+    input.caseRef
+      ? `<p style="margin:0 0 14px;"><span style="display:inline-block;padding:5px 10px 4px;border-radius:8px;background:${color.ink};color:${color.title};font-family:${fonts(input.locale).text};font-size:13px;line-height:1.3;font-weight:800;letter-spacing:0.06em;">${esc(lifecycleCopy[input.locale].caseRef(input.caseRef))}</span></p>`
+      : '',
     heading(ctx, esc(c.heading(name))),
     para(ctx, esc(c.intro)),
     panel(
@@ -141,8 +147,10 @@ export function contactAcknowledgement(input: ContactInput): Rendered {
     signoff(ctx),
   ].join('\n');
 
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'contact') });
+  const subject = input.caseRef ? `${c.subject} [${input.caseRef}]` : c.subject;
+  const html = shell({ ctx, title: subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'contact') });
   const text = textBlock([
+    input.caseRef ? lifecycleCopy[input.locale].caseRef(input.caseRef) : null,
     c.heading(name),
     '',
     c.intro,
@@ -163,7 +171,7 @@ export function contactAcknowledgement(input: ContactInput): Rendered {
     '',
     ...supportFooterText(input.locale, c.why, 'contact'),
   ]);
-  return { subject: c.subject, html, text };
+  return { subject, html, text };
 }
 
 // ---------------------------------------------------------------------------------------
@@ -259,26 +267,29 @@ export function affiliateAcknowledgement(input: AffiliateInput): Rendered {
 // ---------------------------------------------------------------------------------------
 // Newsletter: shared footer
 
-function newsFooter(ctx: Ctx, unsubscribe: string | null, why: string, address?: string): string {
+export function newsFooter(ctx: Ctx, unsubscribe: string | null, why: string, address?: string, preferences?: string): string {
   const t = emailCopy[ctx.locale];
   const links: [string, string][] = [];
   if (unsubscribe) links.push([esc(t.news.unsubscribe), unsubscribe]);
+  if (preferences) links.push([esc(lifecycleCopy[ctx.locale].preferences.manage), preferences]);
   links.push([esc(t.news.privacy), sitePath(ctx.locale, '/privacy')]);
   links.push([esc(t.links.appStore), store(ctx.locale, 'newsletter')]);
+  // The postal address is in every email's brand footer (emails/brand.ts); `address` is kept
+  // for callers that still pass one and is no longer printed twice.
+  void address;
   const lines = [esc(why)];
-  if (address) lines.push(esc(address));
   lines.push(`${esc(t.tagline)} · <a href="${sitePath(ctx.locale, '/')}" style="color:${color.title};text-decoration:underline;">www.outbrick.site</a>`);
   return footerBlock(ctx, { links, lines });
 }
 
-function newsFooterText(locale: EmailLocale, unsubscribe: string | null, why: string, address?: string): string[] {
+export function newsFooterText(locale: EmailLocale, unsubscribe: string | null, why: string, address?: string, preferences?: string): string[] {
   const t = emailCopy[locale];
   return [
     '—',
     why,
     unsubscribe ? `${t.news.unsubscribe}: ${unsubscribe}` : null,
+    preferences ? `${lifecycleCopy[locale].preferences.manage}: ${preferences}` : null,
     `${t.news.privacy}: ${sitePath(locale, '/privacy')}`,
-    address ?? null,
     `${t.tagline} · https://www.outbrick.site`,
     ...brandFooterText(locale),
   ].filter((v): v is string => v !== null);
@@ -313,7 +324,7 @@ export function newsletterConfirm(input: ConfirmInput): Rendered {
 // ---------------------------------------------------------------------------------------
 // Newsletter welcome
 
-export type WelcomeInput = { locale: EmailLocale; unsubscribeUrl: string; assetBase?: string };
+export type WelcomeInput = { locale: EmailLocale; unsubscribeUrl: string; preferencesUrl?: string; assetBase?: string };
 
 export function newsletterWelcome(input: WelcomeInput): Rendered {
   const ctx = ctxOf(input.locale, input.assetBase);
@@ -328,7 +339,7 @@ export function newsletterWelcome(input: WelcomeInput): Rendered {
     para(ctx, `${esc(c.leave)} ${link(input.unsubscribeUrl, esc(t.news.unsubscribe))}`, { muted: true, size: 16 }),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: newsFooter(ctx, input.unsubscribeUrl, t.news.why) });
+  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, nav: true, footer: newsFooter(ctx, input.unsubscribeUrl, t.news.why, undefined, input.preferencesUrl) });
   const text = textBlock([
     c.heading,
     '',
@@ -358,6 +369,8 @@ export type IssueContent = {
   hero: { eyebrow?: string; title: string; body: string; image?: IssueImage };
   stories: IssueStory[];
   release?: { version: string; title: string; items: string[]; link?: { label: string; href: string } };
+  /** An event or season announcement: a ticket-shaped card under the hero (see eventBlock). */
+  event?: { title: string; dates: string; body: string; link?: { label: string; href: string } };
   cta?: { label: string; href: string };
 };
 
@@ -366,6 +379,8 @@ export type CampaignInput = {
   issue: IssueContent;
   /** Per-recipient signed link, or Resend's {{{RESEND_UNSUBSCRIBE_URL}}} in a broadcast. */
   unsubscribeUrl: string;
+  /** The preferences page: a signed link when sent one by one, the ask-for-a-link page in a broadcast. */
+  preferencesUrl?: string;
   /** The sender's postal address line, which commercial email must carry. */
   address: string;
   assetBase?: string;
@@ -407,6 +422,31 @@ ${textCol}
 </table>`;
 }
 
+/**
+ * An event as an admission ticket: a violet stub with the dates, a perforated edge, and the
+ * title and body on the ticket. On a phone the stub stacks above the body.
+ */
+function eventBlock(ctx: Ctx, event: NonNullable<IssueContent['event']>): string {
+  const f = fonts(ctx.locale);
+  const l = lifecycleCopy[ctx.locale].event;
+  const stub = `<div class="ob-col" style="display:inline-block;width:100%;max-width:150px;vertical-align:top;font-size:16px;"><div style="margin:0 0 12px;background:#7b5cf0;border-radius:14px;padding:16px 14px;text-align:center;">
+<p style="margin:0 0 4px;font-family:${f.text};font-size:12px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#efeaff;">${esc(l.when)}</p>
+<p style="margin:0;font-family:${f.display};font-size:18px;line-height:1.25;font-weight:600;color:#ffffff;">${esc(event.dates)}</p></div></div>`;
+  const main = `<div class="ob-col" style="display:inline-block;width:100%;max-width:318px;vertical-align:top;font-size:16px;"><div class="ob-col-img" style="padding:0 0 0 16px;">
+${eyebrow(ctx, `🎟 ${esc(l.eyebrow)}`, '#7b5cf0')}
+${heading(ctx, esc(event.title), 3)}
+${para(ctx, inlineMarkdown(event.body), { size: 16 })}
+${event.link ? `<p style="margin:0 0 6px;font-family:${f.text};font-size:17px;font-weight:700;">${link(safeUrl(event.link.href), `${esc(event.link.label || l.cta)} →`)}</p>` : ''}
+</div></div>`;
+  return `<table role="presentation" class="ob-card" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 22px;background:#ffffff;border:2px dashed #7b5cf0;border-radius:18px;">
+<tr><td style="padding:16px;font-size:0;">
+<!--[if mso]><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td width="150" valign="top"><![endif]-->
+${stub}<!--[if mso]></td><td valign="top"><![endif]-->
+${main}
+<!--[if mso]></td></tr></table><![endif]-->
+</td></tr></table>`;
+}
+
 function releaseBlock(ctx: Ctx, release: NonNullable<IssueContent['release']>): string {
   const t = emailCopy[ctx.locale];
   const f = fonts(ctx.locale);
@@ -435,6 +475,7 @@ export function newsletterCampaign(input: CampaignInput): Rendered {
     heading(ctx, esc(issue.hero.title)),
     issue.hero.image ? `<div style="margin:0 0 20px;">${img(ctx, issue.hero.image, 520, 'ob-hero-img')}</div>` : '',
     paragraphs(ctx, issue.hero.body),
+    issue.event ? eventBlock(ctx, issue.event) : '',
     ...issue.stories.slice(0, 3).map((s, i) => story(ctx, s, i)),
     issue.release ? releaseBlock(ctx, issue.release) : '',
     `<div style="text-align:center;">${button(ctx, safeUrl(cta.href), esc(cta.label), 320).replace('style="margin:8px 0 22px;"', 'align="center" style="margin:8px auto 22px;"')}</div>`,
@@ -446,7 +487,8 @@ export function newsletterCampaign(input: CampaignInput): Rendered {
     preheader: issue.preheader,
     logoAlt: t.logoAlt,
     body,
-    footer: newsFooter(ctx, input.unsubscribeUrl, t.news.why, input.address),
+    footer: newsFooter(ctx, input.unsubscribeUrl, t.news.why, input.address, input.preferencesUrl),
+    nav: true,
   });
   const text = textBlock([
     issue.hero.title,
@@ -459,6 +501,10 @@ export function newsletterCampaign(input: CampaignInput): Rendered {
       s.link ? `${s.link.label}: ${safeUrl(s.link.href)}` : null,
       '',
     ]).filter((v): v is string => v !== null),
+    issue.event && `## ${issue.event.title} · ${issue.event.dates}`,
+    issue.event && plainMarkdown(issue.event.body),
+    issue.event?.link && `${issue.event.link.label}: ${safeUrl(issue.event.link.href)}`,
+    issue.event && '',
     issue.release && `## ${t.news.whatsNew} · ${t.news.version(issue.release.version)}: ${issue.release.title}`,
     ...(issue.release ? issue.release.items.map((item) => `* ${plainMarkdown(item)}`) : []),
     issue.release?.link && `${issue.release.link.label}: ${safeUrl(issue.release.link.href)}`,

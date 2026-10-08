@@ -15,6 +15,9 @@ import { SENDERS, sendEmail } from './resend.ts';
 import { affiliateAcknowledgement, careersAcknowledgement, contactAcknowledgement, newsletterConfirm, type Rendered } from './templates.ts';
 import { SITE, toText } from './core.ts';
 import { teamNotification, type TeamForm } from './team.ts';
+import { databaseAvailable } from '../netlify/community/db.ts';
+import { caseAdminUrl, createCase } from '../netlify/lifecycle/cases.ts';
+import { createApplication } from '../netlify/lifecycle/applications.ts';
 
 export type SubmissionPayload = {
   id?: string;
@@ -27,7 +30,16 @@ export type SubmissionPayload = {
   state?: string;
 };
 
-export type Outcome = { id: string; form: string; status: 'sent' | 'skipped' | 'failed'; reason?: string; locale?: EmailLocale; team?: 'sent' | 'skipped' | 'failed' };
+export type Outcome = {
+  id: string;
+  form: string;
+  status: 'sent' | 'skipped' | 'failed';
+  reason?: string;
+  locale?: EmailLocale;
+  team?: 'sent' | 'skipped' | 'failed';
+  /** The stored support case or application, for the team copy's dashboard link. */
+  record?: { url: string; ref?: string };
+};
 
 /** Where the team's copy goes: newsletter sign-ups to news@, everything else to support@. TEAM_INBOX overrides both (a test inbox, say). */
 export const TEAM_INBOX = { support: 'support@outbrick.site', news: 'news@outbrick.site' } as const;
@@ -53,8 +65,9 @@ export function submissionLocale(data: Record<string, unknown>, formName: string
 async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<string, string | undefined>): Promise<Outcome> {
   const id = str(payload?.id, 80) || 'unknown';
   const form = str(payload?.form_name, 40) || 'unknown';
+  let record: Outcome['record'];
   const done = (status: Outcome['status'], reason?: string, locale?: EmailLocale): Outcome => {
-    const outcome = { id, form, status, reason, locale };
+    const outcome = { id, form, status, reason, locale, record };
     return outcome;
   };
 
@@ -68,6 +81,26 @@ async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<
 
   const to = normalizeEmail(data.email);
   if (!to) return done('skipped', 'no usable email address');
+  const locale0 = submissionLocale(data, form);
+  // Contact messages become support cases and applications are stored, so the team can answer
+  // and decide from the dashboard. Optional: without a database the emails still go out.
+  let caseRef: string | undefined;
+  if (form !== 'newsletter' && databaseAvailable(env)) {
+    try {
+      if (form === 'contact') {
+        const c = await createCase({ submissionId: id, email: to, name: str(data.name, 120), locale: locale0, topic: str(data.topic, 40), message: str(data.message), device: str(data.device, 80), appVersion: str(data['app-version'], 20), iosVersion: str(data['ios-version'], 20) });
+        caseRef = c.ref;
+        record = { url: caseAdminUrl(c.id), ref: c.ref };
+      } else {
+        const details: Record<string, string> = {};
+        for (const k of ['handle', 'channels', 'audience', 'country', 'plan', 'location', 'portfolio', 'cover-note']) if (data[k] !== undefined) details[k] = str(Array.isArray(data[k]) ? (data[k] as unknown[]).join(', ') : data[k], 2000);
+        const appId = await createApplication({ kind: form as 'affiliate' | 'careers', submissionId: id, email: to, name: str(data.name, 120), locale: locale0, role: str(data.role, 160), code: str(data.code, 20), details });
+        record = { url: `${SITE}/community/admin?applications=${form}${appId ? `&application=${appId}` : ''}` };
+      }
+    } catch (error) {
+      console.error(`[email] submission ${id}: could not store the ${form} record: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
   const apiKey = env.RESEND_API_KEY;
   if (!apiKey) return done('skipped', 'RESEND_API_KEY is not set');
 
@@ -87,6 +120,7 @@ async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<
         device: str(data.device, 80),
         iosVersion: str(data['ios-version'], 20),
         appVersion: str(data['app-version'], 20),
+        caseRef,
       });
     } else if (form === 'careers') {
       rendered = careersAcknowledgement({ locale, name, role: str(data.role, 160) });
@@ -136,7 +170,7 @@ export async function handleSubmission(payload: SubmissionPayload | undefined, e
   const team = form === 'newsletter' ? SENDERS.newsTeam : SENDERS.supportTeam;
   const inbox = form === 'newsletter' ? TEAM_INBOX.news : TEAM_INBOX.support;
   try {
-    const rendered = teamNotification({ form, data, locale, submissionId: outcome.id, createdAt: str(payload.created_at, 40), acknowledgement });
+    const rendered = teamNotification({ form, data, locale, submissionId: outcome.id, createdAt: str(payload.created_at, 40), acknowledgement, dashboard: outcome.record });
     const result = await sendEmail(
       apiKey,
       {

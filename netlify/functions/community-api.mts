@@ -44,6 +44,9 @@ import { getLeaderboard, suggestMembers } from '../community/people.ts';
 import { votePoll } from '../community/polls.ts';
 import { bookmark, react } from '../community/reactions.ts';
 import { dashboard, watchAll, saveContent, publishContent, publicContent } from '../community/admin.ts';
+import { caseRoutes } from '../lifecycle/cases.ts';
+import { applicationRoutes } from '../lifecycle/applications.ts';
+import { securityRoutes } from '../lifecycle/security.ts';
 
 const base = '/api/community';
 
@@ -64,6 +67,10 @@ const fxRoutes: Route[] = [
 
 const routes: Route[] = [
   ...fxRoutes,
+  // Customer lifecycle (8 October 2026): support cases, applications, notices.
+  ...caseRoutes(base),
+  ...applicationRoutes(base),
+  ...securityRoutes(base),
   { method: 'GET', pattern: `${base}/admin`, run: dashboard },
   { method: 'POST', pattern: `${base}/admin/watch`, run: watchAll },
   { method: 'POST', pattern: `${base}/admin/content`, run: saveContent },

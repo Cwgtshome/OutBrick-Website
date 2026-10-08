@@ -596,10 +596,49 @@ function SettingsForms({ member, crumbs }: { member: SelfMember; crumbs: { href?
             {copy.settings.export}
           </a>
         </p>
+        {member.email && member.emailVerified ? <EmailExport /> : null}
       </Section>
       {features.passkeys ? <PasskeySettings /> : null}
       <DeleteAccount id={`${id}-delete`} />
     </View>
+  );
+}
+
+/** "Email me a download link": the server mails a signed 24-hour link to the account's own address. */
+function EmailExport() {
+  const { copy, announce } = useApp();
+  const [busy, setBusy] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<ApiFailure | null>(null);
+  const send = async () => {
+    setBusy(true);
+    setError(null);
+    setSent(false);
+    try {
+      await api.emailExport();
+      setSent(true);
+      announce(copy.settings.exportEmailSent);
+    } catch (e) {
+      setError(failureOf(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+  // Focus stays on the button: success is announced politely, a failure is a role=alert notice.
+  return (
+    <>
+      <p>
+        <button type="button" className="cm-act" disabled={busy} aria-busy={busy || undefined} onClick={() => void send()}>
+          {copy.settings.exportEmail}
+        </button>
+      </p>
+      {sent ? (
+        <div className="cm-notice cm-notice-ok">
+          <p>{copy.settings.exportEmailSent}</p>
+        </div>
+      ) : null}
+      {error ? <ErrorNotice error={error} /> : null}
+    </>
   );
 }
 

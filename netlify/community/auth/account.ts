@@ -16,6 +16,7 @@ import { displayNameProblem, selfMember, tidyName } from './members.ts';
 import { asLocale, configuredProviders, isPlaceholderEmail } from './util.ts';
 import { communityFeatures } from '../features.ts';
 import { deleteUnattachedUploads } from '../uploads.ts';
+import { onAccountDeleted } from '../../lifecycle/security.ts';
 
 /** Email kinds a member can switch off. The welcome is sent once and has no switch. */
 export const switchableKinds: readonly (NotificationKind | 'digest')[] = ['reply', 'mention', 'watched', 'status', 'solved', 'release', 'moderation', 'badge', 'merged', 'digest'];
@@ -120,7 +121,18 @@ export async function updateMe(req: Request): Promise<Response> {
 
 export async function exportMe(req: Request): Promise<Response> {
   const viewer = await signedIn(req);
-  const id = viewer.id;
+  const out = await buildExport(viewer.id);
+  return new Response(JSON.stringify(out, null, 2), {
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Content-Disposition': `attachment; filename="outbrick-community-${viewer.id}.json"`,
+      'Cache-Control': 'no-store',
+    },
+  });
+}
+
+/** Everything held about member `id`, for the download above and the emailed link (lifecycle/security.ts). */
+export async function buildExport(id: number): Promise<Record<string, unknown>> {
   const [member] = await sql`SELECT id::int, display_name, name_chosen, email, email_verified, locale, role, bio, email_prefs, banned_until, ban_reason, created_at, last_seen_at FROM members WHERE id = ${id}`;
   const identities = await sql`SELECT provider, subject, email, created_at, last_used_at FROM identities WHERE member_id = ${id} ORDER BY created_at`;
   const sessions = await sql`SELECT created_at, expires_at, user_agent FROM sessions WHERE member_id = ${id} ORDER BY created_at`;
@@ -158,14 +170,10 @@ export async function exportMe(req: Request): Promise<Response> {
     bookmarks: dated(bookmarks),
     pollVotes: dated(pollVotes),
     badges: dated(badges),
+    // Lifecycle (8 October 2026): the browsers and devices this account has signed in from.
+    devices: dated(await sql`SELECT label, first_seen, last_seen FROM member_devices WHERE member_id = ${id} ORDER BY first_seen`),
   };
-  return new Response(JSON.stringify(out, null, 2), {
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Content-Disposition': `attachment; filename="outbrick-community-${id}.json"`,
-      'Cache-Control': 'no-store',
-    },
-  });
+  return out;
 }
 
 export async function deleteMe(req: Request): Promise<Response> {
@@ -173,6 +181,8 @@ export async function deleteMe(req: Request): Promise<Response> {
   const body = await readJson(req, 1024);
   if (body.confirm !== 'DELETE') throw badRequest('invalid', 'Type DELETE to confirm.', { confirm: 'required' });
   const id = viewer.id;
+  // The confirmation goes to the address the account had, so read it before it is erased.
+  const [before] = await sql`SELECT email, email_verified, locale FROM members WHERE id = ${id}`;
   await transaction(async (q) => {
     // Posts stay, so threads still read; they show "Former member <id>" as the author.
     await q(
@@ -198,6 +208,8 @@ export async function deleteMe(req: Request): Promise<Response> {
   });
   // Images no post shows go with the account; those in posts stay with the posts, as the text does.
   await deleteUnattachedUploads(id);
+  await sql`DELETE FROM member_devices WHERE member_id = ${id}`;
   console.log(`[community-auth] member ${id} deleted their account`);
+  if (before) await onAccountDeleted(id, String(before.email), Boolean(before.email_verified), String(before.locale));
   return json({ ok: true }, { headers: { 'Set-Cookie': sessionCookie(req, '', 0) } });
 }

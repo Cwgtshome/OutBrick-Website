@@ -47,6 +47,10 @@ The game itself is a separate repository. This one is only the website.
 
 ## Emails (Resend)
 
+The customer-lifecycle emails (support replies and cases, application decisions, the welcome
+series, release drafts, preferences, account security and policy notices) are documented in
+[docs/EMAIL-LIFECYCLE.md](docs/EMAIL-LIFECYCLE.md).
+
 Every verified form submission also sends the visitor an email, through
 [Resend](https://resend.com) (domain `outbrick.site`, region eu-west-1, open and click tracking off).
 

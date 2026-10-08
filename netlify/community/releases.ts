@@ -25,6 +25,8 @@ import { slugify, transaction } from './db.ts';
 import { modLog, num, refreshThreadCounters, renderBody, run } from './forum.ts';
 import { notifyRelease } from './notifications.ts';
 import { linkShippedIdeas } from './ideas.ts';
+import { notifyFixedCases } from '../lifecycle/cases.ts';
+import { createReleaseDrafts } from '../lifecycle/newsletter.ts';
 
 export const APP_ID = '6807997465';
 export const RELEASES_EMAIL = 'releases@outbrick.site';
@@ -182,7 +184,7 @@ export async function runReleaseBot(fetchFn: FetchLike, prefetched?: StorefrontR
   const opening = await renderBody(posts.opening);
   const translations = await Promise.all(posts.translations.map(async (t) => ({ ...t, rendered: await renderBody(t.body) })));
 
-  return transaction(async (q) => {
+  const result = await transaction(async (q) => {
     const claimed = await q(`INSERT INTO app_releases (version, released_at) VALUES ($1, $2) ON CONFLICT (version) DO NOTHING RETURNING version`, [
       plan.version,
       us.releasedAt,
@@ -221,4 +223,28 @@ export async function runReleaseBot(fetchFn: FetchLike, prefetched?: StorefrontR
     const shippedIdeas = await linkShippedIdeas(q, { version: plan.version, announcementId: threadId, announcementSlug: slugify(posts.title), botId });
     return { action: 'post' as const, version: plan.version, threadId, notified, shippedIdeas };
   });
+  if (result.action === 'post') await afterRelease(plan.version, found);
+  return result;
+}
+
+/**
+ * Lifecycle email for a new version, once, after the announcement committed: players whose
+ * support case was marked "fixed in" this version (or earlier) are told, and one OutBrick News
+ * Broadcast draft per language is created for a person to review and send. Neither may fail
+ * the release bot.
+ */
+async function afterRelease(version: string, found: StorefrontRelease[]): Promise<void> {
+  try {
+    const n = await notifyFixedCases(version);
+    if (n) console.log(`[releases] ${n} support case(s) fixed in ${version} queued`);
+  } catch (error) {
+    console.error(`[releases] fixed-case notices for ${version}: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return;
+  try {
+    await createReleaseDrafts(apiKey, process.env, version, found.map((f) => ({ locale: f.locale, version: f.version, releaseNotes: f.releaseNotes })));
+  } catch (error) {
+    console.error(`[releases] newsletter drafts for ${version}: ${error instanceof Error ? error.message : String(error)}`);
+  }
 }
