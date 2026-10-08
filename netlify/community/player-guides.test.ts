@@ -63,7 +63,7 @@ void test('all six languages: team guides resolve every internal thread link, su
     );
     await pg.exec(
       fs.readFileSync(
-        'netlify/database/migrations/20261007180000_brazilian_portuguese_player_guides/migration.sql',
+        'netlify/database/migrations/20261007190100_brazilian_portuguese_player_guides/migration.sql',
         'utf8',
       ),
     );

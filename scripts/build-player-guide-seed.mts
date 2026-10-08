@@ -57,6 +57,6 @@ writeImmutableMigration(
   'netlify/database/migrations/20261007170000_player-guides/migration.sql',
   buildMigration(legacyLocales, 'reviewed five-language team guides'),
 );
-const ptBRGuides = 'netlify/database/migrations/20261007180000_brazilian_portuguese_player_guides/migration.sql';
+const ptBRGuides = 'netlify/database/migrations/20261007190100_brazilian_portuguese_player_guides/migration.sql';
 writeImmutableMigration(ptBRGuides, buildMigration(['pt-BR'], 'reviewed Brazilian Portuguese team guides'));
 console.log(`Generated ${legacyLocales.length * 9} original team guides and 9 additive pt-BR guides.`);
