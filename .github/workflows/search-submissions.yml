@@ -1,0 +1,42 @@
+name: Submit live sitemap
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 9 * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/search-submissions.yml'
+      - 'scripts/submit-search-sitemap.mjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: search-submissions
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    name: Submit to ${{ matrix.engine }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [google, bing]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+      - name: Test submission safety
+        run: node --test scripts/submit-search-sitemap.test.mjs
+      - name: Submit and verify live sitemap
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ matrix.engine == 'google' && secrets.GSC_SERVICE_ACCOUNT_JSON || '' }}
+          BING_WEBMASTER_API_KEY: ${{ matrix.engine == 'bing' && secrets.BING_WEBMASTER_API_KEY || '' }}
+        run: node scripts/submit-search-sitemap.mjs ${{ matrix.engine }}

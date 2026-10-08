@@ -3,6 +3,26 @@
 Updated 7 October 2026. This is a dated handoff, not a claim that account state remains unchanged.
 Recheck live Git, `/build-info.json`, `/api/community/session` and relevant providers before acting.
 
+## GitHub search submissions (8 October 2026)
+
+The owner requested search submissions through GitHub independently of Netlify deployment
+credits. `.github/workflows/search-submissions.yml` runs daily at 09:23 UTC and manually from
+Actions. It submits only the live `https://www.outbrick.site/sitemap.xml`, handles either a URL
+sitemap or sitemap index, and verifies registration separately in Google and Bing. It does not
+build/deploy the website, submit unpublished URLs, or consume Bing URL-batch quotas.
+
+Configure `GSC_SERVICE_ACCOUNT_JSON` and `BING_WEBMASTER_API_KEY` as encrypted repository
+Actions secrets, as authorized by the owner for this workflow. Google uses the existing OutBrick
+Search Console service account with Full access only to `sc-domain:outbrick.site`. Each job
+receives only its own provider secret. Missing credentials or provider failures fail visibly;
+request URLs, response bodies and credentials are excluded from error logs. Successful
+registration does not guarantee crawling or indexing. The existing Netlify hook is unchanged.
+
+Validation: six focused tests cover live sitemap checks, both submission/readback paths,
+missing credentials and redacted errors. Provider execution from GitHub remains pending secret
+configuration and the first successful Actions run. Earlier direct submissions to Google and
+Bing were accepted on 8 October while Netlify production deployments were credit-blocked.
+
 ## Production checkpoint
 
 - Repository: <https://github.com/Cwgtshome/OutBrick-Website>, default branch `main`.
