@@ -19,6 +19,22 @@ Recheck live Git, `/build-info.json`, `/api/community/session` and relevant prov
 - [PR #13](https://github.com/Cwgtshome/OutBrick-Website/pull/13): current game content in all
   five languages; merged and production publication independently verified.
 
+## Email footer and responsive check (8 October 2026, branch `claude/email-footer-responsive`)
+
+Every email, and every page drawn with the email shell, now ends with the website footer's
+social tiles (all five `socialProfiles` rows, handle `@outbrick`), a "Follow OutBrick: @outbrick"
+line and `© <year> OutBrick. All rights reserved.`, centred, in all six languages. They are added
+by `shell()` (`emails/brand.ts`) and by the text/plain footer helpers, so no template can omit them.
+The year is the year of rendering. The tiles are PNGs in `public/assets/email/`, drawn from the
+site's own glyphs by `scripts/build-email-social-icons.mjs` (macOS). Until a deploy publishes
+them, emails show the tiles' alt text.
+
+Responsive check: all 168 sample emails were rendered at widths of 280, 320, 360, 375, 414, 600,
+768, 1024 and 1440 px in a browser, with no horizontal overflow. A German button label overflowed
+at 280 px; that is fixed with a ≤360 px breakpoint and wrapping long words in the button. This is
+a browser check only. It is not a Litmus or real-client test, and Outlook/Gmail app rendering
+has not been checked on devices.
+
 ## Product content
 
 The verified App Store checkpoint is iOS **5.0.1**, released 6 October 2026. Website home/play,

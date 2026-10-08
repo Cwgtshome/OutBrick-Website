@@ -4,6 +4,7 @@
 // inlineMarkdown), never in the copy catalogue; the text/plain part gets the raw value.
 
 import { contactTopics } from '../lib/business.ts';
+import { brandFooterText } from './brand.ts';
 import { appStoreUrl } from '../lib/app-store-url.ts';
 import { publicPages } from '../lib/i18n/public-pages.ts';
 import {
@@ -86,6 +87,7 @@ function supportFooterText(locale: EmailLocale, why: string, campaign: string): 
     '',
     why,
     `${t.tagline} · https://www.outbrick.site`,
+    ...brandFooterText(locale),
   ];
 }
 
@@ -278,6 +280,7 @@ function newsFooterText(locale: EmailLocale, unsubscribe: string | null, why: st
     `${t.news.privacy}: ${sitePath(locale, '/privacy')}`,
     address ?? null,
     `${t.tagline} · https://www.outbrick.site`,
+    ...brandFooterText(locale),
   ].filter((v): v is string => v !== null);
 }
 

@@ -18,6 +18,7 @@
 // and are bundled by esbuild into the Netlify functions.
 
 import type { EmailLocale } from './i18n.ts';
+import { brandFooter } from './brand.ts';
 
 export const SITE = 'https://www.outbrick.site';
 
@@ -150,7 +151,7 @@ export function button(ctx: Ctx, href: string, label: string, width = 280): stri
 <center style="color:${color.ink};font-family:Arial,sans-serif;font-size:17px;font-weight:bold;">${label}</center>
 </v:roundrect>
 <![endif]-->
-<!--[if !mso]><!-- --><a class="ob-btn" href="${url}" style="display:inline-block;background:${color.gold};color:${color.ink};font-family:${f.display};font-size:18px;line-height:22px;font-weight:600;text-decoration:none;padding:15px 30px 13px;border-radius:14px;border-bottom:4px solid ${color.goldFoot};mso-hide:all;">${label}</a><!--<![endif]-->
+<!--[if !mso]><!-- --><a class="ob-btn" href="${url}" style="display:inline-block;background:${color.gold};color:${color.ink};font-family:${f.display};font-size:18px;line-height:22px;font-weight:600;text-decoration:none;text-align:center;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere;padding:15px 30px 13px;border-radius:14px;border-bottom:4px solid ${color.goldFoot};mso-hide:all;">${label}</a><!--<![endif]-->
 </td></tr>
 </table>`;
 }
@@ -213,9 +214,11 @@ export type ShellOptions = {
   logoAlt: string;
   /** Extra <head> markup (the preview pages add robots noindex). */
   head?: string;
+  /** The copyright year; the year of rendering unless a test pins it. */
+  year?: number;
 };
 
-export function shell({ ctx, title, preheader, body, footer, logoAlt, head = '' }: ShellOptions): string {
+export function shell({ ctx, title, preheader, body, footer, logoAlt, head = '', year }: ShellOptions): string {
   const f = fonts(ctx.locale);
   const asset = (p: string) => `${ctx.assetBase}${p}`;
   // The inbox preview pads itself out with zero-width joiners so the client does not fill the
@@ -257,6 +260,14 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
   .ob-col-img{padding:0 0 14px !important;}
   .ob-hero-img{width:100% !important;height:auto !important;}
 }
+@media screen and (max-width:360px){
+  .ob-outer{padding:8px 4px 20px !important;}
+  .ob-pad{padding:24px 16px 10px !important;}
+  .ob-head{padding:18px 16px !important;}
+  .ob-foot{padding:20px 16px 24px !important;}
+  .ob-h1{font-size:24px !important;}
+  .ob-btn{padding:14px 18px 12px !important;}
+}
 @media (prefers-color-scheme:dark){
   .ob-page{background:${color.darkPage} !important;}
   .ob-paper{background:${color.darkPaper} !important;border-color:${color.ink2} !important;}
@@ -289,11 +300,12 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
 <a href="${SITE}${ctx.locale === 'en' ? '/' : `/${ctx.locale}`}" style="text-decoration:none;"><img src="${esc(asset('/assets/logo/outbrick-wordmark.png'))}" width="168" height="33" alt="${esc(logoAlt)}" style="display:block;width:168px;height:33px;border:0;color:${color.title};font-family:${f.display};font-size:24px;font-weight:600;"></a>
 </td></tr>
 <tr><td style="font-size:0;line-height:0;">${courseStripe()}</td></tr>
-<tr><td class="ob-paper ob-pad" bgcolor="${color.paper}" style="background:${color.paper};padding:36px 40px 18px;border-left:1px solid ${color.paperEdge};border-right:1px solid ${color.paperEdge};">
+<tr><td class="ob-paper ob-pad" bgcolor="${color.paper}" style="background:${color.paper};padding:36px 40px 18px;overflow-wrap:break-word;word-wrap:break-word;border-left:1px solid ${color.paperEdge};border-right:1px solid ${color.paperEdge};">
 ${body}
 </td></tr>
-<tr><td class="ob-foot" bgcolor="${color.ink}" style="background:${color.ink};border-radius:0 0 20px 20px;padding:26px 40px 32px;">
+<tr><td class="ob-foot" bgcolor="${color.ink}" style="background:${color.ink};border-radius:0 0 20px 20px;padding:26px 40px 32px;overflow-wrap:break-word;word-wrap:break-word;">
 ${footer}
+${brandFooter(ctx, year)}
 </td></tr>
 </table>
 </div>

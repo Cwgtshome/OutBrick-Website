@@ -8,6 +8,7 @@
 
 import { SITE, bricks, button, color, esc, escLines, eyebrow, field, fonts, footerBlock, heading, link, panel, para, rule, shell, textBlock, type Ctx } from './core.ts';
 import { emailCopy, type EmailLocale } from './i18n.ts';
+import { brandFooterText } from './brand.ts';
 import { communityCopy, type CommunityKind, type UnsubscribeKind } from './community-i18n.ts';
 import type { Rendered } from './templates.ts';
 import { replyHints } from './community-p2-i18n.ts';
@@ -87,6 +88,7 @@ export function footerText(locale: EmailLocale, why: string, links: FooterLinks)
     '',
     why,
     `${t.tagline} · https://www.outbrick.site`,
+    ...brandFooterText(locale),
   ];
 }
 

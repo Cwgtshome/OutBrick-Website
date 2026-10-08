@@ -11,6 +11,7 @@
 import { contactTopics } from '../lib/business.ts';
 import { SITE, button, color, esc, escLines, eyebrow, field, fonts, footerBlock, heading, link, panel, para, rule, shell, textBlock, toText, type Ctx } from './core.ts';
 import type { EmailLocale } from './i18n.ts';
+import { brandFooterText } from './brand.ts';
 import type { Rendered } from './templates.ts';
 
 export type TeamForm = 'contact' | 'careers' | 'affiliate' | 'newsletter';
@@ -209,6 +210,7 @@ export function teamNotification(input: TeamInput): Rendered {
     '—',
     'Netlify submissions: https://app.netlify.com/projects/outbrick/forms',
     `Replying answers ${email ? 'the visitor' : 'nobody: they left no address'}.`,
+    ...brandFooterText(ctx.locale),
   ]);
   return { subject, html, text };
 }
