@@ -48,17 +48,33 @@ function rfc822(iso) {
   return new Date(`${iso}T12:00:00Z`).toUTCString();
 }
 
+// A deploy uploaded through Netlify's API (not built from the linked Git repository) has no git
+// history on the build machine. scripts/snapshot-git-dates.mjs, run before such an upload, writes
+// `.git-dates.json`: the commit, and each tracked file's last commit date, so the build ID and
+// the sitemap's <lastmod> stay right without git.
+let snapshot = null;
+try {
+  snapshot = JSON.parse(fs.readFileSync(path.join(repoRoot, '.git-dates.json'), 'utf8'));
+} catch {
+  /* no snapshot: use git */
+}
+
 let gitAvailable = true;
 try {
-  const shallow = execFileSync('git', ['rev-parse', '--is-shallow-repository'], { cwd: repoRoot, encoding: 'utf8' }).trim();
+  const shallow = execFileSync('git', ['rev-parse', '--is-shallow-repository'], { cwd: repoRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
   if (shallow === 'true') console.warn('[postbuild] shallow git clone: page lastmod dates may be the clone tip date.');
+  execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, stdio: 'ignore' });
 } catch {
   gitAvailable = false;
-  console.warn('[postbuild] git unavailable: non-article pages get no <lastmod>.');
+  console.warn(snapshot ? '[postbuild] git unavailable: using .git-dates.json for <lastmod>.' : '[postbuild] git unavailable: non-article pages get no <lastmod>.');
 }
 
 function gitDate(files) {
-  if (!gitAvailable || !files.length) return undefined;
+  if (!files.length) return undefined;
+  if (!gitAvailable) {
+    const dates = files.map((f) => snapshot?.files?.[path.relative(repoRoot, path.resolve(repoRoot, f)).split(path.sep).join('/')]).filter(Boolean).sort();
+    return dates.at(-1);
+  }
   try {
     const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', ...files], { cwd: repoRoot, encoding: 'utf8' }).trim();
     return out || undefined;
@@ -604,7 +620,7 @@ fs.writeFileSync(
 console.log(`[postbuild] .well-known/security.txt: expires ${expires.toISOString().slice(0, 10)}`);
 
 // A public commit marker makes production verification unambiguous after deployment.
-const buildCommit = process.env.COMMIT_REF ?? execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8' }).trim();
+const buildCommit = process.env.COMMIT_REF ?? (gitAvailable ? execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8' }).trim() : (snapshot?.commit ?? 'unknown'));
 if (!/^[a-f\d]{40}$/i.test(buildCommit)) throw new Error('Invalid deployment commit');
 fs.writeFileSync(path.join(distDir, 'build-info.json'), JSON.stringify({ commit: buildCommit, builtAt: new Date().toISOString() }, null, 2) + '\n');
 console.log(`[postbuild] build-info.json: ${buildCommit}`);
