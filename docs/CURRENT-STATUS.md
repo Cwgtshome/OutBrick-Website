@@ -25,8 +25,16 @@ The owner's second Google OAuth secret is installed in preview and accepted by G
 endpoint (deliberately invalid authorization code yields `invalid_grant`, not `invalid_client`).
 Real Google sign-in is still unverified. Original Apple/Resend credentials are preserved. Existing
 Bing API key authenticates and the Search Console service account has Full property access, but its
-downloaded JSON key is missing locally. GitHub currently has no repository/environment secrets;
-the Cloudflare connector cannot create deployment tokens. Credential creation needs owner handoff.
+owner-created replacement JSON key now authenticates with Full access to `sc-domain:outbrick.site`.
+GitHub encrypted repository secrets now contain `CLOUDFLARE_API_TOKEN`,
+`BING_WEBMASTER_API_KEY` and `GSC_SERVICE_ACCOUNT_JSON`, confirmed by settings readback.
+The restricted owner-created Cloudflare token successfully deployed production staging.
+All 17 production secret entries are encrypted, and staging passes 54 static/backend-blocking checks.
+Jobs and production translation remain disabled. All four CI cross-browser and all four responsive
+jobs pass; remaining accessibility jobs and the locale-history check still need final acceptance.
+The final-refresh procedure was rehearsed locally: all 37 tables, 976 rows and 18 sequence counters
+match the fresh snapshot. It requires a live source freeze, 15-minute drain, verified snapshot,
+unchanged destination hashes and a private destination backup before atomic replacement.
 Traffic and scheduled writers remain on Netlify; no source freeze or data deletion has occurred.
 
 

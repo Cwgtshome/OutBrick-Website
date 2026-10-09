@@ -35,6 +35,12 @@ for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
   await check(`${prefix}/community/feed.xml`, 404, { type: 'text/html', method: 'HEAD' });
   await check(`${prefix}/community/help`, 200, { type: 'text/html' });
 }
-await check('/.netlify/functions/community-notify', 404);
-await check('/.netlify/functions/lifecycle-outbox', 404);
+const staging = new URL(base).hostname === 'outbrick.moh305.workers.dev';
+await check('/.netlify/functions/community-notify', staging ? 503 : 404);
+await check('/.netlify/functions/lifecycle-outbox', staging ? 503 : 404);
+if (staging) {
+  await check('/api/community/auth/google', 503, { type: 'application/json' });
+  await check('/api/community/auth/apple', 503, { type: 'application/json' });
+  await check('/contact', 503, { method: 'POST', type: 'application/json' });
+}
 console.log(JSON.stringify({ status: 'static-route-checks-passed', checks, limitation: 'Does not prove database writes, sign-in, uploads, jobs or email delivery.' }, null, 2));

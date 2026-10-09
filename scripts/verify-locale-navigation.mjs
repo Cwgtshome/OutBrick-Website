@@ -120,7 +120,10 @@ try {
     ]);
     assert.equal(page.url(), `${base}${localized(to, route)}${suffix}`);
     assert.equal(await page.locator('html').getAttribute('lang'), to);
-    await page.goBack({ waitUntil: 'load' });
+    await Promise.all([
+      page.waitForURL(start, { waitUntil: 'load' }),
+      page.goBack({ waitUntil: 'load' }),
+    ]);
     assert.equal(page.url(), start);
     assert.equal(await page.locator('html').getAttribute('lang'), from);
     evidence.clicks.push({ route, from, to, queryHashPreserved: true, back: 'passed' });
@@ -134,7 +137,10 @@ try {
       assert.equal(new URL(page.url()).pathname, href);
       assert.equal(await page.locator('html').getAttribute('lang'), locale);
       evidence.internalNavigation.push({ locale, kind, href });
-      await page.goBack({ waitUntil: 'load' });
+      await Promise.all([
+        page.waitForURL(`${base}/${locale}/blog/designing-for-real-life-play`, { waitUntil: 'load' }),
+        page.goBack({ waitUntil: 'load' }),
+      ]);
     }
     for (const [kind, selector] of [['author', `main a[href^="/${locale}/authors/"]`], ['footer-help', `footer.site a[href="/${locale}/support"]`], ['header-journal', `header a[href="/${locale}/blog"]`]]) {
       await page.goto(`${base}/${locale}/blog/designing-for-real-life-play`, { waitUntil: 'load' });
