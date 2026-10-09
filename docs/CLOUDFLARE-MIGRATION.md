@@ -1,5 +1,7 @@
 # Cloudflare migration and operations
 
+**Live sign-in acceptance, 8 October 2026:** Cloudflare deployment [37874625503](https://github.com/Cwgtshome/OutBrick-Website/actions/runs/37874625503) succeeded for `789d7a5117ab635011dd10aeebfd0cb29b6430f9`, matching live build-info. The owner completed Apple Touch ID in Safari and returned to the canonical community as a signed-in member with existing notifications visible. Production logs confirmed the successful Apple callback. Google sign-in also completed in Safari and was independently confirmed in production callback logs. The installed Workers signing/ID-token regression passed locally and in GitHub CI; all 25 OAuth tests, build, lint and typecheck passed. Apple/Google sign-in are accepted for these tested owner accounts; passkeys and the other functional acceptance items remain separate.
+
 **Apple sign-in correction (8 October 2026, New York):** production callback logs identified a Workers crypto incompatibility: passing a pre-created `PrivateKeyObject` to ES256 signing failed before Apple token exchange. The signer now passes normalized PEM directly, preserving escaped-newline handling and the 64-byte JOSE signature. A regression runs the shared signer in the installed Workers runtime, verifies both PEM representations and verifies a signed provider ID token. Node-only OAuth tests remain separate from real canonical sign-in acceptance.
 
 ## Current production contract — 9 October 2026 UTC (8 October in New York)
@@ -55,8 +57,8 @@ A credit-cycle reset could change source availability; read provider state befor
 | Contact, careers, affiliate and newsletter sign-up | Worker stores submissions in Postgres; shared Resend lifecycle handlers retained; four real preview flows and nine delivered test emails verified; live invalid/honeypot checks passed | One legitimate canonical submission and inbox check per flow; no subscriber broadcast as a test |
 | Newsletter confirmation/preferences/unsubscribe | Existing signed routes and original Resend signing key retained; double opt-in and deliberate POST preserved | Fresh canonical confirmation/unsubscribe acceptance |
 | Email-link registration/sign-in | Resend credentials and account/token handlers migrated | Successful canonical email-link session and security email acceptance |
-| Sign in with Apple | Restored original key; `/api/community/auth/apple/start` redirects to Apple with canonical callback | Successful real callback/session on canonical website |
-| Sign in with Google | Installed replacement secret for existing client; `/api/community/auth/google/start` redirects with canonical callback | Successful real callback/session on canonical website |
+| Sign in with Apple | Restored original key; `/api/community/auth/apple/start` redirects to Apple with canonical callback | Accepted: real owner callback/session in Safari, independently confirmed in production logs |
+| Sign in with Google | Installed replacement secret for existing client; `/api/community/auth/google/start` redirects with canonical callback | Accepted: real owner callback/session in Safari, independently confirmed in production logs |
 | Passkeys | Enabled; unchanged `outbrick.site` relying-party ID and restored credentials | Existing passkey sign-in and new registration on a real device |
 | Forum image uploads | R2 binding active; source upload store explicitly empty; no known image left uncopied | Authenticated image upload/read/delete with alt text |
 | Notifications, digest, releases and lifecycle outbox | Production `JOBS_ENABLED=true`, every-five-minute Cloudflare Cron Trigger; UTC job selection/idle gates/idempotency retained | Observe due production work and delivered mail; configuration alone is not delivery proof |
