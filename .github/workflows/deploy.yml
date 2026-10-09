@@ -43,7 +43,7 @@ jobs:
       - name: Deploy shared free translation limiter
         run: pnpm exec wrangler deploy --config wrangler.translation.jsonc
       - name: Deploy website
-        run: pnpm exec wrangler deploy --config wrangler.production.jsonc
+        run: node scripts/cloudflare/deploy-version.mjs
       - name: Verify production routes and exact build
         run: |
           node scripts/cloudflare/smoke.mjs https://www.outbrick.site

@@ -7,9 +7,10 @@ import { spawn } from 'node:child_process';
 
 const [baselineDir, finalDir, mode] = process.argv.slice(2);
 const rehearsal = mode === '--rehearse';
+const acceptedSnapshot = mode === '--accepted-paused-snapshot';
 if (![baselineDir, finalDir].every(p => p && path.isAbsolute(p)) ||
     !process.env.PG_DUMP || !process.env.PG_RESTORE || !process.env.PSQL ||
-    (mode && !rehearsal)) throw new Error('Supply private baseline/final snapshots and PostgreSQL tools.');
+    (mode && !rehearsal && !acceptedSnapshot)) throw new Error('Supply private baseline/final snapshots and PostgreSQL tools.');
 const siteID = '8b73b763-21f4-405b-a284-a4605cc31d2f';
 const read = async file => JSON.parse(await fs.readFile(file, 'utf8'));
 const baseline = await read(path.join(baselineDir, 'manifest.json'));
@@ -32,8 +33,16 @@ if (rehearsal) {
   const freeze = await read(process.env.SOURCE_FREEZE_RECEIPT);
   if (freeze.siteID !== siteID || freeze.status !== 'source-disabled' ||
       !Number.isFinite(Date.parse(final.capturedAt)) ||
-      Date.parse(final.capturedAt) < Date.parse(freeze.disabledAt) + 15*60*1000 ||
+      (!acceptedSnapshot && Date.parse(final.capturedAt) < Date.parse(freeze.disabledAt) + 15*60*1000) ||
       !Number.isFinite(Date.parse(freeze.disabledAt))) throw new Error('Final export must follow verified freeze and 15-minute drain.');
+  if (acceptedSnapshot) {
+    const decision = await read(process.env.ACCEPTED_SNAPSHOT_RECEIPT);
+    const manifestHash = createHash('sha256').update(await fs.readFile(path.join(finalDir,'manifest.json'))).digest('hex');
+    if (decision.siteID !== siteID || decision.status !== 'owner-accepted-paused-source-snapshot' ||
+        decision.manifestSha256 !== manifestHash || decision.capturedAt !== final.capturedAt ||
+        decision.acceptsUnverifiedLaterWrites !== true)
+      throw new Error('Explicit owner decision matching this backup is required.');
+  }
   const config = await read(`${process.env.HOME}/Library/Preferences/netlify/config.json`);
   const auth = config.users[config.userId].auth;
   const token = auth.token ?? auth;
@@ -43,6 +52,8 @@ if (rehearsal) {
   if (!response.ok) throw new Error('Cannot verify source freeze.');
   const source = await response.json();
   if (source.id !== siteID || source.disabled !== true) throw new Error('Source is active; no destination mutation attempted.');
+  if (acceptedSnapshot && source.disabled_reason !== 'Account usage exceeded for credits')
+    throw new Error('Accepted fallback applies only to the recorded source credit pause.');
   const configDestination = await read('.env.neon-production.json');
   connection = new URL(configDestination.connectionString);
   if (configDestination.project !== 'summer-boat-89820889' ||
@@ -106,4 +117,5 @@ await run(process.env.PG_DUMP,['--format=custom','--schema=public','--no-owner',
 await fs.chmod(backup,0o600);
 await run(process.env.PSQL,['-X','--single-transaction','--set=ON_ERROR_STOP=1','--file',sqlFile],'restore');
 console.log(JSON.stringify({status:rehearsal?'local-refresh-rehearsal-restored':'final-neon-restored',
-  sourceFrozen:!rehearsal,requiresPostRestoreVerification:true,backupRetained:true}));
+  sourceFrozen:!rehearsal,acceptedOlderSnapshot:acceptedSnapshot,
+  requiresPostRestoreVerification:true,backupRetained:true}));

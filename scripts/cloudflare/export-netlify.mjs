@@ -9,6 +9,9 @@ import { getStore, listStores } from '@netlify/blobs';
 
 const siteID = '8b73b763-21f4-405b-a284-a4605cc31d2f';
 const output = process.argv[2];
+const blobsOnly = process.argv[3] === '--blobs-only';
+const assetsOnly = process.argv[3] === '--assets-only' || blobsOnly;
+if (process.argv[3] && !assetsOnly) throw new Error('Unknown export mode.');
 if (!output || !path.isAbsolute(output)) throw new Error('Supply an absolute, private backup directory.');
 await fs.mkdir(output, { recursive: true, mode: 0o700 });
 const config = JSON.parse(await fs.readFile(`${process.env.HOME}/Library/Preferences/netlify/config.json`, 'utf8'));
@@ -39,6 +42,7 @@ async function pages(route) {
   return rows;
 }
 const receipt = { capturedAt: new Date().toISOString(), siteID, files: [], stores: [], tables: [], status: 'incomplete' };
+if (!blobsOnly) {
 const forms = await pages(`/sites/${siteID}/forms`);
 receipt.files.push(await save('forms.json', forms));
 const submissions = await pages(`/sites/${siteID}/submissions`);
@@ -54,6 +58,7 @@ if (Array.isArray(spam) && spam.length) {
     if (next.length < 100) break;
   }
   receipt.files.push(await save('form-spam-submissions.json', all));
+}
 }
 // Global inventories omit empty stores. Explicitly inspect both required stores so an
 // empty upload store is evidence rather than an inference from its absence.
@@ -74,6 +79,13 @@ for (const name of storeNames) {
       }
     }
     receipt.stores.push({ name, objects: manifest.length, manifest });
+}
+if (assetsOnly) {
+  receipt.status = blobsOnly ? 'blobs-exported-database-and-forms-unavailable' : 'forms-and-blobs-exported-database-unavailable';
+  await save('manifest.json', receipt);
+  console.log(JSON.stringify({status:receipt.status,formSubmissions:receipt.formSubmissions,
+    stores:receipt.stores.map(({name,objects})=>({name,objects}))}));
+  process.exit(0);
 }
 const db = getDatabase({ connectionString: database.database.connectionString });
 const client = await db.pool.connect();

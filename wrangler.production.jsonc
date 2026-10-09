@@ -18,8 +18,8 @@
   "vars": {
     "CONTEXT": "production",
     "SITE_ID": "8b73b763-21f4-405b-a284-a4605cc31d2f",
-    "JOBS_ENABLED": "false",
-    "CLOUDFLARE_TRANSLATION_ENABLED": "false"
+    "JOBS_ENABLED": "true",
+    "CLOUDFLARE_TRANSLATION_ENABLED": "true"
   },
   "r2_buckets": [
     {
@@ -48,6 +48,21 @@
         "class_name": "TranslationBudget",
         "script_name": "outbrick-translation-budget"
       }
+    ]
+  },
+  "routes": [
+    {
+      "pattern": "www.outbrick.site",
+      "custom_domain": true
+    },
+    {
+      "pattern": "outbrick.site",
+      "custom_domain": true
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "*/5 * * * *"
     ]
   }
 }

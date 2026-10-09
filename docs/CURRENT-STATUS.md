@@ -3,40 +3,43 @@
 Updated 8 October 2026. This is a dated handoff, not a claim that account state remains unchanged.
 Recheck live Git, `/build-info.json`, `/api/community/session` and relevant providers before acting.
 
-## Cloudflare integrated preview checkpoint (9 October 2026 UTC; not live)
+## Cloudflare production cutover (9 October 2026 UTC)
 
-Migration branch integrates website main `35ab1507a0532e114313ece826a3beee7aaded0b`, including the
-Help Centre and forum fixes. Cloudflare shares `communityAddress` with the forum router and answers
-unknown community pages/categories with localized 404 assets. Production staging refuses backend
-routes and non-read requests, even when a production database is later bound.
+The owner declined any Netlify payment and explicitly accepted the latest verified backup,
+with later missing information to be reviewed together. Netlify credit exhaustion disabled the
+source site/database at 01:08:27 UTC. The accepted database snapshot was captured at 00:44:42 UTC;
+writes in the intervening approximately 24 minutes remain unverified. No source data was deleted.
 
-Integrated build, lint, typecheck, SEO, Help Centre and internal-link checks pass. 259 backend,
-authentication, lifecycle, form, platform and free-translation tests pass. Preview version
-`6adc5102-3eb9-450a-ac86-a765f4768920` passes 51 static-route checks, including Help Centre and
-unknown community routes in all six languages. Preview migrations preserve 51 legacy forms without
-sending email. Browser CI and actual canonical-domain authentication remain cutover gates.
+Production Neon restored and independently matched all 37 original tables, 976 rows, 18 sequence
+counters and backup hashes before additive migrations. All 17 migrations and 51 archived Netlify
+form submissions (50 normal, one spam) are preserved without resending archived forms. A fresh
+post-pause Blobs export remains readable: community-uploads is explicitly empty and all three
+community-signals objects match the earlier export and production R2 readback hashes.
 
-Fresh private `export-04-precutover` restores and matches all 37 tables, 976 rows, 18 sequences and
-backup file hashes locally. Production Neon still exactly matches the initial 749-row snapshot;
-it has no customer writes. Source is still active, so this is not the final frozen-source snapshot.
-Both required Blobs stores were explicitly inventoried: uploads empty, signals three objects.
+Both www.outbrick.site and outbrick.site are Cloudflare Worker custom domains with HTTPS. The
+apex redirects to www. All 13 other mail/verification DNS records are preserved. Netlify remains
+disabled and automatic builds are stopped. Cloudflare's every-five-minute trigger owns the
+existing notifications, outbox, release, digest, trust and badge schedules. Existing Resend
+credentials, signed links and the legacy resend-events webhook path are retained.
 
-The owner's second Google OAuth secret is installed in preview and accepted by Google's token
-endpoint (deliberately invalid authorization code yields `invalid_grant`, not `invalid_client`).
-Real Google sign-in is still unverified. Original Apple/Resend credentials are preserved. Existing
-Bing API key authenticates and the Search Console service account has Full property access, but its
-owner-created replacement JSON key now authenticates with Full access to `sc-domain:outbrick.site`.
-GitHub encrypted repository secrets now contain `CLOUDFLARE_API_TOKEN`,
-`BING_WEBMASTER_API_KEY` and `GSC_SERVICE_ACCOUNT_JSON`, confirmed by settings readback.
-The restricted owner-created Cloudflare token successfully deployed production staging.
-All 17 production secret entries are encrypted, and staging passes 54 static/backend-blocking checks.
-Jobs and production translation remain disabled. All four CI cross-browser and all four responsive
-jobs pass; remaining accessibility jobs and the locale-history check still need final acceptance.
-The final-refresh procedure was rehearsed locally: all 37 tables, 976 rows and 18 sequence counters
-match the fresh snapshot. It requires a live source freeze, 15-minute drain, verified snapshot,
-unchanged destination hashes and a private destination backup before atomic replacement.
-Traffic and scheduled writers remain on Netlify; no source freeze or data deletion has occurred.
+The integrated website includes main 35ab150 (Help Centre and forum fixes). Build/lint/typecheck,
+259 backend tests, SEO/Help Centre/link checks and all four browser/responsive CI jobs pass.
+Canonical static-route smoke checks pass against the Cloudflare endpoint; DNS caches can still
+resolve Netlify temporarily. Accessibility CI and actual user Google/Apple/passkey sign-in remain
+separate acceptance checks. All 17 production secret bindings are encrypted.
 
+Free Cloudflare GPT-OSS translation is enabled with the shared atomic 5,000-neuron daily budget,
+input/output limits and no paid fallback. Google Analytics retains G-13BKCF9FV4 (provider property
+552790863). Search Console's replacement service account key authenticates with Full domain-property
+access; GitHub encrypted secrets contain Cloudflare, Bing and Search Console credentials. Live
+sitemap submissions passed: Search Console 204, Bing sitemap/100 URLs and IndexNow 1,255 URLs 200.
+The restricted Cloudflare token passed exact-version deployment while retaining domains/schedules.
+GitHub deployment activation and real provider sign-in still require final readback.
+
+Private backups/receipts are retained outside Git in the dated OutBrick migration backup folder.
+The accepted older-snapshot refresh requires an explicit owner receipt matching the manifest hash,
+continued source credit pause, unchanged destination inventory/hashes/counters, and a destination
+backup before atomic replacement. This exception does not turn an older snapshot into a fresh one.
 
 ## Help Centre and forum overhaul (8–9 October 2026, branch `claude/community-help`; not deployed)
 
