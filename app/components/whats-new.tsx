@@ -56,6 +56,7 @@ function ReleaseEntry({ release, locale }: { release: Release; locale: Locale })
   const copy = whatsNewCopy[locale];
   const anchor = releaseAnchor(release.version);
   const titleId = `release-${anchor}-title`;
+  const versionId = `release-${anchor}-version`;
   return (
     <li>
       <article id={anchor} className="wn-release" aria-labelledby={titleId}>
@@ -63,7 +64,7 @@ function ReleaseEntry({ release, locale }: { release: Release; locale: Locale })
           <a className="wn-chip ed-slab lit" data-tone="gold" href={`#${anchor}`}>
             <Studs count={2} />
             <small>{copy.version}</small>
-            <b>{release.version}</b>
+            <b id={versionId}>{release.version}</b>
           </a>
           <p className="wn-date">
             <span className="obx-sr">{copy.released} </span>
@@ -74,7 +75,7 @@ function ReleaseEntry({ release, locale }: { release: Release; locale: Locale })
           <h2 id={titleId} className="ed-h2">{release.headline}</h2>
           <div className="wn-groups">
             {release.sections.map((section, index) => (
-              <section key={section.title} className="wn-group" data-tone={tones[index % tones.length]} aria-labelledby={`${titleId}-${index}`}>
+              <section key={section.title} className="wn-group" data-tone={tones[index % tones.length]} aria-labelledby={`${versionId} ${titleId}-${index}`}>
                 <h3 id={`${titleId}-${index}`}>{section.title}</h3>
                 {section.intro ? <p>{section.intro}</p> : null}
                 <ul>

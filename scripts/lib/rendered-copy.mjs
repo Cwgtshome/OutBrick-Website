@@ -62,7 +62,7 @@ const nativeShared = {
   fr: new Set(['Action', 'actions', 'Collection', 'Collection.', 'Important', 'Missions', 'Notifications', 'Orange', 'Pause', 'Plus', 'Secrets', 'Statue', 'Triangle', 'rotors', 'village', 'France', 'Canada', 'Sources', 'Marketing', 'Design', 'Type', 'Journal', 'Contact', 'Menu', 'Commission', 'Questions', 'Support', 'Newsletter', 'Version', 'Standard', 'Genre', 'Clip', 'Stickers', 'boulevard', 'motivation', 'parents', 'gamification', 'insight', 'flow', 'progression', 'expertise', 'nature', 'attention', 'routines', 'stress', 'smartphones']),
   de: new Set(['In', 'in', 'Orange', 'Pause', 'Pink', 'Plus', 'Statue', 'optional', 'System', 'Name', 'Website', 'Level', 'Newsletter:', 'Widgets:', 'Journal', 'Support', 'Newsletter', 'Version', 'Standard', 'Design', 'Marketing', 'Community', 'Team', 'Genre', 'Clip', 'Stickers', 'Early Access', 'Gamification', 'gamification', 'flow', 'stress', 'smartphones']),
   es: new Set(['No', 'nostalgia', 'Widgets:', 'Marketing', 'Clip', 'Stickers']),
-  'pt-BR': new Set(['Português (Brasil)', 'nostalgia', 'Marketing', 'Design', 'Cookies']),
+  'pt-BR': new Set(['Português (Brasil)', 'nostalgia', 'Marketing', 'Design', 'Cookies', 'Menu']),
   ja: new Set(),
 };
 // Original bibliographic titles preserve source identities, not surrounding explanations.

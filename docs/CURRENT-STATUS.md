@@ -13,6 +13,8 @@ writes in the intervening approximately 24 minutes remain unverified. No source 
 Production Neon restored and independently matched all 37 original tables, 976 rows, 18 sequence
 counters and backup hashes before additive migrations. All 17 migrations and 51 archived Netlify
 form submissions (50 normal, one spam) are preserved without resending archived forms. A fresh
+post-pause read through site and individual-form submission endpoints matches all 51 records
+exactly; the unavailable form-list endpoint did not prevent this independent verification. A fresh
 post-pause Blobs export remains readable: community-uploads is explicitly empty and all three
 community-signals objects match the earlier export and production R2 readback hashes.
 
@@ -22,7 +24,10 @@ disabled and automatic builds are stopped. Cloudflare's every-five-minute trigge
 existing notifications, outbox, release, digest, trust and badge schedules. Existing Resend
 credentials, signed links and the legacy resend-events webhook path are retained.
 
-The integrated website includes main 35ab150 (Help Centre and forum fixes). Build/lint/typecheck,
+The integrated website includes main 35ab150 (Help Centre and forum fixes). Release-note
+sections now include their version in their accessible name, resolving duplicate landmark names
+across releases in all languages. The rendered-copy audit recognizes Portuguese Menu as valid
+Portuguese rather than an English carryover. Build/lint/typecheck,
 259 backend tests, SEO/Help Centre/link checks and all four browser/responsive CI jobs pass.
 Canonical static-route smoke checks pass against the Cloudflare endpoint; DNS caches can still
 resolve Netlify temporarily. Accessibility CI and actual user Google/Apple/passkey sign-in remain
@@ -34,7 +39,8 @@ input/output limits and no paid fallback. Google Analytics retains G-13BKCF9FV4 
 access; GitHub encrypted secrets contain Cloudflare, Bing and Search Console credentials. Live
 sitemap submissions passed: Search Console 204, Bing sitemap/100 URLs and IndexNow 1,255 URLs 200.
 The restricted Cloudflare token passed exact-version deployment while retaining domains/schedules.
-GitHub deployment activation and real provider sign-in still require final readback.
+GitHub DEPLOY_TO_CLOUDFLARE=true is confirmed by settings readback. Real provider sign-in
+and the exact automatic main deployment still require final acceptance.
 
 Private backups/receipts are retained outside Git in the dated OutBrick migration backup folder.
 The accepted older-snapshot refresh requires an explicit owner receipt matching the manifest hash,
