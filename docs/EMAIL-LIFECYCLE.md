@@ -1,5 +1,7 @@
 # Customer lifecycle email
 
+**Email system live, 9 October 2026 UTC:** `main` c1ebb4a deployed to Cloudflare at 13:58. Migrations `20261009163000_email-suppression-consent-releases` and `20261009180000_email-events` were applied to production Neon about two minutes later, with the guarded procedure's destination check and `cloudflare_schema_migrations` bookkeeping. No email was sent in between. The deploy workflow does not migrate, so apply migrations *before* merging code that needs them. The Resend webhook `49ec88be` now subscribes to every `email.*` event plus `contact.updated`. A replayed `email.opened` returned 200 and was stored in `email_events` with its form tag and a hashed address. `RELEASE_EMAIL_AUTOSEND=on` with a 24-hour window is set in `wrangler.production.jsonc`.
+
 **Current host, 9 October 2026 UTC:** Cloudflare Worker `outbrick` invokes the retained lifecycle handlers against Neon, using R2 job signals and Resend. The five-minute Cron Trigger dispatches due UTC jobs; preview jobs are disabled. Secrets belong in Cloudflare, including `RESEND_EVENTS_WEBHOOK_SECRET`; legacy `/.netlify/functions/resend-events` is retained. Read [migration acceptance](CLOUDFLARE-MIGRATION.md) before claiming actual live delivery. The older Netlify activation receipt below is historical.
 
 Implemented 8 October 2026. This document says what each email is, when it is sent and how to run it. It is not proof that any email has been delivered in production. Verify each flow with a scoped test recipient after deploy before claiming it works.
