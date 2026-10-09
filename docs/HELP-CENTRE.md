@@ -22,7 +22,7 @@ is the community's knowledge base: the forum is for questions the guides do not 
 | Screenshots | `public/assets/help/<locale>/<id>-480.webp`, `-960.webp` |
 | Consistency check | `pnpm check:help` (runs in CI) |
 
-The pages are prerendered files, so Netlify serves them before the `/community/*` shell rewrite,
+The pages are prerendered files, so Cloudflare serves them before the `/community/*` shell rewrite,
 and the community client app deliberately leaves `/community/help` links alone
 (`app/components/community/community-app.tsx`).
 

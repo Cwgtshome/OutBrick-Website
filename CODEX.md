@@ -3,7 +3,7 @@
 Read [AGENTS.md](AGENTS.md), then [current status](docs/CURRENT-STATUS.md) and
 [architecture and operations](docs/ARCHITECTURE.md) before starting work.
 
-This is the website/community repository `Cwgtshome/OutBrick-Website`, deployed by Netlify.
+This is the website/community repository `Cwgtshome/OutBrick-Website`, deployed by GitHub Actions to Cloudflare Workers.
 The native OutBrick game and its active Claude Code work are maintained separately.
 
 Use the shared guidance and dated status as the handoff record. Recheck live Git, deployment,

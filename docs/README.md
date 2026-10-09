@@ -21,4 +21,4 @@ Dated plans explain intent; current code and scoped verification establish what 
 
 - [Admin and editorial operations](ADMIN-AND-EDITORIAL.md): roles, verified owner bootstrap, private drafts, publishing and validation.
 
-- [Cloudflare migration checkpoint](CLOUDFLARE-MIGRATION.md): verified infrastructure and backup preparation, shared runtime adapters and remaining cutover gates.
+- [Cloudflare migration checkpoint](CLOUDFLARE-MIGRATION.md): live Cloudflare operations, transferred data, accepted SQL gap, recovery boundaries and functional acceptance checklist.

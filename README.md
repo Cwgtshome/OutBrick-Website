@@ -1,5 +1,7 @@
 # OutBrick website
 
+**Current hosting and recovery:** [Cloudflare migration and operations](docs/CLOUDFLARE-MIGRATION.md) records the live deployment, restored data, accepted SQL gap and functional acceptance checklist. Netlify is retained for recovery, with its site disabled and builds stopped. Do not repoint it at this source or purchase a plan.
+
 The public site for **OutBrick: Block Sort Puzzle**, served at
 [www.outbrick.site](https://www.outbrick.site).
 
@@ -7,9 +9,9 @@ The public site for **OutBrick: Block Sort Puzzle**, served at
 [architecture and operations](docs/ARCHITECTURE.md), and [the documentation index](docs/README.md).
 [AGENTS.md](AGENTS.md) contains shared working guidance; [CODEX.md](CODEX.md) and
 [CLAUDE.md](CLAUDE.md) point both agents to the same handoff record. The community backend uses
-Netlify Functions, managed Postgres, Blobs and Resend; CloudKit remains in the separate native game.
+Cloudflare Workers, owner-controlled Neon Postgres, R2 and Resend; CloudKit remains in the separate native game.
 
-Netlify builds it from this source on every push to `main` — `pnpm build` prerenders every
+GitHub Actions builds and deploys it to Cloudflare Workers on every push to `main` — `pnpm build` prerenders every
 route into `dist/client`, which is what gets published. Nothing here is committed build
 output, deliberately: an earlier version of this repository held a prerendered copy, and it
 went a month stale without anybody noticing, still telling readers the game contained no
@@ -35,12 +37,10 @@ The game itself is a separate repository. This one is only the website.
 ## Forms and affiliate links
 
 * The contact form (`contact`), the affiliate application (`affiliate`), job applications
-  (`careers`) and the newsletter sign-up (`newsletter`) are Netlify Forms, detected from the
-  prerendered HTML. In the Netlify UI, form
-  detection must be enabled (Forms → Enable form detection). Visitor acknowledgements and team
-  copies are sent by the Resend submission function described below; legacy Netlify plain email
-  notifications can duplicate those copies. Verify delivery and inspect the existing rules before
-  changing them. The privacy policy's "Forms on this website" section describes
+  (`careers`) and the newsletter sign-up (`newsletter`) are intercepted by `cloudflare/forms.ts`,
+  stored in Neon Postgres and delivered through the shared Resend handlers below. All 51 legacy
+  submissions are archived without sending their emails again. Verify real canonical delivery
+  before calling the complete form flow accepted. The privacy policy's "Forms on this website" section describes
   exactly this; change one and the other must follow.
 * `outbrick.site/r/<code>` 302-redirects to the App Store with `ct=aff-<code>` (netlify.toml).
   `node scripts/affiliate-link.mjs <code>` prints and checks a code's links.
@@ -65,7 +65,7 @@ Replies go to the sender's own address (`reply_to`). Each email is written in th
 (the forms carry a hidden `locale` field; the newsletter uses its `language` field), falling back
 to English.
 
-* `netlify/functions/submission-created.mts` — Netlify runs it for every verified submission. The
+* `netlify/functions/submission-created.mts` — the Cloudflare form adapter invokes this shared handler for accepted submissions. The
   rules are in `emails/submission.ts`: honeypot and spam flag send nothing, the submission id is
   logged (never the address or the message), each email carries a Resend `Idempotency-Key`, and
   the function always answers 200.
@@ -83,7 +83,7 @@ to English.
   VML button for desktop Outlook, a preheader and a plain-text part. Every visitor value is
   escaped.
 
-**Environment (Netlify, set by the owner):**
+**Environment (Cloudflare encrypted Worker secrets/variables):**
 
 * `RESEND_API_KEY` — required for every email; use Full access because newsletter confirmation
   and unsubscribe manage contacts and segments. Sending access alone cannot do that. The confirm and unsubscribe links are signed with
@@ -96,8 +96,8 @@ to English.
 * `NEWSLETTER_POSTAL_ADDRESS` — the postal address line every campaign's footer must carry; only
   `scripts/send-newsletter.mjs` reads it, and a real send refuses to go out without it.
 
-Without `RESEND_API_KEY` nothing breaks: submissions are stored by Netlify as before and the
-function logs that it skipped the email.
+Without `RESEND_API_KEY`, accepted submissions remain stored in Postgres, but email delivery
+is unavailable. Check persisted status and the outbox before retrying.
 
 **Previews.** `pnpm build` renders every template in every language and checks each one (lang,
 subject, preheader, plain text, escaping, alt text, presentation tables, size under Gmail's clip
@@ -116,8 +116,8 @@ filled in (never their IP address), shows the page they were on, their language,
 whether their acknowledgement went out, and has a Reply button. Reply-To is the visitor, so
 replying from Mail answers them. It is always English, and it is skipped for the honeypot and for
 spam, like the visitor's email. Previews: `team-*.<lang>.html` under `/email-previews/`, where
-the language is the visitor's. After deployment, verify delivery of these team copies before removing Netlify’s two plain
-notification rules (Project configuration → Notifications), which otherwise duplicate them.
+the language is the visitor's. Verify canonical delivery of team copies. Legacy Netlify rules are historical; keep the old site
+disabled so it does not resume sending duplicate notifications.
 Resend rate-limit responses are retried up to three times with backoff and Retry-After, within
 a 12-second budget per email. Exhausted failures remain logged against the stored submission.
 
@@ -153,9 +153,10 @@ The same campaign layout also lives in Resend as five published templates, **Out
 subscriber campaign send path. To send to the subscriber segment, use the JSON issue workflow
 above to create a Broadcast draft, review it in Resend, then send that reviewed draft by ID. `scripts/build-resend-templates.mjs` renders `newsletterCampaign()`
 with Resend variables in place of the content and writes `outputs/resend-templates/<locale>.html`,
-`.txt` and `.json`. `pnpm build` runs it with `--push-on-production`: on Netlify's production
-deploy it creates or updates each template by alias and publishes it, so Resend always carries the
-design that is live. Anywhere else it only writes the files, and a failed push never fails a deploy.
+`.txt` and `.json`. `pnpm build` runs it with `--push-on-production`: an explicitly configured production
+context with Resend credentials creates/updates and publishes templates by alias. The current
+Cloudflare CI build renders these files; do not infer dashboard template publication from a
+successful website deployment. Elsewhere it only writes files; a failed push never fails a deploy.
 
 The 33 variables are `SUBJECT`, `PREHEADER`, `EYEBROW`, `HERO_TITLE`, `HERO_BODY`,
 `HERO_IMAGE_URL`/`_ALT` (1200×630), `STORY1…3_TITLE`/`_BODY`/`_IMAGE_URL`/`_IMAGE_ALT` (square)
@@ -169,5 +170,5 @@ escaped. When editing a formatted body, also update its `_TEXT` variable with pl
 has no fallback, so an omitted URL refuses the send. Resend only supplies
 `{{{RESEND_UNSUBSCRIBE_URL}}}` for Broadcasts, which keep that automatic link. The layout has exactly three
 stories; for two, or for the "What's new" block, use the JSON issue and `pnpm newsletter` above.
-Change the design in `emails/`, never in the Resend editor: the next production deploy overwrites
-the templates.
+Change the design in `emails/`; an explicit production template publication overwrites
+the corresponding dashboard templates. Preserve separately authored editable drafts.

@@ -1,5 +1,7 @@
 # OutBrick website: current status
 
+**Deployment follow-up:** PR #17 merged at `d929950314dad257ff8b0e7e00ebc5091fa1aa09`; GitHub production run [37871974060](https://github.com/Cwgtshome/OutBrick-Website/actions/runs/37871974060) succeeded. Live build-info matched main and ordinary local HTTPS returned 200. Automatic IndexNow (1,255 URLs, 200), Bing sitemap and GSC sitemap (204) succeeded. Fresh post-pause forms export matched all 51 complete records exactly. Focused accessibility fixes passed 14 checks; the full main Site checks rerun is pending. [Migration operations](CLOUDFLARE-MIGRATION.md) is the current detailed functionality/recovery ledger. All earlier entries mentioning Netlify production, pre-cutover gates or undeployed content are dated history superseded by this cutover.
+
 Updated 8 October 2026. This is a dated handoff, not a claim that account state remains unchanged.
 Recheck live Git, `/build-info.json`, `/api/community/session` and relevant providers before acting.
 

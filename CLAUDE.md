@@ -3,7 +3,7 @@
 Follow [AGENTS.md](AGENTS.md). Start by reading [current status](docs/CURRENT-STATUS.md),
 [architecture and operations](docs/ARCHITECTURE.md), and [the documentation index](docs/README.md).
 
-This repository serves `www.outbrick.site` and its community through Netlify. Native game changes
+This repository serves `www.outbrick.site` and its community through Cloudflare Workers. Native game changes
 belong in the separate game repository; coordinate before editing shared checkouts or user drafts.
 
 The shared status document records implementation, production evidence and unresolved acceptance

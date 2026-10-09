@@ -131,7 +131,7 @@ offer, and Mourad's contact.
 |---|---|
 | Downloads and proceeds by campaign (`web-*`, `aff-*`) | App Store Connect → App Analytics → Sources → Campaigns |
 | Search queries, clicks, indexed pages | `pnpm gsc report`, `pnpm bing report` |
-| Share-result links used | Netlify analytics / logs for `/play/result/*` |
+| Share-result links used | Cloudflare Worker observability / logs for `/play/result/*` |
 | Creator performance | App Analytics per `aff-<code>` |
 
 Review monthly; double down on the two channels that bring the cheapest retained players.

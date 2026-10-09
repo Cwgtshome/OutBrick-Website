@@ -44,7 +44,7 @@ so it can go live the day the Clip ships.
    "appclips": { "apps": ["N8QNP8L662.com.risehush.brickout.Clip"] }
    ```
 
-   Keep the existing `applinks` block. Netlify already serves the file as JSON (`public/_headers`).
+   Keep the existing `applinks` block. Cloudflare already serves the file as JSON (`public/_headers`).
 2. **Smart App Banner with Clip.** On `/c` (and `/daily`), add a second meta tag so Safari shows
    the Clip card:
 

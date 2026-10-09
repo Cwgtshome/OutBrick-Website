@@ -1,5 +1,7 @@
 # OutBrick Community: the plan
 
+**Production architecture, 9 October 2026 UTC:** Cloudflare Workers + owner-controlled Neon Postgres + R2 + Resend now supersede the original Netlify choice below. The comparison is retained as decision history. Read [migration operations](CLOUDFLARE-MIGRATION.md) for transferred data and provider acceptance; enabled features are not proof of successful sign-in.
+
 *7 October 2026. The forum, support forum, FAQ and search for outbrick.site, built into the site.*
 
 The core forum and phase-2 server code are now implemented. Read
@@ -98,7 +100,7 @@ plus English", with a one-tap "all languages" filter; the UI itself is fully tra
   functions — no third-party identity service), and **email link** (a one-time sign-in link via
   Resend) for anyone who wants none of those. Facebook is optional and was not enabled in the
   current production snapshot. Passkeys are implemented; members add one after signing in.
-- Each provider switches itself on when its credentials are in Netlify; the page only shows the
+- Each provider switches itself on when its credentials are in Cloudflare; the page only shows the
   buttons that work.
 - One member can link several providers. A member picks a **display name**; email addresses are never
   shown. Apple's "Hide my email" relay addresses work.
@@ -147,18 +149,18 @@ and emails the members who follow Announcements. It never posts twice for one ve
 ## How it is built
 
 - **Pages**: `/community/**` is one prerendered shell per language (the site's chrome and CSS), and a
-  client app inside it that talks to `/api/community/*`. Netlify serves every `/community/...` path
+  client app inside it that talks to `/api/community/*`. Cloudflare serves every `/community/...` path
   from the shell of its language.
 - **Search engines**: an edge function fills the shell's `<title>`, description, canonical and
   `DiscussionForumPosting` JSON-LD from the database, and puts the thread's posts in the HTML, so
   threads are indexable and readable without JavaScript.
-- **API**: Netlify Functions (TypeScript), JSON, `/api/community/*`; input validated at the edge of every
-  handler; SQL through `@netlify/database` with parameters only.
-- **Database**: Netlify Database (Postgres). Tables: members, identities (provider links), sessions,
+- **API**: Cloudflare Worker routes using shared handlers (TypeScript), JSON, `/api/community/*`; input validated at the edge of every
+  handler; SQL through the Neon runtime adapter with parameters only.
+- **Database**: owner-controlled Neon Postgres. Tables: members, identities (provider links), sessions,
   categories, threads, posts, post revisions, votes, follows, notifications, reports, moderation log,
   email tokens, releases posted. Full-text search: a `tsvector` per post in the `simple` configuration
   plus `pg_trgm` for Japanese and fuzzy matches.
-- **Uploads**: Netlify Blobs, images only, re-encoded and size-capped, alt text required.
+- **Uploads**: Cloudflare R2, images only, re-encoded and size-capped, alt text required.
 - **Markdown**: rendered on the server to a strict allow-list of elements; links get `rel="ugc nofollow"`.
 
 ## Phases
@@ -175,7 +177,7 @@ and emails the members who follow Announcements. It never posts twice for one ve
 ## What the owner has to do (the code waits for it, safely)
 
 The code ships with every provider off until its credentials exist. Never paste a secret in chat; add
-each one in Netlify → Project configuration → Environment variables, marked secret:
+each one in Cloudflare → Workers & Pages → outbrick → Settings → Variables and Secrets, marked secret:
 
 1. **Sign in with Apple**: in the Apple Developer account, create a Services ID (e.g.
    `site.outbrick.community`), enable Sign in with Apple, add the domain `www.outbrick.site` and the
@@ -187,7 +189,7 @@ each one in Netlify → Project configuration → Environment variables, marked 
 3. **Facebook**: in Meta for Developers, an app with Facebook Login, redirect URI
    `https://www.outbrick.site/api/community/auth/facebook/callback`. Set `FACEBOOK_APP_ID`,
    `FACEBOOK_APP_SECRET`.
-4. Netlify Database provisions itself on the first deploy; Netlify may ask you to accept its terms once.
+4. Use the existing production Neon branch and R2 bindings; never provision a replacement empty database for an ordinary deploy. Apply additive migrations through the guarded migration procedure.
 5. Your own member account becomes **admin** by setting `COMMUNITY_ADMIN_EMAILS` to your address(es).
 
 ## Phase 2 on the server: what the owner has to do
@@ -209,19 +211,16 @@ variables, marked secret.
    `COMMUNITY_REPLY_DOMAIN` to `reply.outbrick.site` (`RESEND_API_KEY` is already set). From the
    next notification email on, single notifications carry a `Reply-To: reply+…@reply.outbrick.site`
    and say that replying posts the answer. To switch it off again, delete `COMMUNITY_REPLY_DOMAIN`.
-2. **Translation on request** (`features.translate`). On plans with Netlify's AI Gateway, Netlify
-   injects `ANTHROPIC_API_KEY` and `ANTHROPIC_BASE_URL` into functions by itself and nothing needs
-   doing; otherwise set `ANTHROPIC_API_KEY` to an Anthropic API key. The model is Claude Haiku 4.5
-   (`claude-haiku-4-5-20251001`); each post is translated once per edit and language, then cached.
+2. **Translation on request** (`features.translate`). Production uses Cloudflare Workers AI
+   `@cf/openai/gpt-oss-20b` through the shared atomic 5,000-neuron/day limiter. Results are cached
+   per edit/language. No OpenAI API key, Anthropic paid fallback or prepaid AI top-up is used.
 3. **Weekly digest** (`features.digest`). Nothing to set: it uses `RESEND_API_KEY`, is off for every
    member until they switch it on in settings, and is sent on Mondays from 08:00 UTC by the
    scheduled function `community-digest` (production deploys only).
-4. **Image uploads** (`features.uploads`) and **passkeys** (`features.passkeys`) need nothing: Netlify
-   Blobs (store `community-uploads`) provisions itself, and passkeys use the site's own domain
-   (`outbrick.site` as the relying party, so one passkey works on www and the apex). Set
-   `COMMUNITY_UPLOADS=off` or `COMMUNITY_PASSKEYS=off` to hide either. Netlify's synchronous
-   functions accept request bodies up to about 6 MB, so photos larger than that are refused by the
-   platform before the 8 MB check; the page should shrink a large photo before uploading it.
+4. **Image uploads** (`features.uploads`) use the production R2 upload bucket, with existing image
+   validation, size limits and required alt text. **Passkeys** (`features.passkeys`) retain
+   `outbrick.site` as relying-party ID. Both are enabled; actual authenticated acceptance remains
+   separate. `COMMUNITY_UPLOADS=off` or `COMMUNITY_PASSKEYS=off` hides either feature.
 5. **Trust levels**: the scheduled function `community-trust` runs daily at 08:00 UTC and promotes
    members to trusted (7 days, 10 visible posts, 2 solved answers or 5 votes on their ideas, no
    upheld report in 30 days). It never demotes; setting someone back to member is permanent for
@@ -231,12 +230,11 @@ The app's **Report a bug** opens `/community/new?category=bugs&device=…&os=…
 (see `bugDeepLinkParams` in `lib/community/contract.ts`); the form pre-fills, nothing is posted
 until the member presses Post.
 
-## Keeping the database asleep (credit-based Free plan)
+## Keeping Neon idle between useful jobs
 
-Netlify Database suspends its compute after five idle minutes and bills while it is awake
-(10 credits per compute-unit hour; the free plan has 300 credits a month). The scheduled jobs run
-more often than five minutes, so they must not query Postgres just to find nothing to do.
-`netlify/community/idle.ts` gates each one with a small Netlify Blobs store:
+The shared `netlify/community/idle.ts` gates scheduled work through R2 signals in production.
+Preserve these gates: a Cloudflare tick should not wake Postgres just to find nothing to do.
+The following UTC selection runs inside the production five-minute Cron Trigger.
 
 | Job | Schedule | Opens the database only when |
 |---|---|---|
@@ -246,7 +244,7 @@ more often than five minutes, so they must not query Postgres just to find nothi
 | community-trust, community-badges | 08:00 UTC daily | always (one shared daily wake) |
 
 Failed sends back off 5, 10, 20 … minutes (at most 6 hours) and give up after 8 attempts, so an
-outage or a revoked key can't keep the database awake. If Blobs is unreachable, a gate fails open
+outage or a revoked key can't keep the database awake. If the signal store is unreachable, a gate fails open
 (the job queries as before). A notification is never lost to the gate: the notifier records the
 token it read *before* querying, so anything committed during a run signals a newer token, and a
 writer that dies between its commit and its signal is caught by the daily sweep.

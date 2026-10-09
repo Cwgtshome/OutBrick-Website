@@ -1,7 +1,7 @@
 # OutBrick website agent guidance
 
 This repository is `Cwgtshome/OutBrick-Website`, published at
-<https://www.outbrick.site> through Netlify. The native game is a separate repository.
+<https://www.outbrick.site> through Cloudflare Workers. The native game is a separate repository.
 Instructions about the older static `Brickout/website/` folder do not describe this deployment.
 
 ## Read before working
@@ -36,11 +36,11 @@ Check Git status, remote, branch and concurrent ownership. Preserve unrelated ch
 
 ## Backend and delivery
 
-- Retain Netlify Functions + Netlify Database (Postgres) for the community, Netlify Blobs for
-  uploads, and Resend for email. CloudKit remains appropriate for native game sync; do not migrate
+- Use Cloudflare Workers for APIs/forms/jobs, owner-controlled Neon Postgres for the community,
+  R2 for uploads/signals, and Resend for email. See [migration operations](docs/CLOUDFLARE-MIGRATION.md). CloudKit remains appropriate for native game sync; do not migrate
   the forum to CloudKit without a new user instruction and an assessed migration plan.
 - Public routes are prerendered by React/vinext into `dist/client`; APIs and thread edge rendering
-  are separate Netlify functions. Do not describe this repository as a no-Node static folder.
+  run through `cloudflare/worker.ts` using shared handlers retained under `netlify/`. Do not describe this repository as a no-Node static folder.
 - Keep SQL parameterized, transactions intact, migrations additive, and preview data separate
   from production. Use the PGlite test harness for local database tests.
 - Preserve origin checks, hashed session/token storage, OAuth state/nonce validation, provider
@@ -48,7 +48,7 @@ Check Git status, remote, branch and concurrent ownership. Preserve unrelated ch
   or moderation to make a test pass. Optional features must honor configuration gates.
 - Preserve the scheduled-job idle gates in `netlify/community/idle.ts` and visible/active-only
   polling. Avoid queries on skipped scheduler ticks; unnecessary wakes use database credits.
-- Secrets belong in Netlify environment variables, never Git, chat, logs, screenshots or PR bodies.
+- Secrets belong in Cloudflare encrypted Worker bindings and GitHub encrypted CI secrets, never Git, chat, logs, screenshots or PR bodies.
   Keep Apple PEM newlines intact; `signEs256` accepts actual newlines or literal `\n` sequences.
 - Resend needs Full access for contact/segment management. Rotating `RESEND_API_KEY` invalidates
   existing signed newsletter links. Do not send subscriber broadcasts as part of a routine test.
@@ -58,7 +58,7 @@ Check Git status, remote, branch and concurrent ownership. Preserve unrelated ch
 
 ## Verification and handoff
 
-Use Node 22.13.0 and pnpm 10.12.1, matching Netlify and CI. Install with the frozen lockfile.
+Use Node 22.13.0 and pnpm 10.12.1, matching CI. Install with the frozen lockfile.
 For code/content changes, build before lint and run the relevant audits/tests listed in
 [architecture](docs/ARCHITECTURE.md). Browser audits use the exact built artifact in CI.
 For documentation-only changes, validate links, referenced paths, factual claims and whitespace;

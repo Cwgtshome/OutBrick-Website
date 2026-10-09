@@ -1,5 +1,7 @@
 # Website architecture and operations
 
+Production is Cloudflare Workers + Neon + R2 + Resend. [Migration operations](CLOUDFLARE-MIGRATION.md) owns current bindings, deployment, restored-data boundaries and remaining live acceptance. Paths under `netlify/` below are shared source modules, not the current host.
+
 ## Source map
 
 | Area | Source |
@@ -22,14 +24,14 @@
 ## Deployment and data
 
 Node 22.13.0 / pnpm 10.12.1 build React 19 + vinext source with `pnpm build`, publishing
-`dist/client`. Netlify Functions and the community thread edge function provide runtime behavior;
+`dist/client`. `cloudflare/worker.ts` runs the shared APIs, forms, thread rendering and jobs;
 `dist/server` is not the website's deployed application server. Main deploys publish to the
 canonical domain; verify publication from `/build-info.json`, not a commit push alone.
 
-`@netlify/database` supplies managed Postgres and preview branches. Add a new timestamped
+Cloudflare runtime adapters connect to owner-controlled Neon Postgres, with separate production and preview branches. The retained `@netlify/database` fallback belongs to legacy source operation. Add a new timestamped
 `migration.sql` for a schema/data change; preserve applied migrations. `db.ts` parameterizes SQL
 and wraps transactions. `netlify/community/test/harness.ts` applies all migrations to PGlite for
-local tests. Blobs stores uploads and scheduler wake signals. Keep production and preview writes
+local tests. R2 stores uploads and scheduler wake signals through shared adapters. Keep production and preview writes
 separate and preserve existing permissions, session checks and origin validation.
 
 ## Environment inventory (names only)
@@ -44,13 +46,13 @@ separate and preserve existing permissions, session checks and origin validation
 | Optional Facebook OAuth | `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET` (secret) |
 | Administrator bootstrap | `COMMUNITY_ADMIN_EMAILS`; do not publish the owner's address |
 | Inbound replies | `COMMUNITY_REPLY_DOMAIN`, `RESEND_WEBHOOK_SECRET` (secret), plus Resend key; requires receiving DNS/webhook setup |
-| Translation | `ANTHROPIC_API_KEY` (secret), optional `ANTHROPIC_BASE_URL`; configuration is not proof of a successful translation |
+| Translation | `CLOUDFLARE_TRANSLATION_ENABLED=true`, Workers AI/service binding to shared 5,000-neuron/day limiter; no paid fallback; see migration operations |
 | Optional feature overrides | `COMMUNITY_PASSKEYS=off`, `COMMUNITY_UPLOADS=off` |
 | Website analytics (optional) | `GA_MEASUREMENT_ID` (G-XXXXXXXXXX, build time). Unset or malformed: no analytics code and no Google origin in the CSP. Set: GA4 behind a consent banner; see [current status](CURRENT-STATUS.md) |
 | Lifecycle email (optional) | `RESEND_TOPIC_RELEASES/TIPS/EVENTS`, `RESEND_EVENTS_WEBHOOK_SECRET`, `NEWSLETTER_ENGAGEMENT_TRACKING=on` (only once the events webhook delivers); see [EMAIL-LIFECYCLE.md](EMAIL-LIFECYCLE.md) |
 
 Provider visibility comes from `auth/util.ts`; feature flags come from `features.ts` and are
-reported by `/api/community/session`. Store credentials privately in Netlify. Apple web callbacks
+reported by `/api/community/session`. Store credentials in Cloudflare encrypted Worker secrets. Apple web callbacks
 are `/api/community/auth/apple/callback`; Google uses `/api/community/auth/google/callback`.
 Apple uses a cross-site POST callback. Preserve its state/nonce validation and PEM formatting.
 Passkeys use the apex `outbrick.site` relying-party ID; do not casually change domains.
@@ -59,10 +61,10 @@ Passkeys use the apex `outbrick.site` relying-party ID; do not casually change d
 
 Schedules in source use UTC: notifier every five minutes; release polling hourly; digest every
 ten minutes Mondays 08:00–10:50; trust and badges daily at 08:00; the lifecycle outbox every ten
-minutes (Blobs-gated: it opens Postgres only when an email is due) with its daily sweep at 08:00. Idle gates can skip database
+minutes (R2-signal-gated: it opens Postgres only when an email is due) with its daily sweep at 08:00. Idle gates can skip database
 queries when no work is due. Retain bounded retries and safety sweeps. Quiet-month simulations
-are estimates/tests, not a forecast for real visitors, crawlers or an active forum. Free credits
-are shared with deployments and all runtime traffic; consult live billing before plan decisions.
+are estimates/tests, not a forecast for real visitors, crawlers or an active forum. Cloudflare, Neon and Resend have separate usage limits; consult live billing before plan decisions.
+The student Workers fee waiver remains unconfirmed.
 
 ## Validation
 

@@ -19,7 +19,7 @@ Member lists contain public names, role and verification status, not private ema
 
 ## Owner bootstrap
 
-Netlify project `outbrick` has `COMMUNITY_ADMIN_EMAILS` set to the exact addresses
+Cloudflare Worker `outbrick` has `COMMUNITY_ADMIN_EMAILS` set to the exact addresses
 `support@outbrick.site,mourad.hamdi@outbrick.site`, with all scopes and the same value for all deploy
 contexts. A deployment is needed to activate changed environment values. Existing auth code
 promotes an allowlisted address only after provider/email verification. This does not authorize

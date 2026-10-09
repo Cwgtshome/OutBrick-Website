@@ -1,3 +1,93 @@
+# Cloudflare migration and operations
+
+## Current production contract — 9 October 2026 UTC (8 October in New York)
+
+The canonical website is **https://www.outbrick.site**, deployed from
+**Cwgtshome/OutBrick-Website** to the Cloudflare Worker **outbrick**. React/vinext builds
+prerendered assets; the Worker runs APIs, community thread rendering, forms and scheduled jobs.
+The database is owner-controlled **Neon Postgres**, uploads and job signals use **R2**, and
+outbound email/contacts remain **Resend**. Resend and Neon are intentional services in the
+Cloudflare architecture; they are not pending replacements with Cloudflare email or D1.
+Native game CloudKit and saved progress are outside this migration.
+
+PR [#17](https://github.com/Cwgtshome/OutBrick-Website/pull/17) merged as
+`d929950314dad257ff8b0e7e00ebc5091fa1aa09`. GitHub production deployment
+[37871974060](https://github.com/Cwgtshome/OutBrick-Website/actions/runs/37871974060)
+succeeded; live `/build-info.json` matched that commit, built at 01:55:09 UTC.
+Normal local DNS/HTTPS answered 200 after the cache cleared. Both apex and www have Worker
+custom domains; apex redirects to www. All 13 non-web mail/verification DNS records were preserved.
+Future main pushes deploy through `.github/workflows/deploy.yml` with
+`DEPLOY_TO_CLOUDFLARE=true`; no Netlify build or payment is required.
+
+### Data preservation and the accepted gap
+
+The restored application snapshot was captured at **00:44:42.132 UTC**: **37 tables,
+976 rows and 18 sequences**, independently restored and verified before **17 additive
+migrations**. All **51 archived forms** (50 normal, one spam) were retained without replaying
+emails. A fresh post-pause form export matched every ID and payload: zero added, missing or
+changed records. A fresh post-pause Blobs export confirmed **community-uploads empty (0)**
+and **three unchanged signal objects**, copied to production R2 and verified by hashes.
+
+Netlify credit exhaustion paused the source at **01:08:27.471 UTC**. The owner explicitly
+declined payment and accepted the latest possible verified snapshot. SQL writes in the roughly
+**24 minutes between snapshot and pause remain unverified**. This is a possible reconciliation
+gap, not proven loss and not a zero-loss guarantee. If source SQL becomes readable without
+payment, export it privately and reconcile member/content/session/notification changes plus
+`email_outbox`, `newsletter_subscribers`, `support_cases`, `support_case_events` and
+`applications`. Preserve delivery state and idempotency; never resend historical emails blindly
+or overwrite the now-live Neon database with an old backup.
+
+Private backups and verification receipts remain outside Git at
+`/Users/mourad1/Documents/OutBrick-migration-backup-2026-10-08` with restricted permissions.
+Netlify's old database, submissions, Blobs and deployments remain retained for recovery;
+the site is disabled for exhausted credits and automatic builds are stopped. Do not delete
+source data, buy a plan, or reactivate old scheduled writers without an explicit new instruction.
+A credit-cycle reset could change source availability; read provider state before recovery.
+
+### Functionality and acceptance
+
+| Capability | Cloudflare configuration and evidence | Remaining acceptance |
+| --- | --- | --- |
+| Website, journal, localized Help Centre, legal pages and challenge links | Published assets; 51 canonical static smoke checks passed; app-ads.txt and AASA answer correctly | Full browser/accessibility CI rerun remains separate from deployment success |
+| Forum, accounts and editorial content | Restored Neon data; public session/categories/threads/FAQ/content APIs answer 200; original role boundaries retained | Fresh owner/staff authenticated dashboard acceptance |
+| Contact, careers, affiliate and newsletter sign-up | Worker stores submissions in Postgres; shared Resend lifecycle handlers retained; four real preview flows and nine delivered test emails verified; live invalid/honeypot checks passed | One legitimate canonical submission and inbox check per flow; no subscriber broadcast as a test |
+| Newsletter confirmation/preferences/unsubscribe | Existing signed routes and original Resend signing key retained; double opt-in and deliberate POST preserved | Fresh canonical confirmation/unsubscribe acceptance |
+| Email-link registration/sign-in | Resend credentials and account/token handlers migrated | Successful canonical email-link session and security email acceptance |
+| Sign in with Apple | Restored original key; `/api/community/auth/apple/start` redirects to Apple with canonical callback | Successful real callback/session on canonical website |
+| Sign in with Google | Installed replacement secret for existing client; `/api/community/auth/google/start` redirects with canonical callback | Successful real callback/session on canonical website |
+| Passkeys | Enabled; unchanged `outbrick.site` relying-party ID and restored credentials | Existing passkey sign-in and new registration on a real device |
+| Forum image uploads | R2 binding active; source upload store explicitly empty; no known image left uncopied | Authenticated image upload/read/delete with alt text |
+| Notifications, digest, releases and lifecycle outbox | Production `JOBS_ENABLED=true`, every-five-minute Cloudflare Cron Trigger; UTC job selection/idle gates/idempotency retained | Observe due production work and delivered mail; configuration alone is not delivery proof |
+| Resend event webhook | Legacy `/.netlify/functions/resend-events` route retained; signing secret installed; unsigned request rejected | Verify an authentic signed event persists/updates engagement |
+| Reply by email | Existing `replyByEmail=false` preserved | Optional new receiving-domain/MX/webhook setup, not a migration regression |
+| Translation | Cloudflare Workers AI GPT-OSS enabled; shared atomic 5,000-neuron/day cap, cached results, no paid fallback; five real preview languages verified | Authenticated canonical translation; account's other AI workloads have their own usage |
+| Google Analytics | Original GA4 `G-13BKCF9FV4`; consent respected; real page_view request observed | Analytics dashboard ingestion/realtime confirmation |
+| Google Search Console, Bing, IndexNow | Existing verification DNS preserved; encrypted CI credentials; automatic GSC sitemap 204, Bing sitemap accepted, IndexNow 1,255 URLs 200 | Search-engine crawling/indexing is external; Bing daily URL quota can be zero after earlier submissions |
+
+### Deployment, secrets and operating rules
+
+`cloudflare/worker.ts`, `cloudflare/forms.ts`, runtime adapters and `wrangler.jsonc` are the
+production entry points. Existing `netlify/` directories contain **shared TypeScript handlers,
+SQL migrations and compatibility paths**; their names do not imply Netlify hosting. Keep legacy
+newsletter/webhook paths working. Production secrets live in Cloudflare encrypted Worker
+bindings; CI deployment/search credentials live in GitHub Actions encrypted secrets. Never
+copy secret values into docs, Git, chat or screenshots.
+
+Production and preview use separate Neon branches and R2 buckets; preview has jobs disabled
+and noindex. Apply new additive SQL migrations through the guarded database procedure before
+releasing code that needs them: the deployment workflow does not automatically migrate Neon.
+Keep the translation limiter deployment and its shared Durable Object; the quota must not reset
+per preview or Worker instance. Main deployment checks the exact live build, then submits
+sitemaps. Template rendering does not prove Resend dashboard templates were republished:
+`--push-on-production` requires an explicit production context and credentials.
+
+Workers Paid is active; **the student fee waiver is not yet confirmed**. R2 and AI have usage
+limits. The owner authorized free-quota translation only, with no prepaid AI top-up or paid fallback.
+No Netlify subscription was purchased. Preserve historical receipts below as dated evidence;
+this section supersedes earlier Netlify-hosted or pre-cutover instructions.
+
+## Historical preparation receipts — superseded by the production contract above
+
 # Cloudflare migration checkpoint — 8 October 2026
 
 Production still runs on Netlify at `www.outbrick.site`. This branch is migration preparation;

@@ -1,5 +1,7 @@
 # Customer lifecycle email
 
+**Current host, 9 October 2026 UTC:** Cloudflare Worker `outbrick` invokes the retained lifecycle handlers against Neon, using R2 job signals and Resend. The five-minute Cron Trigger dispatches due UTC jobs; preview jobs are disabled. Secrets belong in Cloudflare, including `RESEND_EVENTS_WEBHOOK_SECRET`; legacy `/.netlify/functions/resend-events` is retained. Read [migration acceptance](CLOUDFLARE-MIGRATION.md) before claiming actual live delivery. The older Netlify activation receipt below is historical.
+
 Implemented 8 October 2026. This document says what each email is, when it is sent and how to run it. It is not proof that any email has been delivered in production. Verify each flow with a scoped test recipient after deploy before claiming it works.
 
 ## What every email carries
@@ -50,7 +52,7 @@ Copy for all six languages is in `emails/lifecycle-i18n*.ts`. Previews are built
 ## How it runs
 
 - **Outbox:** `email_outbox` holds anything sent later. `netlify/functions/lifecycle-outbox.mts` runs every ten minutes.
-  - It opens the database only when the next-due time in Blobs (`community-signals/outbox-due`) has passed.
+  - It opens the database only when the next-due time in R2 (`community-signals/outbox-due`) has passed.
   - Once a day at 08:00 UTC it sweeps for re-engagement and prunes rows older than 90 days.
   - Rows are rendered at send time, so a reader who unsubscribed or a case that reopened is dropped rather than emailed.
 - **Support cases:** these live in `support_cases` and `support_case_events`.
