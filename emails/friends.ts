@@ -383,14 +383,14 @@ export function puzzle(ctx: Ctx, p: Puzzle, copy: PuzzleCopy, host: FriendId = '
     '.ob-pz-ok:checked ~ .ob-pz-yes{display:block !important;animation:ob-pz-pop .5s cubic-bezier(.3,1.5,.5,1) 1.2s both;}',
     '.ob-pz-ok:checked ~ .ob-pz-play{display:none !important;}',
     '.ob-pz-no:checked ~ .ob-pz-nope{display:block !important;}',
-    ...p.options.filter((c) => c !== first).map((c) => `#ob-pz-${c}:checked ~ .ob-pz-wrap .ob-pz-${c}{animation:ob-pz-shake .45s ease both;}`),
+    ...p.options.filter((c) => c !== first).map((c) => `.ob-pz-pick-${c}:checked ~ .ob-pz-wrap .ob-pz-${c}{animation:ob-pz-shake .45s ease both;}`),
     '@keyframes ob-pz-shake{0%,100%{transform:none;}20%{transform:translateX(-5px);}40%{transform:translateX(5px);}60%{transform:translateX(-3px);}80%{transform:translateX(3px);}}',
     '@keyframes ob-pz-pop{0%{transform:scale(.6);opacity:0;}100%{transform:none;opacity:1;}}',
     '}',
     '@media (prefers-reduced-motion:reduce){.ob-pz-b{transition:none !important;animation:none !important;}.ob-pz-yes{animation:none !important;}}',
   ].join('\n');
   const radios = p.options
-    .map((c) => `<input type="radio" name="ob-pz" id="ob-pz-${c}" class="ob-pz-in ${c === first ? 'ob-pz-ok' : 'ob-pz-no'}" style="display:none;mso-hide:all;">`)
+    .map((c) => `<input type="radio" name="ob-pz" id="ob-pz-${c}" class="ob-pz-in ob-pz-pick-${c} ${c === first ? 'ob-pz-ok' : 'ob-pz-no'}" style="display:none;mso-hide:all;">`)
     .join('');
   const options = p.options
     .map(

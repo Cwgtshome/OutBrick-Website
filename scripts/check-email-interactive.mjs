@@ -49,6 +49,7 @@ ok('fallback answer hidden in Apple Mail', !(await shown('.ob-pz-still')));
 await page.tap('label[for^="ob-pz-red"]');
 await page.waitForTimeout(500);
 ok('wrong brick shows hint', await shown('.ob-pz-nope'));
+ok('wrong brick shakes', await page.$eval('.ob-pz-red', (e) => getComputedStyle(e).animationName) === 'ob-pz-shake');
 await page.tap('label[for^="ob-pz-blue"]');
 await page.waitForTimeout(2200);
 ok('right brick: success panel', await shown('.ob-pz-yes'));
