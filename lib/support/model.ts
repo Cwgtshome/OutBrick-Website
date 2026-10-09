@@ -33,6 +33,78 @@ export type SupportCopy = {
     issuesText: string;
     trackTitle: string;
     trackText: string;
+    levelsTitle: string;
+    levelsText: string;
+    involvedTitle: string;
+    involvedText: string;
+    /** The reply-time promise, shown on the contact page, the hub and the request page. */
+    promise: string;
+  };
+
+  /** /support/levels: help with one Journey level. */
+  levels: {
+    metaTitle: string;
+    metaDescription: string;
+    eyebrow: string;
+    title: string;
+    lede: string;
+    label: string;
+    hint: string;
+    action: string;
+    invalid: string;
+    /** "Level 512 in the community" */
+    resultsTitle: (level: number) => string;
+    none: (level: number) => string;
+    loading: string;
+    failed: string;
+    solved: string;
+    replies: (n: number) => string;
+    askTitle: string;
+    askText: string;
+    askAction: string;
+    /** The title a new thread starts with: "Level 512: " */
+    askThreadTitle: (level: number) => string;
+    bugAction: string;
+    tipsTitle: string;
+    /** Inline markup allowed. */
+    tips: string[];
+    spoilersTitle: string;
+    spoilersText: string;
+  };
+
+  /** /support/get-involved: beta testing, the accessibility panel and the monthly team post. */
+  involved: {
+    metaTitle: string;
+    metaDescription: string;
+    eyebrow: string;
+    title: string;
+    lede: string;
+    beta: { title: string; text: string; points: string[]; action: string };
+    panel: { title: string; text: string; points: string[]; action: string };
+    monthly: { title: string; text: string; followAction: string; newsAction: string };
+    honest: string;
+  };
+
+  /** The site-wide status banner. */
+  banner: {
+    level: { info: string; warning: string; outage: string };
+    more: string;
+    dismiss: string;
+  };
+
+  /** Screenshots on the contact form and the request page. */
+  attach: {
+    label: string;
+    hint: string;
+    add: string;
+    remove: string;
+    uploading: string;
+    failed: string;
+    tooBig: string;
+    tooMany: string;
+    /** "Screenshot 2" */
+    alt: (n: number) => string;
+    title: string;
   };
 
   issues: {

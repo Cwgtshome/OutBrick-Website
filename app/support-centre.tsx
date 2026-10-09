@@ -17,6 +17,7 @@ import { localeAlternates, localePath, localeUrl, ogLocales, type Locale } from 
 import { siteUrl } from '../lib/site';
 import { breadcrumbNode, graph, webPageNode } from '../lib/structured-data';
 import { helpBase } from './help-centre';
+import { helpUi } from '../lib/help/ui';
 import { Crumbs, Frame, metaText, renderInline, stampDate } from './help-centre';
 import { JsonLd } from './editorial-shell';
 import { issuesReviewed, knownIssues, suggestionIndex, supportCopy, troubleshooter, TROUBLESHOOTING } from '../lib/support/content';
@@ -24,6 +25,7 @@ import type { KnownIssue } from '../lib/support/model';
 import { GuideFeedback } from './components/support/guide-feedback';
 import { Troubleshooter } from './components/support/troubleshooter';
 import { CaseTracker } from './components/support/case-tracker';
+import { LevelHelp } from './components/support/level-help';
 import { ContactForm } from './(en)/contact/contact-form';
 import './styles/help.css';
 import './styles/support.css';
@@ -33,6 +35,8 @@ export const supportPaths = {
   fix: '/support/troubleshooter',
   issues: '/support/known-issues',
   request: '/support/request',
+  levels: '/support/levels',
+  involved: '/support/get-involved',
 } as const;
 
 const at = (locale: Locale, path: string) => localePath(locale, path);
@@ -129,6 +133,12 @@ export function SupportHub({ locale = 'en' }: { locale?: Locale }) {
           </li>
         ))}
       </ul>
+      <ul className="ss-hub-more">
+        <li><a className="ss-hub-link" href={at(locale, supportPaths.levels)}>{c.levelsTitle}</a></li>
+        <li><a className="ss-hub-link" href={at(locale, '/community/help')}>{helpUi[locale].name}</a></li>
+        <li><a className="ss-hub-link" href={at(locale, supportPaths.involved)}>{c.involvedTitle}</a></li>
+      </ul>
+      <p className="ss-promise">{c.promise}</p>
     </section>
   );
 }
@@ -289,4 +299,83 @@ export function ContactFormWithHelp({ locale = 'en' }: { locale?: Locale }) {
     issue: (id) => `${at(locale, supportPaths.issues)}#${id}`,
   });
   return <ContactForm locale={locale} suggestions={index} trackHref={at(locale, supportPaths.request)} />;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Help with a level
+
+export function levelsMetadata(locale: Locale): Metadata {
+  const c = supportCopy(locale).levels;
+  return pageMetadata(locale, supportPaths.levels, c.metaTitle, c.metaDescription);
+}
+
+export function LevelsPage({ locale }: { locale: Locale }) {
+  const c = supportCopy(locale).levels;
+  return (
+    <Frame locale={locale} page={supportPaths.levels} current={at(locale, supportPaths.support)}>
+      <Head locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
+      <div className="band-cream hc-band">
+        <div className="wrap ss-narrow ss-levels">
+          <LevelHelp locale={locale} communityBase={communityPath(locale)} />
+          <section className="brick ss-level-tips" aria-labelledby="ss-tips">
+            <h2 id="ss-tips">{c.tipsTitle}</h2>
+            <ul className="points">
+              {c.tips.map((tip, i) => <li key={i}>{renderInline(tip, locale)}</li>)}
+            </ul>
+            <h3>{c.spoilersTitle}</h3>
+            <p>{c.spoilersText}</p>
+          </section>
+          <GuideFeedback slug="levels" locale={locale} copy={supportCopy(locale).feedback} page {...feedbackLinks(locale)} />
+        </div>
+      </div>
+      <PageGraph locale={locale} path={supportPaths.levels} name={c.title} description={c.metaDescription} crumb={c.title} />
+    </Frame>
+  );
+}
+
+// ---------------------------------------------------------------------------------------------
+// Help shape OutBrick
+
+export function involvedMetadata(locale: Locale): Metadata {
+  const c = supportCopy(locale).involved;
+  return pageMetadata(locale, supportPaths.involved, c.metaTitle, c.metaDescription);
+}
+
+export function InvolvedPage({ locale }: { locale: Locale }) {
+  const c = supportCopy(locale).involved;
+  const card = (key: 'beta' | 'panel', topic: string) => (
+    <section className={`brick ss-programme ${key}`} aria-labelledby={`ss-${key}`}>
+      <h2 id={`ss-${key}`}>{c[key].title}</h2>
+      <p>{c[key].text}</p>
+      <ul className="points">
+        {c[key].points.map((p, i) => <li key={i}>{renderInline(p, locale)}</li>)}
+      </ul>
+      <div className="act">
+        <a className="btn" href={`${at(locale, '/contact')}?topic=${topic}#form`}>{c[key].action}</a>
+      </div>
+    </section>
+  );
+  return (
+    <Frame locale={locale} page={supportPaths.involved} current={at(locale, supportPaths.support)}>
+      <Head locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
+      <div className="band-cream hc-band">
+        <div className="wrap ss-narrow">
+          <div className="ss-programmes">
+            {card('beta', 'beta')}
+            {card('panel', 'accessibility-panel')}
+            <section className="brick ss-programme monthly" aria-labelledby="ss-monthly">
+              <h2 id="ss-monthly">{c.monthly.title}</h2>
+              <p>{c.monthly.text}</p>
+              <div className="act">
+                <a className="btn" href={communityPath(locale, '/c/announcements')}>{c.monthly.followAction}</a>
+                <a className="btn ghost" href={at(locale, '/newsletter')}>{c.monthly.newsAction}</a>
+              </div>
+            </section>
+          </div>
+          <p className="ss-honest">{c.honest}</p>
+        </div>
+      </div>
+      <PageGraph locale={locale} path={supportPaths.involved} name={c.title} description={c.metaDescription} crumb={c.title} />
+    </Frame>
+  );
 }

@@ -7,6 +7,8 @@ import type { TranslatedLocale } from '../i18n/locales.ts';
  * app/(en)/contact/page.tsx. The Support Centre pages themselves use lib/support/copy/*.
  */
 const phrases: Record<string, Record<TranslatedLocale, string>> = {
+  'Beta testing': { fr: 'Tests bêta', de: 'Beta-Test', es: 'Pruebas beta', ja: 'ベータテスト', 'pt-BR': 'Testes beta' },
+  'Accessibility panel': { fr: 'Panel accessibilité', de: 'Barrierefreiheits-Panel', es: 'Panel de accesibilidad', ja: 'アクセシビリティパネル', 'pt-BR': 'Painel de acessibilidade' },
   'About the problem': { fr: 'À propos du problème', de: 'Zum Problem', es: 'Sobre el problema', ja: '問題について', 'pt-BR': 'Sobre o problema' },
   '(optional)': { fr: '(facultatif)', de: '(optional)', es: '(opcional)', ja: '（任意）', 'pt-BR': '(opcional)' },
   'Level number': { fr: 'Numéro du niveau', de: 'Levelnummer', es: 'Número de nivel', ja: 'レベル番号', 'pt-BR': 'Número do nível' },

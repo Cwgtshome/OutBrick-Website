@@ -59,7 +59,7 @@ jobs:
         run: node --experimental-strip-types --test netlify/community/ip-hash.test.ts
 
       - name: Support Centre (request tracking, guide feedback) and support-case lifecycle
-        run: node --experimental-strip-types --test netlify/lifecycle/player-cases.test.ts netlify/lifecycle/lifecycle.test.ts
+        run: node --experimental-strip-types --test netlify/lifecycle/player-cases.test.ts netlify/lifecycle/support-extras.test.ts netlify/lifecycle/lifecycle.test.ts
       - name: SEO audit
         run: pnpm audit:seo
 

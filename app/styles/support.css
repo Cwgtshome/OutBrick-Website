@@ -313,3 +313,54 @@
 .ob-site .ss-fix-intro { margin: 0 0 16px; color: var(--ink-on-cream); }
 .ob-site .ss-fix-intro p { margin: 0 0 8px; }
 .ob-site .ss-fix-intro a { color: var(--hc-link, #2c2296); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------------- screenshots ---------------- */
+.ob-site .ss-attach { margin: 0 0 18px; }
+.ob-site .ss-attach-label { margin: 0; font-family: var(--display); font-weight: 600; color: var(--ink-on-cream, #142b49); }
+.ob-site .ss-attach-list, .ob-site .ss-shots { list-style: none; margin: 8px 0 12px; padding: 0; display: flex; flex-wrap: wrap; gap: 12px; }
+.ob-site .ss-attach-list li { display: grid; gap: 4px; justify-items: start; width: 120px; }
+.ob-site .ss-attach-list img, .ob-site .ss-shots img { width: 120px; height: 120px; object-fit: cover; border-radius: 12px; border: 2px solid #e0cfae; background: #fff; }
+.ob-site .ss-attach-list li.s-uploading img { opacity: 0.55; }
+.ob-site .ss-attach-list li.s-failed img { border-color: var(--red); }
+.ob-site .ss-attach-state { font-size: 0.85rem; color: var(--muted-on-cream, #586879); }
+.ob-site .ss-attach-add { cursor: pointer; padding: 11px 20px; font-size: 1rem; }
+.ob-site .ss-attach-add:focus-within { outline: 3px solid var(--gold); outline-offset: 3px; }
+.ob-site .ss-shots a { display: block; border-radius: 12px; }
+.ob-site .ss-shots a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* ---------------- level help ---------------- */
+.ob-site .hc .ss-levels > .brick { --b: #fff; --b-foot: var(--hc-slab-foot, #e0cfae); --depth: 7px; padding: 24px 26px 18px; border-radius: var(--radius); margin: 0 0 26px; }
+.ob-site .ss-level-form label { display: block; font-family: var(--display); font-weight: 600; margin: 0 0 8px; color: var(--ink-on-cream); }
+.ob-site .ss-level-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.ob-site .ss-level-row input { flex: 0 1 200px; min-width: 0; font: inherit; font-size: 1.2rem; padding: 12px 14px; border: 2px solid #b9a988; border-radius: 12px; background: #fffdf8; color: var(--ink-on-cream); }
+.ob-site .ss-level-row input:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-color: var(--ink-on-cream); }
+.ob-site .ss-level-results h2 { font-size: clamp(1.25rem, 3vw, 1.6rem); margin: 0 0 12px; }
+.ob-site .ss-level-threads { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
+.ob-site .ss-level-threads li { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 14px; padding: 10px 0; border-bottom: 1px solid #ece2cc; }
+.ob-site .ss-level-threads a { color: var(--hc-link, #2c2296); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.ob-site .ss-level-threads .meta { font-size: 0.9rem; color: var(--muted-on-cream); }
+.ob-site .ss-level-ask { margin-top: 10px; padding-top: 14px; border-top: 2px dashed #ece2cc; }
+.ob-site .ss-level-ask h3 { margin: 0 0 6px; font-size: 1.15rem; }
+.ob-site .ss-levels .act { display: flex; flex-wrap: wrap; gap: 14px; }
+.ob-site .ss-levels a.btn { color: var(--ink); text-decoration: none; }
+.ob-site .ss-levels a.btn.ghost { color: #fff; }
+
+/* ---------------- get involved ---------------- */
+.ob-site .ss-programmes { display: grid; gap: 26px; }
+.ob-site .hc .ss-programme { --b: #fff; --b-foot: var(--hc-slab-foot, #e0cfae); --depth: 7px; padding: 26px 28px 22px; border-radius: var(--radius); border-top: 8px solid var(--c, var(--panel)); }
+.ob-site .ss-programme.beta { --c: var(--blue); }
+.ob-site .ss-programme.panel { --c: var(--purple); }
+.ob-site .ss-programme.monthly { --c: var(--green); }
+.ob-site .ss-programme h2 { margin: 0 0 8px; font-size: clamp(1.3rem, 3vw, 1.7rem); }
+.ob-site .ss-programme .points { list-style: none; padding: 0; margin: 10px 0 18px; display: grid; gap: 8px; }
+.ob-site .ss-programme .points li { position: relative; padding-left: 26px; }
+.ob-site .ss-programme .points li::before { content: ''; position: absolute; left: 2px; top: 0.45em; width: 12px; height: 12px; border-radius: 4px; background: var(--teal); box-shadow: 0 3px 0 var(--teal-dark); }
+.ob-site .ss-programme .act { display: flex; flex-wrap: wrap; gap: 14px; }
+.ob-site .ss-programme a.btn { color: var(--ink); text-decoration: none; }
+.ob-site .ss-programme a.btn.ghost { color: #fff; }
+.ob-site .ss-honest { margin: 6px 0 0; color: var(--muted-on-cream); }
+
+/* the hub's second row: smaller doors */
+.ob-site .ss-hub-more { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.ob-site .ss-hub a.ss-hub-link { color: var(--hc-link, #2c2296); font-family: var(--display); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.ob-site .ss-promise { margin: 12px 0 0; font-weight: 600; color: var(--ink-on-cream); }

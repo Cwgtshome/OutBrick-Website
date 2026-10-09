@@ -18,6 +18,7 @@ import { teamNotification, type TeamForm } from './team.ts';
 import { databaseAvailable } from '../netlify/community/db.ts';
 import { caseAdminUrl, cleanCaseDetails, createCase } from '../netlify/lifecycle/cases.ts';
 import { caseTrackUrl } from '../netlify/lifecycle/player-cases.ts';
+import { attachmentIds } from '../netlify/lifecycle/support-attachments.ts';
 import { createApplication } from '../netlify/lifecycle/applications.ts';
 
 export type SubmissionPayload = {
@@ -97,7 +98,7 @@ async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<
   if (form !== 'newsletter' && databaseAvailable(env)) {
     try {
       if (form === 'contact') {
-        const c = await createCase({ submissionId: id, email: to, name: str(data.name, 120), locale: locale0, topic: str(data.topic, 40), message: str(data.message), device: str(data.device, 80), appVersion: str(data['app-version'], 20), iosVersion: str(data['ios-version'], 20), details: cleanCaseDetails(data) });
+        const c = await createCase({ submissionId: id, email: to, name: str(data.name, 120), locale: locale0, topic: str(data.topic, 40), message: str(data.message), device: str(data.device, 80), appVersion: str(data['app-version'], 20), iosVersion: str(data['ios-version'], 20), details: cleanCaseDetails(data), attachments: attachmentIds(data.attachments) });
         caseRef = c.ref;
         caseId = c.id;
         record = { url: caseAdminUrl(c.id), ref: c.ref };
