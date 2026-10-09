@@ -6,7 +6,7 @@
 // `sql` tagged template, so every value is a parameter.
 
 import { getDatabase } from '@netlify/database';
-import { createHash, randomBytes } from 'node:crypto';
+import { createHash, createHmac, randomBytes } from 'node:crypto';
 import { platformDatabase } from '../platform.ts';
 
 /** What the community code needs from a database: a tagged-template query and a transaction. */
@@ -63,11 +63,27 @@ export async function transaction<T>(work: (q: Query) => Promise<T>): Promise<T>
 export const sha256 = (value: string) => createHash('sha256').update(value).digest('hex');
 export const randomToken = (bytes = 32) => randomBytes(bytes).toString('base64url');
 
-/** A salted hash of the caller's IP, for rate limits only; the address itself is never stored. */
+/**
+ * A keyed hash of the caller's IP, for rate limits only; the address itself is never stored.
+ *
+ * The key is the `IP_HASH_SALT` Worker secret. It must stay secret: there are few enough IPv4
+ * addresses that anyone holding the key could hash them all and reverse a stored value, which is
+ * why the public `SITE_ID` (in wrangler.jsonc) no longer serves as the salt. Without the secret
+ * the hash falls back to `SITE_ID` and warns, so a missing secret slows nothing down but is
+ * visible in the logs. Every use is a rate-limit key that `rateAllow` prunes after two days, so
+ * changing the key only restarts those counters.
+ */
 export function ipHash(req: Request): string {
   const ip = req.headers.get('cf-connecting-ip') ?? req.headers.get('x-nf-client-connection-ip') ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  const secret = process.env.IP_HASH_SALT;
+  if (secret) return createHmac('sha256', secret).update(`outbrick-community-ip:${ip}`).digest('hex').slice(0, 32);
+  if (!warnedNoIpSalt) {
+    warnedNoIpSalt = true;
+    console.warn(JSON.stringify({ event: 'outbrick-ip-hash-salt-missing' }));
+  }
   return sha256(`outbrick-community-ip:${process.env.SITE_ID ?? ''}:${ip}`).slice(0, 32);
 }
+let warnedNoIpSalt = false;
 
 /**
  * Count events for `key` in the last `windowSeconds`; if fewer than `max`, record one and return

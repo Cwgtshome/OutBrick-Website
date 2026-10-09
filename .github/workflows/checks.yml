@@ -54,6 +54,9 @@ jobs:
 
       - name: Administrative roles and editorial publishing
         run: node --experimental-strip-types --test netlify/community/admin.test.ts netlify/community/moderation.test.ts
+
+      - name: Rate-limit IP hash is keyed by a secret
+        run: node --experimental-strip-types --test netlify/community/ip-hash.test.ts
       - name: SEO audit
         run: pnpm audit:seo
 
