@@ -108,6 +108,7 @@ export function NetlifyForm({
   className = '',
   children,
   success,
+  onSent,
 }: {
   /** The Netlify form name; also the hidden `form-name` field. */
   name: string;
@@ -117,8 +118,10 @@ export function NetlifyForm({
   label: string;
   className?: string;
   children: (api: FormApi) => ReactNode;
-  /** What replaces the form once the background POST succeeds. */
-  success: (values: URLSearchParams) => ReactNode;
+  /** What replaces the form once the background POST succeeds; `reply` is the server's JSON answer, if any. */
+  success: (values: URLSearchParams, reply: Record<string, unknown>) => ReactNode;
+  /** Called after a successful POST, before the success view replaces the form. */
+  onSent?: () => void;
 }) {
   const locale = useLocale();
   const t = formWords[locale];
@@ -128,6 +131,7 @@ export function NetlifyForm({
   const [status, setStatus] = useState<Status>('idle');
   const [summary, setSummary] = useState('');
   const [sent, setSent] = useState<URLSearchParams | null>(null);
+  const [reply, setReply] = useState<Record<string, unknown>>({});
   const attempted = useRef(false);
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
@@ -185,6 +189,9 @@ export function NetlifyForm({
         body: values.toString(),
       });
       if (!response.ok) throw new Error(String(response.status));
+      const answer = (await response.json().catch(() => null)) as unknown;
+      setReply(answer && typeof answer === 'object' && !Array.isArray(answer) ? (answer as Record<string, unknown>) : {});
+      onSent?.();
       setStatus('sent');
       setSent(values);
       // Only the form's name: never a field value (lib/track.ts; sent only after analytics consent).
@@ -200,7 +207,7 @@ export function NetlifyForm({
   if (sent) {
     return (
       <div className="obf-success" ref={successRef} tabIndex={-1}>
-        {success(sent)}
+        {success(sent, reply)}
       </div>
     );
   }
@@ -365,7 +372,9 @@ export function TextArea({
   rows = 6,
   maxLength,
   minLength,
-}: Common & { rows?: number; maxLength?: number; minLength?: number }) {
+  defaultValue,
+  onValueChange,
+}: Common & { rows?: number; maxLength?: number; minLength?: number; defaultValue?: string; onValueChange?: (value: string) => void }) {
   const ids = useIds(name);
   return (
     <div className={`obf-field ${className}`} data-invalid={error ? '' : undefined}>
@@ -377,6 +386,8 @@ export function TextArea({
         required={!optional}
         maxLength={maxLength}
         minLength={minLength}
+        defaultValue={defaultValue}
+        onChange={onValueChange ? (event) => onValueChange(event.target.value) : undefined}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(ids, hint, error)}
         data-label={spoken ?? label.toLowerCase()}
@@ -466,7 +477,8 @@ export function SubmitRow({ status, label, next }: { status: Status; label: stri
       <button className="obf-btn" type="submit" disabled={status === 'sending'} aria-disabled={status === 'sending' || undefined}>
         {status === 'sending' ? t.sending : label}
       </button>
-      <p className="obf-next">{next}</p>
+      {/* A list cannot sit inside a paragraph: structured "what happens next" gets a block of its own. */}
+      {typeof next === 'string' ? <p className="obf-next">{next}</p> : <div className="obf-next">{next}</div>}
     </div>
   );
 }

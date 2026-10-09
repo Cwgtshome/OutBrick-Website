@@ -48,15 +48,18 @@ export async function submitForm(req: Request): Promise<Response> {
   await sql`INSERT INTO web_form_submissions (id, form_name, payload, delivery_state) VALUES (${payload.id}, ${name}, ${JSON.stringify(payload)}::jsonb, 'pending')`;
   if (name === 'newsletter') await recordSiteEvent('signup', { email: normalizeEmail(data.email), locale: typeof data.language === 'string' ? data.language : null, source: pagePath(req.headers.get('referer')) });
   // Sending is synchronous on the first try, while the durable row protects failures.
-  try { await deliverForm(payload); }
+  // A contact message answers with its case reference (never its private link), so the page can show it at once.
+  let ref: string | undefined;
+  try { ref = (await deliverForm(payload)).record?.ref; }
   catch { console.error(JSON.stringify({ event: 'outbrick-form-delivery-deferred' })); }
-  return json({ received: true }, { status: 202 });
+  return json(ref ? { received: true, ref } : { received: true }, { status: 202 });
 }
-async function deliverForm(payload: SubmissionPayload): Promise<void> {
+async function deliverForm(payload: SubmissionPayload) {
   const outcome = await handleSubmission(payload, process.env);
   // A deliberate skip (the per-address limit) with the team told is done, not a retry.
   const delivered = outcome.status === 'sent' ? outcome.team !== 'failed' : outcome.status === 'skipped' && outcome.reason === 'address rate limit' && outcome.team === 'sent';
   await sql`UPDATE web_form_submissions SET delivery_state = ${delivered ? 'sent' : 'pending'}, attempts = attempts + 1, retry_at = now() + interval '10 minutes', updated_at = now() WHERE id = ${payload.id}`;
+  return outcome;
 }
 export async function drainForms(): Promise<void> {
   if (!process.env.RESEND_API_KEY) return;

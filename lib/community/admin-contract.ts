@@ -83,6 +83,16 @@ export type SupportCaseEvent = {
 export type SupportCaseCounts = { open: number; replied: number; fixPending: number; rating: number | null; answered: number };
 export type SupportCaseListResponse = { cases: SupportCase[]; counts: SupportCaseCounts; page: number };
 export type SupportCaseDetailResponse = { case: SupportCase; events: SupportCaseEvent[] };
+/** "Was this helpful?" answers for one month (netlify/community/help-feedback.ts). */
+export type HelpFeedbackPage = {
+  yes: number;
+  no: number;
+  byLocale: Record<string, { yes: number; no: number }>;
+  reasons: Record<string, number>;
+  comments: { at: string; locale: string; helpful: boolean; reason: string | null; text: string }[];
+};
+export type HelpFeedbackMonth = { month: string; updatedAt: string; pages: Record<string, HelpFeedbackPage> };
+export type HelpFeedbackResponse = { month: HelpFeedbackMonth; previous: HelpFeedbackMonth };
 /** The server returns at most this many cases per page. */
 export const SUPPORT_CASE_PAGE = 50;
 

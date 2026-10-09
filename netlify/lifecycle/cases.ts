@@ -26,6 +26,7 @@ import { feedbackPage, simplePage, supportFeedback, supportFixed, supportReply, 
 import { lifecycleCopy } from '../../emails/lifecycle-i18n.ts';
 import { SENDERS, sendEmail, type OutgoingEmail } from '../../emails/resend.ts';
 import { cancelKey, enqueue, reschedule, signalOutbox, type Row as OutboxRow, type Prepared } from './outbox.ts';
+import { caseTrackUrl } from './player-cases.ts';
 
 export const FEEDBACK_DELAY_DAYS = 3;
 const FEEDBACK_LINK_DAYS = 30;
@@ -55,7 +56,35 @@ export function versionAtLeast(have: string, want: string): boolean {
 export const caseAdminUrl = (id: number) => `${SITE}/community/admin?case=${id}`;
 const feedbackKey = (id: number) => `feedback-${id}`;
 
-export type NewCase = { submissionId: string; email: string; name: string; locale: EmailLocale; topic: string; message: string; device: string; appVersion: string; iosVersion: string };
+export type NewCase = {
+  submissionId: string;
+  email: string;
+  name: string;
+  locale: EmailLocale;
+  topic: string;
+  message: string;
+  device: string;
+  appVersion: string;
+  iosVersion: string;
+  /** The contact form's topic-specific answers (level, purchase, assistive technology, what was tried). Kept on the "created" event. */
+  details?: Record<string, string>;
+};
+
+/** The contact form's optional, topic-specific fields that a case keeps, with their length limits. */
+export const caseDetailFields = { level: 12, 'purchase-item': 120, 'purchase-date': 40, assistive: 60, tried: 60, guide: 60, source: 20 } as const;
+export type CaseDetailField = keyof typeof caseDetailFields;
+
+/** Only the known detail fields, trimmed and capped; empty values are dropped. */
+export function cleanCaseDetails(data: Record<string, unknown>): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [key, max] of Object.entries(caseDetailFields)) {
+    const raw = data[key];
+    const text = typeof raw === 'string' ? raw : typeof raw === 'number' ? String(raw) : '';
+    const value = Array.from(text, (ch) => (ch.charCodeAt(0) < 32 || ch.charCodeAt(0) === 127 ? ' ' : ch)).join('').trim().slice(0, max);
+    if (value) out[key] = value;
+  }
+  return out;
+}
 
 /** Store a contact message as a case and return its reference (the same one if Netlify redelivers the submission). */
 export async function createCase(input: NewCase): Promise<{ id: number; ref: string }> {
@@ -68,7 +97,8 @@ export async function createCase(input: NewCase): Promise<{ id: number; ref: str
       ON CONFLICT DO NOTHING
       RETURNING id::int, ref`;
     if (rows[0]) {
-      await sql`INSERT INTO support_case_events (case_id, kind) VALUES (${num(rows[0].id)}, 'created')`;
+      const details = input.details && Object.keys(input.details).length ? { details: input.details } : {};
+      await sql`INSERT INTO support_case_events (case_id, kind, data) VALUES (${num(rows[0].id)}, 'created', ${JSON.stringify(details)}::jsonb)`;
       return { id: num(rows[0].id), ref: String(rows[0].ref) };
     }
     const [existing] = await sql`SELECT id::int, ref FROM support_cases WHERE submission_id = ${input.submissionId}`;
@@ -187,7 +217,7 @@ export const replyToCase: Route['run'] = async (req, params) => {
   if (!apiKey) throw badRequest('unavailable', 'Email is not configured (RESEND_API_KEY).');
   const row = await loadCase(id);
   const locale = localeOf(row.locale);
-  const rendered = supportReply({ locale, name: String(row.name), ref: String(row.ref), staff: staffName, message, original: String(row.message) });
+  const rendered = supportReply({ locale, name: String(row.name), ref: String(row.ref), staff: staffName, message, original: String(row.message), trackUrl: caseTrackUrl(apiKey, id, locale) });
   const [{ n }] = (await sql`SELECT count(*)::int AS n FROM support_case_events WHERE case_id = ${id} AND kind = 'reply'`) as { n: number }[];
   const result = await sender(
     apiKey,
@@ -275,12 +305,11 @@ export async function notifyFixedCases(version: string, now = new Date()): Promi
 // Outbox preparers
 
 export async function prepareFixed(row: OutboxRow, apiKey: string): Promise<Prepared> {
-  void apiKey;
   const id = num(row.payload.caseId);
   const [c] = await sql`SELECT ref, name, locale FROM support_cases WHERE id = ${id}`;
   if (!c) return null;
   const locale = localeOf(c.locale);
-  const r = supportFixed({ locale, name: String(c.name), ref: String(c.ref), version: toText(row.payload.version), note: toText(row.payload.note) });
+  const r = supportFixed({ locale, name: String(c.name), ref: String(c.ref), version: toText(row.payload.version), note: toText(row.payload.note), trackUrl: caseTrackUrl(apiKey, id, locale) });
   return { email: { ...SENDERS.support, to: row.to_email, subject: r.subject, html: r.html, text: r.text, tags: [{ name: 'form', value: 'support-fixed' }, { name: 'locale', value: locale }] } };
 }
 

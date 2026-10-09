@@ -5,6 +5,7 @@ import type {
   Application,
   ApplicationKind,
   EditorialContent,
+  HelpFeedbackMonth,
   PolicyNoticeRequest,
   SupportCaseEvent,
   SupportCaseFilter,
@@ -127,6 +128,7 @@ function Dashboard() {
         ))}
       </dl>
       <SupportCases initialCase={link.caseId} />
+      <GuideFeedbackPanel />
       <Applications initialKind={link.applicationKind} initialId={link.applicationId} />
       {isAdmin ? <PolicyNotice /> : null}
       {isAdmin ? <EmailAnalytics /> : null}
@@ -924,6 +926,17 @@ function CaseDetail({
           [w.received, <Time key="t" iso={c.createdAt} />],
         ]}
       />
+      {(() => {
+        const created = data.events.find((e) => e.kind === 'created');
+        const details = (created?.data.details ?? {}) as Record<string, string>;
+        const rows = Object.entries(details).filter(([, v]) => typeof v === 'string' && v);
+        return rows.length ? (
+          <>
+            <h4>{w.caseDetails}</h4>
+            <Facts items={rows.map(([k, v]) => [w.caseDetailLabels[k] ?? k, v] as [string, string])} />
+          </>
+        ) : null;
+      })()}
       <h4>{w.caseMessage}</h4>
       <PlainText text={c.message} />
       <h4 ref={history} tabIndex={-1}>
@@ -1002,7 +1015,11 @@ function CaseEventItem({ event: e, statusLabel }: { event: SupportCaseEvent; sta
                   ? w.evFeedback
                   : e.kind === 'reopened'
                     ? w.evReopened
-                    : e.kind;
+                    : e.kind === 'note'
+                      ? e.data.from === 'player'
+                        ? w.evPlayerNote
+                        : w.evNote
+                      : e.kind;
   const actor = e.actor && e.kind !== 'reply' ? ` · ${e.actor}` : '';
   return (
     <li>
@@ -1019,6 +1036,91 @@ function CaseEventItem({ event: e, statusLabel }: { event: SupportCaseEvent; sta
       ) : null}
       {e.body ? <PlainText text={e.body} /> : null}
     </li>
+  );
+}
+
+/** "Was this helpful?" answers on guides and Support Centre pages, this month and last. */
+function GuideFeedbackPanel() {
+  const { locale, n } = useApp(),
+    w = adminWords[locale],
+    g = w.guideFeedback,
+    id = useId();
+  const load = useLoad('admin-help-feedback', () => api.helpFeedback());
+  const pct = (yes: number, no: number) => (yes + no ? new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 }).format(yes / (yes + no)) : '–');
+  const table = (m: HelpFeedbackMonth, caption: string) => {
+    const pages = Object.entries(m.pages).sort(([, a], [, b]) => b.no - a.no || b.yes + b.no - (a.yes + a.no));
+    if (!pages.length) return <p>{g.none}</p>;
+    return (
+      <div className="cm-table-wrap">
+        <table className="cm-table">
+          <caption>{caption}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{g.page}</th>
+              <th scope="col">{g.helpful}</th>
+              <th scope="col">{g.notHelpful}</th>
+              <th scope="col">{g.score}</th>
+              <th scope="col">{g.reasons}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pages.map(([slug, p]) => (
+              <tr key={slug}>
+                <th scope="row">
+                  <a href={slug === 'troubleshooter' || slug === 'known-issues' ? `/support/${slug}` : slug === 'support' ? '/support' : `/community/help/${slug}`}>{slug}</a>
+                </th>
+                <td>{n(p.yes)}</td>
+                <td>{n(p.no)}</td>
+                <td>{pct(p.yes, p.no)}</td>
+                <td>
+                  {Object.entries(p.reasons)
+                    .sort(([, a], [, b]) => b - a)
+                    .map(([r, c]) => `${g.reasonLabels[r] ?? r} (${n(c)})`)
+                    .join(', ') || '–'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+  const comments = load.data
+    ? Object.entries(load.data.month.pages)
+        .flatMap(([slug, p]) => p.comments.map((c) => ({ ...c, slug })))
+        .sort((a, b) => b.at.localeCompare(a.at))
+        .slice(0, 20)
+    : [];
+  return (
+    <section className="cm-section" aria-labelledby={`${id}-h`}>
+      <h2 id={`${id}-h`}>{g.title}</h2>
+      <p>{g.lede}</p>
+      {load.error ? <AdminError error={load.error} /> : null}
+      {!load.data ? (
+        load.error ? null : <Loading />
+      ) : (
+        <>
+          {table(load.data.month, `${g.thisMonth} (${load.data.month.month})`)}
+          {table(load.data.previous, `${g.lastMonth} (${load.data.previous.month})`)}
+          {comments.length ? (
+            <>
+              <h3>{g.comments}</h3>
+              <ul className="cm-admin-members">
+                {comments.map((c, i) => (
+                  <li key={i}>
+                    <p>
+                      <strong>{c.slug}</strong> · {c.helpful ? g.helpful : g.notHelpful}
+                      {c.reason ? ` · ${g.reasonLabels[c.reason] ?? c.reason}` : ''} · {languageName(c.locale)} · <Time iso={c.at} />
+                    </p>
+                    <PlainText text={c.text} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
+        </>
+      )}
+    </section>
   );
 }
 

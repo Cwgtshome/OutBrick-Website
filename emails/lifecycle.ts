@@ -41,6 +41,7 @@ import {
 import { emailCopy, greetingName, type EmailLocale } from './i18n.ts';
 import { lifecycleCopy } from './lifecycle-i18n.ts';
 import { newsFooter, newsFooterText, sitePath, store, supportFooter, supportFooterText, type Rendered } from './templates.ts';
+import { trackHtml, trackText } from './support-centre.ts';
 import { communityUrl, footer as communityFooter, footerText as communityFooterText, signoff } from './community.ts';
 import { FRIENDS, FRIEND_IDS, firstPuzzleBlock, firstPuzzleText, friendSrc, studs, type Mood } from './friends.ts';
 
@@ -92,6 +93,8 @@ export type SupportReplyInput = {
   staff: string;
   message: string;
   original: string;
+  /** The player's private link to follow the case (/support/request). */
+  trackUrl?: string;
   assetBase?: string;
 };
 
@@ -107,6 +110,7 @@ export function supportReply(input: SupportReplyInput): Rendered {
     heading(ctx, esc(c.heading(staff))),
     staffHtml(ctx, input.message),
     para(ctx, esc(c.continue), { muted: true, size: 16 }),
+    input.trackUrl ? trackHtml(ctx, input.trackUrl) : '',
     input.original.trim() ? reveal(ctx, 'ob-original', esc(c.showOriginal), esc(c.original), para(ctx, escLines(input.original.slice(0, 5000)), { size: 16 })) : '',
     ghostButton(ctx, sitePath(input.locale, '/support'), esc(c.cta)),
     para(ctx, `— ${esc(staff)} · ${esc(t.signoff)}`, { margin: '4px 0 20px' }),
@@ -120,6 +124,8 @@ export function supportReply(input: SupportReplyInput): Rendered {
     ...staffText(input.message),
     c.continue,
     '',
+    input.trackUrl && trackText(input.locale, input.trackUrl),
+    input.trackUrl && '',
     input.original.trim() && `${c.original}:`,
     input.original.trim() && input.original.slice(0, 5000),
     input.original.trim() && '',
@@ -130,7 +136,7 @@ export function supportReply(input: SupportReplyInput): Rendered {
   return { subject: c.subject(input.ref), html, text };
 }
 
-export type SupportFixedInput = { locale: EmailLocale; name: string; ref: string; version: string; note?: string; assetBase?: string };
+export type SupportFixedInput = { locale: EmailLocale; name: string; ref: string; version: string; note?: string; trackUrl?: string; assetBase?: string };
 
 /** The bug someone reported ships fixed. Sent by the release bot when `fixed_in` reaches the store. */
 export function supportFixed(input: SupportFixedInput): Rendered {
@@ -147,6 +153,7 @@ export function supportFixed(input: SupportFixedInput): Rendered {
     bricks(ctx, c.steps.map((s) => ({ title: esc(s.title), body: esc(s.body) }))),
     button(ctx, url, esc(c.cta)),
     para(ctx, esc(c.still), { muted: true, size: 16 }),
+    input.trackUrl ? trackHtml(ctx, input.trackUrl) : '',
     signoff(ctx),
   ].join('\n');
   const html = shell({ ctx, host: { friend: 'bricko', pose: 'cheer', mood: 'fixed' }, title: c.subject(input.version), preheader: c.preheader(input.version), logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'support-fixed') });
@@ -164,6 +171,8 @@ export function supportFixed(input: SupportFixedInput): Rendered {
     '',
     c.still,
     '',
+    input.trackUrl && trackText(input.locale, input.trackUrl),
+    input.trackUrl && '',
     signoffText(input.locale),
     '',
     ...supportFooterText(input.locale, c.why, 'support-fixed'),

@@ -45,6 +45,8 @@ import { votePoll } from '../community/polls.ts';
 import { bookmark, react } from '../community/reactions.ts';
 import { dashboard, watchAll, saveContent, publishContent, publicContent } from '../community/admin.ts';
 import { caseRoutes } from '../lifecycle/cases.ts';
+import { playerCaseRoutes } from '../lifecycle/player-cases.ts';
+import { helpFeedbackRoutes } from '../community/help-feedback.ts';
 import { applicationRoutes } from '../lifecycle/applications.ts';
 import { securityRoutes } from '../lifecycle/security.ts';
 import { analyticsRoutes } from '../lifecycle/analytics.ts';
@@ -70,6 +72,8 @@ const routes: Route[] = [
   ...fxRoutes,
   // Customer lifecycle (8 October 2026): support cases, applications, notices.
   ...caseRoutes(base),
+  ...playerCaseRoutes(base),
+  ...helpFeedbackRoutes(base),
   ...applicationRoutes(base),
   ...securityRoutes(base),
   // Email analytics (9 October 2026), admins only.

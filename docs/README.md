@@ -11,6 +11,7 @@ checks, then [ARCHITECTURE.md](ARCHITECTURE.md) for source locations, configurat
 | [Repository README](../README.md) | Hosting, forms, emails and newsletter workflow |
 | [Community plan](COMMUNITY-PLAN.md) | Forum design, contracts, optional features and idle gates; status lives separately |
 | [Help Centre](HELP-CENTRE.md) | The illustrated player guides at /community/help: content model, translations, screenshots and checks |
+| [Support Centre](SUPPORT-CENTRE.md) | Troubleshooter, known issues, a player's request page, "Was this helpful?", the contact form's help, and the recommended next steps |
 | [Journal brief](JOURNAL-BRIEF.md) | Editorial direction |
 | [Translation brief](TRANSLATION-BRIEF.md) | Localized content guidance |
 | [Captures](CAPTURES.md) | Screenshot provenance and workflow |

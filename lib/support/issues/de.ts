@@ -1,0 +1,61 @@
+import type { KnownIssue } from '../model.ts';
+
+/** Bekannte Probleme, auf Deutsch. Dieselben ids in derselben Reihenfolge wie en.ts. */
+export const de: KnownIssue[] = [
+  {
+    id: 'voiceover-focus',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: 'VoiceOver verliert auf dem Brett seinen Platz',
+    affects: 'OutBrick 5.1 und 5.1.1 mit eingeschaltetem VoiceOver, ab Level 6.',
+    what: 'Während VoiceOver das Brett vorlas, zählte das Spiel das nicht als Spielen. Nach einer kurzen Pause öffnete es über dem Brett eine Karte mit Boostern, und nach dem Schließen der Karte hatte der VoiceOver-Fokus keinen Platz mehr und sprang nach oben. Unter iOS 17 und früher konnte außerdem die Zusammenfassung des Bretts jede Berührung abfangen.',
+    workaround: [
+      'Erscheint eine Karte mit Boostern oder einem Hinweis, während du das Brett liest, schließt die **Z-Geste mit zwei Fingern** sie und bringt dich zurück aufs Brett.',
+      'Nutz die **Rotoren** (Teile mit Reihe, Spezialsteine, Ziele, Hindernisse, Tore), um direkt zu dem zu springen, was du brauchst.',
+      'Beweg Teile mit ihren **Aktionen** (nach oben oder unten streichen); so bleibt dein Fokus auf dem Brett.',
+    ],
+    fix: 'Behoben in OutBrick 5.1.2, das wir Apple zur Prüfung geschickt haben. Ein späteres Update bringt weitere Verbesserungen für VoiceOver, die wir unterwegs gefunden haben. Lass automatische Updates eingeschaltet, damit du sie bekommst, sobald sie erscheinen.',
+    more: 'help:voiceover',
+  },
+  {
+    id: 'missions-slide-match',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: 'Missionen zählen auf Slide-&-Match-Brettern keinen Fortschritt',
+    affects: 'OutBrick 5.1 und 5.1.1.',
+    what: 'Manche Missionen kommen nicht voran, wenn du Slide-&-Match-Bretter spielst, und einige verlangen etwas, das diese Bretter gar nicht bieten können. Deine Level, Sterne und Münzen sind nicht betroffen, nur die Zähler der Missionen.',
+    workaround: ['Du musst nichts tun: Dein Fortschritt auf dem Brett ist sicher. Missionen, die du nicht schaffen kannst, warten einfach auf das Update.'],
+    fix: 'Behoben. Die Korrektur kommt mit einem Update nach 5.1.2: Missionen zählen dann auch auf Slide-&-Match-Brettern, und Missionen, die diese Bretter nicht erfüllen können, werden nicht mehr angeboten.',
+    more: 'help:rewards-and-events',
+  },
+  {
+    id: 'pt-br-links',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: 'Community und Fehler melden öffnen bei brasilianischem Portugiesisch englische Seiten',
+    affects: 'OutBrick 5.1 und 5.1.1 auf brasilianischem Portugiesisch.',
+    what: 'Einstellungen › Community und Fehler melden öffnen die englische Version der OutBrick-Community statt der portugiesischen.',
+    workaround: ['Wähle unten auf einer beliebigen Seite der Website **Português (Brasil)** oder öffne direkt [die Community auf Portugiesisch](/pt-BR/community).'],
+    fix: 'Behoben. Die Korrektur kommt mit einem Update nach 5.1.2.',
+  },
+  {
+    id: 'ad-choices-label',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: '„Advertising choices“ steht in den Einstellungen auf Englisch',
+    affects: 'OutBrick 5.1 und 5.1.1 in allen Sprachen außer Englisch, im EWR, im Vereinigten Königreich und in der Schweiz.',
+    what: 'Die Taste für die Werbeoptionen in den Einstellungen ist auf Englisch beschriftet. Sie funktioniert ganz normal; nur ihre Beschriftung ist nicht übersetzt.',
+    workaround: [],
+    fix: 'Behoben. Die Korrektur kommt mit einem Update nach 5.1.2.',
+  },
+  {
+    id: 'tip-card-frozen',
+    status: 'fixed',
+    checked: '2026-10-09',
+    title: 'Ein Brett konnte nach Extrazügen eingefroren wirken',
+    affects: 'Nur OutBrick 5.1.',
+    what: 'Kamen Extrazüge an, während eine Lernkarte zu sehen war, konnte die Karte verschwinden und das Brett trotzdem weiter blockieren. VoiceOver fand nur die Karte, und das nächste Wischen ging dafür drauf, sie wegzulegen.',
+    workaround: [],
+    fix: 'Behoben in OutBrick 5.1.1, seit dem 8. Oktober 2026 im App Store. Aktualisiere OutBrick im App Store, falls du das noch nicht getan hast.',
+  },
+];

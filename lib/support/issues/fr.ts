@@ -1,0 +1,61 @@
+import type { KnownIssue } from '../model.ts';
+
+/** French known issues: same ids, order, status and dates as en.ts. */
+export const fr: KnownIssue[] = [
+  {
+    id: 'voiceover-focus',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: 'VoiceOver perd sa place sur le plateau',
+    affects: 'OutBrick 5.1 et 5.1.1 avec VoiceOver activé, à partir du niveau 6.',
+    what: 'Pendant que VoiceOver lisait le plateau, le jeu ne comptait pas cela comme du jeu. Après une courte pause, il ouvrait par-dessus le plateau une carte proposant des bonus, et sa fermeture laissait le focus VoiceOver nulle part, si bien qu’il sautait en haut de l’écran. Sous iOS 17 et versions antérieures, le résumé du plateau pouvait aussi capter chaque toucher.',
+    workaround: [
+      'Si une carte proposant des bonus ou un indice apparaît pendant que vous lisez le plateau, le geste **Frotter avec deux doigts** la ferme et vous ramène sur le plateau.',
+      'Utilisez les **rotors** (Pièces qui s’alignent, Spéciales, Objectifs, Obstacles, Portes) pour aller directement à ce qu’il vous faut.',
+      'Déplacez les pièces avec leurs **actions** (balayez vers le haut ou le bas), ce qui garde votre focus sur le plateau.',
+    ],
+    fix: 'Corrigé dans OutBrick 5.1.2, que nous avons envoyé à Apple pour examen. Une mise à jour ultérieure apporte d’autres améliorations pour VoiceOver, trouvées en chemin. Laissez les mises à jour automatiques activées pour les recevoir dès leur sortie.',
+    more: 'help:voiceover',
+  },
+  {
+    id: 'missions-slide-match',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: 'Les missions ne comptent pas la progression sur les plateaux Slide & Match',
+    affects: 'OutBrick 5.1 et 5.1.1.',
+    what: 'Certaines missions n’avancent pas quand vous jouez des plateaux Slide & Match, et quelques-unes demandent quelque chose que ces plateaux ne peuvent pas offrir. Vos niveaux, vos étoiles et vos pièces ne sont pas touchés ; seuls les compteurs des missions le sont.',
+    workaround: ['Rien à faire : votre progression sur le plateau est en sécurité. Les missions que vous ne pouvez pas terminer attendent simplement la mise à jour.'],
+    fix: 'Corrigé. Le correctif arrive dans une mise à jour après la 5.1.2 : les missions comptent sur les plateaux Slide & Match, et celles que ces plateaux ne permettent pas d’accomplir ne sont plus proposées.',
+    more: 'help:rewards-and-events',
+  },
+  {
+    id: 'pt-br-links',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: 'Communauté et Signaler un bug ouvrent des pages en anglais pour les joueurs en portugais du Brésil',
+    affects: 'OutBrick 5.1 et 5.1.1 en portugais du Brésil.',
+    what: 'Réglages › Communauté et Signaler un bug ouvrent la version anglaise de la communauté OutBrick au lieu de la version portugaise.',
+    workaround: ['Choisissez **Português (Brasil)** en bas de n’importe quelle page du site, ou ouvrez directement [la communauté en portugais](/pt-BR/community).'],
+    fix: 'Corrigé. Le correctif arrive dans une mise à jour après la 5.1.2.',
+  },
+  {
+    id: 'ad-choices-label',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: '« Advertising choices » s’affiche en anglais dans les Réglages',
+    affects: 'OutBrick 5.1 et 5.1.1 dans toutes les langues autres que l’anglais, dans l’EEE, au Royaume-Uni et en Suisse.',
+    what: 'Dans les Réglages, le bouton Choix publicitaires garde son libellé anglais, « Advertising choices ». Il fonctionne normalement ; seul son libellé n’est pas traduit.',
+    workaround: [],
+    fix: 'Corrigé. Le correctif arrive dans une mise à jour après la 5.1.2.',
+  },
+  {
+    id: 'tip-card-frozen',
+    status: 'fixed',
+    checked: '2026-10-09',
+    title: 'Un plateau pouvait sembler figé après l’arrivée de coups supplémentaires',
+    affects: 'Uniquement OutBrick 5.1.',
+    what: 'Quand des coups supplémentaires arrivaient alors qu’une carte d’astuce était à l’écran, la carte pouvait disparaître tout en bloquant encore le plateau. VoiceOver ne trouvait que la carte, et le balayage suivant servait à la ranger.',
+    workaround: [],
+    fix: 'Corrigé dans OutBrick 5.1.1, sur l’App Store depuis le 8 octobre 2026. Mettez OutBrick à jour depuis l’App Store si ce n’est pas déjà fait.',
+  },
+];

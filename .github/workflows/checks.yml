@@ -57,6 +57,9 @@ jobs:
 
       - name: Rate-limit IP hash is keyed by a secret
         run: node --experimental-strip-types --test netlify/community/ip-hash.test.ts
+
+      - name: Support Centre (request tracking, guide feedback) and support-case lifecycle
+        run: node --experimental-strip-types --test netlify/lifecycle/player-cases.test.ts netlify/lifecycle/lifecycle.test.ts
       - name: SEO audit
         run: pnpm audit:seo
 

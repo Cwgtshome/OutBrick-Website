@@ -1,0 +1,61 @@
+import type { KnownIssue } from '../model.ts';
+
+/** Problemas conhecidos, em português do Brasil. Mesmos ids, na mesma ordem de en.ts. */
+export const ptBR: KnownIssue[] = [
+  {
+    id: 'voiceover-focus',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: 'O VoiceOver perde o lugar no tabuleiro',
+    affects: 'OutBrick 5.1 e 5.1.1 com o VoiceOver ativado, a partir do nível 6.',
+    what: 'Enquanto o VoiceOver lia o tabuleiro, o jogo não contava isso como jogar. Depois de uma pequena pausa, ele abria sobre o tabuleiro um cartão oferecendo reforços e, ao fechar o cartão, o foco do VoiceOver ficava sem lugar e pulava para o topo. No iOS 17 e anteriores, o resumo do tabuleiro também podia capturar todos os toques.',
+    workaround: [
+      'Se aparecer um cartão oferecendo reforços ou uma dica enquanto você lê o tabuleiro, o **gesto de esfregar com dois dedos** fecha o cartão e leva você de volta ao tabuleiro.',
+      'Use os **rotores** (Peças que combinam, Especiais, Objetivos, Bloqueios, Portões) para ir direto ao que precisa.',
+      'Mova as peças com as **ações** delas (passe o dedo para cima ou para baixo), o que mantém seu foco no tabuleiro.',
+    ],
+    fix: 'Corrigido no OutBrick 5.1.2, que enviamos para a revisão da Apple. Uma atualização posterior traz mais melhorias para o VoiceOver que encontramos pelo caminho. Mantenha as atualizações automáticas ativadas para recebê-las assim que forem lançadas.',
+    more: 'help:voiceover',
+  },
+  {
+    id: 'missions-slide-match',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: 'As missões não contam o progresso nos tabuleiros Slide & Match',
+    affects: 'OutBrick 5.1 e 5.1.1.',
+    what: 'Algumas missões não avançam quando você joga tabuleiros Slide & Match, e algumas pedem algo que esses tabuleiros não podem oferecer. Seus níveis, estrelas e moedas não são afetados; só os contadores das missões.',
+    workaround: ['Não é preciso fazer nada: seu progresso no tabuleiro está seguro. As missões que você não consegue concluir simplesmente esperam pela atualização.'],
+    fix: 'Corrigido. A correção chega em uma atualização depois da 5.1.2: as missões passam a contar nos tabuleiros Slide & Match, e as missões que esses tabuleiros não podem completar deixam de ser oferecidas.',
+    more: 'help:rewards-and-events',
+  },
+  {
+    id: 'pt-br-links',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: 'Comunidade e Relatar um bug abrem páginas em inglês para quem joga em português do Brasil',
+    affects: 'OutBrick 5.1 e 5.1.1 em português do Brasil.',
+    what: 'Ajustes › Comunidade e Relatar um bug abrem a versão em inglês da Comunidade OutBrick em vez da versão em português.',
+    workaround: ['Escolha **Português (Brasil)** no fim de qualquer página do site ou abra diretamente [a comunidade em português](/pt-BR/community).'],
+    fix: 'Corrigido. A correção chega em uma atualização depois da 5.1.2.',
+  },
+  {
+    id: 'ad-choices-label',
+    status: 'fix-coming',
+    checked: '2026-10-09',
+    title: '“Advertising choices” aparece em inglês nos Ajustes',
+    affects: 'OutBrick 5.1 e 5.1.1 em todos os idiomas, exceto o inglês, no EEE, no Reino Unido e na Suíça.',
+    what: 'O botão Opções de anúncios, nos Ajustes, aparece com o nome em inglês. Ele funciona normalmente; só o nome não foi traduzido.',
+    workaround: [],
+    fix: 'Corrigido. A correção chega em uma atualização depois da 5.1.2.',
+  },
+  {
+    id: 'tip-card-frozen',
+    status: 'fixed',
+    checked: '2026-10-09',
+    title: 'Um tabuleiro podia parecer travado depois da chegada de jogadas extras',
+    affects: 'Somente o OutBrick 5.1.',
+    what: 'Quando jogadas extras chegavam com um cartão de ensino na tela, o cartão podia sumir e continuar bloqueando o tabuleiro. O VoiceOver só encontrava o cartão, e o gesto seguinte de passar o dedo era gasto para guardá-lo.',
+    workaround: [],
+    fix: 'Corrigido no OutBrick 5.1.1, disponível na App Store desde 8 de outubro de 2026. Atualize o OutBrick pela App Store, se ainda não tiver feito isso.',
+  },
+];

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
 import { LegalPage, Pills } from '../../legal-page';
-import { ContactForm } from './contact-form';
+import { ContactFormWithHelp, SupportHub } from '../../support-centre';
 
 const description =
   'Contact the OutBrick team about game support, bugs, accessibility, privacy, purchases, press, partnerships, affiliates or careers. A person replies.';
@@ -14,6 +14,7 @@ export const metadata: Metadata = pageMetadata({
 
 const elsewhere = [
   { href: '/support', title: 'Stuck on a board?', note: 'The support page answers the common questions straight away.' },
+  { href: '/community/help', title: 'Illustrated guides', note: 'The Help Centre explains every screen, menu and setting.' },
   { href: '/press', title: 'Writing about OutBrick?', note: 'The press room has the release, the boilerplate and the facts.' },
   { href: '/affiliates', title: 'Want to promote the game?', note: 'The affiliate programme has its own application.' },
   { href: '/careers', title: 'Looking for a job?', note: 'Each open role has its own page and application.' },
@@ -42,9 +43,11 @@ export default function ContactPage() {
         </p>
       </div>
 
+      <SupportHub />
+
       <section className="brick" id="form" aria-labelledby="form-title">
         <h2 id="form-title">Send a message</h2>
-        <ContactForm />
+        <ContactFormWithHelp />
       </section>
 
       <section className="brick" aria-labelledby="elsewhere-title">
