@@ -25,6 +25,11 @@ import { localeNames } from '../../../lib/i18n/locales';
 import { pageOfPost } from '../../../lib/community/static-html';
 import { dayDate } from '../../../lib/community/format';
 import { guideWords } from '../../../lib/community/player-guides';
+import { supportCopies } from '../../../lib/support/copy/index';
+import { helpUi } from '../../../lib/help/ui';
+import { localePath } from '../../../lib/i18n/locales';
+import { FriendFigure } from '../../help-blocks';
+import type { FriendId } from '../../../lib/help/model';
 import { api } from './api';
 import { ProfileExtras, RoadmapPreview, VoteButton } from './views-fx';
 import { MemberModeration } from './views-forms';
@@ -193,6 +198,9 @@ function ByLine({
   );
 }
 
+/** Each category has a friend who suits it (pose only). */
+const categoryFriends: Record<string, FriendId> = { announcements: 'bloo', help: 'moss', support: 'moss', bugs: 'peach', ideas: 'sprout', accessibility: 'flurry', showcase: 'poppy', general: 'zippy' };
+
 function CategoryList({
   categories,
   compact = false,
@@ -219,6 +227,7 @@ function CategoryList({
               <a href={path(`/c/${c.slug}`)}>{words.name}</a>
             ) : (
               <>
+                {categoryFriends[c.slug] ? <span className="cm-cat-friend" aria-hidden="true"><FriendFigure id={categoryFriends[c.slug]} pose="idle" size={58} cheerOnHover={false} /></span> : null}
                 <h3>
                   <a href={path(`/c/${c.slug}`)}>{words.name}</a>
                 </h3>
@@ -445,20 +454,33 @@ export function HomeView() {
 }
 
 /** The Help Centre, first thing on the home; the static home draws the same (helpCentreHtml). */
+/** "Start here": the four places that answer most questions before a thread is needed, each held by a friend. */
 function HelpCentreCard() {
   const { fx, locale, path } = useApp();
   const h = fx.ux.helpCentre;
+  const hub = supportCopies[locale].hub;
+  const doors: { key: string; friend: FriendId; href: string; title: string; text: string }[] = [
+    { key: 'guides', friend: 'poppy', href: path('/help'), title: helpUi[locale].name, text: h.text },
+    { key: 'fix', friend: 'moss', href: localePath(locale, '/support/troubleshooter'), title: hub.fixTitle, text: hub.fixText },
+    { key: 'issues', friend: 'peach', href: localePath(locale, '/support/known-issues'), title: hub.issuesTitle, text: hub.issuesText },
+    { key: 'levels', friend: 'sprout', href: localePath(locale, '/support/levels'), title: hub.levelsTitle, text: hub.levelsText },
+  ];
   return (
-    <section className="cm-section cm-helpcentre" aria-labelledby="cm-help-centre-h">
-      <h2 id="cm-help-centre-h">{h.heading}</h2>
-      <p>{h.text}</p>
+    <section className="cm-section cm-helpcentre cm-start" aria-labelledby="cm-help-centre-h">
+      <h2 id="cm-help-centre-h">{hub.title}</h2>
+      <ul className="cm-start-doors">
+        {doors.map((d) => (
+          <li key={d.key}>
+            <a className={`cm-start-door d-${d.key}`} href={d.href}>
+              <span className="fig" aria-hidden="true"><FriendFigure id={d.friend} pose={d.key === 'fix' || d.key === 'issues' ? 'think' : 'idle'} size={64} /></span>
+              <span className="t">{d.title}</span>
+              <span className="d">{d.text}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
       <p className="cm-row">
-        <a className="btn" href={path('/help')}>
-          {h.link}
-        </a>
-        <a className="cm-textlink" href={path('/c/help')}>
-          {guideWords[locale].hub}
-        </a>
+        <a className="cm-textlink" href={path('/c/help')}>{guideWords[locale].hub}</a>
       </p>
     </section>
   );

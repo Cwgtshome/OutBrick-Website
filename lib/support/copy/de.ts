@@ -129,6 +129,13 @@ export const de: SupportCopy = {
     stayTitle: 'Erfahren, wann eine Korrektur erscheint',
     stayText: 'Jede neue Version steht in den Ankündigungen, sobald sie im App Store ist. Beobachte die Kategorie, um eine E-Mail zu bekommen, und lass automatische Updates eingeschaltet, damit Korrekturen ganz von selbst bei dir ankommen.',
     stayAction: 'Ankündigungen beobachten',
+    meToo: "Betrifft mich auch",
+    meTooDone: "Danke, du wurdest gezählt",
+    meTooCount: (n) => (n === 1 ? '1 Person ist davon betroffen' : `${n} Personen sind davon betroffen`),
+    feed: "Diese Liste abonnieren (RSS)",
+    versions: "Versionen",
+    checked: "Zuletzt geprüft",
+    apple: "Käufe, iCloud-Abgleich, Game Center und die Anmeldung mit Apple hängen auch von Apples Diensten ab. Wenn davon etwas nicht klappt, zeigt [Apples Systemstatus](https://www.apple.com/de/support/systemstatus/), ob Apple ein Problem bekannt ist.",
   },
 
   fix: {
@@ -251,6 +258,7 @@ export const de: SupportCopy = {
       missing: 'Meine Frage wurde nicht beantwortet',
       outdated: 'Sie passt nicht zum Spiel',
       'didnt-work': 'Ich bin ihr gefolgt, aber es hat nicht geklappt',
+      accessibility: "Es klappt nicht mit VoiceOver oder meiner Einstellung",
       other: 'Etwas anderes',
     },
     commentLabel: 'Erzähl uns mehr (optional)',

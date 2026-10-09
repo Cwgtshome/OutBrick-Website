@@ -49,6 +49,7 @@ import { playerCaseRoutes } from '../lifecycle/player-cases.ts';
 import { attachmentRoutes } from '../lifecycle/support-attachments.ts';
 import { siteStatusRoutes } from '../community/site-status.ts';
 import { levelRoutes } from '../community/levels.ts';
+import { meTooRoutes } from '../community/me-too.ts';
 import { helpFeedbackRoutes } from '../community/help-feedback.ts';
 import { applicationRoutes } from '../lifecycle/applications.ts';
 import { securityRoutes } from '../lifecycle/security.ts';
@@ -79,6 +80,7 @@ const routes: Route[] = [
   ...attachmentRoutes(base),
   ...siteStatusRoutes(base),
   ...levelRoutes(base),
+  ...meTooRoutes(base),
   ...helpFeedbackRoutes(base),
   ...applicationRoutes(base),
   ...securityRoutes(base),

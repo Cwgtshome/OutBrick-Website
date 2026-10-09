@@ -20,7 +20,7 @@ import { requireRole } from './session.ts';
 
 /** Pages that ask, besides the guides themselves. */
 export const feedbackPages = ['troubleshooter', 'known-issues', 'support', 'levels'] as const;
-export const feedbackReasons = ['unclear', 'missing', 'outdated', 'didnt-work', 'other'] as const;
+export const feedbackReasons = ['unclear', 'missing', 'outdated', 'didnt-work', 'accessibility', 'other'] as const;
 type Reason = (typeof feedbackReasons)[number];
 
 const COMMENTS_PER_PAGE = 40;

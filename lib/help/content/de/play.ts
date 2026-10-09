@@ -433,7 +433,7 @@ export const playArticles: HelpArticle[] = [
               ['Kiste', 'Hält gleitende Steine auf. Eine oder zwei Schichten.', 'Bilde daneben eine Reihe; jede Reihe bricht eine Schicht.'],
               ['Eis (Gelee)', 'Hält den Stein darin fest.', 'Bilde daneben eine Reihe.'],
               ['Schloss', 'Der Stein kann sich nicht bewegen.', 'Bilde eine Reihe **durch** ihn hindurch. Eine Reihe daneben reicht nicht.'],
-              ['Moos', 'Kriecht nach jedem Zug, der nichts abräumt, auf einen Stein.', 'Bilde daneben eine Reihe.'],
+              ['Moos', 'Kriecht nach jedem Zug, der kein Moos abräumt, auf einen Stein.', 'Bilde daneben eine Reihe.'],
               ['Statue', 'Steht in einer Lücke: Nichts gleitet hindurch.', 'Sie bleibt. Such dir eine andere Bahn.'],
             ],
           },
@@ -531,7 +531,7 @@ export const playArticles: HelpArticle[] = [
           },
           {
             t: 'p',
-            text: 'Ab dem fünften Dorf tauchen außerdem Deckel, verdeckte Steine, Etappentore und Portale auf. Jedes bekommt beim ersten Mal seine eigene Lernkarte.',
+            text: 'Im weiteren Verlauf der Reise tauchen außerdem Deckel, verdeckte Steine, Etappentore und Portale auf. Jedes bekommt beim ersten Mal seine eigene Lernkarte.',
           },
         ],
       },

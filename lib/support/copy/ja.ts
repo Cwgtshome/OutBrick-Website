@@ -129,6 +129,13 @@ export const ja: SupportCopy = {
     stayTitle: '修正の配信を知る',
     stayText: 'すべてのリリースは、App Storeで公開されると同時にお知らせに投稿されます。カテゴリをウォッチするとメールが届きます。自動アップデートをオンにしておけば、修正が手間なく届きます。',
     stayAction: 'お知らせをウォッチ',
+    meToo: "自分にも起きています",
+    meTooDone: "ありがとうございます。カウントしました",
+    meTooCount: (n) => (`${n}人のプレイヤーが同じ問題を報告しています`),
+    feed: "このリストを購読（RSS）",
+    versions: "バージョン",
+    checked: "最終確認",
+    apple: "購入、iCloud同期、Game Center、Appleでサインインは、Appleのサービスにも依存しています。うまく動かないときは、[Appleのシステム状況](https://www.apple.com/jp/support/systemstatus/)でAppleが問題を把握しているか確認できます。",
   },
 
   fix: {
@@ -251,6 +258,7 @@ export const ja: SupportCopy = {
       missing: '知りたいことが書かれていなかった',
       outdated: 'ゲームの内容と違っていた',
       'didnt-work': '書かれたとおりにしたが、うまくいかなかった',
+      accessibility: "VoiceOverや自分の設定ではうまくいかない",
       other: 'その他',
     },
     commentLabel: '詳しく教えてください（任意）',

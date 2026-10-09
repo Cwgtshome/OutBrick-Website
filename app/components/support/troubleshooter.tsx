@@ -5,6 +5,7 @@ import { supportCopies } from '../../../lib/support/copy/index';
 import type { Locale } from '../../../lib/i18n/locales';
 import { track } from '../../../lib/track';
 import { useHydrated, useSearchParam } from '../netlify-form';
+import { FriendFigure } from '../../help-blocks';
 
 export type TroubleProblem = {
   id: string;
@@ -193,12 +194,14 @@ export function Troubleshooter({
         </div>
       ) : outcome === 'fixed' ? (
         <div className="brick ss-fix-card ss-fix-done">
+          <span className="ss-fix-friend" aria-hidden="true"><FriendFigure id="moss" pose="cheer" size={96} cheerOnHover={false} /></span>
           <h3 tabIndex={-1} ref={focusRef}>{copy.fixedTitle}</h3>
           <p>{copy.fixedText}</p>
           <button type="button" className="btn ghost" onClick={reset}>{copy.another}</button>
         </div>
       ) : (
         <div className="brick ss-fix-card ss-fix-still">
+          <span className="ss-fix-friend" aria-hidden="true"><FriendFigure id="peach" pose="think" size={96} cheerOnHover={false} /></span>
           <h3 tabIndex={-1} ref={focusRef}>{copy.stillTitle}</h3>
           <p>{copy.stillText}</p>
           <div className="act">

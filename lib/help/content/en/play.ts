@@ -433,7 +433,7 @@ export const playArticles: HelpArticle[] = [
               ['Crate', 'Stops sliding bricks. One or two layers.', 'Make a line beside it; each line breaks a layer.'],
               ['Ice (gel)', 'Holds the brick inside it still.', 'Make a line beside it.'],
               ['Lock', 'The brick cannot move.', 'Make a line **through** it. A line beside it is not enough.'],
-              ['Moss', 'Creeps onto a brick after any move that clears nothing.', 'Make a line beside it.'],
+              ['Moss', 'Creeps onto a brick after any move that clears no moss.', 'Make a line beside it.'],
               ['Statue', 'Stands in a gap: nothing slides through it.', 'It stays. Find another lane.'],
             ],
           },
@@ -531,7 +531,7 @@ export const playArticles: HelpArticle[] = [
           },
           {
             t: 'p',
-            text: 'From the fifth village on, lids, face-down bricks, staged gates and portals start to appear as well. Each gets its own teaching card the first time.',
+            text: 'As the Journey goes on, lids, face-down bricks, staged gates and portals start to appear as well. Each gets its own teaching card the first time.',
           },
         ],
       },

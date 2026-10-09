@@ -53,33 +53,48 @@
 .ob-site .ss-hub { margin: 0 0 30px; }
 .ob-site .ss-hub > h2 { margin: 0 0 6px; font-size: clamp(1.35rem, 3vw, 1.7rem); }
 .ob-site .ss-hub-lede { margin: 0 0 18px; color: var(--muted-on-cream); }
-.ob-site .ss-hub ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-@media (max-width: 820px) { .ob-site .ss-hub ul { grid-template-columns: 1fr; } }
+.ob-site .ss-hub > ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 20px; }
 .ob-site .ss-door {
   position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
-  gap: 4px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   height: 100%;
-  padding: 20px 20px 22px;
-  border-radius: 16px;
+  min-height: 150px;
+  padding: 22px 104px 20px 20px;
+  border-radius: 18px;
   text-decoration: none;
   color: #fff;
-  background: var(--panel);
-  box-shadow: 0 7px 0 var(--panel-dark), inset 0 -2px 0 rgba(0, 0, 0, 0.14);
+  background: var(--door, var(--panel));
+  box-shadow: 0 7px 0 var(--door-foot, var(--panel-dark)), inset 0 -2px 0 rgba(0, 0, 0, 0.14), inset 0 2px 0 rgba(255, 255, 255, 0.18);
   transition: transform 0.08s ease, box-shadow 0.08s ease;
+  overflow: hidden;
 }
-.ob-site .ss-door.issues { background: #b4510f; box-shadow: 0 7px 0 #6e2f06, inset 0 -2px 0 rgba(0, 0, 0, 0.14); }
-.ob-site .ss-door.track { background: #0f766f; box-shadow: 0 7px 0 #064b46, inset 0 -2px 0 rgba(0, 0, 0, 0.14); }
-.ob-site .ss-door:hover { filter: brightness(1.06); }
-.ob-site .ss-door:active { transform: translateY(3px); box-shadow: 0 4px 0 var(--panel-dark); }
+/* a row of studs along the top edge, like a toy brick */
+.ob-site .ss-door::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  width: 64px;
+  height: 10px;
+  background: radial-gradient(circle at 8px 5px, rgba(255, 255, 255, 0.28) 5px, transparent 5.5px) 0 0 / 22px 10px repeat-x;
+  pointer-events: none;
+}
+.ob-site .ss-door.fix { --door: #0f766f; --door-foot: #064b46; }
+.ob-site .ss-door.issues { --door: #b4510f; --door-foot: #6e2f06; }
+.ob-site .ss-door.track { --door: #2c63c4; --door-foot: #173d80; }
+.ob-site .ss-door.levels { --door: #3d7f2a; --door-foot: #23511a; }
+.ob-site .ss-door.guides { --door: #b0367e; --door-foot: #6e1d4e; }
+.ob-site .ss-door.involved { --door: #5b3fd6; --door-foot: #34228f; }
+.ob-site .ss-door:hover { filter: brightness(1.05); }
+.ob-site .ss-door:active { transform: translateY(3px); box-shadow: 0 4px 0 var(--door-foot, var(--panel-dark)); }
 .ob-site .ss-door:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
-.ob-site .ss-door svg { grid-row: 1 / span 2; margin-top: 2px; color: #fff; }
+.ob-site .ss-door-fig { position: absolute; right: 10px; bottom: -6px; }
 .ob-site .ss-hub a.ss-door, .ob-site .ss-hub a.ss-door :is(.t, .d) { color: #fff; text-decoration: none; }
 .ob-site .ss-hub a.ss-door:hover .t { text-decoration: underline; text-underline-offset: 3px; }
 .ob-site .ss-door .t { font-family: var(--display); font-weight: 600; font-size: 1.18rem; line-height: 1.25; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.ob-site .ss-door .d { color: #fff; opacity: 0.94; font-size: 0.97rem; line-height: 1.45; }
+.ob-site .ss-door .d { color: #fff; opacity: 0.95; font-size: 0.97rem; line-height: 1.45; }
 .ob-site .ss-count {
   display: inline-grid;
   place-items: center;
@@ -363,4 +378,28 @@
 /* the hub's second row: smaller doors */
 .ob-site .ss-hub-more { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; }
 .ob-site .ss-hub a.ss-hub-link { color: var(--hc-link, #2c2296); font-family: var(--display); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-.ob-site .ss-promise { margin: 12px 0 0; font-weight: 600; color: var(--ink-on-cream); }
+.ob-site .ss-promise, .ob-site .doc .ss-hub .ss-promise { margin: 24px 0 0; font-weight: 600; color: var(--ink-on-cream); }
+
+/* ---------------- known issues: me too, checked, feed ---------------- */
+.ob-site .ss-checked { margin: 4px 0 0; font-size: 0.88rem; color: var(--muted-on-cream); }
+.ob-site .ss-feed { margin: 0 0 14px; text-align: right; }
+.ob-site .ss-feed a { display: inline-flex; align-items: center; gap: 6px; color: var(--hc-link, #2c2296); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.ob-site .ss-feed a::before { content: ''; width: 14px; height: 14px; border-radius: 3px; background: radial-gradient(circle at 25% 75%, #fff 2px, transparent 2.5px), #f5851f; }
+.ob-site .ss-metoo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 12px 0 2px; }
+.ob-site .ss-metoo-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 8px 16px;
+  border: 2px solid var(--panel); border-radius: 999px; background: #fff;
+  font: 600 0.98rem/1.2 var(--display); color: var(--panel-dark); cursor: pointer;
+}
+.ob-site .ss-metoo-btn svg { fill: none; stroke: currentColor; stroke-width: 2; }
+.ob-site .ss-metoo-btn.done { background: var(--panel); color: #fff; }
+.ob-site .ss-metoo-btn.done svg { fill: currentColor; }
+.ob-site .ss-metoo-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.ob-site .ss-metoo-count { font-size: 0.92rem; color: var(--muted-on-cream); }
+.ob-site .doc p.ss-safe { padding: 10px 14px 10px 44px; border-radius: 12px; background: #eafbe7; position: relative; font-weight: 600; }
+.ob-site .doc p.ss-safe::before { content: ''; position: absolute; left: 14px; top: 12px; width: 18px; height: 20px; background: var(--green-dark, #1f7f2a); clip-path: polygon(50% 0, 100% 18%, 100% 55%, 50% 100%, 0 55%, 0 18%); }
+.ob-site .ss-fix-friend { float: right; margin: -6px -4px 6px 12px; }
+.ob-site .hc .ss-fix-card { display: flow-root; }
+.ob-site .ss-apple { margin: 0 0 26px; padding: 14px 18px; border-radius: 14px; background: #fff; border: 2px dashed #d8c9a6; color: var(--ink-on-cream); }
+.ob-site .ss-apple a { color: var(--hc-link, #2c2296); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }

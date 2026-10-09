@@ -26,7 +26,8 @@ const english = new Map(en.articles.map((a) => [a.slug, a]));
 for (const slug of helpOrder) if (!english.has(slug)) say('en', `no English article for "${slug}"`);
 for (const a of en.articles) if (!helpOrder.includes(a.slug)) say('en', `"${a.slug}" is not in helpOrder`);
 
-const sectionsOf = (a) => a.sections.map((s) => s.id);
+// Anchors a link can target: section ids and encyclopedia entry ids (both rendered as element ids).
+const sectionsOf = (a) => a.sections.flatMap((s) => [s.id, ...s.blocks.filter((b) => b.t === 'entry').map((b) => b.id)]);
 const shotsOf = (a) =>
   a.sections.flatMap((s) => s.blocks.flatMap((b) => (b.t === 'shot' ? [b.id] : b.t === 'shots' ? b.items.map((i) => i.id) : [])));
 const textsOf = (a) => {
@@ -38,6 +39,11 @@ const textsOf = (a) => {
       else if (b.t === 'steps' || b.t === 'list') out.push(...b.items);
       else if (b.t === 'shot') out.push(b.caption, b.alt);
       else if (b.t === 'shots') for (const i of b.items) out.push(i.caption, i.alt);
+      else if (b.t === 'faq') for (const i of b.items) out.push(i.q, i.a);
+      else if (b.t === 'path') for (const i of b.items) out.push(i.day, i.title, i.text);
+      else if (b.t === 'friend') out.push(b.title, b.text);
+      else if (b.t === 'board') out.push(b.board.caption, b.board.alt);
+      else if (b.t === 'entry') out.push(b.title, b.what, b.how, b.tip, b.board?.caption, b.board?.alt, ...(b.facts ?? []).flatMap((f) => [f.label, f.text]));
       else if (b.t === 'callout') out.push(b.text, b.title ?? '');
       else if (b.t === 'table') out.push(b.caption ?? '', ...b.head, ...b.rows.flat());
       else if (b.t === 'defs') for (const i of b.items) out.push(i.term, i.text);

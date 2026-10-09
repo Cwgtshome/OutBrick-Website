@@ -129,6 +129,13 @@ export const en: SupportCopy = {
     stayTitle: 'Hear when a fix ships',
     stayText: 'Every release is posted in Announcements the moment the App Store has it. Follow the category to get an email, and keep automatic updates on so fixes reach you without a thought.',
     stayAction: 'Follow Announcements',
+    meToo: "This affects me too",
+    meTooDone: "Thank you, you are counted",
+    meTooCount: (n) => (n === 1 ? '1 player has said this affects them' : `${n} players have said this affects them`),
+    feed: "Subscribe to this list (RSS)",
+    versions: "Versions",
+    checked: "Last checked",
+    apple: "Purchases, iCloud sync, Game Center and sign-in with Apple also depend on Apple’s services. If one of them is not working for you, [Apple’s System Status](https://www.apple.com/support/systemstatus/) shows whether Apple knows about a problem.",
   },
 
   fix: {
@@ -251,6 +258,7 @@ export const en: SupportCopy = {
       missing: 'My question was not answered',
       outdated: 'It does not match the game',
       'didnt-work': 'I followed it, but it did not work',
+      accessibility: "It doesn’t work with VoiceOver or my setting",
       other: 'Something else',
     },
     commentLabel: 'Tell us more (optional)',

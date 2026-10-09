@@ -442,9 +442,10 @@ export default function PrivacyPage() {
           OutBrick is rated 4+ and the game does not send personal gameplay or face information to the
           developer. Please avoid including children&rsquo;s personal information in support messages.
           The game has no public chat and no account registration. It does contain rewarded video
-          advertising, described above; advertising served to this app is configured as child-directed
-          where Apple or applicable law requires it, which restricts it to non-personalised ads and
-          prevents the use of an advertising identifier.
+          advertising, described above, which only ever plays when a player chooses it. Those ads are
+          limited to Google&rsquo;s general-audience content rating, and whether they are personalised
+          follows the advertising and tracking choices described above; OutBrick is not in the App
+          Store&rsquo;s Kids category.
         </p>
         <p>
           The OutBrick Community on this website is separate from the game and is not meant for

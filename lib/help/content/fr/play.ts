@@ -433,7 +433,7 @@ export const playArticles: HelpArticle[] = [
               ['Caisse', 'Arrête les briques qui glissent. Une ou deux couches.', 'Faites une ligne à côté ; chaque ligne casse une couche.'],
               ['Glace (gelée)', 'Immobilise la brique qu’elle contient.', 'Faites une ligne à côté.'],
               ['Verrou', 'La brique ne peut pas bouger.', 'Faites une ligne qui la **traverse**. Une ligne à côté ne suffit pas.'],
-              ['Mousse', 'S’étend sur une brique après chaque coup qui ne vide rien.', 'Faites une ligne à côté.'],
+              ['Mousse', 'S’étend sur une brique après chaque coup qui n’enlève pas de mousse.', 'Faites une ligne à côté.'],
               ['Statue', 'Occupe un passage : rien ne glisse à travers.', 'Elle reste. Trouvez un autre chemin.'],
             ],
           },
@@ -531,7 +531,7 @@ export const playArticles: HelpArticle[] = [
           },
           {
             t: 'p',
-            text: 'À partir du cinquième village, les couvercles, les briques face cachée, les portes d’étape et les portails font aussi leur apparition. Chacun a sa propre carte d’apprentissage la première fois.',
+            text: 'Au fil du Voyage, les couvercles, les briques face cachée, les portes d’étape et les portails font aussi leur apparition. Chacun a sa propre carte d’apprentissage la première fois.',
           },
         ],
       },

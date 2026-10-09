@@ -26,8 +26,12 @@ import { GuideFeedback } from './components/support/guide-feedback';
 import { Troubleshooter } from './components/support/troubleshooter';
 import { CaseTracker } from './components/support/case-tracker';
 import { LevelHelp } from './components/support/level-help';
+import { MeToo } from './components/support/me-too';
+import { FriendFigure } from './help-blocks';
+import type { FriendId, FriendPose } from '../lib/help/model';
 import { ContactForm } from './(en)/contact/contact-form';
 import './styles/help.css';
+import './styles/help-blocks.css';
 import './styles/support.css';
 
 export const supportPaths = {
@@ -55,7 +59,7 @@ function pageMetadata(locale: Locale, path: string, title: string, description: 
   };
 }
 
-function Head({ locale, title, eyebrow, lede, crumb, stamp }: { locale: Locale; title: string; eyebrow: string; lede: string; crumb: string; stamp?: string }) {
+function Head({ locale, title, eyebrow, lede, crumb, stamp, host }: { locale: Locale; title: string; eyebrow: string; lede: string; crumb: string; stamp?: string; host?: keyof typeof doorHosts }) {
   const c = supportCopy(locale);
   return (
     <div className="doc-head hc-head ss-head">
@@ -68,6 +72,7 @@ function Head({ locale, title, eyebrow, lede, crumb, stamp }: { locale: Locale; 
             { label: crumb },
           ]}
         />
+        {host ? <span className="hc-head-host" aria-hidden="true"><FriendFigure id={doorHosts[host].friend} pose={doorHosts[host].pose} size={120} /></span> : null}
         <p className="eyebrow">{eyebrow}</p>
         <h1 id="ss-title">{title}</h1>
         <p className="lede">{lede}</p>
@@ -101,29 +106,36 @@ function feedbackLinks(locale: Locale) {
 // ---------------------------------------------------------------------------------------------
 // The hub: three doors, on /support and /contact.
 
-const hubIcons = {
-  fix: <path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3 17.8V21h3.2l6.3-6.3a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6Z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />,
-  issues: <path d="M12 3 2 20h20L12 3Zm0 6v5m0 3v.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />,
-  track: <path d="M4 5h16v10H8l-4 4V5Zm4 4h8m-8 3h5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />,
+/** Each door is held by the friend whose character fits the job (pose and movement only). */
+const doorHosts: Record<string, { friend: FriendId; pose: FriendPose }> = {
+  fix: { friend: 'moss', pose: 'think' },
+  issues: { friend: 'peach', pose: 'think' },
+  track: { friend: 'bloo', pose: 'idle' },
+  levels: { friend: 'sprout', pose: 'think' },
+  guides: { friend: 'poppy', pose: 'idle' },
+  involved: { friend: 'vio', pose: 'idle' },
 };
 
 export function SupportHub({ locale = 'en' }: { locale?: Locale }) {
   const c = supportCopy(locale).hub;
   const open = knownIssues(locale).filter((i) => i.status !== 'fixed').length;
   const doors = [
-    { key: 'fix' as const, href: at(locale, supportPaths.fix), title: c.fixTitle, text: c.fixText },
-    { key: 'issues' as const, href: at(locale, supportPaths.issues), title: c.issuesTitle, text: c.issuesText, count: open },
-    { key: 'track' as const, href: at(locale, supportPaths.request), title: c.trackTitle, text: c.trackText },
+    { key: 'fix', href: at(locale, supportPaths.fix), title: c.fixTitle, text: c.fixText },
+    { key: 'issues', href: at(locale, supportPaths.issues), title: c.issuesTitle, text: c.issuesText, count: open },
+    { key: 'track', href: at(locale, supportPaths.request), title: c.trackTitle, text: c.trackText },
+    { key: 'levels', href: at(locale, supportPaths.levels), title: c.levelsTitle, text: c.levelsText },
+    { key: 'guides', href: at(locale, '/community/help'), title: helpUi[locale].name, text: helpUi[locale].categories.learn.blurb },
+    { key: 'involved', href: at(locale, supportPaths.involved), title: c.involvedTitle, text: c.involvedText },
   ];
   return (
-    <section className="ss-hub" aria-labelledby="ss-hub-title" translate="yes">
+    <section className="ss-hub" aria-labelledby="ss-hub-title">
       <h2 id="ss-hub-title">{c.title}</h2>
       <p className="ss-hub-lede">{c.lede}</p>
       <ul>
         {doors.map((d) => (
           <li key={d.key}>
             <a className={`ss-door ${d.key}`} href={d.href}>
-              <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">{hubIcons[d.key]}</svg>
+              <span className="ss-door-fig" aria-hidden="true"><FriendFigure id={doorHosts[d.key].friend} pose={doorHosts[d.key].pose} size={84} /></span>
               <span className="t">
                 {d.title}
                 {d.count ? <span className="ss-count">{d.count}</span> : null}
@@ -132,11 +144,6 @@ export function SupportHub({ locale = 'en' }: { locale?: Locale }) {
             </a>
           </li>
         ))}
-      </ul>
-      <ul className="ss-hub-more">
-        <li><a className="ss-hub-link" href={at(locale, supportPaths.levels)}>{c.levelsTitle}</a></li>
-        <li><a className="ss-hub-link" href={at(locale, '/community/help')}>{helpUi[locale].name}</a></li>
-        <li><a className="ss-hub-link" href={at(locale, supportPaths.involved)}>{c.involvedTitle}</a></li>
       </ul>
       <p className="ss-promise">{c.promise}</p>
     </section>
@@ -148,7 +155,8 @@ export function SupportHub({ locale = 'en' }: { locale?: Locale }) {
 
 export function knownIssuesMetadata(locale: Locale): Metadata {
   const c = supportCopy(locale).issues;
-  return pageMetadata(locale, supportPaths.issues, c.metaTitle, c.metaDescription);
+  const meta = pageMetadata(locale, supportPaths.issues, c.metaTitle, c.metaDescription);
+  return { ...meta, alternates: { ...meta.alternates, types: { 'application/rss+xml': `${localeUrl(locale, supportPaths.issues)}/feed.xml` } } };
 }
 
 function IssueCard({ issue, locale }: { issue: KnownIssue; locale: Locale }) {
@@ -172,7 +180,9 @@ function IssueCard({ issue, locale }: { issue: KnownIssue; locale: Locale }) {
         ) : null}
         <div className="fix"><dt>{c.fix}</dt><dd>{renderInline(issue.fix, locale)}</dd></div>
       </dl>
+      <p className="ss-checked">{c.checked}: <time dateTime={issue.checked}>{stampDate(locale, issue.checked)}</time></p>
       {issue.more ? <p className="ss-more">{renderInline(`[${c.readMore}](${issue.more})`, locale)}</p> : null}
+      {issue.status !== 'fixed' ? <MeToo id={issue.id} locale={locale} /> : null}
     </article>
   );
 }
@@ -184,9 +194,10 @@ export function KnownIssuesPage({ locale }: { locale: Locale }) {
   const fixed = all.filter((i) => i.status === 'fixed');
   return (
     <Frame locale={locale} page={supportPaths.issues} current={at(locale, supportPaths.support)}>
-      <Head locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} stamp={c.reviewed(stampDate(locale, issuesReviewed()))} />
+      <Head host="issues" locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} stamp={c.reviewed(stampDate(locale, issuesReviewed()))} />
       <div className="band-cream hc-band">
         <div className="wrap ss-narrow">
+          <p className="ss-feed"><a href={`${at(locale, supportPaths.issues)}/feed.xml`} type="application/rss+xml">{c.feed}</a></p>
           <section aria-labelledby="ss-open" className="ss-issues">
             <h2 id="ss-open">{c.openTitle}</h2>
             {open.length ? open.map((i) => <IssueCard key={i.id} issue={i} locale={locale} />) : <p className="brick ss-none">{c.noneOpen}</p>}
@@ -197,6 +208,7 @@ export function KnownIssuesPage({ locale }: { locale: Locale }) {
               {fixed.map((i) => <IssueCard key={i.id} issue={i} locale={locale} />)}
             </section>
           ) : null}
+          <p className="ss-apple">{renderInline(c.apple, locale)}</p>
           <section className="hc-desk ss-desk-2" aria-label={c.notListedTitle}>
             <div className="brick ask">
               <h3>{c.notListedTitle}</h3>
@@ -234,7 +246,7 @@ export function TroubleshooterPage({ locale }: { locale: Locale }) {
   const issues = knownIssues(locale);
   return (
     <Frame locale={locale} page={supportPaths.fix} current={at(locale, supportPaths.support)}>
-      <Head locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
+      <Head host="fix" locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
       <div className="band-cream hc-band">
         <div className="wrap ss-narrow">
           <Troubleshooter
@@ -279,7 +291,7 @@ export function RequestPage({ locale }: { locale: Locale }) {
   const c = supportCopy(locale).request;
   return (
     <Frame locale={locale} page={supportPaths.request} current={at(locale, supportPaths.support)}>
-      <Head locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
+      <Head host="track" locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
       <div className="band-cream hc-band">
         <div className="wrap ss-narrow">
           <CaseTracker locale={locale} contactHref={at(locale, '/contact')} />
@@ -313,7 +325,7 @@ export function LevelsPage({ locale }: { locale: Locale }) {
   const c = supportCopy(locale).levels;
   return (
     <Frame locale={locale} page={supportPaths.levels} current={at(locale, supportPaths.support)}>
-      <Head locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
+      <Head host="levels" locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
       <div className="band-cream hc-band">
         <div className="wrap ss-narrow ss-levels">
           <LevelHelp locale={locale} communityBase={communityPath(locale)} />
@@ -357,7 +369,7 @@ export function InvolvedPage({ locale }: { locale: Locale }) {
   );
   return (
     <Frame locale={locale} page={supportPaths.involved} current={at(locale, supportPaths.support)}>
-      <Head locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
+      <Head host="involved" locale={locale} title={c.title} eyebrow={c.eyebrow} lede={c.lede} crumb={c.title} />
       <div className="band-cream hc-band">
         <div className="wrap ss-narrow">
           <div className="ss-programmes">

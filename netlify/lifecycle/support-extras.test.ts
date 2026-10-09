@@ -14,6 +14,7 @@ import { attachmentIds, setAttachmentStoreForTests } from './support-attachments
 import { setOutboxStoreForTests } from './outbox.ts';
 import { setStatusStoreForTests } from '../community/site-status.ts';
 import { levelTitlePattern } from '../community/levels.ts';
+import { setMeTooStoreForTests } from '../community/me-too.ts';
 import handler from '../functions/community-api.mts';
 
 const KEY = 're_test_support_extras';
@@ -33,6 +34,7 @@ before(async () => {
   setPlayerCaseSenderForTests(recorder);
   setAttachmentStoreForTests({ set: async (k, v) => void blobs.set(k, v), get: async (k) => blobs.get(k) ?? null });
   setStatusStoreForTests({ get: async (k) => (json.has(k) ? JSON.parse(json.get(k)!) : null), setJSON: async (k, v) => void json.set(k, JSON.stringify(v)) });
+  setMeTooStoreForTests({ get: async (k) => (json.has(k) ? JSON.parse(json.get(k)!) : null), setJSON: async (k, v) => void json.set(k, JSON.stringify(v)) });
 });
 after(async () => {
   setAttachmentStoreForTests(null);
@@ -128,4 +130,17 @@ void test('level help finds threads by bug-report level or by title in every lan
   assert.equal((await api('GET', '/levels/0/threads')).status, 404);
   assert.equal((await api('GET', '/levels/abc/threads')).status, 404);
   assert.match('nível 7', new RegExp(levelTitlePattern(7).replace('(?![0-9])', '(?!\\d)'), 'i'));
+});
+
+void test('"this affects me too" counts open known issues once a day per connection', async () => {
+  assert.deepEqual((await api('GET', '/known-issues/me-too')).body, { counts: {} });
+  const first = await api('POST', '/known-issues/voiceover-focus/me-too', { body: {} });
+  assert.equal(first.status, 200);
+  assert.equal(first.body.count, 1);
+  assert.equal((await api('POST', '/known-issues/voiceover-focus/me-too', { body: {} })).status, 429, 'once a day from one connection');
+  assert.equal((await api('POST', '/known-issues/voiceover-focus/me-too', { body: {}, headers: { 'cf-connecting-ip': '10.0.0.9' } })).body.count, 2);
+  assert.equal((await api('POST', '/known-issues/tip-card-frozen/me-too', { body: {} })).status, 400, 'fixed issues take no votes');
+  assert.equal((await api('POST', '/known-issues/nope/me-too', { body: {} })).status, 400);
+  assert.equal((await api('POST', '/known-issues/voiceover-focus/me-too', { body: {}, origin: 'https://evil.example' })).status, 403);
+  assert.deepEqual((await api('GET', '/known-issues/me-too')).body.counts, { 'voiceover-focus': 2 });
 });

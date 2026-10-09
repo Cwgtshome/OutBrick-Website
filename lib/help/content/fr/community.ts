@@ -158,6 +158,7 @@ export const communityArticles: HelpArticle[] = [
   {
     slug: 'using-the-community',
     category: 'community',
+    cover: 'settings-community',
     title: 'Utiliser la communauté OutBrick',
     summary:
       'Se connecter, choisir la bonne catégorie, ouvrir une discussion, mettre en forme, marquer une solution, suivre des discussions et gérer les e-mails, les traductions, voter pour des idées et protéger vos informations personnelles.',

@@ -235,14 +235,18 @@
 .ob-site .hc-card:focus-within { outline: 3px solid var(--gold); outline-offset: 3px; }
 .ob-site .hc-card .thumb {
   flex: none;
-  width: 88px;
-  height: 128px;
-  border-radius: 14px;
+  align-self: flex-start;
+  /* The whole phone screen, at its own proportions (set inline from the capture's size), so
+     nothing is cut off: the frame used to be a fixed 88×128 box that showed only the top half. */
+  width: 76px;
+  aspect-ratio: var(--ar, 0.46);
+  border-radius: 12px;
   overflow: hidden;
   background: var(--panel-dark);
   box-shadow: 0 0 0 3px var(--ink), 0 5px 0 3px rgba(26, 19, 80, 0.25);
 }
-.ob-site .hc-card .thumb img { width: 100%; height: auto; }
+.ob-site .hc-card .thumb img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.ob-site .hc-card .thumb.wide { width: 128px; }
 .ob-site .hc-card .body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .ob-site .hc-card h3,
 .ob-site .hc-card h2 { font-size: 1.14rem; line-height: 1.2; margin: 2px 0 0; }

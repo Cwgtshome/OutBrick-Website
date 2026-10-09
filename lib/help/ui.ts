@@ -15,6 +15,8 @@ export type HelpUi = {
   searchOne: string;
   searchMany: string;
   categories: Record<HelpCategory, { title: string; blurb: string }>;
+  /** The three doors at the top of the hub: new, stuck, something wrong. */
+  quick: { label: string; new: { title: string; text: string }; stuck: { title: string; text: string }; wrong: { title: string; text: string } };
   popular: string;
   popularLinks: { label: string; slug: string; section?: string }[];
   onThisPage: string;
@@ -64,12 +66,15 @@ export const helpUi: Record<Locale, HelpUi> = {
     categories: {
       start: { title: 'Getting started', blurb: 'Your first board and a tour of every menu.' },
       play: { title: 'Playing a board', blurb: 'Moves, goals, special bricks, blockers and boosters.' },
+      learn: { title: "Know every brick", blurb: "Specials and combos, every blocker and gate, the twelve kinds of board, strategy and a glossary." },
       progress: { title: 'Journey and rewards', blurb: 'Villages, stars, events, the shop and your friends.' },
+      family: { title: "Families and calm play", blurb: "For parents and carers, playing calmly, and how rewards, lives and ads work." },
       accessibility: { title: 'Accessibility', blurb: 'VoiceOver, Voice Control, Switch Control, vision, hearing and motion.' },
       apple: { title: 'Apple features', blurb: 'Widgets, Siri, Spotlight, Game Center, Messages and notifications.' },
       account: { title: 'Settings, progress and privacy', blurb: 'Every setting, your iCloud progress, purchases and your data.' },
       community: { title: 'Getting help', blurb: 'Troubleshooting, the community and reporting a bug well.' },
     },
+    quick: { label: "Where to start", new: { title: "New to OutBrick?", text: "Your first week, day by day." }, stuck: { title: "Stuck on a board?", text: "Find help with a level, from players and the team." }, wrong: { title: "Something not working?", text: "Fix it step by step, or tell us." } },
     popular: 'Popular right now',
     popularLinks: [
       { label: 'Play with VoiceOver', slug: 'voiceover' },
@@ -122,12 +127,15 @@ export const helpUi: Record<Locale, HelpUi> = {
     categories: {
       start: { title: 'Premiers pas', blurb: 'Votre premier plateau et la visite de chaque menu.' },
       play: { title: 'Jouer un plateau', blurb: 'Coups, objectifs, briques spéciales, obstacles et bonus.' },
+      learn: { title: "Connaître chaque brique", blurb: "Spéciales et combos, chaque obstacle et chaque porte, les douze types de plateaux, stratégie et glossaire." },
       progress: { title: 'Voyage et récompenses', blurb: 'Villages, étoiles, événements, la boutique et vos amis.' },
+      family: { title: "Familles et jeu serein", blurb: "Pour les parents, jouer en toute sérénité, et comment fonctionnent récompenses, vies et pubs." },
       accessibility: { title: 'Accessibilité', blurb: 'VoiceOver, Contrôle vocal, Contrôle de sélection, vue, audition et mouvement.' },
       apple: { title: 'Fonctions Apple', blurb: 'Widgets, Siri, Spotlight, Game Center, Messages et notifications.' },
       account: { title: 'Réglages, progression et confidentialité', blurb: 'Chaque réglage, votre progression iCloud, vos achats et vos données.' },
       community: { title: 'Obtenir de l’aide', blurb: 'Dépannage, la communauté et bien signaler un bug.' },
     },
+    quick: { label: "Par où commencer", new: { title: "Nouveau sur OutBrick ?", text: "Votre première semaine, jour après jour." }, stuck: { title: "Bloqué sur un plateau ?", text: "De l’aide pour un niveau, des joueurs et de l’équipe." }, wrong: { title: "Quelque chose ne marche pas ?", text: "Réglez-le pas à pas, ou écrivez-nous." } },
     popular: 'Les plus consultés',
     popularLinks: [
       { label: 'Jouer avec VoiceOver', slug: 'voiceover' },
@@ -180,12 +188,15 @@ export const helpUi: Record<Locale, HelpUi> = {
     categories: {
       start: { title: 'Erste Schritte', blurb: 'Dein erstes Brett und ein Rundgang durch jedes Menü.' },
       play: { title: 'Ein Brett spielen', blurb: 'Züge, Ziele, Spezialsteine, Hindernisse und Booster.' },
+      learn: { title: "Jeden Stein kennen", blurb: "Spezialsteine und Kombos, jedes Hindernis und jedes Tor, die zwölf Brettarten, Strategie und Glossar." },
       progress: { title: 'Reise und Belohnungen', blurb: 'Dörfer, Sterne, Events, der Shop und deine Freunde.' },
+      family: { title: "Familien und ruhiges Spielen", blurb: "Für Eltern, ruhiges Spielen und wie Belohnungen, Leben und Werbung funktionieren." },
       accessibility: { title: 'Bedienungshilfen', blurb: 'VoiceOver, Sprachsteuerung, Schaltersteuerung, Sehen, Hören und Bewegung.' },
       apple: { title: 'Apple-Funktionen', blurb: 'Widgets, Siri, Spotlight, Game Center, Nachrichten und Mitteilungen.' },
       account: { title: 'Einstellungen, Fortschritt und Datenschutz', blurb: 'Jede Einstellung, dein iCloud-Fortschritt, Käufe und deine Daten.' },
       community: { title: 'Hilfe bekommen', blurb: 'Problemlösung, die Community und gute Fehlerberichte.' },
     },
+    quick: { label: "Wo anfangen", new: { title: "Neu bei OutBrick?", text: "Deine erste Woche, Tag für Tag." }, stuck: { title: "Hängst du an einem Brett?", text: "Hilfe zu einem Level, von Spielern und vom Team." }, wrong: { title: "Funktioniert etwas nicht?", text: "Schritt für Schritt lösen oder uns schreiben." } },
     popular: 'Gerade gefragt',
     popularLinks: [
       { label: 'Mit VoiceOver spielen', slug: 'voiceover' },
@@ -238,12 +249,15 @@ export const helpUi: Record<Locale, HelpUi> = {
     categories: {
       start: { title: 'Primeros pasos', blurb: 'Tu primer tablero y un recorrido por cada menú.' },
       play: { title: 'Jugar un tablero', blurb: 'Movimientos, objetivos, ladrillos especiales, obstáculos y potenciadores.' },
+      learn: { title: "Conoce cada ladrillo", blurb: "Especiales y combinaciones, cada bloqueo y puerta, los doce tipos de tablero, estrategia y glosario." },
       progress: { title: 'Viaje y recompensas', blurb: 'Aldeas, estrellas, eventos, la tienda y tus amigos.' },
+      family: { title: "Familias y juego tranquilo", blurb: "Para madres, padres y tutores, jugar con calma y cómo funcionan las recompensas, las vidas y los anuncios." },
       accessibility: { title: 'Accesibilidad', blurb: 'VoiceOver, Control por voz, Control por botón, visión, audición y movimiento.' },
       apple: { title: 'Funciones de Apple', blurb: 'Widgets, Siri, Spotlight, Game Center, Mensajes y notificaciones.' },
       account: { title: 'Ajustes, progreso y privacidad', blurb: 'Cada ajuste, tu progreso en iCloud, compras y tus datos.' },
       community: { title: 'Obtener ayuda', blurb: 'Solución de problemas, la comunidad y cómo informar bien de un error.' },
     },
+    quick: { label: "Por dónde empezar", new: { title: "¿Nuevo en OutBrick?", text: "Tu primera semana, día a día." }, stuck: { title: "¿Atascado en un tablero?", text: "Ayuda con un nivel, de jugadores y del equipo." }, wrong: { title: "¿Algo no funciona?", text: "Soluciónalo paso a paso o escríbenos." } },
     popular: 'Lo más consultado',
     popularLinks: [
       { label: 'Jugar con VoiceOver', slug: 'voiceover' },
@@ -296,12 +310,15 @@ export const helpUi: Record<Locale, HelpUi> = {
     categories: {
       start: { title: 'はじめに', blurb: '最初の盤面と、すべてのメニューの案内。' },
       play: { title: '盤面の遊び方', blurb: '手数、目標、特殊ブロック、障害物、ブースター。' },
+      learn: { title: "ブロックを知りつくす", blurb: "スペシャルとコンボ、すべての障害物と門、12種類の盤面、攻略とことば集。" },
       progress: { title: 'Journeyと報酬', blurb: '村、星、イベント、ショップ、仲間たち。' },
+      family: { title: "ご家族と、ゆったりプレイ", blurb: "保護者の方へ、ゆったり遊ぶために、ごほうび・ライフ・広告のしくみ。" },
       accessibility: { title: 'アクセシビリティ', blurb: 'VoiceOver、音声コントロール、スイッチコントロール、視覚・聴覚・動き。' },
       apple: { title: 'Appleの機能', blurb: 'ウィジェット、Siri、Spotlight、Game Center、メッセージ、通知。' },
       account: { title: '設定・進行状況・プライバシー', blurb: 'すべての設定、iCloudの進行状況、購入、データ。' },
       community: { title: 'サポートを受ける', blurb: 'トラブル解決、コミュニティ、上手な不具合報告。' },
     },
+    quick: { label: "はじめに", new: { title: "OutBrickは初めて？", text: "最初の1週間を1日ずつ。" }, stuck: { title: "盤面で行き詰まった？", text: "レベルごとのヘルプを、プレイヤーとチームから。" }, wrong: { title: "うまく動かない？", text: "ステップごとに解決するか、お問い合わせください。" } },
     popular: 'よく読まれているガイド',
     popularLinks: [
       { label: 'VoiceOverで遊ぶ', slug: 'voiceover' },
@@ -354,12 +371,15 @@ export const helpUi: Record<Locale, HelpUi> = {
     categories: {
       start: { title: 'Primeiros passos', blurb: 'Seu primeiro tabuleiro e um tour por cada menu.' },
       play: { title: 'Jogando um tabuleiro', blurb: 'Movimentos, objetivos, peças especiais, obstáculos e reforços.' },
+      learn: { title: "Conheça cada tijolo", blurb: "Especiais e combinações, cada bloqueio e portão, os doze tipos de tabuleiro, estratégia e glossário." },
       progress: { title: 'Jornada e recompensas', blurb: 'Vilarejos, estrelas, eventos, a loja e seus amigos.' },
+      family: { title: "Famílias e jogo tranquilo", blurb: "Para pais e responsáveis, jogar com calma e como funcionam recompensas, vidas e anúncios." },
       accessibility: { title: 'Acessibilidade', blurb: 'VoiceOver, Controle por Voz, Controle Assistivo, visão, audição e movimento.' },
       apple: { title: 'Recursos da Apple', blurb: 'Widgets, Siri, Spotlight, Game Center, Mensagens e notificações.' },
       account: { title: 'Ajustes, progresso e privacidade', blurb: 'Cada ajuste, seu progresso no iCloud, compras e seus dados.' },
       community: { title: 'Como conseguir ajuda', blurb: 'Solução de problemas, a comunidade e como relatar bem um bug.' },
     },
+    quick: { label: "Por onde começar", new: { title: "Novo no OutBrick?", text: "Sua primeira semana, dia a dia." }, stuck: { title: "Travou num tabuleiro?", text: "Ajuda com um nível, de jogadores e da equipe." }, wrong: { title: "Algo não funciona?", text: "Resolva passo a passo ou fale com a gente." } },
     popular: 'Mais lidos agora',
     popularLinks: [
       { label: 'Jogue com o VoiceOver', slug: 'voiceover' },

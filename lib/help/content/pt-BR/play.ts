@@ -433,7 +433,7 @@ export const playArticles: HelpArticle[] = [
               ['Caixote', 'Para os tijolos que deslizam. Tem uma ou duas camadas.', 'Faça uma linha ao lado dele; cada linha quebra uma camada.'],
               ['Gelo (geleia)', 'Prende o tijolo que está dentro dele.', 'Faça uma linha ao lado dele.'],
               ['Cadeado', 'O tijolo não pode se mexer.', 'Faça uma linha **que passe por ele**. Uma linha ao lado não basta.'],
-              ['Musgo', 'Se espalha para um tijolo depois de qualquer jogada que não tira nada.', 'Faça uma linha ao lado dele.'],
+              ['Musgo', 'Se espalha para um tijolo depois de qualquer jogada que não tira nenhum musgo.', 'Faça uma linha ao lado dele.'],
               ['Estátua', 'Fica em um vão: nada desliza através dela.', 'Ela não sai. Procure outro caminho.'],
             ],
           },
@@ -531,7 +531,7 @@ export const playArticles: HelpArticle[] = [
           },
           {
             t: 'p',
-            text: 'A partir da quinta vila, também começam a aparecer tampas, tijolos virados, portões de etapa e portais. Cada um ganha seu próprio cartão de ensino na primeira vez.',
+            text: 'Conforme a Jornada avança, também começam a aparecer tampas, tijolos virados, portões de etapa e portais. Cada um ganha seu próprio cartão de ensino na primeira vez.',
           },
         ],
       },

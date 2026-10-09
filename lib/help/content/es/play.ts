@@ -433,7 +433,7 @@ export const playArticles: HelpArticle[] = [
               ['Caja', 'Detiene los ladrillos que se deslizan. Tiene una o dos capas.', 'Haz una línea a su lado; cada línea rompe una capa.'],
               ['Hielo (gelatina)', 'Inmoviliza el ladrillo que tiene dentro.', 'Haz una línea a su lado.'],
               ['Candado', 'El ladrillo no se puede mover.', 'Haz una línea que pase **por** él. Una línea a su lado no basta.'],
-              ['Musgo', 'Se extiende a un ladrillo tras cualquier movimiento que no despeje nada.', 'Haz una línea a su lado.'],
+              ['Musgo', 'Se extiende a un ladrillo tras cualquier movimiento que no quite musgo.', 'Haz una línea a su lado.'],
               ['Estatua', 'Ocupa un hueco: nada se desliza a través de ella.', 'Se queda ahí. Busca otro carril.'],
             ],
           },
@@ -531,7 +531,7 @@ export const playArticles: HelpArticle[] = [
           },
           {
             t: 'p',
-            text: 'A partir de la quinta aldea empiezan a aparecer también tapas, ladrillos bocabajo, puertas por fases y portales. Cada uno tiene su propia tarjeta de aprendizaje la primera vez.',
+            text: 'A medida que avanza el Viaje, empiezan a aparecer también tapas, ladrillos bocabajo, puertas por fases y portales. Cada uno tiene su propia tarjeta de aprendizaje la primera vez.',
           },
         ],
       },

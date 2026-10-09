@@ -37,6 +37,9 @@ export default function ContactPage() {
           The form sends your message straight to the OutBrick team — no mail app needed — and a person
           replies by email.
         </p>
+        <p className="ss-safe">
+          We will never ask for your Apple Account password, your card details or a code sent to your phone.
+        </p>
         <p>
           Prefer email?{' '}
           <a href="mailto:support@outbrick.site" translate="no">support@outbrick.site</a>

@@ -987,3 +987,37 @@
 .ob-site .cm-admin-editor label { display: block; margin-block: 1rem; }
 .ob-site .cm-admin-editor :is(input, textarea, select) { display: block; width: 100%; margin-top: 0.4rem; }
 .ob-site .cm-draft-preview { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* ---------------- "Start here" doors and category friends (Support Centre, 9 October 2026) ---------------- */
+.ob-site .cm-start-doors { list-style: none; margin: 10px 0 8px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 980px) { .ob-site .cm-start-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .ob-site .cm-start-doors { grid-template-columns: 1fr; } }
+.ob-site .cm-start-door {
+  position: relative;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  column-gap: 10px;
+  height: 100%;
+  min-height: 108px;
+  padding: 12px 14px 12px 8px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: #fff;
+  background: var(--door, #4b3fc9);
+  box-shadow: 0 6px 0 var(--door-foot, #2f2696);
+}
+.ob-site .cm-start-door.d-guides { --door: #b0367e; --door-foot: #6e1d4e; }
+.ob-site .cm-start-door.d-fix { --door: #0f766f; --door-foot: #064b46; }
+.ob-site .cm-start-door.d-issues { --door: #b4510f; --door-foot: #6e2f06; }
+.ob-site .cm-start-door.d-levels { --door: #3d7f2a; --door-foot: #23511a; }
+.ob-site .cm-start-door:active { transform: translateY(3px); box-shadow: 0 3px 0 var(--door-foot); }
+.ob-site .cm-start-door:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.ob-site .cm-start-door .fig { grid-row: 1 / span 2; align-self: end; margin-bottom: -8px; }
+.ob-site .cm-start-door .t { font-family: var(--display); font-weight: 600; font-size: 1.06rem; line-height: 1.2; color: #fff; align-self: end; }
+.ob-site .cm-start-door .d { font-size: 0.9rem; line-height: 1.4; color: #fff; opacity: 0.94; }
+.ob-site .cm-start-door:hover .t { text-decoration: underline; text-underline-offset: 3px; }
+.ob-site .cm-cat { position: relative; }
+.ob-site .cm-cat-friend { position: absolute; right: 10px; top: -14px; pointer-events: none; }
+.ob-site .cm-cat:has(.cm-cat-friend) h3 { padding-right: 64px; }
+@media (max-width: 420px) { .ob-site .cm-cat-friend { display: none; } }

@@ -59,10 +59,10 @@ const identities = new Set([
 ]);
 // Same spelling is legitimate only in these specific target languages.
 const nativeShared = {
-  fr: new Set(['Action', 'actions', 'Collection', 'Collection.', 'Important', 'Missions', 'Notifications', 'Orange', 'Pause', 'Plus', 'Secrets', 'Statue', 'Triangle', 'rotors', 'village', 'France', 'Canada', 'Sources', 'Marketing', 'Design', 'Type', 'Journal', 'Contact', 'Menu', 'Commission', 'Questions', 'Support', 'Newsletter', 'Version', 'Standard', 'Genre', 'Clip', 'Stickers', 'boulevard', 'motivation', 'parents', 'gamification', 'insight', 'flow', 'progression', 'expertise', 'nature', 'attention', 'routines', 'stress', 'smartphones']),
-  de: new Set(['In', 'in', 'Orange', 'Pause', 'Pink', 'Plus', 'Statue', 'optional', '(optional)', 'System', 'Name', 'Website', 'Level', 'Newsletter:', 'Widgets:', 'Journal', 'Support', 'Newsletter', 'Version', 'Standard', 'Design', 'Marketing', 'Community', 'Team', 'Genre', 'Clip', 'Stickers', 'Early Access', 'Gamification', 'gamification', 'flow', 'stress', 'smartphones']),
-  es: new Set(['No', 'nostalgia', 'Widgets:', 'Marketing', 'Clip', 'Stickers']),
-  'pt-BR': new Set(['Português (Brasil)', 'nostalgia', 'Marketing', 'Design', 'Cookies', 'Menu', 'No']),
+  fr: new Set(['Obstacle', 'Obstacles', 'Combo', 'combo', 'Cascade', 'cascade', 'Cascades', 'Village', 'Rotor', 'Points', 'score', 'BOSS', 'Action', 'actions', 'Collection', 'Collection.', 'Important', 'Missions', 'Notifications', 'Orange', 'Pause', 'Plus', 'Secrets', 'Statue', 'Triangle', 'rotors', 'village', 'France', 'Canada', 'Sources', 'Marketing', 'Design', 'Type', 'Journal', 'Contact', 'Menu', 'Commission', 'Questions', 'Support', 'Newsletter', 'Version', 'Standard', 'Genre', 'Clip', 'Stickers', 'boulevard', 'motivation', 'parents', 'gamification', 'insight', 'flow', 'progression', 'expertise', 'nature', 'attention', 'routines', 'stress', 'smartphones']),
+  de: new Set(['Portal', 'Rotor', 'Events', 'Videos', 'BOSS', 'In', 'in', 'Orange', 'Pause', 'Pink', 'Plus', 'Statue', 'optional', '(optional)', 'System', 'Name', 'Website', 'Level', 'Newsletter:', 'Widgets:', 'Journal', 'Support', 'Newsletter', 'Version', 'Standard', 'Design', 'Marketing', 'Community', 'Team', 'Genre', 'Clip', 'Stickers', 'Early Access', 'Gamification', 'gamification', 'flow', 'stress', 'smartphones']),
+  es: new Set(['Portal', 'Combo', 'combo', 'Rotor', 'Calm Glow', 'Calm Outline', 'No', 'nostalgia', 'Widgets:', 'Marketing', 'Clip', 'Stickers']),
+  'pt-BR': new Set(['Portal', 'Combo', 'combo', 'Rotor', 'Item', 'Use', 'A', 'Português (Brasil)', 'nostalgia', 'Marketing', 'Design', 'Cookies', 'Menu', 'No']),
   ja: new Set(),
 };
 // Original bibliographic titles preserve source identities, not surrounding explanations.
@@ -80,6 +80,10 @@ export function carryoverException(entry, locale) {
   if (!/[A-Za-z]/.test(text)) return 'numbers-or-non-Latin';
   // French counts that read the same as English ("2 guides", "167 villages", "25 minutes").
   if (locale === 'fr' && /^\d[\d\s]* (?:guides?|villages|minutes)$/.test(text)) return 'native-shared-spelling';
+  if (locale === 'de' && /^Level \d+\.?$/.test(text)) return 'native-shared-spelling';
+  if (locale === 'fr' && /^\d[\d\s]* points$/.test(text)) return 'native-shared-spelling';
+  // An iOS settings path segment ("Settings › Apple Account › iCloud"): the product name is the same everywhere.
+  if (/^› iCloud$/.test(text)) return 'proper-name-or-technical-identity';
   if (identities.has(text)) return 'proper-name-or-technical-identity';
   if (nativeShared[locale]?.has(text)) return 'native-shared-spelling';
   if (/^(?:https?:\/\/\S*|(?:www\.)?[\w.-]+\.(?:com|site)(?:\/\S*)?|YOURCODE\d+)$/.test(text)) return 'URL-or-example-identifier';

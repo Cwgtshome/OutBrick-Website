@@ -79,6 +79,42 @@ forum and form suites, build, lint, typecheck, `audit:seo`, `check:links`, `chec
 
 Tests: `netlify/lifecycle/support-extras.test.ts` (attachments, notice, level threads) runs in CI with the request-tracking and lifecycle suites.
 
+## Third release, 9 October 2026: the friends, drawn boards and much deeper guides
+
+Built from the research in `reports/Game support website best practices.md` (kept out of Git; the
+summary is below).
+
+- **The nine friends as hosts** (`app/help-blocks.tsx` `FriendFigure`, styles in
+  `app/styles/help-blocks.css`, poses in `public/assets/friends/poses/<id>-<idle|think|cheer>.webp`):
+  every Help Centre shelf (`categoryHosts`), guide (`host`/`hostPose`), support door, support page
+  masthead, community category and "Start here" door has a host. Each friend moves in its own way
+  (Bloo hops, Peach ponders, Sprout grows, Bricko does reps, Flurry shivers, Moss nods, Poppy twirls,
+  Vio grooves, Zippy dozes) and cheers on hover; all movement stops under Reduce Motion. They never
+  speak: pose and expression only, alt text empty where decorative.
+- **New guide blocks** (`lib/help/model.ts`): `board` (drawn mini-boards in the game's colours with
+  the colour-blind symbols, specials, blockers, gates and move arrows, always with a full `alt`),
+  `entry` (encyclopedia cards), `faq`, `path` (day-by-day) and `friend`.
+- **Twelve new guides** in six languages: common questions, your first week, special bricks and
+  combos, every blocker, lid and gate, the twelve kinds of board, how to beat a hard board, the
+  glossary, meet the friends, a parents' guide, playing calmly, how rewards, lives and ads work, and
+  lost progress or a missing purchase. New shelves: "Know every brick" and "Families and calm play".
+- **Help Centre hub**: the crew in the masthead, three quick-start doors (new, stuck, something
+  wrong), hosts on every shelf, and full-height thumbnails (the cards used to cut iPhone captures in
+  half).
+- **Known issues**: "This affects me too" (anonymous, once a day, R2 `known-issues-me-too.json`),
+  "last checked" per entry, an RSS feed per language (`/support/known-issues/feed.xml`, generated in
+  `scripts/postbuild.mjs`), and a pointer to Apple's System Status.
+- **Guides**: the reply-time promise on every guide; "doesn't work with VoiceOver or my setting" as a
+  "Was this helpful?" reason. **Contact**: "We will never ask for your Apple Account password, card
+  details or a code sent to your phone."
+- **Corrections found while writing**: the privacy policy no longer claims ads are "configured as
+  child-directed" (never true of any build, per the game's docs/ads.md); "lids … from the fifth
+  village" became "as the Journey goes on" in the play guide.
+
+**Open question for the owner:** the out-of-moves screen's free Hint video has been switched off since
+5.0 (`WallFreeHint.removed = true`), yet the site's economy copy (support page, FAQ,
+`lib/i18n/current-game.ts`, AGENTS.md) still counts it among "eight placements, 39 views a day".
+
 ## Recommended next steps (as of the first release; items 1–8 were built in the second)
 
 Ordered by value to players; the ones marked **owner** need a decision before building.

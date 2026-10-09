@@ -29,14 +29,31 @@ import { JsonLd } from './editorial-shell';
 import { Course, editorialNavFor, VillageFooter, VillageHeader } from './village-shell';
 import { HelpFinder } from './components/help-finder';
 import { GuideFeedback } from './components/support/guide-feedback';
+import { FriendFigure, HelpBoard, HelpEntry, HelpFaq, HelpFriend, HelpPath } from './help-blocks';
+import type { FriendId, FriendPose, HelpCategory as Category } from '../lib/help/model';
 import { supportCopy } from '../lib/support/content';
 import './styles/help.css';
+import './styles/help-blocks.css';
 import './styles/support.css';
 
 type ShotInfo = { w: number; h: number; locales: string[] };
 const shots = shotsCatalog as Record<string, ShotInfo>;
 
 export const helpBase = '/community/help';
+
+/** Each shelf of the Help Centre has a brick friend as its host, shown through pose alone. */
+export const categoryHosts: Record<Category, { friend: FriendId; pose: FriendPose }> = {
+  start: { friend: 'bloo', pose: 'cheer' },
+  play: { friend: 'bricko', pose: 'idle' },
+  learn: { friend: 'peach', pose: 'think' },
+  progress: { friend: 'sprout', pose: 'idle' },
+  family: { friend: 'zippy', pose: 'idle' },
+  accessibility: { friend: 'flurry', pose: 'idle' },
+  apple: { friend: 'poppy', pose: 'idle' },
+  account: { friend: 'moss', pose: 'think' },
+  community: { friend: 'vio', pose: 'idle' },
+};
+export const articleHost = (a: HelpArticle) => ({ friend: a.host ?? categoryHosts[a.category].friend, pose: a.hostPose ?? categoryHosts[a.category].pose });
 /** The day the Help Centre was first published. */
 const helpPublished = '2026-10-08T12:00:00+00:00';
 
@@ -114,7 +131,14 @@ export function resolveHref(href: string, locale: Locale): string {
   return href;
 }
 
+/** French puts a space before : ; ! ? and inside « »: keep those spaces from breaking a line. */
+export function typeset(text: string, locale: Locale): string {
+  if (locale !== 'fr') return text;
+  return text.replace(/ ([:;!?»])/g, '\u00a0$1').replace(/« /g, '«\u00a0');
+}
+
 export function renderInline(text: string, locale: Locale): ReactNode[] {
+  text = typeset(text, locale);
   const out: ReactNode[] = [];
   let last = 0;
   let key = 0;
@@ -159,7 +183,18 @@ const calloutGlyph: Record<string, ReactNode> = {
 
 function BlockView({ block, locale }: { block: Block; locale: Locale }) {
   const ui = helpUi[locale];
+  const inline = (text: string) => renderInline(text, locale);
   switch (block.t) {
+    case 'board':
+      return <HelpBoard board={block.board} inline={inline} />;
+    case 'entry':
+      return <HelpEntry entry={block} inline={inline} />;
+    case 'faq':
+      return <HelpFaq items={block.items} inline={inline} />;
+    case 'path':
+      return <HelpPath items={block.items} inline={inline} />;
+    case 'friend':
+      return <HelpFriend friend={block.friend} pose={block.pose} title={block.title} text={block.text} inline={inline} />;
     case 'p':
       return <p>{renderInline(block.text, locale)}</p>;
     case 'h3':
@@ -195,7 +230,7 @@ function BlockView({ block, locale }: { block: Block; locale: Locale }) {
       );
     case 'callout':
       return (
-        <aside className={`hc-callout ${block.kind}`}>
+        <div className={`hc-callout ${block.kind}`} role="note">
           <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
             {calloutGlyph[block.kind]}
           </svg>
@@ -203,7 +238,7 @@ function BlockView({ block, locale }: { block: Block; locale: Locale }) {
             <p className="label">{block.title ? renderInline(block.title, locale) : ui.callout[block.kind]}</p>
             <p>{renderInline(block.text, locale)}</p>
           </div>
-        </aside>
+        </div>
       );
     case 'table':
       return (
@@ -318,7 +353,7 @@ function GuideCard({ article, locale, headingLevel = 3 }: { article: HelpArticle
   return (
     <li className="hc-card brick" data-help-item="">
       {cover ? (
-        <span className="thumb" aria-hidden="true">
+        <span className={`thumb${cover.info.w > cover.info.h ? ' wide' : ''}`} aria-hidden="true" style={{ ['--ar' as string]: `${cover.info.w} / ${cover.info.h}` }}>
           <img src={cover.small} width={cover.info.w} height={cover.info.h} alt="" loading="lazy" decoding="async" />
         </span>
       ) : null}
@@ -328,7 +363,8 @@ function GuideCard({ article, locale, headingLevel = 3 }: { article: HelpArticle
         </H>
         <span className="sum">{plainText(article.summary)}</span>
         <span className="meta">{ui.minutes(readingMinutes(article, locale))}</span>
-        <span hidden>
+        {/* Search data for the hub's finder (titles of sections, synonyms in two languages): never shown or read aloud. */}
+        <span hidden aria-hidden="true">
           {article.sections.map((s) => s.title).join(' · ')} {article.keywords ?? ''}
         </span>
       </span>
@@ -353,6 +389,33 @@ export function helpHubMetadata(locale: Locale): Metadata {
   };
 }
 
+const crew: FriendId[] = ['bloo', 'peach', 'sprout', 'bricko', 'flurry', 'moss', 'poppy', 'vio', 'zippy'];
+
+/** Three doors for the three reasons people arrive: new, stuck, or something is wrong. */
+function QuickStart({ locale }: { locale: Locale }) {
+  const ui = helpUi[locale];
+  const doors = [
+    { key: 'new', friend: 'sprout' as FriendId, href: guidePath(locale, 'first-week'), ...ui.quick.new },
+    { key: 'stuck', friend: 'peach' as FriendId, href: localePath(locale, '/support/levels'), ...ui.quick.stuck },
+    { key: 'wrong', friend: 'moss' as FriendId, href: localePath(locale, '/support/troubleshooter'), ...ui.quick.wrong },
+  ];
+  return (
+    <nav className="hc-quick" aria-label={ui.quick.label}>
+      <ul>
+        {doors.map((d) => (
+          <li key={d.key}>
+            <a className={`hc-quick-door q-${d.key}`} href={d.href}>
+              <span className="fig" aria-hidden="true"><FriendFigure id={d.friend} pose={d.key === 'wrong' ? 'think' : 'idle'} size={80} /></span>
+              <span className="t">{d.title}</span>
+              <span className="d">{d.text}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 export function HelpHub({ locale }: { locale: Locale }) {
   const ui = helpUi[locale];
   const articles = helpArticles(locale);
@@ -375,6 +438,13 @@ export function HelpHub({ locale }: { locale: Locale }) {
           <p className="lede">{ui.hubLede}</p>
           <p className="stamp">{ui.checked(helpCheckpoint.version, stampDate(locale, helpCheckpoint.day))}</p>
         </div>
+        <div className="hc-crew" aria-hidden="true">
+          {crew.map((id, i) => (
+            <span key={id} className="hc-crew-spot" style={{ ['--i' as string]: i }}>
+              <FriendFigure id={id} pose={i % 3 === 1 ? 'think' : 'idle'} size={84} />
+            </span>
+          ))}
+        </div>
         <div className="road" aria-hidden="true" />
       </div>
 
@@ -394,12 +464,16 @@ export function HelpHub({ locale }: { locale: Locale }) {
             </nav>
           </div>
 
+          <QuickStart locale={locale} />
+
           {helpCategories.map((category) => {
             const inCategory = articles.filter((a) => a.category === category);
             if (!inCategory.length) return null;
+            const host = categoryHosts[category];
             return (
-              <section key={category} className="hc-cat" data-help-group="" aria-labelledby={`cat-${category}`}>
+              <section key={category} className={`hc-cat cat-${category}`} data-help-group="" aria-labelledby={`cat-${category}`}>
                 <div className="hc-cat-head">
+                  <span className="hc-cat-host" aria-hidden="true"><FriendFigure id={host.friend} pose={host.pose} size={72} /></span>
                   <h2 id={`cat-${category}`}>{ui.categories[category].title}</h2>
                   <p>
                     {ui.categories[category].blurb} <span className="count">{ui.guides(inCategory.length)}</span>
@@ -446,7 +520,11 @@ export function helpArticleMetadata(locale: Locale, slug: string): Metadata {
   const article = helpArticle(locale, slug);
   if (!article) return {};
   const url = `${siteUrl}${guidePath(locale, slug)}`;
-  const title = `${article.title} · OutBrick`;
+  // A short guide title gets the Help Centre's name too, so the page title says what it is.
+  const plainTitle = `${article.title} · OutBrick`;
+  const weight = plainTitle.length + (plainTitle.match(/[\u3000-\u9fff\uff00-\uffef]/g)?.length ?? 0);
+  // …and a long one drops the suffix, so search results show it whole.
+  const title = weight < 34 ? `${article.title} · OutBrick ${helpUi[locale].name}` : weight > 65 ? article.title : plainTitle;
   const description = metaText(article.summary, locale);
   const image = `${siteUrl}${shotSource(article.cover ?? 'home', locale).large}`;
   // Only languages with their own translation are offered as alternates.
@@ -476,6 +554,7 @@ export function HelpArticlePage({ locale, slug }: { locale: Locale; slug: string
   const url = `${siteUrl}${guidePath(locale, slug)}`;
   const minutes = readingMinutes(article, locale);
   const otherLanguages = locales.filter((l) => l !== locale && isTranslated(l, slug));
+  const host = articleHost(article);
 
   return (
     <Frame locale={locale} page={`${helpBase}/${slug}`}>
@@ -490,8 +569,9 @@ export function HelpArticlePage({ locale, slug }: { locale: Locale; slug: string
               { label: article.title },
             ]}
           />
+          <span className="hc-head-host" aria-hidden="true"><FriendFigure id={host.friend} pose={host.pose} size={120} /></span>
           <p className="eyebrow">{ui.categories[article.category].title}</p>
-          <h1 id="hc-title">{article.title}</h1>
+          <h1 id="hc-title">{typeset(article.title, locale)}</h1>
           <p className="lede">{renderInline(article.summary, locale)}</p>
           <p className="hc-meta">
             <span className="stamp">{ui.checked(helpCheckpoint.version, stampDate(locale, helpCheckpoint.day))}</span>
@@ -566,6 +646,7 @@ export function HelpArticlePage({ locale, slug }: { locale: Locale; slug: string
               </section>
             ) : null}
 
+            <p className="hc-promise">{supportCopy(locale).hub.promise}</p>
             <HelpDesk locale={locale} />
 
             {otherLanguages.length ? (
@@ -619,3 +700,5 @@ export function HelpArticlePage({ locale, slug }: { locale: Locale; slug: string
 }
 
 export { helpOrder } from '../lib/help/model';
+/** The guides that exist (in English, the source): a planned slug without content gets no page. */
+export const publishedSlugs = (): string[] => helpArticles('en').map((a) => a.slug);

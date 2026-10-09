@@ -129,6 +129,13 @@ export const fr: SupportCopy = {
     stayTitle: 'Soyez prévenu quand un correctif sort',
     stayText: 'Chaque version est publiée dans les Annonces dès qu’elle arrive sur l’App Store. Suivez la catégorie pour recevoir un e-mail, et laissez les mises à jour automatiques activées pour que les correctifs vous parviennent sans y penser.',
     stayAction: 'Suivre les Annonces',
+    meToo: "Ça me concerne aussi",
+    meTooDone: "Merci, c’est noté",
+    meTooCount: (n) => (n <= 1 ? `${n} joueur est concerné` : `${n} joueurs sont concernés`),
+    feed: "S’abonner à cette liste (RSS)",
+    versions: "Versions",
+    checked: "Dernière vérification",
+    apple: "Les achats, la synchronisation iCloud, Game Center et la connexion avec Apple dépendent aussi des services d’Apple. Si l’un d’eux ne fonctionne pas, [l’état du système Apple](https://www.apple.com/fr/support/systemstatus/) indique si Apple connaît un problème.",
   },
 
   fix: {
@@ -251,6 +258,7 @@ export const fr: SupportCopy = {
       missing: 'Ma question n’a pas trouvé de réponse',
       outdated: 'Cela ne correspond pas au jeu',
       'didnt-work': 'J’ai suivi les étapes, mais ça n’a pas marché',
+      accessibility: "Ça ne marche pas avec VoiceOver ou mon réglage",
       other: 'Autre chose',
     },
     commentLabel: 'Dites-nous en plus (facultatif)',

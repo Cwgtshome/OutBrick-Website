@@ -516,6 +516,35 @@ fs.mkdirSync(path.join(distDir, 'whats-new'), { recursive: true });
 fs.writeFileSync(path.join(distDir, 'whats-new/feed.xml'), releaseFeed);
 console.log(`[postbuild] whats-new/feed.xml: ${releaseItems.length} items`);
 
+// ---------------------------------------------------------------------------------------
+// Known issues: one RSS feed per language (support/known-issues/feed.xml), newest check first.
+{
+  const issueSets = {
+    en: (await import('../lib/support/issues/en.ts')).en,
+    fr: (await import('../lib/support/issues/fr.ts')).fr,
+    de: (await import('../lib/support/issues/de.ts')).de,
+    es: (await import('../lib/support/issues/es.ts')).es,
+    ja: (await import('../lib/support/issues/ja.ts')).ja,
+    'pt-BR': (await import('../lib/support/issues/pt-BR.ts')).ptBR,
+  };
+  const { supportCopies } = await import('../lib/support/copy/index.ts');
+  const plain = (t) => String(t).replace(/\*\*([^*]+)\*\*/g, '$1').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+  for (const [locale, list] of Object.entries(issueSets)) {
+    const c = supportCopies[locale].issues;
+    const page = `${siteUrl}${locale === 'en' ? '' : `/${locale}`}/support/known-issues`;
+    const newest = list.map((i) => i.checked).sort().at(-1);
+    const items = [...list].sort((a, b) => (a.checked < b.checked ? 1 : -1)).map((i) => {
+      const body = [`<p><b>${xmlEscape(c.status[i.status])}</b></p>`, `<p>${xmlEscape(plain(i.affects))}</p>`, `<p>${xmlEscape(plain(i.what))}</p>`, ...(i.workaround.length ? [`<ul>${i.workaround.map((w) => `<li>${xmlEscape(plain(w))}</li>`).join('')}</ul>`] : []), `<p>${xmlEscape(plain(i.fix))}</p>`].join('');
+      return `<item><title>${xmlEscape(`${c.status[i.status]}: ${plain(i.title)}`)}</title><link>${page}#${i.id}</link><guid isPermaLink="false">outbrick-issue-${i.id}-${i.status}-${i.checked}</guid><pubDate>${rfc822(i.checked)}</pubDate><description>${xmlEscape(body)}</description></item>`;
+    });
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>${xmlEscape(c.metaTitle)}</title><link>${page}</link><atom:link href="${page}/feed.xml" rel="self" type="application/rss+xml"/><description>${xmlEscape(c.metaDescription)}</description><language>${locale}</language><lastBuildDate>${rfc822(newest)}</lastBuildDate>${items.join('')}</channel></rss>\n`;
+    const dir = path.join(distDir, locale === 'en' ? '' : locale, 'support/known-issues');
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, 'feed.xml'), xml);
+  }
+  console.log('[postbuild] support/known-issues/feed.xml in 6 languages');
+}
+
 for (const locale of translatedLocales) {
   const release = currentReleaseIn(locale);
   const url = `${siteUrl}/${locale}/whats-new`;

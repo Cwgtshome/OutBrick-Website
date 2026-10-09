@@ -15,7 +15,7 @@ import type { Locale } from '../i18n/locales.ts';
 export const caseStatuses = ['open', 'replied', 'fix_pending', 'resolved', 'closed'] as const;
 export type CaseStatus = (typeof caseStatuses)[number];
 
-export const feedbackReasons = ['unclear', 'missing', 'outdated', 'didnt-work', 'other'] as const;
+export const feedbackReasons = ['unclear', 'missing', 'outdated', 'didnt-work', 'accessibility', 'other'] as const;
 export type FeedbackReason = (typeof feedbackReasons)[number];
 
 export const assistiveOptions = ['VoiceOver', 'Voice Control', 'Switch Control', 'Full Keyboard Access', 'Larger Text', 'Zoom', 'other'] as const;
@@ -131,6 +131,15 @@ export type SupportCopy = {
     stayTitle: string;
     stayText: string;
     stayAction: string;
+    meToo: string;
+    meTooDone: string;
+    /** "12 players have said this affects them" */
+    meTooCount: (n: number) => string;
+    feed: string;
+    versions: string;
+    checked: string;
+    /** One line pointing to Apple's System Status for purchases, iCloud and Game Center. */
+    apple: string;
   };
 
   fix: {

@@ -25,6 +25,7 @@ import { editorialNavFor, VillageFooter, VillageHeader } from './village-shell';
 import { chromeCopy } from '../lib/i18n/chrome';
 import { CommunityApp } from './components/community/community-app';
 import './styles/community.css';
+import './styles/help-blocks.css';
 
 export type CommunityShellView = 'home' | 'faq' | 'guidelines';
 
