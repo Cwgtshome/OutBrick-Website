@@ -594,3 +594,62 @@ export const weeklyPuzzleCopy: Record<EmailLocale, Omit<PuzzleCopy, 'cta'> & { c
     cta: 'Jogar o tabuleiro do dia',
   },
 };
+
+// ---------------------------------------------------------------------------------------
+// The friends' letter: once a month one friend writes the newsletter's opening letter, in their
+// own voice, signed by hand. The research behind it: the best-loved game newsletters open with a
+// named person's short letter, and players stay for the cast (docs/EMAIL-DESIGN-SYSTEM.md).
+
+const letterUi: Record<EmailLocale, { from: (name: string) => string; community: string }> = {
+  en: { from: (n) => `A letter from ${n}`, community: 'From the community' },
+  fr: { from: (n) => `Une lettre de ${n}`, community: 'Dans la communauté' },
+  de: { from: (n) => `Ein Brief von ${n}`, community: 'Aus der Community' },
+  es: { from: (n) => `Una carta de ${n}`, community: 'Desde la comunidad' },
+  ja: { from: (n) => `${n}からの手紙`, community: 'コミュニティから' },
+  'pt-BR': { from: (n) => `Uma carta de ${n}`, community: 'Da comunidade' },
+};
+
+export function letterTitle(locale: EmailLocale, friend: FriendId): string {
+  return letterUi[locale].from(FRIENDS[friend].name);
+}
+
+export function communityTitle(locale: EmailLocale): string {
+  return letterUi[locale].community;
+}
+
+/**
+ * The letter: a cream plate with a stud row in the friend's colour, their portrait and name in
+ * the corner, the letter in paragraphs, and their name as the signature. `bodyHtml` is already
+ * escaped Markdown (templates.ts paragraphs()).
+ */
+export function letterBlock(ctx: Ctx, friend: FriendId, bodyHtml: string): string {
+  const f = fonts(ctx.locale);
+  const fr = FRIENDS[friend];
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;">
+<tr><td style="padding:0 0 0 18px;height:5px;font-size:0;line-height:0;">${studs(5, fr.colour, 12, 10)}</td></tr>
+<tr><td class="ob-quote" style="background:${color.cream};border-top:3px solid ${fr.colour};border-bottom:4px solid ${color.paperEdge};border-radius:14px;padding:18px 20px 6px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 10px;"><tr>
+<td width="60" valign="middle" style="width:60px;padding:0 12px 0 0;"><img src="${esc(friendSrc(ctx, friend, 'idle'))}" width="56" height="56" alt="" style="display:block;width:56px;height:56px;border:0;"></td>
+<td valign="middle"><p class="ob-eyebrow" style="margin:0;font-family:${f.text};font-size:13px;line-height:1.4;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:${color.panel};">${esc(letterTitle(ctx.locale, friend))}</p></td>
+</tr></table>
+${bodyHtml}
+<p class="ob-text" style="margin:0 0 14px;font-family:${f.display};font-size:20px;line-height:1.3;font-weight:600;color:${color.onPaper};">— ${esc(fr.name)}</p>
+</td></tr>
+</table>`;
+}
+
+/** A short list of forum highlights, each a brick bullet and a link, with an optional note. */
+export function communityBlock(ctx: Ctx, title: string, items: { title: string; href: string; note?: string }[], link: (href: string) => string): string {
+  const f = fonts(ctx.locale);
+  const rows = items
+    .slice(0, 4)
+    .map(
+      (item, i) => `<tr>
+<td valign="top" width="34" style="padding:3px 12px 12px 0;"><div style="height:4px;padding-left:2px;font-size:0;line-height:0;">${studs(2, BRICK[(['red', 'yellow', 'teal', 'purple'] as BrickColour[])[i % 4]].face, 7, 4)}</div><div style="width:22px;height:13px;border-radius:4px;background:${BRICK[(['red', 'yellow', 'teal', 'purple'] as BrickColour[])[i % 4]].face};border-bottom:3px solid rgba(0,0,0,0.25);font-size:0;line-height:0;">&nbsp;</div></td>
+<td valign="top" style="padding:0 0 12px;"><p class="ob-text" style="margin:0;font-family:${f.text};font-size:17px;line-height:1.5;color:${color.onPaper};"><a class="ob-link" href="${esc(link(item.href))}" style="color:${color.link};font-weight:700;text-decoration:underline;">${esc(item.title)}</a>${item.note ? ` <span class="ob-muted" style="color:${color.onPaper2};">${esc(item.note)}</span>` : ''}</p></td>
+</tr>`,
+    )
+    .join('\n');
+  return `<h2 class="ob-h" style="margin:0 0 12px;font-family:${f.display};font-size:23px;line-height:1.25;font-weight:600;color:${color.onPaper};">${esc(title)}</h2>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 20px;">${rows}</table>`;
+}

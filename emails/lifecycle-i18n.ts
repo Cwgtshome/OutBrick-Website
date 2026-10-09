@@ -190,6 +190,16 @@ export type LifecycleCopy = {
     pageIntro: string;
     topicsTitle: string;
     topics: { releases: [string, string]; tips: [string, string]; events: [string, string] };
+    frequencyTitle: string;
+    frequency: { everything: [string, string]; monthly: [string, string] };
+    pauseTitle: string;
+    pauseHint: string;
+    pauseNone: string;
+    pause30: string;
+    pause90: string;
+    pausedUntil: (date: string) => string;
+    pauseKeep: (date: string) => string;
+    pauseResume: string;
     language: string;
     save: string;
     saved: string;
@@ -441,7 +451,7 @@ const en: LifecycleCopy = {
     preheader: 'One tap keeps you on the list. Otherwise we’ll quietly stop writing.',
     eyebrow: 'OutBrick News',
     heading: 'Should we keep writing?',
-    intro: 'It’s been a while since you opened one of our letters, and we’d rather not fill an inbox that doesn’t want us.',
+    intro: 'It’s been a while since you followed a link in one of our letters, and we’d rather not fill an inbox that doesn’t want us.',
     keep: 'Yes, keep me on the list',
     leave: 'No, unsubscribe me',
     fewer: 'Or hear about less',
@@ -464,6 +474,19 @@ const en: LifecycleCopy = {
       tips: ['Tips and guides', 'How to play better, and the stories behind the boards.'],
       events: ['Events and seasons', 'New villages, holiday events and challenges.'],
     },
+    frequencyTitle: 'How often',
+    frequency: {
+      everything: ['Everything', 'Every letter: the monthly news, new versions as they ship, and the welcome letters.'],
+      monthly: ['Monthly only', 'Just the monthly letter. No separate emails for new versions.'],
+    },
+    pauseTitle: 'Take a break',
+    pauseHint: 'While the newsletter is paused we send you no letters. They start again by themselves when the pause ends.',
+    pauseNone: 'Keep the letters coming',
+    pause30: 'Pause for 30 days',
+    pause90: 'Pause for 90 days',
+    pausedUntil: (date) => `Your newsletter is paused until ${date}.`,
+    pauseKeep: (date) => `Stay paused until ${date}`,
+    pauseResume: 'Resume now',
     language: 'Language',
     save: 'Save my choices',
     saved: 'Saved. Thank you!',

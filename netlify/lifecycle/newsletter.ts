@@ -4,18 +4,26 @@
 //     which wording, which stored submission), before Resend is asked to add the contact, so a
 //     Resend outage is retried from the outbox ('resend-sync', and daily while resend_pending)
 //     rather than losing the reader; the welcome series' letters 2 and 3 are queued for days 3
-//     and 10 (the first goes out with the confirmation, or from the outbox if that send failed);
+//     and 10 (the first goes out with the confirmation, or from the outbox if that send failed),
+//     except for the hold-back group: NEWSLETTER_HOLDOUT_PERCENT (default 10) of new readers,
+//     chosen once from an HMAC of the address, get letter 1 only, so the series can be measured;
 //   - onUnsubscribed: anything still queued for that address is cancelled;
 //   - onSuppressed / onContactUnsubscribed: Resend's webhook (resend-events.mts) reports a hard
 //     bounce, a complaint, a suppression or an unsubscribe made in Resend; the reader is marked
 //     and everything queued for the address is cancelled. Every news@ email checks `reachable`
 //     when it is rendered, so nothing goes to a suppressed or departed reader;
 //   - the preferences page (netlify/functions/newsletter-preferences.mts): without a token it asks
-//     for the address and emails a signed link; with one it shows the topics and the language;
-//     saved topics also reach Resend Topics when RESEND_TOPIC_<RELEASES|TIPS|EVENTS> are set;
+//     for the address and emails a signed link; with one it shows the topics, how often (everything
+//     or monthly only), a 30- or 90-day pause and the language; saved topics also reach Resend
+//     Topics when RESEND_TOPIC_<RELEASES|TIPS|EVENTS> are set (a monthly reader is opted out of
+//     "New versions", a paused one out of all three until the pause ends: resumePaused, daily);
 //   - "still want these?" (sweepReengagement, daily): only while NEWSLETTER_ENGAGEMENT_TRACKING=on,
-//     i.e. once Resend's opened/clicked webhook feeds last_engaged_at. Without it, nobody is
-//     asked and nobody is removed, because silence would be indistinguishable from not reading.
+//     i.e. once Resend's clicked webhook feeds last_engaged_at. Only clicks and our own milestones
+//     (confirming, saving preferences, "keep me") count: Apple Mail Privacy Protection opens
+//     every message, so an open is no evidence of reading. Without tracking, nobody is asked and
+//     nobody is removed, because silence would be indistinguishable from not reading. At most
+//     NEWSLETTER_REENGAGE_DAILY_CAP (25) are asked a day, so a large silent cohort never uses up
+//     the Resend plan's daily quota at once. Paused time does not count towards the 120 days.
 //     A reader who doesn't answer in 14 days is unsubscribed (status 'sunset');
 //   - release broadcasts (recordReleaseBroadcasts, processReleaseBroadcasts): the release bot
 //     records one row per language with that storefront's notes, inside the transaction that
@@ -27,8 +35,8 @@
 import { ipHash, rateAllow, sql, type Query } from '../community/db.ts';
 import { SITE } from '../community/http.ts';
 import { emailLocales, isEmailLocale, type EmailLocale } from '../../emails/i18n.ts';
-import { addressTag, normalizeEmail, signedUrl, unsubscribeUrl, verifySigned } from '../../emails/links.ts';
-import { preferencesAskPage, preferencesLink, preferencesPage, reengage, releaseNews, simplePage, topicKeys, welcomeBoards, welcomeFriends, type Topics } from '../../emails/lifecycle.ts';
+import { addressTag, analyticsHash, normalizeEmail, signedUrl, unsubscribeUrl, verifySigned } from '../../emails/links.ts';
+import { preferencesAskPage, preferencesLink, preferencesPage, reengage, releaseNews, simplePage, topicKeys, welcomeBoards, welcomeFriends, type Frequency, type Topics } from '../../emails/lifecycle.ts';
 import { lifecycleCopy } from '../../emails/lifecycle-i18n.ts';
 import { localiseText, tagLinks, toText } from '../../emails/core.ts';
 
@@ -37,13 +45,14 @@ import { listUnsubscribeHeaders } from '../../emails/newsletter.ts';
 import { SENDERS, newsletterSegments, resend, sendEmail, subscribeContact, unsubscribeContact, type OutgoingEmail } from '../../emails/resend.ts';
 import { newsletterWelcome } from '../../emails/templates.ts';
 import { cancelFor, enqueue, signalOutbox, type Prepared, type Row as OutboxRow } from './outbox.ts';
-import { recordSiteEvent } from './analytics.ts';
+import { holdoutPercent, recordSiteEvent } from './analytics.ts';
 
 type Env = Record<string, string | undefined>;
 const DAY = 86400_000;
 export const WELCOME_DAYS = { 'welcome-2': 3, 'welcome-3': 10 } as const;
 export const REENGAGE_AFTER_DAYS = 120;
 export const SUNSET_AFTER_DAYS = 14;
+export const PAUSE_DAYS = [30, 90] as const;
 const PREFS_LINK_DAYS = 30;
 const newsKinds = ['welcome-1', 'welcome-2', 'welcome-3', 'reengage', 'sunset', 'resend-sync'] as const;
 
@@ -55,25 +64,53 @@ export const preferencesAskUrl = (locale: EmailLocale) => `${preferencesBase}?l=
 /** What the reader agreed to, read from the stored sign-up at confirmation (emails/newsletter.ts). */
 export type Consent = { source?: string | null; textVersion?: string | null; submissionId?: string | null };
 
+export { holdoutPercent };
+
+/**
+ * Whether an address falls in the hold-back group. The bucket comes from the analytics HMAC
+ * of the address (emails/links.ts analyticsHash), so it is stable for that address, unrelated
+ * to anything about the reader, and unknowable without the key. It is stored at the first
+ * confirmation, so a later key rotation never moves anyone.
+ */
+export function inHoldout(apiKey: string | undefined, email: string, percent: number): boolean {
+  if (!apiKey || !(percent > 0)) return false;
+  const bucket = Buffer.from(analyticsHash(apiKey, email), 'base64url').readUIntBE(0, 6) % 10_000;
+  return bucket < Math.round(percent * 100);
+}
+
+/** What a confirmation started: whether the welcome series began here, and in which group. */
+export type Confirmed = { series: boolean; holdout: boolean };
+
 /**
  * Record a confirmation. `resendPending` says Resend has not been told yet (the caller asks it
  * next and clears the flag with markResendSynced); a reader who confirms again after leaving or
- * being suppressed gave fresh consent from that same address, so the suppression is lifted.
+ * being suppressed gave fresh consent from that same address, so the suppression is lifted, and
+ * signing up again ends a pause. With `apiKey`, a new reader is placed in or out of the
+ * hold-back group (holdoutPercent); a returning reader keeps the group they had.
  */
-export async function onConfirmed(email: string, locale: EmailLocale, opts: { consent?: Consent; resendPending?: boolean; now?: Date } = {}): Promise<void> {
+export async function onConfirmed(
+  email: string,
+  locale: EmailLocale,
+  opts: { consent?: Consent; resendPending?: boolean; now?: Date; apiKey?: string; holdoutPercent?: number } = {},
+): Promise<Confirmed> {
   const now = opts.now ?? new Date();
   const c = opts.consent ?? {};
+  const holdout = inHoldout(opts.apiKey, email, opts.holdoutPercent ?? 0);
   await sql`
     INSERT INTO newsletter_subscribers (email, locale, status, confirmed_at, welcome_step, last_engaged_at, reengage_sent_at,
-                                        consent_at, consent_source, consent_text_version, submission_id, resend_pending)
+                                        consent_at, consent_source, consent_text_version, submission_id, resend_pending, holdout)
     VALUES (${email}, ${locale}, 'subscribed', now(), 1, now(), NULL,
-            now(), ${c.source ?? null}, ${c.textVersion ?? null}, ${c.submissionId ?? null}, ${opts.resendPending ?? false})
+            now(), ${c.source ?? null}, ${c.textVersion ?? null}, ${c.submissionId ?? null}, ${opts.resendPending ?? false}, ${holdout})
     ON CONFLICT (email) DO UPDATE SET locale = EXCLUDED.locale, status = 'subscribed', last_engaged_at = now(), reengage_sent_at = NULL, updated_at = now(),
       consent_at = now(), consent_source = EXCLUDED.consent_source, consent_text_version = EXCLUDED.consent_text_version,
-      submission_id = EXCLUDED.submission_id, resend_pending = EXCLUDED.resend_pending, suppressed_at = NULL, suppression_reason = NULL`;
-  const [row] = await sql`SELECT welcome_step FROM newsletter_subscribers WHERE email = ${email}`;
+      submission_id = EXCLUDED.submission_id, resend_pending = EXCLUDED.resend_pending, suppressed_at = NULL, suppression_reason = NULL,
+      paused_until = NULL`;
+  const [row] = await sql`SELECT welcome_step, holdout FROM newsletter_subscribers WHERE email = ${email}`;
+  const held = row?.holdout === true;
   // A returning reader who already had the series doesn't get it again.
-  if (Number(row?.welcome_step ?? 1) > 1) return;
+  if (Number(row?.welcome_step ?? 1) > 1) return { series: false, holdout: held };
+  // The hold-back group gets letter 1 (it goes with the confirmation) and nothing more.
+  if (held) return { series: true, holdout: true };
   const items = (['welcome-2', 'welcome-3'] as const).map((kind) => ({
     kind,
     to: email,
@@ -83,6 +120,7 @@ export async function onConfirmed(email: string, locale: EmailLocale, opts: { co
   }));
   const at = await enqueue(items);
   if (at !== null) await signalOutbox(at);
+  return { series: true, holdout: false };
 }
 
 /**
@@ -189,19 +227,35 @@ export async function onSuppressed(email: string, reason: string, eventAt?: Date
   await cancelFor(email);
 }
 
-/** A click or open (from the webhook), a "keep me" tap, or saved preferences. */
+/**
+ * A click (from the webhook), a "keep me" tap, or saved preferences. Never an open: Apple Mail
+ * Privacy Protection fetches every message's images, so opens would keep everyone "engaged".
+ */
 export async function markEngaged(email: string): Promise<void> {
   await sql`UPDATE newsletter_subscribers SET last_engaged_at = now(), reengage_sent_at = NULL, updated_at = now() WHERE email = ${email} AND status = 'subscribed'`;
   await cancelFor(email, ['sunset']);
 }
 
 async function subscriber(email: string) {
-  const [row] = await sql`SELECT email, locale, status, topics, welcome_step, suppressed_at, resend_pending FROM newsletter_subscribers WHERE email = ${email}`;
+  const [row] = await sql`SELECT email, locale, status, topics, welcome_step, suppressed_at, resend_pending, paused_until, frequency, holdout, reengage_sent_at
+                            FROM newsletter_subscribers WHERE email = ${email}`;
   return row ?? null;
 }
 
 /** Whether a news@ email may go to this reader now: still subscribed and not suppressed. */
 export const reachable = (s: Record<string, unknown> | null | undefined): boolean => Boolean(s && s.status === 'subscribed' && !s.suppressed_at);
+
+/** Whether the reader has paused the newsletter and the pause has not ended yet. */
+export const isPaused = (s: Record<string, unknown> | null | undefined, now = Date.now()): boolean => Boolean(s?.paused_until) && millis(s?.paused_until) > now;
+
+/**
+ * Whether a newsletter letter (welcome, re-engagement) may go to this reader now: reachable and
+ * not paused. The Resend contact sync, the preferences link a reader asks for and policy
+ * notices are not newsletter letters and go regardless of a pause.
+ */
+export const newsletterSendable = (s: Record<string, unknown> | null | undefined, now = Date.now()): boolean => reachable(s) && !isPaused(s, now);
+
+export const frequencyOf = (v: unknown): Frequency => (v === 'monthly' ? 'monthly' : 'everything');
 
 const localeOf = (v: unknown): EmailLocale => (isEmailLocale(v) ? v : 'en');
 
@@ -212,11 +266,13 @@ function newsEmail(apiKey: string, to: string, locale: EmailLocale, r: { subject
 
 export async function prepareWelcome(row: OutboxRow, apiKey: string): Promise<Prepared> {
   const s = await subscriber(row.to_email);
-  if (!s || !reachable(s)) return null;
+  if (!s || !newsletterSendable(s)) return null;
   const locale = localeOf(s.locale);
   const links = { locale, unsubscribeUrl: unsubscribeUrl(SITE, apiKey, row.to_email, locale), preferencesUrl: preferencesUrl(apiKey, row.to_email, locale) };
   // Letter 1 only comes from the outbox when the confirmation could not send it.
   if (row.kind === 'welcome-1') return { email: newsEmail(apiKey, row.to_email, locale, newsletterWelcome(links), 'newsletter-welcome') };
+  // Letters 2 and 3 are extras: not for the hold-back group, nor for a reader who chose monthly only.
+  if (s.holdout === true || frequencyOf(s.frequency) === 'monthly') return null;
   const step = row.kind === 'welcome-2' ? 2 : 3;
   const r = step === 2 ? welcomeBoards(links) : welcomeFriends(links);
   return {
@@ -229,22 +285,45 @@ export async function prepareWelcome(row: OutboxRow, apiKey: string): Promise<Pr
 
 export const engagementTracking = (env: Env) => (env.NEWSLETTER_ENGAGEMENT_TRACKING ?? '').toLowerCase() === 'on';
 
-/** Daily: queue "still want these?" for long-silent readers. Returns how many were queued. */
+/** How many "still want these?" emails one day may queue: 25 unless set (0 to 100; 0 asks nobody). */
+export function reengageDailyCap(env: Env): number {
+  const raw = env.NEWSLETTER_REENGAGE_DAILY_CAP;
+  const n = Number(raw);
+  return raw !== undefined && raw !== '' && Number.isInteger(n) && n >= 0 && n <= 100 ? n : 25;
+}
+
+/**
+ * Daily: queue "still want these?" for long-silent readers, the longest silent first, at most
+ * reengageDailyCap a day (counting any already queued that UTC day, so a second sweep adds none
+ * past the cap). A paused reader is not asked, and the clock restarts when a pause ends.
+ * Returns how many were queued.
+ */
 export async function sweepReengagement(env: Env, now = new Date()): Promise<number> {
   if (!engagementTracking(env)) return 0;
+  const stamp = now.toISOString().slice(0, 10);
+  const [today] = await sql`SELECT count(*)::int AS n FROM email_outbox WHERE kind = 'reengage' AND dedupe_key LIKE ${`reengage-%-${stamp}`}`;
+  const room = reengageDailyCap(env) - Number(today?.n ?? 0);
+  if (room <= 0) return 0;
+  const at = now.toISOString();
   const cutoff = new Date(now.getTime() - REENGAGE_AFTER_DAYS * DAY).toISOString();
   const rows = await sql`SELECT email, locale FROM newsletter_subscribers
-                          WHERE status = 'subscribed' AND suppressed_at IS NULL AND reengage_sent_at IS NULL AND last_engaged_at < ${cutoff}::timestamptz AND confirmed_at < ${cutoff}::timestamptz
-                          ORDER BY last_engaged_at LIMIT 200`;
-  const stamp = now.toISOString().slice(0, 10);
-  const at = await enqueue(rows.map((r) => ({ kind: 'reengage' as const, to: String(r.email), locale: String(r.locale), dedupeKey: `reengage-${toText(r.email)}-${stamp}` })));
-  if (at !== null) await signalOutbox(at);
+                          WHERE status = 'subscribed' AND suppressed_at IS NULL AND reengage_sent_at IS NULL
+                            AND (paused_until IS NULL OR paused_until <= ${at}::timestamptz)
+                            AND GREATEST(last_engaged_at, COALESCE(paused_until, last_engaged_at)) < ${cutoff}::timestamptz
+                            AND confirmed_at < ${cutoff}::timestamptz
+                            -- Asked already and not yet sent (a send backing off): not asked twice.
+                            AND NOT EXISTS (SELECT 1 FROM email_outbox o WHERE o.kind = 'reengage' AND lower(o.to_email) = newsletter_subscribers.email
+                                             AND o.sent_at IS NULL AND o.cancelled_at IS NULL)
+                          ORDER BY GREATEST(last_engaged_at, COALESCE(paused_until, last_engaged_at)), email LIMIT ${room}`;
+  const due = await enqueue(rows.map((r) => ({ kind: 'reengage' as const, to: String(r.email), locale: String(r.locale), dedupeKey: `reengage-${toText(r.email)}-${stamp}` })));
+  if (due !== null) await signalOutbox(due);
   return rows.length;
 }
 
 export async function prepareReengage(row: OutboxRow, apiKey: string): Promise<Prepared> {
   const s = await subscriber(row.to_email);
-  if (!s || !reachable(s)) return null;
+  // Already asked (a duplicate row): one "still want these?" per silence.
+  if (!s || !newsletterSendable(s) || s.reengage_sent_at) return null;
   const locale = localeOf(s.locale);
   const keepUrl = signedUrl(`${SITE}/.netlify/functions/newsletter-preferences?l=${locale}&keep=1`, apiKey, 'keep', { e: row.to_email }, (SUNSET_AFTER_DAYS + 30) * 86400);
   const r = reengage({ locale, keepUrl, unsubscribeUrl: unsubscribeUrl(SITE, apiKey, row.to_email, locale), preferencesUrl: preferencesUrl(apiKey, row.to_email, locale) });
@@ -261,9 +340,11 @@ export async function prepareReengage(row: OutboxRow, apiKey: string): Promise<P
 
 /** Fourteen days after "still want these?" with no answer: off the list, quietly. */
 export async function prepareSunset(row: OutboxRow, apiKey: string): Promise<Prepared> {
-  const [s] = await sql`SELECT status, last_engaged_at, reengage_sent_at FROM newsletter_subscribers WHERE email = ${row.to_email}`;
+  const [s] = await sql`SELECT status, last_engaged_at, reengage_sent_at, paused_until FROM newsletter_subscribers WHERE email = ${row.to_email}`;
   if (!s || s.status !== 'subscribed' || !s.reengage_sent_at) return null;
   if (millis(s.last_engaged_at) > millis(s.reengage_sent_at)) return null;
+  // A pause is an answer (saving it also counts as engagement); never remove a paused reader.
+  if (isPaused(s)) return null;
   return {
     action: async () => {
       const result = await unsubscribeContact(apiKey, row.to_email);
@@ -283,13 +364,49 @@ export function topicsOf(raw: unknown): Topics {
   return { releases: t.releases !== false, tips: t.tips !== false, events: t.events !== false };
 }
 
-async function syncResendTopics(apiKey: string, env: Env, email: string, topics: Topics): Promise<void> {
+/**
+ * The topics Resend should hold for a reader, which is what decides who a Broadcast with a
+ * topic reaches. Resend cannot filter a segment by our columns, so a reader's frequency and
+ * pause reach Broadcasts only this way: "monthly only" opts out of New versions, and a pause
+ * opts out of every topic until resumePaused restores the saved choice. A Broadcast sent
+ * without a topic reaches the whole segment, paused or not.
+ */
+export function resendTopics(topics: Topics, frequency: Frequency, paused: boolean): Topics {
+  if (paused) return { releases: false, tips: false, events: false };
+  return { ...topics, releases: topics.releases && frequency !== 'monthly' };
+}
+
+/** Mirror topics to Resend Topics (when configured). Returns false only when Resend refused. */
+async function syncResendTopics(apiKey: string, env: Env, email: string, topics: Topics): Promise<boolean> {
   const updates = topicKeys
     .map((k) => ({ id: env[`RESEND_TOPIC_${k.toUpperCase()}`] ?? '', subscription: topics[k] ? 'opt_in' : 'opt_out' }))
     .filter((u) => u.id);
-  if (!updates.length) return;
+  if (!updates.length) return true;
   const result = await resend(apiKey, `/contacts/${encodeURIComponent(email)}/topics`, { method: 'PATCH', body: updates });
   if (!result.ok) console.error(`[newsletter] topics ${addressTag(apiKey, email)}: ${result.error}`);
+  return result.ok;
+}
+
+/**
+ * Daily: pauses that have ended. The reader's saved topics go back to Resend first, and only
+ * then is the pause cleared, so a refused sync is tried again tomorrow (our own letters resume
+ * as soon as paused_until passes either way). The re-engagement clock restarts at the pause's
+ * end, so paused time never counts as silence. Returns how many pauses were ended.
+ */
+export async function resumePaused(apiKey: string, env: Env, now = new Date()): Promise<number> {
+  const at = now.toISOString();
+  const rows = await sql`SELECT email, topics, frequency, paused_until FROM newsletter_subscribers
+                          WHERE paused_until IS NOT NULL AND paused_until <= ${at}::timestamptz ORDER BY paused_until LIMIT 200`;
+  let resumed = 0;
+  for (const r of rows) {
+    const email = String(r.email);
+    if (!(await syncResendTopics(apiKey, env, email, resendTopics(topicsOf(r.topics), frequencyOf(r.frequency), false)))) continue;
+    const until = r.paused_until instanceof Date ? r.paused_until.toISOString() : toText(r.paused_until);
+    const done = await sql`UPDATE newsletter_subscribers SET last_engaged_at = GREATEST(last_engaged_at, paused_until), paused_until = NULL, updated_at = now()
+                            WHERE email = ${email} AND paused_until = ${until}::timestamptz RETURNING email`;
+    resumed += done.length;
+  }
+  return resumed;
 }
 
 async function moveLanguage(apiKey: string, env: Env, email: string, from: EmailLocale, to: EmailLocale): Promise<void> {
@@ -364,19 +481,37 @@ export async function handlePreferences(req: Request, env: Env, send: Send = sen
   const s = await subscriber(email);
   const unsub = unsubscribeUrl(SITE, apiKey, email, s ? localeOf(s.locale) : locale);
   if (!s || s.status !== 'subscribed') return page(simplePage(locale, c.pageTitle, emailLocalesNote(locale), { href: `${SITE}/newsletter`, label: 'outbrick.site/newsletter' }));
-  if (req.method === 'GET') return page(preferencesPage(localeOf(s.locale), self, topicsOf(s.topics), unsub));
+  const pausedNow = isPaused(s);
+  if (req.method === 'GET') {
+    return page(preferencesPage(localeOf(s.locale), self, topicsOf(s.topics), unsub, false, { frequency: frequencyOf(s.frequency), pausedUntil: pausedNow ? (s.paused_until as Date | string) : null }));
+  }
 
   const form = await req.formData().catch(() => null);
   const topics: Topics = { releases: form?.get('releases') === 'yes', tips: form?.get('tips') === 'yes', events: form?.get('events') === 'yes' };
   const chosen = toText(form?.get('locale'));
   const newLocale: EmailLocale = isEmailLocale(chosen) ? chosen : localeOf(s.locale);
-  await sql`UPDATE newsletter_subscribers SET topics = ${JSON.stringify(topics)}::jsonb, locale = ${newLocale}, last_engaged_at = now(), reengage_sent_at = NULL, updated_at = now() WHERE email = ${email}`;
+  // An older page without the new fields keeps the reader's frequency and pause as they were.
+  const frequency = form?.has('frequency') ? frequencyOf(form.get('frequency')) : frequencyOf(s.frequency);
+  const pauseChoice = toText(form?.get('pause'));
+  const pauseDays = (PAUSE_DAYS as readonly number[]).find((d) => String(d) === pauseChoice) ?? null;
+  const pausedUntil = pauseDays
+    ? new Date(Date.now() + pauseDays * DAY)
+    : pauseChoice === 'resume' || !pausedNow
+      ? null
+      : new Date(millis(s.paused_until));
+  await sql`UPDATE newsletter_subscribers SET topics = ${JSON.stringify(topics)}::jsonb, locale = ${newLocale}, frequency = ${frequency},
+              paused_until = ${pausedUntil ? pausedUntil.toISOString() : null}::timestamptz,
+              last_engaged_at = now(), reengage_sent_at = NULL, updated_at = now() WHERE email = ${email}`;
   await cancelFor(email, ['sunset']);
-  await recordSiteEvent('prefs_saved', { email, locale: newLocale, source: 'preferences', apiKey });
-  await syncResendTopics(apiKey, env, email, topics);
+  // Letters already queued stay queued: each is dropped when it comes due if the reader is still
+  // paused then, so "resume now" straight after a pause loses nothing.
+  // The choices only: nothing here says who saved them.
+  const detail = { topics, frequency, pause: pauseDays ?? (pauseChoice === 'resume' && pausedNow ? 'resume' : pausedUntil ? 'kept' : null), language: newLocale !== localeOf(s.locale) ? 'changed' : 'same' };
+  await recordSiteEvent('prefs_saved', { email, locale: newLocale, source: 'preferences', apiKey, detail });
+  await syncResendTopics(apiKey, env, email, resendTopics(topics, frequency, Boolean(pausedUntil)));
   await moveLanguage(apiKey, env, email, localeOf(s.locale), newLocale);
   locale = newLocale;
-  return page(preferencesPage(locale, self, topics, unsubscribeUrl(SITE, apiKey, email, locale), true));
+  return page(preferencesPage(locale, self, topics, unsubscribeUrl(SITE, apiKey, email, locale), true, { frequency, pausedUntil }));
 }
 
 function emailLocalesNote(locale: EmailLocale): string {

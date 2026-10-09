@@ -54,7 +54,7 @@ See also [the email design system](EMAIL-DESIGN-SYSTEM.md) for what each email l
 | Newsletter | **Welcome 3 of 3**: the nine friends, the daily board, the community | day 10 | news@ |
 | Newsletter | **New version**, a Broadcast draft per language | the release bot sees a new version. Drafts only, unless `RELEASE_EMAIL_AUTOSEND=on` (below). | news@ |
 | Newsletter | **Event** issue (ticket block) | `scripts/send-newsletter.mjs` with an issue that has `"event"`, `--topic events` | news@ |
-| Newsletter | **Still want these?** Keep, fewer, leave | 120 days without engagement, **only with tracking on** (below) | news@ |
+| Newsletter | **Still want these?** Keep, fewer, leave | 120 days without a click or a site milestone, **only with tracking on** (below); at most 25 a day | news@ |
 | Newsletter | Preferences link | a reader asks on the preferences page | news@ |
 | Account | **New sign-in** from a new browser/OS, with one-tap "sign out everywhere" | sign-in; never for an account's first device | support@ (Community) |
 | Account | **Passkey added** | passkey registration | support@ (Community) |
@@ -84,7 +84,7 @@ Copy for all six languages is in `emails/lifecycle-i18n*.ts`. Previews are built
   - Topics are saved here.
   - When `RESEND_TOPIC_RELEASES`, `RESEND_TOPIC_TIPS` and `RESEND_TOPIC_EVENTS` are set, topics are also synced to Resend Topics, and release drafts and `--topic` broadcasts only reach readers who kept that topic.
 - **Resend webhook** (`resend-events`, Svix-verified; each `svix-id` is recorded in `resend_webhook_events` for 30 days, so redeliveries are no-ops):
-  - `email.opened`, `email.clicked` from news@: the reader is engaged.
+  - `email.clicked` from news@ (not on an unsubscribe link): the reader is engaged. `email.opened` is only recorded for the report (see [Engagement](#engagement-clicks-not-opens)).
   - `email.bounced` (permanent only), `email.complained`, `email.suppressed`, from any sender: the address is suppressed and **every** unsent outbox email to it is cancelled. A complaint also unsubscribes the Resend contact.
   - `contact.updated` with `unsubscribed: true`: the reader leaves the list here too. Events older than the reader's latest confirmation are ignored.
 - **Release email:** the release bot records one `release_broadcasts` row per language (that storefront's notes, else English) in the same transaction that claims the version. Each row becomes a Resend Broadcast draft; a failure is retried by the outbox tick with backoff. The team email to news@ says when the drafts will be sent, or that they won't be.
@@ -96,12 +96,41 @@ Copy for all six languages is in `emails/lifecycle-i18n*.ts`. Previews are built
   - Every GET is scanner-safe: it shows a page, and only the POST acts.
   - The one exception is "keep me on the list", which is harmless if a scanner triggers it.
 
+## Engagement: clicks, not opens
+
+Since 9 October 2026 (migration `20261009200000_newsletter-pause-frequency-holdout`). Apple Mail Privacy Protection loads every message's images, so an open is no evidence that anyone read anything; counting opens would keep every Apple Mail reader "engaged" for ever.
+
+- `last_engaged_at` moves only on a **click** in a news@ letter or Broadcast (`email.clicked`, except an unsubscribe link) and on our own milestones: confirming, saving preferences, "keep me on the list". `email.opened` is still stored in `email_events` for the report, and nothing else.
+- "Still want these?" (120 days) and the 14-day sunset both read that clock, so neither depends on opens.
+- **Daily cap:** the 08:00 sweep queues at most `NEWSLETTER_REENGAGE_DAILY_CAP` (default 25, 0 to 100) re-engagement emails per UTC day, longest silent first, counting any already queued that day. A large silent cohort is asked over several days instead of using the free Resend plan's 100 emails a day at once. A reader whose request is still waiting in the outbox is not queued again, and a duplicate row is dropped once the first has gone.
+- Readers whose clock was moved by an open between 8 and 9 October keep that date; the effect is at most a day.
+
+## Pause and frequency
+
+On the preferences page (`handlePreferences`, `preferencesPage`), beside topics and language. Copy in all six languages (`preferences.frequency*`, `preferences.pause*` in `emails/lifecycle-i18n*.ts`).
+
+- **Pause for 30 or 90 days** sets `paused_until`. While it runs, no newsletter letter is queued or sent: the outbox drops a due welcome or "still want these?" row for a paused reader at render time, as it does for an unsubscribed one, and the sunset never removes a paused reader. Letters already queued are not cancelled at once, so "Resume now" straight away loses nothing. The Resend contact sync, a preferences link the reader asks for, and policy notices still go. The page shows "paused until …" with "Stay paused", "Resume now" and a fresh 30 or 90 days.
+- **The re-engagement clock does not count paused time:** the sweep measures silence from the later of `last_engaged_at` and `paused_until`. Saving a pause is itself engagement.
+- **Frequency:** "Everything" (default) or "Monthly only" (`frequency` = `everything` | `monthly`). Monthly readers get no welcome letters 2 and 3. Release emails are Resend Broadcasts sent to segments, and Resend cannot filter a segment by our columns, so the choice reaches Broadcasts through **Resend Topics**: a monthly reader is opted out of "New versions" (`RESEND_TOPIC_RELEASES`), and a paused reader out of all three topics. There is no per-recipient release send today; if one is added, it must skip monthly and paused readers.
+- **Resuming:** the daily sweep (`resumePaused`) finds pauses that have ended, restores the saved topics in Resend (still without "New versions" for monthly readers), and only then clears `paused_until` and restarts the clock at the pause's end. If Resend refuses, it tries again the next day; our own letters resume as soon as the date passes either way.
+- **Limits:** all of this needs the three `RESEND_TOPIC_*` ids. A Broadcast sent **without** a topic (`scripts/send-newsletter.mjs` without `--topic`) reaches every contact in the segment, paused or monthly; send newsletter Broadcasts with a topic.
+- **Analytics:** each save writes a `prefs_saved` event whose `detail` holds only the choices (`topics`, `frequency`, `pause`: 30, 90, `resume`, `kept` or null, and whether the language changed), never the reader.
+
+## Welcome series hold-back
+
+Measures what letters 2 and 3 actually do.
+
+- At the **first** confirmation, `NEWSLETTER_HOLDOUT_PERCENT` (default 10, 0 to 50; 0 switches it off) of new readers are placed in the hold-back (`newsletter_subscribers.holdout`). The bucket is the analytics HMAC of the address (`analyticsHash`, keyed from `RESEND_API_KEY`), so it is stable for an address, unrelated to anything about the reader, and stored, so a key rotation never moves anyone. A returning reader keeps their group.
+- Hold-back readers get welcome 1, every transactional email and every Broadcast, but not welcome 2 and 3 (none are queued, and a queued one is dropped at render time).
+- The `confirmed` event of a reader who starts the series carries `cohort` = `treatment` or `holdout`. Readers confirmed before the feature have no group and are left out.
+- **Report:** `/community/admin` → Email → "Welcome series hold-back" compares the groups, by address hash only, over every reader confirmed since the hold-back began (the period selector does not apply): readers (n); still subscribed at 30 and 60 days (each counted only over readers who joined at least that long ago, and shown as "x of n"); left the list (first unsubscribe, complaint, bounce or suppression on newsletter mail); and clicked a later letter (any news@ letter or Broadcast other than the welcome series, the confirmation, the preferences link and "still want these?", unsubscribe links excluded, over the readers those letters reached). The panel says plainly that small samples are noisy: at 10 %, the hold-back needs a few hundred confirmations before a gap of a few points means anything.
+
 ## Analytics
 
 Implemented 9 October 2026 (migration `20261009180000_email-events`, `netlify/lifecycle/analytics.ts`). Not yet proven against live Resend webhooks.
 
 - **Email events:** every Resend `email.*` webhook event is a row in `email_events`, plus `contact.updated` unsubscribes. That covers sent, delivered, delayed, opened, clicked, bounced, complained, suppressed and failed. Each row keeps the send's `form` and `locale` tags, the Resend email id and, for a Broadcast, its id. A redelivered svix-id is stored once.
-- **Site milestones:** our handlers write `signup` (form submitted), `confirmed`, `unsubscribed_site` (our unsubscribe link, one-click or the 14-day sunset) and `prefs_saved`, with the page path where there is one.
+- **Site milestones:** our handlers write `signup` (form submitted), `confirmed`, `unsubscribed_site` (our unsubscribe link, one-click or the 14-day sunset) and `prefs_saved`, with the page path where there is one. A `confirmed` row that starts the welcome series carries the reader's hold-back `cohort`, and a `prefs_saved` row the choices saved (`detail`), never anything about the reader.
 - **Privacy:**
   - No address is stored. `address_hash` is an HMAC keyed from `RESEND_API_KEY` (purpose `analytics`), so it can count unique readers and nothing else. Rotating the key starts new hashes.
   - A clicked link keeps its host, path and `utm_*` tags; signed-link parameters are dropped.
@@ -126,15 +155,18 @@ Implemented 9 October 2026 (migration `20261009180000_email-events`, `netlify/li
 | `RESEND_EVENTS_WEBHOOK_SECRET` | The Resend webhook → `/.netlify/functions/resend-events`. Subscribe it to **every `email.*` event** and `contact.updated` (analytics records them all; bounces, complaints, suppressions and unsubscribes also act). |
 | `RELEASE_EMAIL_AUTOSEND=on` | Optional. Sends release Broadcast drafts automatically after the review window. Off by default: drafts only. |
 | `RELEASE_EMAIL_DELAY_HOURS` | Optional, 1 to 336, default 24. The review window between a release draft being made and it being sent. |
-| `NEWSLETTER_ENGAGEMENT_TRACKING=on` | Optional. Switches on "still want these?" and the 14-day sunset. **Leave it off until the events webhook delivers.** Otherwise silence would look like disinterest and remove real readers. |
+| `NEWSLETTER_ENGAGEMENT_TRACKING=on` | Optional. Switches on "still want these?" and the 14-day sunset. **Leave it off until the events webhook delivers.** Otherwise silence would look like disinterest and remove real readers. Engagement is clicks only (see [Engagement](#engagement-clicks-not-opens)). |
+| `NEWSLETTER_REENGAGE_DAILY_CAP` | Optional, 0 to 100, default 25. The most "still want these?" emails one day may queue. |
+| `NEWSLETTER_HOLDOUT_PERCENT` | Optional, 0 to 50, default 10. The share of new readers held back from welcome letters 2 and 3; 0 switches the hold-back off. |
 
 **Switched on 8 October 2026:** open and click tracking on the Resend domain, the `email.opened`/`email.clicked` webhook (`resend-events`, secret in Netlify), the three topics (New versions, Tips and events, Events and seasons; ids in `RESEND_TOPIC_*`) and `NEWSLETTER_ENGAGEMENT_TRACKING=on` in production. The privacy policy (#email-tracking) discloses it. Readers who confirmed before that day are imported once by the daily sweep with their 120-day clock starting then.
 
 ## Owner checks after the first deploy
 
 1. Send a contact form to a scoped test address and reply from `/community/admin`. Confirm the reply arrives with the case reference, then answer "not yet" from the feedback email when it arrives three days later. (Or move `send_after` in `email_outbox` for a test row.)
-2. Confirm a newsletter test address. Check that letters 2 and 3 are queued for days 3 and 10, and open the preferences link.
+2. Confirm a newsletter test address. Check that letters 2 and 3 are queued for days 3 and 10 (none are if the address fell in the 10 % hold-back: `holdout` is then true), and open the preferences link.
 3. Sign in from a second browser with a test member and check the new sign-in email. Then use "sign out everywhere".
 4. Read the first release Broadcast drafts in Resend before sending them, or before their auto-send time.
 5. Apply migration `20261009163000_email-suppression-consent-releases` before deploying this code, and add the four new event types to the existing Resend webhook.
 6. Send a test email to Resend's bounce and complaint test addresses with a queued row for each, and check that the rows are cancelled and `suppressed_at` is set.
+7. Apply migration `20261009200000_newsletter-pause-frequency-holdout` before deploying the pause, frequency and hold-back code. Then, with a scoped test address: pause for 30 days on the preferences page and check in Resend that the contact's three topics are opted out; choose "Monthly only" and "Resume now" and check that only "New versions" stays opted out.

@@ -3,7 +3,7 @@
 // Every value that came from a visitor or an issue file is escaped here (esc / escLines /
 // inlineMarkdown), never in the copy catalogue; the text/plain part gets the raw value.
 
-import { puzzle, type FriendId, type Puzzle, type PuzzleCopy } from './friends.ts';
+import { FRIENDS, communityBlock, communityTitle, letterBlock, letterTitle, puzzle, type FriendId, type Puzzle, type PuzzleCopy } from './friends.ts';
 import { trackHtml, trackText } from './support-centre.ts';
 import { contactTopics } from '../lib/business.ts';
 import { brandFooterText } from './brand.ts';
@@ -380,6 +380,10 @@ export type IssueContent = {
   event?: { title: string; dates: string; body: string; link?: { label: string; href: string } };
   /** A board to solve in the email (see friends.ts puzzle), hosted by one of the friends. */
   puzzle?: { host?: FriendId; board: Puzzle; copy: PuzzleCopy };
+  /** The monthly friends' letter: one friend writes the opening letter (Markdown) and hosts the issue. */
+  letter?: { friend: FriendId; body: string };
+  /** Forum highlights: up to four threads, each with an optional one-line note. */
+  community?: { title?: string; items: { title: string; href: string; note?: string }[] };
   cta?: { label: string; href: string };
 };
 
@@ -484,8 +488,10 @@ export function newsletterCampaign(input: CampaignInput): Rendered {
     heading(ctx, esc(issue.hero.title)),
     issue.hero.image ? `<div style="margin:0 0 20px;">${img(ctx, issue.hero.image, 520, 'ob-hero-img')}</div>` : '',
     paragraphs(ctx, issue.hero.body),
+    issue.letter ? letterBlock(ctx, issue.letter.friend, paragraphs(ctx, issue.letter.body)) : '',
     issue.event ? eventBlock(ctx, issue.event) : '',
     issue.puzzle ? puzzle(ctx, issue.puzzle.board, issue.puzzle.copy, issue.puzzle.host ?? 'bloo') : '',
+    issue.community?.items.length ? communityBlock(ctx, issue.community.title ?? communityTitle(input.locale), issue.community.items, (href) => safeUrl(href)) : '',
     ...issue.stories.slice(0, 3).map((s, i) => story(ctx, s, i)),
     issue.release ? releaseBlock(ctx, issue.release) : '',
     `<div style="text-align:center;">${button(ctx, safeUrl(cta.href), esc(cta.label), 320).replace('style="margin:8px 0 22px;"', 'align="center" style="margin:8px auto 22px;"')}</div>`,
@@ -493,7 +499,9 @@ export function newsletterCampaign(input: CampaignInput): Rendered {
   ].join('\n');
   const html = shell({
     ctx,
-    host: issue.puzzle
+    host: issue.letter
+      ? { friend: issue.letter.friend, pose: 'cheer', mood: 'news' }
+      : issue.puzzle
       ? { friend: issue.puzzle.host ?? 'bloo', pose: 'think', mood: 'puzzle' }
       : issue.event
         ? { friend: 'flurry', pose: 'cheer', mood: 'event' }
@@ -509,6 +517,12 @@ export function newsletterCampaign(input: CampaignInput): Rendered {
     issue.hero.title,
     '',
     ...String(issue.hero.body).split(/\n\s*\n/).map((p) => `${plainMarkdown(p.trim())}\n`),
+    ...(issue.letter
+      ? [`## ${letterTitle(input.locale, issue.letter.friend)}`, '', ...String(issue.letter.body).split(/\n\s*\n/).map((p) => `${plainMarkdown(p.trim())}\n`), `— ${FRIENDS[issue.letter.friend].name}`, '']
+      : []),
+    ...(issue.community?.items.length
+      ? [`## ${issue.community.title ?? communityTitle(input.locale)}`, '', ...issue.community.items.slice(0, 4).map((c) => `* ${c.title}${c.note ? ` (${c.note})` : ''}: ${safeUrl(c.href)}`), '']
+      : []),
     ...issue.stories.slice(0, 3).flatMap((s) => [
       `## ${s.title}`,
       '',

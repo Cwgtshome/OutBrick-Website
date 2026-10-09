@@ -8,7 +8,7 @@ import { SENDERS, newsletterSegments, sendEmail, subscribeContact, unsubscribeCo
 import { newsletterWelcome, unsubscribePage, confirmPage } from './templates.ts';
 import { SITE } from './core.ts';
 import { databaseAvailable } from '../netlify/community/db.ts';
-import { recordSiteEvent } from '../netlify/lifecycle/analytics.ts';
+import { holdoutPercent, recordSiteEvent } from '../netlify/lifecycle/analytics.ts';
 import { consentFor, markResendSynced, onConfirmed, onUnsubscribed, preferencesUrl, queueConfirmRetry, type Consent } from '../netlify/lifecycle/newsletter.ts';
 
 type Env = Record<string, string | undefined>;
@@ -90,9 +90,10 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
     }
     for (let attempt = 0; attempt < 2 && !recorded; attempt++) {
       try {
-        await onConfirmed(email, locale, { consent, resendPending: true });
+        const started = await onConfirmed(email, locale, { consent, resendPending: true, apiKey, holdoutPercent: holdoutPercent(env) });
         recorded = true;
-        await recordSiteEvent('confirmed', { email, locale, source: consent.source, apiKey });
+        // Only a reader who began the welcome series here belongs to a group in the report.
+        await recordSiteEvent('confirmed', { email, locale, source: consent.source, apiKey, cohort: started.series ? (started.holdout ? 'holdout' : 'treatment') : null });
       } catch (error) {
         console.error(`[newsletter] record ${tag} (attempt ${attempt + 1}): ${error instanceof Error ? error.message : String(error)}`);
       }

@@ -1,7 +1,8 @@
 // The customer-lifecycle flows end to end on PGlite, with Resend replaced by a recorder:
 // support cases (reply → feedback → reopen; fixed-in → release → notice), applications,
-// the newsletter's welcome series, preferences and unsubscribe, account security, policy notices,
-// and the outbox's gate.
+// the newsletter's welcome series, preferences (topics, frequency, pause) and unsubscribe,
+// engagement on clicks and the capped re-engagement sweep, the welcome-series hold-back and its
+// report, account security, policy notices, and the outbox's gate.
 
 import { after, before, beforeEach, test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -12,13 +13,27 @@ import { setDatabaseForTests, transaction } from '../community/db.ts';
 import { api, member } from '../community/test/forum-helpers.ts';
 import { memorySignalStore } from '../community/idle.ts';
 import { analyticsHash, confirmUrl, signedUrl, unsubscribeUrl } from '../../emails/links.ts';
-import { cleanLink, emailReport, pruneEmailEvents, recordSiteEvent } from './analytics.ts';
+import { cleanLink, emailReport, holdbackReport, holdoutPercent, pruneEmailEvents, recordSiteEvent } from './analytics.ts';
 import { handleConfirm } from '../../emails/newsletter.ts';
 import { handleResendEvent } from '../functions/resend-events.mts';
 import type { OutgoingEmail } from '../../emails/resend.ts';
 import { createCase, handleFeedback, notifyFixedCases, setCaseSenderForTests, versionAtLeast } from './cases.ts';
 import { createApplication, setApplicationSenderForTests } from './applications.ts';
-import { applyRetention, handlePreferences, onConfirmed, onUnsubscribed, preferencesUrl, processReleaseBroadcasts, recordReleaseBroadcasts, releaseNextDue } from './newsletter.ts';
+import {
+  applyRetention,
+  handlePreferences,
+  inHoldout,
+  onConfirmed,
+  onUnsubscribed,
+  preferencesUrl,
+  processReleaseBroadcasts,
+  recordReleaseBroadcasts,
+  reengageDailyCap,
+  releaseNextDue,
+  resendTopics,
+  resumePaused,
+  sweepReengagement,
+} from './newsletter.ts';
 import { deviceLabel, onSessionStarted, setSecuritySenderForTests } from './security.ts';
 import { drain, enqueue, outboxGate, setOutboxStoreForTests, signalOutbox } from './outbox.ts';
 import { lifecycleTick } from './run.ts';
@@ -370,12 +385,12 @@ void test('Resend webhook: an unsubscribe made in Resend leaves the list here; s
   // The same svix-id twice: the second delivery is acknowledged and does nothing.
   await onConfirmed('engaged@example.com', 'en');
   await pg.query(`UPDATE newsletter_subscribers SET last_engaged_at = now() - interval '200 days' WHERE email = 'engaged@example.com'`);
-  const opened = { type: 'email.opened', data: { from: 'OutBrick News <news@outbrick.site>', to: ['engaged@example.com'] } };
-  assert.equal((await handleResendEvent(webhook(opened, 'msg_once'), hookEnv)).status, 200);
+  const clicked = { type: 'email.clicked', data: { from: 'OutBrick News <news@outbrick.site>', to: ['engaged@example.com'], click: { link: 'https://www.outbrick.site/play' } } };
+  assert.equal((await handleResendEvent(webhook(clicked, 'msg_once'), hookEnv)).status, 200);
   const first = await subscriberRow('engaged@example.com');
   assert.ok(Date.now() - (first!.last_engaged_at as Date).getTime() < 60_000);
   await pg.query(`UPDATE newsletter_subscribers SET last_engaged_at = now() - interval '200 days' WHERE email = 'engaged@example.com'`);
-  assert.equal((await handleResendEvent(webhook(opened, 'msg_once'), hookEnv)).status, 200);
+  assert.equal((await handleResendEvent(webhook(clicked, 'msg_once'), hookEnv)).status, 200);
   const second = await subscriberRow('engaged@example.com');
   assert.ok(Date.now() - (second!.last_engaged_at as Date).getTime() > 100 * 86400_000, 'a redelivered event is a no-op');
 });
@@ -741,4 +756,244 @@ void test('French plain text gets a no-break space before each colon; links, tim
   const { localiseText } = await import('../../emails/core.ts');
   assert.equal(localiseText('Sujet: Assistance\nX (Twitter): https://x.com/o\nÀ 10:30\nDéjà : ok', 'fr'), 'Sujet : Assistance\nX (Twitter) : https://x.com/o\nÀ 10:30\nDéjà : ok');
   assert.equal(localiseText('Topic: Support', 'en'), 'Topic: Support');
+});
+
+// ---------------------------------------------------------------------------------------
+// Engagement on clicks, pause and frequency, and the welcome-series hold-back (9 October 2026).
+
+const ago = (d: number) => new Date(Date.now() - d * 86400_000).toISOString();
+const topicEnv = { ...env, RESEND_TOPIC_RELEASES: 'topic-rel', RESEND_TOPIC_TIPS: 'topic-tips', RESEND_TOPIC_EVENTS: 'topic-events' };
+const topicPatch = (calls: { path: string; method: string; body: unknown }[]) =>
+  Object.fromEntries(((calls.find((c) => c.method === 'PATCH' && c.path.endsWith('/topics'))?.body ?? []) as { id: string; subscription: string }[]).map((u) => [u.id, u.subscription]));
+
+void test('engagement: a click from news@ counts; an open, an unsubscribe click or another sender does not', async () => {
+  await onConfirmed('clicker@example.com', 'en');
+  const stale = async () => {
+    await pg.query(`UPDATE newsletter_subscribers SET last_engaged_at = now() - interval '200 days' WHERE email = 'clicker@example.com'`);
+  };
+  const fresh = async () => Date.now() - ((await subscriberRow('clicker@example.com'))!.last_engaged_at as Date).getTime() < 60_000;
+  const news = 'OutBrick News <news@outbrick.site>';
+  await stale();
+  await handleResendEvent(webhook({ type: 'email.opened', data: { from: news, to: ['clicker@example.com'] } }), hookEnv);
+  assert.equal(await fresh(), false, 'Mail Privacy Protection opens everything: an open is not engagement');
+  await handleResendEvent(webhook({ type: 'email.clicked', data: { from: news, to: ['clicker@example.com'], click: { link: 'https://www.outbrick.site/.netlify/functions/newsletter-unsubscribe?e=x' } } }), hookEnv);
+  assert.equal(await fresh(), false, 'a click on the way out is not engagement');
+  await handleResendEvent(webhook({ type: 'email.clicked', data: { from: 'OutBrick Support <support@outbrick.site>', to: ['clicker@example.com'], click: { link: 'https://www.outbrick.site/support' } } }), hookEnv);
+  assert.equal(await fresh(), false, 'only letters from news@ count');
+  await handleResendEvent(webhook({ type: 'email.clicked', data: { from: news, to: ['clicker@example.com'], click: { link: 'https://www.outbrick.site/play?utm_campaign=x' } } }), hookEnv);
+  assert.equal(await fresh(), true);
+  const opens = await pg.query(`SELECT count(*)::int AS n FROM email_events WHERE type = 'opened' AND address_hash = $1`, [analyticsHash(KEY, 'clicker@example.com')]);
+  assert.equal((opens.rows[0] as { n: number }).n, 1, 'opens are still recorded for the report');
+});
+
+void test('re-engagement: at most the daily cap, longest silent first; paused readers and paused time are left out', async () => {
+  assert.equal(reengageDailyCap({}), 25);
+  assert.equal(reengageDailyCap({ NEWSLETTER_REENGAGE_DAILY_CAP: '0' }), 0);
+  assert.equal(reengageDailyCap({ NEWSLETTER_REENGAGE_DAILY_CAP: '7' }), 7);
+  for (const bad of ['', 'x', '2.5', '-1', '500']) assert.equal(reengageDailyCap({ NEWSLETTER_REENGAGE_DAILY_CAP: bad }), 25, bad);
+  const add = (email: string, silentDays: number, pausedUntil: string | null = null) =>
+    pg.query(`INSERT INTO newsletter_subscribers (email, locale, status, confirmed_at, welcome_step, last_engaged_at, paused_until) VALUES ($1, 'en', 'subscribed', $2, 3, $2, $3)`, [email, ago(silentDays), pausedUntil]);
+  for (let i = 0; i < 8; i++) await add(`silent${i}@example.com`, 400 + i);
+  await add('paused-now@example.com', 900, new Date(Date.now() + 20 * 86400_000).toISOString());
+  // Silent 300 days, but paused until ten days ago: the clock restarted when the pause ended.
+  await add('paused-before@example.com', 900, ago(10));
+  const tracking = { NEWSLETTER_ENGAGEMENT_TRACKING: 'on', NEWSLETTER_REENGAGE_DAILY_CAP: '3' };
+  assert.equal(await sweepReengagement({ NEWSLETTER_REENGAGE_DAILY_CAP: '3' }), 0, 'nothing without engagement tracking');
+  const today = new Date();
+  assert.equal(await sweepReengagement(tracking, today), 3);
+  assert.equal(await sweepReengagement(tracking, today), 0, 'a second sweep the same day adds nothing past the cap');
+  const queued = async () => ((await pg.query(`SELECT to_email FROM email_outbox WHERE kind = 'reengage' ORDER BY to_email`)).rows as { to_email: string }[]).map((r) => r.to_email);
+  assert.deepEqual(await queued(), ['silent5@example.com', 'silent6@example.com', 'silent7@example.com'], 'the longest silent go first');
+  assert.equal(await sweepReengagement(tracking, new Date(Date.now() + 86400_000)), 3, 'the next day, three more');
+  assert.equal(await sweepReengagement({ ...tracking, NEWSLETTER_REENGAGE_DAILY_CAP: '25' }, new Date(Date.now() + 2 * 86400_000)), 2);
+  const all = await queued();
+  assert.ok(!all.includes('paused-now@example.com'), 'a paused reader is not asked');
+  assert.ok(!all.includes('paused-before@example.com'), 'paused time is not silence');
+  assert.equal(all.length, 8);
+  await pg.query(`DELETE FROM email_outbox WHERE kind = 'reengage'`);
+  await pg.query(`DELETE FROM newsletter_subscribers WHERE email LIKE 'silent%' OR email LIKE 'paused-%'`);
+});
+
+void test('preferences: frequency and a pause are saved, shown, reach Resend Topics and are recorded without the reader', async () => {
+  await onConfirmed('pauser@example.com', 'fr');
+  const url = preferencesUrl(KEY, 'pauser@example.com', 'fr');
+  const html = await (await handlePreferences(new Request(url), topicEnv, recorder)).text();
+  assert.match(html, /type="radio" id="f-everything" name="frequency" value="everything" checked/);
+  assert.match(html, /name="pause" value="30"/);
+  assert.match(html, /name="pause" value="90"/);
+  assert.match(html, /Faire une pause de 30 jours/);
+  assert.doesNotMatch(html, /value="resume"/, 'nothing to resume yet');
+  const post = (fields: Record<string, string>) => {
+    const form = new FormData();
+    for (const [k, v] of Object.entries(fields)) form.set(k, v);
+    return handlePreferences(new Request(url, { method: 'POST', body: form, headers: { origin: 'https://www.outbrick.site' } }), topicEnv, recorder);
+  };
+  await pg.query(`DELETE FROM email_events WHERE type = 'prefs_saved'`);
+  let page = '';
+  const paused = await withResend(() => Response.json({}), async () => {
+    page = await (await post({ releases: 'yes', tips: 'yes', frequency: 'monthly', pause: '30', locale: 'fr' })).text();
+  });
+  const row = await subscriberRow('pauser@example.com');
+  assert.equal(row?.frequency, 'monthly');
+  const until = (row!.paused_until as Date).getTime();
+  assert.ok(Math.abs(until - (Date.now() + 30 * 86400_000)) < 120_000, 'paused for thirty days');
+  assert.deepEqual(topicPatch(paused), { 'topic-rel': 'opt_out', 'topic-tips': 'opt_out', 'topic-events': 'opt_out' }, 'a pause opts out of every topic');
+  assert.match(page, /en pause jusqu’au/);
+  assert.match(page, /name="pause" value="resume"/);
+  assert.match(page, /id="f-monthly" name="frequency" value="monthly" checked/);
+
+  // Saving again without touching the pause keeps it; "resume" ends it.
+  await withResend(() => Response.json({}), async () => {
+    await post({ releases: 'yes', tips: 'yes', frequency: 'monthly', pause: '', locale: 'fr' });
+  });
+  assert.equal(((await subscriberRow('pauser@example.com'))!.paused_until as Date).getTime(), until);
+  const resumed = await withResend(() => Response.json({}), async () => {
+    await post({ releases: 'yes', tips: 'yes', frequency: 'monthly', pause: 'resume', locale: 'fr' });
+  });
+  assert.equal((await subscriberRow('pauser@example.com'))?.paused_until, null);
+  assert.deepEqual(topicPatch(resumed), { 'topic-rel': 'opt_out', 'topic-tips': 'opt_in', 'topic-events': 'opt_out' }, 'monthly only: no "New versions"');
+  // An older form without the new fields leaves frequency alone.
+  await withResend(() => Response.json({}), async () => {
+    await post({ releases: 'yes', locale: 'fr' });
+  });
+  assert.equal((await subscriberRow('pauser@example.com'))?.frequency, 'monthly');
+
+  const events = (await pg.query(`SELECT detail, source FROM email_events WHERE type = 'prefs_saved' ORDER BY id`)).rows as { detail: Record<string, unknown>; source: string }[];
+  assert.equal(events.length, 4);
+  assert.deepEqual(events[0].detail, { topics: { releases: true, tips: true, events: false }, frequency: 'monthly', pause: 30, language: 'same' });
+  assert.equal(events[1].detail.pause, 'kept');
+  assert.equal(events[2].detail.pause, 'resume');
+  assert.doesNotMatch(JSON.stringify(events), /@|pauser/, 'no personal data in the recorded choices');
+
+  assert.deepEqual(resendTopics({ releases: true, tips: true, events: true }, 'everything', false), { releases: true, tips: true, events: true });
+  assert.deepEqual(resendTopics({ releases: true, tips: false, events: true }, 'monthly', false), { releases: false, tips: false, events: true });
+});
+
+void test('a paused reader gets no newsletter letters, and a monthly reader no welcome extras; other mail still goes', async () => {
+  await onConfirmed('paused-reader@example.com', 'en');
+  await onConfirmed('monthly-reader@example.com', 'de');
+  await pg.query(`UPDATE newsletter_subscribers SET paused_until = now() + interval '30 days' WHERE email = 'paused-reader@example.com'`);
+  await pg.query(`UPDATE newsletter_subscribers SET frequency = 'monthly' WHERE email = 'monthly-reader@example.com'`);
+  await tick(days(3));
+  assert.ok(!sent.some((s) => s.email.to === 'paused-reader@example.com'), 'paused: welcome 2 is dropped');
+  assert.ok(!sent.some((s) => s.email.to === 'monthly-reader@example.com'), 'monthly only: no welcome extras');
+  const dropped = await pg.query(`SELECT count(*)::int AS n FROM email_outbox WHERE to_email = 'paused-reader@example.com' AND kind = 'welcome-2' AND cancelled_at IS NOT NULL`);
+  assert.equal((dropped.rows[0] as { n: number }).n, 1);
+
+  // "Still want these?" and its sunset never reach a paused reader.
+  await enqueue([{ kind: 'reengage', to: 'paused-reader@example.com', locale: 'en', dedupeKey: 'reengage-paused-reader-test' }]);
+  await pg.query(`UPDATE newsletter_subscribers SET reengage_sent_at = now() - interval '20 days', last_engaged_at = now() - interval '200 days' WHERE email = 'paused-reader@example.com'`);
+  await enqueue([{ kind: 'sunset', to: 'paused-reader@example.com', locale: 'en', dedupeKey: 'sunset-paused-reader-test' }]);
+  sent = [];
+  const result = await withResend(() => Response.json({}), async () => {
+    await tick(new Date(Date.now() + 60_000));
+  });
+  assert.ok(!sent.some((s) => s.email.to === 'paused-reader@example.com'));
+  assert.equal(result.filter((c) => c.method === 'PATCH').length, 0, 'the sunset did not unsubscribe a paused reader in Resend');
+  assert.equal((await subscriberRow('paused-reader@example.com'))?.status, 'subscribed');
+});
+
+void test('pauses that have ended are resumed daily: topics restored first, then the clock restarts at the end of the pause', async () => {
+  await onConfirmed('resume@example.com', 'en');
+  await pg.query(`UPDATE newsletter_subscribers SET paused_until = $1, last_engaged_at = $2, frequency = 'monthly', topics = '{"events": false}'::jsonb WHERE email = 'resume@example.com'`, [ago(1), ago(100)]);
+  const refused = await withResend(() => Response.json({ message: 'down' }, { status: 500 }), async () => {
+    assert.equal(await resumePaused(KEY, topicEnv), 0, 'a refused sync keeps the pause for tomorrow');
+  });
+  assert.ok(refused.length >= 1);
+  assert.ok((await subscriberRow('resume@example.com'))?.paused_until);
+  const calls = await withResend(() => Response.json({}), async () => {
+    assert.equal(await resumePaused(KEY, topicEnv), 1);
+  });
+  assert.deepEqual(topicPatch(calls), { 'topic-rel': 'opt_out', 'topic-tips': 'opt_in', 'topic-events': 'opt_out' });
+  const row = await subscriberRow('resume@example.com');
+  assert.equal(row?.paused_until, null);
+  assert.ok(Math.abs((row!.last_engaged_at as Date).getTime() - Date.parse(ago(1))) < 5_000, 'the 120 days count from the end of the pause');
+  assert.equal(await resumePaused(KEY, env), 0, 'nothing left to resume');
+});
+
+void test('hold-back: assigned once from the address, about the configured share, and kept out of welcome letters 2 and 3', async () => {
+  assert.equal(holdoutPercent({}), 10);
+  assert.equal(holdoutPercent({ NEWSLETTER_HOLDOUT_PERCENT: '0' }), 0);
+  assert.equal(holdoutPercent({ NEWSLETTER_HOLDOUT_PERCENT: '20' }), 20);
+  for (const bad of ['x', '-5', '70']) assert.equal(holdoutPercent({ NEWSLETTER_HOLDOUT_PERCENT: bad }), 10, bad);
+  const addresses = Array.from({ length: 3000 }, (_, i) => `reader${i}@example.com`);
+  const held = addresses.filter((a) => inHoldout(KEY, a, 10)).length;
+  assert.ok(held > 3000 * 0.08 && held < 3000 * 0.12, `about 10 % (${held} of 3000)`);
+  assert.equal(addresses.filter((a) => inHoldout(KEY, a, 0)).length, 0, '0 switches it off');
+  assert.equal(inHoldout(undefined, 'reader1@example.com', 10), false);
+  assert.ok(addresses.every((a) => inHoldout(KEY, a, 10) === inHoldout(KEY, a, 10)), 'stable for an address');
+
+  const holdoutAddress = Array.from({ length: 500 }, (_, i) => `held${i}@example.com`).find((a) => inHoldout(KEY, a, 10))!;
+  const treated = Array.from({ length: 500 }, (_, i) => `treated${i}@example.com`).find((a) => !inHoldout(KEY, a, 10))!;
+  await pg.query(`DELETE FROM email_events WHERE type = 'confirmed'`);
+  const confirmEnv = { RESEND_API_KEY: KEY, RESEND_SEGMENT_ID: 'seg-main' };
+  for (const who of [holdoutAddress, treated]) {
+    await withResend(() => Response.json({ id: 'x' }), async () => {
+      await handleConfirm(new Request(confirmUrl('https://www.outbrick.site', KEY, who, 'en'), { method: 'POST', headers: { Origin: 'https://www.outbrick.site' } }), confirmEnv);
+    });
+  }
+  assert.equal((await subscriberRow(holdoutAddress))?.holdout, true);
+  assert.equal((await subscriberRow(treated))?.holdout, false);
+  assert.deepEqual(await unsent(holdoutAddress), [], 'the hold-back gets welcome 1 only');
+  assert.deepEqual(await unsent(treated), ['welcome-2', 'welcome-3']);
+  const cohorts = (await pg.query(`SELECT address_hash, cohort FROM email_events WHERE type = 'confirmed'`)).rows as { address_hash: string; cohort: string }[];
+  assert.deepEqual(Object.fromEntries(cohorts.map((r) => [r.address_hash, r.cohort])), { [analyticsHash(KEY, holdoutAddress)]: 'holdout', [analyticsHash(KEY, treated)]: 'treatment' });
+
+  // A returning reader keeps the group they had, and is not counted again.
+  assert.deepEqual(await onConfirmed(holdoutAddress, 'en', { apiKey: KEY, holdoutPercent: 0 }), { series: true, holdout: true });
+  assert.equal((await subscriberRow(holdoutAddress))?.holdout, true);
+  await pg.query(`UPDATE newsletter_subscribers SET welcome_step = 3 WHERE email = $1`, [treated]);
+  assert.deepEqual(await onConfirmed(treated, 'en', { apiKey: KEY, holdoutPercent: 10 }), { series: false, holdout: false });
+  // Even a letter queued before the reader was held back is dropped when it comes due.
+  await pg.query(`UPDATE newsletter_subscribers SET holdout = true WHERE email = $1`, [treated]);
+  await enqueue([{ kind: 'welcome-3', to: treated, locale: 'en', dedupeKey: `welcome-3-held-late-${treated}` }]);
+  sent = [];
+  await tick(days(11));
+  assert.ok(!sent.some((s) => s.email.to === treated));
+});
+
+void test('hold-back report: retention at 30 and 60 days, departures and later clicks per group, with sample sizes', async () => {
+  await pg.query(`DELETE FROM email_events`);
+  const confirmed = (hash: string, cohort: string | null, d: number) =>
+    pg.query(`INSERT INTO email_events (type, form, address_hash, cohort, occurred_at) VALUES ('confirmed', 'newsletter', $1, $2, $3)`, [hash, cohort, ago(d)]);
+  const event = (hash: string, type: string, d: number, extra: { form?: string; broadcast?: string; link?: string } = {}) =>
+    pg.query(`INSERT INTO email_events (type, form, broadcast_id, link_url, address_hash, occurred_at) VALUES ($1, $2, $3, $4, $5, $6)`, [type, extra.form ?? null, extra.broadcast ?? null, extra.link ?? null, hash, ago(d)]);
+  // Treatment: t1 stays and clicks a later letter; t2 leaves on day 35; t3 joined ten days ago;
+  // t4 stays, clicks only welcome 2 and an unsubscribe link, and is reached by a Broadcast.
+  await confirmed('t1', 'treatment', 70);
+  await confirmed('t1', null, 5); // a later, returning confirmation: not a second member
+  await event('t1', 'delivered', 50, { form: 'newsletter-letter' });
+  await event('t1', 'clicked', 50, { form: 'newsletter-letter', link: 'https://www.outbrick.site/play' });
+  await confirmed('t2', 'treatment', 70);
+  await event('t2', 'unsubscribed_site', 35, { form: 'newsletter' });
+  await confirmed('t3', 'treatment', 10);
+  await event('t3', 'delivered', 5, { form: 'newsletter-letter' });
+  await confirmed('t4', 'treatment', 70);
+  await event('t4', 'clicked', 66, { form: 'newsletter-welcome-2', link: 'https://www.outbrick.site/play' });
+  await event('t4', 'delivered', 20, { broadcast: 'bc-1' });
+  await event('t4', 'clicked', 20, { broadcast: 'bc-1', link: 'https://www.outbrick.site/.netlify/functions/newsletter-unsubscribe?x' });
+  // Hold-back: h1 leaves on day 5 (a complaint on a Broadcast); h2 joined 35 days ago and clicks a Broadcast.
+  await confirmed('h1', 'holdout', 70);
+  await event('h1', 'complained', 65, { broadcast: 'bc-0' });
+  await confirmed('h2', 'holdout', 35);
+  await event('h2', 'delivered', 20, { broadcast: 'bc-1' });
+  await event('h2', 'clicked', 20, { broadcast: 'bc-1', link: 'https://www.outbrick.site/whats-new' });
+  // A reader confirmed before the hold-back existed has no group and is left out.
+  await confirmed('old', null, 70);
+
+  const h = await holdbackReport(10);
+  assert.equal(h.percent, 10);
+  assert.deepEqual(h.groups, [
+    { group: 'treatment', readers: 4, at30: { eligible: 3, stillSubscribed: 3 }, at60: { eligible: 3, stillSubscribed: 2 }, left: 1, reachedByLaterLetters: 3, clickedLaterLetters: 1 },
+    { group: 'holdout', readers: 2, at30: { eligible: 2, stillSubscribed: 1 }, at60: { eligible: 1, stillSubscribed: 0 }, left: 1, reachedByLaterLetters: 1, clickedLaterLetters: 1 },
+  ]);
+  const r = await emailReport(7, new Date(), { holdoutPercent: 0 });
+  assert.equal(r.holdback.percent, 0);
+  assert.equal(r.holdback.groups[0].readers, 4, 'the comparison ignores the period');
+  assert.doesNotMatch(JSON.stringify(r.holdback), /t1|h1|@/, 'aggregates only');
+  const empty = await (async () => {
+    await pg.query(`DELETE FROM email_events`);
+    return holdbackReport(10);
+  })();
+  assert.deepEqual(empty.groups.map((g) => g.readers), [0, 0]);
 });

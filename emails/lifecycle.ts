@@ -670,22 +670,55 @@ export function preferencesLink(input: { locale: EmailLocale; url: string; asset
 
 export type Topics = { releases: boolean; tips: boolean; events: boolean };
 export const topicKeys = ['releases', 'tips', 'events'] as const;
+/** How often a reader hears from OutBrick News: every letter, or the monthly letter only. */
+export type Frequency = 'everything' | 'monthly';
+export const frequencyKeys = ['everything', 'monthly'] as const;
 
 const localeNames: Record<EmailLocale, string> = { en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', ja: '日本語', 'pt-BR': 'Português (Brasil)' };
 
-/** The preferences page: three topic switches (styled as brick toggles), language, save; unsubscribe below. */
-export function preferencesPage(locale: EmailLocale, actionUrl: string, topics: Topics, unsubscribeUrl: string, saved = false): string {
+/** What else the preferences page shows: the reader's frequency, and the end of a pause still running. */
+export type PreferencesState = { frequency?: Frequency; pausedUntil?: Date | string | null };
+
+/**
+ * The preferences page: three topic switches (styled as brick toggles), how often (everything
+ * or monthly only), a 30- or 90-day pause, language, save; unsubscribe below. Every choice is a
+ * native checkbox or radio button inside a labelled fieldset, so it reads and works the same with
+ * VoiceOver, a keyboard or no CSS at all.
+ */
+export function preferencesPage(locale: EmailLocale, actionUrl: string, topics: Topics, unsubscribeUrl: string, saved = false, state: PreferencesState = {}): string {
   const ctx = ctxOf(locale);
   const c = lifecycleCopy[locale].preferences;
   const f = fonts(locale);
+  const frequency: Frequency = state.frequency ?? 'everything';
+  const pausedUntil = state.pausedUntil ? dateOnly(locale, state.pausedUntil) : '';
+  const legend = (text: string) =>
+    `<legend style="margin:0 0 10px;padding:0;font-family:${f.text};font-size:13px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:${color.panel};">${esc(text)}</legend>`;
+  const card = (id: string, accent: string, control: string, label: string, hint?: string) =>
+    `<label for="${id}" style="display:block;margin:0 0 10px;padding:14px 16px;border:2px solid ${color.paperEdge};border-left:8px solid ${accent};border-radius:14px;background:#ffffff;cursor:pointer;">
+${control}
+<span style="font-family:${f.display};font-size:18px;font-weight:600;color:${color.onPaper};">${esc(label)}</span>${
+      hint ? `\n<span style="display:block;margin:4px 0 0 32px;font-family:${f.text};font-size:15px;line-height:1.5;color:${color.onPaper2};">${esc(hint)}</span>` : ''
+    }</label>`;
+  const input = (type: 'checkbox' | 'radio', id: string, name: string, value: string, checked: boolean) =>
+    `<input type="${type}" id="${id}" name="${name}" value="${value}"${checked ? ' checked' : ''} style="width:22px;height:22px;margin:0 10px 0 0;vertical-align:-4px;accent-color:${color.panel};">`;
   const toggle = (key: (typeof topicKeys)[number], i: number) => {
     const [label, hint] = c.topics[key];
-    return `<label for="t-${key}" style="display:block;margin:0 0 10px;padding:14px 16px;border:2px solid ${color.paperEdge};border-left:8px solid ${['#3b8bf0', '#26b9b0', '#7b5cf0'][i]};border-radius:14px;background:#ffffff;cursor:pointer;">
-<input type="checkbox" id="t-${key}" name="${key}" value="yes"${topics[key] ? ' checked' : ''} style="width:22px;height:22px;margin:0 10px 0 0;vertical-align:-4px;accent-color:${color.panel};">
-<span style="font-family:${f.display};font-size:18px;font-weight:600;color:${color.onPaper};">${esc(label)}</span>
-<span style="display:block;margin:4px 0 0 32px;font-family:${f.text};font-size:15px;line-height:1.5;color:${color.onPaper2};">${esc(hint)}</span></label>`;
+    return card(`t-${key}`, ['#3b8bf0', '#26b9b0', '#7b5cf0'][i], input('checkbox', `t-${key}`, key, 'yes', topics[key]), label, hint);
   };
+  const often = (key: Frequency, i: number) => {
+    const [label, hint] = c.frequency[key];
+    return card(`f-${key}`, ['#f2b822', '#f07c3b'][i], input('radio', `f-${key}`, 'frequency', key, frequency === key), label, hint);
+  };
+  // While paused, the default keeps the pause as it is; otherwise it keeps the letters coming.
+  const pauses: [string, string][] = pausedUntil
+    ? [['', c.pauseKeep(pausedUntil)], ['resume', c.pauseResume], ['30', c.pause30], ['90', c.pause90]]
+    : [['', c.pauseNone], ['30', c.pause30], ['90', c.pause90]];
+  const pause = ([value, label]: [string, string]) => card(`p-${value || 'none'}`, '#9aa3b5', input('radio', `p-${value || 'none'}`, 'pause', value, value === ''), label);
   const options = (Object.keys(localeNames) as EmailLocale[]).map((l) => `<option value="${l}"${l === locale ? ' selected' : ''}>${esc(localeNames[l])}</option>`).join('');
+  const fieldset = (title: string, inner: string, note?: string) =>
+    `<fieldset style="border:0;margin:0 0 18px;padding:0;">${legend(title)}
+${note ? `<p style="margin:0 0 10px;font-family:${f.text};font-size:15px;line-height:1.5;color:${color.onPaper2};">${esc(note)}</p>\n` : ''}${inner}
+</fieldset>`;
   return lifecyclePage(
     locale,
     c.pageTitle,
@@ -693,11 +726,12 @@ export function preferencesPage(locale: EmailLocale, actionUrl: string, topics: 
       eyebrow(ctx, esc(emailCopy[locale].news.eyebrow)),
       heading(ctx, esc(c.pageTitle)),
       saved ? panel(ctx, para(ctx, `✓ ${esc(c.saved)}`), '#3fc544') : '',
+      pausedUntil ? panel(ctx, para(ctx, esc(c.pausedUntil(pausedUntil))), '#9aa3b5') : '',
       para(ctx, esc(c.pageIntro)),
       `<form method="post" action="${esc(actionUrl)}" style="margin:0 0 22px;">
-<fieldset style="border:0;margin:0 0 18px;padding:0;"><legend style="margin:0 0 10px;padding:0;font-family:${f.text};font-size:13px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:${color.panel};">${esc(c.topicsTitle)}</legend>
-${topicKeys.map(toggle).join('\n')}
-</fieldset>
+${fieldset(c.topicsTitle, topicKeys.map(toggle).join('\n'))}
+${fieldset(c.frequencyTitle, frequencyKeys.map(often).join('\n'))}
+${fieldset(c.pauseTitle, pauses.map(pause).join('\n'), c.pauseHint)}
 <label for="lang" style="display:block;margin:0 0 6px;font-family:${f.text};font-size:13px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:${color.panel};">${esc(c.language)}</label>
 <select id="lang" name="locale" style="display:block;box-sizing:border-box;width:100%;max-width:320px;min-height:44px;margin:0 0 20px;padding:8px 12px;border:2px solid ${color.paperEdge};border-radius:12px;background:#ffffff;color:${color.onPaper};font-family:${f.text};font-size:16px;">${options}</select>
 ${formButton(ctx, c.save)}

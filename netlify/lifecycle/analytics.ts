@@ -4,13 +4,16 @@
 //     (recordWebhookEvent): each email.* event, with the send's `form` and `locale` tags, the
 //     Resend email id and, for a Broadcast, its id; and a contact.updated that unsubscribed.
 //     The site's own newsletter milestones (signup, confirmed, unsubscribed_site, prefs_saved)
-//     are written by the handlers where they happen (recordSiteEvent);
+//     are written by the handlers where they happen (recordSiteEvent). A 'confirmed' row that
+//     started the welcome series carries the reader's group (cohort: treatment or holdout), and
+//     a 'prefs_saved' row the choices saved (detail: topics, frequency, pause), never the reader;
 //   - privacy: no address is stored. address_hash is an HMAC (emails/links.ts analyticsHash)
 //     that only counts unique readers; a clicked link keeps its host, path and utm_* tags and
 //     drops everything else, so signed-link parameters never reach the table. Rows go after
 //     400 days (pruneEmailEvents, from the daily sweep);
 //   - report: GET /api/community/admin/email?days=7|30|90, admins only, returns aggregates
-//     computed in SQL (emailReport) for the "Email" panel of /community/admin.
+//     computed in SQL (emailReport) for the "Email" panel of /community/admin, including the
+//     welcome-series hold-back comparison (holdbackReport), followed by address hash only.
 //
 // Opens are approximate: Apple Mail Privacy Protection and some security scanners fetch
 // images for every message, so the report leads with clicks.
@@ -26,6 +29,17 @@ export const EMAIL_EVENT_TYPES = ['sent', 'delivered', 'delivery_delayed', 'open
 export type SiteEventType = 'signup' | 'confirmed' | 'unsubscribed_site' | 'prefs_saved';
 export const RETENTION_DAYS = 400;
 export const REPORT_WINDOWS: EmailReportWindow[] = [7, 30, 90];
+
+/**
+ * The share of new newsletter readers held back from welcome letters 2 and 3 (newsletter.ts
+ * onConfirmed), and shown beside the report's comparison: 10 unless NEWSLETTER_HOLDOUT_PERCENT
+ * says otherwise (0 to 50; 0 switches the hold-back off).
+ */
+export function holdoutPercent(env: Record<string, string | undefined>): number {
+  const raw = env.NEWSLETTER_HOLDOUT_PERCENT;
+  const n = Number(raw);
+  return raw !== undefined && raw !== '' && Number.isFinite(n) && n >= 0 && n <= 50 ? n : 10;
+}
 
 const clip = (v: unknown, max: number): string | null => {
   const s = toText(v).trim();
@@ -103,10 +117,16 @@ export async function recordWebhookEvent(event: { type?: unknown; created_at?: u
  * A newsletter milestone that happens on our side. Best effort: analytics never fails the
  * handler that called it.
  */
-export async function recordSiteEvent(type: SiteEventType, opts: { email?: string | null; locale?: string | null; source?: string | null; apiKey?: string; form?: string } = {}): Promise<void> {
+export async function recordSiteEvent(
+  type: SiteEventType,
+  opts: { email?: string | null; locale?: string | null; source?: string | null; apiKey?: string; form?: string; cohort?: 'treatment' | 'holdout' | null; detail?: Record<string, unknown> | null } = {},
+): Promise<void> {
   try {
-    await sql`INSERT INTO email_events (type, form, locale, source, address_hash)
-              VALUES (${type}, ${opts.form ?? 'newsletter'}, ${clip(opts.locale, 10)}, ${clip(opts.source, 300)}, ${hashOf(opts.apiKey ?? process.env.RESEND_API_KEY, opts.email)})`;
+    const cohort = type === 'confirmed' && opts.cohort ? opts.cohort : null;
+    const detail = type === 'prefs_saved' && opts.detail ? JSON.stringify(opts.detail).slice(0, 500) : null;
+    await sql`INSERT INTO email_events (type, form, locale, source, address_hash, cohort, detail)
+              VALUES (${type}, ${opts.form ?? 'newsletter'}, ${clip(opts.locale, 10)}, ${clip(opts.source, 300)}, ${hashOf(opts.apiKey ?? process.env.RESEND_API_KEY, opts.email)},
+                      ${cohort}, ${detail}::jsonb)`;
   } catch (error) {
     console.error(`[analytics] ${type}: ${error instanceof Error ? error.message : String(error)}`);
   }
@@ -125,7 +145,69 @@ const n = (v: unknown) => Number(v ?? 0) || 0;
 const s = (v: unknown) => toText(v);
 const isoOrNull = (v: unknown) => (v instanceof Date ? v.toISOString() : v ? new Date(toText(v)).toISOString() : null);
 
-export async function emailReport(days: EmailReportWindow, now = new Date()): Promise<EmailReport> {
+// Emails that are not "a later letter" for the hold-back comparison: the welcome series itself
+// (which is what differs between the groups), the confirmation request, the preferences link
+// and "still want these?". Everything else from news@, and every Broadcast, counts.
+const NOT_LATER_LETTERS = ['newsletter-welcome', 'newsletter-welcome-2', 'newsletter-welcome-3', 'newsletter-confirm', 'newsletter-preferences-link', 'newsletter-reengage'];
+
+/**
+ * The welcome series against its hold-back group, over every reader whose confirmation carried a
+ * group (since the hold-back began; the period selector does not apply). A reader "left" at
+ * their first unsubscribe, complaint, bounce or suppression on newsletter mail after joining;
+ * "still subscribed at 30 days" is counted only over readers who joined at least 30 days ago
+ * (likewise 60). Clicks are on later letters and Broadcasts, unsubscribe links excluded, over
+ * the readers those letters reached.
+ */
+export async function holdbackReport(percent: number, now = new Date()): Promise<EmailReport['holdback']> {
+  const at = now.toISOString();
+  const later = NOT_LATER_LETTERS.join(',');
+  const rows = await sql`
+    WITH members AS (
+      SELECT DISTINCT ON (address_hash) address_hash, cohort, occurred_at AS joined
+        FROM email_events WHERE type = 'confirmed' AND cohort IS NOT NULL AND address_hash IS NOT NULL
+       ORDER BY address_hash, occurred_at
+    ), departures AS (
+      SELECT m.address_hash, min(e.occurred_at) AS left_at
+        FROM members m JOIN email_events e ON e.address_hash = m.address_hash AND e.occurred_at >= m.joined
+       WHERE e.type IN ('unsubscribed','unsubscribed_site')
+          OR (e.type IN ('bounced','complained','suppressed') AND (e.form LIKE 'newsletter%' OR e.broadcast_id IS NOT NULL))
+       GROUP BY 1
+    ), letters AS (
+      SELECT m.address_hash,
+             bool_or(e.type = 'delivered') AS reached,
+             bool_or(e.type = 'clicked' AND NOT (COALESCE(e.link_url, '') ILIKE '%unsubscribe%')) AS clicked
+        FROM members m JOIN email_events e ON e.address_hash = m.address_hash AND e.occurred_at > m.joined
+       WHERE e.type IN ('delivered','clicked')
+         AND (e.broadcast_id IS NOT NULL OR (e.form LIKE 'newsletter%' AND NOT (e.form = ANY(string_to_array(${later}::text, ',')))))
+       GROUP BY 1
+    )
+    SELECT m.cohort,
+           count(*) AS readers,
+           count(*) FILTER (WHERE m.joined <= ${at}::timestamptz - interval '30 days') AS due30,
+           count(*) FILTER (WHERE m.joined <= ${at}::timestamptz - interval '30 days' AND (d.left_at IS NULL OR d.left_at > m.joined + interval '30 days')) AS kept30,
+           count(*) FILTER (WHERE m.joined <= ${at}::timestamptz - interval '60 days') AS due60,
+           count(*) FILTER (WHERE m.joined <= ${at}::timestamptz - interval '60 days' AND (d.left_at IS NULL OR d.left_at > m.joined + interval '60 days')) AS kept60,
+           count(d.left_at) AS left_list,
+           count(*) FILTER (WHERE l.reached) AS reached,
+           count(*) FILTER (WHERE l.clicked) AS clicked
+      FROM members m LEFT JOIN departures d USING (address_hash) LEFT JOIN letters l USING (address_hash)
+     GROUP BY m.cohort`;
+  const group = (name: 'treatment' | 'holdout') => {
+    const r = rows.find((x) => x.cohort === name);
+    return {
+      group: name,
+      readers: n(r?.readers),
+      at30: { eligible: n(r?.due30), stillSubscribed: n(r?.kept30) },
+      at60: { eligible: n(r?.due60), stillSubscribed: n(r?.kept60) },
+      left: n(r?.left_list),
+      reachedByLaterLetters: n(r?.reached),
+      clickedLaterLetters: n(r?.clicked),
+    };
+  };
+  return { percent, groups: [group('treatment'), group('holdout')] };
+}
+
+export async function emailReport(days: EmailReportWindow, now = new Date(), opts: { holdoutPercent?: number } = {}): Promise<EmailReport> {
   const since = new Date(now.getTime() - days * 86400_000).toISOString();
   const [funnel] = await sql`
     SELECT count(DISTINCT COALESCE(address_hash, id::text)) FILTER (WHERE type = 'signup') AS signups,
@@ -185,6 +267,7 @@ export async function emailReport(days: EmailReportWindow, now = new Date()): Pr
      ORDER BY r.created_at DESC, r.locale LIMIT 30`;
   const joined = n(funnel?.confirmed);
   const left = n(funnel?.left_list);
+  const holdback = await holdbackReport(opts.holdoutPercent ?? holdoutPercent(process.env), now);
   return {
     days,
     since,
@@ -216,6 +299,7 @@ export async function emailReport(days: EmailReportWindow, now = new Date()): Pr
       bounced: n(r.bounced),
       complained: n(r.complained),
     })),
+    holdback,
   };
 }
 

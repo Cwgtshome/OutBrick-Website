@@ -157,4 +157,22 @@ export type EmailReport = {
     bounced: number;
     complained: number;
   }[];
+  /**
+   * The welcome series against its hold-back group (readers who got welcome 1 only), over every
+   * reader confirmed since the hold-back began, whatever the period. `percent` is the configured
+   * hold-back size. Small groups are noisy: read the sample sizes before the rates.
+   */
+  holdback: {
+    percent: number;
+    groups: {
+      group: 'treatment' | 'holdout';
+      readers: number;
+      /** Readers who joined at least 30 (60) days ago, and how many of them had not left by then. */
+      at30: { eligible: number; stillSubscribed: number };
+      at60: { eligible: number; stillSubscribed: number };
+      left: number;
+      reachedByLaterLetters: number;
+      clickedLaterLetters: number;
+    }[];
+  };
 };

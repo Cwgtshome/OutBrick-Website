@@ -60,6 +60,8 @@ All in `emails/core.ts` and `emails/friends.ts`; templates compose them.
 | Picks | `picks()` | One-tap answers (yes/no, ratings) as tiles, each a signed link to a confirmation page. |
 | Puzzle | `puzzle(ctx, board, copy, host)` | A real board in table cells. Tap the brick that moves first. |
 | Friend grid | `friendGrid()` (lifecycle.ts) | The nine friends cheering on name plates (welcome 3). |
+| Friends' letter | `letterBlock()` via issue `letter: { friend, body }` | One friend writes the issue's opening letter, signs it, and hosts the email. |
+| Community highlights | `communityBlock()` via issue `community: { title?, items }` | Up to four forum threads with brick bullets and an optional note each. |
 
 ## The cast
 
@@ -113,6 +115,8 @@ brick in `solution` is the answer; each brick in `solution` leaves through its o
 Only author boards that are true under the game's rules (slide until stopped; a brick leaves
 through the gate of its colour) and have exactly one first move.
 
+**The monthly friends' letter** (9 October 2026): an issue file can open with a letter from one friend (`"letter": { "friend": "poppy", "body": "…Markdown…" }`) and list forum highlights (`"community": { "items": [{ "title", "href", "note" }] }`). Rotate the writer month by month through the cast, keep the letter to two short paragraphs in the friend's voice, and only state what is true in the game. Sample: `newsletter-letter` (Poppy, with the weekly puzzle and two community links). Send it like any issue with `scripts/send-newsletter.mjs`.
+
 Shipped: `firstPuzzle` (welcome 2, hosted by Peach) and `weeklyPuzzle` (the `newsletter-puzzle`
 sample, hosted by Sprout). Any issue file can carry `"puzzle": { host, board, copy }`.
 
@@ -145,7 +149,17 @@ board). Gmail and Outlook were checked by simulation only.
 
 ## Roadmap
 
-In order of value. Each item names what it needs.
+Done, 9 October 2026 (see EMAIL-LIFECYCLE.md):
+
+- ~~**Engagement on clicks, not opens**~~: "still want these?" and the sunset read the last click
+  or site milestone, never an open (Mail Privacy Protection); at most 25 re-engagement emails a
+  day (`NEWSLETTER_REENGAGE_DAILY_CAP`).
+- ~~**Pause and frequency**~~: the preferences page offers a 30- or 90-day pause and "Monthly
+  only", in six languages; both reach Broadcasts through Resend Topics.
+- ~~**Welcome series hold-back**~~: 10 % of new readers (`NEWSLETTER_HOLDOUT_PERCENT`) get welcome
+  1 only; the admin Email report compares the groups with their sample sizes.
+
+Still open, in order of value. Each item names what it needs.
 
 1. **Brick of the week**, fortnightly: a puzzle issue to the Tips topic. Needs one authored board
    and copy per issue (six languages), sent with `scripts/send-newsletter.mjs`.

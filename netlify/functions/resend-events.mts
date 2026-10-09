@@ -6,12 +6,13 @@
 // email.* event (and an unsubscribing contact.updated) is recorded in email_events for the
 // admin's email report (netlify/lifecycle/analytics.ts), hashed, never with the address. Then:
 //
-//   - email.opened, email.clicked: a letter from news@ (a Broadcast or a one-to-one newsletter
-//     email) was read, which marks that reader engaged. "Still want these?"
-//     (netlify/lifecycle/newsletter.ts) needs this before it can ever ask anyone; turn that on
-//     with NEWSLETTER_ENGAGEMENT_TRACKING=on only once this webhook delivers. Apple Mail Privacy
-//     Protection fetches images for every message, so opens over-count. That only ever keeps
-//     people on the list; it never removes anyone.
+//   - email.clicked: a link in a letter from news@ (a Broadcast or a one-to-one newsletter
+//     email) was followed, which marks that reader engaged (an unsubscribe link does not).
+//     "Still want these?" (netlify/lifecycle/newsletter.ts) needs this before it can ever ask
+//     anyone; turn that on with NEWSLETTER_ENGAGEMENT_TRACKING=on only once this webhook
+//     delivers. email.opened is recorded for the report and nothing more: Apple Mail Privacy
+//     Protection fetches the images of every message, so an open is no evidence of reading
+//     and would keep every Apple Mail reader "engaged" for ever.
 //   - email.bounced (permanent bounces only), email.complained, email.suppressed: from any of
 //     our senders. The address is marked suppressed in newsletter_subscribers and every unsent
 //     outbox email to it is cancelled, newsletter or not. A complaint also unsubscribes the
@@ -77,9 +78,11 @@ export async function handleResendEvent(req: Request, env: Env = process.env, de
   const at = eventTime(event);
   await recordWebhookEvent(event, svixId, env.RESEND_API_KEY);
 
-  if (type === 'email.opened' || type === 'email.clicked') {
+  if (type === 'email.clicked') {
     const from = typeof data.from === 'string' ? data.from : '';
-    if (/news@outbrick\.site/i.test(from)) for (const email of addressesOf(data.to)) await markEngaged(email);
+    const click = data.click && typeof data.click === 'object' ? (data.click as Record<string, unknown>) : {};
+    const leaving = /unsubscribe/i.test(toText(click.link));
+    if (/news@outbrick\.site/i.test(from) && !leaving) for (const email of addressesOf(data.to)) await markEngaged(email);
   } else if (type === 'contact.updated') {
     const email = normalizeEmail(data.email);
     if (email && data.unsubscribed === true) {

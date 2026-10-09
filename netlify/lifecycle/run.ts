@@ -1,7 +1,8 @@
 // One tick of the lifecycle outbox (netlify/functions/lifecycle-outbox.mts, every ten minutes):
 //
-//   1. once a day, in the 08:00 UTC wake window the other daily jobs share, a sweep: queue
-//      "still want these?" (only with engagement tracking on), requeue Resend contact syncs still
+//   1. once a day, in the 08:00 UTC wake window the other daily jobs share, a sweep: end the
+//      newsletter pauses that are over, queue "still want these?" (only with engagement tracking
+//      on, at most NEWSLETTER_REENGAGE_DAILY_CAP a day), requeue Resend contact syncs still
 //      owed, apply the retention periods the privacy policy states, import pre-existing
 //      newsletter readers once, and prune the outbox, the webhook receipts and email analytics
 //      older than 400 days. Each step is isolated, so one failure never skips the rest;
@@ -15,7 +16,7 @@ import { platformStore } from '../platform.ts';
 import { sql } from '../community/db.ts';
 import { sendEmail } from '../../emails/resend.ts';
 import { prepareFeedback, prepareFixed } from './cases.ts';
-import { applyRetention, backfillSubscribers, prepareReengage, prepareResendSync, prepareSunset, prepareWelcome, processReleaseBroadcasts, requeueResendSync, sweepReengagement, type ReleaseSummary } from './newsletter.ts';
+import { applyRetention, backfillSubscribers, prepareReengage, prepareResendSync, prepareSunset, prepareWelcome, processReleaseBroadcasts, requeueResendSync, resumePaused, sweepReengagement, type ReleaseSummary } from './newsletter.ts';
 import { pruneEmailEvents } from './analytics.ts';
 import { drain, outboxGate, outboxRan, pruneOutbox, type DrainSummary, type Preparer, type Sender } from './outbox.ts';
 import { preparePolicy, prepareSecurity } from './security.ts';
@@ -116,6 +117,7 @@ export async function lifecycleTick(
         console.error(`[lifecycle] subscriber import failed: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
+    const resumed = await step('pause resume', () => resumePaused(apiKey, env, now));
     const queued = await step('re-engagement sweep', () => sweepReengagement(env, now));
     const resynced = await step('Resend contact requeue', () => requeueResendSync(env, now));
     await step('retention', () => applyRetention());
@@ -123,6 +125,7 @@ export async function lifecycleTick(
     await step('webhook receipt prune', () => sql`DELETE FROM resend_webhook_events WHERE received_at < now() - interval '30 days'`);
     await step('email analytics prune', () => pruneEmailEvents());
     await markSweep(day);
+    if (resumed) console.log(`[lifecycle] sweep ended ${resumed} newsletter pause(s)`);
     if (queued) console.log(`[lifecycle] sweep queued ${queued} re-engagement email(s)`);
     if (resynced) console.log(`[lifecycle] sweep requeued ${resynced} Resend contact sync(s)`);
     swept = true;

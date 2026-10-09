@@ -1,6 +1,7 @@
 'use client';
 // The Email panel of /community/admin, for admins: the newsletter funnel, the list, each
-// template's delivery and engagement, languages, clicked links and release Broadcasts. Every
+// template's delivery and engagement, languages, clicked links, release Broadcasts and the
+// welcome series against its hold-back group, each rate beside its sample size. Every
 // number is an aggregate from GET /api/community/admin/email (netlify/lifecycle/analytics.ts);
 // no reader's address or identifier reaches this page. Clicks lead; opens are approximate.
 import { useId, useState, type ReactNode } from 'react';
@@ -58,6 +59,8 @@ export function EmailAnalytics() {
     whole > 0 ? new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1 }).format(part / whole) : '–';
   // A count with its share of a base: "42 (12.5 %)".
   const share = (part: number, whole: number) => `${n(part)} (${pct(part, whole)})`;
+  // A rate with its sample spelled out, for the hold-back comparison: "30 of 40 (75 %)".
+  const outOf = (part: number, whole: number) => `${w.of(n(part), n(whole))} (${pct(part, whole)})`;
   const r: EmailReport | null = load.data;
   return (
     <section className="cm-section" aria-labelledby={`${id}-h`} aria-busy={load.loading || undefined}>
@@ -194,6 +197,30 @@ export function EmailAnalytics() {
               share(b.complained, b.delivered),
             ])}
           />
+          {r.holdback ? (
+            <>
+              <h3>{w.holdback}</h3>
+              <p>{r.holdback.percent > 0 ? w.holdbackLede(new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1 }).format(r.holdback.percent / 100)) : w.holdbackOff}</p>
+              <p className="cm-note">{w.holdbackNoise}</p>
+              <Table
+                caption={w.holdbackCaption}
+                empty={w.empty}
+                head={[w.group, w.readers, w.kept30, w.kept60, w.leftRate, w.laterClicks]}
+                rows={
+                  r.holdback.groups.some((g) => g.readers > 0)
+                    ? r.holdback.groups.map((g) => [
+                        g.group === 'holdout' ? w.holdout : w.treatment,
+                        n(g.readers),
+                        outOf(g.at30.stillSubscribed, g.at30.eligible),
+                        outOf(g.at60.stillSubscribed, g.at60.eligible),
+                        outOf(g.left, g.readers),
+                        outOf(g.clickedLaterLetters, g.reachedByLaterLetters),
+                      ])
+                    : []
+                }
+              />
+            </>
+          ) : null}
         </>
       )}
     </section>
