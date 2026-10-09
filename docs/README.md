@@ -10,6 +10,7 @@ checks, then [ARCHITECTURE.md](ARCHITECTURE.md) for source locations, configurat
 | [Claude entry point](../CLAUDE.md) | Claude reading order |
 | [Repository README](../README.md) | Hosting, forms, emails and newsletter workflow |
 | [Community plan](COMMUNITY-PLAN.md) | Forum design, contracts, optional features and idle gates; status lives separately |
+| [Help Centre](HELP-CENTRE.md) | The illustrated player guides at /community/help: content model, translations, screenshots and checks |
 | [Journal brief](JOURNAL-BRIEF.md) | Editorial direction |
 | [Translation brief](TRANSLATION-BRIEF.md) | Localized content guidance |
 | [Captures](CAPTURES.md) | Screenshot provenance and workflow |

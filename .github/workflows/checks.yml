@@ -57,6 +57,8 @@ jobs:
       - name: Playable boards are solvable at their targets
         run: node --experimental-strip-types scripts/verify-board-levels.mjs
 
+      - name: Help Centre guides match English in every language
+        run: pnpm check:help
       - name: Translation and route coverage
         run: node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/audit-localization.mjs
 

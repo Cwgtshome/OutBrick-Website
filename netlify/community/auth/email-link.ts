@@ -20,7 +20,7 @@ import { communityCopy } from '../../../emails/community-i18n.ts';
 import { normalizeEmail } from '../../../emails/links.ts';
 import { SENDERS, sendEmail } from '../../../emails/resend.ts';
 import { ipHash, rateAllow, randomToken, sha256, sql, transaction } from '../db.ts';
-import { ApiError, badRequest, filledTooFast, json, readJson, requestOrigin, tooMany } from '../http.ts';
+import { ApiError, badRequest, filledTooFast, honeypotHit, tooFast, json, readJson, requestOrigin, tooMany } from '../http.ts';
 import { isConfiguredAdmin, startSession } from '../session.ts';
 import { signInWithProfile } from './members.ts';
 import { asLocale, pageResponse, redirectTo, safeReturnTo, signInErrorRedirect } from './util.ts';
@@ -43,8 +43,10 @@ const parseData = (value: unknown): Record<string, unknown> => (typeof value ===
 export async function requestEmailSignIn(req: Request): Promise<Response> {
   const body = await readJson(req, 8 * 1024);
   const locale = asLocale(body.locale);
-  // A bot that fills the hidden field is told it worked and nothing is sent.
-  if ((typeof body.website === 'string' && body.website.trim()) || filledTooFast(body)) return json({ sent: true });
+  // A bot that fills the hidden field is told it worked and nothing is sent. A form sent faster
+  // than a person fills one in (an autofilled address and a quick tap) is asked to send again.
+  if (honeypotHit(body)) return json({ sent: true });
+  if (filledTooFast(body)) throw tooFast();
   if (!apiKey()) throw new ApiError(503, 'unavailable', 'Email sign-in is not available right now.');
   const email = normalizeEmail(body.email);
   if (!email) throw badRequest('invalid', 'That doesn’t look like an email address.', { email: 'invalid' });

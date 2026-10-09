@@ -31,6 +31,7 @@ import {
 import type { Locale } from '../i18n/locales.ts';
 import { escapeHtml as e, fullDate, number } from './format.ts';
 import { guideWords } from './player-guides.ts';
+import { communityFx } from '../i18n/community-fx.ts';
 
 export const STATIC_START = '<!--cm-static-start-->';
 export const STATIC_END = '<!--cm-static-end-->';
@@ -96,12 +97,18 @@ export function homeStaticHtml(locale: Locale): string {
     }) +
       body(
         `<ul class="cm-points">${copy.home.points.map((p) => `<li>${e(p)}</li>`).join('')}</ul>` +
-          `<section class="cm-section" aria-labelledby="cm-player-guides-h"><h2 id="cm-player-guides-h">${e(guideWords[locale].label)}</h2><p>${e(guideWords[locale].intro)}</p><a class="btn" href="${communityPath(locale, '/c/help')}">${e(guideWords[locale].hub)}</a></section>` +
+          helpCentreHtml(locale) +
           `<noscript><p class="cm-note">${e(copy.home.noScript)}</p></noscript>` +
           `<section class="cm-section" aria-labelledby="cm-cats-h"><h2 id="cm-cats-h">${e(copy.home.categoriesHeading)}</h2><ul class="cm-cats">${cats}</ul></section>` +
           `<p class="cm-links"><a href="${communityPath(locale, '/faq')}">${e(copy.faq.title)}</a> <a href="${communityPath(locale, '/guidelines')}">${e(copy.home.readGuidelines)}</a></p>`,
       ),
   );
+}
+
+/** The Help Centre card on the community home, before and after script (HomeView draws the same). */
+export function helpCentreHtml(locale: Locale): string {
+  const h = communityFx[locale].ux.helpCentre;
+  return `<section class="cm-section cm-helpcentre" aria-labelledby="cm-help-centre-h"><h2 id="cm-help-centre-h">${e(h.heading)}</h2><p>${e(h.text)}</p><p class="cm-row"><a class="btn" href="${communityPath(locale, '/help')}">${e(h.link)}</a><a class="cm-textlink" href="${communityPath(locale, '/c/help')}">${e(guideWords[locale].hub)}</a></p></section>`;
 }
 
 /** The FAQ before script: the support page's answers. The client adds the community's. */
@@ -217,9 +224,11 @@ function postHtml(
   const badge = post.author ? roleBadge(copy, post.author.role) : null;
   const date = fullDate(locale, post.createdAt, 'UTC');
   const lang = detail.thread.language;
+  // The separators are real text for screen readers ("Mourad, OutBrick team, 7 October…"):
+  // the heading is a flex row, which drops plain spaces between its items.
   return `<article class="cm-post${post.isSolution ? ' is-solution' : ''}" id="post-${post.number}" aria-labelledby="post-${post.number}-h"><h2 class="cm-post-h" id="post-${post.number}-h"><span class="cm-author">${e(name)}</span>${
-    badge ? `<span class="cm-role">${e(badge)}</span>` : ''
-  }<span class="cm-sep" aria-hidden="true">, </span><time datetime="${e(post.createdAt)}">${e(date)}</time></h2>${
+    badge ? `<span class="sr-only">, </span><span class="cm-role">${e(badge)}</span>` : ''
+  }<span class="cm-sep" aria-hidden="true">,</span><span class="sr-only">, </span><time datetime="${e(post.createdAt)}">${e(date)}</time></h2>${
     post.isSolution
       ? `<p class="cm-badge cm-badge-solution">${e(copy.thread.solution)}</p>`
       : ''

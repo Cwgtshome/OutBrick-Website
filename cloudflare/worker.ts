@@ -20,6 +20,7 @@ import { workerDatabase, r2Store } from './adapters.ts';
 import { routeRule } from './routing.ts';
 import { submitForm, drainForms } from './forms.ts';
 import type { TranslationBudget } from './translation-budget.ts';
+import { communityAddress } from '../lib/community/routes.ts';
 
 const legacy: Record<string, (req: Request) => Promise<Response>> = {
   'newsletter-confirm': newsletterConfirm,
@@ -60,6 +61,18 @@ async function fetchSite(req: Request, env: CloudflareEnv): Promise<Response> {
     return nativeForm && response.ok ? Response.redirect(url.href, 303) : response;
   }
   if (!['GET', 'HEAD'].includes(req.method)) return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET, HEAD' } });
+
+  // Share the forum's accepted address shapes with its client and Netlify edge handler.
+  // Read the localized 404 through the asset binding, never through the public origin.
+  const address = communityAddress(path);
+  if (address && !address.known) {
+    const file = new URL(url);
+    file.pathname = address.locale === 'en' ? '/404.html' : `/${address.locale}/404.html`;
+    const page = await env.ASSETS.fetch(new Request(file, { method: req.method }));
+    const headers = new Headers(page.headers);
+    headers.set('Cache-Control', 'no-store');
+    return new Response(req.method === 'HEAD' ? null : page.body, { status: 404, headers });
+  }
 
   const rule = routeRule(path);
   // Force rules override physical alias files, just as they did on Netlify.
@@ -125,6 +138,10 @@ async function scoped<T>(env: CloudflareEnv, work: () => Promise<T>): Promise<T>
 export default {
   async fetch(req, env) {
     try {
+      const staging = env.CONTEXT === 'production' && new URL(req.url).hostname.endsWith('.workers.dev');
+      // A production database must never accept customer writes through its staging hostname.
+      // Auth GET routes can also write state, so keep every backend route unavailable there.
+      if (staging && (!['GET', 'HEAD'].includes(req.method) || /^\/(?:api\/|\.netlify\/functions\/)/.test(new URL(req.url).pathname))) return unavailable();
       const response = await scoped(env, () => fetchSite(req, env));
       if (env.CONTEXT !== 'preview' && !new URL(req.url).hostname.endsWith('.workers.dev')) return response;
       const headers = new Headers(response.headers);

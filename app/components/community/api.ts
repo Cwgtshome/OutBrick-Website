@@ -59,6 +59,7 @@ import type {
   PasskeyLoginRequest,
   PasskeyInfo,
 } from '../../../lib/community/contract';
+import { minFillMs } from '../../../lib/community/contract';
 import type {
   AdminSnapshot,
   Application,
@@ -73,6 +74,16 @@ import type {
 } from '../../../lib/community/admin-contract';
 
 export const API = '/api/community';
+
+/**
+ * Wait out the rest of the time-to-fill check (lib/community/contract.ts, minFillMs) before a
+ * form is sent, measured from when the form was shown. A quick real reply ("Thanks!") is then
+ * never mistaken for a bot; the wait is at most three seconds and only for the very quick.
+ */
+export function waitOutFillCheck(startedAt: number): Promise<void> {
+  const rest = startedAt + minFillMs + 250 - Date.now();
+  return rest > 0 ? new Promise((done) => window.setTimeout(done, rest)) : Promise.resolve();
+}
 
 /**
  * Background polling (the bell, live replies) only while someone is actually here: the tab is

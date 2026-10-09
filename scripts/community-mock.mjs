@@ -69,6 +69,7 @@ const forum = (await import('../netlify/functions/community-api.mts')).default;
 const accounts = (await import('../netlify/functions/community-auth.mts')).default;
 const { renderThreadPage, parseThreadPath } = await import('../netlify/edge-functions/community-thread.ts');
 const { threadPath } = await import('../lib/community/contract.ts');
+const { communityAddress } = await import('../lib/community/routes.ts');
 
 const authPaths = /^\/api\/community\/(session|auth\/|me(\/|$)|notifications(\/|$)|email\/)/;
 const apiFor = (pathname) => (authPaths.test(pathname) ? accounts : forum);
@@ -263,7 +264,9 @@ async function resolve(pathname) {
   const found = (await file(`${base}.html`)) ?? (await file(join(base, 'index.html'))) ?? (await file(base));
   if (found) return found;
   // netlify.toml: /community/* and /<locale>/community/* are served from the language's shell.
+  // netlify/edge-functions/community-route.ts: an address the community cannot draw is a 404.
   const community = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/community\//);
+  if (community && !communityAddress(pathname)?.known) return null;
   if (community) return join(root, community[1] ? `${community[1]}/community.html` : 'community.html');
   const challenge = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/c\//);
   if (challenge) return join(root, challenge[1] ? `${challenge[1]}/c.html` : 'c.html');

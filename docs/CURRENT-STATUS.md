@@ -3,6 +3,65 @@
 Updated 8 October 2026. This is a dated handoff, not a claim that account state remains unchanged.
 Recheck live Git, `/build-info.json`, `/api/community/session` and relevant providers before acting.
 
+## Cloudflare integrated preview checkpoint (9 October 2026 UTC; not live)
+
+Migration branch integrates website main `35ab1507a0532e114313ece826a3beee7aaded0b`, including the
+Help Centre and forum fixes. Cloudflare shares `communityAddress` with the forum router and answers
+unknown community pages/categories with localized 404 assets. Production staging refuses backend
+routes and non-read requests, even when a production database is later bound.
+
+Integrated build, lint, typecheck, SEO, Help Centre and internal-link checks pass. 259 backend,
+authentication, lifecycle, form, platform and free-translation tests pass. Preview version
+`6adc5102-3eb9-450a-ac86-a765f4768920` passes 51 static-route checks, including Help Centre and
+unknown community routes in all six languages. Preview migrations preserve 51 legacy forms without
+sending email. Browser CI and actual canonical-domain authentication remain cutover gates.
+
+Fresh private `export-04-precutover` restores and matches all 37 tables, 976 rows, 18 sequences and
+backup file hashes locally. Production Neon still exactly matches the initial 749-row snapshot;
+it has no customer writes. Source is still active, so this is not the final frozen-source snapshot.
+Both required Blobs stores were explicitly inventoried: uploads empty, signals three objects.
+
+The owner's second Google OAuth secret is installed in preview and accepted by Google's token
+endpoint (deliberately invalid authorization code yields `invalid_grant`, not `invalid_client`).
+Real Google sign-in is still unverified. Original Apple/Resend credentials are preserved. Existing
+Bing API key authenticates and the Search Console service account has Full property access, but its
+downloaded JSON key is missing locally. GitHub currently has no repository/environment secrets;
+the Cloudflare connector cannot create deployment tokens. Credential creation needs owner handoff.
+Traffic and scheduled writers remain on Netlify; no source freeze or data deletion has occurred.
+
+
+## Help Centre and forum overhaul (8–9 October 2026, branch `claude/community-help`; not deployed)
+
+**Help Centre** at `/community/help` and `/<locale>/community/help`: 20 team-written guides to the
+released game (every menu, the board, specials and blockers, boosters and Pause, lives and the
+out-of-moves screen, the Journey, rewards and the Brick Pass, the Shop and restoring, friends and the
+Wardrobe, every setting, Apple features, progress and privacy, troubleshooting, the community and bug
+reports) with an accessibility shelf: an overview, VoiceOver, Voice Control/Switch Control/keyboards,
+and vision/hearing/motion. All six languages, written with the game's own localized labels. 24 real
+captures per language from the 5.1 (67) Debug build on an iPhone 17 Pro Max simulator (Debug-only
+Board Lab/RCP rows hidden); guides stamped as checked against 5.1.1 (68), whose only change is the
+tip-card fix. See [HELP-CENTRE.md](HELP-CENTRE.md). Linked from the community bar and home, Support,
+Accessibility and the footer. `pnpm check:help` runs in CI.
+
+**Forum:** fixes from a code and browser audit: unambiguous time zones (the thread page and lists
+disagreed by the reader's offset), no home HTML shown on other routes, real 404s for unknown community
+addresses (`netlify/edge-functions/community-route.ts`), byline separators for screen readers,
+Back/Forward keeps filters, honest retryable "too fast" replies instead of silent drops, Unicode slugs,
+canonicals on client pages, label-in-name, stronger focus and field contrast, a collapsible mobile bar
+with Help Centre and Start a thread, a paginated `/community/latest`, drafts with restore, Copy link,
+QAPage data for solved threads, and community styles on the site tokens (the community-only dark
+mode is gone). Migration `20261008170000_player-guide-help-centre-notes` prepends a Help Centre link
+to the seeded player-guide threads (additive, idempotent; runs after `20261008150000`).
+
+Evidence: build, lint, `audit:seo` (0 errors), localization and rendered-copy audits (0 carryovers),
+internal links, `check:help`, 253 community/auth/lifecycle tests on PGlite, and axe with no
+violations at 390 and 1280 px on Help Centre pages in all six languages, Support, Accessibility and
+the community. Not verified: production publication (Netlify credits exhausted; Cloudflare cutover in
+draft PR #17), real VoiceOver on a device for the new pages.
+
+Found in the game, not fixed here: in 5.1 missions appear not to progress on Slide & Match boards
+(levels 1–2,000), "Advertising choices" is untranslated, Settings › Community and Report a bug send
+pt-BR players to English pages, and a French string reads "Ta série de 1 victoires".
 
 ## Performance pass (8 October 2026, on main; not deployed — Netlify production deploys paused for credits)
 

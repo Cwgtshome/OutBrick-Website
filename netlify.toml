@@ -187,6 +187,9 @@
 # served from the shell of its language with a 200, and the client app reads the address. Thread
 # pages are filled in for readers without script and for search engines by
 # netlify/edge-functions/community-thread.ts, which runs on the original path before this rewrite.
+# An address the community cannot draw (/community/nope, /community/c/<unknown>, /community/feed.xml)
+# never reaches this rule: netlify/edge-functions/community-route.ts answers it with the language's
+# 404 page and status 404 (lib/community/routes.ts lists what exists; /community/help/** passes).
 [[redirects]]
   from = "/community/*"
   to = "/community"

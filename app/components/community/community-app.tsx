@@ -43,6 +43,7 @@ import {
   privateRoutes,
   type AppContext,
   type Navigate,
+  type PageOptions,
   type Route,
 } from './core';
 import {
@@ -50,6 +51,7 @@ import {
   FaqView,
   GuidelinesView,
   HomeView,
+  LatestView,
   MemberView,
   NotFoundView,
   SearchView,
@@ -103,6 +105,25 @@ const noFeatures = {
 const locationSnapshot = () =>
   window.location.pathname + window.location.search;
 
+const SITE = 'https://www.outbrick.site';
+
+/**
+ * The pages whose server-rendered HTML is in `[data-cm-static]` on first load: the prerendered
+ * home, FAQ and guidelines, and the edge-rendered threads, library and editorial pages. Any other
+ * address gets the home's HTML from the shell, which must not be left on screen (or read out)
+ * as if it were that page.
+ */
+const staticRoutes = new Set<Route['name']>(['home', 'faq', 'guidelines', 'thread', 'library', 'content']);
+
+/** Empty and hide the server-rendered slot. True when there was something to clear. */
+function clearStaticSlot(): boolean {
+  const slot = document.querySelector<HTMLElement>('[data-cm-static]');
+  if (!slot || !slot.childNodes.length) return false;
+  slot.replaceChildren();
+  slot.hidden = true;
+  return true;
+}
+
 function ViewFor({ route }: { route: Route }) {
   switch (route.name) {
     case 'home':
@@ -145,6 +166,8 @@ function ViewFor({ route }: { route: Route }) {
       return <LeaderboardView route={route} />;
     case 'bookmarks':
       return <BookmarksView route={route} />;
+    case 'latest':
+      return <LatestView route={route} />;
     default:
       return <NotFoundView />;
   }
@@ -297,6 +320,9 @@ export function CommunityApp({
       if (target.origin !== window.location.origin) return;
       if (target.pathname !== base && !target.pathname.startsWith(`${base}/`))
         return;
+      // The Help Centre is a set of prerendered pages, not a view of this app.
+      if (target.pathname === `${base}/help` || target.pathname.startsWith(`${base}/help/`))
+        return;
       const here = window.location;
       if (
         target.pathname === here.pathname &&
@@ -315,6 +341,18 @@ export function CommunityApp({
     () => (url ? parseRoute(locale, url) : { name: 'home' }),
     [url, locale],
   );
+
+  // The static HTML stays only while it is this very page's: on a route the shell has no HTML
+  // for (search, settings, a member…), or once the reader moves on before the first page has its
+  // data, it goes at once and the new page shows its own head and "Loading…".
+  const [firstAddress, setFirstAddress] = useState<string | null>(null);
+  if (hydrated && firstAddress === null) setFirstAddress(address);
+  const staticIsThisPage =
+    staticRoutes.has(route.name) && (firstAddress === null || address === firstAddress);
+  if (hydrated && staticShowing && !staticIsThisPage) setStaticShowing(false);
+  useEffect(() => {
+    if (!staticShowing) clearStaticSlot();
+  }, [staticShowing]);
 
   // A member who has not picked a display name yet is sent to choose one first.
   useEffect(() => {
@@ -345,7 +383,7 @@ export function CommunityApp({
   }, [url, session, announce, copy]);
 
   const pageReady = useCallback(
-    (title: string) => {
+    (title: string, options: PageOptions = {}) => {
       document.title = /OutBrick/.test(title)
         ? title
         : copy.meta.pageTitle(title);
@@ -356,7 +394,7 @@ export function CommunityApp({
       if (robotsOriginal.current === null)
         robotsOriginal.current = robots?.content ?? '';
       const routeName = parseRoute(locale, currentUrl()).name;
-      if (privateRoutes.has(routeName)) {
+      if (privateRoutes.has(routeName) || options.noindex) {
         if (!robots) {
           robots = document.createElement('meta');
           robots.name = 'robots';
@@ -376,12 +414,26 @@ export function CommunityApp({
           link.href = communityPath(l) + rest + window.location.search;
       }
 
-      const slot = document.querySelector<HTMLElement>('[data-cm-static]');
-      if (slot && slot.childNodes.length) {
-        slot.replaceChildren();
-        slot.hidden = true;
-        setStaticShowing(false);
+      // The canonical address: the view's own (a thread's), or this one without filters, keeping
+      // only the page number. The shell's canonical is /community, which every page would
+      // otherwise claim to be.
+      const here = currentUrl();
+      const page = Number(here.searchParams.get('page'));
+      const canonicalPath =
+        options.canonical ??
+        here.pathname.replace(/\/+$/, '') +
+          (Number.isInteger(page) && page > 1 ? `?page=${page}` : '');
+      let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.rel = 'canonical';
+        document.head.appendChild(canonical);
       }
+      canonical.href = SITE + canonicalPath;
+      for (const meta of document.querySelectorAll<HTMLMetaElement>('meta[property="og:url"]'))
+        meta.content = SITE + canonicalPath;
+
+      if (clearStaticSlot()) setStaticShowing(false);
 
       const hash = decodeURIComponent(window.location.hash.slice(1));
       const wasFirst = firstPage.current;
@@ -446,6 +498,8 @@ export function CommunityApp({
       <div className="cm-app">
         {hydrated && url ? (
           <ViewFor
+            // Search and a category keep their component (and focus) when only the query
+            // changes; their filters follow the address (Back and Forward included).
             key={
               route.name === 'search' || route.name === 'category'
                 ? url.pathname

@@ -52,12 +52,16 @@ const identities = new Set([
   'Garden City', 'Celebration Square', 'Bamboo Springs', 'Waterwheel Woods', 'Desert Oasis', 'Windmill Walk', 'Rainbow Canal', 'Dinosaur Grove', 'Crystal Valley', 'Firefly Wetlands', 'Market Day', 'Hidden Courtyards', 'Lavender Hills', 'Button Factory', 'Cherry Blossom Town', 'First Light', 'Cloud Carnival', 'Autumn Orchard', 'Sunflower Railway', 'Coral Cove', 'Pirate Harbor', 'Royal Rose Court', 'Mushroom Forest', 'Unicorn Meadow', 'Festival Gardens', 'Seashell Beach', 'Clover Farm', 'Ember Volcano', 'Peppermint Plaza', 'Grand Promenade', 'Moonlit Meadow', 'Honeybee Hollow', 'Spaceport Gardens', 'Snowflake Village',
   'Celeste', 'Hades', 'Pokémon GO', 'Tetris', 'Wordle', 'Stardew Valley', 'Monument Valley', 'Papers, Please', 'Angry Birds', 'Minecraft', 'Animal Crossing', 'The Sims', 'Klotski', 'Block Out! - Color Sort Puzzle', 'Block Buster - No Timer', 'Color Block Jam',
   'Deutsch', 'Français', 'Español', '日本語', 'English', 'Português (Brasil)', 'APA 7', 'MIT', 'UX', '#OutBrick', '#BlockSortPuzzle',
+  // Help Centre (lib/help): keys, Apple feature names, product and game names, Markdown samples,
+  // and game labels the game itself leaves in English in some languages.
+  'Esc', '(Escape)', 'H', 'Tab', 'Return', 'Space', 'Google', 'Zoom', 'Widget', 'Spotlight:', 'Handoff:', '@name', '- item', 'Off | On',
+  'Brick Pass', 'Brick Royale', 'Slide & Match', 'UFO', 'Premium', 'Pass', 'Passes', 'Shop', 'Shop.', 'Avatar', 'Boss', 'Normal', 'Booster', 'Roadmap', 'Combos', 'Journey', 'Play next level',
 ]);
 // Same spelling is legitimate only in these specific target languages.
 const nativeShared = {
-  fr: new Set(['France', 'Canada', 'Sources', 'Marketing', 'Design', 'Type', 'Journal', 'Contact', 'Menu', 'Commission', 'Questions', 'Support', 'Newsletter', 'Version', 'Standard', 'Genre', 'Clip', 'Stickers', 'boulevard', 'motivation', 'parents', 'gamification', 'insight', 'flow', 'progression', 'expertise', 'nature', 'attention', 'routines', 'stress', 'smartphones']),
-  de: new Set(['optional', 'System', 'Name', 'Website', 'Level', 'Newsletter:', 'Widgets:', 'Journal', 'Support', 'Newsletter', 'Version', 'Standard', 'Design', 'Marketing', 'Community', 'Team', 'Genre', 'Clip', 'Stickers', 'Early Access', 'Gamification', 'gamification', 'flow', 'stress', 'smartphones']),
-  es: new Set(['nostalgia', 'Widgets:', 'Marketing', 'Clip', 'Stickers']),
+  fr: new Set(['Action', 'actions', 'Collection', 'Collection.', 'Important', 'Missions', 'Notifications', 'Orange', 'Pause', 'Plus', 'Secrets', 'Statue', 'Triangle', 'rotors', 'village', 'France', 'Canada', 'Sources', 'Marketing', 'Design', 'Type', 'Journal', 'Contact', 'Menu', 'Commission', 'Questions', 'Support', 'Newsletter', 'Version', 'Standard', 'Genre', 'Clip', 'Stickers', 'boulevard', 'motivation', 'parents', 'gamification', 'insight', 'flow', 'progression', 'expertise', 'nature', 'attention', 'routines', 'stress', 'smartphones']),
+  de: new Set(['In', 'in', 'Orange', 'Pause', 'Pink', 'Plus', 'Statue', 'optional', 'System', 'Name', 'Website', 'Level', 'Newsletter:', 'Widgets:', 'Journal', 'Support', 'Newsletter', 'Version', 'Standard', 'Design', 'Marketing', 'Community', 'Team', 'Genre', 'Clip', 'Stickers', 'Early Access', 'Gamification', 'gamification', 'flow', 'stress', 'smartphones']),
+  es: new Set(['No', 'nostalgia', 'Widgets:', 'Marketing', 'Clip', 'Stickers']),
   'pt-BR': new Set(['Português (Brasil)', 'nostalgia', 'Marketing', 'Design', 'Cookies']),
   ja: new Set(),
 };
@@ -74,6 +78,8 @@ const citationTitles = new Set([
 export function carryoverException(entry, locale) {
   const text = normalizeCopy(entry.text);
   if (!/[A-Za-z]/.test(text)) return 'numbers-or-non-Latin';
+  // French counts that read the same as English ("2 guides", "167 villages", "25 minutes").
+  if (locale === 'fr' && /^\d[\d\s]* (?:guides?|villages|minutes)$/.test(text)) return 'native-shared-spelling';
   if (identities.has(text)) return 'proper-name-or-technical-identity';
   if (nativeShared[locale]?.has(text)) return 'native-shared-spelling';
   if (/^(?:https?:\/\/\S*|(?:www\.)?[\w.-]+\.(?:com|site)(?:\/\S*)?|YOURCODE\d+)$/.test(text)) return 'URL-or-example-identifier';

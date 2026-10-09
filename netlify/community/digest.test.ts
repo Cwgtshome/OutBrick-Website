@@ -141,12 +141,16 @@ void test('the unsubscribe link switches the digest off, and a failed send is re
   }
 });
 
-void test('the email sign-in form sent too fast is told it worked and sends nothing', async () => {
+void test('the email sign-in form sent too fast is asked to send again and sends nothing; the honeypot is told it worked', async () => {
   const restore = withEnv({ RESEND_API_KEY: TEST_RESEND_KEY });
   const fetchStub = stubFetch();
   try {
     const fast = await communityAuth(request('POST', '/api/community/auth/email', { body: { email: 'fast@example.com', locale: 'en', startedAt: Date.now() - 1000 } }));
-    assert.deepEqual(await fast.json(), { sent: true });
+    assert.equal(fast.status, 429);
+    assert.equal(((await fast.json()) as { error: { code: string } }).error.code, 'too_fast');
+    assert.equal(fetchStub.emails().length, 0);
+    const bot = await communityAuth(request('POST', '/api/community/auth/email', { body: { email: 'bot@example.com', locale: 'en', website: 'spam', startedAt: Date.now() - 8000 } }));
+    assert.deepEqual(await bot.json(), { sent: true });
     assert.equal(fetchStub.emails().length, 0);
     const slow = await communityAuth(request('POST', '/api/community/auth/email', { body: { email: 'slow@example.com', locale: 'en', startedAt: Date.now() - 8000 } }));
     assert.deepEqual(await slow.json(), { sent: true });

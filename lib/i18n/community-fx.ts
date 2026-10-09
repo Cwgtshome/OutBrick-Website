@@ -123,6 +123,15 @@ export type CommunityFxCopy = {
   notifications: { badge: (badge: string) => string; merged: (from: string, thread: string) => string };
   merged: string;
   deepLink: { notice: string; level: string; levelHint: string };
+  /** Added with the 8 October 2026 review: the Help Centre card, the latest-threads page, post links and drafts. */
+  ux: {
+    helpCentre: { heading: string; text: string; link: string };
+    latest: { title: string; lede: string; more: string };
+    searchPages: string;
+    menu: string;
+    post: { copyLink: string; share: string; copied: (n: string) => string; shared: string; failed: string };
+    draft: { restored: string; discard: string; discarded: string };
+  };
   errors: Record<string, string>;
 };
 
@@ -286,6 +295,14 @@ const en: CommunityFxCopy = {
   notifications: { badge: (badge) => `You earned the ${badge} badge`, merged: (from, thread) => `Your post in “${from}” is now in “${thread}”` },
   merged: 'This thread was merged into another one. You are reading that thread now.',
   deepLink: { notice: 'Filled in from the app. Check every field before posting.', level: 'Level', levelHint: 'Optional: the level number, if it happened on a board.' },
+  ux: {
+    helpCentre: { heading: 'Help Centre', text: 'Illustrated guides to every screen, setting and accessibility feature in OutBrick 5.1.', link: 'Open the Help Centre' },
+    latest: { title: 'Latest threads', lede: 'Every thread in your language and English, the most recently active first.', more: 'See all the latest threads' },
+    searchPages: 'Result pages',
+    menu: 'Menu',
+    post: { copyLink: 'Copy link', share: 'Share', copied: (n) => `Link to post ${n} copied.`, shared: 'Shared.', failed: 'The link could not be copied this time.' },
+    draft: { restored: 'Draft restored', discard: 'Discard', discarded: 'Draft discarded.' },
+  },
   errors: { too_many: 'That is too many at once. Wait a little and try again.', translate_failed: 'The translation didn’t work this time. Please try again in a minute.', unknown_credential: 'That passkey is not linked to an account here.', poll_closed: 'This poll has closed.', poll_has_votes: 'People have already voted, so the poll can no longer be changed.' },
 };
 
@@ -449,6 +466,14 @@ const fr: CommunityFxCopy = {
   notifications: { badge: (badge) => `Vous avez obtenu le badge ${badge}`, merged: (from, thread) => `Votre message de « ${from} » se trouve maintenant dans « ${thread} »` },
   merged: 'Cette discussion a été fusionnée avec une autre. Vous lisez maintenant celle-ci.',
   deepLink: { notice: 'Rempli depuis l’app. Vérifiez chaque champ avant de publier.', level: 'Niveau', levelHint: 'Facultatif : le numéro du niveau, si c’est arrivé sur un plateau.' },
+  ux: {
+    helpCentre: { heading: 'Centre d’aide', text: 'Des guides illustrés pour chaque écran, chaque réglage et chaque fonction d’accessibilité d’OutBrick 5.1.', link: 'Ouvrir le centre d’aide' },
+    latest: { title: 'Dernières discussions', lede: 'Toutes les discussions dans votre langue et en anglais, les plus récemment actives en premier.', more: 'Voir toutes les dernières discussions' },
+    searchPages: 'Pages de résultats',
+    menu: 'Menu',
+    post: { copyLink: 'Copier le lien', share: 'Partager', copied: (n) => `Lien vers le message ${n} copié.`, shared: 'Partagé.', failed: 'Impossible de copier le lien cette fois-ci.' },
+    draft: { restored: 'Brouillon restauré', discard: 'Supprimer', discarded: 'Brouillon supprimé.' },
+  },
   errors: { too_many: 'C’est trop d’un coup. Attendez un peu et réessayez.', translate_failed: 'La traduction n’a pas fonctionné cette fois. Réessayez dans une minute.', unknown_credential: 'Cette clé d’accès n’est liée à aucun compte ici.', poll_closed: 'Ce sondage est terminé.', poll_has_votes: 'Des personnes ont déjà voté : le sondage ne peut plus être modifié.' },
 };
 
@@ -612,6 +637,14 @@ const de: CommunityFxCopy = {
   notifications: { badge: (badge) => `Du hast das Abzeichen „${badge}“ erhalten`, merged: (from, thread) => `Dein Beitrag aus „${from}“ steht jetzt in „${thread}“` },
   merged: 'Dieses Thema wurde mit einem anderen zusammengeführt. Du liest jetzt das andere.',
   deepLink: { notice: 'Aus der App ausgefüllt. Prüf jedes Feld, bevor du veröffentlichst.', level: 'Level', levelHint: 'Optional: die Levelnummer, falls es auf einem Spielfeld passiert ist.' },
+  ux: {
+    helpCentre: { heading: 'Hilfe-Center', text: 'Bebilderte Anleitungen zu jedem Bildschirm, jeder Einstellung und jeder Bedienungshilfe in OutBrick 5.1.', link: 'Hilfe-Center öffnen' },
+    latest: { title: 'Neueste Themen', lede: 'Alle Themen in deiner Sprache und auf Englisch, die zuletzt aktiven zuerst.', more: 'Alle neuesten Themen ansehen' },
+    searchPages: 'Ergebnisseiten',
+    menu: 'Menü',
+    post: { copyLink: 'Link kopieren', share: 'Teilen', copied: (n) => `Link zu Beitrag ${n} kopiert.`, shared: 'Geteilt.', failed: 'Der Link ließ sich diesmal nicht kopieren.' },
+    draft: { restored: 'Entwurf wiederhergestellt', discard: 'Verwerfen', discarded: 'Entwurf verworfen.' },
+  },
   errors: { too_many: 'Das ist zu viel auf einmal. Warte kurz und versuch es noch einmal.', translate_failed: 'Die Übersetzung hat diesmal nicht geklappt. Versuch es in einer Minute noch einmal.', unknown_credential: 'Dieser Passkey gehört hier zu keinem Konto.', poll_closed: 'Diese Umfrage ist beendet.', poll_has_votes: 'Es wurde schon abgestimmt, deshalb lässt sich die Umfrage nicht mehr ändern.' },
 };
 
@@ -746,7 +779,7 @@ const es: CommunityFxCopy = {
     },
     problems: { image_needs_alt: 'Cada imagen necesita una descripción para poder publicar.', upload_not_found: 'Una de las imágenes ya no está disponible. Quítala y vuelve a añadirla.' },
   },
-  translate: { button: (language) => `Traducir al ${language.toLowerCase()}`, working: 'Traduciendo…', label: (language) => `Traducción automática del ${language.toLowerCase()}`, hide: 'Ocultar la traducción', failed: 'La traducción no ha funcionado esta vez. Vuelve a intentarlo en un minuto.' },
+  translate: { button: (language) => `Traducir al ${language.toLowerCase()}`, working: 'Traduciendo…', label: (language) => `Traducción automática del ${language}`, hide: 'Ocultar la traducción', failed: 'La traducción no ha funcionado esta vez. Vuelve a intentarlo en un minuto.' },
   passkey: {
     signIn: 'Iniciar sesión con una llave de acceso',
     signInNote: 'Usa Face ID, Touch ID o el bloqueo de pantalla de tu dispositivo. Puedes añadir una llave de acceso en Ajustes después de iniciar sesión de otra forma.',
@@ -775,6 +808,14 @@ const es: CommunityFxCopy = {
   notifications: { badge: (badge) => `Has conseguido la insignia ${badge}`, merged: (from, thread) => `Tu mensaje de «${from}» ahora está en «${thread}»` },
   merged: 'Este tema se fusionó con otro. Ahora estás leyendo ese.',
   deepLink: { notice: 'Rellenado desde la app. Revisa cada campo antes de publicar.', level: 'Nivel', levelHint: 'Opcional: el número del nivel, si pasó en un tablero.' },
+  ux: {
+    helpCentre: { heading: 'Centro de ayuda', text: 'Guías ilustradas de cada pantalla, cada ajuste y cada función de accesibilidad de OutBrick 5.1.', link: 'Abrir el centro de ayuda' },
+    latest: { title: 'Últimos temas', lede: 'Todos los temas en tu idioma y en inglés, primero los que han tenido actividad más reciente.', more: 'Ver todos los últimos temas' },
+    searchPages: 'Páginas de resultados',
+    menu: 'Menú',
+    post: { copyLink: 'Copiar enlace', share: 'Compartir', copied: (n) => `Enlace al mensaje ${n} copiado.`, shared: 'Compartido.', failed: 'Esta vez no se ha podido copiar el enlace.' },
+    draft: { restored: 'Borrador recuperado', discard: 'Descartar', discarded: 'Borrador descartado.' },
+  },
   errors: { too_many: 'Son demasiados a la vez. Espera un poco y vuelve a intentarlo.', translate_failed: 'La traducción no ha funcionado esta vez. Vuelve a intentarlo en un minuto.', unknown_credential: 'Esa llave de acceso no está vinculada a ninguna cuenta aquí.', poll_closed: 'Esta encuesta está cerrada.', poll_has_votes: 'Ya hay votos, así que la encuesta no se puede cambiar.' },
 };
 
@@ -938,6 +979,14 @@ const ja: CommunityFxCopy = {
   notifications: { badge: (badge) => `バッジ「${badge}」を獲得しました`, merged: (from, thread) => `「${from}」にあったあなたの投稿は「${thread}」に移りました` },
   merged: 'このスレッドは別のスレッドに統合されました。いまは統合先のスレッドを表示しています。',
   deepLink: { notice: 'アプリから入力されました。投稿する前に各項目を確認してください。', level: 'レベル', levelHint: '任意：ステージで起きた場合はレベル番号。' },
+  ux: {
+    helpCentre: { heading: 'ヘルプセンター', text: 'OutBrick 5.1のすべての画面、設定、アクセシビリティ機能を、図解付きのガイドで説明しています。', link: 'ヘルプセンターを開く' },
+    latest: { title: '最新のスレッド', lede: 'あなたの言語と英語のスレッドを、最近動きがあった順に表示します。', more: '最新のスレッドをすべて見る' },
+    searchPages: '検索結果のページ',
+    menu: 'メニュー',
+    post: { copyLink: 'リンクをコピー', share: '共有', copied: (n) => `投稿${n}へのリンクをコピーしました。`, shared: '共有しました。', failed: '今回はリンクをコピーできませんでした。' },
+    draft: { restored: '下書きを復元しました', discard: '破棄', discarded: '下書きを破棄しました。' },
+  },
   errors: { too_many: '一度に多すぎます。少し待ってからお試しください。', translate_failed: '今回は翻訳できませんでした。1分ほどしてからもう一度お試しください。', unknown_credential: 'このパスキーはここのアカウントと結びついていません。', poll_closed: 'このアンケートは締め切りました。', poll_has_votes: 'すでに投票があるため、アンケートは変更できません。' },
 };
 
@@ -1010,7 +1059,7 @@ const ptBR: CommunityFxCopy = {
     errors: { missing: 'Escolha uma imagem para enviar.', too_large: 'A imagem continua grande demais mesmo reduzida. Tente outra menor.', too_many_pixels: 'A imagem é grande demais: o limite é 4096 pixels por lado.', unsupported_type: 'Esse tipo de arquivo não pode ser publicado. Use JPEG, PNG ou WebP.', heic_unsupported: 'Fotos HEIC ainda não são aceitas. Faça uma captura de tela ou exporte como JPEG.', bad_image: 'Não foi possível ler a imagem. Talvez ela esteja danificada.', unavailable: 'O envio de imagens está desativado no momento.' },
     problems: { image_needs_alt: 'Todas as imagens precisam de uma descrição para serem publicadas.', upload_not_found: 'Uma das imagens não está mais disponível. Remova-a e adicione novamente.' },
   },
-  translate: { button: (language) => `Traduzir para ${language}`, working: 'Traduzindo…', label: (language) => `Tradução automática do ${language}`, hide: 'Ocultar tradução', failed: 'Não foi possível traduzir desta vez. Tente novamente em um minuto.' },
+  translate: { button: (language) => `Traduzir para ${language}`, working: 'Traduzindo…', label: (language) => `Tradução automática ${language}`, hide: 'Ocultar tradução', failed: 'Não foi possível traduzir desta vez. Tente novamente em um minuto.' },
   passkey: {
     signIn: 'Entrar com uma chave de acesso', signInNote: 'Use o Face ID, Touch ID ou o bloqueio de tela do seu dispositivo. Você pode adicionar uma chave de acesso nas configurações depois de entrar de outra forma.',
     unsupported: 'Este navegador não aceita chaves de acesso. Entre de outra forma.', cancelled: 'A solicitação da chave de acesso foi cancelada. Nada foi alterado.',
@@ -1024,6 +1073,14 @@ const ptBR: CommunityFxCopy = {
   notifications: { badge: (badge) => `Você conquistou a medalha ${badge}`, merged: (from, thread) => `Sua publicação em “${from}” agora está em “${thread}”` },
   merged: 'Esta conversa foi unida a outra. Você está lendo a conversa que a recebeu.',
   deepLink: { notice: 'Preenchido pelo app. Confira cada campo antes de publicar.', level: 'Fase', levelHint: 'Opcional: número da fase, se o problema aconteceu em um tabuleiro.' },
+  ux: {
+    helpCentre: { heading: 'Central de Ajuda', text: 'Guias ilustrados de cada tela, ajuste e recurso de acessibilidade do OutBrick 5.1.', link: 'Abrir a Central de Ajuda' },
+    latest: { title: 'Conversas recentes', lede: 'Todas as conversas no seu idioma e em inglês, com as mais movimentadas recentemente primeiro.', more: 'Ver todas as conversas recentes' },
+    searchPages: 'Páginas de resultados',
+    menu: 'Menu',
+    post: { copyLink: 'Copiar link', share: 'Compartilhar', copied: (n) => `Link da publicação ${n} copiado.`, shared: 'Compartilhado.', failed: 'Não foi possível copiar o link desta vez.' },
+    draft: { restored: 'Rascunho restaurado', discard: 'Descartar', discarded: 'Rascunho descartado.' },
+  },
   errors: { too_many: 'Muitas ações de uma vez. Aguarde um pouco e tente novamente.', translate_failed: 'Não foi possível traduzir desta vez. Tente novamente em um minuto.', unknown_credential: 'Esta chave de acesso não está vinculada a nenhuma conta daqui.', poll_closed: 'Esta enquete está encerrada.', poll_has_votes: 'A enquete já recebeu votos e não pode mais ser alterada.' },
 };
 
@@ -1033,8 +1090,8 @@ export const communityFx: Record<Locale, CommunityFxCopy> = { en, fr, de, es, ja
 export const languageNamesIn: Record<Locale, Record<Locale, string>> = {
   en: { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese', 'pt-BR': 'Brazilian Portuguese' },
   fr: { en: 'de l’anglais', fr: 'du français', de: 'de l’allemand', es: 'de l’espagnol', ja: 'du japonais', 'pt-BR': 'du portugais du Brésil' },
-  de: { en: 'Englischen', fr: 'Französischen', de: 'Deutschen', es: 'Spanischen', ja: 'Japanischen', 'pt-BR': 'Brasilianischen Portugiesischen' },
-  es: { en: 'Inglés', fr: 'Francés', de: 'Alemán', es: 'Español', ja: 'Japonés', 'pt-BR': 'portugués de Brasil' },
+  de: { en: 'Englischen', fr: 'Französischen', de: 'Deutschen', es: 'Spanischen', ja: 'Japanischen', 'pt-BR': 'brasilianischen Portugiesisch' },
+  es: { en: 'inglés', fr: 'francés', de: 'alemán', es: 'español', ja: 'japonés', 'pt-BR': 'portugués de Brasil' },
   ja: { en: '英語', fr: 'フランス語', de: 'ドイツ語', es: 'スペイン語', ja: '日本語', 'pt-BR': 'ブラジルポルトガル語' },
   'pt-BR': { en: 'do inglês', fr: 'do francês', de: 'do alemão', es: 'do espanhol', ja: 'do japonês', 'pt-BR': 'do português do Brasil' },
 };

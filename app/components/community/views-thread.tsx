@@ -6,13 +6,14 @@
  * button named with its effect and target. Pages of 25 posts, never infinite scroll.
  */
 
-import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type SubmitEvent } from 'react';
 import type { Post, ThreadDetail, ReportReason, ThreadStatus } from '../../../lib/community/contract';
 import { threadPath, bugStatuses, ideaStatuses } from '../../../lib/community/contract';
 import { categoryWords } from '../../../lib/i18n/community';
 import { htmlToText } from '../../../lib/community/format';
 import { memberName, pageOfPost } from '../../../lib/community/static-html';
-import { api, ApiFailure, clearCache } from './api';
+import { api, ApiFailure, clearCache, waitOutFillCheck } from './api';
+import { DraftNotice, readDraft, useDraftSaver, useUnsavedWarning, writeDraft } from './drafts';
 import { Composer } from './composer';
 import { ErrorSummary, Fill, MARK, Member, Pagination, Pending, StatusBadge, Time, View, errorText, fieldMessages, useApp, useLoad, Honeypot, type FieldErrors, type Route } from './core';
 import { CategoryAside, FollowButtons } from './views-browse';
@@ -97,6 +98,7 @@ export function ThreadView({ route }: { route: Extract<Route, { name: 'thread' }
       titleLang={thread.language}
       crumbs={[...crumbsBase, { href: path(`/c/${thread.category.slug}`), label: cat.name }, { label: thread.title, lang: thread.language }]}
       ready={!load.loading}
+      canonical={threadPath(thread.language, thread) + (detail.page > 1 ? `?page=${detail.page}` : '')}
       aside={<CategoryAside />}
       headExtra={<ThreadHead detail={detail} postHref={postHref} />}
     >
@@ -170,11 +172,11 @@ function ThreadHead({ detail, postHref }: { detail: Detail; postHref: (n: number
       <div className="cm-head-actions">
         {isIdea ? (
           session?.member ? (
-            <button type="button" className="cm-vote" aria-pressed={votes.voted} disabled={busy} onClick={() => void vote()} aria-label={copy.thread.upvoteLabel(thread.title, copy.thread.votes, votes.count, n(votes.count))}>
+            <button type="button" className="cm-vote" aria-pressed={votes.voted} disabled={busy} onClick={() => void vote()} aria-describedby="cm-page-title">
               <span className="cm-vote-arrow" aria-hidden="true">
                 ▲
               </span>
-              {votes.voted ? copy.thread.upvoted : copy.thread.upvote}
+              {votes.voted ? copy.thread.upvoted : copy.thread.upvote}{' '}
               <span className="cm-vote-count">{copy.thread.votes(votes.count, n(votes.count))}</span>
             </button>
           ) : (
@@ -251,6 +253,8 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const headingId = `post-${post.number}-h`;
+  // The "Post 3" permalink: the description of this post's buttons ("Bookmark", "Post 3").
+  const linkId = `post-${post.number}-link`;
   const name = memberName(copy, post.author);
   const num = n(post.number);
   const lang = detail.thread.language;
@@ -282,29 +286,31 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
 
   return (
     <article className={`cm-post${post.isSolution ? ' is-solution' : ''}${post.hidden ? ' is-hidden' : ''}${post.pending ? ' is-pending' : ''}`} id={`post-${post.number}`} aria-labelledby={headingId} tabIndex={-1}>
-      <h2 className="cm-post-h" id={headingId}>
-        <Member member={post.author} />
-        <span className="cm-sep" aria-hidden="true">
-          ,{' '}
-        </span>
-        <span className="sr-only">, </span>
-        <Time iso={post.createdAt} />
-      </h2>
-      <p className="cm-post-meta">
-        <a href={postHref(post.number)} className="cm-permalink" aria-label={`${copy.thread.actions.share}: ${copy.thread.postNumber(num)}`}>
-          {copy.thread.postNumber(num)}
-        </a>
-        {post.replyTo ? (
-          <a href={postHref(post.replyTo)} className="cm-replyto">
-            {copy.thread.replyTo(n(post.replyTo))}
-          </a>
-        ) : null}
-        {post.editedAt ? (
-          <span>
-            <Fill template={copy.thread.edited(MARK)} parts={[<Time key="t" iso={post.editedAt} relative />]} />
+      <div className="cm-post-top">
+        <h2 className="cm-post-h" id={headingId}>
+          <Member member={post.author} />
+          <span className="cm-sep" aria-hidden="true">
+            ,
           </span>
-        ) : null}
-      </p>
+          <span className="sr-only">, </span>
+          <Time iso={post.createdAt} />
+        </h2>
+        <p className="cm-post-meta">
+          <a href={postHref(post.number)} className="cm-permalink" id={linkId}>
+            {copy.thread.postNumber(num)}
+          </a>
+          {post.replyTo ? (
+            <a href={postHref(post.replyTo)} className="cm-replyto">
+              {copy.thread.replyTo(n(post.replyTo))}
+            </a>
+          ) : null}
+          {post.editedAt ? (
+            <span>
+              <Fill template={copy.thread.edited(MARK)} parts={[<Time key="t" iso={post.editedAt} relative />]} />
+            </span>
+          ) : null}
+        </p>
+      </div>
       {post.isSolution ? <p className="cm-badge cm-badge-solution cm-solution-mark">{copy.thread.solutionBy(name)}</p> : null}
       {post.pending ? <p className="cm-note">{copy.thread.pending}</p> : null}
       {post.hidden ? (
@@ -341,7 +347,7 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
         </fieldset>
       ) : null}
       {mode === 'report' ? <ReportForm post={post} name={name} onDone={() => { announce(copy.thread.reported); setMode('view'); }} onCancel={() => setMode('view')} /> : null}
-      {mode === 'view' && !post.hidden && (detail.canReply || (detail.canSolve && !isFirst) || post.canEdit || post.canDelete || (session?.member && post.author?.id !== session.member.id)) ? (
+      {mode === 'view' && !post.hidden && !post.pending ? (
         <ul className="cm-actions">
           {detail.canReply ? (
             <>
@@ -364,7 +370,7 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
                 className="cm-act"
                 aria-pressed={post.isSolution}
                 disabled={busy}
-                aria-label={post.isSolution ? copy.thread.actions.unsolveLabel(num) : copy.thread.actions.solveLabel(num)}
+                aria-describedby={linkId}
                 onClick={() => void act(() => api.solve(detail.thread.id, post.isSolution ? null : post.id), post.isSolution ? copy.thread.unsolvedNow : copy.thread.solvedNow, post.number)}
               >
                 {post.isSolution ? copy.thread.actions.unsolve : copy.thread.actions.solve}
@@ -387,9 +393,12 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
           ) : null}
           {session?.member ? (
             <li>
-              <BookmarkButton post={post} />
+              <BookmarkButton post={post} describedBy={linkId} />
             </li>
           ) : null}
+          <li>
+            <ShareButton href={postHref(post.number)} title={detail.thread.title} number={post.number} describedBy={linkId} />
+          </li>
           {session?.member && post.author?.id !== session.member.id ? (
             <li>
               <button type="button" className="cm-act" onClick={() => setMode('report')} aria-label={copy.thread.actions.reportLabel(num, name)}>
@@ -400,6 +409,36 @@ function PostArticle({ post, detail, postHref, onChanged }: { post: Post; detail
         </ul>
       ) : null}
     </article>
+  );
+}
+
+/**
+ * Share a post: the system share sheet where there is one, otherwise the link copied to the
+ * clipboard. Either way the polite live region says what happened.
+ */
+function ShareButton({ href, title, number, describedBy }: { href: string; title: string; number: number; describedBy: string }) {
+  const { fx, n, announce } = useApp();
+  const canShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+  const share = async () => {
+    const url = new URL(href, window.location.href).href;
+    try {
+      if (canShare) {
+        await navigator.share({ title, url });
+        announce(fx.ux.post.shared);
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      announce(fx.ux.post.copied(n(number)));
+    } catch (error) {
+      // Closing the share sheet is not a failure.
+      if (error instanceof DOMException && error.name === 'AbortError') return;
+      announce(fx.ux.post.failed);
+    }
+  };
+  return (
+    <button type="button" className="cm-act" aria-describedby={describedBy} onClick={() => void share()}>
+      {canShare ? fx.ux.post.share : fx.ux.post.copyLink}
+    </button>
   );
 }
 
@@ -506,8 +545,12 @@ function ReportForm({ post, name, onDone, onCancel }: { post: Post; name: string
 
 function ReplyArea({ detail, signInHref, onPosted }: { detail: Detail; signInHref: string; onPosted: (result: { number: number; page: number }) => void }) {
   const { copy, fx, n, session, announce } = useApp();
-  const [body, setBody] = useState('');
-  const [replyTo, setReplyTo] = useState<number | null>(null);
+  // What was being written here last time, if anything (drafts.tsx).
+  const draftKey = `reply:${detail.thread.id}`;
+  const [draft] = useState(() => (detail.canReply ? readDraft<{ body: string; replyTo: number | null }>(draftKey) : null));
+  const [restored, setRestored] = useState(!!draft?.body);
+  const [body, setBody] = useState(draft?.body ?? '');
+  const [replyTo, setReplyTo] = useState<number | null>(draft?.replyTo ?? null);
   const [website, setWebsite] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [general, setGeneral] = useState('');
@@ -517,6 +560,10 @@ function ReplyArea({ detail, signInHref, onPosted }: { detail: Detail; signInHre
   const summary = useRef<HTMLDivElement>(null);
   const id = useId();
   const composerId = `${id}-reply`;
+  const unsent = !!body.trim();
+  const draftValue = useMemo(() => ({ body, replyTo }), [body, replyTo]);
+  useDraftSaver(draftKey, draftValue, !unsent || !detail.canReply);
+  useUnsavedWarning(unsent && !busy);
 
   useEffect(() => {
     const onQuote = (event: Event) => {
@@ -564,7 +611,10 @@ function ReplyArea({ detail, signInHref, onPosted }: { detail: Detail; signInHre
     setErrors({});
     setBusy(true);
     try {
+      await waitOutFillCheck(startedAt);
       const result = await api.reply(detail.thread.id, { body, replyTo, website: website || undefined, startedAt });
+      writeDraft(draftKey, null);
+      setRestored(false);
       setBody('');
       setReplyTo(null);
       // A honeypot hit is answered with a stand-in (id 0): say it worked, go nowhere.
@@ -586,6 +636,18 @@ function ReplyArea({ detail, signInHref, onPosted }: { detail: Detail; signInHre
       <h2 id={`${id}-h`}>{copy.thread.replyHeading}</h2>
       <form onSubmit={(e) => void submit(e)} noValidate>
         <ErrorSummary errors={errors} ids={{ body: composerId }} summaryRef={summary} general={general} />
+        {restored ? (
+          <DraftNotice
+            onDiscard={() => {
+              writeDraft(draftKey, null);
+              setRestored(false);
+              setBody('');
+              setReplyTo(null);
+              announce(fx.ux.draft.discarded);
+              textarea.current?.focus();
+            }}
+          />
+        ) : null}
         {replyTo ? (
           <p className="cm-replying">
             {copy.composer.replyingTo(n(replyTo))}{' '}

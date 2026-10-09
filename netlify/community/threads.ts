@@ -15,7 +15,7 @@ import type {
 } from '../../lib/community/contract.ts';
 import { bugStatuses, communityLocales, ideaStatuses, pageSize } from '../../lib/community/contract.ts';
 import { ipHash, rateAllow, slugify, transaction } from './db.ts';
-import { ApiError, badRequest, filledTooFast, forbidden, int, json, notFound, oneOf, readJson, str, tooMany } from './http.ts';
+import { ApiError, badRequest, filledTooFast, forbidden, honeypotHit, tooFast, int, json, notFound, oneOf, readJson, str, tooMany } from './http.ts';
 import { currentMember, hasRole, requireMember, type Viewer } from './session.ts';
 import {
   BODY_MAX,
@@ -242,9 +242,10 @@ export const postThread: Handler = async (req) => {
   requireCanWrite(viewer);
   if (category.team_only_threads && !hasRole(viewer, 'team')) throw forbidden('Only the OutBrick team starts threads here. You can reply to any of them.');
 
-  if ((typeof body.website === 'string' && body.website.trim() !== '') || filledTooFast(body)) {
+  if (honeypotHit(body)) {
     return json({ thread: decoyThread(title, category.slug, category.kind, language, viewer) }, { status: 201 });
   }
+  if (filledTooFast(body)) throw tooFast();
 
   await rateLimitOrThrow([
     [`thread:day:${viewer.id}`, limitFor(viewer, 20, 60), 86400],

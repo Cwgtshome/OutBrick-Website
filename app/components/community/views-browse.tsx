@@ -14,6 +14,7 @@ import {
   threadPath,
   ideaStatuses,
   bugStatuses,
+  pageSize,
 } from '../../../lib/community/contract';
 import {
   categoryColours,
@@ -31,6 +32,7 @@ import {
   ErrorNotice,
   Fill,
   MARK,
+  Loading,
   Member,
   Pagination,
   Pending,
@@ -66,8 +68,9 @@ export function ThreadList({
   threads: ThreadSummary[];
   headingLevel?: 2 | 3;
 }) {
-  const { copy, fx, locale, n } = useApp();
+  const { copy, fx, locale, n, session } = useApp();
   const H = headingLevel === 2 ? 'h2' : 'h3';
+  const signedIn = !!session?.member;
   return (
     <ul className="cm-threads">
       {threads.map((t) => {
@@ -84,7 +87,7 @@ export function ThreadList({
             }
           >
             <H className="cm-thread-title">
-              <a href={threadPath(locale, t)} lang={t.language}>
+              <a href={threadPath(locale, t)} lang={t.language} id={`cm-t-${t.id}`}>
                 {t.title}
               </a>
             </H>
@@ -131,12 +134,13 @@ export function ThreadList({
                 </>
               ) : null}
             </p>
-            {t.category.kind === 'ideas' ? (
-              <VoteButton thread={t} compact />
+            {/* Signed in, the vote button carries the count; signed out, the stats line does. */}
+            {t.category.kind === 'ideas' && signedIn ? (
+              <VoteButton thread={t} compact describedBy={`cm-t-${t.id}`} />
             ) : null}
             <p className="cm-stats">
               <span>{copy.stats.replies(t.replyCount, n(t.replyCount))}</span>
-              {t.category.kind === 'ideas' ? (
+              {t.category.kind === 'ideas' && !signedIn ? (
                 <span>{copy.stats.votes(t.voteCount, n(t.voteCount))}</span>
               ) : null}
               <span>{copy.stats.views(t.viewCount, n(t.viewCount))}</span>
@@ -260,9 +264,12 @@ export function CategoryAside() {
 export function SearchBox({
   initial = '',
   category = '',
+  secondary = false,
 }: {
   initial?: string;
   category?: string;
+  /** Beside another primary action (the home's Start a thread): the quieter button. */
+  secondary?: boolean;
 }) {
   const { copy, navigate, path } = useApp();
   const [q, setQ] = useState(initial);
@@ -288,7 +295,7 @@ export function SearchBox({
             enterKeyHint="search"
             autoComplete="off"
           />
-          <button type="submit" className="btn">
+          <button type="submit" className={secondary ? 'btn ghost' : 'btn'}>
             {copy.home.searchButton}
           </button>
         </div>
@@ -312,6 +319,7 @@ export function FollowButtons({
   const { copy, announce } = useApp();
   const [busy, setBusy] = useState(false);
   const [current, setCurrent] = useState(level);
+  const id = useId();
   const set = async (target: FollowLevel) => {
     const next = current === target ? 'none' : target;
     setBusy(true);
@@ -334,11 +342,19 @@ export function FollowButtons({
   return (
     <fieldset className="cm-follow">
       <legend className="cm-follow-label">{copy.follow.legend}</legend>
+      {/* The name is the visible word (Voice Control users say what they see); what it does
+          and to which thread or category is its description. */}
+      <span className="sr-only" id={`${id}-watch`}>
+        {watchLabel}
+      </span>
+      <span className="sr-only" id={`${id}-mute`}>
+        {muteLabel}
+      </span>
       <button
         type="button"
         className="cm-act"
         aria-pressed={current === 'watch'}
-        aria-label={watchLabel}
+        aria-describedby={`${id}-watch`}
         disabled={busy}
         onClick={() => void set('watch')}
       >
@@ -348,7 +364,7 @@ export function FollowButtons({
         type="button"
         className="cm-act"
         aria-pressed={current === 'mute'}
-        aria-label={muteLabel}
+        aria-describedby={`${id}-mute`}
         disabled={busy}
         onClick={() => void set('mute')}
       >
@@ -361,14 +377,18 @@ export function FollowButtons({
 // ---------------------------------------------------------------------------------------
 // Home
 
+/** How many of the latest threads the home lists; the rest are on the latest-threads page. */
+const homeLatest = 10;
+
 export function HomeView() {
-  const { copy, locale, path } = useApp();
+  const { copy, fx, locale, path } = useApp();
   const cats = useLoad('categories', () => api.categories());
-  const latest = useLoad(`latest:${locale}`, () =>
+  const latest = useLoad(`latest:${locale}:1`, () =>
     api.threads({ sort: 'latest', language: languageParam(locale, 'mine') }),
   );
   const ready = !!cats.data && !latest.loading;
   if (!cats.data) return <Pending load={cats} title={copy.home.title} />;
+  const threads = latest.data?.threads ?? [];
   return (
     <View
       title={copy.home.title}
@@ -382,15 +402,9 @@ export function HomeView() {
           <li key={p}>{p}</li>
         ))}
       </ul>
-      <section className="cm-section" aria-labelledby="cm-player-guides-h">
-        <h2 id="cm-player-guides-h">{guideWords[locale].label}</h2>
-        <p>{guideWords[locale].intro}</p>
-        <a className="btn" href={path('/c/help')}>
-          {guideWords[locale].hub}
-        </a>
-      </section>
+      <HelpCentreCard />
       <div className="cm-toolbar">
-        <SearchBox />
+        <SearchBox secondary />
         <a className="btn" href={path('/new')}>
           {copy.home.startThread}
         </a>
@@ -404,17 +418,83 @@ export function HomeView() {
         {latest.error ? (
           <ErrorNotice error={latest.error} retry={latest.reload} />
         ) : latest.data ? (
-          latest.data.threads.length ? (
-            <ThreadList threads={latest.data.threads} />
+          threads.length ? (
+            <>
+              <ThreadList threads={threads.slice(0, homeLatest)} />
+              {latest.data.total > homeLatest ? (
+                <p>
+                  <a className="cm-textlink" href={path('/latest')}>
+                    {fx.ux.latest.more}
+                  </a>
+                </p>
+              ) : null}
+            </>
           ) : (
             <p>{copy.category.empty}</p>
           )
-        ) : null}
+        ) : (
+          <Loading />
+        )}
       </section>
       <p className="cm-links">
         <a href={path('/faq')}>{copy.faq.title}</a>{' '}
         <a href={path('/guidelines')}>{copy.home.readGuidelines}</a>
       </p>
+    </View>
+  );
+}
+
+/** The Help Centre, first thing on the home; the static home draws the same (helpCentreHtml). */
+function HelpCentreCard() {
+  const { fx, locale, path } = useApp();
+  const h = fx.ux.helpCentre;
+  return (
+    <section className="cm-section cm-helpcentre" aria-labelledby="cm-help-centre-h">
+      <h2 id="cm-help-centre-h">{h.heading}</h2>
+      <p>{h.text}</p>
+      <p className="cm-row">
+        <a className="btn" href={path('/help')}>
+          {h.link}
+        </a>
+        <a className="cm-textlink" href={path('/c/help')}>
+          {guideWords[locale].hub}
+        </a>
+      </p>
+    </section>
+  );
+}
+
+/** Every category's latest threads, in pages: where the home's short list continues. */
+export function LatestView({ route }: { route: Extract<Route, { name: 'latest' }> }) {
+  const { copy, fx, locale, path, n } = useApp();
+  const threads = useLoad(`latest:${locale}:${route.page}`, () =>
+    api.threads({ sort: 'latest', language: languageParam(locale, 'mine'), page: route.page }),
+  );
+  const crumbs = [{ href: path(), label: copy.nav.label }, { label: fx.ux.latest.title }];
+  const data = threads.data;
+  if (!data) return <Pending load={threads} title={fx.ux.latest.title} crumbs={crumbs} />;
+  return (
+    <View title={fx.ux.latest.title} lede={fx.ux.latest.lede} crumbs={crumbs} ready={!threads.loading} aside={<CategoryAside />}>
+      {data.threads.length ? (
+        <>
+          <output className="cm-count-line" aria-live="polite">
+            {copy.category.showing(
+              n((data.page - 1) * pageSize.threads + 1),
+              n((data.page - 1) * pageSize.threads + data.threads.length),
+              n(data.total),
+            )}
+          </output>
+          <ThreadList threads={data.threads} headingLevel={2} />
+          <Pagination
+            page={data.page}
+            pages={data.pages}
+            href={(page) => path('/latest') + (page > 1 ? `?page=${page}` : '')}
+            label={copy.category.pages}
+          />
+        </>
+      ) : (
+        <p className="cm-empty">{copy.category.empty}</p>
+      )}
     </View>
   );
 }
@@ -444,6 +524,13 @@ export function CategoryView({
   );
   const [language, setLanguage] = useState(route.language);
   const [status, setStatus] = useState(route.status);
+  // The filters follow the address: Back and Forward change the route, not this component.
+  const [shown, setShown] = useState({ language: route.language, status: route.status });
+  if (shown.language !== route.language || shown.status !== route.status) {
+    setShown({ language: route.language, status: route.status });
+    setLanguage(route.language);
+    setStatus(route.status);
+  }
   const formId = useId();
   const category = cats.data?.categories.find((c) => c.slug === route.slug);
   const words = categoryWords(locale, route.slug);
@@ -601,8 +688,8 @@ export function CategoryView({
           <>
             <output className="cm-count-line" aria-live="polite">
               {copy.category.showing(
-                n((data.page - 1) * 30 + 1),
-                n((data.page - 1) * 30 + data.threads.length),
+                n((data.page - 1) * pageSize.threads + 1),
+                n((data.page - 1) * pageSize.threads + data.threads.length),
                 n(data.total),
               )}
             </output>
@@ -632,9 +719,16 @@ export function SearchView({
 }: {
   route: Extract<Route, { name: 'search' }>;
 }) {
-  const { copy, locale, path, navigate, n } = useApp();
+  const { copy, fx, locale, path, navigate, n } = useApp();
   const [q, setQ] = useState(route.q);
   const [category, setCategory] = useState(route.category);
+  // The search box follows the address: Back and Forward change the route, not this component.
+  const [shown, setShown] = useState({ q: route.q, category: route.category });
+  if (shown.q !== route.q || shown.category !== route.category) {
+    setShown({ q: route.q, category: route.category });
+    setQ(route.q);
+    setCategory(route.category);
+  }
   const cats = useLoad('categories', () => api.categories());
   const results = useLoad(
     route.q ? `search:${route.q}:${route.category}:${route.page}` : null,
@@ -729,7 +823,7 @@ export function SearchView({
       ) : null}
       {data && data.hits.length ? (
         <>
-          <ol className="cm-hits" start={(data.page - 1) * 20 + 1}>
+          <ol className="cm-hits" start={(data.page - 1) * pageSize.search + 1}>
             {data.hits.map((hit, i) => (
               <li
                 key={`${hit.type}-${hit.threadId}-${hit.postNumber}-${i}`}
@@ -770,7 +864,7 @@ export function SearchView({
             page={data.page}
             pages={data.pages}
             href={pageHref}
-            label={copy.search.title}
+            label={fx.ux.searchPages}
           />
         </>
       ) : null}
@@ -972,6 +1066,7 @@ export function NotFoundView() {
         { label: copy.notFoundTitle },
       ]}
       ready
+      noindex
     >
       <p>
         <a className="btn" href={path()}>

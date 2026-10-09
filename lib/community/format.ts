@@ -8,12 +8,26 @@ import type { Locale } from '../i18n/locales.ts';
 const dateFormats = new Map<string, Intl.DateTimeFormat>();
 const numberFormats = new Map<string, Intl.NumberFormat>();
 
-/** "7 October 2026 at 09:14" (en-GB), "7 octobre 2026 à 09:14", "2026年10月7日 9:14". UTC on the server. */
+/**
+ * "7 October 2026 at 09:14 UTC" (en-GB), "7 octobre 2026 à 09:14 UTC", "2026年10月7日 09:14 UTC".
+ * Always with its time zone, so the server's UTC (the edge-rendered thread pages) and the
+ * reader's own zone (the client app, "16:30 GMT-4") never read as the same clock. `timeZone`
+ * is given on the server; the client leaves it out and gets the reader's zone.
+ */
 export function fullDate(locale: Locale, iso: string, timeZone?: string): string {
   const key = `${locale}|${timeZone ?? ''}`;
   let format = dateFormats.get(key);
   if (!format) {
-    format = new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : locale, { dateStyle: 'long', timeStyle: 'short', ...(timeZone ? { timeZone } : {}) });
+    // dateStyle/timeStyle cannot be combined with timeZoneName, hence the separate parts.
+    format = new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : locale, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short',
+      ...(timeZone ? { timeZone } : {}),
+    });
     dateFormats.set(key, format);
   }
   const date = new Date(iso);

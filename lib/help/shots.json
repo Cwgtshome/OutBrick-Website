@@ -1,0 +1,290 @@
+{
+  "atlas": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "board-contrast": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "board-shapes": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "board-slide": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "board-village": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "clear": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "collection": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "delete-data": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "garden-teach": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "home": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "journey": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "leaders": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "leave": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "level-failed": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "missions": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "no-lives": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "pass": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "profile": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "settings-a11y": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "settings-community": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "settings-game": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "shop": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "wall": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  },
+  "wardrobe": {
+    "w": 960,
+    "h": 2086,
+    "locales": [
+      "de",
+      "en",
+      "es",
+      "fr",
+      "ja",
+      "pt-BR"
+    ]
+  }
+}

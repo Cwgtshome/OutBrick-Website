@@ -98,6 +98,17 @@ export default function SupportPage() {
       </div>
 
       <section className="brick headline">
+        <h2>Illustrated guides</h2>
+        <p>
+          The Help Centre explains every screen, menu and setting in OutBrick 5.1 with real screenshots from the game, with a whole shelf on VoiceOver and accessibility.
+        </p>
+        <div className="act">
+          <a className="btn" href="/community/help">Open the Help Centre</a>
+          <a className="btn" href="/community/help/voiceover">Playing with VoiceOver</a>
+        </div>
+      </section>
+
+      <section className="brick headline">
         <h2>Ask the community</h2>
         <p>
           Players and the OutBrick team answer questions, track bugs and vote on ideas in OutBrick Community.

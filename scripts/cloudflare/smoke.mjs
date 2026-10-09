@@ -28,6 +28,13 @@ for (const locale of ['fr', 'de', 'es', 'ja', 'pt-BR']) {
   await check(`/${locale}/missing-legal-document`, 404, { type: 'text/html' });
 }
 await check('/missing-legal-document', 404);
+for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
+  const prefix = locale === 'en' ? '' : `/${locale}`;
+  await check(`${prefix}/community/no-such-page`, 404, { type: 'text/html' });
+  await check(`${prefix}/community/c/no-such-category`, 404, { type: 'text/html' });
+  await check(`${prefix}/community/feed.xml`, 404, { type: 'text/html', method: 'HEAD' });
+  await check(`${prefix}/community/help`, 200, { type: 'text/html' });
+}
 await check('/.netlify/functions/community-notify', 404);
 await check('/.netlify/functions/lifecycle-outbox', 404);
 console.log(JSON.stringify({ status: 'static-route-checks-passed', checks, limitation: 'Does not prove database writes, sign-in, uploads, jobs or email delivery.' }, null, 2));
