@@ -371,8 +371,10 @@ export function puzzle(ctx: Ctx, p: Puzzle, copy: PuzzleCopy, host: FriendId = '
   const [first] = p.solution;
   const css = [
     '@media screen and (-webkit-min-device-pixel-ratio:0){',
-    '.ob-pz-play{display:block !important;}',
-    '.ob-pz-still{display:none !important;}',
+    // Only where the radios survived: a client that strips <input> but keeps this CSS must still
+    // get the answer, never a row of buttons that do nothing.
+    '.ob-pz-in ~ .ob-pz-play{display:block !important;}',
+    '.ob-pz-in ~ .ob-pz-still{display:none !important;}',
     '.ob-pz-opt:hover{transform:translateY(-2px);}',
     ...p.solution.map((c, i) => {
       const b = p.bricks.find((x) => x.colour === c)!;
@@ -388,7 +390,7 @@ export function puzzle(ctx: Ctx, p: Puzzle, copy: PuzzleCopy, host: FriendId = '
     '@media (prefers-reduced-motion:reduce){.ob-pz-b{transition:none !important;animation:none !important;}.ob-pz-yes{animation:none !important;}}',
   ].join('\n');
   const radios = p.options
-    .map((c) => `<input type="radio" name="ob-pz" id="ob-pz-${c}" class="${c === first ? 'ob-pz-ok' : 'ob-pz-no'}" style="display:none;mso-hide:all;">`)
+    .map((c) => `<input type="radio" name="ob-pz" id="ob-pz-${c}" class="ob-pz-in ${c === first ? 'ob-pz-ok' : 'ob-pz-no'}" style="display:none;mso-hide:all;">`)
     .join('');
   const options = p.options
     .map(
