@@ -1,0 +1,578 @@
+[
+  {
+    "from": "/privacy-policy",
+    "to": "/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/privacy-policy.html",
+    "to": "/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/license",
+    "to": "/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/license.html",
+    "to": "/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/refund",
+    "to": "/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/refund.html",
+    "to": "/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/eula-apple",
+    "to": "/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/eula-apple.html",
+    "to": "/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/accessibility-support",
+    "to": "/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/accessibility-support.html",
+    "to": "/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/age-suitability",
+    "to": "/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/age-suitability.html",
+    "to": "/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/play-*",
+    "to": "/play",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/play-*",
+    "to": "/fr/play",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/play-*",
+    "to": "/de/play",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/play-*",
+    "to": "/es/play",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/play-*",
+    "to": "/ja/play",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/play-*",
+    "to": "/pt-BR/play",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/r/:code",
+    "to": "https://apps.apple.com/us/app/outbrick/id6807997465?mt=8&ct=aff-:code",
+    "status": 302,
+    "force": true
+  },
+  {
+    "from": "/c/*",
+    "to": "/c",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/community/*",
+    "to": "/community",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/fr/privacy-policy",
+    "to": "/fr/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/privacy-policy.html",
+    "to": "/fr/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/license",
+    "to": "/fr/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/license.html",
+    "to": "/fr/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/refund",
+    "to": "/fr/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/refund.html",
+    "to": "/fr/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/eula-apple",
+    "to": "/fr/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/eula-apple.html",
+    "to": "/fr/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/accessibility-support",
+    "to": "/fr/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/accessibility-support.html",
+    "to": "/fr/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/age-suitability",
+    "to": "/fr/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/fr/age-suitability.html",
+    "to": "/fr/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/privacy-policy",
+    "to": "/de/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/privacy-policy.html",
+    "to": "/de/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/license",
+    "to": "/de/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/license.html",
+    "to": "/de/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/refund",
+    "to": "/de/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/refund.html",
+    "to": "/de/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/eula-apple",
+    "to": "/de/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/eula-apple.html",
+    "to": "/de/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/accessibility-support",
+    "to": "/de/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/accessibility-support.html",
+    "to": "/de/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/age-suitability",
+    "to": "/de/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/de/age-suitability.html",
+    "to": "/de/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/privacy-policy",
+    "to": "/es/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/privacy-policy.html",
+    "to": "/es/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/license",
+    "to": "/es/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/license.html",
+    "to": "/es/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/refund",
+    "to": "/es/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/refund.html",
+    "to": "/es/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/eula-apple",
+    "to": "/es/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/eula-apple.html",
+    "to": "/es/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/accessibility-support",
+    "to": "/es/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/accessibility-support.html",
+    "to": "/es/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/age-suitability",
+    "to": "/es/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/es/age-suitability.html",
+    "to": "/es/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/privacy-policy",
+    "to": "/ja/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/privacy-policy.html",
+    "to": "/ja/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/license",
+    "to": "/ja/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/license.html",
+    "to": "/ja/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/refund",
+    "to": "/ja/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/refund.html",
+    "to": "/ja/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/eula-apple",
+    "to": "/ja/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/eula-apple.html",
+    "to": "/ja/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/accessibility-support",
+    "to": "/ja/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/accessibility-support.html",
+    "to": "/ja/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/age-suitability",
+    "to": "/ja/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ja/age-suitability.html",
+    "to": "/ja/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/privacy-policy",
+    "to": "/pt-BR/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/privacy-policy.html",
+    "to": "/pt-BR/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/license",
+    "to": "/pt-BR/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/license.html",
+    "to": "/pt-BR/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/refund",
+    "to": "/pt-BR/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/refund.html",
+    "to": "/pt-BR/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/eula-apple",
+    "to": "/pt-BR/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/eula-apple.html",
+    "to": "/pt-BR/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/accessibility-support",
+    "to": "/pt-BR/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/accessibility-support.html",
+    "to": "/pt-BR/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/age-suitability",
+    "to": "/pt-BR/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/age-suitability.html",
+    "to": "/pt-BR/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/pt-BR/c/*",
+    "to": "/pt-BR/c",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/pt-BR/community/*",
+    "to": "/pt-BR/community",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/pt-BR/*",
+    "to": "/pt-BR/404",
+    "status": 404,
+    "force": false
+  },
+  {
+    "from": "/fr/c/*",
+    "to": "/fr/c",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/de/c/*",
+    "to": "/de/c",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/es/c/*",
+    "to": "/es/c",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/ja/c/*",
+    "to": "/ja/c",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/fr/community/*",
+    "to": "/fr/community",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/de/community/*",
+    "to": "/de/community",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/es/community/*",
+    "to": "/es/community",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/ja/community/*",
+    "to": "/ja/community",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/fr/*",
+    "to": "/fr/404",
+    "status": 404,
+    "force": false
+  },
+  {
+    "from": "/de/*",
+    "to": "/de/404",
+    "status": 404,
+    "force": false
+  },
+  {
+    "from": "/es/*",
+    "to": "/es/404",
+    "status": 404,
+    "force": false
+  },
+  {
+    "from": "/ja/*",
+    "to": "/ja/404",
+    "status": 404,
+    "force": false
+  }
+]

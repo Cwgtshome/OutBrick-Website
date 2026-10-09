@@ -23,12 +23,13 @@ import { ApiError, badRequest, json, readJson } from './http.ts';
 import { requireMember } from './session.ts';
 import { idParam, num, postForWrite, renderBody, run } from './forum.ts';
 import { rateLimitOrThrow } from './threads.ts';
+import { platformTranslator } from '../platform.ts';
 
 type Handler = (req: Request, params: Record<string, string>, url: URL) => Promise<Response>;
 
 export const TRANSLATE_MODEL = 'claude-haiku-4-5-20251001';
 
-export const translateConfigured = (env: Record<string, string | undefined> = process.env) => Boolean(env.ANTHROPIC_API_KEY?.trim());
+export const translateConfigured = (env: Record<string, string | undefined> = process.env) => Boolean(platformTranslator() || env.ANTHROPIC_API_KEY?.trim());
 
 const languageNames: Record<CommunityLocale, string> = { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese', 'pt-BR': 'Brazilian Portuguese' };
 
@@ -46,6 +47,8 @@ export function systemPrompt(to: CommunityLocale): string {
 
 /** One call to the Messages API. Separate so tests can see exactly what was sent. */
 export async function callModel(markdown: string, to: CommunityLocale, env: Record<string, string | undefined> = process.env): Promise<string> {
+  const translate = platformTranslator();
+  if (translate) return translate(markdown, systemPrompt(to));
   const base = (env.ANTHROPIC_BASE_URL?.trim() || 'https://api.anthropic.com').replace(/\/+$/, '');
   const response = await fetch(`${base}/v1/messages`, {
     method: 'POST',
@@ -96,6 +99,12 @@ export const translatePost: Handler = async (req, params) => {
   try {
     translated = await callModel(md, to);
   } catch (error) {
+    if (error instanceof Error && error.message.includes('free request limit')) {
+      throw new ApiError(413, 'too_large', 'This post is too long for translation within the free allowance.');
+    }
+    if (error instanceof Error && error.message.includes('free daily translation allowance')) {
+      throw new ApiError(429, 'rate_limited', 'The free translation allowance has been reached for today. Cached translations remain available.');
+    }
     console.error('[community-translate] failed:', error instanceof Error ? error.message : String(error));
     throw new ApiError(502, 'translate_failed', 'The translation didn’t work this time. Please try again in a minute.');
   }

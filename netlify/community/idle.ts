@@ -25,7 +25,7 @@
 // If Blobs is unavailable, every gate fails open: the job runs against the database as before.
 // Losing sleep is better than losing an email.
 
-import { getStore } from '@netlify/blobs';
+import { platformStore } from '../platform.ts';
 import { randomToken } from './db.ts';
 
 export type SignalStore = {
@@ -54,7 +54,7 @@ export function memorySignalStore(): SignalStore & { data: Map<string, unknown> 
 function store(): SignalStore | null {
   if (override) return override;
   try {
-    const blobs = getStore({ name: 'community-signals', consistency: 'strong' });
+    const blobs = platformStore('community-signals');
     return {
       get: (key) => blobs.get(key, { type: 'json' }) as Promise<unknown>,
       set: async (key, value) => {

@@ -97,7 +97,7 @@ export function contentPage(
 }
 export default async function editorialContent(
   req: Request,
-  context: { next: () => Promise<Response> },
+  context: { next: () => Promise<Response>; fetch?: typeof fetch },
 ) {
   const url = new URL(req.url),
     match = url.pathname.match(
@@ -111,7 +111,7 @@ export default async function editorialContent(
   let content: EditorialContent | EditorialContent[] | null = null,
     status = 200;
   try {
-    const result = await fetch(new URL(api, url), {
+    const result = await (context.fetch ?? fetch)(new URL(api, url), {
       headers: { accept: 'application/json' },
       signal: AbortSignal.timeout(8000),
     });

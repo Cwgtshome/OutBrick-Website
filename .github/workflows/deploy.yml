@@ -1,83 +1,55 @@
-# Production deploy from GitHub (8 October 2026).
-#
-# Netlify's own Git builds count against the team's build credits, which ran out on 8 October
-# 2026 after a run of failed builds. This workflow does the same work on GitHub's runner instead:
-# `netlify deploy --build --prod` runs the full Netlify pipeline here — the site build
-# (`pnpm build`), Netlify Database migrations, Functions and Edge Functions bundling, headers and
-# redirects from netlify.toml — and uploads the result to the `outbrick` project. Netlify then
-# only serves it.
-#
-# Setup (once, by the owner):
-#   1. Netlify → User settings → Applications → Personal access tokens → New token.
-#   2. GitHub → this repo → Settings → Secrets and variables → Actions:
-#        secret   NETLIFY_AUTH_TOKEN = that token
-#        variable DEPLOY_FROM_GITHUB = true      (anything else, or unset, disables this workflow)
-#   Build-time environment (GA_MEASUREMENT_ID, RESEND_API_KEY, …) is read from the Netlify
-#   project by the CLI, so nothing else needs copying.
-#
-# A Netlify production deploy may itself still need credits; if Netlify refuses the publish, the
-# job fails with Netlify's message and the live site stays as it was. When Netlify's own Git
-# builds are healthy again, set DEPLOY_FROM_GITHUB to false (or stop Netlify's builds) so a
-# commit is not deployed twice.
-
+# Enable DEPLOY_TO_CLOUDFLARE only after migration cutover and live acceptance.
 name: Deploy to production
-
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: deploy-production
   cancel-in-progress: false
-
 jobs:
   deploy:
-    if: vars.DEPLOY_FROM_GITHUB == 'true'
+    if: vars.DEPLOY_TO_CLOUDFLARE == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      NETLIFY_SITE_ID: 8b73b763-21f4-405b-a284-a4605cc31d2f
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: e33a32f168de9597cfccf1698cb153a8
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      GA_MEASUREMENT_ID: G-13BKCF9FV4
     steps:
       - uses: actions/checkout@v4
         with:
-          # postbuild.mjs dates sitemap entries and names the build from git history.
           fetch-depth: 0
           persist-credentials: false
-
       - uses: pnpm/action-setup@v4
         with:
           version: 10.12.1
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22.13.0
           cache: pnpm
-
       - run: pnpm install --frozen-lockfile
-
-      - name: Check the deploy token is configured
+      - name: Check deployment credentials
+        run: test -n "$CLOUDFLARE_API_TOKEN"
+      - run: pnpm build
+      - run: pnpm lint
+      - run: pnpm exec tsc --noEmit
+      - run: pnpm audit:seo
+      - run: pnpm check:links
+      - run: pnpm check:jsonld
+      - run: pnpm cloudflare:prepare
+      - name: Deploy shared free translation limiter
+        run: pnpm exec wrangler deploy --config wrangler.translation.jsonc
+      - name: Deploy website
+        run: node scripts/cloudflare/deploy-version.mjs
+      - name: Verify production routes and exact build
         run: |
-          if [ -z "$NETLIFY_AUTH_TOKEN" ]; then
-            echo "::error::NETLIFY_AUTH_TOKEN is not set; see the header of this workflow."
-            exit 1
-          fi
-
-      - name: Build and deploy with the Netlify pipeline
-        run: >
-          npx --yes netlify-cli@27.8.1 deploy --build --prod --context production
-          --site "$NETLIFY_SITE_ID"
-          --message "GitHub Actions ${{ github.sha }}"
-
-      - name: Confirm the live build
-        run: |
-          for i in $(seq 1 18); do
-            live=$(curl -fsS "https://www.outbrick.site/build-info.json?cb=$RANDOM" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).commit))' || true)
-            if [ "$live" = "${{ github.sha }}" ]; then echo "Live: $live"; exit 0; fi
-            sleep 10
-          done
-          echo "::warning::The deploy finished but build-info.json reports '$live' rather than ${{ github.sha }} (a CDN cache, or a newer deploy)."
+          node scripts/cloudflare/smoke.mjs https://www.outbrick.site
+          node --input-type=module -e 'const r=await fetch("https://www.outbrick.site/build-info.json?cb="+Date.now());const b=await r.json();if(b.commit!==process.env.GITHUB_SHA)throw Error("Production build mismatch")'
+      - name: Submit public sitemaps
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+        run: node scripts/cloudflare/deploy-succeeded.mjs

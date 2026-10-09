@@ -16,7 +16,7 @@
 // carry a Resend Idempotency-Key from `dedupe_key`, and a failed send backs off 15 min × 2^n,
 // giving up after 6 attempts.
 
-import { getStore } from '@netlify/blobs';
+import { platformStore } from '../platform.ts';
 import { sql, transaction, type Query } from '../community/db.ts';
 import type { SignalStore } from '../community/idle.ts';
 import type { ResendResult, OutgoingEmail } from '../../emails/resend.ts';
@@ -51,7 +51,7 @@ export function setOutboxStoreForTests(store: SignalStore | null): void {
 function store(): SignalStore | null {
   if (override) return override;
   try {
-    const blobs = getStore({ name: 'community-signals', consistency: 'strong' });
+    const blobs = platformStore('community-signals');
     return {
       get: (key) => blobs.get(key, { type: 'json' }) as Promise<unknown>,
       set: async (key, value) => {

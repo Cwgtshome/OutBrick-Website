@@ -7,7 +7,7 @@
 //
 // Both steps leave the database asleep when there is nothing to do.
 
-import { getStore } from '@netlify/blobs';
+import { platformStore } from '../platform.ts';
 import { sendEmail } from '../../emails/resend.ts';
 import { prepareFeedback, prepareFixed } from './cases.ts';
 import { applyRetention, backfillSubscribers, prepareReengage, prepareSunset, prepareWelcome, sweepReengagement } from './newsletter.ts';
@@ -40,7 +40,7 @@ export const prepare: Preparer = async (row, apiKey) => {
 
 async function sweepDone(day: string): Promise<boolean | undefined> {
   try {
-    const store = getStore({ name: 'community-signals', consistency: 'strong' });
+    const store = platformStore('community-signals');
     return (await store.get('lifecycle-sweep-day', { type: 'text' })) === day;
   } catch {
     return undefined;
@@ -49,7 +49,7 @@ async function sweepDone(day: string): Promise<boolean | undefined> {
 
 async function flag(key: string): Promise<boolean | undefined> {
   try {
-    return (await getStore({ name: 'community-signals', consistency: 'strong' }).get(key, { type: 'text' })) === 'done';
+    return (await platformStore('community-signals').get(key, { type: 'text' })) === 'done';
   } catch {
     return undefined;
   }
@@ -57,7 +57,7 @@ async function flag(key: string): Promise<boolean | undefined> {
 
 async function setFlag(key: string): Promise<void> {
   try {
-    await getStore({ name: 'community-signals', consistency: 'strong' }).set(key, 'done');
+    await platformStore('community-signals').set(key, 'done');
   } catch {
     /* the import is idempotent */
   }
@@ -65,7 +65,7 @@ async function setFlag(key: string): Promise<void> {
 
 async function markSweep(day: string): Promise<void> {
   try {
-    await getStore({ name: 'community-signals', consistency: 'strong' }).set('lifecycle-sweep-day', day);
+    await platformStore('community-signals').set('lifecycle-sweep-day', day);
   } catch {
     /* the sweep is idempotent: running twice queues nothing new */
   }

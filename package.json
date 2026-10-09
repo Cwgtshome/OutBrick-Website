@@ -28,9 +28,13 @@
     "covers": "python3 scripts/make-cover.py",
     "emails:preview": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/build-email-previews.mjs --out outputs/email-previews",
     "emails:resend-templates": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/build-resend-templates.mjs",
-    "newsletter": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/send-newsletter.mjs"
+    "newsletter": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/send-newsletter.mjs",
+    "cloudflare:prepare": "node scripts/cloudflare/prepare-routes.mjs",
+    "cloudflare:dev": "wrangler dev --config wrangler.jsonc",
+    "cloudflare:deploy:preview": "node scripts/cloudflare/prepare-routes.mjs && wrangler deploy --config wrangler.jsonc"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
     "@netlify/blobs": "^11.1.3",
     "@netlify/database": "^2.0.1",
     "react": "19.2.6",
@@ -57,7 +61,7 @@
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vite": "8.0.13",
-    "wrangler": "4.92.0"
+    "wrangler": "4.149.0"
   },
   "type": "module"
 }

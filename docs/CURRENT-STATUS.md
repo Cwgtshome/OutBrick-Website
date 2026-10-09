@@ -3,6 +3,49 @@
 Updated 8 October 2026. This is a dated handoff, not a claim that account state remains unchanged.
 Recheck live Git, `/build-info.json`, `/api/community/session` and relevant providers before acting.
 
+## Cloudflare production cutover (9 October 2026 UTC)
+
+The owner declined any Netlify payment and explicitly accepted the latest verified backup,
+with later missing information to be reviewed together. Netlify credit exhaustion disabled the
+source site/database at 01:08:27 UTC. The accepted database snapshot was captured at 00:44:42 UTC;
+writes in the intervening approximately 24 minutes remain unverified. No source data was deleted.
+
+Production Neon restored and independently matched all 37 original tables, 976 rows, 18 sequence
+counters and backup hashes before additive migrations. All 17 migrations and 51 archived Netlify
+form submissions (50 normal, one spam) are preserved without resending archived forms. A fresh
+post-pause read through site and individual-form submission endpoints matches all 51 records
+exactly; the unavailable form-list endpoint did not prevent this independent verification. A fresh
+post-pause Blobs export remains readable: community-uploads is explicitly empty and all three
+community-signals objects match the earlier export and production R2 readback hashes.
+
+Both www.outbrick.site and outbrick.site are Cloudflare Worker custom domains with HTTPS. The
+apex redirects to www. All 13 other mail/verification DNS records are preserved. Netlify remains
+disabled and automatic builds are stopped. Cloudflare's every-five-minute trigger owns the
+existing notifications, outbox, release, digest, trust and badge schedules. Existing Resend
+credentials, signed links and the legacy resend-events webhook path are retained.
+
+The integrated website includes main 35ab150 (Help Centre and forum fixes). Release-note
+sections now include their version in their accessible name, resolving duplicate landmark names
+across releases in all languages. The rendered-copy audit recognizes Portuguese Menu as valid
+Portuguese rather than an English carryover. Build/lint/typecheck,
+259 backend tests, SEO/Help Centre/link checks and all four browser/responsive CI jobs pass.
+Canonical static-route smoke checks pass against the Cloudflare endpoint; DNS caches can still
+resolve Netlify temporarily. Accessibility CI and actual user Google/Apple/passkey sign-in remain
+separate acceptance checks. All 17 production secret bindings are encrypted.
+
+Free Cloudflare GPT-OSS translation is enabled with the shared atomic 5,000-neuron daily budget,
+input/output limits and no paid fallback. Google Analytics retains G-13BKCF9FV4 (provider property
+552790863). Search Console's replacement service account key authenticates with Full domain-property
+access; GitHub encrypted secrets contain Cloudflare, Bing and Search Console credentials. Live
+sitemap submissions passed: Search Console 204, Bing sitemap/100 URLs and IndexNow 1,255 URLs 200.
+The restricted Cloudflare token passed exact-version deployment while retaining domains/schedules.
+GitHub DEPLOY_TO_CLOUDFLARE=true is confirmed by settings readback. Real provider sign-in
+and the exact automatic main deployment still require final acceptance.
+
+Private backups/receipts are retained outside Git in the dated OutBrick migration backup folder.
+The accepted older-snapshot refresh requires an explicit owner receipt matching the manifest hash,
+continued source credit pause, unchanged destination inventory/hashes/counters, and a destination
+backup before atomic replacement. This exception does not turn an older snapshot into a fresh one.
 
 ## Help Centre and forum overhaul (8–9 October 2026, branch `claude/community-help`; not deployed)
 
@@ -46,6 +89,13 @@ editorial CSS ships only with the editorial shell (site-wide CSS 38.9 → 27.4 K
 WebP twins and right-sized `srcset` variants (covers at 960w, friends 240w, wordmark 48/96/192 px).
 Not done on purpose: inlining critical CSS, framework JS, longer caches for non-hashed assets, and
 the hero headline's fade-in (a design call; real-user LCP may count it).
+
+## Cloudflare migration preparation (8 October 2026)
+
+See [CLOUDFLARE-MIGRATION.md](CLOUDFLARE-MIGRATION.md) for current provider setup, verified
+backup/restore scope and remaining cutover gates. Production remains Netlify. Source snapshot
+restored successfully to Neon; the Cloudflare preview is still undergoing integration and testing.
+This preparation does not establish real sign-in, email delivery or production migration.
 
 ## Production checkpoint
 
@@ -365,3 +415,16 @@ Brazilian Portuguese coordination: the user identified an ongoing cloud task. Co
 The isolated branch `codex/pt-br-localization` adds `pt-BR` across public routes, all 99 journal articles, community and backend copy, transactional/newsletter email, forms, legal pages, support FAQs, search, localized metadata and share assets. It adds nine translated editorial guide threads in a new additive migration; the existing 45 guide seeds and all merged admin authorization remain unchanged. It is rebased on main checkpoint `a247aa6776e8b0a0e044c215ea693fa511c57ced`, preserving PR #15 authorization and editorial code plus the deployment receipts above. The branch is pushed to origin. Opening the draft PR is blocked because GitHub CLI reports the injected `GH_TOKEN` is invalid and there is no logged-in CLI account. GitHub's PR creation page for the pushed branch is https://github.com/Cwgtshome/OutBrick-Website/pull/new/codex/pt-br-localization; no deploy preview exists yet.
 
 Local verification on the branch: production build rendered 1,668 routes and 168 email previews (28 templates × 6 languages); all 241 community/backend/auth/newsletter and place-name tests passed. A focused rerun after final edits passed the six-language admin and player-guide suites (10 tests). `pnpm lint`, TypeScript and `git diff --check` passed. The rendered-copy audit found no carryovers or missing counterparts across 1,390 page pairs; the SEO audit covered 1,674 pages with zero errors or warnings; the asset audit verified 147 neutral image variants across five translated locales. Browser checks passed for 150 documents, 750 language links, four locale switches with back navigation, 25 internal links, 12 noindex checks and 144 no-JavaScript pages. The form audit passed all 20 hydrated flows and 20 no-JavaScript destinations. Netlify TOML parses, and the PT-BR challenge rewrite precedes its unknown-page fallback. Manual review of Brazil-specific legal language is still appropriate before relying on it as legal advice. Keep the PR isolated; do not edit the merged admin authorization, function paths, or immutable migrations.
+
+
+## Cloudflare migration preview — 8 October 2026
+
+Preparation continues on `codex/cloudflare-migration`; production website still runs on Netlify.
+Cloudflare DNS is active and all original records are preserved. Preview verification now
+includes actual email-link sign-in, uploads, export, webhook signatures, four persisted/sent
+forms and five real Cloudflare-hosted translations with cache reuse. The user requires free
+AI only: a shared durable reservation limit caps OutBrick translation at 5,000 neurons/day UTC;
+no paid GPT gateway or credit top-up is used. Original Apple key and Resend signing-key
+continuity are recovered/verified; Google OAuth secret is still required. Final source freeze,
+latest-data restore, production routing, CI credentials, Google/Bing API setup and real-domain
+acceptance remain pending. See [migration evidence and limits](CLOUDFLARE-MIGRATION.md).

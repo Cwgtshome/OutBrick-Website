@@ -20,3 +20,5 @@ checks, then [ARCHITECTURE.md](ARCHITECTURE.md) for source locations, configurat
 Dated plans explain intent; current code and scoped verification establish what actually works.
 
 - [Admin and editorial operations](ADMIN-AND-EDITORIAL.md): roles, verified owner bootstrap, private drafts, publishing and validation.
+
+- [Cloudflare migration checkpoint](CLOUDFLARE-MIGRATION.md): verified infrastructure and backup preparation, shared runtime adapters and remaining cutover gates.
