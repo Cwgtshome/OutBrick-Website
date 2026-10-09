@@ -68,6 +68,8 @@ export type NewCase = {
   iosVersion: string;
   /** The contact form's topic-specific answers (level, purchase, assistive technology, what was tried). Kept on the "created" event. */
   details?: Record<string, string>;
+  /** Screenshot ids from support-attachments.ts, kept on the "created" event. */
+  attachments?: string[];
 };
 
 /** The contact form's optional, topic-specific fields that a case keeps, with their length limits. */
@@ -97,7 +99,10 @@ export async function createCase(input: NewCase): Promise<{ id: number; ref: str
       ON CONFLICT DO NOTHING
       RETURNING id::int, ref`;
     if (rows[0]) {
-      const details = input.details && Object.keys(input.details).length ? { details: input.details } : {};
+      const details = {
+        ...(input.details && Object.keys(input.details).length ? { details: input.details } : {}),
+        ...(input.attachments?.length ? { attachments: input.attachments } : {}),
+      };
       await sql`INSERT INTO support_case_events (case_id, kind, data) VALUES (${num(rows[0].id)}, 'created', ${JSON.stringify(details)}::jsonb)`;
       return { id: num(rows[0].id), ref: String(rows[0].ref) };
     }

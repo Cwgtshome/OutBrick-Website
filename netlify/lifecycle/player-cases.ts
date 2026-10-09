@@ -24,6 +24,7 @@ import { SENDERS, sendEmail, type OutgoingEmail } from '../../emails/resend.ts';
 import { caseLinkEmail, teamPlayerNote } from '../../emails/support-centre.ts';
 import { caseAdminUrl, feedbackLinks } from './cases.ts';
 import { cancelKey } from './outbox.ts';
+import { attachmentIds } from './support-attachments.ts';
 
 export const CASE_LINK_DAYS = 365;
 const TEAM_INBOX = 'support@outbrick.site';
@@ -58,14 +59,14 @@ function signedCaseId(params: URLSearchParams, apiKey: string): number {
 const playerKinds = new Set(['created', 'reply', 'status', 'fixed_in', 'fixed_notified', 'feedback', 'reopened', 'note']);
 
 export type PlayerEvent =
-  | { kind: 'created'; at: string }
+  | { kind: 'created'; at: string; attachments: string[] }
   | { kind: 'reply'; at: string; body: string; staff: string }
   | { kind: 'status'; at: string; to: string }
   | { kind: 'fixed_in'; at: string; version: string; note: string }
   | { kind: 'fixed_notified'; at: string; version: string }
   | { kind: 'feedback'; at: string; solved: boolean | null; rating: number | null; comment: string }
   | { kind: 'reopened'; at: string; comment: string }
-  | { kind: 'player_note'; at: string; body: string };
+  | { kind: 'player_note'; at: string; body: string; attachments: string[] };
 
 function playerEvent(e: Record<string, unknown>): PlayerEvent | null {
   const kind = String(e.kind);
@@ -76,7 +77,7 @@ function playerEvent(e: Record<string, unknown>): PlayerEvent | null {
   const body = text(e.body);
   switch (kind) {
     case 'created':
-      return { kind, at };
+      return { kind, at, attachments: attachmentIds(data.attachments) };
     case 'reply':
       // Only the first name, as the email signs it.
       return { kind, at, body, staff: text(e.actor).trim().split(/\s+/)[0] || 'OutBrick' };
@@ -92,7 +93,7 @@ function playerEvent(e: Record<string, unknown>): PlayerEvent | null {
       return { kind, at, comment: body };
     case 'note':
       // Staff notes stay private; only what the player added is shown back to them.
-      return data.from === 'player' ? { kind: 'player_note', at, body } : null;
+      return data.from === 'player' ? { kind: 'player_note', at, body, attachments: attachmentIds(data.attachments) } : null;
     default:
       return null;
   }
@@ -149,12 +150,13 @@ export const addPlayerNote: Route['run'] = async (req) => {
   const body = await readJson(req, 16 * 1024);
   const id = signedCaseId(signedParams(body), apiKey);
   const message = str(body, 'message', { min: 2, max: 5000, label: 'Your message' });
+  const attachments = attachmentIds(body.attachments);
   if (!(await rateAllow(`case-note:${ipHash(req)}`, 20, 3600)) || !(await rateAllow(`case-note-case:${id}`, 10, 86400))) throw tooMany();
   const [c] = await sql`SELECT id::int, ref, locale, status FROM support_cases WHERE id = ${id}`;
   if (!c) throw notFound('This link is not valid.');
   const reopen = ['replied', 'resolved', 'closed'].includes(String(c.status));
   await transaction(async (q) => {
-    await q(`INSERT INTO support_case_events (case_id, kind, body, data) VALUES ($1, 'note', $2, '{"from":"player"}'::jsonb)`, [id, message]);
+    await q(`INSERT INTO support_case_events (case_id, kind, body, data) VALUES ($1, 'note', $2, $3::jsonb)`, [id, message, JSON.stringify(attachments.length ? { from: 'player', attachments } : { from: 'player' })]);
     if (reopen) {
       await q(`UPDATE support_cases SET status = 'open', reopened = reopened + 1, updated_at = now() WHERE id = $1`, [id]);
       await q(`INSERT INTO support_case_events (case_id, kind, body, data) VALUES ($1, 'reopened', '', '{"by":"player-note"}'::jsonb)`, [id]);
@@ -165,7 +167,7 @@ export const addPlayerNote: Route['run'] = async (req) => {
   // A reopened case is no longer waiting for "did we solve it?".
   if (reopen) await cancelKey(`feedback-${id}`);
   const locale: EmailLocale = isEmailLocale(c.locale) ? c.locale : 'en';
-  const team = teamPlayerNote({ ref: String(c.ref), caseUrl: caseAdminUrl(id), message, reopened: reopen, locale });
+  const team = teamPlayerNote({ ref: String(c.ref), caseUrl: caseAdminUrl(id), message: attachments.length ? `${message}\n\n[${attachments.length} screenshot${attachments.length > 1 ? 's' : ''} attached: open the case to see them]` : message, reopened: reopen, locale });
   const to = normalizeEmail(process.env.TEAM_INBOX) || TEAM_INBOX;
   const sent = await sender(apiKey, { ...SENDERS.supportTeam, to, subject: team.subject, html: team.html, text: team.text, tags: [{ name: 'form', value: 'support-player-note' }] }, `case-${id}-note-${Date.now()}`);
   if (!sent.ok) console.error(`[support] team copy of a player note on case ${id} failed: ${sent.error}`);

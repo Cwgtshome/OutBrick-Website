@@ -5,6 +5,8 @@ import { clientTree, clientText } from '../../../lib/i18n/client-tree';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { contactTopics, deviceTopics } from '../../../lib/business';
 import { assistiveOptions } from '../../../lib/support/model';
+import { supportCopies } from '../../../lib/support/copy/index';
+import { AttachmentPicker } from '../../components/support/attachments';
 import type { Suggestion } from '../../../lib/support/content';
 import { ConsentField, NetlifyForm, SelectField, SubmitRow, TextArea, TextField, useSearchParam } from '../../components/netlify-form';
 
@@ -24,9 +26,19 @@ import { ConsentField, NetlifyForm, SelectField, SubmitRow, TextArea, TextField,
  */
 
 const DRAFT_KEY = 'ob-contact-draft';
-const accessibilityTopics = ['accessibility'];
+const accessibilityTopics = ['accessibility', 'accessibility-panel'];
 const levelTopics = ['support', 'bug', 'accessibility'];
 const purchaseTopics = ['purchases'];
+const attachTopics = ['support', 'bug', 'accessibility', 'purchases', 'other'];
+
+/** The game's assistive codes (the bug report's, e.g. "voiceover,larger_text") or a form value, as the form's choice. */
+const appAssistive: Record<string, string> = { voiceover: 'VoiceOver', switch_control: 'Switch Control', larger_text: 'Larger Text', voice_control: 'Voice Control', zoom: 'Zoom', keyboard: 'Full Keyboard Access' };
+function assistiveChoice(raw: string | undefined): string {
+  if (!raw) return '';
+  if ((assistiveOptions as readonly string[]).includes(raw)) return raw;
+  for (const code of raw.split(',')) if (appAssistive[code.trim()]) return appAssistive[code.trim()];
+  return '';
+}
 
 function readDraft(): string {
   try {
@@ -117,7 +129,8 @@ export function ContactForm({ suggestions = [], trackHref = '/support/request' }
   const showDevice = deviceTopics.includes(topic) || accessibilityTopics.includes(topic);
   const showLevel = levelTopics.includes(topic);
   const showPurchase = purchaseTopics.includes(topic);
-  const showAssistive = accessibilityTopics.includes(topic);
+  // The app sends the assistive technology that is on (e.g. voiceover) whatever the topic: show what it filled in.
+  const showAssistive = accessibilityTopics.includes(topic) || Boolean(assistiveChoice(assistive));
   const topicLabel = (value: string | null) => clientText(contactTopics.find((t) => t.value === value)?.label ?? 'your message', locale);
 
   return clientTree((
@@ -192,7 +205,7 @@ export function ContactForm({ suggestions = [], trackHref = '/support/request' }
                   optional
                   placeholder="None or not sure"
                   options={assistiveOptions.map((o) => ({ value: o, label: o === 'other' ? 'Other' : o }))}
-                  defaultValue={assistive && (assistiveOptions as readonly string[]).includes(assistive) ? assistive : ''}
+                  defaultValue={assistiveChoice(assistive)}
                   error={errors.assistive}
                 />
               </div>
@@ -239,6 +252,9 @@ export function ContactForm({ suggestions = [], trackHref = '/support/request' }
               </>
             ) : null}
           </div>
+          <div hidden={!attachTopics.includes(topic)}>
+            <AttachmentPicker locale={locale} name="attachments" />
+          </div>
           <ConsentField error={errors.consent}>
             I agree that OutBrick may use these details to reply to me, as described in the{' '}
             <a href="/privacy#forms">privacy policy</a>.
@@ -251,7 +267,7 @@ export function ContactForm({ suggestions = [], trackHref = '/support/request' }
                 <b>What happens next</b>
                 <ol className="ss-next">
                   <li>You get an email with your reference straight away.</li>
-                  <li>A person on the team reads your message and replies by email.</li>
+                  <li>{supportCopies[locale].hub.promise}</li>
                   <li>Follow your request and add details at any time from the link in that email.</li>
                 </ol>
               </>

@@ -19,8 +19,10 @@ import { siteWords } from '../lib/i18n/site';
 import './styles/fonts.css';
 import './globals.css';
 import './styles/consent.css';
+import './styles/status-banner.css';
 import { consentDefaultsScript, gaMeasurementId } from '../lib/analytics';
 import { ConsentBanner } from './components/consent-banner';
+import { StatusBanner } from './components/support/status-banner';
 import { siteUrl } from '../lib/site';
 import { siteGraph } from '../lib/structured-data';
 import { APP_STORE_ID } from './store-badge';
@@ -181,6 +183,7 @@ export function SiteDocument({ lang, children }: { lang: string; children: React
       </head>
       <body className="antialiased">
         <LocaleProvider locale={lang as Locale}>{children}</LocaleProvider>
+        <StatusBanner locale={(isTranslatedLocale(lang) ? lang : 'en') as Locale} />
         {gaMeasurementId ? <ConsentBanner measurementId={gaMeasurementId} locale={(isTranslatedLocale(lang) ? lang : 'en') as Locale} /> : null}
         {/* The organisation, its founder and the website: the graph every page's own JSON-LD points into. */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localizedSiteGraph(isTranslatedLocale(lang) ? lang : 'en')).replace(/</g, '\\u003c') }} />

@@ -65,7 +65,21 @@ email links, guide feedback tallies and staff-only reading), plus the existing l
 forum and form suites, build, lint, typecheck, `audit:seo`, `check:links`, `check:jsonld`,
 `check:help` and the localization audit.
 
-## Recommended next steps
+## Added on 9 October 2026 (second release)
+
+| Where | What it does |
+| --- | --- |
+| Contact form and request page | **Screenshots**: up to three per message. The browser converts HEIC and shrinks large images; the server (`netlify/lifecycle/support-attachments.ts`) checks the bytes, strips metadata and stores them in R2 under `support/<id>`. They are served only to staff (`/api/community/admin/cases/:id/attachments/:aid`) or to the player through their signed link, and only when that case's events name the id. No index table: the case events are the index. |
+| Every page | **Site-wide notice** (`app/components/support/status-banner.tsx`), switched on from the admin dashboard (**Site-wide notice**) with a message per language, an optional link and 1–14 days; stored in R2 (`site-status.json`), so reading it costs no database query. Fixed to the bottom of the screen, dismissible, fetched once the page is idle. |
+| `/support/levels` | **Help with a level**: the community threads about a level (by the bug report's level or a title such as "Level 512", "niveau 512", "レベル512"), a button that starts a help thread titled with the level, a bug report for the level, tips for hard boards and a note on spoilers. |
+| `/support/get-involved` | **Help shape OutBrick**: the TestFlight beta group and the accessibility panel (both sign up through the contact form with topics `beta` and `accessibility-panel`, so each sign-up is a case the team can answer), and the monthly "From the team" post in Announcements. The first post is drafted in `docs/drafts/from-the-team-2026-10.md` for the owner to post. |
+| Contact page, hub, request page | **Reply-time promise**: "A person on the team reads every message. We aim to reply within two working days." Keep it true; change `hub.promise` in `lib/support/copy/*` if the target changes. |
+| Privacy policy | Four bullets in the forms section: screenshots, the private request link, anonymous "Was this helpful?" answers, programme sign-ups (six languages). |
+| Game (branch `feat-support-links`) | Settings › Contact us opens the contact form with the device, iOS version, app version, level and assistive technology filled in (`source=app`), and a **Known issues** row opens `/support/known-issues`. |
+
+Tests: `netlify/lifecycle/support-extras.test.ts` (attachments, notice, level threads) runs in CI with the request-tracking and lifecycle suites.
+
+## Recommended next steps (as of the first release; items 1–8 were built in the second)
 
 Ordered by value to players; the ones marked **owner** need a decision before building.
 

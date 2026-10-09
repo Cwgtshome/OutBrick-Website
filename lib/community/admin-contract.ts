@@ -93,6 +93,8 @@ export type HelpFeedbackPage = {
 };
 export type HelpFeedbackMonth = { month: string; updatedAt: string; pages: Record<string, HelpFeedbackPage> };
 export type HelpFeedbackResponse = { month: HelpFeedbackMonth; previous: HelpFeedbackMonth };
+/** The site-wide notice (netlify/community/site-status.ts). */
+export type SiteStatusNotice = { id: string; level: 'info' | 'warning' | 'outage'; messages: Record<string, string>; link: string | null; updatedAt: string; expiresAt: string };
 /** The server returns at most this many cases per page. */
 export const SUPPORT_CASE_PAGE = 50;
 

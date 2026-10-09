@@ -70,6 +70,7 @@ import type {
   EmailReportWindow,
   HelpFeedbackResponse,
   PolicyNoticeRequest,
+  SiteStatusNotice,
   SupportCase,
   SupportCaseDetailResponse,
   SupportCaseFilter,
@@ -245,6 +246,10 @@ export const api = {
   ) => write<{ case: SupportCase }>('POST', `/admin/cases/${id}/status`, { status }),
   markCaseFixed: (id: number, body: { version: string; note?: string }) =>
     write<{ case: SupportCase }>('POST', `/admin/cases/${id}/fixed`, body),
+  // The query only defeats the public minute-long browser cache; the server ignores it.
+  siteStatus: () => get<{ status: SiteStatusNotice | null }>(`/site-status?fresh=${Date.now()}`, true),
+  setSiteStatus: (body: { level: string; messages: Record<string, string>; link?: string; days: number }) => write<{ status: SiteStatusNotice }>('POST', '/admin/site-status', body),
+  clearSiteStatus: () => write<{ status: null }>('DELETE', '/admin/site-status'),
   helpFeedback: (month?: string) =>
     get<HelpFeedbackResponse>(`/admin/help-feedback${query({ month: month ?? null })}`, true),
   applications: (kind: ApplicationKind | 'all', includeDecided = false) =>

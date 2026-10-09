@@ -25,11 +25,13 @@ export const contactTopics: ContactTopic[] = [
   { value: 'marketing', label: 'Marketing & partnerships' },
   { value: 'affiliate', label: 'Affiliate programme' },
   { value: 'careers', label: 'Careers' },
+  { value: 'beta', label: 'Beta testing' },
+  { value: 'accessibility-panel', label: 'Accessibility panel' },
   { value: 'other', label: 'Other' },
 ];
 
 /** Topics that show the optional device, iOS version and app version fields. */
-export const deviceTopics = ['support', 'bug'];
+export const deviceTopics = ['support', 'bug', 'beta'];
 
 // ---------------------------------------------------------------------------------------
 // Affiliate programme

@@ -90,7 +90,8 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
   const [draft] = useState(() => (prefill.fromApp ? null : readDraft<NewThreadDraft>(draftKey)));
   const [restored, setRestored] = useState(!!draft);
   const [category, setCategory] = useState(draft?.category ?? route.category);
-  const [title, setTitle] = useState(draft?.title ?? '');
+  // Level help (/support/levels) starts a thread already titled "Level 512: ".
+  const [title, setTitle] = useState(() => draft?.title ?? (new URLSearchParams(window.location.search).get('title') ?? '').replace(/\s+/g, ' ').slice(0, 140));
   const [language, setLanguage] = useState<CommunityLocale>(draft?.language ?? prefill.lang ?? locale);
   const [body, setBody] = useState(draft?.body ?? '');
   const [bug, setBug] = useState(draft?.bug ?? { device: prefill.device ?? '', osVersion: prefill.os ?? '', appVersion: prefill.app ?? '', steps: '', expected: '', actual: '', level: prefill.level ? String(prefill.level) : '' });

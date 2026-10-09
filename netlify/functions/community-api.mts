@@ -46,6 +46,9 @@ import { bookmark, react } from '../community/reactions.ts';
 import { dashboard, watchAll, saveContent, publishContent, publicContent } from '../community/admin.ts';
 import { caseRoutes } from '../lifecycle/cases.ts';
 import { playerCaseRoutes } from '../lifecycle/player-cases.ts';
+import { attachmentRoutes } from '../lifecycle/support-attachments.ts';
+import { siteStatusRoutes } from '../community/site-status.ts';
+import { levelRoutes } from '../community/levels.ts';
 import { helpFeedbackRoutes } from '../community/help-feedback.ts';
 import { applicationRoutes } from '../lifecycle/applications.ts';
 import { securityRoutes } from '../lifecycle/security.ts';
@@ -73,6 +76,9 @@ const routes: Route[] = [
   // Customer lifecycle (8 October 2026): support cases, applications, notices.
   ...caseRoutes(base),
   ...playerCaseRoutes(base),
+  ...attachmentRoutes(base),
+  ...siteStatusRoutes(base),
+  ...levelRoutes(base),
   ...helpFeedbackRoutes(base),
   ...applicationRoutes(base),
   ...securityRoutes(base),

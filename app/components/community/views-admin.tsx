@@ -7,6 +7,7 @@ import type {
   EditorialContent,
   HelpFeedbackMonth,
   PolicyNoticeRequest,
+  SiteStatusNotice,
   SupportCaseEvent,
   SupportCaseFilter,
   SupportCaseStatus,
@@ -129,6 +130,7 @@ function Dashboard() {
       </dl>
       <SupportCases initialCase={link.caseId} />
       <GuideFeedbackPanel />
+      <SiteStatusPanel />
       <Applications initialKind={link.applicationKind} initialId={link.applicationId} />
       {isAdmin ? <PolicyNotice /> : null}
       {isAdmin ? <EmailAnalytics /> : null}
@@ -944,7 +946,7 @@ function CaseDetail({
       </h4>
       <ol className="cm-admin-members">
         {data.events.map((e) => (
-          <CaseEventItem key={e.id} event={e} statusLabel={statusLabel} />
+          <CaseEventItem key={e.id} event={e} statusLabel={statusLabel} caseId={c.id} />
         ))}
       </ol>
       <form className="cm-form cm-admin-editor" onSubmit={(e) => void reply(e)} noValidate aria-labelledby={`${id}-reply`}>
@@ -994,7 +996,7 @@ function CaseDetail({
   );
 }
 
-function CaseEventItem({ event: e, statusLabel }: { event: SupportCaseEvent; statusLabel: (s: string) => string }) {
+function CaseEventItem({ event: e, statusLabel, caseId }: { event: SupportCaseEvent; statusLabel: (s: string) => string; caseId: number }) {
   const { locale } = useApp(),
     w = adminWords[locale];
   const version = String(e.data.version ?? '');
@@ -1035,6 +1037,17 @@ function CaseEventItem({ event: e, statusLabel }: { event: SupportCaseEvent; sta
         </p>
       ) : null}
       {e.body ? <PlainText text={e.body} /> : null}
+      {Array.isArray(e.data.attachments) && e.data.attachments.length ? (
+        <ul className="cm-admin-shots" aria-label={w.caseShots}>
+          {(e.data.attachments as string[]).map((a, i) => (
+            <li key={a}>
+              <a href={`/api/community/admin/cases/${caseId}/attachments/${a}`} target="_blank" rel="noopener">
+                <img src={`/api/community/admin/cases/${caseId}/attachments/${a}`} alt={`${w.caseShots} ${i + 1}`} width={140} height={140} loading="lazy" style={{ objectFit: 'cover', borderRadius: 10 }} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </li>
   );
 }
@@ -1120,6 +1133,87 @@ function GuideFeedbackPanel() {
           ) : null}
         </>
       )}
+    </section>
+  );
+}
+
+/** The site-wide notice: switch it on with a message per language, or remove it. */
+function SiteStatusPanel() {
+  const { locale, announce } = useApp(),
+    w = adminWords[locale],
+    t = w.siteStatus,
+    id = useId();
+  const load = useLoad('admin-site-status', () => api.siteStatus());
+  const [level, setLevel] = useState<'info' | 'warning' | 'outage'>('warning'),
+    [messages, setMessages] = useState<Record<string, string>>({}),
+    [link, setLink] = useState(''),
+    [days, setDays] = useState(3),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState<ApiFailure | null>(null);
+  const current: SiteStatusNotice | null = load.data?.status ?? null;
+  const save = async (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setBusy(true);
+    setError(null);
+    try {
+      await api.setSiteStatus({ level, messages, link: link.trim() || undefined, days });
+      load.reload();
+      announce(t.saved);
+    } catch (failure) {
+      setError(failure as ApiFailure);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const clear = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await api.clearSiteStatus();
+      load.reload();
+      announce(t.cleared);
+    } catch (failure) {
+      setError(failure as ApiFailure);
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <section className="cm-section" aria-labelledby={`${id}-h`}>
+      <h2 id={`${id}-h`}>{t.title}</h2>
+      <p>{t.lede}</p>
+      {current ? (
+        <div className="cm-note">
+          <p>
+            <strong>{t.current}:</strong> {t.levels[current.level]} · {current.messages[locale] || current.messages.en} · {t.ends} <Time iso={current.expiresAt} />
+          </p>
+          <button type="button" className="cm-act" disabled={busy} onClick={() => void clear()}>{t.clear}</button>
+        </div>
+      ) : load.data ? (
+        <p>{t.none}</p>
+      ) : null}
+      {error ? <AdminError error={error} /> : null}
+      <form className="cm-form cm-admin-editor" onSubmit={(e) => void save(e)} noValidate>
+        <Field id={`${id}-level`} label={t.kind}>
+          {(props) => (
+            <select {...props} value={level} onChange={(e) => setLevel(e.target.value as 'info' | 'warning' | 'outage')}>
+              {(['info', 'warning', 'outage'] as const).map((l) => <option key={l} value={l}>{t.levels[l]}</option>)}
+            </select>
+          )}
+        </Field>
+        {(['en', 'fr', 'de', 'es', 'ja', 'pt-BR'] as const).map((l) => (
+          <Field key={l} id={`${id}-m-${l}`} label={`${t.messageIn} ${languageName(l)}`} hint={l === 'en' ? t.messageHint : undefined} optional={l !== 'en'}>
+            {(props) => <input {...props} type="text" lang={l} maxLength={240} value={messages[l] ?? ''} required={l === 'en'} onChange={(e) => setMessages((m) => ({ ...m, [l]: e.target.value }))} />}
+          </Field>
+        ))}
+        <Field id={`${id}-link`} label={t.link} hint={t.linkHint} optional>
+          {(props) => <input {...props} type="text" maxLength={300} value={link} onChange={(e) => setLink(e.target.value)} />}
+        </Field>
+        <Field id={`${id}-days`} label={t.days}>
+          {(props) => <input {...props} type="number" min={1} max={14} value={days} onChange={(e) => setDays(Math.min(14, Math.max(1, Number(e.target.value) || 1)))} />}
+        </Field>
+        <button className="btn" type="submit" disabled={busy || !(messages.en ?? '').trim()}>{t.save}</button>
+      </form>
     </section>
   );
 }

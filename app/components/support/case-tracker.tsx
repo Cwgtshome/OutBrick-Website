@@ -4,19 +4,20 @@ import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
 import { useHydrated, useSearchParam } from '../netlify-form';
 import type { CaseStatus, SupportCopy } from '../../../lib/support/model';
 import { supportCopies } from '../../../lib/support/copy/index';
+import { AttachmentPicker } from './attachments';
 import { contactTopics } from '../../../lib/business';
 import { clientText } from '../../../lib/i18n/client-tree';
 import type { Locale } from '../../../lib/i18n/locales';
 
 type PlayerEvent =
-  | { kind: 'created'; at: string }
+  | { kind: 'created'; at: string; attachments: string[] }
   | { kind: 'reply'; at: string; body: string; staff: string }
   | { kind: 'status'; at: string; to: string }
   | { kind: 'fixed_in'; at: string; version: string; note: string }
   | { kind: 'fixed_notified'; at: string; version: string }
   | { kind: 'feedback'; at: string; solved: boolean | null; rating: number | null; comment: string }
   | { kind: 'reopened'; at: string; comment: string }
-  | { kind: 'player_note'; at: string; body: string };
+  | { kind: 'player_note'; at: string; body: string; attachments: string[] };
 
 type PlayerCase = {
   ref: string;
@@ -148,6 +149,7 @@ function CaseView({
         <p className="ss-ref"><span>{copy.reference}</span> <b translate="no">{data.ref}</b></p>
         <h2 id={`${id}-status`}>{copy.statusTitle[data.status]}</h2>
         <p>{copy.statusText[data.status]}</p>
+        {data.status === 'open' ? <p className="ss-promise">{supportCopies[locale].hub.promise}</p> : null}
         <ol className="ss-stages">
           {stageOrder.map((s, i) =>
             s === 'fixing' && skipFixing ? null : (
@@ -182,24 +184,42 @@ function CaseView({
           {data.events.map((e, i) => (
             <li key={i} className={`k-${e.kind}`}>
               <p className="when"><time dateTime={e.at}>{date(e.at, true)}</time></p>
-              <EventView e={e} copy={copy} data={data} detailRows={detailRows} />
+              <EventView e={e} copy={copy} data={data} detailRows={detailRows} signed={signed} locale={locale} />
             </li>
           ))}
         </ol>
       </section>
 
-      <AddDetails copy={copy} signed={signed} status={data.status} onUpdate={onUpdate} />
+      <AddDetails copy={copy} signed={signed} status={data.status} locale={locale} onUpdate={onUpdate} />
     </>
   );
 }
 
-function EventView({ e, copy, data, detailRows }: { e: PlayerEvent; copy: SupportCopy['request']; data: PlayerCase; detailRows: [string, string][] }) {
+function Shots({ ids, signed, locale }: { ids: string[]; signed: { p: string; x: string; t: string }; locale: Locale }) {
+  const t = supportCopies[locale].attach;
+  if (!ids.length) return null;
+  const src = (a: string) => `${api}/attachment?${new URLSearchParams({ ...signed, a }).toString()}`;
+  return (
+    <ul className="ss-shots" aria-label={t.title}>
+      {ids.map((a, i) => (
+        <li key={a}>
+          <a href={src(a)} target="_blank" rel="noopener">
+            <img src={src(a)} alt={t.alt(i + 1)} loading="lazy" width={120} height={120} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function EventView({ e, copy, data, detailRows, signed, locale }: { e: PlayerEvent; copy: SupportCopy['request']; data: PlayerCase; detailRows: [string, string][]; signed: { p: string; x: string; t: string }; locale: Locale }) {
   switch (e.kind) {
     case 'created':
       return (
         <>
           <p className="what">{copy.event.created}</p>
           <blockquote className="ss-quote">{data.message}</blockquote>
+          <Shots ids={e.attachments} signed={signed} locale={locale} />
           {detailRows.length ? (
             <dl className="ss-details" aria-label={copy.detailsTitle}>
               {detailRows.map(([k, v]) => (
@@ -241,6 +261,7 @@ function EventView({ e, copy, data, detailRows }: { e: PlayerEvent; copy: Suppor
         <>
           <p className="what">{copy.event.playerNote}</p>
           <blockquote className="ss-quote">{e.body}</blockquote>
+          <Shots ids={e.attachments} signed={signed} locale={locale} />
         </>
       );
     default:
@@ -248,9 +269,11 @@ function EventView({ e, copy, data, detailRows }: { e: PlayerEvent; copy: Suppor
   }
 }
 
-function AddDetails({ copy, signed, status, onUpdate }: { copy: SupportCopy['request']; signed: { p: string; x: string; t: string }; status: CaseStatus; onUpdate: (data: PlayerCase) => void }) {
+function AddDetails({ copy, signed, status, locale, onUpdate }: { copy: SupportCopy['request']; signed: { p: string; x: string; t: string }; status: CaseStatus; locale: Locale; onUpdate: (data: PlayerCase) => void }) {
   const id = useId();
   const [message, setMessage] = useState('');
+  const [shots, setShots] = useState<string[]>([]);
+  const [round, setRound] = useState(0);
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'failed' | 'busy'>('idle');
   const doneRef = useRef<HTMLOutputElement>(null);
   const reopens = ['replied', 'resolved', 'closed'].includes(status);
@@ -260,11 +283,13 @@ function AddDetails({ copy, signed, status, onUpdate }: { copy: SupportCopy['req
     if (message.trim().length < 2) return;
     setState('sending');
     try {
-      const response = await fetch(`${api}/note`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...signed, message: message.trim() }) });
+      const response = await fetch(`${api}/note`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...signed, message: message.trim(), attachments: shots }) });
       const body = (await response.json().catch(() => ({}))) as { case?: PlayerCase };
       if (response.status === 429) return setState('busy');
       if (!response.ok || !body.case) throw new Error(String(response.status));
       setMessage('');
+      setShots([]);
+      setRound((r) => r + 1);
       setState('sent');
       onUpdate(body.case);
       window.setTimeout(() => doneRef.current?.focus(), 0);
@@ -282,6 +307,7 @@ function AddDetails({ copy, signed, status, onUpdate }: { copy: SupportCopy['req
           <textarea id={`${id}-msg`} rows={5} minLength={2} maxLength={5000} required value={message} onChange={(e) => setMessage(e.target.value)} aria-describedby={`${id}-hint`} />
           <p id={`${id}-hint`} className="obf-hint">{copy.addHint}{reopens ? ` ${copy.addReopens}` : ''}</p>
         </div>
+        <AttachmentPicker key={round} locale={locale} onChange={setShots} />
         <button type="submit" className="btn" disabled={state === 'sending'}>{state === 'sending' ? copy.addSending : copy.addAction}</button>
         {state === 'sent' ? <output className="ss-thanks" tabIndex={-1} ref={doneRef}>{copy.added}</output> : null}
         {state === 'failed' ? <p className="ss-error" role="alert">{copy.failed}</p> : null}
