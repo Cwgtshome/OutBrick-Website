@@ -1,0 +1,53 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "outbrick",
+  "account_id": "e33a32f168de9597cfccf1698cb153a8",
+  "main": "cloudflare/worker.ts",
+  "compatibility_date": "2026-10-08",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "workers_dev": true,
+  "assets": {
+    "directory": "dist/client",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "not_found_handling": "none",
+    "run_worker_first": true
+  },
+  "vars": {
+    "CONTEXT": "production",
+    "SITE_ID": "8b73b763-21f4-405b-a284-a4605cc31d2f",
+    "JOBS_ENABLED": "false",
+    "CLOUDFLARE_TRANSLATION_ENABLED": "false"
+  },
+  "r2_buckets": [
+    {
+      "binding": "UPLOADS",
+      "bucket_name": "outbrick-uploads"
+    },
+    {
+      "binding": "SIGNALS",
+      "bucket_name": "outbrick-signals"
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.01
+    }
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "TRANSLATION_BUDGET",
+        "class_name": "TranslationBudget",
+        "script_name": "outbrick-translation-budget"
+      }
+    ]
+  }
+}

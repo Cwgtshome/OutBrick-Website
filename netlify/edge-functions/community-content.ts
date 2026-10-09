@@ -97,11 +97,11 @@ export function contentPage(
 }
 export default async function editorialContent(
   req: Request,
-  context: { next: () => Promise<Response> },
+  context: { next: () => Promise<Response>; fetch?: typeof fetch },
 ) {
   const url = new URL(req.url),
     match = url.pathname.match(
-      /^\/(?:(fr|de|es|ja)\/)?community\/(library|content\/(page|blog)\/([a-z0-9][a-z0-9-]{1,79}))\/?$/,
+      /^\/(?:(fr|de|es|ja|pt-BR)\/)?community\/(library|content\/(page|blog)\/([a-z0-9][a-z0-9-]{1,79}))\/?$/,
     );
   if (!match) return context.next();
   const locale = (match[1] || 'en') as CommunityLocale;
@@ -111,7 +111,7 @@ export default async function editorialContent(
   let content: EditorialContent | EditorialContent[] | null = null,
     status = 200;
   try {
-    const result = await fetch(new URL(api, url), {
+    const result = await (context.fetch ?? fetch)(new URL(api, url), {
       headers: { accept: 'application/json' },
       signal: AbortSignal.timeout(8000),
     });

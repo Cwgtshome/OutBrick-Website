@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "outbrick-translation-budget",
+  "account_id": "e33a32f168de9597cfccf1698cb153a8",
+  "main": "cloudflare/translation-budget.ts",
+  "compatibility_date": "2026-10-08",
+  "workers_dev": false,
+  "ai": { "binding": "AI" },
+  "durable_objects": { "bindings": [{ "name": "TRANSLATION_BUDGET", "class_name": "TranslationBudget" }] },
+  "migrations": [{ "tag": "translation-budget-v1", "new_sqlite_classes": ["TranslationBudget"] }],
+  "observability": { "enabled": false }
+}

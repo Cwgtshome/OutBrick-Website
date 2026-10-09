@@ -7,6 +7,7 @@
 
 import { getDatabase } from '@netlify/database';
 import { createHash, randomBytes } from 'node:crypto';
+import { platformDatabase } from '../platform.ts';
 
 /** What the community code needs from a database: a tagged-template query and a transaction. */
 export type Db = {
@@ -34,15 +35,17 @@ function live(): ReturnType<typeof getDatabase> {
  * this first rather than waiting on a connection that can't exist.
  */
 export function databaseAvailable(env: Record<string, string | undefined> = process.env): boolean {
-  return Boolean(override) || Boolean(env.NETLIFY_DB_URL);
+  return Boolean(override) || Boolean(platformDatabase()) || Boolean(env.NETLIFY_DB_URL);
 }
 
 export const sql = (strings: TemplateStringsArray, ...values: unknown[]): Promise<Record<string, unknown>[]> =>
-  override ? override.sql(strings, ...values) : (live().sql(strings, ...values) as unknown as Promise<Record<string, unknown>[]>);
+  (override ?? platformDatabase())?.sql(strings, ...values) ?? (live().sql(strings, ...values) as unknown as Promise<Record<string, unknown>[]>);
 
 /** Run `work` in one transaction on a pooled client. */
 export async function transaction<T>(work: (q: Query) => Promise<T>): Promise<T> {
   if (override) return override.transaction(work);
+  const platform = platformDatabase();
+  if (platform) return platform.transaction(work);
   const client = await live().pool.connect();
   try {
     await client.query('BEGIN');
@@ -62,7 +65,7 @@ export const randomToken = (bytes = 32) => randomBytes(bytes).toString('base64ur
 
 /** A salted hash of the caller's IP, for rate limits only; the address itself is never stored. */
 export function ipHash(req: Request): string {
-  const ip = req.headers.get('x-nf-client-connection-ip') ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  const ip = req.headers.get('cf-connecting-ip') ?? req.headers.get('x-nf-client-connection-ip') ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   return sha256(`outbrick-community-ip:${process.env.SITE_ID ?? ''}:${ip}`).slice(0, 32);
 }
 

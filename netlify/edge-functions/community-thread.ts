@@ -31,7 +31,7 @@ import { escapeHtml, excerpt, htmlToText } from '../../lib/community/format.ts';
 
 const SITE = 'https://www.outbrick.site';
 
-type EdgeContext = { next: () => Promise<Response> };
+type EdgeContext = { next: () => Promise<Response>; fetch?: typeof fetch };
 
 const ogLocales: Record<CommunityLocale, string> = { en: 'en_US', fr: 'fr_FR', de: 'de_DE', es: 'es_ES', ja: 'ja_JP', 'pt-BR': 'pt_BR' };
 
@@ -161,7 +161,7 @@ export default async function communityThread(req: Request, context: EdgeContext
   let missing = false;
   try {
     const signal = AbortSignal.timeout(4000);
-    const res = await fetch(api, { headers: { accept: 'application/json' }, signal });
+    const res = await (context.fetch ?? fetch)(api, { headers: { accept: 'application/json' }, signal });
     if (res.status === 404) missing = true;
     else if (res.ok) {
       const data = (await res.json()) as ThreadDetail | { redirect: { id: number; slug: string } };

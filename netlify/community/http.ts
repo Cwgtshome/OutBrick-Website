@@ -41,6 +41,7 @@ export function isAllowedOrigin(origin: string | null): boolean {
     const u = new URL(origin);
     if (u.origin === SITE || u.origin === 'https://outbrick.site') return true;
     if (u.protocol === 'https:' && /^(?:[a-z0-9-]+--)?outbrick\.netlify\.app$/.test(u.host)) return true;
+    if (process.env.CONTEXT === 'preview' && u.origin === process.env.CLOUDFLARE_PREVIEW_ORIGIN) return true;
     if (process.env.CONTEXT === 'dev' || process.env.NETLIFY_DEV === 'true') return u.hostname === 'localhost' || u.hostname === '127.0.0.1';
     return false;
   } catch {

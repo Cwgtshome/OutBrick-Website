@@ -19,7 +19,7 @@
 // Field error codes (error.fields.file): 'missing', 'too_large', 'too_many_pixels',
 // 'unsupported_type', 'heic_unsupported', 'bad_image'.
 
-import { getDeployStore, getStore } from '@netlify/blobs';
+import { platformStore } from '../platform.ts';
 import type { Upload } from '../../lib/community/contract.ts';
 import { randomToken, transaction } from './db.ts';
 import { ApiError, forbidden, json, notFound } from './http.ts';
@@ -49,7 +49,7 @@ export function setUploadStoreForTests(store: UploadStore | null): void {
 
 function store(): UploadStore {
   if (override) return override;
-  const s = process.env.CONTEXT === 'production' ? getStore({ name: UPLOAD_STORE, consistency: 'strong' }) : getDeployStore({ name: UPLOAD_STORE });
+  const s = platformStore(UPLOAD_STORE, process.env.CONTEXT !== 'production');
   return s as unknown as UploadStore;
 }
 
@@ -184,4 +184,3 @@ export async function deleteUnattachedUploads(memberId: number): Promise<void> {
     }
   }
 }
-

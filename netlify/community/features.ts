@@ -8,6 +8,7 @@
 //   digest        RESEND_API_KEY
 
 import type { CommunityFeatures } from '../../lib/community/contract.ts';
+import { platformTranslator } from '../platform.ts';
 
 type Env = Record<string, string | undefined>;
 const set = (v: string | undefined) => Boolean(v?.trim());
@@ -20,7 +21,7 @@ export function communityFeatures(e: Env = process.env): CommunityFeatures {
     passkeys: notOff(e.COMMUNITY_PASSKEYS),
     uploads: notOff(e.COMMUNITY_UPLOADS),
     replyByEmail: replyByEmailConfigured(e),
-    translate: set(e.ANTHROPIC_API_KEY),
+    translate: Boolean(platformTranslator()) || set(e.ANTHROPIC_API_KEY),
     digest: set(e.RESEND_API_KEY),
   };
 }
