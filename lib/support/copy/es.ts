@@ -214,7 +214,7 @@ export const es: SupportCopy = {
       playerNote: 'Has añadido',
     },
     addTitle: 'Añadir detalles',
-    addHint: 'Un número de nivel, lo que has probado, lo que ha cambiado. No incluyas contraseñas ni datos de tarjetas. Para enviar una captura, responde a nuestro correo con la imagen adjunta.',
+    addHint: 'Un número de nivel, lo que has probado, lo que ha cambiado. No incluyas contraseñas ni datos de tarjetas.',
     addLabel: 'Tu mensaje',
     addAction: 'Enviar al equipo',
     addSending: 'Enviando…',

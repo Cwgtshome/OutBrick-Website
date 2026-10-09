@@ -214,7 +214,7 @@ export const ptBR: SupportCopy = {
       playerNote: 'Você acrescentou',
     },
     addTitle: 'Acrescentar detalhes',
-    addHint: 'O número de um nível, o que você tentou, o que mudou. Não inclua senhas nem dados de cartão. Para enviar uma captura de tela, responda ao nosso e-mail com ela anexada.',
+    addHint: 'O número de um nível, o que você tentou, o que mudou. Não inclua senhas nem dados de cartão.',
     addLabel: 'Sua mensagem',
     addAction: 'Enviar para a equipe',
     addSending: 'Enviando…',

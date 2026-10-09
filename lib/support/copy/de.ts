@@ -214,7 +214,7 @@ export const de: SupportCopy = {
       playerNote: 'Deine Ergänzung',
     },
     addTitle: 'Details ergänzen',
-    addHint: 'Eine Levelnummer, was du probiert hast, was sich geändert hat. Bitte keine Passwörter und keine Kartendaten. Für ein Bildschirmfoto antworte auf unsere E-Mail und häng es an.',
+    addHint: 'Eine Levelnummer, was du probiert hast, was sich geändert hat. Bitte keine Passwörter und keine Kartendaten.',
     addLabel: 'Deine Nachricht',
     addAction: 'Ans Team senden',
     addSending: 'Wird gesendet …',

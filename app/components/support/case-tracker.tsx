@@ -149,7 +149,6 @@ function CaseView({
         <p className="ss-ref"><span>{copy.reference}</span> <b translate="no">{data.ref}</b></p>
         <h2 id={`${id}-status`}>{copy.statusTitle[data.status]}</h2>
         <p>{copy.statusText[data.status]}</p>
-        {data.status === 'open' ? <p className="ss-promise">{supportCopies[locale].hub.promise}</p> : null}
         <ol className="ss-stages">
           {stageOrder.map((s, i) =>
             s === 'fixing' && skipFixing ? null : (

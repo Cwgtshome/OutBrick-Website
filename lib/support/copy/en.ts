@@ -214,7 +214,7 @@ export const en: SupportCopy = {
       playerNote: 'You added',
     },
     addTitle: 'Add details',
-    addHint: 'A level number, what you tried, what changed. Please leave out passwords and card details. To send a screenshot, reply to our email with it attached.',
+    addHint: 'A level number, what you tried, what changed. Please leave out passwords and card details.',
     addLabel: 'Your message',
     addAction: 'Send to the team',
     addSending: 'Sending…',

@@ -6,7 +6,7 @@
 //                            again on /support/request (only ever to the address on the case);
 //   teamPlayerNote           the team's copy when a player adds details to a case (English).
 
-import { button, color, esc, escLines, eyebrow, field, fonts, heading, panel, para, shell, textBlock, type Ctx } from './core.ts';
+import { button, color, esc, escLines, eyebrow, field, fonts, heading, panel, para, shell, textBlock, type Ctx, ghostButton } from './core.ts';
 import { emailCopy, type EmailLocale } from './i18n.ts';
 import { lifecycleCopy } from './lifecycle-i18n.ts';
 import { supportFooter, supportFooterText, type Rendered } from './templates.ts';
@@ -110,7 +110,9 @@ function chip(ctx: Ctx, ref: string): string {
 /** The "Track your request" paragraph and link, as HTML for an email body. */
 export function trackHtml(ctx: Ctx, url: string): string {
   const c = supportCentreEmailCopy[ctx.locale];
-  return para(ctx, `${esc(c.trackLine)} <a href="${esc(url)}" style="color:${color.title};text-decoration:underline;font-weight:800;">${esc(c.trackLabel)}</a>`, { size: 16 });
+  // The line, then an outlined button in the link colour (ob-link: lighter in dark mode). Not the
+  // title cream, which is for text on ink and would vanish on the paper background.
+  return para(ctx, esc(c.trackLine), { size: 16, margin: '0 0 10px' }) + ghostButton(ctx, url, esc(c.trackLabel));
 }
 
 export function trackText(locale: EmailLocale, url: string): string {

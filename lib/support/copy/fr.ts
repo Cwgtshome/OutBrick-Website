@@ -214,7 +214,7 @@ export const fr: SupportCopy = {
       playerNote: 'Vous avez ajouté',
     },
     addTitle: 'Ajouter des détails',
-    addHint: 'Un numéro de niveau, ce que vous avez essayé, ce qui a changé. N’indiquez ni mot de passe ni numéro de carte. Pour envoyer une capture d’écran, répondez à notre e-mail en la joignant.',
+    addHint: 'Un numéro de niveau, ce que vous avez essayé, ce qui a changé. N’indiquez ni mot de passe ni numéro de carte.',
     addLabel: 'Votre message',
     addAction: 'Envoyer à l’équipe',
     addSending: 'Envoi…',
