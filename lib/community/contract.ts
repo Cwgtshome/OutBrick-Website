@@ -81,6 +81,13 @@ export const bugStatuses: readonly BugStatus[] = ['new', 'confirmed', 'fixed', '
 export const ideaStatuses: readonly IdeaStatus[] = ['open', 'considering', 'planned', 'in_progress', 'shipped', 'declined'];
 export const pageSize = { threads: 30, posts: 25, search: 20, notifications: 30 } as const;
 
+/**
+ * A person needs longer than this between seeing a form and sending it (the time-to-fill check,
+ * netlify/community/http.ts). The client waits out the rest before sending, so a quick real
+ * reply ("Thanks!") is never caught by it.
+ */
+export const minFillMs = 3000;
+
 export type ApiErrorBody = {
   /** Stable machine code: signin_required, forbidden, not_found, invalid, rate_limited, too_large, locked, banned … */
   code: string;
@@ -341,9 +348,13 @@ export function communityPath(locale: CommunityLocale, path = ''): string {
   return path ? `${base}${path.startsWith('/') ? '' : '/'}${path}` : base;
 }
 
-/** The canonical path of a thread: /community/t/42/no-graphics-mode */
+/**
+ * The canonical path of a thread: /community/t/42/no-graphics-mode. A slug in another script
+ * (/t/43/ボイスオーバー) is percent-encoded here, exactly as a browser sends it, so the edge
+ * function and the client can compare it with `URL.pathname` as it is.
+ */
 export function threadPath(locale: CommunityLocale, thread: { id: number; slug: string }, postNumber?: number | null): string {
-  return communityPath(locale, `/t/${thread.id}/${thread.slug}`) + (postNumber && postNumber > 1 ? `#post-${postNumber}` : '');
+  return communityPath(locale, `/t/${thread.id}/${encodeURIComponent(thread.slug)}`) + (postNumber && postNumber > 1 ? `#post-${postNumber}` : '');
 }
 
 // Moderation (added with the forum backend, 7 October 2026) -----------------------------------

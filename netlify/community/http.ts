@@ -6,6 +6,7 @@
 // (without the request body) and answered as a 500 with no detail.
 
 import { signalNotifyWork } from './idle.ts';
+import { minFillMs } from '../../lib/community/contract.ts';
 
 export const SITE = 'https://www.outbrick.site';
 
@@ -152,14 +153,19 @@ export async function handle(req: Request, routes: Route[]): Promise<Response> {
 
 // Phase 2 (community-p2): the time-to-fill check ----------------------------------------------
 
-/** A person needs longer than this between seeing a form and sending it. */
-export const MIN_FILL_MS = 3000;
+/** A person needs longer than this between seeing a form and sending it (shared with the client). */
+export const MIN_FILL_MS = minFillMs;
 
 /**
  * True when the form was sent less than MIN_FILL_MS after it was shown, by the client's own
- * `startedAt` (ms epoch). The caller answers like a honeypot hit: a convincing success, nothing
- * stored. A missing or unreadable value is allowed (older clients), and so is a `startedAt` in
- * the future: a phone whose clock runs ahead must never lose a real post.
+ * `startedAt` (ms epoch). A missing or unreadable value is allowed (older clients), and so is a
+ * `startedAt` in the future: a phone whose clock runs ahead must never lose a real post.
+ *
+ * The caller answers with `tooFast()`, not with a honeypot's decoy success: a quick real person
+ * (a one-word reply, an autofilled email) would otherwise be told their post was sent while it
+ * was thrown away. The client waits out the remainder before sending, so it rarely sees this;
+ * when it does, it keeps the text and says to send again. The hidden honeypot field is still
+ * answered with a silent decoy.
  */
 export function filledTooFast(body: Record<string, unknown>, now = Date.now()): boolean {
   const raw = body.startedAt;
@@ -168,3 +174,9 @@ export function filledTooFast(body: Record<string, unknown>, now = Date.now()): 
   const elapsed = now - started;
   return elapsed >= 0 && elapsed < MIN_FILL_MS;
 }
+
+/** The retryable answer to a form sent faster than a person fills one in. Nothing is stored. */
+export const tooFast = () => new ApiError(429, 'too_fast', 'That was quick. Wait a moment, then send it again.');
+
+/** A honeypot hit: the hidden field that people never see was filled in. */
+export const honeypotHit = (body: Record<string, unknown>) => typeof body.website === 'string' && body.website.trim() !== '';

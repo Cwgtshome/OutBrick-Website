@@ -37,6 +37,17 @@ export default function AccessibilityPage() {
         </ul>
       </section>
 
+      <section className="brick headline">
+        <h2>Step-by-step accessibility guides</h2>
+        <p>
+          The Help Centre walks through every accessibility feature with real screenshots from the game: playing with VoiceOver, with Voice Control, Switch Control or a keyboard, and every setting for vision, hearing and motion.
+        </p>
+        <div className="act">
+          <a className="btn" href="/community/help/accessibility">Accessibility guides</a>
+          <a className="btn" href="/community/help/voiceover">Playing with VoiceOver</a>
+        </div>
+      </section>
+
       <section className="brick">
         <h2>Device size and input</h2>
         <p>

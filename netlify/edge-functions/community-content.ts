@@ -101,7 +101,7 @@ export default async function editorialContent(
 ) {
   const url = new URL(req.url),
     match = url.pathname.match(
-      /^\/(?:(fr|de|es|ja)\/)?community\/(library|content\/(page|blog)\/([a-z0-9][a-z0-9-]{1,79}))\/?$/,
+      /^\/(?:(fr|de|es|ja|pt-BR)\/)?community\/(library|content\/(page|blog)\/([a-z0-9][a-z0-9-]{1,79}))\/?$/,
     );
   if (!match) return context.next();
   const locale = (match[1] || 'en') as CommunityLocale;
@@ -152,10 +152,12 @@ export const config = {
     '/de/community/content/*',
     '/es/community/content/*',
     '/ja/community/content/*',
+    '/pt-BR/community/content/*',
     '/community/library',
     '/fr/community/library',
     '/de/community/library',
     '/es/community/library',
     '/ja/community/library',
+    '/pt-BR/community/library',
   ],
 };

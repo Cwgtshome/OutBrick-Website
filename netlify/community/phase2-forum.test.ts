@@ -52,13 +52,20 @@ async function upload(cookie: string, data: Uint8Array, opts: { contentType?: st
 
 // Time-to-fill ------------------------------------------------------------------------------------
 
-void test('a form sent under three seconds after it was shown is a decoy; older clients and fast clocks still post', async () => {
+void test('a form sent under three seconds after it was shown is refused with a retryable too_fast, nothing stored; older clients and fast clocks still post', async () => {
   const ada = await member(pg);
-  const before = Number((await pg.query<{ n: number }>(`SELECT count(*)::int AS n FROM threads`)).rows[0].n);
+  const count = async () => Number((await pg.query<{ n: number }>(`SELECT count(*)::int AS n FROM threads`)).rows[0].n);
+  const before = await count();
   const fast = await api('POST', '/threads', { cookie: ada.cookie, body: { categorySlug: 'general', title: 'Too quick', body: 'Bot text', language: 'en', startedAt: Date.now() - 500 } });
-  assert.equal(fast.status, 201);
-  assert.equal(fast.body.thread.id, 0);
-  assert.equal(Number((await pg.query<{ n: number }>(`SELECT count(*)::int AS n FROM threads`)).rows[0].n), before, 'nothing stored');
+  assert.equal(fast.status, 429);
+  assert.equal(fast.body.error.code, 'too_fast', 'a real person who was quick is told to send again, not told it worked');
+  assert.equal(await count(), before, 'nothing stored');
+
+  // The hidden honeypot field still gets a silent decoy.
+  const bot = await api('POST', '/threads', { cookie: ada.cookie, body: { categorySlug: 'general', title: 'Bot thread', body: 'Bot text', language: 'en', website: 'https://spam.example', startedAt: Date.now() - 20_000 } });
+  assert.equal(bot.status, 201);
+  assert.equal(bot.body.thread.id, 0);
+  assert.equal(await count(), before, 'nothing stored for the honeypot either');
 
   const slow = await newThread(ada.cookie, { title: 'Took my time', startedAt: Date.now() - 20_000 });
   assert.ok(slow.id > 0);
@@ -67,11 +74,18 @@ void test('a form sent under three seconds after it was shown is a decoy; older 
   const future = await newThread(ada.cookie, { title: 'Phone clock runs ahead', startedAt: Date.now() + 60_000 });
   assert.ok(future.id > 0);
 
+  const replies = async () => Number((await pg.query<{ n: number }>(`SELECT count(*)::int AS n FROM posts WHERE thread_id = $1`, [slow.id])).rows[0].n);
+  const postsBefore = await replies();
   const reply = await api('POST', `/threads/${slow.id}/posts`, { cookie: ada.cookie, body: { body: 'Instant reply', startedAt: String(Date.now()) } });
-  assert.equal(reply.status, 201);
-  assert.equal(reply.body.post.id, 0);
+  assert.equal(reply.status, 429);
+  assert.equal(reply.body.error.code, 'too_fast');
+  assert.equal(await replies(), postsBefore, 'the instant reply is not stored');
+  const botReply = await api('POST', `/threads/${slow.id}/posts`, { cookie: ada.cookie, body: { body: 'Bot reply', website: 'x', startedAt: Date.now() - 5000 } });
+  assert.equal(botReply.status, 201);
+  assert.equal(botReply.body.post.id, 0);
   const real = await api('POST', `/threads/${slow.id}/posts`, { cookie: ada.cookie, body: { body: 'Considered reply', startedAt: Date.now() - 5000 } });
   assert.ok(real.body.post.id > 0);
+  assert.equal(await replies(), postsBefore + 1);
 });
 
 // Bug level ---------------------------------------------------------------------------------------

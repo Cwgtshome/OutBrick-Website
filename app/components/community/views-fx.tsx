@@ -29,7 +29,7 @@ import { dayDate, fullDate } from '../../../lib/community/format';
 import { pageOfPost } from '../../../lib/community/static-html';
 import { api, ApiFailure, readerIsActive } from './api';
 import { BadgeIcon } from './badges';
-import { ErrorNotice, Member, Pending, StatusBadge, Time, View, errorText, useApp, useLoad, type Route } from './core';
+import { ErrorNotice, Member, PageLoading, Pending, StatusBadge, Time, View, errorText, useApp, useLoad, type Route } from './core';
 
 const failureOf = (error: unknown) => (error instanceof ApiFailure ? error : new ApiFailure(0, { code: 'unknown', message: String(error) }));
 
@@ -45,8 +45,12 @@ export function useErrorText() {
 // ---------------------------------------------------------------------------------------
 // Idea votes
 
-/** The upvote button: the count is part of it, aria-pressed is the state, the name says what it does. */
-export function VoteButton({ thread, compact = false }: { thread: Pick<ThreadSummary, 'id' | 'title' | 'voteCount' | 'voted'>; compact?: boolean }) {
+/**
+ * The upvote button: the count is part of it, aria-pressed is the state. Its name starts with
+ * what is on it ("Upvote 4 votes", so saying "Upvote" works in Voice Control); the idea it is
+ * for is its description, `describedBy` (the idea's title link).
+ */
+export function VoteButton({ thread, compact = false, describedBy }: { thread: Pick<ThreadSummary, 'id' | 'title' | 'voteCount' | 'voted'>; compact?: boolean; describedBy?: string }) {
   const { copy, n, session, announce } = useApp();
   const [votes, setVotes] = useState({ count: thread.voteCount, voted: !!thread.voted });
   const [busy, setBusy] = useState(false);
@@ -72,13 +76,16 @@ export function VoteButton({ thread, compact = false }: { thread: Pick<ThreadSum
       aria-pressed={votes.voted}
       disabled={busy}
       onClick={() => void vote()}
-      aria-label={copy.thread.upvoteLabel(thread.title, copy.thread.votes, votes.count, n(votes.count))}
+      aria-describedby={describedBy}
     >
       <span className="cm-vote-arrow" aria-hidden="true">
         ▲
       </span>
-      {votes.voted ? copy.thread.upvoted : copy.thread.upvote}
-      <span className="cm-vote-count">{n(votes.count)}</span>
+      {votes.voted ? copy.thread.upvoted : copy.thread.upvote}{' '}
+      <span className="cm-vote-count" aria-hidden="true">
+        {n(votes.count)}
+      </span>
+      <span className="sr-only">{copy.thread.votes(votes.count, n(votes.count))}</span>
     </button>
   );
 }
@@ -91,10 +98,10 @@ export function IdeaList({ threads, headingLevel = 3 }: { threads: ThreadSummary
     <ol className="cm-ideas">
       {threads.map((t) => (
         <li key={t.id} className="cm-idea">
-          <VoteButton thread={t} compact />
+          <VoteButton thread={t} compact describedBy={`cm-idea-${t.id}`} />
           <div className="cm-idea-text">
             <H className="cm-idea-title">
-              <a href={threadPath(locale, t)} lang={t.language}>
+              <a href={threadPath(locale, t)} lang={t.language} id={`cm-idea-${t.id}`}>
                 {t.title}
               </a>
             </H>
@@ -282,8 +289,9 @@ export function Reactions({ post, interactive }: { post: Post; interactive: bool
 // ---------------------------------------------------------------------------------------
 // Bookmarks and translation, on each post
 
-export function BookmarkButton({ post }: { post: Post }) {
-  const { fx, n, announce } = useApp();
+/** Named by its visible word ("Bookmark", "Bookmarked"); `describedBy` says which post. */
+export function BookmarkButton({ post, describedBy }: { post: Post; describedBy?: string }) {
+  const { fx, announce } = useApp();
   const [on, setOn] = useState(!!post.bookmarked);
   const [busy, setBusy] = useState(false);
   const say = useErrorText();
@@ -300,7 +308,7 @@ export function BookmarkButton({ post }: { post: Post }) {
     }
   };
   return (
-    <button type="button" className="cm-act" aria-pressed={on} disabled={busy} aria-label={fx.bookmarks.label(n(post.number))} onClick={() => void toggle()}>
+    <button type="button" className="cm-act" aria-pressed={on} disabled={busy} aria-describedby={describedBy} onClick={() => void toggle()}>
       {on ? fx.bookmarks.added : fx.bookmarks.add}
     </button>
   );
@@ -773,7 +781,7 @@ export function BookmarksView({ route }: { route: Extract<Route, { name: 'bookma
   const load = useLoad(signedIn ? `bookmarks:${route.page}` : null, () => api.bookmarks(route.page));
   const say = useErrorText();
   const crumbs = [{ href: path(), label: copy.nav.label }, { label: fx.bookmarks.title }];
-  if (!session) return null;
+  if (!session) return <PageLoading title={fx.bookmarks.title} crumbs={crumbs} />;
   if (!signedIn)
     return (
       <View title={fx.bookmarks.title} crumbs={crumbs} ready>

@@ -9,16 +9,17 @@
  * own message. Success moves focus to what was made and says so in the polite live region.
  */
 
-import { useEffect, useId, useRef, useState, type SubmitEvent, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type SubmitEvent, type ReactNode } from 'react';
 import { dayDate } from '../../../lib/community/format';
 import type { BadgeKey, AssistiveTech, CommunityLocale, ModQueueItem, ModReport, Provider, SelfMember } from '../../../lib/community/contract';
 import { bugLevelRange, communityLocales, threadPath } from '../../../lib/community/contract';
 import { categoryWords } from '../../../lib/i18n/community';
 import { localeNames } from '../../../lib/i18n/locales';
-import { api, ApiFailure, authStart, exportUrl } from './api';
+import { api, ApiFailure, authStart, exportUrl, waitOutFillCheck } from './api';
+import { DraftNotice, readDraft, useDraftSaver, useUnsavedWarning, writeDraft } from './drafts';
 import { Composer } from './composer';
 import { PasskeySettings, PasskeySignIn, PollEditor, SimilarIdeas, emptyPoll, type PollDraft } from './views-fx';
-import { ErrorNotice, ErrorSummary, Field, Honeypot, Member, Pagination, Pending, Time, View, errorText, fieldMessages, safeReturn, useApp, useLoad, type FieldErrors, type Route } from './core';
+import { ErrorNotice, ErrorSummary, Field, Honeypot, Member, PageLoading, Pagination, Pending, Time, View, errorText, fieldMessages, safeReturn, useApp, useLoad, type FieldErrors, type Route } from './core';
 
 const failureOf = (error: unknown) => (error instanceof ApiFailure ? error : new ApiFailure(0, { code: 'unknown', message: String(error) }));
 
@@ -68,18 +69,31 @@ function readDeepLink(): { fromApp: boolean; device?: string; os?: string; app?:
   return { fromApp: Object.entries(found).some(([k, v]) => k !== 'lang' && v !== undefined), ...found };
 }
 
+type NewThreadDraft = {
+  category: string;
+  title: string;
+  language: CommunityLocale;
+  body: string;
+  bug: { device: string; osVersion: string; appVersion: string; steps: string; expected: string; actual: string; level: string };
+  assistive: AssistiveTech[];
+};
+
 export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }> }) {
   const { copy, fx, locale, path, session, navigate, announce } = useApp();
   const cats = useLoad('categories', () => api.categories());
   const id = useId();
   // The app's "Report a bug" opens this page with the details filled in (bugDeepLinkParams).
   const [prefill] = useState(() => readDeepLink());
-  const [category, setCategory] = useState(route.category);
-  const [title, setTitle] = useState('');
-  const [language, setLanguage] = useState<CommunityLocale>(prefill.lang ?? locale);
-  const [body, setBody] = useState('');
-  const [bug, setBug] = useState({ device: prefill.device ?? '', osVersion: prefill.os ?? '', appVersion: prefill.app ?? '', steps: '', expected: '', actual: '', level: prefill.level ? String(prefill.level) : '' });
-  const [assistive, setAssistive] = useState<AssistiveTech[]>(prefill.assistive ?? []);
+  // A draft for this category (drafts.tsx). The app's pre-filled bug report starts fresh instead.
+  const draftKey = `new:${locale}:${route.category}`;
+  const [draft] = useState(() => (prefill.fromApp ? null : readDraft<NewThreadDraft>(draftKey)));
+  const [restored, setRestored] = useState(!!draft);
+  const [category, setCategory] = useState(draft?.category ?? route.category);
+  const [title, setTitle] = useState(draft?.title ?? '');
+  const [language, setLanguage] = useState<CommunityLocale>(draft?.language ?? prefill.lang ?? locale);
+  const [body, setBody] = useState(draft?.body ?? '');
+  const [bug, setBug] = useState(draft?.bug ?? { device: prefill.device ?? '', osVersion: prefill.os ?? '', appVersion: prefill.app ?? '', steps: '', expected: '', actual: '', level: prefill.level ? String(prefill.level) : '' });
+  const [assistive, setAssistive] = useState<AssistiveTech[]>(draft?.assistive ?? prefill.assistive ?? []);
   const [poll, setPoll] = useState<PollDraft | null>(null);
   const [startedAt] = useState(() => Date.now());
   const [website, setWebsite] = useState('');
@@ -87,8 +101,21 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
   const [general, setGeneral] = useState('');
   const [busy, setBusy] = useState(false);
   const summary = useSummary();
+  const typed = !!(title.trim() || body.trim() || bug.steps.trim() || bug.expected.trim() || bug.actual.trim());
+  const draftValue = useMemo<NewThreadDraft>(() => ({ category, title, language, body, bug, assistive }), [category, title, language, body, bug, assistive]);
+  useDraftSaver(draftKey, draftValue, !typed);
+  useUnsavedWarning(typed && !busy);
+  const discardDraft = () => {
+    writeDraft(draftKey, null);
+    setRestored(false);
+    setTitle('');
+    setBody('');
+    setBug({ device: prefill.device ?? '', osVersion: prefill.os ?? '', appVersion: prefill.app ?? '', steps: '', expected: '', actual: '', level: prefill.level ? String(prefill.level) : '' });
+    setAssistive(prefill.assistive ?? []);
+    announce(fx.ux.draft.discarded);
+  };
 
-  if (!session) return null;
+  if (!session) return <PageLoading title={copy.newThread.title} crumbs={[{ href: path(), label: copy.nav.label }, { label: copy.newThread.title }]} />;
   if (!session.member) return <SignInFirst title={copy.newThread.title} crumbLabel={copy.newThread.title} note={copy.newThread.signIn} />;
   if (!cats.data) return <Pending load={cats} title={copy.newThread.title} />;
 
@@ -181,6 +208,7 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
     }
     setBusy(true);
     try {
+      await waitOutFillCheck(startedAt);
       const result = await api.newThread({
         categorySlug: category,
         title: title.trim(),
@@ -191,6 +219,8 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
         website: website || undefined,
         startedAt,
       });
+      writeDraft(draftKey, null);
+      setRestored(false);
       announce(copy.newThread.posted);
       if (result.thread.id !== 0) navigate(threadPath(locale, result.thread));
       else {
@@ -229,6 +259,7 @@ export function NewThreadView({ route }: { route: Extract<Route, { name: 'new' }
     >
       <form className="cm-form" onSubmit={(e) => void submit(e)} noValidate>
         <ErrorSummary errors={errors} ids={ids} summaryRef={summary.ref} general={general} />
+        {restored ? <DraftNotice onDiscard={discardDraft} /> : null}
         {prefill.fromApp ? (
           <div className="cm-notice cm-notice-ok">
             <p>{fx.deepLink.notice}</p>
@@ -360,7 +391,7 @@ export function SignInView({ route }: { route: Extract<Route, { name: 'signin' }
   useEffect(() => {
     if (sent) sentRef.current?.focus();
   }, [sent]);
-  if (!session) return null;
+  if (!session) return <PageLoading title={copy.signin.title} crumbs={[{ href: path(), label: copy.nav.label }, { label: copy.signin.title }]} />;
   const returnTo = route.returnTo;
   const errorKey = route.error as keyof typeof copy.signin.errors;
   const landing = copy.signin.errors[errorKey];
@@ -408,6 +439,7 @@ export function SignInView({ route }: { route: Extract<Route, { name: 'signin' }
     setErrors({});
     setBusy(true);
     try {
+      await waitOutFillCheck(startedAt);
       await api.emailSignIn({ email: value, locale, returnTo: safeReturn(locale, returnTo), website: website || undefined, startedAt });
       setSent(true);
     } catch (error) {
@@ -485,7 +517,7 @@ export function WelcomeView({ route }: { route: Extract<Route, { name: 'welcome'
   const [busy, setBusy] = useState(false);
   const summary = useSummary();
   const id = useId();
-  if (!session) return null;
+  if (!session) return <PageLoading title={copy.welcome.title} crumbs={[{ href: path(), label: copy.nav.label }, { label: copy.welcome.title }]} />;
   if (!session.member) return <SignInFirst title={copy.welcome.title} crumbLabel={copy.welcome.title} />;
   const submit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -544,7 +576,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 
 export function SettingsView() {
   const { copy, path, session } = useApp();
-  if (!session) return null;
+  if (!session) return <PageLoading title={copy.settings.title} crumbs={[{ href: path(), label: copy.nav.label }, { label: copy.settings.title }]} />;
   if (!session.member) return <SignInFirst title={copy.settings.title} crumbLabel={copy.settings.title} />;
   return <SettingsForms member={session.member} crumbs={[{ href: path(), label: copy.nav.label }, { label: copy.settings.title }]} />;
 }
@@ -859,7 +891,7 @@ export function NotificationsView({ route }: { route: Extract<Route, { name: 'no
   const { copy, fx, locale, path, session, refreshSession, announce } = useApp();
   const signedIn = !!session?.member;
   const load = useLoad(signedIn ? `notifications:${route.page}` : null, () => api.notifications(route.page));
-  if (!session) return null;
+  if (!session) return <PageLoading title={copy.notifications.title} crumbs={[{ href: path(), label: copy.nav.label }, { label: copy.notifications.title }]} />;
   if (!signedIn) return <SignInFirst title={copy.notifications.title} crumbLabel={copy.notifications.title} />;
   if (!load.data) return <Pending load={load} title={copy.notifications.title} />;
   const data = load.data;
@@ -927,7 +959,7 @@ export function ModView() {
   const queue = useLoad(isMod ? 'mod:queue' : null, () => api.modQueue());
   const id = useId();
   const crumbs = [{ href: path(), label: copy.nav.label }, { label: copy.mod.title }];
-  if (!session) return null;
+  if (!session) return <PageLoading title={copy.mod.title} crumbs={[{ href: path(), label: copy.nav.label }, { label: copy.mod.title }]} />;
   if (!isMod)
     return (
       <View title={copy.mod.title} crumbs={crumbs} ready>

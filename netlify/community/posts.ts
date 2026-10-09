@@ -3,7 +3,7 @@
 import type { Post, ReportReason } from '../../lib/community/contract.ts';
 import { pageSize } from '../../lib/community/contract.ts';
 import { ipHash, transaction } from './db.ts';
-import { ApiError, badRequest, filledTooFast, forbidden, json, notFound, oneOf, readJson, str } from './http.ts';
+import { ApiError, badRequest, filledTooFast, forbidden, honeypotHit, tooFast, json, notFound, oneOf, readJson, str } from './http.ts';
 import { currentMember, requireMember, type Viewer } from './session.ts';
 import {
   BODY_MAX,
@@ -76,7 +76,7 @@ export async function replyAs(viewer: Viewer, threadId: number, body: Record<str
   const replyToRaw = body.replyTo == null ? null : Number(body.replyTo);
   if (replyToRaw != null && (!Number.isSafeInteger(replyToRaw) || replyToRaw < 1)) throw badRequest('invalid', 'That is not a post to reply to.', { replyTo: 'invalid' });
 
-  if ((typeof body.website === 'string' && body.website.trim() !== '') || filledTooFast(body)) {
+  if (honeypotHit(body)) {
     const now = new Date().toISOString();
     const decoy: Post = {
       id: 0,
@@ -94,6 +94,7 @@ export async function replyAs(viewer: Viewer, threadId: number, body: Record<str
     };
     return { post: decoy, page: 1, decoy: true };
   }
+  if (filledTooFast(body)) throw tooFast();
 
   await rateLimitOrThrow([[`post:hour:${viewer.id}`, limitFor(viewer, 30, 90), 3600]]);
 

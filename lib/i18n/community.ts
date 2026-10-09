@@ -48,6 +48,7 @@ export type CommunityCopy = {
     signOut: string;
     moderation: string;
     newThread: string;
+    helpCentre: string;
     signedInAs: (name: string) => string;
   };
   home: {
@@ -407,6 +408,7 @@ const en: CommunityCopy = {
     signOut: 'Sign out',
     moderation: 'Moderation',
     newThread: 'Start a thread',
+    helpCentre: 'Help Centre',
     signedInAs: (name) => `Signed in as ${name}`,
   },
   home: {
@@ -633,7 +635,7 @@ const en: CommunityCopy = {
     osVersion: 'iOS, iPadOS or other system version',
     osVersionHint: 'Settings › General › About › iOS Version, for example 27.1.',
     appVersion: 'OutBrick version',
-    appVersionHint: 'In OutBrick: Settings › About, for example 5.1.1 (68).',
+    appVersionHint: 'Tap your avatar on Home to open your Profile: the version is at the bottom, for example 5.1.1 (68). Settings › Report a bug in the game fills it in for you.',
     assistive: 'Assistive technology in use',
     assistiveHint: 'Tick everything that was on when it happened.',
     at: { voiceover: 'VoiceOver', voice_control: 'Voice Control', switch_control: 'Switch Control', zoom: 'Zoom', larger_text: 'Larger Text', colour_filters: 'Colour Filters', none: 'None' },
@@ -893,6 +895,7 @@ const en: CommunityCopy = {
     not_found: 'We could not find that. It may have been deleted.',
     invalid: 'Some of that needs fixing.',
     rate_limited: 'That was quick! Wait a minute and try again.',
+    too_fast: 'That was quick. Wait a moment, then send it again: your text is still here.',
     too_large: 'That is too long. Shorten it and try again.',
     locked: 'This thread is locked.',
     banned: 'Your account cannot post at the moment.',
@@ -946,6 +949,7 @@ const fr: CommunityCopy = {
     signOut: 'Se déconnecter',
     moderation: 'Modération',
     newThread: 'Ouvrir une discussion',
+    helpCentre: 'Centre d’aide',
     signedInAs: (name) => `Connecté en tant que ${name}`,
   },
   home: {
@@ -1172,7 +1176,7 @@ const fr: CommunityCopy = {
     osVersion: 'Version d’iOS, d’iPadOS ou d’un autre système',
     osVersionHint: 'Réglages › Général › Informations › Version d’iOS, par exemple 27.1.',
     appVersion: 'Version d’OutBrick',
-    appVersionHint: 'Dans OutBrick : Réglages › À propos, par exemple 5.1.1 (68).',
+    appVersionHint: 'Sur l’écran d’accueil, touchez votre avatar pour ouvrir votre profil : la version figure tout en bas, par exemple 5.1.1 (68). Dans le jeu, Réglages › Signaler un bug la remplit pour vous.',
     assistive: 'Technologies d’assistance utilisées',
     assistiveHint: 'Cochez tout ce qui était activé au moment du problème.',
     at: { voiceover: 'VoiceOver', voice_control: 'Contrôle vocal', switch_control: 'Contrôle de sélection', zoom: 'Zoom', larger_text: 'Texte plus grand', colour_filters: 'Filtres de couleur', none: 'Aucune' },
@@ -1432,6 +1436,7 @@ const fr: CommunityCopy = {
     not_found: 'Introuvable. Le contenu a peut-être été supprimé.',
     invalid: 'Certains éléments sont à corriger.',
     rate_limited: 'Doucement ! Attendez une minute et réessayez.',
+    too_fast: 'C’était rapide ! Patientez un instant, puis renvoyez : votre texte est toujours là.',
     too_large: 'C’est trop long. Raccourcissez puis réessayez.',
     locked: 'Cette discussion est verrouillée.',
     banned: 'Votre compte ne peut pas publier pour le moment.',
@@ -1485,6 +1490,7 @@ const de: CommunityCopy = {
     signOut: 'Abmelden',
     moderation: 'Moderation',
     newThread: 'Thema starten',
+    helpCentre: 'Hilfe-Center',
     signedInAs: (name) => `Angemeldet als ${name}`,
   },
   home: {
@@ -1711,7 +1717,7 @@ const de: CommunityCopy = {
     osVersion: 'iOS-, iPadOS- oder andere Systemversion',
     osVersionHint: 'Einstellungen › Allgemein › Info › iOS-Version, zum Beispiel 27.1.',
     appVersion: 'OutBrick-Version',
-    appVersionHint: 'In OutBrick: Einstellungen › Info, zum Beispiel 5.1.1 (68).',
+    appVersionHint: 'Tippe auf dem Startbildschirm auf deinen Avatar, um dein Profil zu öffnen: Die Version steht ganz unten, zum Beispiel 5.1.1 (68). Im Spiel trägt Einstellungen › Fehler melden sie für dich ein.',
     assistive: 'Verwendete assistive Technologie',
     assistiveHint: 'Kreuz alles an, was eingeschaltet war, als es passiert ist.',
     at: { voiceover: 'VoiceOver', voice_control: 'Sprachsteuerung', switch_control: 'Schaltersteuerung', zoom: 'Zoom', larger_text: 'Größerer Text', colour_filters: 'Farbfilter', none: 'Keine' },
@@ -1971,6 +1977,7 @@ const de: CommunityCopy = {
     not_found: 'Das haben wir nicht gefunden. Vielleicht wurde es gelöscht.',
     invalid: 'Einiges muss noch korrigiert werden.',
     rate_limited: 'Das ging schnell! Warte eine Minute und versuch es noch einmal.',
+    too_fast: 'Das ging schnell. Warte einen Moment und sende es dann noch einmal: Dein Text ist noch da.',
     too_large: 'Das ist zu lang. Kürz es und versuch es noch einmal.',
     locked: 'Dieses Thema ist gesperrt.',
     banned: 'Dein Konto kann gerade nichts veröffentlichen.',
@@ -2024,6 +2031,7 @@ const es: CommunityCopy = {
     signOut: 'Cerrar sesión',
     moderation: 'Moderación',
     newThread: 'Abrir un tema',
+    helpCentre: 'Centro de ayuda',
     signedInAs: (name) => `Sesión iniciada como ${name}`,
   },
   home: {
@@ -2250,7 +2258,7 @@ const es: CommunityCopy = {
     osVersion: 'Versión de iOS, iPadOS u otro sistema',
     osVersionHint: 'Ajustes › General › Información › Versión de iOS, por ejemplo 27.1.',
     appVersion: 'Versión de OutBrick',
-    appVersionHint: 'En OutBrick: Ajustes › Acerca de, por ejemplo 5.1.1 (68).',
+    appVersionHint: 'En la pantalla de inicio, toca tu avatar para abrir tu perfil: la versión aparece abajo del todo, por ejemplo 5.1.1 (68). En el juego, Ajustes › Informar de un error la rellena por ti.',
     assistive: 'Tecnología de apoyo en uso',
     assistiveHint: 'Marca todo lo que estaba activado cuando ocurrió.',
     at: { voiceover: 'VoiceOver', voice_control: 'Control por voz', switch_control: 'Control por botón', zoom: 'Zoom', larger_text: 'Texto más grande', colour_filters: 'Filtros de color', none: 'Ninguna' },
@@ -2510,6 +2518,7 @@ const es: CommunityCopy = {
     not_found: 'No lo encontramos. Puede que se haya eliminado.',
     invalid: 'Hay algo que corregir.',
     rate_limited: '¡Qué rapidez! Espera un minuto y vuelve a intentarlo.',
+    too_fast: '¡Qué rapidez! Espera un momento y vuelve a enviarlo: tu texto sigue aquí.',
     too_large: 'Es demasiado largo. Acórtalo y vuelve a intentarlo.',
     locked: 'Este tema está cerrado.',
     banned: 'Tu cuenta no puede publicar por ahora.',
@@ -2563,6 +2572,7 @@ const ja: CommunityCopy = {
     signOut: 'サインアウト',
     moderation: 'モデレーション',
     newThread: 'スレッドを作成',
+    helpCentre: 'ヘルプセンター',
     signedInAs: (name) => `${name}としてサインイン中`,
   },
   home: {
@@ -2789,7 +2799,7 @@ const ja: CommunityCopy = {
     osVersion: 'iOS、iPadOS、またはほかのシステムのバージョン',
     osVersionHint: '設定 › 一般 › 情報 › iOSバージョン。例：27.1。',
     appVersion: 'OutBrickのバージョン',
-    appVersionHint: 'OutBrickの設定 › 情報。例：5.1.1 (68)。',
+    appVersionHint: 'ホーム画面で自分のアバターをタップしてプロフィールを開くと、いちばん下にバージョンが表示されます（例：5.1.1 (68)）。ゲームの設定 › 不具合を報告から開くと、自動で入力されます。',
     assistive: '使用していた支援技術',
     assistiveHint: '起きたときにオンだったものをすべて選んでください。',
     at: { voiceover: 'VoiceOver', voice_control: '音声コントロール', switch_control: 'スイッチコントロール', zoom: 'ズーム機能', larger_text: 'さらに大きな文字', colour_filters: 'カラーフィルタ', none: 'なし' },
@@ -3049,6 +3059,7 @@ const ja: CommunityCopy = {
     not_found: '見つかりませんでした。削除された可能性があります。',
     invalid: '直していただきたい項目があります。',
     rate_limited: '少し急ぎすぎたようです。1分ほど待ってから、もう一度お試しください。',
+    too_fast: '送信が早すぎました。少し待ってから、もう一度送信してください。入力した内容はそのまま残っています。',
     too_large: '長すぎます。短くしてから、もう一度お試しください。',
     locked: 'このスレッドはロックされています。',
     banned: '現在、このアカウントでは投稿できません。',
@@ -3083,7 +3094,7 @@ const ptBR: CommunityCopy = {
     pageTitle: (page) => `${page} — Comunidade OutBrick`, threadTitle: (title) => `${title} — Comunidade OutBrick`,
   },
   name: 'Comunidade OutBrick', eyebrow: 'Comunidade OutBrick', skip: 'Ir para o conteúdo', breadcrumb: 'Navegação estrutural',
-  nav: { label: 'Comunidade', home: 'Início da comunidade', search: 'Buscar', faq: 'Perguntas frequentes', guidelines: 'Diretrizes', notifications: 'Notificações', unread: (n, f) => n === 1 ? '1 não lida' : `${f} não lidas`, settings: 'Configurações', signIn: 'Entrar', signOut: 'Sair', moderation: 'Moderação', newThread: 'Iniciar conversa', signedInAs: (name) => `Você entrou como ${name}` },
+  nav: { label: 'Comunidade', home: 'Início da comunidade', search: 'Buscar', faq: 'Perguntas frequentes', guidelines: 'Diretrizes', notifications: 'Notificações', unread: (n, f) => n === 1 ? '1 não lida' : `${f} não lidas`, settings: 'Configurações', signIn: 'Entrar', signOut: 'Sair', moderation: 'Moderação', newThread: 'Iniciar conversa', helpCentre: 'Central de Ajuda', signedInAs: (name) => `Você entrou como ${name}` },
   home: {
     title: 'Comunidade OutBrick',
     lede: 'Peça ajuda com uma fase, conte o que não está funcionando e vote no que devemos criar. A equipe lê cada conversa e responde publicamente.',
@@ -3123,7 +3134,7 @@ const ptBR: CommunityCopy = {
   },
   composer: { label: 'Sua publicação', replyLabel: 'Sua resposta', hint: 'Escreva em Markdown: uma linha em branco inicia um novo parágrafo. Abaixo há uma ajuda de formatação.', write: 'Escrever', preview: 'Prévia', tabsLabel: 'Escrever ou ver a prévia', previewEmpty: 'Ainda não há nada para mostrar.', previewLoading: 'Preparando a prévia…', previewHeading: 'Sua publicação ficará assim', help: 'Ajuda de formatação', helpItems: [['**negrito**', 'texto em negrito'], ['*itálico*', 'texto em itálico'], ['# Título', 'um título (## e ### para títulos menores)'], ['- item', 'uma lista com marcadores; use 1. para uma lista numerada'], ['> citação', 'uma citação'], ['[texto](https://…)', 'um link'], ['`código`', 'código, como o número de uma fase ou o nome de uma configuração']], count: (used, max) => `${used} de ${max} caracteres`, left: (n, f) => n === 1 ? 'Resta 1 caractere' : `Restam ${f} caracteres`, over: (n, f) => n === 1 ? 'Excede em 1 caractere' : `Excede em ${f} caracteres`, submitReply: 'Publicar resposta', sending: 'Publicando…', replyingTo: (n) => `Respondendo à publicação ${n}.`, clearReply: 'Responder à conversa em vez disso' },
   newThread: {
-    title: 'Iniciar conversa', lede: 'Um assunto por conversa, com um título que explique do que se trata. Busque primeiro: alguém talvez já tenha perguntado.', category: 'Categoria', chooseCategory: 'Escolha uma categoria', titleLabel: 'Título', titleHint: 'Uma frase curta, por exemplo: “Fase 214: como passar pela porta congelada?”. De 4 a 140 caracteres.', language: 'Idioma da publicação', languageHint: 'Assim, quem lê nesse idioma poderá encontrá-la. Por padrão, as listas mostram seu idioma e inglês.', body: 'Sua publicação', bodyBug: 'Resumo', bugLegend: 'Sobre o problema', device: 'Dispositivo', deviceHint: 'Por exemplo, iPhone 15 Pro, iPad Air (5ª geração) ou Apple Watch Series 9. Ajustes › Geral › Sobre › Nome do Modelo.', osVersion: 'Versão do iOS, iPadOS ou outro sistema', osVersionHint: 'Ajustes › Geral › Sobre › Versão do iOS, por exemplo, 27.1.', appVersion: 'Versão do OutBrick', appVersionHint: 'No OutBrick: Ajustes › Sobre, por exemplo, 5.1.1 (68).', assistive: 'Tecnologia assistiva em uso', assistiveHint: 'Marque tudo o que estava ativado quando aconteceu.', at: { voiceover: 'VoiceOver', voice_control: 'Controle por Voz', switch_control: 'Controle Assistivo', zoom: 'Zoom', larger_text: 'Texto maior', colour_filters: 'Filtros de cor', none: 'Nenhuma' }, steps: 'Etapas para reproduzir', stepsHint: 'Liste as etapas desde que abre o app. Por exemplo: 1. Abra a fase 214. 2. Deslize o tijolo vermelho para a esquerda.', expected: 'O que deveria acontecer', actual: 'O que aconteceu', submit: 'Publicar conversa', posted: 'Sua conversa foi publicada.', signIn: 'Entre para iniciar uma conversa', teamOnly: 'Somente a equipe OutBrick pode iniciar conversas em Novidades.',
+    title: 'Iniciar conversa', lede: 'Um assunto por conversa, com um título que explique do que se trata. Busque primeiro: alguém talvez já tenha perguntado.', category: 'Categoria', chooseCategory: 'Escolha uma categoria', titleLabel: 'Título', titleHint: 'Uma frase curta, por exemplo: “Fase 214: como passar pela porta congelada?”. De 4 a 140 caracteres.', language: 'Idioma da publicação', languageHint: 'Assim, quem lê nesse idioma poderá encontrá-la. Por padrão, as listas mostram seu idioma e inglês.', body: 'Sua publicação', bodyBug: 'Resumo', bugLegend: 'Sobre o problema', device: 'Dispositivo', deviceHint: 'Por exemplo, iPhone 15 Pro, iPad Air (5ª geração) ou Apple Watch Series 9. Ajustes › Geral › Sobre › Nome do Modelo.', osVersion: 'Versão do iOS, iPadOS ou outro sistema', osVersionHint: 'Ajustes › Geral › Sobre › Versão do iOS, por exemplo, 27.1.', appVersion: 'Versão do OutBrick', appVersionHint: 'Na tela inicial, toque no seu avatar para abrir o Perfil: a versão aparece no fim da tela, por exemplo, 5.1.1 (68). No jogo, Ajustes › Relatar um problema preenche esse campo para você.', assistive: 'Tecnologia assistiva em uso', assistiveHint: 'Marque tudo o que estava ativado quando aconteceu.', at: { voiceover: 'VoiceOver', voice_control: 'Controle por Voz', switch_control: 'Controle Assistivo', zoom: 'Zoom', larger_text: 'Texto maior', colour_filters: 'Filtros de cor', none: 'Nenhuma' }, steps: 'Etapas para reproduzir', stepsHint: 'Liste as etapas desde que abre o app. Por exemplo: 1. Abra a fase 214. 2. Deslize o tijolo vermelho para a esquerda.', expected: 'O que deveria acontecer', actual: 'O que aconteceu', submit: 'Publicar conversa', posted: 'Sua conversa foi publicada.', signIn: 'Entre para iniciar uma conversa', teamOnly: 'Somente a equipe OutBrick pode iniciar conversas em Novidades.',
   },
   form: {
     problem: 'Há um problema', problemCount: (n, f) => n === 1 ? 'Corrija 1 item para continuar:' : `Corrija ${f} itens para continuar:`, required: 'Todos os campos são obrigatórios, exceto os marcados como opcionais.', optional: 'opcional', honeypot: 'Deixe este campo em branco',
@@ -3159,7 +3170,7 @@ const ptBR: CommunityCopy = {
   notifications: { title: 'Notificações', lede: 'Respostas, menções e novidades sobre o que você acompanha.', markAll: 'Marcar tudo como lido', marked: 'Todas as notificações foram marcadas como lidas.', none: 'Nenhuma novidade. Quando alguém responder, aparecerá aqui.', unreadTag: 'Nova', kinds: { reply: (actor, thread) => `${actor} respondeu em “${thread}”`, mention: (actor, thread) => `${actor} mencionou você em “${thread}”`, watched: (actor, thread) => `${actor} publicou em “${thread}”, que você acompanha`, status: (_actor, thread, extra) => `“${thread}” agora está: ${extra}`, solved: (actor, thread) => `${actor} marcou sua resposta em “${thread}” como solução`, release: (_actor, thread, extra) => extra ? `OutBrick ${extra} já está disponível: “${thread}”` : `Nova versão: “${thread}”`, moderation: (_actor, thread) => `Um moderador tomou uma medida sobre sua publicação em “${thread}”. Enviamos os detalhes por e-mail.`, welcome: () => 'Boas-vindas à comunidade OutBrick. Comece pelas diretrizes e depois diga olá em Assuntos gerais.' } },
   profile: { title: (name) => name, joined: (when) => `Membro desde ${when}`, posts: pluralPt('publicação'), solved: (n, f) => n === 1 ? '1 solução' : `${f} soluções`, recent: 'Conversas recentes', none: 'Ainda não há conversas.', noBio: 'Ainda não há descrição.' },
   mod: { title: 'Moderação', lede: 'Denúncias de membros e primeiras publicações aguardando aprovação. Todas as ações ficam registradas.', reports: 'Denúncias', queue: 'Aguardando aprovação', noReports: 'Não há denúncias em aberto.', noQueue: 'Não há publicações aguardando aprovação.', reportedBy: (name, reason) => `Denunciada por ${name}: ${reason}`, inThread: (title) => `Em “${title}”`, dismiss: 'Descartar denúncia', hide: 'Ocultar publicação', approve: 'Aprovar publicação', reasonLabel: 'Motivo (enviado por e-mail a quem publicou)', done: 'Concluído.', forbidden: 'Somente moderadores podem ver esta página.', banHeading: 'Suspender este membro', banLede: 'Membros suspensos ainda podem ler e alterar as preferências de e-mail, mas não podem publicar, responder, reagir ou votar.', banDays: 'Dias', banReason: 'Motivo (visível para o membro)', banSubmit: 'Suspender', unban: 'Remover suspensão', bannedUntil: (d) => `Suspenso até ${d}`, banDone: 'O membro foi suspenso.', unbanDone: 'A suspensão foi removida.' },
-  errors: { signin_required: 'Entre para fazer isso.', forbidden: 'Você não pode fazer isso.', not_found: 'Não encontramos. Talvez tenha sido excluído.', invalid: 'Há algo que precisa ser corrigido.', rate_limited: 'Você está indo rápido demais. Aguarde um minuto e tente novamente.', too_large: 'Está longo demais. Encurte e tente novamente.', locked: 'Esta conversa está fechada.', banned: 'Sua conta não pode publicar no momento.', unverified: 'Confirme primeiro seu endereço de e-mail.', network: 'Não foi possível conectar à comunidade. Confira sua conexão e tente novamente.', unavailable: 'A comunidade está em uma pausa rápida. Tente novamente em instantes.', unknown: 'Algo deu errado do nosso lado. Tente novamente.', send_failed: 'Não foi possível enviar o e-mail agora. Tente novamente em um minuto.' },
+  errors: { signin_required: 'Entre para fazer isso.', forbidden: 'Você não pode fazer isso.', not_found: 'Não encontramos. Talvez tenha sido excluído.', invalid: 'Há algo que precisa ser corrigido.', rate_limited: 'Você está indo rápido demais. Aguarde um minuto e tente novamente.', too_fast: 'Foi rápido demais. Espere um instante e envie de novo: seu texto continua aqui.', too_large: 'Está longo demais. Encurte e tente novamente.', locked: 'Esta conversa está fechada.', banned: 'Sua conta não pode publicar no momento.', unverified: 'Confirme primeiro seu endereço de e-mail.', network: 'Não foi possível conectar à comunidade. Confira sua conexão e tente novamente.', unavailable: 'A comunidade está em uma pausa rápida. Tente novamente em instantes.', unknown: 'Algo deu errado do nosso lado. Tente novamente.', send_failed: 'Não foi possível enviar o e-mail agora. Tente novamente em um minuto.' },
   loading: 'Carregando…', signedIn: 'Você entrou.', retry: 'Tentar novamente', notFoundTitle: 'Página não encontrada', notFoundLede: 'Não há uma página da comunidade neste endereço.', backHome: 'Ir para o início da comunidade',
   supportCta: { heading: 'Pergunte à comunidade', text: 'Na comunidade OutBrick, jogadores e a equipe respondem dúvidas, acompanham problemas e votam em ideias.', ask: 'Perguntar à comunidade', bug: 'Relatar um problema' },
 };

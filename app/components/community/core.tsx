@@ -65,6 +65,7 @@ export type Route =
   | { name: 'ideas' }
   | { name: 'leaderboard'; period: string; kind: string }
   | { name: 'bookmarks'; page: number }
+  | { name: 'latest'; page: number }
   | { name: 'notfound' };
 
 const int = (value: string | null, fallback = 1) => {
@@ -79,10 +80,15 @@ export function parseRoute(locale: CommunityLocale, url: URL): Route {
     : url.pathname;
   rest = rest.replace(/\/+$/, '');
   const q = url.searchParams;
-  const parts = rest
-    .split('/')
-    .filter(Boolean)
-    .map((p) => decodeURIComponent(p));
+  let parts: string[];
+  try {
+    parts = rest
+      .split('/')
+      .filter(Boolean)
+      .map((p) => decodeURIComponent(p));
+  } catch {
+    return { name: 'notfound' };
+  }
   const [first, second, third] = parts;
   if (
     first === 'content' &&
@@ -158,6 +164,8 @@ export function parseRoute(locale: CommunityLocale, url: URL): Route {
         };
       case 'bookmarks':
         return { name: 'bookmarks', page: int(q.get('page')) };
+      case 'latest':
+        return { name: 'latest', page: int(q.get('page')) };
     }
   }
   return { name: 'notfound' };
@@ -199,6 +207,8 @@ export type Navigate = (
   options?: { replace?: boolean; focus?: boolean },
 ) => void;
 
+export type PageOptions = { noindex?: boolean; canonical?: string };
+
 export type AppContext = {
   locale: CommunityLocale;
   copy: CommunityCopy;
@@ -215,8 +225,12 @@ export type AppContext = {
   refreshSession: () => Promise<SessionResponse | null>;
   /** Say something politely (role=status). */
   announce: (message: string) => void;
-  /** Called by a view once its content is on screen: sets the title, takes over from the static HTML, moves focus. */
-  pageReady: (title: string) => void;
+  /**
+   * Called by a view once its content is on screen: sets the title, robots and canonical, takes
+   * over from the static HTML, moves focus. `noindex` marks a client-only error state (a missing
+   * member, a missing category); `canonical` overrides the page's own address (a thread's).
+   */
+  pageReady: (title: string, options?: PageOptions) => void;
   /** True while the prerendered/edge-rendered HTML is still showing (first load, before data). */
   staticShowing: boolean;
   supportFaqs: { question: string; answer: string }[];
@@ -333,8 +347,8 @@ const courseColours = [
 
 /**
  * One page of the app: the dark head band (breadcrumb, h1, lede), the community bar, and the
- * cream body. `ready` tells the app the page is complete, which sets the document title and
- * moves focus to the h1 after a navigation.
+ * cream body. `ready` tells the app the page is complete, which sets the document title, the
+ * robots and canonical tags, and moves focus to the h1 after a navigation.
  */
 export function View({
   title,
@@ -345,6 +359,8 @@ export function View({
   docTitle,
   headExtra,
   aside,
+  noindex,
+  canonical,
   children,
 }: {
   title: string;
@@ -356,12 +372,16 @@ export function View({
   docTitle?: string;
   headExtra?: ReactNode;
   aside?: ReactNode;
+  /** A client-only error state (missing member or category): keep it out of search results. */
+  noindex?: boolean;
+  /** The canonical path, when it is not this address without its query (a thread's). */
+  canonical?: string;
   children?: ReactNode;
 }) {
   const { copy, pageReady, locale } = useApp();
   useEffect(() => {
-    if (ready) pageReady(docTitle ?? title);
-  }, [ready, title, docTitle, pageReady]);
+    if (ready) pageReady(docTitle ?? title, { noindex, canonical });
+  }, [ready, title, docTitle, pageReady, noindex, canonical]);
   return (
     <>
       <div className="cm-head">
@@ -392,7 +412,7 @@ export function View({
             ))}
           </div>
           <p className="eyebrow">{copy.eyebrow}</p>
-          <h1 className="cm-title" tabIndex={-1} lang={titleLang}>
+          <h1 className="cm-title" id="cm-page-title" tabIndex={-1} lang={titleLang}>
             {title}
           </h1>
           {lede ? <p className="lede">{lede}</p> : null}
@@ -411,85 +431,143 @@ export function View({
   );
 }
 
-/** The community's own navigation: home, search, FAQ, guidelines, and the member's corner. */
+/**
+ * The community's own navigation. The first few links (home, the Help Centre, search, and
+ * starting a thread or signing in) are always in view; the rest (FAQ, guidelines, library,
+ * roadmap, leaderboard and the member's own pages) sit behind a Menu button on narrow screens,
+ * a disclosure with aria-expanded that Escape closes. On wide screens everything shows in one row
+ * and the button is not drawn (CSS), so the order of links is the same for everyone.
+ */
 export function CommunityBar() {
   const { copy, fx, session, path, route, n, locale, refreshSession, announce, navigate } = useApp();
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState<ApiFailure | null>(null);
+  const [open, setOpen] = useState(false);
+  const [openFor, setOpenFor] = useState(route);
+  const button = useRef<HTMLButtonElement>(null);
+  const moreId = useId();
+  // A new page closes the menu.
+  if (openFor !== route) {
+    setOpenFor(route);
+    setOpen(false);
+  }
   const signOut = async () => {
-    setSigningOut(true); setSignOutError(null);
-    try { await api.signOut(); await refreshSession(); announce(copy.settings.signedOut); navigate(path('/signin'), {replace:true}); }
-    catch (error) {setSignOutError(error as ApiFailure);}
-    finally {setSigningOut(false);}
+    setSigningOut(true);
+    setSignOutError(null);
+    try {
+      await api.signOut();
+      await refreshSession();
+      announce(copy.settings.signedOut);
+      navigate(path('/signin'), { replace: true });
+    } catch (error) {
+      setSignOutError(error as ApiFailure);
+    } finally {
+      setSigningOut(false);
+    }
   };
   const member = session?.member ?? null;
   const unread = session?.unreadNotifications ?? 0;
   const current = (name: Route['name']) =>
     route.name === name ? 'page' : undefined;
   const isMod = member && ['moderator', 'admin'].includes(member.role);
+  const isTeam = member && (member.role === 'team' || member.role === 'admin');
+  // Escape closes the open menu from anywhere in it, and focus goes back to its button.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setOpen(false);
+      button.current?.focus();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
+  const unreadChip =
+    unread > 0 ? (
+      <span className="cm-count">{copy.nav.unread(unread, n(unread))}</span>
+    ) : null;
   return (
     <nav className="cm-bar" aria-label={copy.nav.label}>
       <div className="wrap">
-        <ul>
+        <ul className="cm-bar-main">
           <li>
             <a href={path()} aria-current={current('home')}>
               {copy.nav.home}
             </a>
           </li>
           <li>
+            <a href={path('/help')}>{copy.nav.helpCentre}</a>
+          </li>
+          <li>
             <a href={path('/search')} aria-current={current('search')}>
               {copy.nav.search}
             </a>
           </li>
-          <li>
-            <a href={path('/faq')} aria-current={current('faq')}>
-              {copy.nav.faq}
-            </a>
-          </li>
-          <li>
-            <a href={path('/guidelines')} aria-current={current('guidelines')}>
-              {copy.nav.guidelines}
-            </a>
-          </li>
-          <li>
-            <a href={path('/library')} aria-current={current('library')}>
-              {adminWords[locale].library}
-            </a>
-          </li>
-          <li>
-            <a href={path('/roadmap')} aria-current={current('roadmap')}>
-              {fx.nav.roadmap}
-            </a>
-          </li>
-          <li>
-            <a
-              href={path('/leaderboard')}
-              aria-current={current('leaderboard')}
-            >
-              {fx.nav.leaderboard}
-            </a>
-          </li>
           {member ? (
-            <>
+            <li>
+              <a href={path('/new')} aria-current={current('new')}>
+                {copy.nav.newThread}
+              </a>
+            </li>
+          ) : session ? (
+            <li>
+              <a href={path('/signin')} aria-current={current('signin')}>
+                {copy.nav.signIn}
+              </a>
+            </li>
+          ) : null}
+          <li className="cm-bar-toggle">
+            <button
+              ref={button}
+              type="button"
+              aria-expanded={open}
+              aria-controls={moreId}
+              onClick={() => setOpen((o) => !o)}
+            >
+              {fx.ux.menu}
+              {unreadChip}
+            </button>
+          </li>
+        </ul>
+        <div className="cm-bar-more" id={moreId} data-open={open ? '' : undefined}>
+          <ul>
+            <li>
+              <a href={path('/faq')} aria-current={current('faq')}>
+                {copy.nav.faq}
+              </a>
+            </li>
+            <li>
+              <a href={path('/guidelines')} aria-current={current('guidelines')}>
+                {copy.nav.guidelines}
+              </a>
+            </li>
+            <li>
+              <a href={path('/library')} aria-current={current('library')}>
+                {adminWords[locale].library}
+              </a>
+            </li>
+            <li>
+              <a href={path('/roadmap')} aria-current={current('roadmap')}>
+                {fx.nav.roadmap}
+              </a>
+            </li>
+            <li>
+              <a href={path('/leaderboard')} aria-current={current('leaderboard')}>
+                {fx.nav.leaderboard}
+              </a>
+            </li>
+          </ul>
+          {member ? (
+            <ul className="cm-bar-account">
               <li>
-                <a
-                  href={path('/bookmarks')}
-                  aria-current={current('bookmarks')}
-                >
-                  {fx.nav.bookmarks}
+                <a href={path('/notifications')} aria-current={current('notifications')}>
+                  {copy.nav.notifications}
+                  {unreadChip}
                 </a>
               </li>
               <li>
-                <a
-                  href={path('/notifications')}
-                  aria-current={current('notifications')}
-                >
-                  {copy.nav.notifications}
-                  {unread > 0 ? (
-                    <span className="cm-count">
-                      {copy.nav.unread(unread, n(unread))}
-                    </span>
-                  ) : null}
+                <a href={path('/bookmarks')} aria-current={current('bookmarks')}>
+                  {fx.nav.bookmarks}
                 </a>
               </li>
               <li>
@@ -504,27 +582,23 @@ export function CommunityBar() {
                   </a>
                 </li>
               ) : null}
-              <li><button type="button" className="cm-nav-signout" disabled={signingOut} onClick={() => void signOut()}>{copy.nav.signOut}</button></li>
-              {member.role === 'team' || member.role === 'admin' ? (
+              {isTeam ? (
                 <li>
                   <a href={path('/admin')} aria-current={current('admin')}>
                     {adminWords[locale].title}
                   </a>
                 </li>
               ) : null}
-            </>
-          ) : session ? (
-            <li>
-              <a href={path('/signin')} aria-current={current('signin')}>
-                {copy.nav.signIn}
-              </a>
-            </li>
+              <li>
+                <button type="button" className="cm-nav-signout" disabled={signingOut} onClick={() => void signOut()}>
+                  {copy.nav.signOut}
+                </button>
+              </li>
+            </ul>
           ) : null}
-        </ul>
+          {member ? <p className="cm-whoami">{copy.nav.signedInAs(member.displayName)}</p> : null}
+        </div>
         {signOutError ? <ErrorNotice error={signOutError} /> : null}
-        {member ? (
-          <p className="cm-whoami">{copy.nav.signedInAs(member.displayName)}</p>
-        ) : null}
       </div>
     </nav>
   );
@@ -544,9 +618,10 @@ export function Time({
   const { locale } = useApp();
   const full = fullDate(locale, iso);
   if (!relative) return <time dateTime={iso}>{full}</time>;
+  // The space keeps the two readings apart wherever the text is read as one string.
   return (
     <time dateTime={iso} title={full}>
-      <span aria-hidden="true">{relativeDate(locale, iso)}</span>
+      <span aria-hidden="true">{relativeDate(locale, iso)}</span>{' '}
       <span className="sr-only">{full}</span>
     </time>
   );
@@ -562,7 +637,11 @@ export function RoleBadge({ role }: { role: MemberRole }) {
   ) : null;
 }
 
-/** A member's name, linked to their profile, with the team or moderator badge as text. */
+/**
+ * A member's name, linked to their profile, with the team or moderator badge and their top
+ * badge as text. The comma between them is for screen readers ("Mourad, OutBrick team"); on
+ * screen the chips stand apart by themselves.
+ */
 export function Member({
   member,
   link = true,
@@ -581,7 +660,13 @@ export function Member({
       ) : (
         <span className="cm-author">{name}</span>
       )}
-      {member ? <RoleBadge role={member.role} /> : null}
+      {member && roleBadge(copy, member.role) ? (
+        <>
+          <span className="sr-only">, </span>
+          <RoleBadge role={member.role} />
+        </>
+      ) : null}
+      {member?.topBadge ? <span className="sr-only">, </span> : null}
       {member?.topBadge ? (
         <BadgeChip
           badge={member.topBadge}
@@ -735,7 +820,7 @@ export function Pending({
       : copy.form.problem
     : (title ?? copy.loading);
   return (
-    <View title={heading} crumbs={crumbs ?? []} ready={!!load.error}>
+    <View title={heading} crumbs={crumbs ?? []} ready={!!load.error} noindex={!!load.error}>
       {load.error ? (
         <ErrorNotice error={load.error} retry={load.reload} />
       ) : (
@@ -744,6 +829,12 @@ export function Pending({
     </View>
   );
 }
+
+/** A page whose data (or the session it needs) has not arrived yet: its head, the bar and "Loading…". */
+export function PageLoading({ title, crumbs }: { title?: string; crumbs?: Crumb[] }) {
+  return <Pending load={idle} title={title} crumbs={crumbs} />;
+}
+const idle = { error: null, reload: () => undefined };
 
 // ---------------------------------------------------------------------------------------
 // Forms

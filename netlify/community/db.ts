@@ -84,15 +84,24 @@ export async function rateAllow(key: string, max: number, windowSeconds: number)
   return allowed;
 }
 
-/** URL slug for a thread title: lower-case latin words joined by hyphens, or 'thread' for other scripts. */
+/**
+ * URL slug for a thread title: lower-case letters and numbers of any script joined by hyphens
+ * ("No-graphics mode" → "no-graphics-mode", "ボイスオーバーで遊ぶ" → "ボイスオーバーで遊ぶ",
+ * "Ça déraille" → "ca-deraille"), at most 60 characters and 120 bytes, or 'thread' when nothing
+ * is left. Accents are dropped from Latin letters only; other scripts keep their marks
+ * (dakuten, Devanagari vowel signs). Links percent-encode it (threadPath).
+ */
 export function slugify(title: string): string {
-  const s = title
-    .normalize('NFKD')
-    .replace(/[̀-ͯ]/g, '')
+  const words = title
+    .normalize('NFKC')
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 60)
-    .replace(/-+$/, '');
+    .normalize('NFKD')
+    .replace(/(\p{Script=Latin})\p{M}+/gu, '$1')
+    .normalize('NFC')
+    .replace(/[^\p{L}\p{N}\p{M}]+/gu, '-')
+    .replace(/^[-\p{M}]+|-+$/gu, '');
+  let chars = Array.from(words).slice(0, 60);
+  while (chars.length && new TextEncoder().encode(chars.join('')).length > 120) chars = chars.slice(0, -1);
+  const s = chars.join('').replace(/-+$/, '');
   return s || 'thread';
 }

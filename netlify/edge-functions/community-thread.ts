@@ -10,7 +10,9 @@
  *   - <title>, meta description, canonical, Open Graph and Twitter tags for the thread;
  *   - one hreflang, for the thread's own language (a thread is written in one language; the
  *     other interface languages are not translations of it);
- *   - DiscussionForumPosting JSON-LD (headline, author, dates, text, counts, the replies);
+ *   - DiscussionForumPosting JSON-LD (headline, author, dates, text, counts, the replies), or
+ *     QAPage for a solved question in Help & support or Accessibility (the solution post is its
+ *     acceptedAnswer);
  *   - the thread's posts as plain HTML in the shell's `[data-cm-static]` slot, so the page reads
  *     without script and the client app (app/components/community) takes over from it.
  *
@@ -48,7 +50,13 @@ const securityHeaders: Record<string, string> = {
 export function parseThreadPath(pathname: string): { locale: CommunityLocale; id: number; slug: string } | null {
   const match = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/community\/t\/(\d{1,12})(?:\/([^/]*))?\/?$/);
   if (!match) return null;
-  return { locale: (match[1] as CommunityLocale | undefined) ?? 'en', id: Number(match[2]), slug: decodeURIComponent(match[3] ?? '') };
+  let slug = '';
+  try {
+    slug = decodeURIComponent(match[3] ?? '');
+  } catch {
+    // A malformed escape: the redirect below puts the address right.
+  }
+  return { locale: (match[1] as CommunityLocale | undefined) ?? 'en', id: Number(match[2]), slug };
 }
 
 const attr = (value: string) => escapeHtml(value);
@@ -123,7 +131,41 @@ export function renderThreadPage(shell: string, locale: CommunityLocale, detail:
     ],
     ...(comments.length ? { comment: comments } : {}),
   };
-  const jsonLd = JSON.stringify(data).replace(/</g, '\\u003c');
+  // A solved question in Help & support or Accessibility is a question with an accepted answer:
+  // QAPage, whose acceptedAnswer is the post marked as the solution. Only when that post is on
+  // this page of the thread (its text is needed); everything else stays a discussion.
+  const solution = detail.posts.find((p) => p.isSolution && !p.hidden && !p.pending);
+  const isQuestion = thread.solved && (thread.category.slug === 'help' || thread.category.slug === 'accessibility') && detail.page === 1 && !!firstPost && !!solution && solution !== firstPost;
+  const answer = (p: (typeof detail.posts)[number]) => ({
+    '@type': 'Answer',
+    url: `${canonical}#post-${p.number}`,
+    text: excerpt(htmlToText(p.html), 1000),
+    dateCreated: p.createdAt,
+    author: person(p.author),
+  });
+  const qa = isQuestion && solution
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'QAPage',
+        '@id': `${canonical}#page`,
+        url: canonical,
+        inLanguage: thread.language,
+        mainEntity: {
+          '@type': 'Question',
+          name: data.headline,
+          text,
+          answerCount: thread.replyCount,
+          dateCreated: thread.createdAt,
+          author: person(thread.author),
+          acceptedAnswer: answer(solution),
+          ...(() => {
+            const others = detail.posts.filter((p) => p !== firstPost && p !== solution && !p.hidden && !p.pending);
+            return others.length ? { suggestedAnswer: others.map(answer) } : {};
+          })(),
+        },
+      }
+    : null;
+  const jsonLd = JSON.stringify(qa ?? data).replace(/</g, '\\u003c');
 
   // The shell's own JSON-LD describes /community, not this thread. Its <script> element stays
   // (React hydrates the element; removing it is a hydration mismatch) and only its text changes.

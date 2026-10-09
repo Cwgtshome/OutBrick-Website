@@ -30,17 +30,18 @@ void test('all six languages: team guides resolve every internal thread link, su
     );
     for (const locale of locales) {
       assert.equal(rows.filter((g) => g.locale === locale).length, 9);
-      assert.match(
-        homeStaticHtml(locale),
-        new RegExp(guideWords[locale].label),
-      );
+      // The home's card leads to the Help Centre, with the guide library as its second link.
+      assert.ok(homeStaticHtml(locale).includes(guideWords[locale].hub.replaceAll('&', '&amp;')));
     }
     for (const g of rows) {
       assert.equal(g.role, 'team');
       assert.ok(!g.body_md.includes('guide-placeholder'));
       assert.equal(renderMarkdown(g.body_md).html, g.body_html);
-      for (const match of g.body_html.matchAll(/href="([^"]+)"/g))
+      for (const match of g.body_html.matchAll(/href="([^"]+)"/g)) {
+        // The 8 October note at the top points to the guide's Help Centre page.
+        if (/^https:\/\/www\.outbrick\.site(?:\/(?:fr|de|es|ja|pt-BR))?\/community\/help(?:\/|$)/.test(match[1])) continue;
         assert.ok(paths.has(match[1]), `missing guide: ${match[1]}`);
+      }
     }
     // Editorial seed must not overwrite an opening post that a team editor changes later.
     await pg.query(

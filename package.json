@@ -22,6 +22,8 @@
     "verify:refs": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/verify-references.mjs",
     "check:links": "node scripts/check-links.mjs",
     "check:jsonld": "node scripts/check-jsonld.mjs",
+    "check:help": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/check-help.mjs",
+    "import:help-shots": "python3 scripts/import-help-shots.py",
     "check:responsive": "node scripts/check-responsive.mjs",
     "covers": "python3 scripts/make-cover.py",
     "emails:preview": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/build-email-previews.mjs --out outputs/email-previews",

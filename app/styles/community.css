@@ -9,22 +9,27 @@
    Readers come with VoiceOver, Zoom, Larger Text and Switch Control, so:
    every target is at least 44 × 44 px; sizes are rem, so the page follows the
    browser's text size and still fits at 320 px wide and 200 % text; colour
-   never carries meaning alone (every badge is words); dark mode, more
-   contrast, forced colours and reduced motion each get their own block.
+   never carries meaning alone (every badge is words); more contrast, forced
+   colours and reduced motion each get their own block. There is no dark
+   mode: the rest of the site (masthead, footer, every other page) has none,
+   and the community looks like the site it belongs to.
    ================================================================== */
 
 .ob-site .cm {
+  /* The site's own values (globals.css): .doc a for links, .doc section for slabs. */
   --cm-bg: var(--cream);
   --cm-card: #fff;
-  --cm-card-foot: #e0cfae;
   --cm-ink: var(--ink-on-cream);
   --cm-muted: var(--muted-on-cream);
-  --cm-link: #2c2296;
-  --cm-line: #ddcaa6;
+  --cm-link: var(--panel-dark);
+  /* Dividers and card outlines: decoration, the paving colour. */
+  --cm-line: var(--paving-dark);
+  /* Field outlines carry meaning (where to type), so they clear 3:1 on white (5.8:1). */
+  --cm-field-line: var(--muted-on-cream);
   --cm-field: #fff;
   --cm-chip: #f3ead8;
   --cm-chip-ink: #3a2f12;
-  --cm-ok: #1f7f2a;
+  --cm-ok: var(--green-dark);
   --cm-bad: #a3241e;
   --cm-solution: #e8f8e4;
   display: block;
@@ -32,23 +37,15 @@
   color: var(--cm-ink);
 }
 
-@media (prefers-color-scheme: dark) {
-  .ob-site .cm {
-    --cm-bg: var(--ink);
-    --cm-card: var(--base);
-    --cm-card-foot: var(--screen);
-    --cm-ink: var(--white);
-    --cm-muted: var(--lilac);
-    --cm-link: var(--gold);
-    --cm-line: #4e43c9;
-    --cm-field: var(--floor);
-    --cm-chip: var(--panel-inner);
-    --cm-chip-ink: #fff;
-    --cm-ok: var(--green-light);
-    --cm-bad: #ff9c94;
-    --cm-solution: #1d3a2a;
-  }
+/* Focus on the light body: a dark ring with the site's gold just inside it, so it shows on white
+   and cream (the gold alone is 1.6:1 there) and on the dark head band alike. */
+.ob-site .cm :focus-visible {
+  outline: 3px solid var(--panel-dark);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--gold);
 }
+.ob-site .cm-head :focus-visible,
+.ob-site .cm-bar :focus-visible { outline-color: var(--gold); box-shadow: 0 0 0 3px var(--ink); }
 
 .ob-site .cm [hidden] { display: none !important; }
 /* `.ob-site section` is a full-height band on the home page; here a section is just a section. */
@@ -72,7 +69,7 @@
   overflow-wrap: anywhere;
 }
 .ob-site .cm-head h1:focus { outline: none; }
-.ob-site .cm-head h1:focus-visible { outline: 3px solid var(--gold); outline-offset: 6px; border-radius: 6px; }
+.ob-site .cm-head h1:focus-visible { outline: 3px solid var(--gold); outline-offset: 6px; border-radius: 6px; box-shadow: none; }
 .ob-site .cm-head .lede { color: var(--lilac); margin: 0 0 12px; }
 .ob-site .cm-head .course { margin: 6px 0 20px; max-width: 420px; }
 .ob-site .cm-head .eyebrow { margin-bottom: 10px; }
@@ -108,34 +105,31 @@
 .ob-site .cm-meta-dark a,
 .ob-site .cm-head .cm-author { color: #fff; }
 .ob-site .cm-note-dark { color: var(--lilac); margin: 0; }
-.ob-site .cm-head .cm-badge:not(.cm-status):not(.cm-badge-solution) { background: var(--panel-inner); color: #fff; box-shadow: 0 3px 0 #241d7c; }
-.ob-site .cm-head .cm-role { background: var(--gold); color: var(--ink); }
+.ob-site .cm-head .cm-badge:not(.cm-status):not(.cm-badge-solution) { background: var(--panel-inner); color: #fff; box-shadow: 0 3px 0 var(--panel-dark); }
+.ob-site .cm-head :is(.cm-role, .cm-badgechip) { background: transparent; color: #fff; }
 
-/* breadcrumb */
+/* breadcrumb: inline, so each "›" stays on the line of the item it introduces (a no-break
+   space each side) instead of starting a line by itself on a phone */
 .ob-site .cm-crumbs ol {
   list-style: none;
   margin: 0 0 14px;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 0;
   font-family: var(--display);
   font-weight: 500;
   font-size: 0.95rem;
+  line-height: 2.75rem;
 }
-.ob-site .cm-crumbs li { display: flex; align-items: center; min-width: 0; }
-.ob-site .cm-crumbs li + li::before { content: '›'; margin: 0 8px; color: var(--muted); }
+.ob-site .cm-crumbs li { display: inline; }
+.ob-site .cm-crumbs li + li::before { content: '\00a0›\00a0'; content: '\00a0›\00a0' / ''; color: var(--muted); }
 .ob-site .cm-crumbs a {
   color: var(--lilac);
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
+  padding-block: 0.7rem;
   text-decoration: underline;
   text-decoration-color: rgba(203, 196, 255, 0.4);
   text-underline-offset: 3px;
   overflow-wrap: anywhere;
 }
-.ob-site .cm-crumbs [aria-current='page'] { color: #fff; display: inline-flex; align-items: center; min-height: 44px; overflow-wrap: anywhere; }
+.ob-site .cm-crumbs [aria-current='page'] { color: #fff; overflow-wrap: anywhere; }
 .ob-site .cm-crumbs a:hover { color: #fff; }
 
 .ob-site .cm-head-actions {
@@ -179,20 +173,39 @@
   flex-wrap: wrap;
   gap: 4px;
 }
-.ob-site .cm-bar a, .ob-site .cm-bar .cm-nav-signout {
+.ob-site .cm-bar a,
+.ob-site .cm-bar button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: 44px;
   padding: 0 14px;
+  border: 0;
   border-radius: 999px;
+  background: transparent;
   color: #fff;
   text-decoration: none;
-  font-family: var(--display);
-  font-weight: 500;
+  font: 500 1rem var(--display);
+  cursor: pointer;
 }
-.ob-site .cm-bar a:hover, .ob-site .cm-bar .cm-nav-signout:hover { background: rgba(255, 255, 255, 0.1); }
+.ob-site .cm-bar a:hover,
+.ob-site .cm-bar button:hover { background: rgba(255, 255, 255, 0.1); }
 .ob-site .cm-bar a[aria-current='page'] { background: var(--panel); box-shadow: inset 0 0 0 2px var(--gold); }
+.ob-site .cm-bar-more { display: contents; }
+.ob-site .cm-bar-toggle { display: none; }
+.ob-site .cm-bar .cm-bar-account { border-inline-start: 2px solid rgba(255, 255, 255, 0.18); padding-inline-start: 4px; }
+/* Phones: home, Help Centre, search and the one main action stay in view; the rest open from Menu. */
+@media (max-width: 759px) {
+  .ob-site .cm-bar .wrap { display: block; }
+  .ob-site .cm-bar-toggle { display: block; margin-inline-start: auto; }
+  .ob-site .cm-bar-toggle button { border: 2px solid rgba(255, 255, 255, 0.5); }
+  .ob-site .cm-bar-toggle button[aria-expanded='true'] { background: var(--panel); border-color: var(--gold); }
+  .ob-site .cm-bar-more { display: block; border-top: 2px solid rgba(255, 255, 255, 0.18); margin-top: 6px; padding-top: 6px; }
+  .ob-site .cm-bar-more:not([data-open]) { display: none; }
+  .ob-site .cm-bar-more ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr)); }
+  .ob-site .cm-bar .cm-bar-account { border-inline-start: 0; padding-inline-start: 0; border-top: 2px solid rgba(255, 255, 255, 0.18); margin-top: 6px; padding-top: 6px; }
+  .ob-site .cm-whoami { padding: 6px 14px 0; }
+}
 .ob-site .cm-count {
   font-size: 0.8rem;
   font-weight: 600;
@@ -221,15 +234,43 @@
 .ob-site .cm-body h2 { font-size: clamp(1.35rem, 3.2vw, 1.8rem); margin: 0 0 14px; }
 .ob-site .cm-body h3 { font-size: 1.15rem; margin: 0 0 6px; }
 .ob-site .cm-body h4 { font-family: var(--display); font-weight: 600; font-size: 1.05rem; margin: 0 0 6px; }
-.ob-site .cm-body a { color: var(--cm-link); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.ob-site .cm-body a { color: var(--cm-link); text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: rgba(75, 63, 201, 0.4); }
+.ob-site .cm-body a:hover { text-decoration-color: currentColor; }
+.ob-site .cm-body a.btn.ghost,
+.ob-site .cm-body a.cm-act { color: #fff; text-decoration: none; }
+/* Links inside text are underlined, not told apart by colour alone (the site sets none on <a>). */
+.ob-site .cm-body :is(a:not([class]), a.mention, a.cm-author, a.cm-textlink, a.cm-permalink, a.cm-replyto, a.cm-unread) { text-decoration-line: underline; }
+/* A quiet link beside a button, still a 44px target. */
+.ob-site .cm .cm-textlink { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--display); font-weight: 600; }
+/* A button that reads as a link (Discard, in the draft notice). */
+.ob-site .cm-linkbutton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--cm-link);
+  font: 600 1rem var(--display);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.ob-site .cm-draft { display: flex; flex-wrap: wrap; align-items: center; gap: 0 4px; margin: 0 0 12px; padding: 2px 14px; border-radius: 12px; background: var(--cm-chip); color: var(--cm-chip-ink); }
 .ob-site .cm-body a.btn { color: var(--ink); text-decoration: none; }
 
-/* a section is a slab, as on the document pages */
+/* a section is a slab, as on the document pages: the brick primitive's variables, as .doc section */
+.ob-site :is(.cm-section, .cm-aside, .cm-post) {
+  --b: var(--cm-card);
+  --b-foot: #e0cfae;
+  --depth: 7px;
+  background: var(--b);
+  box-shadow: 0 var(--depth) 0 var(--b-foot);
+}
 .ob-site .cm-section {
   position: relative;
-  background: var(--cm-card);
   border-radius: var(--radius);
-  box-shadow: 0 7px 0 var(--cm-card-foot);
   padding: 24px 24px 12px;
   margin: 0 0 24px;
 }
@@ -291,15 +332,13 @@
 .ob-site .cm-cat h3 a { display: inline-flex; align-items: center; min-height: 44px; }
 .ob-site .cm-cat p { color: var(--cm-muted); font-size: 0.97rem; }
 /* The prerendered home sets its category list on the cream; keep it a slab too. */
-.ob-site .cm-static .cm-cat { box-shadow: 0 5px 0 var(--cm-card-foot); }
+.ob-site .cm-static .cm-cat { box-shadow: 0 5px 0 #e0cfae; }
 
 .ob-site .cm-stats { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.9rem; color: var(--cm-muted); }
 .ob-site .cm-stats a { display: inline-flex; align-items: center; min-height: 44px; }
 
 .ob-site .cm-aside {
-  background: var(--cm-card);
   border-radius: var(--radius);
-  box-shadow: 0 7px 0 var(--cm-card-foot);
   padding: 18px 18px 8px;
 }
 .ob-site .cm-aside h2 { font-size: 1.15rem; }
@@ -333,7 +372,7 @@
   padding: 12px 16px 4px;
 }
 .ob-site .cm-thread { border-left: 10px solid var(--cat, var(--blue)); }
-.ob-site .cm-thread-title { font-size: 1.15rem !important; margin: 0 0 4px !important; }
+.ob-site .cm .cm-thread-title { font-size: 1.15rem; margin: 0 0 4px; }
 .ob-site .cm-thread-title a { display: inline-flex; align-items: center; min-height: 44px; }
 .ob-site .cm-meta { color: var(--cm-muted); font-size: 0.92rem; margin: 0 0 6px; }
 .ob-site .cm-meta a { display: inline; }
@@ -346,71 +385,84 @@
 .ob-site .cm-note-item.is-unread { border-color: var(--panel-light); }
 .ob-site .cm-note-item .cm-meta { margin: 0; }
 
-/* ---------------- badges ---------------- */
+/* ---------------- chips ----------------
+   One chip, two families. Status and facts about a thread (.cm-badge: Solved, Fixed in 5.1,
+   Pinned, a category) are filled pills. Facts about a person (.cm-role: OutBrick team; and
+   .cm-badgechip: their top badge) are outlined tags with square corners, so a member's
+   "Shipped" badge never reads as an idea's "Shipped" status. */
 
 .ob-site .cm-badges { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 8px; }
-.ob-site .cm-badge {
-  display: inline-block;
+.ob-site :is(.cm-badge, .cm-role, .cm-badgechip) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-family: var(--display);
   font-weight: 600;
   font-size: 0.8rem;
   line-height: 1.3;
   letter-spacing: 0.02em;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--cm-chip);
-  color: var(--cm-chip-ink);
-  border: 1px solid transparent;
+  padding: 3px 10px;
+  border: 2px solid transparent;
+  vertical-align: middle;
+  text-shadow: none;
+  white-space: nowrap;
 }
+.ob-site .cm-badge { border-radius: 999px; background: var(--cm-chip); color: var(--cm-chip-ink); }
 .ob-site .cm-badge-solution { background: var(--green); color: var(--ink); }
 .ob-site .cm-status-fixed,
 .ob-site .cm-status-released,
 .ob-site .cm-status-shipped { background: var(--green); color: var(--ink); }
 .ob-site .cm-status-confirmed,
-.ob-site .cm-status-planned { background: var(--blue); color: #fff; background: #1d5fc4; }
+.ob-site .cm-status-planned,
+.ob-site .cm-status-in_progress { background: var(--blue-dark); color: #fff; }
 .ob-site .cm-status-considering,
 .ob-site .cm-status-new,
 .ob-site .cm-status-open { background: var(--gold); color: var(--ink); }
 .ob-site .cm-status-declined,
 .ob-site .cm-status-not_a_bug,
-.ob-site .cm-status-duplicate { background: #5a5374; color: #fff; }
-.ob-site .cm-role {
-  display: inline-block;
-  font-family: var(--display);
-  font-weight: 600;
-  font-size: 0.76rem;
-  padding: 2px 8px;
-  margin-inline-start: 8px;
+.ob-site .cm-status-duplicate { background: var(--muted-on-cream); color: #fff; }
+
+.ob-site :is(.cm-role, .cm-badgechip) {
   border-radius: 6px;
-  background: var(--panel);
-  color: #fff;
-  vertical-align: middle;
-  text-shadow: none;
+  margin-inline-start: 8px;
+  padding: 1px 8px;
+  font-size: 0.76rem;
+  background: var(--cm-card);
+  color: var(--cm-ink);
+  border-color: var(--panel);
 }
-.ob-site .cm-role-moderator { background: var(--teal-dark); }
+.ob-site .cm-role-moderator { border-color: var(--teal-dark); }
+.ob-site .cm-badgechip { border-color: var(--gold-dark); }
+.ob-site .cm-badgechip .cm-badge-icon { color: var(--gold-dark); }
+.ob-site :is(.cm-badgechip-accessibility_champion, .cm-badgechip-helpful) { border-color: var(--teal-dark); }
+.ob-site :is(.cm-badgechip-accessibility_champion, .cm-badgechip-helpful) .cm-badge-icon { color: var(--teal-dark); }
+.ob-site :is(.cm-badgechip-shipped, .cm-badgechip-idea_maker) { border-color: var(--green-dark); }
+.ob-site :is(.cm-badgechip-shipped, .cm-badgechip-idea_maker) .cm-badge-icon { color: var(--green-dark); }
+.ob-site :is(.cm-badgechip-bug_hunter, .cm-badgechip-beta_tester) { border-color: var(--blue-dark); }
+.ob-site :is(.cm-badgechip-bug_hunter, .cm-badgechip-beta_tester) .cm-badge-icon { color: var(--blue-dark); }
+.ob-site .cm-head :is(.cm-role, .cm-badgechip) { border-color: var(--gold); }
+.ob-site .cm-head .cm-badgechip .cm-badge-icon { color: var(--gold); }
 
 /* ---------------- a thread ---------------- */
 
 .ob-site .cm-posts { display: grid; gap: 18px; margin: 0 0 24px; }
 .ob-site .cm-post {
   position: relative;
-  background: var(--cm-card);
   border-radius: var(--radius);
-  box-shadow: 0 6px 0 var(--cm-card-foot);
   padding: 18px 22px 8px;
   scroll-margin-top: 96px;
 }
 .ob-site .cm-post:focus { outline: none; }
-.ob-site .cm-post:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
-.ob-site .cm-post.is-solution { background: var(--cm-solution); box-shadow: 0 6px 0 var(--green-dark), inset 0 0 0 3px var(--green); }
+.ob-site .cm-post:focus-visible { outline: 3px solid var(--panel-dark); outline-offset: 4px; box-shadow: 0 var(--depth) 0 var(--b-foot), 0 0 0 4px var(--gold); }
+.ob-site .cm-post.is-solution { --b: var(--cm-solution); --b-foot: var(--green-dark); box-shadow: 0 var(--depth) 0 var(--b-foot), inset 0 0 0 3px var(--green); }
 .ob-site .cm-post.is-hidden,
 .ob-site .cm-post.is-pending { border: 2px dashed var(--cm-line); }
 @media (max-width: 560px) {
   .ob-site .cm-post { padding: 16px 14px 6px; }
 }
-.ob-site .cm-post-h {
-  font-size: 1.05rem !important;
-  margin: 0 0 4px !important;
+.ob-site .cm .cm-post-h {
+  font-size: 1.05rem;
+  margin: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -418,8 +470,12 @@
 }
 .ob-site .cm-post-h .cm-author { display: inline-flex; align-items: center; min-height: 44px; }
 .ob-site .cm-post-h time { font-family: var(--text); font-weight: 400; font-size: 0.95rem; color: var(--cm-muted); }
-.ob-site .cm-sep { color: var(--cm-muted); margin-inline-end: 4px; }
-.ob-site .cm-post-meta { display: flex; flex-wrap: wrap; gap: 0 14px; font-size: 0.88rem; color: var(--cm-muted); margin: 0 0 10px; }
+.ob-site .cm-sep { color: var(--cm-muted); margin-inline-end: 6px; }
+/* The post's heading and its "Post 3 · In reply to …" links run on as one line of text, so the
+   permalink sits at the end of the heading instead of taking a 44px row of its own on a phone. */
+.ob-site .cm-post-top { margin: 0 0 8px; }
+.ob-site .cm .cm-post-top .cm-post-h { display: inline; }
+.ob-site .cm .cm-post-meta { display: inline-flex; flex-wrap: wrap; gap: 0 14px; font-size: 0.88rem; color: var(--cm-muted); margin: 0 0 0 12px; vertical-align: baseline; }
 .ob-site .cm-post-meta a { display: inline-flex; align-items: center; min-height: 44px; }
 .ob-site .cm-solution-mark { margin-bottom: 12px; }
 
@@ -483,9 +539,10 @@
 .ob-site .cm-vote-count { font-weight: 500; }
 .ob-site .cm-vote-static { color: var(--lilac); margin: 0; }
 
-/* ---------------- buttons ---------------- */
+/* ---------------- buttons ----------------
+   The site's .btn as it is; a post's or a form's smaller actions are the site's ghost button
+   (.btn.ghost: panel face, darker seam) at a 44px size. */
 
-.ob-site .cm .btn { min-height: 48px; font-size: 1rem; padding: 12px 22px; }
 .ob-site .cm-act {
   display: inline-flex;
   align-items: center;
@@ -493,21 +550,27 @@
   min-height: 44px;
   min-width: 44px;
   padding: 0 16px;
-  border: 2px solid var(--panel);
+  border: 0;
   border-radius: 999px;
-  background: var(--cm-card);
-  color: var(--cm-link);
+  background: var(--panel);
+  box-shadow: 0 4px 0 var(--panel-dark);
+  color: #fff;
   font: 600 0.95rem var(--display);
   text-decoration: none;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.22);
   cursor: pointer;
+  margin-bottom: 4px;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
-.ob-site .cm-head .cm-act { background: transparent; border-color: var(--lilac); color: #fff; }
-.ob-site .cm-act:hover { background: var(--cm-chip); }
-.ob-site .cm-head .cm-act:hover { background: rgba(255, 255, 255, 0.1); }
-.ob-site .cm-act[aria-pressed='true'] { background: var(--panel); color: #fff; border-color: var(--panel); }
+.ob-site .cm-act:hover { filter: brightness(1.08); }
+.ob-site .cm-act:active,
+.ob-site .cm-act[aria-pressed='true'] { transform: translateY(2px); box-shadow: 0 2px 0 var(--ink), inset 0 3px 0 rgba(0, 0, 0, 0.2); background: var(--panel-dark); }
+.ob-site .cm-act:focus-visible { box-shadow: 0 4px 0 var(--panel-dark), 0 0 0 3px var(--gold); }
 .ob-site .cm-act:disabled,
 .ob-site .cm .btn:disabled { opacity: 0.6; cursor: progress; }
-.ob-site .cm-danger { border-color: var(--cm-bad); color: var(--cm-bad); }
+.ob-site .cm .btn:focus-visible { box-shadow: 0 6px 0 var(--green-dark), 0 0 0 3px var(--gold); }
+.ob-site .cm .btn.ghost:focus-visible { box-shadow: 0 6px 0 var(--panel-dark), 0 0 0 3px var(--gold); }
+.ob-site .cm-act.cm-danger { background: var(--red-dark); box-shadow: 0 4px 0 #5c120f; }
 .ob-site .cm .cm-danger-btn { background: var(--red-dark); color: #fff; box-shadow: 0 6px 0 #5c120f; text-shadow: none; }
 .ob-site .cm-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 14px; }
 
@@ -577,7 +640,7 @@
 .ob-site .cm-optional { font-weight: 400; color: var(--cm-muted); }
 .ob-site .cm-hint { color: var(--cm-muted); font-size: 0.92rem; margin: 0 0 8px; }
 .ob-site .cm-error { color: var(--cm-bad); font-weight: 600; margin: 0 0 8px; }
-.ob-site .cm-error::before { content: '! '; font-weight: 800; }
+.ob-site .cm-error::before { content: '! '; content: '! ' / ''; font-weight: 800; }
 .ob-site .cm input[type='text'],
 .ob-site .cm input[type='email'],
 .ob-site .cm input[type='search'],
@@ -589,7 +652,7 @@
   font-size: 1rem;
   color: var(--cm-ink);
   background: var(--cm-field);
-  border: 2px solid var(--cm-line);
+  border: 2px solid var(--cm-field-line);
   border-bottom-width: 4px;
   border-radius: 12px;
   padding: 10px 14px;
@@ -597,7 +660,7 @@
 .ob-site .cm textarea { min-height: 9rem; resize: vertical; line-height: 1.5; }
 .ob-site .cm input:focus-visible,
 .ob-site .cm select:focus-visible,
-.ob-site .cm textarea:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; border-color: var(--panel); }
+.ob-site .cm textarea:focus-visible { outline: 3px solid var(--panel-dark); outline-offset: 1px; box-shadow: 0 0 0 4px var(--gold); border-color: var(--panel); }
 .ob-site .cm [aria-invalid='true'] { border-color: var(--cm-bad); }
 .ob-site .cm input:disabled,
 .ob-site .cm textarea:disabled { opacity: 0.65; }
@@ -622,8 +685,8 @@
   margin: 0 0 18px;
   background: var(--cm-card);
 }
-.ob-site .cm-summary:focus { outline: 3px solid var(--gold); outline-offset: 3px; }
-.ob-site .cm-summary h2 { font-size: 1.2rem !important; color: var(--cm-bad) !important; }
+.ob-site .cm-summary:focus { outline: 3px solid var(--panel-dark); outline-offset: 3px; box-shadow: 0 0 0 3px var(--gold); }
+.ob-site .cm .cm-summary h2 { font-size: 1.2rem; color: var(--cm-bad); }
 .ob-site .cm-summary ul { margin: 0 0 12px; padding-left: 1.2em; }
 .ob-site .cm-summary a { color: var(--cm-bad); font-weight: 600; display: inline-block; padding-block: 10px; }
 
@@ -631,7 +694,7 @@
 
 /* notices */
 .ob-site .cm-notice { border-radius: 14px; padding: 14px 18px 2px; margin: 0 0 20px; border: 2px solid var(--cm-line); background: var(--cm-card); }
-.ob-site .cm-notice:focus { outline: 3px solid var(--gold); outline-offset: 3px; }
+.ob-site .cm-notice:focus { outline: 3px solid var(--panel-dark); outline-offset: 3px; box-shadow: 0 0 0 3px var(--gold); }
 .ob-site .cm-notice-error { border-color: var(--cm-bad); }
 .ob-site .cm-notice-ok { border-color: var(--cm-ok); }
 .ob-site .cm-notice h3 { margin-top: 0; }
@@ -656,13 +719,12 @@
 .ob-site .cm-composer [role='tabpanel'] textarea { border-top-left-radius: 0; }
 .ob-site .cm-preview {
   min-height: 9rem;
-  border: 2px solid var(--cm-line);
+  border: 2px solid var(--cm-field-line);
   border-bottom-width: 4px;
   border-radius: 0 12px 12px 12px;
   padding: 12px 14px 2px;
   background: var(--cm-field);
 }
-.ob-site .cm-preview:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; }
 .ob-site .cm-charcount { font-size: 0.88rem; color: var(--cm-muted); margin: 6px 0; }
 .ob-site .cm-charcount.is-over { color: var(--cm-bad); font-weight: 700; }
 .ob-site .cm-help summary {
@@ -706,7 +768,6 @@
 .ob-site .cm-provider-google { background: #fff; color: #1f1f1f !important; border: 1px solid #747775; font-family: Roboto, Arial, system-ui, sans-serif; font-weight: 500; }
 /* Facebook: brand blue, white f and words */
 .ob-site .cm-provider-facebook { background: #0866ff; color: #fff !important; }
-.ob-site .cm-provider:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 
 /* ---------------- FAQ and guidelines ---------------- */
 
@@ -739,8 +800,7 @@
 .ob-site .cm-column-planned { --col: var(--blue); }
 .ob-site .cm-column-in_progress { --col: var(--purple); }
 .ob-site .cm-column-shipped { --col: var(--green); }
-.ob-site .cm-column h2,
-.ob-site .cm-column h3 { font-size: 1.15rem !important; margin: 0 0 4px !important; }
+.ob-site .cm .cm-column :is(h2, h3) { font-size: 1.15rem; margin: 0 0 4px; }
 .ob-site .cm-column-count { font-family: var(--text); font-weight: 400; color: var(--cm-muted); font-size: 0.95rem; }
 .ob-site .cm-board .cm-roadmap { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
 .ob-site .cm-recent-post { display: block; }
@@ -750,12 +810,12 @@
 .ob-site .cm-idea { display: flex; flex-direction: column-reverse; gap: 2px; align-items: flex-start; border-top: 2px solid var(--cm-chip); padding-top: 8px; }
 .ob-site .cm-idea:first-child { border-top: 0; padding-top: 0; }
 .ob-site .cm-idea-text { min-width: 0; flex: 1; }
-.ob-site .cm-idea-title { font-size: 1rem !important; margin: 0 !important; }
+.ob-site .cm .cm-idea-title { font-size: 1rem; margin: 0; }
 .ob-site .cm-idea-title a { display: inline-flex; min-height: 44px; align-items: center; }
 .ob-site .cm-idea .cm-vote-static { white-space: nowrap; }
 
 .ob-site .cm-similar { border: 2px dashed var(--panel-light); border-radius: 14px; padding: 12px 16px 4px; margin: -4px 0 18px; background: var(--cm-card); }
-.ob-site .cm-similar h2 { font-size: 1.1rem !important; }
+.ob-site .cm .cm-similar h2 { font-size: 1.1rem; }
 
 /* ---------------- reactions ---------------- */
 
@@ -793,7 +853,7 @@
   font: inherit;
   color: var(--cm-ink);
   background: var(--cm-field);
-  border: 2px solid var(--cm-line);
+  border: 2px solid var(--cm-field-line);
   border-bottom-width: 4px;
   border-radius: 12px;
   padding: 8px 14px;
@@ -816,28 +876,9 @@
 
 /* ---------------- badges, stats, tables ---------------- */
 
-.ob-site .cm-badgechip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-inline-start: 6px;
-  padding: 1px 8px 1px 6px;
-  border-radius: 6px;
-  font: 600 0.76rem var(--display);
-  background: var(--gold);
-  color: var(--ink);
-  vertical-align: middle;
-  white-space: nowrap;
-}
-.ob-site .cm-badgechip-accessibility_champion,
-.ob-site .cm-badgechip-helpful { background: var(--teal); color: var(--ink); }
-.ob-site .cm-badgechip-shipped,
-.ob-site .cm-badgechip-idea_maker { background: var(--green); color: var(--ink); }
-.ob-site .cm-badgechip-bug_hunter,
-.ob-site .cm-badgechip-beta_tester { background: #1d5fc4; color: #fff; }
 .ob-site .cm-badge-icon { flex: none; }
 .ob-site .cm-badge-list { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
-.ob-site .cm-badge-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 14px; border: 2px solid var(--cm-line); background: var(--cm-card) !important; color: var(--cm-ink) !important; }
+.ob-site .cm .cm-badge-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 14px; border: 2px solid var(--cm-line); background: var(--cm-card); color: var(--cm-ink); }
 .ob-site .cm-badge-item h3 { margin: 0 0 4px; }
 .ob-site .cm-badge-item p { margin: 0 0 4px; color: var(--cm-muted); }
 .ob-site .cm-badge-medal { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border-radius: 12px; background: var(--gold); color: var(--ink); box-shadow: 0 4px 0 var(--gold-dark); }
@@ -878,7 +919,7 @@
 .ob-site .cm input[type='file'] { font: inherit; max-width: 100%; min-height: 44px; }
 .ob-site .cm-error-list { list-style: none; padding: 0; margin: 0 0 10px; }
 .ob-site .cm-translation { border-inline-start: 5px solid var(--teal); padding: 6px 14px 2px; margin: 0 0 12px; background: var(--cm-chip); border-radius: 0 12px 12px 0; }
-.ob-site .cm-translation:focus { outline: 3px solid var(--gold); outline-offset: 2px; }
+.ob-site .cm-translation:focus { outline: 3px solid var(--panel-dark); outline-offset: 2px; box-shadow: 0 0 0 3px var(--gold); }
 .ob-site .cm-translation-label { font: 600 0.85rem var(--display); color: var(--cm-muted); margin: 0 0 6px; }
 .ob-site .cm-provider-passkey { background: var(--panel); color: #fff !important; border: 0; width: 100%; max-width: 30rem; cursor: pointer; }
 
@@ -935,16 +976,14 @@
 }
 
 /* Administration uses the community's existing controls and surfaces. */
-.cm-admin-counts { display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1rem; margin-block:1.5rem; }
-.cm-admin-counts > div { padding:1rem; border:1px solid var(--cm-line); border-radius:1rem; }
-.cm-admin-counts dt { font-weight:700; }
-.cm-admin-counts dd { margin:0; font-size:2rem; }
-.cm-admin-members { list-style:none; padding:0; }
-.cm-admin-members > li { padding-block:1rem; border-bottom:1px solid var(--cm-line); }
-.cm-admin-members select { margin-inline:.5rem; max-width:100%; }
-.cm-admin-editor { margin-block:1.5rem; }
-.cm-admin-editor label { display:block; margin-block:1rem; }
-.cm-admin-editor input,.cm-admin-editor textarea,.cm-admin-editor select { display:block; width:100%; margin-top:.4rem; }
-.cm-draft-preview { white-space:pre-wrap; overflow-wrap:anywhere; }
-
-.ob-site .cm-nav-signout { color:inherit; font:inherit; border:0; background:transparent; cursor:pointer; }
+.ob-site .cm-admin-counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 1rem; margin-block: 1.5rem; }
+.ob-site .cm-admin-counts > div { padding: 1rem; border: 2px solid var(--cm-line); border-radius: 14px; background: var(--cm-card); }
+.ob-site .cm-admin-counts dt { font-weight: 700; }
+.ob-site .cm-admin-counts dd { margin: 0; font-size: 2rem; }
+.ob-site .cm-admin-members { list-style: none; padding: 0; }
+.ob-site .cm-admin-members > li { padding-block: 1rem; border-bottom: 2px solid var(--cm-line); }
+.ob-site .cm-admin-members select { margin-inline: 0.5rem; max-width: 100%; }
+.ob-site .cm-admin-editor { margin-block: 1.5rem; }
+.ob-site .cm-admin-editor label { display: block; margin-block: 1rem; }
+.ob-site .cm-admin-editor :is(input, textarea, select) { display: block; width: 100%; margin-top: 0.4rem; }
+.ob-site .cm-draft-preview { white-space: pre-wrap; overflow-wrap: anywhere; }
