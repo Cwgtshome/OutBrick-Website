@@ -73,7 +73,7 @@ const qualified=t=>`${quote(t.schema)}.${quote(t.table)}`;
 const oldDump=await run(process.env.PG_RESTORE,['--data-only','--file=-',path.join(baselineDir,'database.dump')],'baseline-sequences');
 const sequences=[...oldDump.matchAll(/SELECT pg_catalog\.setval\('([^']+)', (\d+), (true|false)\);/g)];
 if(sequences.length!==18) throw new Error('Unexpected baseline sequence inventory.');
-const names=[...baseline.tables.map(t=>`${t.schema}.${t.table}`),...sequences.map(m=>m[1])].sort();
+const names=[...baseline.tables.map(t=>`${t.schema}.${t.table}`),...sequences.map(m=>m[1])].sort((a,b)=>a<b?-1:a>b?1:0);
 const guard=`SET LOCAL timezone = 'UTC';
 LOCK TABLE ${baseline.tables.map(qualified).join(', ')} IN ACCESS EXCLUSIVE MODE;
 DO $guard$
