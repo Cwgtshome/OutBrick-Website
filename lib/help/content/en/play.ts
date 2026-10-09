@@ -736,6 +736,7 @@ export const playArticles: HelpArticle[] = [
             title: 'A helping hand',
             text: 'Stuck on one board? From your sixth attempt at it, the game gives you **3 extra moves** before you start: “A helping hand: 3 extra moves this try”. Once a day per board.',
           },
+          { t: 'shot', id: 'level-failed', alt: 'Level failed: a sad friend, Almost there!, the goals still needed (3 sunshine and 3 wave bricks), a broken heart showing one life used, a blue Try again button, an optional offer, and Back to the map.', caption: 'Level failed shows how close you came.' },
         ],
       },
       {

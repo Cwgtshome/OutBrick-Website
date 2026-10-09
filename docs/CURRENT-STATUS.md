@@ -4,6 +4,39 @@ Updated 8 October 2026. This is a dated handoff, not a claim that account state 
 Recheck live Git, `/build-info.json`, `/api/community/session` and relevant providers before acting.
 
 
+## Help Centre and forum overhaul (8–9 October 2026, branch `claude/community-help`; not deployed)
+
+**Help Centre** at `/community/help` and `/<locale>/community/help`: 20 team-written guides to the
+released game (every menu, the board, specials and blockers, boosters and Pause, lives and the
+out-of-moves screen, the Journey, rewards and the Brick Pass, the Shop and restoring, friends and the
+Wardrobe, every setting, Apple features, progress and privacy, troubleshooting, the community and bug
+reports) with an accessibility shelf: an overview, VoiceOver, Voice Control/Switch Control/keyboards,
+and vision/hearing/motion. All six languages, written with the game's own localized labels. 24 real
+captures per language from the 5.1 (67) Debug build on an iPhone 17 Pro Max simulator (Debug-only
+Board Lab/RCP rows hidden); guides stamped as checked against 5.1.1 (68), whose only change is the
+tip-card fix. See [HELP-CENTRE.md](HELP-CENTRE.md). Linked from the community bar and home, Support,
+Accessibility and the footer. `pnpm check:help` runs in CI.
+
+**Forum:** fixes from a code and browser audit: unambiguous time zones (the thread page and lists
+disagreed by the reader's offset), no home HTML shown on other routes, real 404s for unknown community
+addresses (`netlify/edge-functions/community-route.ts`), byline separators for screen readers,
+Back/Forward keeps filters, honest retryable "too fast" replies instead of silent drops, Unicode slugs,
+canonicals on client pages, label-in-name, stronger focus and field contrast, a collapsible mobile bar
+with Help Centre and Start a thread, a paginated `/community/latest`, drafts with restore, Copy link,
+QAPage data for solved threads, and community styles on the site tokens (the community-only dark
+mode is gone). Migration `20261008170000_player-guide-help-centre-notes` prepends a Help Centre link
+to the seeded player-guide threads (additive, idempotent; runs after `20261008150000`).
+
+Evidence: build, lint, `audit:seo` (0 errors), localization and rendered-copy audits (0 carryovers),
+internal links, `check:help`, 253 community/auth/lifecycle tests on PGlite, and axe with no
+violations at 390 and 1280 px on Help Centre pages in all six languages, Support, Accessibility and
+the community. Not verified: production publication (Netlify credits exhausted; Cloudflare cutover in
+draft PR #17), real VoiceOver on a device for the new pages.
+
+Found in the game, not fixed here: in 5.1 missions appear not to progress on Slide & Match boards
+(levels 1–2,000), "Advertising choices" is untranslated, Settings › Community and Report a bug send
+pt-BR players to English pages, and a French string reads "Ta série de 1 victoires".
+
 ## Performance pass (8 October 2026, on main; not deployed — Netlify production deploys paused for credits)
 
 Mobile Lighthouse, same local setup before/after (HTTP/1.1, noisy machine): home 79–82 → 84–85, page

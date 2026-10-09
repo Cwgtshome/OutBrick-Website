@@ -16,9 +16,10 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { chromeCopy } from '../lib/i18n/chrome';
-import { localeAlternates, localeNames, localePath, locales, ogLocales, type Locale } from '../lib/i18n/locales';
+import { localeAlternates, localeNames, localePath, localeUrl, locales, ogLocales, type Locale } from '../lib/i18n/locales';
 import { siteUrl } from '../lib/site';
-import { breadcrumbNode, graph, ids, ref, webPageNode } from '../lib/structured-data';
+import { appNode, breadcrumbNode, graph, ids, ref, webPageNode } from '../lib/structured-data';
+import { localizedApplicationNode } from '../lib/i18n/application';
 import { communityPath } from '../lib/community/contract';
 import { helpCategories, helpCheckpoint, type Block, type HelpArticle } from '../lib/help/model';
 import { helpArticle, helpArticles, isTranslated, readingMinutes } from '../lib/help/content';
@@ -33,6 +34,18 @@ type ShotInfo = { w: number; h: number; locales: string[] };
 const shots = shotsCatalog as Record<string, ShotInfo>;
 
 export const helpBase = '/community/help';
+/** The day the Help Centre was first published. */
+const helpPublished = '2026-10-08T12:00:00+00:00';
+
+/** A meta description within search engines' length (CJK characters count double). */
+function metaText(text: string, locale: Locale): string {
+  const plain = plainText(text);
+  const limit = locale === 'ja' ? 78 : 155;
+  if (plain.length <= limit) return plain;
+  const cut = plain.slice(0, limit - 1);
+  const space = locale === 'ja' ? cut.length : cut.lastIndexOf(' ');
+  return `${cut.slice(0, space > limit * 0.6 ? space : cut.length).replace(/[\s,;:、。.]+$/, '')}…`;
+}
 const hubPath = (locale: Locale) => localePath(locale, helpBase);
 const guidePath = (locale: Locale, slug: string) => localePath(locale, `${helpBase}/${slug}`);
 
@@ -327,11 +340,11 @@ export function helpHubMetadata(locale: Locale): Metadata {
   const image = `${siteUrl}${shotSource('home', locale).large}`;
   return {
     title: { absolute: ui.metaTitle },
-    description: ui.metaDescription,
+    description: metaText(ui.metaDescription, locale),
     alternates: localeAlternates(locale, helpBase),
     robots: { index: true, follow: true },
-    openGraph: { type: 'website', siteName: 'OutBrick', url, title: ui.metaTitle, description: ui.metaDescription, locale: ogLocales[locale], images: [{ url: image, alt: ui.name }] },
-    twitter: { card: 'summary_large_image', title: ui.metaTitle, description: ui.metaDescription, images: [{ url: image, alt: ui.name }] },
+    openGraph: { type: 'website', siteName: 'OutBrick', url, title: ui.metaTitle, description: metaText(ui.metaDescription, locale), locale: ogLocales[locale], images: [{ url: image, alt: ui.name }] },
+    twitter: { card: 'summary_large_image', title: ui.metaTitle, description: metaText(ui.metaDescription, locale), images: [{ url: image, alt: ui.name }] },
   };
 }
 
@@ -427,11 +440,10 @@ export function HelpHub({ locale }: { locale: Locale }) {
 export function helpArticleMetadata(locale: Locale, slug: string): Metadata {
   const article = helpArticle(locale, slug);
   if (!article) return {};
-  const ui = helpUi[locale];
   const url = `${siteUrl}${guidePath(locale, slug)}`;
-  const title = `${article.title} · ${ui.name} · OutBrick`;
-  const description = plainText(article.summary);
-  const image = article.cover ? `${siteUrl}${shotSource(article.cover, locale).large}` : undefined;
+  const title = `${article.title} · OutBrick`;
+  const description = metaText(article.summary, locale);
+  const image = `${siteUrl}${shotSource(article.cover ?? 'home', locale).large}`;
   // Only languages with their own translation are offered as alternates.
   const alternates = localeAlternates(locale, `${helpBase}/${slug}`);
   if (alternates.languages) {
@@ -442,8 +454,8 @@ export function helpArticleMetadata(locale: Locale, slug: string): Metadata {
     description,
     alternates,
     robots: { index: isTranslated(locale, slug), follow: true },
-    openGraph: { type: 'article', siteName: 'OutBrick', url, title: article.title, description, locale: ogLocales[locale], ...(image ? { images: [{ url: image, alt: article.title }] } : {}) },
-    twitter: { card: image ? 'summary_large_image' : 'summary', title: article.title, description, ...(image ? { images: [{ url: image, alt: article.title }] } : {}) },
+    openGraph: { type: 'article', siteName: 'OutBrick', url, title: article.title, description, locale: ogLocales[locale], images: [{ url: image, alt: article.title }] },
+    twitter: { card: 'summary_large_image', title: article.title, description, images: [{ url: image, alt: article.title }] },
   };
 }
 
@@ -571,11 +583,12 @@ export function HelpArticlePage({ locale, slug }: { locale: Locale; slug: string
               headline: article.title,
               description: plainText(article.summary),
               inLanguage: locale,
-              dateModified: helpCheckpoint.day,
+              datePublished: helpPublished,
+              dateModified: `${helpCheckpoint.day}T12:00:00+00:00`,
               proficiencyLevel: 'Beginner',
               author: ref(ids.organization),
               publisher: ref(ids.organization),
-              about: { '@type': 'VideoGame', name: 'OutBrick', gamePlatform: ['iPhone', 'iPad'] },
+              about: ref(ids.app),
               ...(article.cover ? { image: `${siteUrl}${shotSource(article.cover, locale).large}` } : {}),
             },
           }),
@@ -585,6 +598,7 @@ export function HelpArticlePage({ locale, slug }: { locale: Locale; slug: string
             { name: ui.name, path: hubPath(locale) },
             { name: article.title, path: guidePath(locale, slug) },
           ]),
+          localizedApplicationNode(appNode({ url: localeUrl('en', '/') }), locale),
         )}
       />
     </Frame>

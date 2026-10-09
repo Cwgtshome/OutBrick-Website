@@ -53,7 +53,7 @@ export const helpUi: Record<Locale, HelpUi> = {
     hubTitle: 'Everything OutBrick, explained.',
     hubLede:
       'Illustrated guides to every screen, menu and setting in the released game, written by the team, with a whole shelf on VoiceOver and accessibility. Read them here, then ask the community anything they do not answer.',
-    metaTitle: 'OutBrick Help Centre: illustrated guides, VoiceOver and accessibility',
+    metaTitle: 'OutBrick Help Centre: guides, VoiceOver and accessibility',
     metaDescription:
       'Team-written, illustrated guides to OutBrick on iPhone and iPad: how to play, every menu, lives and undos, the Journey, Settings, VoiceOver, Voice Control, Switch Control and every accessibility feature.',
     searchHint: 'Search the guides',
@@ -111,7 +111,7 @@ export const helpUi: Record<Locale, HelpUi> = {
     hubTitle: 'Tout OutBrick, expliqué.',
     hubLede:
       'Des guides illustrés pour chaque écran, menu et réglage du jeu publié, écrits par l’équipe, avec tout un rayon consacré à VoiceOver et à l’accessibilité. Lisez-les ici, puis posez à la communauté les questions qui restent.',
-    metaTitle: 'Centre d’aide OutBrick : guides illustrés, VoiceOver et accessibilité',
+    metaTitle: 'Centre d’aide OutBrick : guides, VoiceOver, accessibilité',
     metaDescription:
       'Des guides illustrés, écrits par l’équipe, pour OutBrick sur iPhone et iPad : comment jouer, chaque menu, vies et annulations, le Voyage, les Réglages, VoiceOver, Contrôle vocal, Contrôle de sélection et toutes les fonctions d’accessibilité.',
     searchHint: 'Rechercher dans les guides',
@@ -169,7 +169,7 @@ export const helpUi: Record<Locale, HelpUi> = {
     hubTitle: 'OutBrick, ganz erklärt.',
     hubLede:
       'Bebilderte Anleitungen zu jedem Bildschirm, Menü und jeder Einstellung des veröffentlichten Spiels, vom Team geschrieben, mit einem ganzen Regal zu VoiceOver und Bedienungshilfen. Lies sie hier und frag die Community, was offen bleibt.',
-    metaTitle: 'OutBrick Hilfe-Center: bebilderte Anleitungen, VoiceOver und Bedienungshilfen',
+    metaTitle: 'OutBrick Hilfe-Center: Anleitungen, VoiceOver, Bedienungshilfen',
     metaDescription:
       'Bebilderte Anleitungen des Teams zu OutBrick auf iPhone und iPad: Spielregeln, jedes Menü, Leben und Rückgängig, die Reise, Einstellungen, VoiceOver, Sprachsteuerung, Schaltersteuerung und alle Bedienungshilfen.',
     searchHint: 'Anleitungen durchsuchen',
@@ -227,7 +227,7 @@ export const helpUi: Record<Locale, HelpUi> = {
     hubTitle: 'Todo OutBrick, explicado.',
     hubLede:
       'Guías ilustradas de cada pantalla, menú y ajuste del juego publicado, escritas por el equipo, con toda una estantería sobre VoiceOver y accesibilidad. Léelas aquí y pregunta a la comunidad lo que no resuelvan.',
-    metaTitle: 'Centro de ayuda de OutBrick: guías ilustradas, VoiceOver y accesibilidad',
+    metaTitle: 'Centro de ayuda de OutBrick: guías, VoiceOver y accesibilidad',
     metaDescription:
       'Guías ilustradas del equipo para OutBrick en iPhone y iPad: cómo jugar, cada menú, vidas y deshacer, el Viaje, los Ajustes, VoiceOver, Control por voz, Control por botón y todas las funciones de accesibilidad.',
     searchHint: 'Buscar en las guías',
@@ -343,7 +343,7 @@ export const helpUi: Record<Locale, HelpUi> = {
     hubTitle: 'Todo o OutBrick, explicado.',
     hubLede:
       'Guias ilustrados de cada tela, menu e ajuste do jogo lançado, escritos pela equipe, com uma estante inteira sobre VoiceOver e acessibilidade. Leia aqui e pergunte à comunidade o que eles não responderem.',
-    metaTitle: 'Central de Ajuda do OutBrick: guias ilustrados, VoiceOver e acessibilidade',
+    metaTitle: 'Central de Ajuda do OutBrick: guias, VoiceOver e acessibilidade',
     metaDescription:
       'Guias ilustrados da equipe para o OutBrick no iPhone e iPad: como jogar, cada menu, vidas e desfazer, a Jornada, Ajustes, VoiceOver, Controle por Voz, Controle Assistivo e todos os recursos de acessibilidade.',
     searchHint: 'Buscar nos guias',

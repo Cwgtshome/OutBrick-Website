@@ -60,7 +60,7 @@ export const accessibilityArticles: HelpArticle[] = [
             head: ['Réglage', 'Ce qu’il fait', 'Par défaut'],
             rows: [
               ['Vitesse des animations', 'La vitesse à laquelle les pièces s’échangent, tombent et disparaissent : 50 %, 75 %, 100 %, 150 % ou 200 %. Plus lent, c’est plus facile à suivre.', '100 %'],
-              ['Détail des annonces', 'Ce que VoiceOver dit après chaque coup : Bref, Standard ou Complet.', 'Standard'],
+              ['Détail des annonces', 'Ce que VoiceOver dit après chaque coup : Bref, Standard ou Complet.', 'Standard (par défaut)'],
               ['Daltonien', 'Imprime une forme sur chaque brique pour que la couleur ne soit jamais la seule différence.', 'Activé'],
               ['Plateau à fort contraste', 'Un sol sombre uni, des contours blancs, de grands symboles de couleur et des contours de porte épais.', 'Désactivé'],
               ['Barre pour gauchers', 'Place les bonus sous votre pouce gauche et la Pause à droite.', 'Désactivé'],
@@ -334,7 +334,7 @@ export const accessibilityArticles: HelpArticle[] = [
             head: ['Choix', 'Ce que vous entendez'],
             rows: [
               ['Bref', 'Ce qui a disparu, tout objectif atteint et les coups restants.'],
-              ['Standard', 'En plus, les spéciales que vous avez créées et les objectifs qui ont avancé.'],
+              ['Standard (par défaut)', 'En plus, les spéciales que vous avez créées et les objectifs qui ont avancé.'],
               ['Complet', 'En plus, le compte de chaque objectif après chaque coup.'],
             ],
           },

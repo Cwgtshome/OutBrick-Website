@@ -736,6 +736,7 @@ export const playArticles: HelpArticle[] = [
             title: 'Uma ajudinha',
             text: 'Empacou em um tabuleiro? A partir da sexta tentativa nele, o jogo dá **3 jogadas extras** antes de você começar: “Uma ajudinha: 3 movimentos a mais nesta tentativa”. Uma vez por dia em cada tabuleiro.',
           },
+          { t: 'shot', id: 'level-failed', alt: 'Fase não concluída: um amigo triste, «Quase lá!», os objetivos que faltam (3 tijolos de sol e 3 de onda), um coração partido indicando uma vida usada, um botão azul para tentar de novo, uma oferta opcional e a volta ao mapa.', caption: 'A tela mostra o quanto faltou.' },
         ],
       },
       {

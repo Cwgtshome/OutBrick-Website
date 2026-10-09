@@ -736,6 +736,7 @@ export const playArticles: HelpArticle[] = [
             title: 'Un coup de main',
             text: 'Bloqué sur un plateau ? À partir de votre sixième essai sur ce plateau, le jeu vous donne **3 coups en plus** avant de commencer : « Un coup de main : 3 coups en plus pour cet essai ». Une fois par jour et par plateau.',
           },
+          { t: 'shot', id: 'level-failed', alt: 'Niveau raté : un ami triste, « Presque ! », les objectifs restants (3 briques soleil et 3 briques vague), un cœur brisé indiquant une vie utilisée, un bouton bleu pour réessayer, une offre facultative et le retour à la carte.', caption: 'L’écran d’échec montre à quel point vous étiez proche.' },
         ],
       },
       {

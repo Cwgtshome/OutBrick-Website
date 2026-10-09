@@ -736,6 +736,7 @@ export const playArticles: HelpArticle[] = [
             title: 'Eine helfende Hand',
             text: 'Hängst du an einem Brett fest? Ab deinem sechsten Versuch daran schenkt dir das Spiel vor dem Start **3 Extrazüge**: „Eine helfende Hand: 3 Züge mehr für diesen Versuch“. Einmal am Tag pro Brett.',
           },
+          { t: 'shot', id: 'level-failed', alt: 'Level nicht geschafft: ein trauriger Freund, „Fast geschafft!“, die noch fehlenden Ziele (3 Sonnen- und 3 Wellensteine), ein gebrochenes Herz für ein verbrauchtes Leben, eine blaue Taste zum erneuten Versuch, ein freiwilliges Angebot und der Weg zurück zur Karte.', caption: 'Der Bildschirm zeigt, wie knapp es war.' },
         ],
       },
       {

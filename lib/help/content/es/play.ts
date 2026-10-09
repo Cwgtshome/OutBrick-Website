@@ -736,6 +736,7 @@ export const playArticles: HelpArticle[] = [
             title: 'Una ayudita',
             text: '¿Atascado en un tablero? A partir de tu sexto intento en él, el juego te da **3 movimientos extra** antes de empezar: «Una ayudita: 3 movimientos más en este intento». Una vez al día por tablero.',
           },
+          { t: 'shot', id: 'level-failed', alt: 'Nivel fallido: un amigo triste, «¡Casi!», los objetivos que faltan (3 ladrillos de sol y 3 de ola), un corazón roto que indica una vida usada, un botón azul para reintentar, una oferta opcional y la vuelta al mapa.', caption: 'La pantalla muestra lo cerca que estuviste.' },
         ],
       },
       {
