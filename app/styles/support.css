@@ -94,11 +94,20 @@
 .ob-site .ss-door:active { transform: translateY(3px); box-shadow: 0 4px 0 var(--door-foot, var(--panel-dark)); }
 .ob-site .ss-door:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 .ob-site .ss-door-fig { grid-column: 1; grid-row: 1; align-self: end; }
-.ob-site .ss-door .t { grid-column: 2; grid-row: 1; align-self: center; padding-right: 30px; hyphens: manual; -webkit-hyphens: manual; overflow-wrap: normal; }
+.ob-site .ss-door .t { grid-column: 2; grid-row: 1; align-self: center; hyphens: manual; -webkit-hyphens: manual; overflow-wrap: break-word; }
+/* The studs sit above the title (top 8–18px, the title starts at 18px), so the title can run to the edge.
+   On a narrow box the friend steps down to 52px so the title keeps room for two lines. */
+.ob-site .ss-hub > ul > li { container-type: inline-size; }
+@container (max-width: 330px) {
+  .ob-site .ss-door { grid-template-columns: 52px minmax(0, 1fr); column-gap: 12px; padding: 18px 16px 18px 14px; }
+  .ob-site .ss-door-fig .ff { --ff-size: 52px !important; width: 52px; }
+}
 .ob-site .ss-door .d { grid-column: 1 / -1; grid-row: 2; align-self: start; }
 .ob-site .ss-hub a.ss-door, .ob-site .ss-hub a.ss-door :is(.t, .d) { color: #fff; text-decoration: none; }
 .ob-site .ss-hub a.ss-door:hover .t { text-decoration: underline; text-underline-offset: 3px; }
-.ob-site .ss-door .t { font-family: var(--display); font-weight: 600; font-size: 1.18rem; line-height: 1.25; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ob-site .ss-door .t { font-family: var(--display); font-weight: 600; font-size: 1.18rem; line-height: 1.25; display: block; }
+/* the count rides on the title's last line instead of taking a line of its own */
+.ob-site .ss-door .t .ss-count { margin-left: 8px; vertical-align: 2px; }
 .ob-site .ss-door .d { color: #fff; opacity: 0.95; font-size: 0.97rem; line-height: 1.45; }
 .ob-site .ss-count {
   display: inline-grid;
