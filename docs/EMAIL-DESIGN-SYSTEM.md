@@ -138,10 +138,10 @@ sample, hosted by Sprout). Any issue file can carry `"puzzle": { host, board, co
    iPhone (iPhone Mirroring works). Use a local `.eml` or a single test email to the owner,
    never a subscriber send.
 
-Verified in real clients, 9 October 2026: Apple Mail on macOS (menu at desktop width, host tap,
-puzzle cleared) and iOS Mail on the owner's iPhone (menu, host tap, puzzle cleared). The final
-version was confirmed in Apple Mail. A second test to the iPhone was sent, but not yet opened
-because the phone was in use. Gmail and Outlook were checked by simulation only.
+Verified in real clients, 9 October 2026, on the final version: Apple Mail on macOS (☰ at desktop
+width opens all five links, host tap, puzzle cleared) and iOS Mail on the owner's iPhone (☰ opens and
+closes, Peach visible and cheering on tap, wrong brick shows the hint and shakes, Blue clears the
+board). Gmail and Outlook were checked by simulation only.
 
 ## Roadmap
 
