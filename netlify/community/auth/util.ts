@@ -66,7 +66,7 @@ export function safeReturnTo(value: unknown, locale: CommunityLocale): string {
 }
 
 /** The error values the sign-in page understands: /community/signin?error=<value>. */
-export type SignInError = 'expired' | 'invalid' | 'denied' | 'failed' | 'unavailable' | 'email_taken';
+export type SignInError = 'expired' | 'used' | 'invalid' | 'denied' | 'failed' | 'unavailable' | 'email_taken';
 
 /**
  * A redirect to a path on `origin`. Netlify copies a function's own query string onto a redirect

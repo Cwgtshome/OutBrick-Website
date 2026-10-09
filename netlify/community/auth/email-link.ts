@@ -94,10 +94,19 @@ async function tokenLocale(token: string, url: URL): Promise<CommunityLocale> {
   return asLocale(url.searchParams.get('locale'));
 }
 
+/** A consumed link worked on another browser; it must never create a second session. */
+async function signInTokenError(token: string): Promise<'used' | 'expired'> {
+  if (token) {
+    const [row] = await sql`SELECT used_at FROM auth_tokens WHERE token_hash = ${sha256(token)} AND purpose = 'signin'`;
+    if (row?.used_at) return 'used';
+  }
+  return 'expired';
+}
+
 export async function signInPage(req: Request, url: URL): Promise<Response> {
   const token = tokenFrom(url);
   const found = await peek(token, 'signin');
-  if (!found) return signInErrorRedirect(requestOrigin(req), await tokenLocale(token, url), 'expired');
+  if (!found) return signInErrorRedirect(requestOrigin(req), await tokenLocale(token, url), await signInTokenError(token));
   const locale = asLocale(found.data.locale);
   const p = communityCopy[locale].pages.signin;
   return pageResponse({ locale, title: p.title, body: p.body, note: p.note, form: { action: `${url.pathname}?token=${token}`, button: p.button }, origin: requestOrigin(req) });
@@ -111,7 +120,7 @@ export async function signInWithLink(req: Request, url: URL): Promise<Response> 
                  WHERE token_hash = ${sha256(token)} AND purpose = 'signin' AND used_at IS NULL AND expires_at > now()
                  RETURNING email, data`
     : [];
-  if (!rows[0]) return signInErrorRedirect(origin, await tokenLocale(token, url), 'expired', 303);
+  if (!rows[0]) return signInErrorRedirect(origin, await tokenLocale(token, url), await signInTokenError(token), 303);
   const email = normalizeEmail(rows[0].email);
   const data = parseData(rows[0].data);
   const locale = asLocale(data.locale);

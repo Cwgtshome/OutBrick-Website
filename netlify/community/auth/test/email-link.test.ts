@@ -100,11 +100,11 @@ void describe('email sign-in link', () => {
     assert.equal(first.status, 303);
     const again = await communityAuth(request('POST', `/api/community/auth/email/verify?token=${token}`));
     assert.equal(again.status, 303);
-    assert.equal(again.headers.get('location'), 'https://www.outbrick.site/fr/community/signin?error=expired');
+    assert.equal(again.headers.get('location'), 'https://www.outbrick.site/fr/community/signin?error=used');
     assert.equal(sessionCookieOf(again), null);
     const page = await communityAuth(request('GET', `/api/community/auth/email/verify?token=${token}`));
     assert.equal(page.status, 302);
-    assert.equal(page.headers.get('location'), 'https://www.outbrick.site/fr/community/signin?error=expired');
+    assert.equal(page.headers.get('location'), 'https://www.outbrick.site/fr/community/signin?error=used');
   });
 
   void test('an expired link is refused on GET and POST', async () => {

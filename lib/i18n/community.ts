@@ -286,7 +286,7 @@ export type CommunityCopy = {
     emailButton: string;
     sent: string;
     sentNote: string;
-    errors: Record<'expired' | 'invalid' | 'denied' | 'failed' | 'unavailable' | 'email_taken', string>;
+    errors: Record<'expired' | 'used' | 'invalid' | 'denied' | 'failed' | 'unavailable' | 'email_taken', string>;
     already: (name: string) => string;
     privacy: string;
     noProviders: string;
@@ -769,6 +769,7 @@ const en: CommunityCopy = {
     sent: 'Check your email',
     sentNote: 'If that address can sign in, a link is on its way. It works once, for 20 minutes. You can close this page.',
     errors: {
+      used: 'This sign-in link has already been used. Each link signs in one browser once. Ask for a new link below to sign in on this device.',
       expired: 'That sign-in link has expired. Links work for 20 minutes: ask for a new one below.',
       invalid: 'That sign-in link did not work. It may have been used already. Ask for a new one below.',
       failed: 'Signing in did not finish because of a problem on the other side. Please try again, or use an email link.',
@@ -1310,6 +1311,7 @@ const fr: CommunityCopy = {
     sent: 'Consultez vos e-mails',
     sentNote: 'Si cette adresse peut se connecter, un lien est en route. Il fonctionne une fois, pendant 20 minutes. Vous pouvez fermer cette page.',
     errors: {
+      used: 'Ce lien de connexion a déjà été utilisé. Chaque lien connecte un seul navigateur, une seule fois. Demandez un nouveau lien ci-dessous pour vous connecter sur cet appareil.',
       expired: 'Ce lien de connexion a expiré. Les liens sont valables 20 minutes : demandez-en un nouveau ci-dessous.',
       invalid: 'Ce lien de connexion n’a pas fonctionné. Il a peut-être déjà servi. Demandez-en un nouveau ci-dessous.',
       failed: 'La connexion n’a pas abouti à cause d’un problème de l’autre côté. Réessayez, ou utilisez un lien par e-mail.',
@@ -1851,6 +1853,7 @@ const de: CommunityCopy = {
     sent: 'Sieh in dein Postfach',
     sentNote: 'Wenn sich diese Adresse anmelden kann, ist ein Link unterwegs. Er funktioniert einmal, 20 Minuten lang. Du kannst diese Seite schließen.',
     errors: {
+      used: 'Dieser Anmeldelink wurde bereits verwendet. Jeder Link meldet einen Browser einmal an. Fordere unten einen neuen Link an, um dich auf diesem Gerät anzumelden.',
       expired: 'Dieser Anmeldelink ist abgelaufen. Links gelten 20 Minuten: Fordere unten einen neuen an.',
       invalid: 'Dieser Anmeldelink hat nicht funktioniert. Vielleicht wurde er schon benutzt. Fordere unten einen neuen an.',
       failed: 'Die Anmeldung wurde wegen eines Problems beim Anbieter nicht abgeschlossen. Versuch es noch einmal oder nutz einen E-Mail-Link.',
@@ -2392,6 +2395,7 @@ const es: CommunityCopy = {
     sent: 'Revisa tu correo',
     sentNote: 'Si esa dirección puede iniciar sesión, el enlace va de camino. Funciona una vez, durante 20 minutos. Puedes cerrar esta página.',
     errors: {
+      used: 'Este enlace de acceso ya se ha usado. Cada enlace inicia sesión una sola vez en un navegador. Pide uno nuevo abajo para entrar en este dispositivo.',
       expired: 'Ese enlace de acceso ha caducado. Los enlaces duran 20 minutos: pide uno nuevo aquí abajo.',
       invalid: 'Ese enlace de acceso no ha funcionado. Puede que ya se usara. Pide uno nuevo aquí abajo.',
       failed: 'El inicio de sesión no terminó por un problema del otro lado. Vuelve a intentarlo o usa un enlace por correo.',
@@ -2933,6 +2937,7 @@ const ja: CommunityCopy = {
     sent: 'メールをご確認ください',
     sentNote: 'このアドレスでサインインできる場合、リンクをお送りしました。20分間、1回だけ使えます。このページは閉じてかまいません。',
     errors: {
+      used: 'このサインイン用のリンクはすでに使用されています。各リンクは1つのブラウザで1回だけ使えます。この端末でサインインするには、下から新しいリンクを受け取ってください。',
       expired: 'このサインイン用のリンクは期限切れです。リンクの有効期間は20分です。下から新しいリンクを受け取ってください。',
       invalid: 'このサインイン用のリンクは使えませんでした。すでに使われた可能性があります。下から新しいリンクを受け取ってください。',
       failed: '相手側の問題でサインインが完了しませんでした。もう一度お試しいただくか、メールのリンクをご利用ください。',
@@ -3159,7 +3164,7 @@ const ptBR: CommunityCopy = {
     title: 'Entrar na comunidade OutBrick', lede: 'A leitura é aberta a todos. Entre para publicar, responder, votar e acompanhar conversas. Não precisa lembrar de senha.', providersHeading: 'Entre com uma conta que você já tem', apple: 'Entrar com Apple', google: 'Entrar com Google', facebook: 'Continuar com Facebook',
     shares: { apple: 'A Apple compartilha um endereço de e-mail, que pode ser um endereço privado de encaminhamento se você escolher Ocultar Meu E-mail, e seu nome somente se você permitir.', google: 'O Google compartilha seu nome e endereço de e-mail. Guardamos o endereço para permitir seu acesso e nunca o exibimos.', facebook: 'O Facebook compartilha seu nome e endereço de e-mail. Nunca publicamos nada no Facebook.', email: 'Enviaremos um link de uso único que mantém sua sessão por 30 dias neste navegador. Usamos seu e-mail apenas para isso e para as mensagens que você escolher.' },
     or: 'Ou', emailHeading: 'Entre com um link por e-mail', email: 'E-mail', emailHint: 'Enviaremos um link válido por 20 minutos e de uso único.', emailButton: 'Enviar um link de acesso', sent: 'Confira seu e-mail', sentNote: 'Se este endereço puder entrar, o link já está a caminho. Ele pode ser usado uma vez e vale por 20 minutos. Você pode fechar esta página.',
-    errors: { expired: 'Este link de acesso expirou. Os links valem por 20 minutos. Peça outro abaixo.', invalid: 'Este link de acesso não funcionou. Talvez já tenha sido usado. Peça outro abaixo.', failed: 'Não foi possível concluir o acesso por um problema do outro lado. Tente novamente ou use um link por e-mail.', denied: 'O acesso foi cancelado. Nada foi compartilhado. Você pode tentar novamente quando quiser.', unavailable: 'Esta forma de entrar não está disponível agora. Use um link por e-mail ou tente mais tarde.', email_taken: 'Este e-mail já pertence a outra conta. Entre da mesma forma que usou na primeira vez.' }, already: (name) => `Você já entrou como ${name}.`, privacy: 'Como tratamos seus dados está explicado na política de privacidade e nas diretrizes da comunidade.', noProviders: 'O acesso com outras contas ainda não está ativado. Use um link por e-mail.',
+    errors: { used: 'Este link de acesso já foi usado. Cada link permite entrar uma vez em um navegador. Peça um novo link abaixo para entrar neste dispositivo.', expired: 'Este link de acesso expirou. Os links valem por 20 minutos. Peça outro abaixo.', invalid: 'Este link de acesso não funcionou. Talvez já tenha sido usado. Peça outro abaixo.', failed: 'Não foi possível concluir o acesso por um problema do outro lado. Tente novamente ou use um link por e-mail.', denied: 'O acesso foi cancelado. Nada foi compartilhado. Você pode tentar novamente quando quiser.', unavailable: 'Esta forma de entrar não está disponível agora. Use um link por e-mail ou tente mais tarde.', email_taken: 'Este e-mail já pertence a outra conta. Entre da mesma forma que usou na primeira vez.' }, already: (name) => `Você já entrou como ${name}.`, privacy: 'Como tratamos seus dados está explicado na política de privacidade e nas diretrizes da comunidade.', noProviders: 'O acesso com outras contas ainda não está ativado. Use um link por e-mail.',
   },
   welcome: { title: 'Escolha seu nome de exibição', lede: 'Este é o único nome que os outros membros veem. Você pode alterá-lo depois nas Configurações.', name: 'Nome de exibição', nameHint: 'De 3 a 30 caracteres: letras, números, espaços, pontos, hífens e sublinhados. Não use seu e-mail.', save: 'Salvar e continuar', saved: 'Boas-vindas à comunidade OutBrick.' },
   settings: {
