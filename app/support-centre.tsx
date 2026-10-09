@@ -135,7 +135,7 @@ export function SupportHub({ locale = 'en' }: { locale?: Locale }) {
         {doors.map((d) => (
           <li key={d.key}>
             <a className={`ss-door ${d.key}`} href={d.href}>
-              <span className="ss-door-fig" aria-hidden="true"><FriendFigure id={doorHosts[d.key].friend} pose={doorHosts[d.key].pose} size={84} /></span>
+              <span className="ss-door-fig" aria-hidden="true"><FriendFigure id={doorHosts[d.key].friend} pose={doorHosts[d.key].pose} size={68} /></span>
               <span className="t">
                 {d.title}
                 {d.count ? <span className="ss-count">{d.count}</span> : null}

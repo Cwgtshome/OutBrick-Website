@@ -56,12 +56,15 @@
 .ob-site .ss-hub > ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 20px; }
 .ob-site .ss-door {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  /* Friend and title share the top row; the description gets the box's full width below. */
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  column-gap: 14px;
+  row-gap: 10px;
+  align-items: end;
   height: 100%;
-  min-height: 150px;
-  padding: 22px 104px 20px 20px;
+  padding: 18px 20px 20px 16px;
   border-radius: 18px;
   text-decoration: none;
   color: #fff;
@@ -90,7 +93,9 @@
 .ob-site .ss-door:hover { filter: brightness(1.05); }
 .ob-site .ss-door:active { transform: translateY(3px); box-shadow: 0 4px 0 var(--door-foot, var(--panel-dark)); }
 .ob-site .ss-door:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
-.ob-site .ss-door-fig { position: absolute; right: 10px; bottom: -6px; }
+.ob-site .ss-door-fig { grid-column: 1; grid-row: 1; align-self: end; }
+.ob-site .ss-door .t { grid-column: 2; grid-row: 1; align-self: center; padding-right: 30px; hyphens: manual; -webkit-hyphens: manual; overflow-wrap: normal; }
+.ob-site .ss-door .d { grid-column: 1 / -1; grid-row: 2; align-self: start; }
 .ob-site .ss-hub a.ss-door, .ob-site .ss-hub a.ss-door :is(.t, .d) { color: #fff; text-decoration: none; }
 .ob-site .ss-hub a.ss-door:hover .t { text-decoration: underline; text-underline-offset: 3px; }
 .ob-site .ss-door .t { font-family: var(--display); font-weight: 600; font-size: 1.18rem; line-height: 1.25; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
