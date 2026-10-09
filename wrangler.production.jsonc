@@ -21,7 +21,8 @@
     "JOBS_ENABLED": "true",
     "CLOUDFLARE_TRANSLATION_ENABLED": "true",
     "RELEASE_EMAIL_AUTOSEND": "on",
-    "RELEASE_EMAIL_DELAY_HOURS": "24"
+    "RELEASE_EMAIL_DELAY_HOURS": "24",
+    "COMMUNITY_REPLY_DOMAIN": "reply.outbrick.site"
   },
   "r2_buckets": [
     {
