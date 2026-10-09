@@ -58,6 +58,15 @@ ok('blue brick left through its gate', blueGone === '0', `opacity ${blueGone}`);
 await page.$eval('.ob-pz-yes', (e) => e.scrollIntoView({ block: 'center' }));
 await page.screenshot({ path: `${shots}3-solved.png` });
 
+// Mail pauses animations in a window behind others: everything must still be visible when paused.
+const paused = await browser.newContext({ ...devices['iPhone 15'] });
+const pp = await paused.newPage();
+await pp.addInitScript(() => document.addEventListener('DOMContentLoaded', () => { const st = document.createElement('style'); st.textContent = '*{animation-play-state:paused !important;}'; document.head.append(st); }));
+await pp.goto(`${base}/newsletter-welcome-2.en.html`);
+await pp.waitForTimeout(800);
+const hostVisible = await pp.$eval('.ob-f-main', (e) => { const r = e.getBoundingClientRect(); let o = 1; for (let n = e; n; n = n.parentElement) o *= Number(getComputedStyle(n).opacity); return r.height > 80 && o > 0.9; });
+ok('host visible with animations paused', hostVisible);
+
 // 2. Gmail/Outlook fallback: inputs stripped.
 const html = await (await fetch(`${base}/newsletter-welcome-2.en.html`)).text();
 await page.setContent(html.replace(/<input[^>]*>/g, ''), { waitUntil: 'load' });
@@ -75,6 +84,17 @@ await dp.waitForTimeout(800);
 const paper = await dp.$eval('.ob-paper', (e) => getComputedStyle(e).backgroundColor);
 ok('dark mode paper is indigo', paper === 'rgb(34, 26, 98)', paper);
 await dp.screenshot({ path: `${shots}4-dark.png` });
+
+// The hamburger at desktop width too.
+const desk = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+const dk = await desk.newPage();
+await dk.goto(`${base}/newsletter-welcome.en.html`);
+ok('burger shown on desktop width', await dk.$eval('.ob-burger', (e) => getComputedStyle(e).display === 'block'));
+ok('menu folded on desktop', await dk.$eval('.ob-nav', (e) => e.getBoundingClientRect().height < 5));
+await dk.click('.ob-burger');
+await dk.waitForTimeout(500);
+ok('menu opens on desktop', await dk.$eval('.ob-nav', (e) => e.getBoundingClientRect().height > 200));
+await dk.screenshot({ path: `${shots}5-desktop-open.png` });
 
 // 4. Every template: the menu toggles where it exists, team copies have none.
 const names = [...new Set(fs.readdirSync(dir).filter((f) => f.endsWith('.en.html')).map((f) => f.replace('.en.html', '')))];

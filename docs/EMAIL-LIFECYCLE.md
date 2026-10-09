@@ -12,7 +12,7 @@ All of this is added by the shared shell in `emails/core.ts` and `emails/brand.t
 
 - **Header:** the OutBrick wordmark, centred.
 - **Header menu (every email a reader gets; only the team's internal copies leave it off):** a row of links: Play guide, What's new, Daily board, Community, Support.
-  - On phones in Apple Mail, iOS Mail and Samsung Email it folds into a hamburger. Its interactive CSS sits in its own `<style>` block behind a WebKit gate, so a client that keeps the checkbox but cannot flip it never shows a dead button.
+  - In Apple Mail, iOS Mail and Samsung Email it folds into a hamburger at every width (since 9 October 2026; before that only on phones). Its interactive CSS sits in its own `<style>` block behind a WebKit gate, so a client that keeps the checkbox but cannot flip it never shows a dead button.
   - Gmail, Outlook and Yahoo strip `<input>` and keep the plain row of links.
   - Checkbox ids (menu, host, tips, puzzle) get a per-message suffix, so two OutBrick emails shown together in a conversation never toggle each other.
   - The hamburger itself is `aria-hidden`: screen readers read the links in order whether the menu is folded or not.

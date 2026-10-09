@@ -246,14 +246,18 @@ ${bubble}
 </table>`;
 }
 
-/** The stage's moving parts, added to the shell's interactive <style> block. */
+/**
+ * The stage's moving parts, added to the shell's interactive <style> block. Every animation starts
+ * from a visible frame and holds no fill: Apple Mail pauses animations in a window behind others,
+ * and a paused hop that began at opacity 0 left the friend invisible (seen on 9 October 2026).
+ */
 export const stageCss = `
-  .ob-host-fig{transform-origin:50% 100%;animation:ob-hop .75s cubic-bezier(.3,1.45,.55,1) .25s both,ob-breathe 3.8s ease-in-out 1.4s infinite;}
+  .ob-host-fig{transform-origin:50% 100%;animation:ob-hop .75s cubic-bezier(.3,1.45,.55,1),ob-breathe 3.8s ease-in-out .75s infinite;}
   .ob-host:hover .ob-host-fig{animation:ob-wiggle .5s ease both;}
   .ob-host-input:checked + .ob-host .ob-f-main{display:none !important;}
   .ob-host-input:checked + .ob-host .ob-f-alt{display:block !important;height:96px !important;max-height:none !important;}
   .ob-host-input:checked + .ob-host .ob-host-fig{animation:ob-cheer .65s cubic-bezier(.3,1.5,.5,1) both;}
-  @keyframes ob-hop{0%{transform:translateY(-22px) scale(.96,1.04);opacity:0;}45%{opacity:1;}60%{transform:translateY(0) scale(1.07,.93);}80%{transform:translateY(-4px) scale(.98,1.02);}100%{transform:none;}}
+  @keyframes ob-hop{0%{transform:translateY(-14px) scale(.96,1.04);}55%{transform:translateY(0) scale(1.07,.93);}80%{transform:translateY(-4px) scale(.98,1.02);}100%{transform:none;}}
   @keyframes ob-breathe{0%,100%{transform:none;}50%{transform:translateY(-2px) scale(1.01,.99);}}
   @keyframes ob-wiggle{0%,100%{transform:none;}30%{transform:rotate(-5deg);}65%{transform:rotate(4deg);}}
   @keyframes ob-cheer{0%{transform:none;}35%{transform:translateY(-16px) rotate(-4deg);}70%{transform:translateY(0) scale(1.06,.94);}100%{transform:none;}}`;
@@ -380,12 +384,12 @@ export function puzzle(ctx: Ctx, p: Puzzle, copy: PuzzleCopy, host: FriendId = '
       const b = p.bricks.find((x) => x.colour === c)!;
       return `.ob-pz-ok:checked ~ .ob-pz-wrap .ob-pz-${c}{transform:${exit(b)};opacity:0;transition:transform .5s cubic-bezier(.5,0,.8,.4) ${(i * 0.65).toFixed(2)}s,opacity .2s linear ${(i * 0.65 + 0.35).toFixed(2)}s;}`;
     }),
-    '.ob-pz-ok:checked ~ .ob-pz-yes{display:block !important;animation:ob-pz-pop .5s cubic-bezier(.3,1.5,.5,1) 1.2s both;}',
+    '.ob-pz-ok:checked ~ .ob-pz-yes{display:block !important;animation:ob-pz-pop .5s cubic-bezier(.3,1.5,.5,1);}',
     '.ob-pz-ok:checked ~ .ob-pz-play{display:none !important;}',
     '.ob-pz-no:checked ~ .ob-pz-nope{display:block !important;}',
     ...p.options.filter((c) => c !== first).map((c) => `.ob-pz-pick-${c}:checked ~ .ob-pz-wrap .ob-pz-${c}{animation:ob-pz-shake .45s ease both;}`),
     '@keyframes ob-pz-shake{0%,100%{transform:none;}20%{transform:translateX(-5px);}40%{transform:translateX(5px);}60%{transform:translateX(-3px);}80%{transform:translateX(3px);}}',
-    '@keyframes ob-pz-pop{0%{transform:scale(.6);opacity:0;}100%{transform:none;opacity:1;}}',
+    '@keyframes ob-pz-pop{0%{transform:scale(.85);}100%{transform:none;}}',
     '}',
     '@media (prefers-reduced-motion:reduce){.ob-pz-b{transition:none !important;animation:none !important;}.ob-pz-yes{animation:none !important;}}',
   ].join('\n');

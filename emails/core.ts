@@ -385,7 +385,7 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
   .ob-rv-input:checked ~ .ob-rv-body{display:block !important;}
   .ob-rv-input:checked + .ob-rv-btn{display:none !important;}
 }
-@media screen and (-webkit-min-device-pixel-ratio:0) and (max-width:620px){
+@media screen and (-webkit-min-device-pixel-ratio:0){
   .ob-menu-input + .ob-burger{display:block !important;position:absolute;top:16px;right:14px;width:44px;height:44px;border-radius:12px;background:#2a2364;cursor:pointer;-webkit-tap-highlight-color:transparent;}
   .ob-burger span{display:block;width:20px;height:2px;margin:6px auto 0;border-radius:2px;background:${color.title};transition:transform .25s ease,opacity .2s ease;}
   .ob-burger span:first-child{margin-top:15px;}

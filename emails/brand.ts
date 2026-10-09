@@ -47,8 +47,9 @@ const sitePath = (locale: EmailLocale, path: string) => `https://www.outbrick.si
 
 /**
  * The site menu for the header (see ShellOptions.nav in core.ts): the website's own labels and
- * routes. A centred row of links in every client; on phones where checkboxes work, folded behind
- * a hamburger in the header's top-right corner that drops the links down as full-width rows.
+ * routes. Wherever checkboxes work (Apple Mail, iOS Mail, Samsung Email), at every width, it is
+ * folded behind a hamburger in the header's top-right corner that drops the links down as
+ * full-width rows; clients that strip <input> (Gmail, Outlook, Yahoo) show a centred row instead.
  * The links stay in reading order for screen readers either way, so the hamburger itself is
  * aria-hidden: it is a visual fold, not a control that changes what VoiceOver reads.
  */
