@@ -1,7 +1,7 @@
 // Just enough JOSE for OpenID Connect, with node:crypto and fetch: verify an RS256 ID token
 // against a provider's published keys (JWKS), and sign the ES256 client secret Apple asks for.
 
-import { createPublicKey, createPrivateKey, sign, verify, type KeyObject } from 'node:crypto';
+import { createPublicKey, sign, verify, type KeyObject } from 'node:crypto';
 
 export class TokenError extends Error {}
 
@@ -86,7 +86,8 @@ export const claimTrue = (v: unknown) => v === true || v === 'true';
 
 /** An ES256 JWT, e.g. Apple's client secret. The PEM may arrive with literal "\n" sequences. */
 export function signEs256(header: Record<string, unknown>, payload: Record<string, unknown>, pem: string): string {
-  const key = createPrivateKey(pem.includes('\\n') ? pem.replace(/\\n/g, '\n') : pem);
+  // Pass normalized PEM directly: Workers rejects a pre-created PrivateKeyObject in sign options.
+  const key = pem.includes('\\n') ? pem.replace(/\\n/g, '\n') : pem;
   const input = `${b64url(JSON.stringify({ ...header, alg: 'ES256', typ: 'JWT' }))}.${b64url(JSON.stringify(payload))}`;
   const signature = sign('sha256', Buffer.from(input), { key, dsaEncoding: 'ieee-p1363' });
   return `${input}.${b64url(signature)}`;

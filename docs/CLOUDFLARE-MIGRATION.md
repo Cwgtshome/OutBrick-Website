@@ -1,5 +1,7 @@
 # Cloudflare migration and operations
 
+**Apple sign-in correction (8 October 2026, New York):** production callback logs identified a Workers crypto incompatibility: passing a pre-created `PrivateKeyObject` to ES256 signing failed before Apple token exchange. The signer now passes normalized PEM directly, preserving escaped-newline handling and the 64-byte JOSE signature. A regression runs the shared signer in the installed Workers runtime, verifies both PEM representations and verifies a signed provider ID token. Node-only OAuth tests remain separate from real canonical sign-in acceptance.
+
 ## Current production contract — 9 October 2026 UTC (8 October in New York)
 
 The canonical website is **https://www.outbrick.site**, deployed from

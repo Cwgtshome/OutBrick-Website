@@ -46,6 +46,9 @@ jobs:
       - name: Cloudflare translation free allowance and request isolation
         run: node --experimental-sqlite --experimental-strip-types --test scripts/cloudflare/translation-budget.test.mjs netlify/platform.test.ts
 
+      - name: Apple OAuth signing in the Cloudflare runtime
+        run: node --test scripts/cloudflare/apple-signing.test.mjs
+
       - name: Player guide links and additive seed
         run: node --experimental-strip-types --test netlify/community/player-guides.test.ts netlify/community/threads.test.ts
 
