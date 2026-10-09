@@ -19,7 +19,9 @@
     "CONTEXT": "production",
     "SITE_ID": "8b73b763-21f4-405b-a284-a4605cc31d2f",
     "JOBS_ENABLED": "true",
-    "CLOUDFLARE_TRANSLATION_ENABLED": "true"
+    "CLOUDFLARE_TRANSLATION_ENABLED": "true",
+    "RELEASE_EMAIL_AUTOSEND": "on",
+    "RELEASE_EMAIL_DELAY_HOURS": "24"
   },
   "r2_buckets": [
     {
