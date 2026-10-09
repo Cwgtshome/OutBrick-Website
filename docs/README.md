@@ -11,6 +11,9 @@ checks, then [ARCHITECTURE.md](ARCHITECTURE.md) for source locations, configurat
 | [Repository README](../README.md) | Hosting, forms, emails and newsletter workflow |
 | [Community plan](COMMUNITY-PLAN.md) | Forum design, contracts, optional features and idle gates; status lives separately |
 | [Help Centre](HELP-CENTRE.md) | The illustrated player guides at /community/help: content model, translations, screenshots and checks |
+| [Email design system](EMAIL-DESIGN-SYSTEM.md) | The OutBrick Email System: foundations, components, the nine host friends, interactive rules, puzzles, checks and roadmap |
+| [Email review page](email-system/index.html) | Every email live by language, width, theme and mail app; build with `pnpm emails:system` |
+| [Email lifecycle](EMAIL-LIFECYCLE.md) | What each email is and when it is sent, queues, Resend, webhooks, consent and analytics |
 | [Support Centre](SUPPORT-CENTRE.md) | Troubleshooter, known issues, a player's request page, "Was this helpful?", the contact form's help, and the recommended next steps |
 | [Journal brief](JOURNAL-BRIEF.md) | Editorial direction |
 | [Translation brief](TRANSLATION-BRIEF.md) | Localized content guidance |

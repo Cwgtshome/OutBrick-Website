@@ -39,21 +39,23 @@ export default function PrivacyPage() {
         </p>
         <p>
           This website is separate from the app. It measures visits with Google Analytics only if you
-          accept it in the cookie banner; until then nothing loads from Google. Our newsletter emails
-          record opens and clicks. Both are explained below, with how to say no.
+          accept it in the cookie banner; until then nothing loads from Google. Our emails record whether
+          they were delivered, opened and clicked, and we keep statistics on them without your
+          address. Both are explained below, with your choices.
         </p>
       </div>
 
       <section className="brick" id="changes-hosting">
         <h2>What changed on 9 October 2026</h2>
         <p>
-          This revision changes the companies that run this website for us. Nothing changed in the app, and nothing changed in what the website collects or why.
+          This revision changes the companies that run this website for us, and adds statistics on the emails we send. Nothing changed in the app.
         </p>
         <ul className="points">
           <li><b>New host:</b> Cloudflare now hosts this website and runs its forms, the OutBrick Community and the storage for images in posts. Netlify did this until 9 October 2026.</li>
           <li><b>New database:</b> Neon now runs the website&rsquo;s database for us directly, still in the United States (US East). Until 9 October 2026, Netlify ran it with Neon.</li>
           <li><b>Translation on request:</b> community posts are now translated by Cloudflare Workers AI, on Cloudflare&rsquo;s own network.</li>
           <li><b>Earlier records:</b> our records were copied to the new services. Netlify still holds the earlier copy — form submissions sent before 9 October 2026, the former database and its request logs — which we keep only as a backup of the move. We will have it deleted once the move is confirmed, and in any case within the periods set out in this policy.</li>
+          <li><b>Email statistics:</b> we now count deliveries, opens and clicks for every email we send, without storing your address with them, and stop sending the newsletter to an address that bounces or reports spam. Details are under Email open and click tracking below.</li>
         </ul>
       </section>
 
@@ -204,7 +206,7 @@ export default function PrivacyPage() {
         <ul className="points">
           <li><b>Support cases:</b> when you use the contact form, we keep your message, name, email address, language and topic, the device, app and iOS versions you gave us, a case reference, the team&rsquo;s replies, the case&rsquo;s status, the version a fix shipped in, and your answer to &ldquo;Did we solve it?&rdquo; with any comment you add. We keep a case for 24 months after it is closed or resolved, then delete it.</li>
           <li><b>Affiliate and job applications:</b> what you submitted and the decision we made. We keep an application for 24 months after the decision, then delete it.</li>
-          <li><b>Newsletter subscription:</b> your address and language, the date you confirmed, the topics you chose (new versions, tips and guides, events and seasons), how far you are through the welcome letters, the date you last opened or clicked a newsletter, and whether we have asked you &ldquo;Still want these?&rdquo;. We keep this while you are subscribed and delete it 30 days after you unsubscribe or are removed.</li>
+          <li><b>Newsletter subscription:</b> your address and language, the date you confirmed, the topics you chose (new versions, tips and guides, events and seasons), how far you are through the welcome letters, the date you last opened or clicked a newsletter, whether we have asked you &ldquo;Still want these?&rdquo;, and whether we stopped writing to you after a bounce or a spam report. As the record of your consent, we also keep the page you signed up on (its path only), the version of the sign-up wording you agreed to and a reference to your sign-up form submission. We keep all of this while you are subscribed and delete it 30 days after you unsubscribe or are removed.</li>
           <li><b>Scheduled emails:</b> emails due later — welcome letters, &ldquo;Did we solve it?&rdquo; requests and notices — wait in a queue with your address and language. Each is deleted no later than 90 days after it is sent or cancelled.</li>
         </ul>
         <p>
@@ -216,13 +218,16 @@ export default function PrivacyPage() {
       <section className="brick" id="email-tracking">
         <h2>Email open and click tracking</h2>
         <p>
-          This section is new as of 8 October 2026. OutBrick News, our newsletter, records whether each
-          email was opened and which of its links were clicked. Resend, which sends it from the EU
-          (Ireland), adds a tiny invisible image that is fetched when the email is displayed, and routes
-          each link through Resend before it takes you to the page.
+          This section was added on 8 October 2026 and updated on 9 October 2026, when we began keeping
+          statistics on every email we send. Resend, which sends our emails from the EU (Ireland),
+          records whether each email was delivered and opened and which of its links were clicked. It
+          adds a tiny invisible image that is fetched when the email is displayed, and routes each link
+          through Resend before it takes you to the page. This applies to every email we send: the
+          newsletter, support replies, and account and community emails.
         </p>
         <p>
-          We use this for one thing: to notice readers who no longer read the letters. If 120 days pass
+          For OutBrick News, our newsletter, opens and clicks also tell us which readers no longer read
+          the letters. If 120 days pass
           without you opening or clicking any newsletter, we send one email asking &ldquo;Still want
           these?&rdquo;. If you do not answer within 14 days, we take you off the list. We do not use it
           to build a profile of you, and nobody but Resend receives it.
@@ -238,10 +243,23 @@ export default function PrivacyPage() {
           blocks images, an open is never recorded.
         </p>
         <p>
-          Resend&rsquo;s tracking is switched on for our whole sending domain, so opens and clicks may
-          also be recorded on our other emails, such as support replies and account notices. We use those
-          records only to diagnose delivery problems; only newsletter opens and clicks count towards the
-          check described above.
+          Since 9 October 2026 we also keep statistics on every email we send, to see how each kind of
+          email performs. Each event Resend reports (delivered, opened, clicked, bounced, marked as spam
+          and the like) is stored with the email type, its language, Resend&rsquo;s reference for the
+          message and a keyed one-way code made from your address, never the address itself. For a click
+          we keep only the link&rsquo;s site, page path and campaign tags; the rest of the link is
+          dropped. For the newsletter we also record, the same way, when you sign up (with the page you
+          signed up on), confirm, unsubscribe or save your preferences. These records are deleted after
+          400 days. We read them only as totals per email type, language and link, never to profile
+          individuals, and we do not share them with anyone. Our legal basis is our legitimate interest
+          in knowing whether our emails arrive and are useful.
+        </p>
+        <p>
+          If an email to you bounces permanently, you mark one as spam, or Resend blocks delivery to your
+          address, Resend tells us. From then on we stop sending you the newsletter, and we cancel every
+          email of any kind still waiting in our queue for you; a spam report also unsubscribes you at
+          Resend. If you unsubscribe with Resend&rsquo;s own unsubscribe link, you leave our list too and
+          your queued letters are cancelled.
         </p>
       </section>
 
@@ -341,6 +359,7 @@ export default function PrivacyPage() {
         </p>
         <ul className="points">
           <li><b>What is measured:</b> the pages you view, the page that brought you here, your type of device and browser, your approximate country and city, which Google works out itself, and clicks on App Store buttons, sending the newsletter or contact form, and links to our social channels.</li>
+          <li><b>Links in our emails:</b> links to pages on this website carry utm_source, utm_medium and utm_campaign tags naming the email they came from, so that Google Analytics can count visits from each email. The tags name the email, not you, and Google Analytics reads them only if you have accepted analytics.</li>
           <li><b>What is not:</b> Google Analytics 4 does not log or store IP addresses. Google signals and ad personalisation are switched off, so the data is not combined with your Google account or used for advertising.</li>
           <li><b>Why:</b> to understand which pages help people, and to improve the site.</li>
           <li><b>Legal basis:</b> where EU or UK law applies, your consent. Withdrawing it stops future measurement; it does not undo what was measured before.</li>
@@ -390,8 +409,8 @@ export default function PrivacyPage() {
         </p>
         <p>
           On the website, each kind of record has its own period, set out in the sections above: form
-          submissions, support cases and applications, the newsletter, scheduled emails, and website
-          analytics.
+          submissions, support cases and applications, the newsletter, scheduled emails, email statistics
+          and website analytics.
         </p>
       </section>
 
@@ -434,7 +453,7 @@ export default function PrivacyPage() {
       <section className="brick">
         <h2>Third parties and changes</h2>
         <p>
-          Apple services, App Store purchases, Game Center, iCloud sync, and iCloud backups are operated under their own terms and privacy policies. Google is the one advertising partner in the app, described above. On this website, Cloudflare hosts the pages and runs the forms, the OutBrick Community and its image storage; Neon runs the database behind them; Resend sends our emails and records newsletter opens and clicks; and Google Analytics measures visits when you allow it, all described above. If you sign in to the community with Apple, Google or Facebook, that company handles the sign-in under its own terms and privacy policy. We do not add a third-party analytics or advertising partner without updating this policy first, and, for the app, its App Store privacy information too; this revision moves the website from Netlify to Cloudflare and Neon, and the app is unchanged. We may update this page when the app, the website or our practices change; the effective date above shows the latest revision, and the latest changes are summarised at the top.
+          Apple services, App Store purchases, Game Center, iCloud sync, and iCloud backups are operated under their own terms and privacy policies. Google is the one advertising partner in the app, described above. On this website, Cloudflare hosts the pages and runs the forms, the OutBrick Community and its image storage; Neon runs the database behind them; Resend sends our emails and records whether they are delivered, opened and clicked; and Google Analytics measures visits when you allow it, all described above. If you sign in to the community with Apple, Google or Facebook, that company handles the sign-in under its own terms and privacy policy. We do not add a third-party analytics or advertising partner without updating this policy first, and, for the app, its App Store privacy information too; this revision moves the website from Netlify to Cloudflare and Neon, and the app is unchanged. We may update this page when the app, the website or our practices change; the effective date above shows the latest revision, and the latest changes are summarised at the top.
         </p>
       </section>
 

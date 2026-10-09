@@ -1,0 +1,423 @@
+<title>OutBrick Email System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700;800&family=Fredoka:wght@500;600&display=swap">
+<style>
+/* Layout: a toy-brick workbench. Indigo chrome and a cream reading surface, the same as every
+   OutBrick email; one wide preview bench, then the reference sections in a single column. */
+:root {
+  --ink: #1a1350;
+  --ink-2: #221a62;
+  --lilac: #c9c2ff;
+  --title: #fff6d6;
+  --page: #fff3dd;
+  --paper: #fffaf1;
+  --edge: #efe2c6;
+  --text: #1d1747;
+  --muted: #4f4a6e;
+  --link: #3b2fb0;
+  --gold: #ffc53d;
+  --gold-foot: #b8780a;
+  --chip: #f4ead4;
+  --display: 'Fredoka', 'Arial Rounded MT Bold', ui-rounded, system-ui, sans-serif;
+  --body: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #120e33; --paper: #1d1752; --edge: #2c237a; --text: #f3f1fc; --muted: #c9c2ff;
+    --link: #ffd66e; --chip: #2a2364; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #120e33; --paper: #1d1752; --edge: #2c237a; --text: #f3f1fc; --muted: #c9c2ff;
+  --link: #ffd66e; --chip: #2a2364; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--text); font: 16px/1.55 var(--body); }
+a { color: var(--link); }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.2; text-wrap: balance; margin: 0; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; }
+.course { display: grid; grid-template-columns: repeat(6, 1fr); height: 10px; }
+.course i:nth-child(1){background:#e2352f}.course i:nth-child(2){background:#ffc53d}.course i:nth-child(3){background:#26b9b0}
+.course i:nth-child(4){background:#7b5cf0}.course i:nth-child(5){background:#3b8bf0}.course i:nth-child(6){background:#3fc544}
+
+header.top { background: var(--ink); color: var(--title); }
+header.top .wrap { padding-block: 28px 26px; display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: end; justify-content: space-between; }
+header.top img { width: 168px; height: auto; display: block; margin-bottom: 12px; }
+header.top h1 { font-size: clamp(28px, 5vw, 40px); }
+header.top p { margin: 6px 0 0; color: var(--lilac); max-width: 60ch; }
+.stats { display: flex; gap: 10px; flex-wrap: wrap; }
+.stat { background: var(--ink-2); border-radius: 14px; border-bottom: 4px solid #0d0930; padding: 10px 16px 8px; min-width: 104px; }
+.stat b { display: block; font: 600 26px/1 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--lilac); }
+
+nav.jump { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--edge); }
+nav.jump .wrap { display: flex; gap: 4px 18px; flex-wrap: wrap; padding-block: 10px; font-weight: 700; font-size: 14px; }
+nav.jump a { text-decoration: none; color: var(--muted); }
+nav.jump a:hover, nav.jump a:focus-visible { color: var(--link); }
+
+section { padding-block: 36px 8px; }
+section > .wrap > h2 { font-size: 28px; margin-bottom: 6px; }
+.lede { color: var(--muted); max-width: 70ch; margin: 0 0 20px; }
+
+/* Bench */
+.bench { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+.list { background: var(--paper); border: 1px solid var(--edge); border-radius: 18px; padding: 8px; max-height: 1000px; overflow: auto; }
+@media (max-width: 860px) { .list { max-height: 320px; } }
+.list h3 { font: 800 12px/1.4 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 12px 10px 4px; }
+.list button { all: unset; box-sizing: border-box; display: flex; gap: 10px; align-items: center; width: 100%; padding: 7px 10px; border-radius: 12px; cursor: pointer; font-size: 14px; line-height: 1.3; }
+.list button:hover { background: var(--chip); }
+.list button:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+.list button[aria-current="true"] { background: var(--ink); color: var(--title); }
+.list img { width: 30px; height: 30px; flex: none; }
+.list .none { width: 30px; height: 30px; flex: none; border-radius: 8px; background: var(--chip); display: grid; place-items: center; font-size: 12px; color: var(--muted); }
+.viewer { min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-bottom: 12px; }
+.seg { display: inline-flex; background: var(--chip); border-radius: 12px; padding: 3px; }
+.seg button { all: unset; cursor: pointer; padding: 6px 12px; border-radius: 9px; font-size: 14px; font-weight: 700; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--title); }
+.seg button:focus-visible { outline: 2px solid var(--link); }
+select { font: 700 14px var(--body); padding: 7px 10px; border-radius: 10px; border: 1px solid var(--edge); background: var(--paper); color: var(--text); }
+.meta { background: var(--paper); border: 1px solid var(--edge); border-radius: 14px; padding: 12px 16px; margin-bottom: 12px; display: grid; gap: 4px; font-size: 14px; }
+.meta .subject { font: 600 18px/1.3 var(--display); }
+.meta .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tag { background: var(--chip); border-radius: 8px; padding: 2px 8px; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.stage-frame { overflow-x: auto; background: repeating-linear-gradient(45deg, var(--chip) 0 10px, transparent 10px 20px); border-radius: 22px; padding: 18px; border: 1px solid var(--edge); }
+.device { margin: 0 auto; background: #000; border-radius: 34px; padding: 10px; width: max-content; box-shadow: 0 10px 30px rgba(26,19,80,.25); }
+.device.desktop { border-radius: 14px; padding: 28px 8px 8px; position: relative; }
+.device.desktop::before { content: ''; position: absolute; top: 10px; left: 14px; width: 42px; height: 9px; background: radial-gradient(circle at 4px 4px, #ff5f57 4px, transparent 4.5px), radial-gradient(circle at 21px 4px, #febc2e 4px, transparent 4.5px), radial-gradient(circle at 38px 4px, #28c840 4px, transparent 4.5px); }
+iframe { display: block; border: 0; border-radius: 26px; background: #fff3dd; height: 820px; }
+.device.desktop iframe { border-radius: 6px; }
+.hint { font-size: 13.5px; color: var(--muted); margin: 10px 0 0; }
+
+/* Cast */
+.cast { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.friend { background: var(--paper); border: 1px solid var(--edge); border-radius: 18px; padding: 14px 14px 12px; display: grid; grid-template-columns: 72px minmax(0,1fr); gap: 4px 12px; align-items: center; }
+.friend img { width: 72px; height: 72px; grid-row: span 2; }
+.friend .name { display: inline-block; padding: 2px 9px 1px; border-radius: 8px; font: 600 15px/1.4 var(--display); }
+.friend p { margin: 0; font-size: 13.5px; color: var(--muted); }
+.friend .hosts { grid-column: 1 / -1; font-size: 13px; color: var(--text); border-top: 1px dashed var(--edge); padding-top: 8px; margin-top: 4px; }
+
+/* Foundations */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 18px; }
+.sw { background: var(--paper); border: 1px solid var(--edge); border-radius: 14px; overflow: hidden; font-size: 13px; }
+.sw div { height: 54px; }
+.sw p { margin: 0; padding: 8px 10px; }
+.sw code { font-size: 12px; color: var(--muted); }
+.type { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.card { background: var(--paper); border: 1px solid var(--edge); border-radius: 18px; padding: 18px; min-width: 0; }
+.card h3 { font-size: 19px; margin-bottom: 6px; }
+.card p { margin: 0 0 8px; }
+.card ul { margin: 6px 0 0; padding-left: 20px; }
+.card li { margin: 0 0 6px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.flow { background: var(--paper); border: 1px solid var(--edge); border-radius: 18px; padding: 16px; overflow-x: auto; margin-bottom: 14px; }
+.flow h3 { font-size: 18px; margin-bottom: 8px; }
+.checklist { counter-reset: step; list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.checklist li { counter-increment: step; background: var(--paper); border: 1px solid var(--edge); border-radius: 14px; padding: 12px 14px 12px 54px; position: relative; }
+.checklist li::before { content: counter(step); position: absolute; left: 14px; top: 12px; width: 28px; height: 24px; border-radius: 7px; background: var(--gold); border-bottom: 3px solid var(--gold-foot); color: #1a1350; font: 600 14px/24px var(--display); text-align: center; }
+.checklist b { font-family: var(--display); font-weight: 600; }
+.pill { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .04em; border-radius: 7px; padding: 1px 7px; margin-left: 6px; vertical-align: 1px; }
+.pill.done { background: #d9f5d3; color: #1d5a17; }
+.pill.you { background: #ffe7a8; color: #6b4a00; }
+:root[data-theme="dark"] .pill.done { background: #234d1f; color: #d9f5d3; } :root[data-theme="dark"] .pill.you { background: #5c4300; color: #ffe7a8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .pill.done { background: #234d1f; color: #d9f5d3; } :root:not([data-theme="light"]) .pill.you { background: #5c4300; color: #ffe7a8; } }
+table.data { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.data th, table.data td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--edge); vertical-align: top; }
+table.data th { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.scroll { overflow-x: auto; }
+footer { padding-block: 40px 60px; color: var(--muted); font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div>
+      <img src="assets/logo/outbrick-wordmark.png" alt="OutBrick">
+      <h1>Email System</h1>
+      <p>Every email OutBrick sends, built from the website's palette and the game's bricks, hosted by the nine friends. Live on www.outbrick.site since 9 October 2026; this page is for your review.</p>
+    </div>
+    <div class="stats" aria-label="At a glance">
+      <div class="stat"><b>50</b><span>templates</span></div>
+      <div class="stat"><b>6</b><span>languages</span></div>
+      <div class="stat"><b>9</b><span>host friends</span></div>
+      <div class="stat"><b>290</b><span>tests passing</span></div>
+      <div class="stat"><b>22/22</b><span>WebKit checks</span></div>
+    </div>
+  </div>
+  <div class="course" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</header>
+
+<nav class="jump" aria-label="Sections">
+  <div class="wrap">
+    <a href="#bench">Live emails</a><a href="#cast">The cast</a><a href="#foundations">Foundations</a><a href="#components">Components</a><a href="#journey">Customer journey</a><a href="#analytics">Analytics</a><a href="#resend">Resend</a><a href="#retention">Retention</a><a href="#ship">Shipped</a>
+  </div>
+</nav>
+
+<section id="bench">
+  <div class="wrap">
+    <h2>Live emails</h2>
+    <p class="lede">Pick an email, then switch language, width, theme and mail app. "Apple Mail" shows the interactive layer: the hamburger, the host cheering when tapped, the tips and the puzzles. "Gmail / Outlook" strips the checkboxes the way those clients do, so you see exactly what their readers get.</p>
+    <div class="bench">
+      <div class="list" id="list" role="navigation" aria-label="Emails"></div>
+      <div class="viewer">
+        <div class="toolbar">
+          <label>Language <select id="locale" aria-label="Language"></select></label>
+          <div class="seg" role="group" aria-label="Width"><button data-width="390" aria-pressed="true">Phone</button><button data-width="680" aria-pressed="false">Desktop</button></div>
+          <div class="seg" role="group" aria-label="Theme"><button data-scheme="light" aria-pressed="true">Light</button><button data-scheme="dark" aria-pressed="false">Dark</button></div>
+          <div class="seg" role="group" aria-label="Mail app"><button data-client="apple" aria-pressed="true">Apple Mail</button><button data-client="gmail" aria-pressed="false">Gmail / Outlook</button></div>
+        </div>
+        <div class="meta" id="meta"></div>
+        <div class="stage-frame"><div class="device" id="device"><iframe id="frame" title="Email preview" width="390"></iframe></div></div>
+        <p class="hint">On the phone width, tap the ☰ in the header for the menu, and tap the friend at the top to make them cheer. Welcome 2 and "Brick of the week" hold a puzzle you can play.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cast">
+  <div class="wrap">
+    <h2>The cast</h2>
+    <p class="lede">Each email opens with one friend on a plinth in their own colour, saying one short line in the reader's language. The lines are written per mood and never quote a reader, so a forum post can never end up in a friend's mouth. The casting follows each friend's role in the game.</p>
+    <div class="cast" id="castGrid"></div>
+  </div>
+</section>
+
+<section id="foundations">
+  <div class="wrap">
+    <h2>Foundations</h2>
+    <p class="lede">Colours are the website's own tokens (<code>app/styles/editorial.css</code>), so an email and the page it links to feel like one place. Every text colour clears 4.5:1 on its surface in both themes. The puzzle bricks use the game's palette from <code>DESIGN.md</code>.</p>
+    <div class="swatches" id="swatches"></div>
+    <h3 style="font-size:19px;margin:8px 0 10px;">Game bricks (puzzles)</h3>
+    <div class="swatches" id="bricks"></div>
+    <div class="type">
+      <div class="card"><p class="tag" style="display:inline-block">Display</p><h3 style="font-size:30px">Fredoka 600</h3><p>Headings, buttons, friend names, speech bubbles. Rounded and moulded like the bricks. Falls back to Arial Rounded, then the system.</p></div>
+      <div class="card"><p class="tag" style="display:inline-block">Text</p><h3 style="font-family:var(--body);font-weight:700">Figtree 400 / 800</h3><p>Body at 17 px with 1.6 line height; eyebrows at 13 px, 800, tracked uppercase. Japanese uses Hiragino Maru Gothic.</p></div>
+      <div class="card"><p class="tag" style="display:inline-block">Frame</p><h3>One 600 px column</h3><p>Indigo header and footer, a cream reading plate, the six-colour course stripe above and below. Fluid on phones without media queries; Outlook gets a fixed ghost table.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="components">
+  <div class="wrap">
+    <h2>Components</h2>
+    <p class="lede">All in <code>emails/core.ts</code> and <code>emails/friends.ts</code>. Every interactive part degrades to readable, still content.</p>
+    <div class="grid2">
+      <div class="card"><h3>Host stage</h3><p>The friend on a studded plinth with a speech bubble. In Apple Mail they hop in, breathe, wiggle on hover and cheer when tapped. Reduced motion switches it all off. With images off, the bubble is still real text and the image alt is the friend's name.</p></div>
+      <div class="card"><h3>Header menu</h3><p>In every reader email, as a ☰ at every width in Apple Mail, iOS Mail and Samsung Email; Gmail, Outlook and Yahoo strip the control a hamburger needs, so they show a plain row of links. Each email's checkbox ids are unique, so two OutBrick emails in a conversation never open each other's menu.</p></div>
+      <div class="card"><h3>Studded button</h3><p>The one action: a gold brick with a darker foot, two studs and a moulded highlight. Outlook on Windows draws the same shape in VML.</p></div>
+      <div class="card"><h3>Puzzle board</h3><p>A real OutBrick board in table cells: bricks, gates, studs. Tap the brick that moves first. The right one slides out through its gate, the rest follow, and the host cheers. A wrong one shakes and a hint appears. Other clients get the board, the answer and a link to the daily board.</p></div>
+      <div class="card"><h3>Plates, bullets, breaks</h3><p>Panels are plates with a row of studs; list bullets are small studded bricks in the course colours; section breaks are five little bricks in a row.</p></div>
+      <div class="card"><h3>Brand footer</h3><p>Social tiles, the App Store badge in the reader's language, copyright and the P.O. Box, plus unsubscribe and preferences where the email is marketing. The badge's campaign token names the email that was sent.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="journey">
+  <div class="wrap">
+    <h2>Customer journey</h2>
+    <p class="lede">Who gets what, when, and from which friend. Grey labels are the triggers.</p>
+    <div class="flow"><h3>Newsletter</h3>
+<pre class="mermaid">
+flowchart LR
+  A[Sign-up form<br/>consent recorded] --> B[Confirm email<br/>Bloo]
+  B -->|tap confirm| C[Welcome 1<br/>Bloo]
+  C -->|day 3| D[Welcome 2 + first puzzle<br/>Peach]
+  D -->|day 10| E[Welcome 3: the nine friends<br/>Poppy]
+  E --> F[New version<br/>Bloo, auto-send after review window]
+  E --> G[Brick of the week<br/>puzzle issue]
+  E --> H[Events and seasons<br/>Flurry]
+  F & G & H -->|120 days without a click| I[Still want these?<br/>Zippy]
+  I -->|14 days, no answer| J[Removed from the list]
+</pre></div>
+    <div class="flow"><h3>Support</h3>
+<pre class="mermaid">
+flowchart LR
+  A[Contact form] --> B[We got it, case OB-XXXXXX<br/>Sprout]
+  B --> C[Reply from the team<br/>Sprout]
+  C -->|3 days| D[Did we solve it?<br/>Vio]
+  D -->|not yet| C
+  C -->|fix ships| E[Fixed in version X<br/>Bricko]
+</pre></div>
+    <div class="flow"><h3>Community and account</h3>
+<pre class="mermaid">
+flowchart LR
+  A[Sign-in link<br/>Moss] --> B[Welcome to the community<br/>Moss]
+  B --> C[Replies and mentions<br/>Poppy]
+  B --> D[Solved<br/>Sprout]
+  B --> E[Badge earned<br/>Zippy]
+  B --> F[Weekly digest<br/>Moss]
+  A --> G[New sign-in, passkey, data export<br/>Peach]
+</pre></div>
+  </div>
+</section>
+
+<section id="analytics">
+  <div class="wrap">
+    <h2>Analytics, end to end</h2>
+    <p class="lede">Three layers, each with no raw address stored outside Resend and your own subscriber table.</p>
+    <div class="grid2">
+      <div class="card"><h3>In the email</h3><ul><li>Resend webhook stores every <code>email.*</code> event in <code>email_events</code>: sent, delivered, opened, clicked, bounced, complained, suppressed, failed.</li><li>Addresses are stored as a keyed hash; clicked links keep only path and <code>utm_*</code>.</li><li>Opens are marked approximate (Apple Mail Privacy Protection); clicks lead.</li></ul></div>
+      <div class="card"><h3>On the website</h3><ul><li>Every site link carries <code>utm_source=outbrick-email</code>, <code>utm_medium=email</code> and <code>utm_campaign</code> = the email's name, so Google Analytics credits each visit.</li><li>New GA4 events, behind the consent banner: <code>generate_lead</code> (newsletter sign-up), <code>contact</code>, <code>sign_up</code> (community).</li><li>Server milestones without cookies: sign-up, confirmed, unsubscribed, preferences saved.</li></ul></div>
+      <div class="card"><h3>In the App Store</h3><ul><li>The App Store badge in each email carries <code>ct=email-&lt;name&gt;</code>, so App Analytics can say which email sent a download.</li><li>Apple only counts it once the provider token is filled in (see To ship).</li></ul></div>
+      <div class="card"><h3>The report</h3><ul><li>New <b>Email</b> panel in <code>/community/admin</code> (admins only), 7 / 30 / 90 days.</li><li>Funnel: sign-ups → confirmed → welcome 2 → welcome 3 → still subscribed.</li><li>Per email: sent, delivered, clicks, opens, bounces, complaints, unsubscribes; by language; top links; release broadcasts.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="resend">
+  <div class="wrap">
+    <h2>Resend: what we use, what to turn on</h2>
+    <p class="lede">From the live account on 9 October: one verified domain (outbrick.site, eu-west-1), open and click tracking on, 3 topics, 3 segments, 7 templates, 1 webhook, 9 contacts, 122 emails this month with zero bounces or complaints. The plan is the free tier: 100 emails a day, 3,000 a month, 3 segments.</p>
+    <div class="card scroll">
+      <table class="data">
+        <thead><tr><th>Feature</th><th>Status</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td>Webhook events</td><td>Done, 9 Oct</td><td>All <code>email.*</code> events and <code>contact.updated</code> now reach the site, so unsubscribes, bounces and complaints stay in sync and feed the Email report.</td></tr>
+          <tr><td>Receiving (inbound)</td><td>Off</td><td>The forum's reply-by-email is built but switched off. Turn on receiving for <code>reply.outbrick.site</code> to let members answer a notification from their inbox.</td></tr>
+          <tr><td>Plan capacity</td><td>Free tier</td><td>A single broadcast to more than about 100 readers in a day hits the daily cap. Move to Pro before the first big release email.</td></tr>
+          <tr><td>Segments</td><td>3 of 3 used</td><td>"General" is unused. Per-language release drafts need one segment per language; delete General, use topics plus the <code>language</code> contact property, or upgrade.</td></tr>
+          <tr><td>Contact properties</td><td>Only <code>language</code></td><td>Add <code>source</code>, <code>first_confirmed</code> and <code>favourite_friend</code> to personalise broadcasts.</td></tr>
+          <tr><td>Release broadcasts</td><td>Automatic, 9 Oct</td><td>Drafts per language when the App Store shows a new version; sent 24 hours later unless deleted.</td></tr>
+          <tr><td>Scheduled broadcasts</td><td>Supported in code</td><td>Send each language in its own morning with <code>scheduled_at</code>.</td></tr>
+          <tr><td>Automations</td><td>Not needed</td><td>Our own outbox runs the welcome series and keeps the data in our database; Automations stay an option.</td></tr>
+          <tr><td>Topics</td><td>3, two overlap</td><td>"Tips and events" and "Events and seasons" overlap. Merge into "Puzzles and tips" and "Events and seasons".</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="retention">
+  <div class="wrap">
+    <h2>What email can do next for retention</h2>
+    <div class="grid2">
+      <div class="card"><h3>Brick of the week</h3><p>A fortnightly puzzle issue, solved in the inbox, pointing to the daily board. Built and ready; it needs a puzzle and an issue file each time.</p></div>
+      <div class="card"><h3>Link the game to an email</h3><p>An opt-in "Get OutBrick news" in the app's Settings, sending the address with a hashed Game Center id. It unlocks milestone emails: a village finished, a chapter cleared, 100 days of play.</p></div>
+      <div class="card"><h3>Gentle comeback</h3><p>After 14 days away, one email from the friend whose village the player was in ("Moss kept your spot in Clover Farm"), with a puzzle. One per absence, never a streak guilt-trip.</p></div>
+      <div class="card"><h3>Friend of the month</h3><p>Poppy tells one friend's story, with a sticker and a themed board. Builds attachment to the cast the game is built around.</p></div>
+      <div class="card"><h3>Seasonal events</h3><p>The event ticket layout is ready for the winter festival: dates, what's new, a themed puzzle, hosted by Flurry.</p></div>
+      <div class="card"><h3>Ask once, answer fast</h3><p>The support loop already asks "did we solve it?" and reopens the case on "not yet". Add a yearly "What should we build next?" with one-tap choices to the newsletter.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="ship">
+  <div class="wrap">
+    <h2>Shipped, and what's left</h2>
+    <p class="lede">Live on www.outbrick.site since 9 October 2026, 13:58 UTC (main <code>c1ebb4a</code>). After merging main's Support Centre: 290 of 290 tests, lint and type-check clean, all 300 email renders checked, 17 of 17 interactive checks in WebKit.</p>
+    <ol class="checklist">
+      <li><b>Merged and deployed</b><span class="pill done">Done</span><br>Both database migrations applied to production (suppression and consent; email events) and verified: 7 new columns, 3 new tables.</li>
+      <li><b>Resend webhook widened</b><span class="pill done">Done</span><br>Every <code>email.*</code> event plus <code>contact.updated</code>. A replayed event returned 200 and was stored in <code>email_events</code> with its email name and a hashed address.</li>
+      <li><b>Release emails send themselves</b><span class="pill done">Done</span><br>When the App Store shows a new version, drafts appear in Resend and send 24 hours later. Delete a draft in Resend to stop it.</li>
+      <li><b>Checked in Apple Mail itself</b><span class="pill done">Done</span><br>The test email reached your inbox. In Apple Mail the ☰ opens all five links and closes again, Peach cheers when tapped, and the puzzle clears with blue and red leaving through their gates. That check found two bugs, both fixed and live: the friend was invisible while Mail paused animations, and the menu was a row on wide windows. WebKit checks: 22 of 22.</li>
+      <li><b>Review this page</b><span class="pill you">You</span><br>Tell me what to change: a friend's casting, a line, the puzzle, the bricks.</li>
+      <li><b>App Store campaign token</b><span class="pill you">You</span><br>Copy the provider token from App Store Connect › App Analytics › Campaigns into <code>lib/app-store-url.ts</code>, so App Analytics counts downloads per email.</li>
+      <li><b>Privacy policy lines</b><span class="pill you">You</span><br>Two sentences: we keep a consent record (page and wording version), and email analytics are stored with hashed addresses for 400 days. I can draft them in all six languages.</li>
+      <li><b>Resend plan and receiving</b><span class="pill you">You</span><br>Move off the free plan (100 emails a day) before a big broadcast; turn on receiving for <code>reply.outbrick.site</code> if you want forum reply-by-email.</li>
+    </ol>
+  </div>
+</section>
+
+<footer><div class="wrap">OutBrick · Email System review page · rendered from source, not screenshots.</div></footer>
+
+<script>
+const FRIENDS = {
+  bloo: { name: 'Bloo', colour: '#3b8bf0', ink: '#0a1a3d', role: 'The one with the watch', hosts: 'News, releases, the welcome letter, confirmations' },
+  peach: { name: 'Peach', colour: '#f4a283', ink: '#1a1350', role: 'The careful planner', hosts: 'Account security, welcome 2 tips, policy notices' },
+  sprout: { name: 'Sprout', colour: '#6cc24a', ink: '#10270a', role: 'The one with questions', hosts: 'Support: we got it, replies, solved threads' },
+  bricko: { name: 'Bricko', colour: '#d42f29', ink: '#ffffff', role: 'The one doing reps', hosts: 'Fixed in X, affiliates, careers' },
+  zippy: { name: 'Zippy', colour: '#ffd22e', ink: '#1a1350', role: 'The one who drifts off', hosts: 'Still want these?, preferences, badges' },
+  vio: { name: 'Vio', colour: '#7b5cf0', ink: '#ffffff', role: 'The critic with headphones', hosts: 'Did we solve it?, moderation, bounced replies' },
+  moss: { name: 'Moss', colour: '#357a32', ink: '#ffffff', role: 'The farmhand', hosts: 'Community sign-in, welcome, digests' },
+  flurry: { name: 'Flurry', colour: '#9fd6f5', ink: '#0f2a44', role: 'The one in the scarf', hosts: 'Events and seasons' },
+  poppy: { name: 'Poppy', colour: '#f59ac6', ink: '#3a0f28', role: 'The storyteller', hosts: 'Replies and mentions, welcome 3 (the friends)' },
+};
+const LANG = { en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', ja: '日本語', 'pt-BR': 'Português (BR)' };
+const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+const state = { name: store.get('ob-name') || 'newsletter-welcome-2', locale: 'en', width: 390, scheme: 'light', client: 'apple' };
+let manifest = [];
+const cache = new Map();
+
+function el(tag, attrs = {}, kids = []) { const e = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) { if (k === 'text') e.textContent = v; else e.setAttribute(k, v); } for (const c of kids) e.append(c); return e; }
+
+function renderCast() {
+  const grid = document.getElementById('castGrid');
+  for (const [id, f] of Object.entries(FRIENDS)) {
+    const name = el('span', { class: 'name', text: f.name }); name.style.background = f.colour; name.style.color = f.ink;
+    grid.append(el('div', { class: 'friend' }, [el('img', { src: `assets/email/friends/${id}-cheer.png`, alt: '' }), name, el('p', { text: f.role }), el('div', { class: 'hosts', text: f.hosts })]));
+  }
+  const sw = (target, list) => { const g = document.getElementById(target); for (const [n, hex, use] of list) { const d = el('div'); d.style.background = hex; g.append(el('div', { class: 'sw' }, [d, el('p', {}, [el('b', { text: n }), el('br'), el('code', { text: hex }), el('br'), document.createTextNode(use)])])); } };
+  sw('swatches', [['Ink', '#1a1350', 'Header, footer, puzzle board'], ['Paper', '#fffaf1', 'The reading plate'], ['Cream', '#fff3dd', 'Page and panels'], ['On paper', '#1d1747', 'Body text, 15.6:1'], ['Lilac', '#c9c2ff', 'Text on ink, 10.9:1'], ['Gold', '#ffc53d', 'The one action'], ['Link', '#3b2fb0', 'Links on paper, 8.4:1'], ['Course', 'linear-gradient(90deg,#e2352f 0 16.6%,#ffc53d 0 33.3%,#26b9b0 0 50%,#7b5cf0 0 66.6%,#3b8bf0 0 83.3%,#3fc544 0)', 'Stripe, bullets, breaks']]);
+  sw('bricks', [['Red', '#e2372f', 'ink white'], ['Yellow', '#f9c823', 'ink indigo'], ['Green', '#4cb944', 'ink dark green'], ['Blue', '#2c7be5', 'ink white'], ['Purple', '#9b5fe0', 'ink white'], ['Pink', '#f26ab8', 'ink plum'], ['Orange', '#f5851f', 'ink indigo'], ['Teal', '#26b9b0', 'ink dark teal']]);
+}
+
+function renderList() {
+  const list = document.getElementById('list');
+  list.textContent = '';
+  let group = '';
+  const seen = manifest.reduce((n, m) => n.set(m.subject, (n.get(m.subject) || 0) + 1), new Map());
+  for (const m of manifest) {
+    const label = seen.get(m.subject) > 1 ? m.title.replace(/^[^:]*:\s*/, '') : m.subject;
+    if (m.group !== group) { group = m.group; list.append(el('h3', { text: group })); }
+    const icon = m.host ? el('img', { src: `assets/email/friends/${m.host}-idle.png`, alt: '' }) : el('span', { class: 'none', text: 'team' });
+    const b = el('button', { type: 'button', 'aria-current': String(m.name === state.name) }, [icon, el('span', { text: label })]);
+    b.addEventListener('click', () => { state.name = m.name; store.set('ob-name', m.name); if (!m.locales.includes(state.locale)) state.locale = 'en'; renderList(); load(); });
+    list.append(b);
+  }
+}
+
+function transform(html) {
+  if (state.scheme === 'dark') html = html.replace(/@media \(prefers-color-scheme:dark\)/g, '@media all');
+  else html = html.replace(/@media \(prefers-color-scheme:dark\)/g, '@media not all').replace(/\[data-ogs[cb]\][^{]*\{[^}]*\}/g, '');
+  if (state.client === 'gmail') html = html.replace(/<input[^>]*>/g, '').replace(/-webkit-min-device-pixel-ratio:0/g, 'max-width:1px');
+  return html;
+}
+
+async function load() {
+  const m = manifest.find((x) => x.name === state.name) || manifest[0];
+  state.name = m.name;
+  const sel = document.getElementById('locale');
+  sel.textContent = '';
+  for (const l of m.locales) sel.append(el('option', { value: l, text: LANG[l] }));
+  sel.value = state.locale;
+  const meta = document.getElementById('meta');
+  meta.textContent = '';
+  const tags = el('div', { class: 'tags' }, [
+    el('span', { class: 'tag', text: m.host ? `Host: ${FRIENDS[m.host].name} (${m.pose})` : 'Internal team copy' }),
+    el('span', { class: 'tag', text: m.nav ? 'Header menu' : 'No menu (internal)' }),
+    el('span', { class: 'tag', text: `${m.locales.length === 6 ? 'All six languages here' : 'English here; all six in the code'}` }),
+    el('span', { class: 'tag', text: m.name }),
+  ]);
+  meta.append(el('div', { class: 'subject', text: m.subject }), el('div', { text: m.title }), tags);
+  const key = `${m.name}.${state.locale}`;
+  let html = cache.get(key);
+  if (!html) {
+    try { html = await (await fetch(`emails/${key}.html`)).text(); cache.set(key, html); }
+    catch { html = '<p style="font-family:sans-serif;padding:20px">This preview could not be loaded.</p>'; }
+  }
+  const frame = document.getElementById('frame');
+  frame.width = String(state.width);
+  frame.style.width = `${state.width}px`;
+  document.getElementById('device').className = state.width > 400 ? 'device desktop' : 'device';
+  frame.srcdoc = transform(html);
+}
+
+function bindSeg(attr, key, cast = (v) => v) {
+  document.querySelectorAll(`[data-${attr}]`).forEach((b) => b.addEventListener('click', () => {
+    state[key] = cast(b.dataset[attr]);
+    document.querySelectorAll(`[data-${attr}]`).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    load();
+  }));
+}
+bindSeg('width', 'width', Number);
+bindSeg('scheme', 'scheme');
+bindSeg('client', 'client');
+document.getElementById('locale').addEventListener('change', (e) => { state.locale = e.target.value; load(); });
+
+renderCast();
+fetch('manifest.json').then((r) => r.json()).then((m) => { manifest = m; renderList(); load(); }).catch(() => {
+  document.getElementById('list').append(el('p', { text: 'The email list could not be loaded.' }));
+});
+</script>

@@ -15,6 +15,14 @@ Documentation map: [docs/README.md](docs/README.md). Backend behavior and test c
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Email template/campaign workflow:
 [README.md](README.md#emails-resend). No secret values belong in these documents.
 
+## Email system
+
+[The OutBrick Email System](docs/EMAIL-DESIGN-SYSTEM.md) (design system, cast, interactive rules,
+roadmap) and its review page `docs/email-system/index.html` (`pnpm emails:system`) cover every email;
+[EMAIL-LIFECYCLE.md](docs/EMAIL-LIFECYCLE.md) covers delivery, Resend and analytics. Checkpoint
+9 October 2026: live and owner-approved; hamburger, host friends and puzzles verified in Apple Mail
+and iOS Mail.
+
 ## Administrative dashboard checkpoint
 
 Read [admin and editorial operations](docs/ADMIN-AND-EDITORIAL.md) for the role matrix, exact verified owner allowlist, draft/publish workflow and deployment gates. Do not grant domain-wide admin access or promote an Apple relay account without explicit instruction. Existing static pages and journal stay Git-managed; new editorial content uses the database dashboard.

@@ -31,7 +31,9 @@
     "newsletter": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/send-newsletter.mjs",
     "cloudflare:prepare": "node scripts/cloudflare/prepare-routes.mjs",
     "cloudflare:dev": "wrangler dev --config wrangler.jsonc",
-    "cloudflare:deploy:preview": "node scripts/cloudflare/prepare-routes.mjs && wrangler deploy --config wrangler.jsonc"
+    "cloudflare:deploy:preview": "node scripts/cloudflare/prepare-routes.mjs && wrangler deploy --config wrangler.jsonc",
+    "emails:system": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/build-email-system.mjs",
+    "emails:check-interactive": "node scripts/check-email-interactive.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

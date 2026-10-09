@@ -609,5 +609,7 @@ export async function backfillSubscribers(apiKey: string, env: Env): Promise<num
 export async function applyRetention(): Promise<void> {
   await sql`DELETE FROM support_cases WHERE status IN ('resolved','closed') AND updated_at < now() - interval '24 months'`;
   await sql`DELETE FROM applications WHERE status IN ('approved','next_step','declined') AND COALESCE(decided_at, updated_at) < now() - interval '24 months'`;
-  await sql`DELETE FROM newsletter_subscribers WHERE status <> 'subscribed' AND updated_at < now() - interval '30 days'`;
+  // A reader we stopped writing to after a bounce or spam report is "removed" in the privacy
+  // policy's sense, so their row (and its consent record) goes 30 days later like an unsubscribe.
+  await sql`DELETE FROM newsletter_subscribers WHERE (status <> 'subscribed' AND updated_at < now() - interval '30 days') OR suppressed_at < now() - interval '30 days'`;
 }

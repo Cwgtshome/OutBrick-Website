@@ -14,6 +14,14 @@ English, French, German, Spanish, Japanese and Brazilian Portuguese.
 Update the shared status after substantive work so Claude and Codex read the same context.
 Keep credentials exclusively in approved secret storage; document variable names and behavior only.
 
+## Email system
+
+[The OutBrick Email System](docs/EMAIL-DESIGN-SYSTEM.md) (design system, cast, interactive rules,
+roadmap) and its review page `docs/email-system/index.html` (`pnpm emails:system`) cover every email;
+[EMAIL-LIFECYCLE.md](docs/EMAIL-LIFECYCLE.md) covers delivery, Resend and analytics. Checkpoint
+9 October 2026: live and owner-approved; hamburger, host friends and puzzles verified in Apple Mail
+and iOS Mail.
+
 ## Administrative dashboard checkpoint
 
 Read [admin and editorial operations](docs/ADMIN-AND-EDITORIAL.md) for the role matrix, exact verified owner allowlist, draft/publish workflow and deployment gates. Do not grant domain-wide admin access or promote an Apple relay account without explicit instruction. Existing static pages and journal stay Git-managed; new editorial content uses the database dashboard.

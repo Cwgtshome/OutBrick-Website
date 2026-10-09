@@ -258,7 +258,14 @@ void test('retention deletes what the privacy policy says, and nothing younger',
   await onConfirmed('gone@example.com', 'en');
   await onUnsubscribed('gone@example.com');
   await pg.query(`UPDATE newsletter_subscribers SET updated_at = now() - interval '31 days' WHERE email = 'gone@example.com'`);
+  // A reader stopped after a bounce keeps status 'subscribed' but counts as removed: gone after 30 days.
+  await onConfirmed('bounced@example.com', 'en');
+  await onConfirmed('fresh-bounce@example.com', 'en');
+  await pg.query(`UPDATE newsletter_subscribers SET suppressed_at = now() - interval '31 days' WHERE email = 'bounced@example.com'`);
+  await pg.query(`UPDATE newsletter_subscribers SET suppressed_at = now() - interval '2 days' WHERE email = 'fresh-bounce@example.com'`);
   await applyRetention();
+  const bounced = await pg.query(`SELECT email FROM newsletter_subscribers WHERE email IN ('bounced@example.com', 'fresh-bounce@example.com')`);
+  assert.deepEqual(bounced.rows.map((r) => (r as { email: string }).email), ['fresh-bounce@example.com']);
   const cases = await pg.query(`SELECT id FROM support_cases WHERE id IN ($1, $2)`, [old.id, open.id]);
   assert.deepEqual(cases.rows.map((r) => (r as { id: number }).id), [open.id], 'an open case is kept however old');
   const subs = await pg.query(`SELECT 1 FROM newsletter_subscribers WHERE email = 'gone@example.com'`);

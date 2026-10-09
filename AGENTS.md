@@ -56,6 +56,23 @@ Check Git status, remote, branch and concurrent ownership. Preserve unrelated ch
   types. Preserve localized 404s, challenge routes and community shell rewrites; do not add a
   catch-all that turns missing legal documents into a successful home-page response.
 
+## Email
+
+- Follow [the email design system](docs/EMAIL-DESIGN-SYSTEM.md) for anything a reader sees, and
+  [the email lifecycle](docs/EMAIL-LIFECYCLE.md) for delivery, Resend, queues and analytics. The
+  review page is `docs/email-system/index.html`; rebuild it with `pnpm emails:system`.
+- Every reader email goes through `shell()` with a `host` friend and the header menu (on by
+  default); team-only copies pass `nav: false`. Speech bubbles use the per-language mood lines in
+  `emails/friends.ts`, never a reader's words.
+- Interactive CSS stays behind the WebKit gate; hang visibility off the checkbox; never start an
+  animation invisible or with a backwards fill (Mail pauses animations); never select `#ob-…` ids
+  in CSS (they carry a per-message suffix).
+- Before merging email work: `pnpm emails:preview`, `pnpm emails:check-interactive`, the backend
+  tests, and one real-client check of anything tappable (Apple Mail; iPhone via iPhone Mirroring)
+  using a local `.eml` or a single owner test, never a subscriber send.
+- The deploy workflow does not migrate Neon. Apply new migrations through the guarded procedure
+  before merging code that needs them.
+
 ## Verification and handoff
 
 Use Node 22.13.0 and pnpm 10.12.1, matching CI. Install with the frozen lockfile.
