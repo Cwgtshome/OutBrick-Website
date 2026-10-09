@@ -16,7 +16,8 @@ import { affiliateAcknowledgement, careersAcknowledgement, contactAcknowledgemen
 import { SITE, toText } from './core.ts';
 import { teamNotification, type TeamForm } from './team.ts';
 import { databaseAvailable } from '../netlify/community/db.ts';
-import { caseAdminUrl, createCase } from '../netlify/lifecycle/cases.ts';
+import { caseAdminUrl, cleanCaseDetails, createCase } from '../netlify/lifecycle/cases.ts';
+import { caseTrackUrl } from '../netlify/lifecycle/player-cases.ts';
 import { createApplication } from '../netlify/lifecycle/applications.ts';
 
 export type SubmissionPayload = {
@@ -85,11 +86,13 @@ async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<
   // Contact messages become support cases and applications are stored, so the team can answer
   // and decide from the dashboard. Optional: without a database the emails still go out.
   let caseRef: string | undefined;
+  let caseId: number | undefined;
   if (form !== 'newsletter' && databaseAvailable(env)) {
     try {
       if (form === 'contact') {
-        const c = await createCase({ submissionId: id, email: to, name: str(data.name, 120), locale: locale0, topic: str(data.topic, 40), message: str(data.message), device: str(data.device, 80), appVersion: str(data['app-version'], 20), iosVersion: str(data['ios-version'], 20) });
+        const c = await createCase({ submissionId: id, email: to, name: str(data.name, 120), locale: locale0, topic: str(data.topic, 40), message: str(data.message), device: str(data.device, 80), appVersion: str(data['app-version'], 20), iosVersion: str(data['ios-version'], 20), details: cleanCaseDetails(data) });
         caseRef = c.ref;
+        caseId = c.id;
         record = { url: caseAdminUrl(c.id), ref: c.ref };
       } else {
         const details: Record<string, string> = {};
@@ -121,6 +124,7 @@ async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<
         iosVersion: str(data['ios-version'], 20),
         appVersion: str(data['app-version'], 20),
         caseRef,
+        trackUrl: caseId ? caseTrackUrl(apiKey, caseId, locale) : undefined,
       });
     } else if (form === 'careers') {
       rendered = careersAcknowledgement({ locale, name, role: str(data.role, 160) });

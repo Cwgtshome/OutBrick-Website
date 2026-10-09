@@ -36,14 +36,17 @@ export async function submitForm(req: Request): Promise<Response> {
   const payload: SubmissionPayload = { id: randomUUID(), form_name: name, site_url: 'https://www.outbrick.site', created_at: new Date().toISOString(), data: { ...data, referrer: req.headers.get('referer') ?? '' } };
   await sql`INSERT INTO web_form_submissions (id, form_name, payload, delivery_state) VALUES (${payload.id}, ${name}, ${JSON.stringify(payload)}::jsonb, 'pending')`;
   // Sending is synchronous on the first try, while the durable row protects failures.
-  try { await deliverForm(payload); }
+  // A contact message answers with its case reference (never its private link), so the page can show it at once.
+  let ref: string | undefined;
+  try { ref = (await deliverForm(payload)).record?.ref; }
   catch { console.error(JSON.stringify({ event: 'outbrick-form-delivery-deferred' })); }
-  return json({ received: true }, { status: 202 });
+  return json(ref ? { received: true, ref } : { received: true }, { status: 202 });
 }
-async function deliverForm(payload: SubmissionPayload): Promise<void> {
+async function deliverForm(payload: SubmissionPayload) {
   const outcome = await handleSubmission(payload, process.env);
   const delivered = outcome.status === 'sent' && outcome.team !== 'failed';
   await sql`UPDATE web_form_submissions SET delivery_state = ${delivered ? 'sent' : 'pending'}, attempts = attempts + 1, retry_at = now() + interval '10 minutes', updated_at = now() WHERE id = ${payload.id}`;
+  return outcome;
 }
 export async function drainForms(): Promise<void> {
   if (!process.env.RESEND_API_KEY) return;

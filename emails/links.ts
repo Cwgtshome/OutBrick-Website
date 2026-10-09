@@ -94,7 +94,7 @@ export function addressTag(apiKey: string, email: string): string {
 // signature binds it to a purpose and an expiry, so a link for one thing can never be replayed
 // as another. Same key derivation as above: rotating RESEND_API_KEY invalidates them all.
 
-export type SignedPurpose = 'feedback' | 'keep' | 'prefs' | 'signout' | 'export';
+export type SignedPurpose = 'feedback' | 'keep' | 'prefs' | 'signout' | 'export' | 'case';
 
 export function signedUrl(base: string, apiKey: string, purpose: SignedPurpose, payload: Record<string, string | number>, ttlSeconds: number, nowMs = Date.now()): string {
   const p = b64(JSON.stringify(payload));

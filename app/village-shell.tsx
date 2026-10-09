@@ -15,6 +15,7 @@ import { publicPages } from '../lib/i18n/public-pages';
 import { legalPages } from '../lib/i18n/legal-pages';
 import { siteWords } from '../lib/i18n/site';
 import { chromeCopy } from '../lib/i18n/chrome';
+import { supportCopies } from '../lib/support/copy/index';
 import { helpUi } from '../lib/help/ui';
 import {
   localeNames,
@@ -398,6 +399,8 @@ export function VillageFooter({ locale = 'en', page, languages }: { locale?: Loc
             <ul>
               <li><a href={localePath(locale, '/support')}>{copy.support}</a></li>
               <li><a href={localePath(locale, '/community/help')}>{helpUi[locale].name}</a></li>
+              <li><a href={localePath(locale, '/support/known-issues')}>{supportCopies[locale].hub.issuesTitle}</a></li>
+              <li><a href={localePath(locale, '/support/request')}>{supportCopies[locale].hub.trackTitle}</a></li>
               <li><a href={localePath(locale, '/community')}>{copy.community}</a></li>
               <li><a href={localePath(locale, '/privacy')}>{copy.privacy}</a></li>
               <li><a href={localePath(locale, '/privacy-choices')}>{copy.privacyChoices}</a></li>

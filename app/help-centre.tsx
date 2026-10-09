@@ -28,7 +28,10 @@ import shotsCatalog from '../lib/help/shots.json';
 import { JsonLd } from './editorial-shell';
 import { Course, editorialNavFor, VillageFooter, VillageHeader } from './village-shell';
 import { HelpFinder } from './components/help-finder';
+import { GuideFeedback } from './components/support/guide-feedback';
+import { supportCopy } from '../lib/support/content';
 import './styles/help.css';
+import './styles/support.css';
 
 type ShotInfo = { w: number; h: number; locales: string[] };
 const shots = shotsCatalog as Record<string, ShotInfo>;
@@ -38,7 +41,7 @@ export const helpBase = '/community/help';
 const helpPublished = '2026-10-08T12:00:00+00:00';
 
 /** A meta description within search engines' length (CJK characters count double). */
-function metaText(text: string, locale: Locale): string {
+export function metaText(text: string, locale: Locale): string {
   const plain = plainText(text);
   const limit = locale === 'ja' ? 78 : 155;
   if (plain.length <= limit) return plain;
@@ -49,7 +52,7 @@ function metaText(text: string, locale: Locale): string {
 const hubPath = (locale: Locale) => localePath(locale, helpBase);
 const guidePath = (locale: Locale, slug: string) => localePath(locale, `${helpBase}/${slug}`);
 
-function stampDate(locale: Locale, day: string) {
+export function stampDate(locale: Locale, day: string) {
   return new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${day}T12:00:00Z`));
 }
 
@@ -101,6 +104,8 @@ export function resolveHref(href: string, locale: Locale): string {
     const [slug, hash] = href.slice(5).split('#');
     return (slug ? guidePath(locale, slug) : hubPath(locale)) + (hash ? `#${hash}` : '');
   }
+  // A path already in a language (/pt-BR/community) is left as written.
+  if (/^\/(?:fr|de|es|ja|pt-BR)(?:[/?#]|$)/.test(href)) return href;
   if (href.startsWith('/')) {
     // Community addresses are prefixed the same way; anchors survive.
     const [path, hash] = href.split('#');
@@ -109,7 +114,7 @@ export function resolveHref(href: string, locale: Locale): string {
   return href;
 }
 
-function renderInline(text: string, locale: Locale): ReactNode[] {
+export function renderInline(text: string, locale: Locale): ReactNode[] {
   const out: ReactNode[] = [];
   let last = 0;
   let key = 0;
@@ -245,13 +250,13 @@ function BlockView({ block, locale }: { block: Block; locale: Locale }) {
 // ---------------------------------------------------------------------------------------------
 // Shared furniture
 
-function Frame({ locale, page, children }: { locale: Locale; page: string; children: ReactNode }) {
+export function Frame({ locale, page, current, children }: { locale: Locale; page: string; current?: string; children: ReactNode }) {
   return (
     <div className="ob-site hc-site">
       <a className="skip" href="#main">{chromeCopy[locale].skip}</a>
       <VillageHeader
         links={editorialNavFor(locale)}
-        current={communityPath(locale)}
+        current={current ?? communityPath(locale)}
         home={localePath(locale, '/')}
         label={locale === 'en' ? 'Primary navigation' : chromeCopy[locale].primaryNav}
         locale={locale}
@@ -262,7 +267,7 @@ function Frame({ locale, page, children }: { locale: Locale; page: string; child
   );
 }
 
-function Crumbs({ locale, items }: { locale: Locale; items: { href?: string; label: string }[] }) {
+export function Crumbs({ locale, items }: { locale: Locale; items: { href?: string; label: string }[] }) {
   return (
     <nav className="hc-crumbs" aria-label={helpUi[locale].breadcrumb}>
       <ol>
@@ -541,6 +546,14 @@ export function HelpArticlePage({ locale, slug }: { locale: Locale; slug: string
                 </a>
               ) : null}
             </nav>
+
+            <GuideFeedback
+              slug={slug}
+              locale={locale}
+              copy={supportCopy(locale).feedback}
+              contactHref={`${localePath(locale, '/contact')}?topic=support&guide=${slug}`}
+              askHref={communityPath(locale, '/new?category=help')}
+            />
 
             {related.length ? (
               <section className="hc-related" aria-labelledby="hc-related">

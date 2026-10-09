@@ -8,6 +8,7 @@ import { graph } from '../../../lib/structured-data';
 import { siteUrl } from '../../../lib/site';
 import { HelpSearch } from '../../components/help-search';
 import { supportFaqs as faqs } from '../../../lib/support-faqs';
+import { SupportHub } from '../../support-centre';
 
 
 export const metadata: Metadata = pageMetadata({
@@ -26,6 +27,7 @@ export default function SupportPage() {
       updated="7 October 2026"
       current="/support"
     >
+      <SupportHub />
       <div data-help-root>
       <HelpSearch />
       <div className="brick headline" data-help-item>

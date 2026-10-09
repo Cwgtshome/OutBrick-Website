@@ -66,6 +66,7 @@ import type {
   ApplicationDecisionRequest,
   ApplicationKind,
   EditorialContent,
+  HelpFeedbackResponse,
   PolicyNoticeRequest,
   SupportCase,
   SupportCaseDetailResponse,
@@ -242,6 +243,8 @@ export const api = {
   ) => write<{ case: SupportCase }>('POST', `/admin/cases/${id}/status`, { status }),
   markCaseFixed: (id: number, body: { version: string; note?: string }) =>
     write<{ case: SupportCase }>('POST', `/admin/cases/${id}/fixed`, body),
+  helpFeedback: (month?: string) =>
+    get<HelpFeedbackResponse>(`/admin/help-feedback${query({ month: month ?? null })}`, true),
   applications: (kind: ApplicationKind | 'all', includeDecided = false) =>
     get<{ applications: Application[] }>(
       `/admin/applications${query({ kind, status: includeDecided ? 'all' : null })}`,

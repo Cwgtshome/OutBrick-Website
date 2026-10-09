@@ -3,6 +3,7 @@
 // Every value that came from a visitor or an issue file is escaped here (esc / escLines /
 // inlineMarkdown), never in the copy catalogue; the text/plain part gets the raw value.
 
+import { trackHtml, trackText } from './support-centre.ts';
 import { contactTopics } from '../lib/business.ts';
 import { brandFooterText } from './brand.ts';
 import { appStoreUrl } from '../lib/app-store-url.ts';
@@ -105,6 +106,8 @@ export type ContactInput = {
   appVersion?: string;
   /** The support case's reference (OB-XXXXXX), when the case was stored. */
   caseRef?: string;
+  /** The player's private link to follow the case (/support/request), when the case was stored. */
+  trackUrl?: string;
   assetBase?: string;
 };
 
@@ -141,6 +144,7 @@ export function contactAcknowledgement(input: ContactInput): Rendered {
     ),
     askDevice ? panel(ctx, para(ctx, esc(c.device)), color.goldFoot) : '',
     para(ctx, esc(c.add)),
+    input.trackUrl ? trackHtml(ctx, input.trackUrl) : '',
     rule(),
     para(ctx, esc(c.meanwhile)),
     button(ctx, sitePath(input.locale, '/support'), esc(c.cta)),
@@ -165,6 +169,8 @@ export function contactAcknowledgement(input: ContactInput): Rendered {
     askDevice && '',
     c.add,
     '',
+    input.trackUrl && trackText(input.locale, input.trackUrl),
+    input.trackUrl && '',
     `${c.meanwhile} ${sitePath(input.locale, '/support')}`,
     '',
     `— ${t.signoff}`,

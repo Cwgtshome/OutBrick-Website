@@ -43,7 +43,7 @@ const forms: Record<TeamForm, { label: string; accent: string }> = {
 
 /** Field order and labels per form. Anything else the visitor sent follows, under its own name. */
 const fieldLabels: Record<TeamForm, [string, string][]> = {
-  contact: [['name', 'Name'], ['email', 'Email'], ['topic', 'Topic'], ['device', 'Device'], ['ios-version', 'iOS version'], ['app-version', 'OutBrick version']],
+  contact: [['name', 'Name'], ['email', 'Email'], ['topic', 'Topic'], ['device', 'Device'], ['ios-version', 'iOS version'], ['app-version', 'OutBrick version'], ['level', 'Level'], ['purchase-item', 'Purchase'], ['purchase-date', 'Purchased on'], ['assistive', 'Assistive technology'], ['tried', 'Troubleshooter: problem tried'], ['guide', 'From guide'], ['source', 'Opened from']],
   careers: [['name', 'Name'], ['email', 'Email'], ['role', 'Role'], ['location', 'Location'], ['portfolio', 'Portfolio']],
   affiliate: [['name', 'Name'], ['email', 'Email'], ['handle', 'Handle'], ['channels', 'Channels'], ['audience', 'Audience'], ['country', 'Country'], ['plan', 'Plan'], ['code', 'Requested code']],
   newsletter: [['email', 'Email'], ['name', 'Name'], ['language', 'Language'], ['consent', 'Consent']],
