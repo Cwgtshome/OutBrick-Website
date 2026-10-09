@@ -114,8 +114,10 @@ try {
     const start = `${base}${localized(from, route)}${suffix}`;
     await page.goto(start, { waitUntil: 'load' });
     await languageLinks();
-    await page.locator(`footer.site details.langs a[hreflang="${to}"]`).click();
-    await page.waitForLoadState('load');
+    await Promise.all([
+      page.waitForURL(`${base}${localized(to, route)}${suffix}`, { waitUntil: 'load' }),
+      page.locator(`footer.site details.langs a[hreflang="${to}"]`).click(),
+    ]);
     assert.equal(page.url(), `${base}${localized(to, route)}${suffix}`);
     assert.equal(await page.locator('html').getAttribute('lang'), to);
     await page.goBack({ waitUntil: 'load' });
@@ -128,7 +130,7 @@ try {
     for (const kind of ['category', 'tag']) {
       const link = page.locator(`main a[href^="/${locale}/blog/${kind}/"]`).first();
       const href = await link.getAttribute('href');
-      await link.click(); await page.waitForLoadState('load');
+      await Promise.all([page.waitForURL(new URL(href, base).href, { waitUntil: 'load' }), link.click()]);
       assert.equal(new URL(page.url()).pathname, href);
       assert.equal(await page.locator('html').getAttribute('lang'), locale);
       evidence.internalNavigation.push({ locale, kind, href });
@@ -138,7 +140,7 @@ try {
       await page.goto(`${base}/${locale}/blog/designing-for-real-life-play`, { waitUntil: 'load' });
       const link = page.locator(selector).first();
       const href = await link.getAttribute('href');
-      await link.click(); await page.waitForLoadState('load');
+      await Promise.all([page.waitForURL(new URL(href, base).href, { waitUntil: 'load' }), link.click()]);
       assert.equal(new URL(page.url()).pathname, href);
       assert.equal(await page.locator('html').getAttribute('lang'), locale);
       evidence.internalNavigation.push({ locale, kind, href });
