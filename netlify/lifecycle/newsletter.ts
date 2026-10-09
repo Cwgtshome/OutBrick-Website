@@ -30,7 +30,7 @@ import { emailLocales, isEmailLocale, type EmailLocale } from '../../emails/i18n
 import { addressTag, normalizeEmail, signedUrl, unsubscribeUrl, verifySigned } from '../../emails/links.ts';
 import { preferencesAskPage, preferencesLink, preferencesPage, reengage, releaseNews, simplePage, topicKeys, welcomeBoards, welcomeFriends, type Topics } from '../../emails/lifecycle.ts';
 import { lifecycleCopy } from '../../emails/lifecycle-i18n.ts';
-import { tagLinks, toText } from '../../emails/core.ts';
+import { localiseText, tagLinks, toText } from '../../emails/core.ts';
 
 const millis = (v: unknown) => (v instanceof Date ? v.getTime() : Date.parse(toText(v)));
 import { listUnsubscribeHeaders } from '../../emails/newsletter.ts';
@@ -489,7 +489,7 @@ export async function processReleaseBroadcasts(apiKey: string, env: Env, now = n
     const r = releaseNews({ locale, version: row.version, notes: row.notes, unsubscribeUrl: '{{{RESEND_UNSUBSCRIBE_URL}}}', preferencesUrl: preferencesAskUrl(locale) });
     const result = await resend(apiKey, '/broadcasts', {
       idempotencyKey: `release-${row.version}-${locale}`,
-      body: { segment_id: row.segment_id, ...(topic ? { topic_id: topic } : {}), from: SENDERS.news.from, reply_to: SENDERS.news.replyTo, subject: r.subject, html: tagLinks(r.html, `release-${row.version}`), text: r.text, name: `OutBrick ${row.version} · ${locale}`, send: false },
+      body: { segment_id: row.segment_id, ...(topic ? { topic_id: topic } : {}), from: SENDERS.news.from, reply_to: SENDERS.news.replyTo, subject: r.subject, html: tagLinks(r.html, `release-${row.version}`), text: localiseText(r.text, locale), name: `OutBrick ${row.version} · ${locale}`, send: false },
     });
     const id = toText(result.data?.id);
     if (!result.ok || !id) {

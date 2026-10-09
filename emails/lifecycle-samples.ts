@@ -125,7 +125,7 @@ export function renderLifecycleSample(name: LifecycleTemplateName, locale: Email
       const c = weeklyPuzzleCopy[locale];
       return newsletterCampaign({
         ...base,
-        issue: { ...issue, subject: `${c.eyebrow}: ${c.question.split(/[.。]/)[0]}`, preheader: c.question, stories: issue.stories.slice(0, 1), puzzle: { host: 'sprout', board: weeklyPuzzle, copy: { ...c, cta: { label: c.cta, href: 'https://www.outbrick.site/daily' } } } },
+        issue: { ...issue, subject: `${c.eyebrow}: ${c.question.split(/[.。]/)[0]}`, preheader: c.question, stories: issue.stories.slice(0, 1), puzzle: { host: 'sprout', board: weeklyPuzzle, copy: { ...c, cta: { label: c.cta, href: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/daily` } } } },
         unsubscribeUrl: `${link}-unsubscribe`,
         preferencesUrl: `${link}-prefs`,
         address: '',

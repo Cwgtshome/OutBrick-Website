@@ -59,7 +59,7 @@ export function navBlock(ctx: Ctx): string {
   const links: [string, string][] = [
     [c.footer.playGuide, sitePath(ctx.locale, '/play')],
     [c.footer.whatsNew, sitePath(ctx.locale, '/whats-new')],
-    [c.footer.daily, 'https://www.outbrick.site/daily'],
+    [c.footer.daily, sitePath(ctx.locale, '/daily')],
     [c.footer.community, sitePath(ctx.locale, '/community')],
     [c.footer.support, sitePath(ctx.locale, '/support')],
   ];

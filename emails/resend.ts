@@ -5,7 +5,7 @@
 // Resend groups contacts in segments (it used to call them audiences). The newsletter segment
 // is "OutBrick News"; its id is the RESEND_SEGMENT_ID environment variable.
 
-import { tagLinks } from './core.ts';
+import { localiseText, tagLinks } from './core.ts';
 
 const API = 'https://api.resend.com';
 
@@ -94,6 +94,7 @@ export function sendEmail(apiKey: string, email: OutgoingEmail, idempotencyKey?:
   // The send's form tag names the campaign, so every site link says which email it came from.
   const campaign = email.tags?.find((tag) => tag.name === 'form')?.value;
   const html = campaign ? tagLinks(email.html, campaign) : email.html;
+  const text = localiseText(email.text, email.tags?.find((tag) => tag.name === 'locale')?.value);
   return resend(apiKey, '/emails', {
     idempotencyKey,
     body: {
@@ -102,7 +103,7 @@ export function sendEmail(apiKey: string, email: OutgoingEmail, idempotencyKey?:
       reply_to: email.replyTo,
       subject: email.subject,
       html,
-      text: email.text,
+      text,
       headers: email.headers,
       tags: email.tags,
     },

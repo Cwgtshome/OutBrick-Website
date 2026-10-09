@@ -477,6 +477,17 @@ export function tagLinks(html: string, campaign: string): string {
     .replace(/(href="https:\/\/apps\.apple\.com\/[^"]*[?&](?:amp;)?ct=)web-email-footer/g, (_, head: string) => `${head}${`email-${slug}`.slice(0, 40)}`);
 }
 
+/**
+ * Language typography for a text/plain part. French puts a no-break space before a colon
+ * ("Sujet : Assistance"); the templates build "label: value" lines in one shared form, so the
+ * space is added here, once, for every French email. Links ("https://…") and times ("10:30")
+ * have no space after their colon and are left alone.
+ */
+export function localiseText(text: string, locale: string | undefined): string {
+  if (locale !== 'fr') return text;
+  return text.replace(/([^\s:\u00a0\u202f]) ?:(?=\s)/g, '$1\u00a0:');
+}
+
 /** Wraps plain text at a readable width for the text/plain part. */
 export function textBlock(lines: (string | false | undefined | null)[]): string {
   return lines

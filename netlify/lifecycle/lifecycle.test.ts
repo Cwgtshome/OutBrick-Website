@@ -736,3 +736,9 @@ void test('analytics: rows older than 400 days are pruned', async () => {
   await pruneEmailEvents();
   assert.deepEqual((await eventRows()).map((r) => r.form), ['kept']);
 });
+
+void test('French plain text gets a no-break space before each colon; links, times and other languages are untouched', async () => {
+  const { localiseText } = await import('../../emails/core.ts');
+  assert.equal(localiseText('Sujet: Assistance\nX (Twitter): https://x.com/o\nÀ 10:30\nDéjà : ok', 'fr'), 'Sujet : Assistance\nX (Twitter) : https://x.com/o\nÀ 10:30\nDéjà : ok');
+  assert.equal(localiseText('Topic: Support', 'en'), 'Topic: Support');
+});
