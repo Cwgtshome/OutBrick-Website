@@ -149,6 +149,8 @@ board). Gmail and Outlook were checked by simulation only.
 
 ## Roadmap
 
+The research behind this roadmap (what leading games and apps do with email, which results are measured and which are vendor claims, and what to avoid) is in [research/world-class-email-ideas.md](research/world-class-email-ideas.md), with its source notes in `research/email-ideas-notes/`.
+
 Done, 9 October 2026 (see EMAIL-LIFECYCLE.md):
 
 - ~~**Engagement on clicks, not opens**~~: "still want these?" and the sunset read the last click

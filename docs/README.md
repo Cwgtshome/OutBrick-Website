@@ -13,6 +13,7 @@ checks, then [ARCHITECTURE.md](ARCHITECTURE.md) for source locations, configurat
 | [Help Centre](HELP-CENTRE.md) | The illustrated player guides at /community/help: content model, translations, screenshots and checks |
 | [Email design system](EMAIL-DESIGN-SYSTEM.md) | The OutBrick Email System: foundations, components, the nine host friends, interactive rules, puzzles, checks and roadmap |
 | [Email review page](email-system/index.html) | Every email live by language, width, theme and mail app; build with `pnpm emails:system` |
+| [Email research](research/world-class-email-ideas.md) | What world-class games and apps do with email, the evidence, and OutBrick's email roadmap (9 October 2026) |
 | [Email lifecycle](EMAIL-LIFECYCLE.md) | What each email is and when it is sent, queues, Resend, webhooks, consent and analytics |
 | [Support Centre](SUPPORT-CENTRE.md) | Troubleshooter, known issues, a player's request page, "Was this helpful?", the contact form's help, and the recommended next steps |
 | [Journal brief](JOURNAL-BRIEF.md) | Editorial direction |
