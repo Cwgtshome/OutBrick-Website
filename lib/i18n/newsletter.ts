@@ -1,4 +1,10 @@
 import type { Locale } from './locales';
+/**
+ * The version of the sign-up wording below (heading, intro, consent line) a reader agreed to.
+ * The form posts it and the confirmation stores it (newsletter_subscribers.consent_text_version):
+ * change the date whenever that wording changes in any language.
+ */
+export const NEWSLETTER_CONSENT_VERSION = '2026-10-09';
 const en = { heading: 'Get a letter when there’s a new village', intro: 'New villages, big updates and the odd note from the bench. About once a month, never more than that.', done: 'Check your inbox to confirm.', thanks: 'Thank you. We’ve sent you an email with a button in it: press it within 7 days and you’re on the list. Until then, nothing is added. The letters come about once a month at most, and every one has a one-click unsubscribe link.', privacyNote: 'How we look after your email', label: 'Newsletter sign-up', empty: 'Leave this empty:', email: 'Email address', language: 'Language', consent: 'Email me about OutBrick updates. Unsubscribe any time.', privacy: 'Privacy policy', sending: 'Signing you up…', submit: 'Sign me up' };
 export const newsletterWords: Record<Locale, typeof en> = {
  en,

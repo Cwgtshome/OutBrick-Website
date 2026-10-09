@@ -6,6 +6,7 @@
 // name, a thread title, a post, a moderator's reason) is escaped here with esc()/escLines(); the
 // text/plain part gets the raw value. Links are absolute and built by the caller.
 
+import type { Host } from './friends.ts';
 import { SITE, bricks, button, color, esc, escLines, eyebrow, field, fonts, footerBlock, heading, link, panel, para, rule, shell, textBlock, type Ctx } from './core.ts';
 import { emailCopy, type EmailLocale } from './i18n.ts';
 import { brandFooterText } from './brand.ts';
@@ -117,7 +118,7 @@ export function communitySignIn(input: SignInInput): Rendered {
     para(ctx, esc(s.ignore)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: s.subject, preheader: s.preheader, logoAlt: emailCopy[input.locale].logoAlt, body, footer: footer(ctx, s.why, links) });
+  const html = shell({ ctx, host: { friend: 'moss', pose: 'idle', mood: 'key' }, title: s.subject, preheader: s.preheader, logoAlt: emailCopy[input.locale].logoAlt, body, footer: footer(ctx, s.why, links) });
   const text = textBlock([s.heading, '', s.intro, '', `${s.cta}:`, input.url, '', s.expiry.replace(/[:：]$/, '.'), '', s.ignore, '', `— ${emailCopy[input.locale].signoff}`, '', ...footerText(input.locale, s.why, links)]);
   return { subject: s.subject, html, text };
 }
@@ -144,7 +145,7 @@ export function communityConfirmEmail(input: ConfirmEmailInput): Rendered {
     para(ctx, esc(s.ignore)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: s.subject, preheader: s.preheader, logoAlt: emailCopy[input.locale].logoAlt, body, footer: footer(ctx, s.why, links) });
+  const html = shell({ ctx, host: { friend: 'moss', pose: 'idle', mood: 'key' }, title: s.subject, preheader: s.preheader, logoAlt: emailCopy[input.locale].logoAlt, body, footer: footer(ctx, s.why, links) });
   const text = textBlock([s.heading, '', intro, '', `${s.cta}:`, input.url, '', s.expiry.replace(/[:：]$/, '.'), '', s.ignore, '', `— ${emailCopy[input.locale].signoff}`, '', ...footerText(input.locale, s.why, links)]);
   return { subject: s.subject, html, text };
 }
@@ -176,7 +177,7 @@ export function communityWelcome(input: CommunityWelcomeInput): Rendered {
     para(ctx, `${esc(w.guidelines)} ${link(guidelines, esc(w.guidelinesLink))}`, { muted: true, size: 16 }),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: w.subject, preheader: w.preheader, logoAlt: emailCopy[input.locale].logoAlt, body, footer: footer(ctx, w.why, links) });
+  const html = shell({ ctx, host: { friend: 'moss', pose: 'cheer', mood: 'welcome' }, title: w.subject, preheader: w.preheader, logoAlt: emailCopy[input.locale].logoAlt, body, footer: footer(ctx, w.why, links) });
   const text = textBlock([
     w.heading(name),
     '',
@@ -300,6 +301,19 @@ export type NotificationEmailInput = FooterLinks & {
   replyByEmail?: boolean;
 };
 
+/**
+ * Who opens a community email: Poppy the storyteller for replies and mentions, Sprout cheering a
+ * solved thread, Zippy for a badge, Bloo for a release, Vio for moderation, Moss for the rest.
+ */
+function notificationHost(kind: string): Host {
+  if (kind === 'reply' || kind === 'mention' || kind === 'watched') return { friend: 'poppy', pose: 'idle', mood: 'reply' };
+  if (kind === 'solved') return { friend: 'sprout', pose: 'cheer', mood: 'yay' };
+  if (kind === 'badge') return { friend: 'zippy', pose: 'cheer', mood: 'badge' };
+  if (kind === 'release') return { friend: 'bloo', pose: 'cheer', mood: 'release' };
+  if (kind === 'moderation') return { friend: 'vio', pose: 'think', mood: 'notice' };
+  return { friend: 'moss', pose: 'idle', mood: 'reply' };
+}
+
 export function communityNotification(input: NotificationEmailInput): Rendered {
   const { locale, item } = input;
   const ctx = ctxOf(locale, input.assetBase);
@@ -326,7 +340,7 @@ export function communityNotification(input: NotificationEmailInput): Rendered {
     item.kind === 'moderation' ? para(ctx, esc(c.kinds.moderation.appeal)) : '',
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: subject, preheader: excerpt ? clip(excerpt, 140) : parts.intro, logoAlt: emailCopy[locale].logoAlt, body, footer: footer(ctx, why, input) });
+  const html = shell({ ctx, host: notificationHost(item.kind), title: subject, preheader: excerpt ? clip(excerpt, 140) : parts.intro, logoAlt: emailCopy[locale].logoAlt, body, footer: footer(ctx, why, input) });
   const text = textBlock([
     headingText,
     '',
@@ -392,7 +406,7 @@ export function communityDigest(input: DigestEmailInput): Rendered {
     signoff(ctx),
   ].join('\n');
   const subject = d.subject(count);
-  const html = shell({ ctx, title: subject, preheader: d.preheader, logoAlt: emailCopy[locale].logoAlt, body, footer: footer(ctx, c.footer.why, input) });
+  const html = shell({ ctx, host: { friend: 'moss', pose: 'idle', mood: 'digest' }, title: subject, preheader: d.preheader, logoAlt: emailCopy[locale].logoAlt, body, footer: footer(ctx, c.footer.why, input) });
   const text = textBlock([
     d.heading(count),
     '',
@@ -446,6 +460,7 @@ export function communityPage(input: PageInput): string {
   ].join('\n');
   const html = shell({
     ctx,
+    host: { friend: 'moss', pose: 'idle' },
     title: input.title,
     preheader: input.body,
     logoAlt: t.logoAlt,

@@ -66,6 +66,8 @@ import type {
   ApplicationDecisionRequest,
   ApplicationKind,
   EditorialContent,
+  EmailReport,
+  EmailReportWindow,
   PolicyNoticeRequest,
   SupportCase,
   SupportCaseDetailResponse,
@@ -255,6 +257,7 @@ export const api = {
     ),
   policyNotice: (body: PolicyNoticeRequest) =>
     write<{ queued: number }>('POST', '/admin/notices/policy', body),
+  emailReport: (days: EmailReportWindow) => get<EmailReport>(`/admin/email?days=${days}`, true),
   content: (locale: string) =>
     get<{ content: EditorialContent[] }>(`/content?locale=${locale}`),
   contentItem: (locale: string, kind: string, slug: string) =>

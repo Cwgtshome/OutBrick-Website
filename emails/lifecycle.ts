@@ -42,6 +42,7 @@ import { emailCopy, greetingName, type EmailLocale } from './i18n.ts';
 import { lifecycleCopy } from './lifecycle-i18n.ts';
 import { newsFooter, newsFooterText, sitePath, store, supportFooter, supportFooterText, type Rendered } from './templates.ts';
 import { communityUrl, footer as communityFooter, footerText as communityFooterText, signoff } from './community.ts';
+import { FRIENDS, FRIEND_IDS, firstPuzzleBlock, firstPuzzleText, friendSrc, studs, type Mood } from './friends.ts';
 
 const ctxOf = (locale: EmailLocale, assetBase = SITE): Ctx => ({ locale, assetBase });
 const signoffText = (locale: EmailLocale) => `— ${emailCopy[locale].signoff}`;
@@ -110,7 +111,7 @@ export function supportReply(input: SupportReplyInput): Rendered {
     ghostButton(ctx, sitePath(input.locale, '/support'), esc(c.cta)),
     para(ctx, `— ${esc(staff)} · ${esc(t.signoff)}`, { margin: '4px 0 20px' }),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject(input.ref), preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'support-reply') });
+  const html = shell({ ctx, host: { friend: 'sprout', pose: 'cheer', mood: 'reply' }, title: c.subject(input.ref), preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'support-reply') });
   const text = textBlock([
     lifecycleCopy[input.locale].caseRef(input.ref),
     '',
@@ -148,7 +149,7 @@ export function supportFixed(input: SupportFixedInput): Rendered {
     para(ctx, esc(c.still), { muted: true, size: 16 }),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject(input.version), preheader: c.preheader(input.version), logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'support-fixed') });
+  const html = shell({ ctx, host: { friend: 'bricko', pose: 'cheer', mood: 'fixed' }, title: c.subject(input.version), preheader: c.preheader(input.version), logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'support-fixed') });
   const text = textBlock([
     lifecycleCopy[input.locale].caseRef(input.ref),
     '',
@@ -174,8 +175,8 @@ export function supportFixed(input: SupportFixedInput): Rendered {
 export type FeedbackLinks = { solved: string; notSolved: string; rate: [string, string, string] };
 export type SupportFeedbackInput = { locale: EmailLocale; name: string; ref: string; links: FeedbackLinks; assetBase?: string };
 
-/** Bloo's approved expressions (BrickoutCore PreparedMascots), never a sad face: "not yet" is Bloo thinking. */
-const bloo = (ctx: Ctx, mood: 'cheer' | 'idle' | 'think') => `${ctx.assetBase}/assets/email/feedback-bloo-${mood}.png`;
+/** Vio, the critic, hosts "did we solve it?": approved expressions only, never a sad face ("not yet" is Vio thinking). */
+const bloo = (ctx: Ctx, mood: 'cheer' | 'idle' | 'think') => friendSrc(ctx, 'vio', mood);
 const ratingMoods = ['think', 'idle', 'cheer'] as const;
 const ratingTones = ['#7b5cf0', '#3b8bf0', '#3fc544'];
 
@@ -208,7 +209,7 @@ export function supportFeedback(input: SupportFeedbackInput): Rendered {
     para(ctx, esc(c.private), { muted: true, size: 15 }),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'support-feedback') });
+  const html = shell({ ctx, host: { friend: 'vio', pose: 'think', mood: 'rate' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'support-feedback') });
   const text = textBlock([
     lifecycleCopy[input.locale].caseRef(input.ref),
     '',
@@ -245,7 +246,7 @@ const formButton = (ctx: Ctx, label: string) =>
 /** A web page in the email shell: these answer the signed links. */
 export function lifecyclePage(locale: EmailLocale, title: string, bodyHtml: string): string {
   const ctx = ctxOf(locale);
-  const html = shell({ ctx, title, preheader: title, logoAlt: emailCopy[locale].logoAlt, body: bodyHtml, footer: pageFooter(ctx), head: pageHead });
+  const html = shell({ ctx, host: { friend: 'bloo', pose: 'idle' }, title, preheader: title, logoAlt: emailCopy[locale].logoAlt, body: bodyHtml, footer: pageFooter(ctx), head: pageHead });
   return html.replace('<div role="article" aria-roledescription="email"', '<div role="main"');
 }
 
@@ -309,7 +310,7 @@ export function affiliateApproved(input: AffiliateApprovedInput): Rendered {
     ghostButton(ctx, `${SITE}/press-kit`, esc(c.pressKit)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'affiliate-approved') });
+  const html = shell({ ctx, host: { friend: 'bricko', pose: 'cheer', mood: 'yay' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'affiliate-approved') });
   const text = textBlock([
     c.heading(greetingName(input.locale, input.name)),
     '',
@@ -345,7 +346,7 @@ export function affiliateDeclined(input: DecisionInput): Rendered {
     ghostButton(ctx, sitePath(input.locale, '/affiliates'), esc(c.cta)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'affiliate-declined') });
+  const html = shell({ ctx, host: { friend: 'bricko', pose: 'idle', mood: 'thanks' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'affiliate-declined') });
   const text = textBlock([
     c.heading(greetingName(input.locale, input.name)),
     '',
@@ -375,7 +376,7 @@ export function careersInReview(input: CareersDecisionInput): Rendered {
     ghostButton(ctx, `${SITE}/careers`, esc(c.cta)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject(input.role), preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'careers-review') });
+  const html = shell({ ctx, host: { friend: 'bricko', pose: 'think', mood: 'got' }, title: c.subject(input.role), preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'careers-review') });
   const text = textBlock([
     c.heading(greetingName(input.locale, input.name)),
     '',
@@ -402,7 +403,7 @@ export function careersNextStep(input: CareersDecisionInput): Rendered {
     para(ctx, esc(c.reply)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject(input.role), preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'careers-next') });
+  const html = shell({ ctx, host: { friend: 'bricko', pose: 'cheer', mood: 'yay' }, title: c.subject(input.role), preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'careers-next') });
   const text = textBlock([
     c.heading(greetingName(input.locale, input.name)),
     '',
@@ -430,7 +431,7 @@ export function careersDeclined(input: CareersDecisionInput): Rendered {
     ghostButton(ctx, `${SITE}/careers`, esc(c.cta)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject(input.role), preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'careers-declined') });
+  const html = shell({ ctx, host: { friend: 'bricko', pose: 'idle', mood: 'thanks' }, title: c.subject(input.role), preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'careers-declined') });
   const text = textBlock([
     c.heading(greetingName(input.locale, input.name)),
     '',
@@ -462,10 +463,11 @@ export function welcomeBoards(input: { locale: EmailLocale } & NewsLinks): Rende
     para(ctx, esc(c.intro)),
     bricks(ctx, c.steps.map((s) => ({ title: esc(s.title), body: esc(s.body) }))),
     reveal(ctx, 'ob-tip', `💡 ${esc(c.tipButton)}`, esc(c.tipLabel), para(ctx, esc(c.tip), { size: 16 })),
+    firstPuzzleBlock(ctx, `${SITE}/daily`),
     button(ctx, sitePath(input.locale, '/play'), esc(c.cta)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, nav: true, footer: newsFooter(ctx, input.unsubscribeUrl, c.why, undefined, input.preferencesUrl) });
+  const html = shell({ ctx, host: { friend: 'peach', pose: 'think', mood: 'tip' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, nav: true, footer: newsFooter(ctx, input.unsubscribeUrl, c.why, undefined, input.preferencesUrl) });
   const text = textBlock([
     c.heading,
     '',
@@ -474,6 +476,8 @@ export function welcomeBoards(input: { locale: EmailLocale } & NewsLinks): Rende
     ...c.steps.map((s) => `* ${s.title} ${s.body}`),
     '',
     `${c.tipLabel}: ${c.tip}`,
+    '',
+    ...firstPuzzleText(input.locale, `${SITE}/daily`),
     '',
     `${c.cta}: ${sitePath(input.locale, '/play')}`,
     '',
@@ -484,27 +488,20 @@ export function welcomeBoards(input: { locale: EmailLocale } & NewsLinks): Rende
   return { subject: c.subject, html, text };
 }
 
-const friends: [string, string][] = [
-  ['bloo', 'Bloo'],
-  ['peach', 'Peach'],
-  ['sprout', 'Sprout'],
-  ['bricko', 'Bricko'],
-  ['zippy', 'Zippy'],
-  ['vio', 'Vio'],
-  ['moss', 'Moss'],
-  ['flurry', 'Flurry'],
-  ['poppy', 'Poppy'],
-];
-
-/** The nine friends as a 3 × 3 grid of tappable portraits that wraps to fit any width. */
+/**
+ * The nine friends as a 3 × 3 grid that wraps to fit any width: each one cheering on a plinth in
+ * their own colour, linking to their page. The 6 KB email art keeps the letter light (the site's
+ * full renders came to 825 KB for the nine).
+ */
 function friendGrid(ctx: Ctx): string {
   const f = fonts(ctx.locale);
-  const cells = friends
-    .map(
-      ([slug, name]) => `<!--[if mso]><td width="33%" align="center" valign="top" style="padding:0 0 12px;"><![endif]--><a class="ob-pick" href="${esc(`${SITE}/mascots/${slug}`)}" style="display:inline-block;vertical-align:top;width:31%;min-width:88px;max-width:150px;margin:0 1% 12px;text-align:center;text-decoration:none;transition:transform .15s ease;">
-<img src="${esc(`${ctx.assetBase}/assets/friends/${slug}.png`)}" width="120" height="120" alt="${esc(name)}" style="display:block;width:100%;max-width:120px;height:auto;margin:0 auto;border:0;border-radius:18px;background:${color.cream};">
-<span class="ob-text" style="display:block;padding-top:4px;font-family:${f.display};font-size:16px;line-height:1.3;font-weight:600;color:${color.onPaper};">${esc(name)}</span></a><!--[if mso]></td><![endif]-->`,
-    )
+  const cells = FRIEND_IDS.map((id) => {
+    const fr = FRIENDS[id];
+    return `<!--[if mso]><td width="33%" align="center" valign="top" style="padding:0 0 12px;"><![endif]--><a class="ob-pick" href="${esc(`${SITE}/mascots/${id}`)}" style="display:inline-block;vertical-align:top;width:31%;min-width:88px;max-width:150px;margin:0 1% 14px;text-align:center;text-decoration:none;transition:transform .15s ease;">
+<img src="${esc(friendSrc(ctx, id, 'cheer'))}" width="96" height="96" alt="${esc(fr.name)}" style="display:block;width:96px;max-width:100%;height:auto;margin:0 auto;border:0;">
+<span style="display:block;height:5px;font-size:0;line-height:0;text-align:center;">${studs(2, fr.colour, 12, 10)}</span>
+<span style="display:block;margin:0 6px;padding:5px 4px 3px;border-radius:9px;background:${fr.colour};border-bottom:4px solid ${fr.foot};font-family:${f.display};font-size:15px;line-height:1.3;font-weight:600;color:${fr.ink};">${esc(fr.name)}</span></a><!--[if mso]></td><![endif]-->`;
+  })
     .reduce((rows: string[], cell, i) => {
       if (i % 3 === 0) rows.push('');
       rows[rows.length - 1] += cell;
@@ -538,13 +535,13 @@ export function welcomeFriends(input: { locale: EmailLocale } & NewsLinks): Rend
     input.preferencesUrl ? para(ctx, link(input.preferencesUrl, `${esc(c.preferences)} →`), { size: 16 }) : '',
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, nav: true, footer: newsFooter(ctx, input.unsubscribeUrl, c.why, undefined, input.preferencesUrl) });
+  const html = shell({ ctx, host: { friend: 'poppy', pose: 'cheer', mood: 'friends' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, nav: true, footer: newsFooter(ctx, input.unsubscribeUrl, c.why, undefined, input.preferencesUrl) });
   const text = textBlock([
     c.heading,
     '',
     c.intro,
     '',
-    ...friends.map(([slug, name]) => `* ${name}: ${SITE}/mascots/${slug}`),
+    ...FRIEND_IDS.map((id) => `* ${FRIENDS[id].name}: ${SITE}/mascots/${id}`),
     '',
     `## ${c.dailyTitle}`,
     c.dailyBody,
@@ -591,7 +588,7 @@ export function releaseNews(input: ReleaseInput): Rendered {
     signoff(ctx),
   ].join('\n');
   const why = emailCopy[input.locale].news.why;
-  const html = shell({ ctx, title: c.subject(input.version), preheader: c.preheader(input.version), logoAlt: t.logoAlt, body, nav: true, footer: newsFooter(ctx, input.unsubscribeUrl, why, undefined, input.preferencesUrl) });
+  const html = shell({ ctx, host: { friend: 'bloo', pose: 'cheer', mood: 'release' }, title: c.subject(input.version), preheader: c.preheader(input.version), logoAlt: t.logoAlt, body, nav: true, footer: newsFooter(ctx, input.unsubscribeUrl, why, undefined, input.preferencesUrl) });
   const text = textBlock([
     c.heading(input.version),
     '',
@@ -618,7 +615,6 @@ export function reengage(input: ReengageInput): Rendered {
   const t = emailCopy[input.locale];
   const body = [
     eyebrow(ctx, esc(c.eyebrow)),
-    `<p style="margin:0 0 6px;text-align:center;"><img src="${esc(`${ctx.assetBase}/assets/friends/bloo.png`)}" width="120" height="120" alt="Bloo" style="display:inline-block;width:120px;height:120px;border:0;"></p>`,
     heading(ctx, esc(c.heading)),
     para(ctx, esc(c.intro)),
     `<div style="text-align:center;">${button(ctx, input.keepUrl, esc(c.keep), 300).replace('style="margin:8px 0 22px;"', 'align="center" style="margin:8px auto 14px;"')}</div>`,
@@ -626,7 +622,7 @@ export function reengage(input: ReengageInput): Rendered {
     para(ctx, esc(c.after), { muted: true, size: 15 }),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: newsFooter(ctx, input.unsubscribeUrl, c.why, undefined, input.preferencesUrl) });
+  const html = shell({ ctx, host: { friend: 'zippy', pose: 'think', mood: 'miss' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: newsFooter(ctx, input.unsubscribeUrl, c.why, undefined, input.preferencesUrl) });
   const text = textBlock([
     c.heading,
     '',
@@ -658,7 +654,7 @@ export function preferencesLink(input: { locale: EmailLocale; url: string; asset
     para(ctx, esc(c.linkIgnore), { muted: true, size: 15 }),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.linkSubject, preheader: c.linkPreheader, logoAlt: t.logoAlt, body, footer: newsFooter(ctx, null, c.linkWhy) });
+  const html = shell({ ctx, host: { friend: 'zippy', pose: 'idle', mood: 'prefs' }, title: c.linkSubject, preheader: c.linkPreheader, logoAlt: t.logoAlt, body, footer: newsFooter(ctx, null, c.linkWhy) });
   const text = textBlock([c.linkHeading, '', c.linkIntro, '', `${c.linkCta}:`, input.url, '', c.linkIgnore, '', signoffText(input.locale), '', ...newsFooterText(input.locale, null, c.linkWhy)]);
   return { subject: c.linkSubject, html, text };
 }
@@ -731,12 +727,13 @@ ${formButton(ctx, c.askSend)}
 
 export type AccountLinks = { manageUrl: string; assetBase?: string };
 
-function securityShell(ctx: Ctx, title: string, preheader: string, body: string, why: string, manageUrl: string): string {
-  return shell({ ctx, title, preheader, logoAlt: emailCopy[ctx.locale].logoAlt, body, footer: communityFooter(ctx, why, { manageUrl }) });
+function securityShell(ctx: Ctx, title: string, preheader: string, body: string, why: string, manageUrl: string, mood: Mood = 'security'): string {
+  // Peach, the careful planner, keeps watch over the account.
+  return shell({ ctx, host: { friend: 'peach', pose: mood === 'security' ? 'think' : 'idle', mood }, title, preheader, logoAlt: emailCopy[ctx.locale].logoAlt, body, footer: communityFooter(ctx, why, { manageUrl }) });
 }
 
-const shield = (_ctx: Ctx) =>
-  `<p style="margin:0 0 12px;"><span style="display:inline-block;width:48px;height:48px;border-radius:14px;background:${color.ink};border-bottom:4px solid #120c3a;text-align:center;font-size:24px;line-height:48px;">🔐</span></p>`;
+/** Peach opens every account email now, so the old padlock tile is gone. */
+const shield = (_ctx: Ctx) => '';
 
 export function passkeyAdded(input: { locale: EmailLocale; nickname: string; at: Date | string } & AccountLinks): Rendered {
   const ctx = ctxOf(input.locale, input.assetBase);
@@ -798,7 +795,7 @@ export function accountDeleted(input: { locale: EmailLocale; assetBase?: string 
     para(ctx, `<strong>${esc(c.mistake)}</strong>`),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'account-deleted') });
+  const html = shell({ ctx, host: { friend: 'peach', pose: 'idle', mood: 'bye' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'account-deleted') });
   const text = textBlock([c.heading, '', c.intro, '', ...c.gone.map((s) => `* ${s.title} ${s.body}`), '', c.stays, '', c.newsletter, '', c.mistake, '', signoffText(input.locale), '', ...supportFooterText(input.locale, c.why, 'account-deleted')]);
   return { subject: c.subject, html, text };
 }
@@ -818,7 +815,7 @@ export function dataExport(input: { locale: EmailLocale; downloadUrl: string } &
     para(ctx, esc(c.notYou), { size: 16 }),
     signoff(ctx),
   ].join('\n');
-  const html = securityShell(ctx, c.subject, c.preheader, body, c.why, input.manageUrl);
+  const html = securityShell(ctx, c.subject, c.preheader, body, c.why, input.manageUrl, 'notice');
   const text = textBlock([c.heading, '', c.intro, '', `${c.cta}: ${input.downloadUrl}`, c.expiry(EXPORT_LINK_HOURS), '', c.notYou, '', signoffText(input.locale), '', ...communityFooterText(input.locale, c.why, { manageUrl: input.manageUrl })]);
   return { subject: c.subject, html, text };
 }
@@ -858,7 +855,7 @@ export function policyNotice(input: PolicyInput): Rendered {
     input.audience === 'member' && input.manageUrl ? communityFooter(ctx, why, { manageUrl: input.manageUrl }) : newsFooter(ctx, input.unsubscribeUrl ?? null, why);
   const footerTxt =
     input.audience === 'member' && input.manageUrl ? communityFooterText(input.locale, why, { manageUrl: input.manageUrl }) : newsFooterText(input.locale, input.unsubscribeUrl ?? null, why);
-  const html = shell({ ctx, title: c.subject(name), preheader: c.preheader(date), logoAlt: t.logoAlt, body, footer: footerHtml });
+  const html = shell({ ctx, host: { friend: 'peach', pose: 'idle', mood: 'notice' }, title: c.subject(name), preheader: c.preheader(date), logoAlt: t.logoAlt, body, footer: footerHtml });
   const text = textBlock([c.heading(name), '', c.intro(date), '', `${c.changesTitle}:`, ...changes.map((x) => `* ${plainMarkdown(x)}`), '', `${c.cta}: ${url}`, '', c.noAction, '', signoffText(input.locale), '', ...footerTxt]);
   return { subject: c.subject(name), html, text };
 }
@@ -884,7 +881,7 @@ export function teamCaseUpdate(input: { ref: string; caseUrl: string; solved?: b
     ),
     button(ctx, input.caseUrl, 'Open the case'),
   ].join('\n');
-  const html = shell({ ctx, title: subject, preheader: input.comment?.slice(0, 120) || subject, logoAlt: 'OutBrick', body, footer: `<p style="margin:0;font-family:${fonts('en').text};font-size:15px;color:${color.lilac};">Sent to the OutBrick team by the support feedback flow.</p>` });
+  const html = shell({ ctx, nav: false, title: subject, preheader: input.comment?.slice(0, 120) || subject, logoAlt: 'OutBrick', body, footer: `<p style="margin:0;font-family:${fonts('en').text};font-size:15px;color:${color.lilac};">Sent to the OutBrick team by the support feedback flow.</p>` });
   const text = textBlock([subject, '', input.solved !== undefined ? `Solved: ${input.solved ? 'yes' : 'no'}` : null, typeof input.rating === 'number' ? `Rating: ${input.rating}/5` : null, input.comment ? `Comment: ${input.comment}` : null, '', `Open the case: ${input.caseUrl}`]);
   return { subject, html, text };
 }

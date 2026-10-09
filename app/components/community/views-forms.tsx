@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useId, useMemo, useRef, useState, type SubmitEvent, type ReactNode } from 'react';
+import { track } from '../../../lib/track';
 import { dayDate } from '../../../lib/community/format';
 import type { BadgeKey, AssistiveTech, CommunityLocale, ModQueueItem, ModReport, Provider, SelfMember } from '../../../lib/community/contract';
 import { bugLevelRange, communityLocales, threadPath } from '../../../lib/community/contract';
@@ -530,6 +531,9 @@ export function WelcomeView({ route }: { route: Extract<Route, { name: 'welcome'
     setBusy(true);
     try {
       await api.updateMe({ displayName: value });
+      // Choosing the first display name is the moment a community account is new: GA4's
+      // sign_up, with the sign-in method only (lib/track.ts, sent only after analytics consent).
+      track('sign_up', { method: session.member?.providers?.[0] ?? 'email' });
       await refreshSession();
       announce(copy.welcome.saved);
       navigate(route.returnTo, { replace: true });

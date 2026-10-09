@@ -117,3 +117,32 @@ export type PolicyNoticeRequest = {
   changes: Partial<Record<CommunityLocale, string[]>> & { en: string[] };
   audiences: ('member' | 'news')[];
 };
+
+// Email analytics (netlify/lifecycle/analytics.ts): GET /admin/email?days=7|30|90, admins only.
+// Aggregates only; no address or identifier of a reader ever reaches the browser.
+export type EmailReportWindow = 7 | 30 | 90;
+export type EmailReportRates = { sent: number; delivered: number; uniqueOpens: number; uniqueClicks: number };
+export type EmailReport = {
+  days: EmailReportWindow;
+  since: string;
+  generatedAt: string;
+  /** Readers at each newsletter step within the window (unique where the data allows). */
+  funnel: { signups: number; confirmed: number; welcome2: number; welcome3: number; stillSubscribed: number };
+  list: { size: number; joined: number; left: number; net: number };
+  templates: (EmailReportRates & { template: string; bounced: number; complained: number; unsubscribeClicks: number })[];
+  locales: (EmailReportRates & { locale: string; signups: number; confirmed: number })[];
+  links: { path: string; campaign: string; clicks: number; uniqueClickers: number }[];
+  releases: {
+    version: string;
+    locale: string;
+    state: 'pending' | 'draft' | 'sent' | 'cancelled';
+    createdAt: string;
+    sendAfter: string | null;
+    sentAt: string | null;
+    delivered: number;
+    uniqueOpens: number;
+    uniqueClicks: number;
+    bounced: number;
+    complained: number;
+  }[];
+};

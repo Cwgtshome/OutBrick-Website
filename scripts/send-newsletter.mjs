@@ -31,7 +31,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { newsletterCampaign, emailLocales, isEmailLocale, PLACEHOLDER_ADDRESS } = await import('../emails/index.ts');
 const { SENDERS, resend, sendEmail } = await import('../emails/resend.ts');
-const { toText } = await import('../emails/core.ts');
+const { toText, tagLinks } = await import('../emails/core.ts');
 const { unsubscribeUrl, normalizeEmail } = await import('../emails/links.ts');
 const { listUnsubscribeHeaders } = await import('../emails/newsletter.ts');
 
@@ -142,7 +142,7 @@ for (const locale of locales) {
       from: SENDERS.news.from,
       reply_to: SENDERS.news.replyTo,
       subject: email.subject,
-      html: email.html,
+      html: tagLinks(email.html, `newsletter-${issue.id}`),
       text: email.text,
       name: `${issue.name ?? issue.id} [${locale}]`,
     },

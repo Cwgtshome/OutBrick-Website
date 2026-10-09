@@ -17,6 +17,7 @@ import { localeNames } from '../../../lib/i18n/locales';
 import { renderMarkdown } from '../../../netlify/community/markdown';
 import { api, ApiFailure } from './api';
 import { View, Pending, ErrorNotice, Field, Loading, Time, useApp, useLoad } from './core';
+import { EmailAnalytics } from './views-admin-email';
 function AdminError({ error }: { error: ApiFailure }) {
   const { locale } = useApp();
   return error.code === 'conflict' ? (
@@ -128,6 +129,7 @@ function Dashboard() {
       <SupportCases initialCase={link.caseId} />
       <Applications initialKind={link.applicationKind} initialId={link.applicationId} />
       {isAdmin ? <PolicyNotice /> : null}
+      {isAdmin ? <EmailAnalytics /> : null}
       {isAdmin ? (
         <section className="cm-section" aria-labelledby="cm-admin-members">
           <h2 id="cm-admin-members">{w.members}</h2>

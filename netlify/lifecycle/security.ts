@@ -198,7 +198,7 @@ export const sendPolicyNotice: Route['run'] = async (req) => {
     for (const m of members) items.push({ kind: 'policy', to: String(m.email), locale: String(m.locale), payload: { policy, effective, changes, audience: 'member' } satisfies PolicyPayload, dedupeKey: `policy-${policy}-${effective}-m-${String(m.email).toLowerCase()}` });
   }
   if (audiences.includes('news')) {
-    const readers = await sql`SELECT email, locale FROM newsletter_subscribers WHERE status = 'subscribed'`;
+    const readers = await sql`SELECT email, locale FROM newsletter_subscribers WHERE status = 'subscribed' AND suppressed_at IS NULL`;
     for (const r of readers) items.push({ kind: 'policy', to: String(r.email), locale: String(r.locale), payload: { policy, effective, changes, audience: 'news' } satisfies PolicyPayload, dedupeKey: `policy-${policy}-${effective}-n-${String(r.email).toLowerCase()}` });
   }
   // Someone who is both a member and a reader hears once, as a member.
@@ -219,7 +219,7 @@ export async function preparePolicy(row: OutboxRow, apiKey: string): Promise<Pre
     const r = policyNotice({ locale, policy: p.policy, effective: p.effective, changes, audience: 'member', manageUrl: manageUrl(locale) });
     return { email: { ...SENDERS.community, to: row.to_email, subject: r.subject, html: r.html, text: r.text, tags: [{ name: 'form', value: 'notice-policy' }, { name: 'locale', value: locale }] } };
   }
-  const [s] = await sql`SELECT 1 FROM newsletter_subscribers WHERE email = ${row.to_email} AND status = 'subscribed'`;
+  const [s] = await sql`SELECT 1 FROM newsletter_subscribers WHERE email = ${row.to_email} AND status = 'subscribed' AND suppressed_at IS NULL`;
   if (!s) return null;
   const unsub = unsubscribeUrl(SITE, apiKey, row.to_email, locale);
   const r = policyNotice({ locale, policy: p.policy, effective: p.effective, changes, audience: 'news', unsubscribeUrl: unsub });

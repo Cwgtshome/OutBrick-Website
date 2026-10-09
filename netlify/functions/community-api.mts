@@ -47,6 +47,7 @@ import { dashboard, watchAll, saveContent, publishContent, publicContent } from 
 import { caseRoutes } from '../lifecycle/cases.ts';
 import { applicationRoutes } from '../lifecycle/applications.ts';
 import { securityRoutes } from '../lifecycle/security.ts';
+import { analyticsRoutes } from '../lifecycle/analytics.ts';
 
 const base = '/api/community';
 
@@ -71,6 +72,8 @@ const routes: Route[] = [
   ...caseRoutes(base),
   ...applicationRoutes(base),
   ...securityRoutes(base),
+  // Email analytics (9 October 2026), admins only.
+  ...analyticsRoutes(base),
   { method: 'GET', pattern: `${base}/admin`, run: dashboard },
   { method: 'POST', pattern: `${base}/admin/watch`, run: watchAll },
   { method: 'POST', pattern: `${base}/admin/content`, run: saveContent },

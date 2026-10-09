@@ -1,6 +1,7 @@
 // Sample data for the lifecycle emails and pages (emails/lifecycle.ts), for the previews built
 // into Deploy Previews (scripts/build-email-previews.mjs) and the tests. Links are inert.
 
+import { weeklyPuzzle, weeklyPuzzleCopy } from './friends.ts';
 import type { EmailLocale } from './i18n.ts';
 import {
   accountDeleted,
@@ -39,6 +40,7 @@ export const lifecycleTemplateNames = [
   'newsletter-welcome-3',
   'newsletter-release',
   'newsletter-event',
+  'newsletter-puzzle',
   'newsletter-reengage',
   'newsletter-preferences-link',
   'account-passkey-added',
@@ -64,6 +66,7 @@ export const lifecycleTemplateTitles: Record<LifecycleTemplateName, string> = {
   'newsletter-welcome-3': 'Newsletter: welcome series 3/3 (the nine friends, daily board, community)',
   'newsletter-release': 'Newsletter: a new App Store version (Broadcast draft)',
   'newsletter-event': 'Newsletter: an issue with an event ticket',
+  'newsletter-puzzle': 'Newsletter: Brick of the week (a board to solve in the email)',
   'newsletter-reengage': 'Newsletter: still want these?',
   'newsletter-preferences-link': 'Newsletter: the link to your preferences',
   'account-passkey-added': 'Account security: a passkey was added',
@@ -117,6 +120,16 @@ export function renderLifecycleSample(name: LifecycleTemplateName, locale: Email
       const story = issue.stories[0];
       const dates = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', timeZone: 'UTC' }).formatRange(new Date('2026-12-18T00:00:00Z'), new Date('2027-01-02T00:00:00Z'));
       return newsletterCampaign({ ...base, issue: { ...issue, event: { title: story.title, dates, body: story.body, link: story.link } }, unsubscribeUrl: `${link}-unsubscribe`, preferencesUrl: `${link}-prefs`, address: '' });
+    }
+    case 'newsletter-puzzle': {
+      const c = weeklyPuzzleCopy[locale];
+      return newsletterCampaign({
+        ...base,
+        issue: { ...issue, subject: `${c.eyebrow}: ${c.question.split(/[.。]/)[0]}`, preheader: c.question, stories: issue.stories.slice(0, 1), puzzle: { host: 'sprout', board: weeklyPuzzle, copy: { ...c, cta: { label: c.cta, href: 'https://www.outbrick.site/daily' } } } },
+        unsubscribeUrl: `${link}-unsubscribe`,
+        preferencesUrl: `${link}-prefs`,
+        address: '',
+      });
     }
     case 'newsletter-reengage':
       return reengage({ ...base, keepUrl: `${link}-keep`, unsubscribeUrl: `${link}-unsubscribe`, preferencesUrl: `${link}-prefs` });

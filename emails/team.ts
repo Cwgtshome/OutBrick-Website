@@ -56,7 +56,7 @@ const messageField: Partial<Record<TeamForm, [string, string]>> = {
 };
 
 /** Never shown: Netlify's plumbing, the honeypot, and the visitor's IP address. */
-const hidden = new Set(['bot-field', 'form-name', 'locale', 'referrer', 'user_agent', 'ip', 'message', 'cover-note']);
+const hidden = new Set(['bot-field', 'form-name', 'locale', 'referrer', 'user_agent', 'ip', 'message', 'cover-note', 'consent-version']);
 
 const str = (v: unknown, max = 5000) => toText(Array.isArray(v) ? v.join(', ') : v).slice(0, max).trim();
 const oneLine = (v: string, max: number) => {
@@ -195,7 +195,7 @@ export function teamNotification(input: TeamInput): Rendered {
     ],
   });
 
-  const html = shell({ ctx, title: subject, preheader: message ? oneLine(message, 140) : ackLine, logoAlt: 'OutBrick', body, footer });
+  const html = shell({ ctx, nav: false, title: subject, preheader: message ? oneLine(message, 140) : ackLine, logoAlt: 'OutBrick', body, footer });
   const text = textBlock([
     title,
     `${languageNames[input.locale]} · ${ackSent ? 'acknowledged' : 'not acknowledged'}${when(input.createdAt) ? ` · ${when(input.createdAt)}` : ''}`,

@@ -49,6 +49,8 @@ const sitePath = (locale: EmailLocale, path: string) => `https://www.outbrick.si
  * The site menu for the header (see ShellOptions.nav in core.ts): the website's own labels and
  * routes. A centred row of links in every client; on phones where checkboxes work, folded behind
  * a hamburger in the header's top-right corner that drops the links down as full-width rows.
+ * The links stay in reading order for screen readers either way, so the hamburger itself is
+ * aria-hidden: it is a visual fold, not a control that changes what VoiceOver reads.
  */
 export function navBlock(ctx: Ctx): string {
   const f = fonts(ctx.locale);
@@ -63,7 +65,7 @@ export function navBlock(ctx: Ctx): string {
   const items = links
     .map(([label, href]) => `<a class="ob-nav-a" href="${esc(href)}" style="display:inline-block;margin:0 9px 6px;font-family:${f.text};font-size:14px;line-height:1.4;font-weight:700;color:${color.lilac};text-decoration:none;">${esc(label)}</a>`)
     .join('\n');
-  return `<!--[if !mso]><!--><input type="checkbox" id="ob-menu" class="ob-menu-input" style="display:none;mso-hide:all;"><label for="ob-menu" class="ob-burger" title="${esc(c.menu)}" aria-label="${esc(c.menu)}" style="display:none;mso-hide:all;"><span></span><span></span><span></span></label><!--<![endif]-->
+  return `<!--[if !mso]><!--><input type="checkbox" id="ob-menu" class="ob-menu-input" style="display:none;mso-hide:all;"><label for="ob-menu" class="ob-burger" title="${esc(c.menu)}" aria-hidden="true" style="display:none;mso-hide:all;"><span></span><span></span><span></span></label><!--<![endif]-->
 <div class="ob-nav" style="padding-top:14px;text-align:center;">
 ${items}
 </div>`;

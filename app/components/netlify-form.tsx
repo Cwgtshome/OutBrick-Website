@@ -189,6 +189,9 @@ export function NetlifyForm({
       setSent(values);
       // Only the form's name: never a field value (lib/track.ts; sent only after analytics consent).
       track(name === 'contact' ? 'contact_submit' : 'form_submit', { form_name: name });
+      // The topic is a fixed choice from a list, never free text.
+      const topic = values.get('topic') ?? '';
+      if (name === 'contact') track('contact', { topic: /^[a-z0-9-]{1,40}$/.test(topic) ? topic : 'other' });
     } catch {
       setStatus('failed');
     }

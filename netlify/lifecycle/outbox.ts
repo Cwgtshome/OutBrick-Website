@@ -11,10 +11,13 @@
 //   - the tick reads that time first and returns at once while it lies in the future;
 //   - a drain recomputes it from the table (the earliest unsent row), or clears it.
 //
-// If Blobs is unavailable the gate fails open and the tick queries as it would without it.
+// If Blobs is unavailable or the stored value is unreadable the gate fails open and the tick
+// queries as it would without it; the daily sweep (run.ts) drains regardless of the gate, so a
+// lost signal delays a row by a day at most, never forever.
 // Rows are claimed for five minutes before sending (a run cut off mid-send is retried), sends
-// carry a Resend Idempotency-Key from `dedupe_key`, and a failed send backs off 15 min × 2^n,
-// giving up after 6 attempts.
+// carry a Resend Idempotency-Key from `dedupe_key`, and a failure (a refused send, a preparer or
+// an action that throws) backs off 15 min × 2^n, giving up after 6 attempts. A preparer
+// returning null is the only thing that drops a row.
 
 import { platformStore } from '../platform.ts';
 import { sql, transaction, type Query } from '../community/db.ts';
@@ -22,6 +25,7 @@ import type { SignalStore } from '../community/idle.ts';
 import type { ResendResult, OutgoingEmail } from '../../emails/resend.ts';
 
 export type OutboxKind =
+  | 'welcome-1'
   | 'welcome-2'
   | 'welcome-3'
   | 'support-feedback'
@@ -29,7 +33,8 @@ export type OutboxKind =
   | 'reengage'
   | 'sunset'
   | 'policy'
-  | 'security';
+  | 'security'
+  | 'resend-sync';
 
 export type OutboxItem = {
   kind: OutboxKind;
@@ -63,13 +68,16 @@ function store(): SignalStore | null {
   }
 }
 
+/** The stored next-due time: a number, null (nothing queued), or undefined (unknown: fail open). */
 async function readDue(): Promise<number | null | undefined> {
   const s = store();
   if (!s) return undefined;
   try {
     const v = (await s.get(DUE_KEY)) as { at?: unknown } | null;
     if (v === null) return null;
-    return typeof v?.at === 'number' ? v.at : null;
+    if (v?.at === null) return null;
+    // Anything else unreadable is unknown, not "nothing due": an empty gate would never reopen.
+    return typeof v?.at === 'number' && Number.isFinite(v.at) ? v.at : undefined;
   } catch {
     return undefined; // fail open
   }
@@ -160,55 +168,84 @@ export async function drain(opts: { apiKey: string; prepare: Preparer; send: Sen
     ),
   )) as unknown as Row[];
   const summary: DrainSummary = { sent: 0, dropped: 0, failed: 0, nextDue: null };
+  // A failed attempt, whatever failed: count it and back off, so one bad row never stalls the
+  // queue (it is unclaimed, with a later send_after) and a transient error never drops an email.
+  const failed = async (row: Row, error: unknown) => {
+    const message = error instanceof Error ? error.message : String(error);
+    const attempts = row.attempts + 1;
+    const giveUp = attempts >= MAX_ATTEMPTS;
+    const retry = new Date(now.getTime() + 15 * 60_000 * 2 ** (attempts - 1));
+    summary.failed++;
+    console.error(`[outbox] ${row.kind} #${row.id} failed (attempt ${attempts}${giveUp ? ', giving up' : ''}): ${message}`);
+    try {
+      await sql`UPDATE email_outbox SET attempts = ${attempts}, claimed_until = NULL, last_error = ${message.slice(0, 300)},
+                  send_after = ${retry.toISOString()}::timestamptz, cancelled_at = ${giveUp ? now.toISOString() : null}::timestamptz
+                WHERE id = ${row.id}`;
+    } catch (inner) {
+      // The claim lapses in five minutes and the row is tried again then.
+      console.error(`[outbox] #${row.id} could not record its failure: ${inner instanceof Error ? inner.message : String(inner)}`);
+    }
+  };
   for (const row of rows) {
     let prepared: Prepared;
     try {
       prepared = await opts.prepare(row, opts.apiKey);
     } catch (error) {
-      prepared = null;
-      console.error(`[outbox] ${row.kind} #${row.id} could not be prepared: ${error instanceof Error ? error.message : String(error)}`);
-    }
-    if (prepared === null) {
-      await sql`UPDATE email_outbox SET cancelled_at = now(), claimed_until = NULL WHERE id = ${row.id}`;
-      summary.dropped++;
+      // A database hiccup while rendering is a failed attempt, not a reason to drop the email.
+      await failed(row, new Error(`could not be prepared: ${error instanceof Error ? error.message : String(error)}`));
       continue;
     }
-    if ('action' in prepared) {
-      await prepared.action();
-      await sql`UPDATE email_outbox SET sent_at = now(), claimed_until = NULL WHERE id = ${row.id}`;
-      summary.sent++;
-      continue;
-    }
-    const result = await opts.send(opts.apiKey, prepared.email, `outbox-${row.dedupe_key}`.slice(0, 256));
-    if (result.ok) {
+    let after: (() => Promise<void>) | undefined;
+    try {
+      if (prepared === null) {
+        await sql`UPDATE email_outbox SET cancelled_at = now(), claimed_until = NULL WHERE id = ${row.id}`;
+        summary.dropped++;
+        continue;
+      }
+      if ('action' in prepared) {
+        await prepared.action();
+        await sql`UPDATE email_outbox SET sent_at = now(), claimed_until = NULL, last_error = NULL WHERE id = ${row.id}`;
+        summary.sent++;
+        continue;
+      }
+      const result = await opts.send(opts.apiKey, prepared.email, `outbox-${row.dedupe_key}`.slice(0, 256));
+      if (!result.ok) {
+        await failed(row, new Error(String(result.error ?? result.status)));
+        continue;
+      }
       // A deleted account's address is not kept once its last email has gone.
       await sql`UPDATE email_outbox SET sent_at = now(), claimed_until = NULL, last_error = NULL,
                   to_email = CASE WHEN ${row.kind}::text = 'security' AND payload->>'template' = 'account-deleted' THEN '' ELSE to_email END
                 WHERE id = ${row.id}`;
-      await prepared.after?.();
       summary.sent++;
-    } else {
-      const attempts = row.attempts + 1;
-      const giveUp = attempts >= MAX_ATTEMPTS;
-      const retry = new Date(now.getTime() + 15 * 60_000 * 2 ** (attempts - 1));
-      await sql`UPDATE email_outbox SET attempts = ${attempts}, claimed_until = NULL, last_error = ${String(result.error ?? result.status).slice(0, 300)},
-                  send_after = ${retry.toISOString()}::timestamptz, cancelled_at = ${giveUp ? now.toISOString() : null}::timestamptz
-                WHERE id = ${row.id}`;
-      console.error(`[outbox] ${row.kind} #${row.id} failed (attempt ${attempts}${giveUp ? ', giving up' : ''}): ${result.error}`);
-      summary.failed++;
+      after = prepared.after;
+    } catch (error) {
+      await failed(row, error);
+      continue;
+    }
+    // The email went; a failing follow-up (welcome step, sunset scheduling) must not resend it.
+    try {
+      await after?.();
+    } catch (error) {
+      console.error(`[outbox] ${row.kind} #${row.id} sent, but its follow-up failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
-  const [next] = await sql`SELECT min(send_after) AS at FROM email_outbox WHERE sent_at IS NULL AND cancelled_at IS NULL`;
-  const at = next?.at;
-  summary.nextDue = at instanceof Date ? at.getTime() : typeof at === 'string' ? Date.parse(at) : null;
+  summary.nextDue = await outboxNextDue();
   return summary;
 }
 
-/** The tick's gate: run only when the stored next-due time has come (or Blobs can't say). */
+/** The tick's gate: run only when the stored next-due time has come (or the store can't say). */
 export async function outboxGate(now: number): Promise<boolean> {
   const due = await readDue();
   if (due === undefined) return true;
   return due !== null && due <= now;
+}
+
+/** The earliest unsent row, straight from the table (the daily sweep's check, and drain's). */
+export async function outboxNextDue(): Promise<number | null> {
+  const [next] = await sql`SELECT min(send_after) AS at FROM email_outbox WHERE sent_at IS NULL AND cancelled_at IS NULL`;
+  const at = next?.at;
+  return at instanceof Date ? at.getTime() : typeof at === 'string' ? Date.parse(at) : null;
 }
 
 export async function outboxRan(nextDue: number | null): Promise<void> {

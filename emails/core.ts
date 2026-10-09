@@ -19,6 +19,7 @@
 
 import type { EmailLocale } from './i18n.ts';
 import { brandFooter, navBlock } from './brand.ts';
+import { stage, stageCss, studs, type Host } from './friends.ts';
 
 export const SITE = 'https://www.outbrick.site';
 
@@ -137,8 +138,9 @@ export function link(href: string, text: string): string {
 }
 
 /**
- * The one action of a message: a gold brick with its darker foot. Outlook on Windows gets the
- * same shape drawn in VML; everything else gets a real link styled as a button.
+ * The one action of a message: a gold brick with its darker foot and two studs on top, like the
+ * game's own buttons. Outlook on Windows gets the same shape drawn in VML; everything else gets a
+ * real link styled as a button.
  */
 export function button(ctx: Ctx, href: string, label: string, width = 280): string {
   const f = fonts(ctx.locale);
@@ -151,15 +153,19 @@ export function button(ctx: Ctx, href: string, label: string, width = 280): stri
 <center style="color:${color.ink};font-family:Arial,sans-serif;font-size:17px;font-weight:bold;">${label}</center>
 </v:roundrect>
 <![endif]-->
-<!--[if !mso]><!-- --><a class="ob-btn" href="${url}" style="display:inline-block;background:${color.gold};color:${color.ink};font-family:${f.display};font-size:18px;line-height:22px;font-weight:600;text-decoration:none;text-align:center;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere;padding:15px 30px 13px;border-radius:14px;border-bottom:4px solid ${color.goldFoot};mso-hide:all;">${label}</a><!--<![endif]-->
+<!--[if !mso]><!-- --><span class="ob-btn-studs" style="display:block;height:5px;margin:0 0 -1px;padding:0 0 0 22px;font-size:0;line-height:0;mso-hide:all;">${studs(2, color.gold, 14, 10)}</span><a class="ob-btn" href="${url}" style="display:inline-block;vertical-align:top;background:${color.gold};color:${color.ink};font-family:${f.display};font-size:18px;line-height:22px;font-weight:600;text-decoration:none;text-align:center;max-width:100%;box-sizing:border-box;overflow-wrap:anywhere;padding:15px 30px 13px;border-radius:14px;border-bottom:4px solid ${color.goldFoot};box-shadow:inset 0 2px 0 rgba(255,255,255,0.45);mso-hide:all;">${label}</a><!--<![endif]-->
 </td></tr>
 </table>`;
 }
 
-/** A quiet cream panel: a copy of what the visitor sent, a code, a list of promises. */
+/**
+ * A quiet cream panel: a copy of what the visitor sent, a code, a list of promises. It reads as a
+ * toy-brick plate: a row of studs in the accent colour along the top and a darker foot below.
+ */
 export function panel(ctx: Ctx, inner: string, accent: string = color.panel): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 20px;">
-<tr><td class="ob-quote" style="background:${color.cream};border-left:5px solid ${accent};border-radius:12px;padding:16px 18px 2px;">${inner}</td></tr>
+<tr><td style="padding:0 0 0 16px;height:5px;font-size:0;line-height:0;">${studs(4, accent, 12, 10)}</td></tr>
+<tr><td class="ob-quote" style="background:${color.cream};border-top:3px solid ${accent};border-bottom:4px solid ${color.paperEdge};border-radius:12px;padding:16px 18px 2px;">${inner}</td></tr>
 </table>`;
 }
 
@@ -177,7 +183,7 @@ export function bricks(ctx: Ctx, items: { title: string; body: string }[]): stri
 ${items
   .map(
     (item, i) => `<tr>
-<td valign="top" width="30" style="padding:6px 12px 10px 0;"><div style="width:18px;height:14px;border-radius:4px;background:${course[i % course.length]};border-bottom:3px solid rgba(0,0,0,0.25);font-size:0;line-height:0;">&nbsp;</div></td>
+<td valign="top" width="34" style="padding:3px 12px 10px 0;"><div style="height:4px;padding-left:2px;font-size:0;line-height:0;">${studs(2, course[i % course.length], 7, 4)}</div><div style="width:22px;height:13px;border-radius:4px;background:${course[i % course.length]};border-bottom:3px solid rgba(0,0,0,0.25);font-size:0;line-height:0;">&nbsp;</div></td>
 <td valign="top" style="padding:0 0 10px;"><p class="ob-text" style="margin:0;font-family:${f.text};font-size:17px;line-height:1.55;color:${color.onPaper};"><strong>${item.title}</strong> ${item.body}</p></td>
 </tr>`,
   )
@@ -185,8 +191,11 @@ ${items
 </table>`;
 }
 
+/** A section break: five small studded bricks in the course colours, centred. */
 export function rule(): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 22px;"><tr><td class="ob-rule" style="border-top:2px dashed ${color.rule};font-size:0;line-height:0;height:1px;">&nbsp;</td></tr></table>`;
+  const brick = (c: string) =>
+    `<span style="display:inline-block;vertical-align:bottom;margin:0 3px;"><span style="display:block;height:4px;font-size:0;line-height:0;text-align:center;">${studs(2, c, 6, 4)}</span><span style="display:block;width:26px;height:10px;border-radius:3px;background:${c};border-bottom:3px solid rgba(0,0,0,0.22);font-size:0;line-height:0;">&nbsp;</span></span>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 24px;"><tr><td align="center" style="text-align:center;font-size:0;line-height:0;">${course.slice(0, 5).map(brick).join('')}</td></tr></table>`;
 }
 
 /** The brick course as a row of six cells: the same stripe as the site's header. */
@@ -263,15 +272,35 @@ export type ShellOptions = {
   /** The copyright year; the year of rendering unless a test pins it. */
   year?: number;
   /**
-   * The site menu under the logo (newsletters, the welcome series, announcements). A row of
-   * links everywhere; on phones in clients that support it (Apple Mail, iOS Mail), a hamburger
-   * that opens it. Transactional mail leaves it off so the one action stays the one action.
+   * The site menu under the logo. A row of links everywhere; on phones in clients that support
+   * it (Apple Mail, iOS Mail), a hamburger that opens it. On by default in every message a reader
+   * gets; only the team's internal copies turn it off.
    */
   nav?: boolean;
+  /** The friend who opens the message, on a brick plinth, with what they say. */
+  host?: Host;
 };
 
-export function shell({ ctx, title, preheader, body, footer, logoAlt, head = '', year, nav = false }: ShellOptions): string {
+/**
+ * A short, stable suffix for this message's checkbox ids. Apple Mail can show several messages
+ * of a conversation together; two newsletters both using id="ob-menu" would let one message's
+ * hamburger open the other's menu. Derived from the content, so a re-render is identical.
+ */
+function idSuffix(seed: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < seed.length; i++) h = Math.imul(h ^ seed.charCodeAt(i), 0x01000193);
+  return (h >>> 0).toString(36);
+}
+
+/** Gives every ob- id (and the label and radio group pointing at it) this message's suffix. */
+function uniqueIds(html: string, suffix: string): string {
+  return html.replace(/\b(id|for|name)="(ob-[a-z0-9-]+)"/g, `$1="$2-${suffix}"`);
+}
+
+export function shell({ ctx, title, preheader, body: rawBody, footer, logoAlt, head = '', year, nav = true, host }: ShellOptions): string {
   const f = fonts(ctx.locale);
+  const suffix = idSuffix(`${ctx.locale}|${title}|${preheader}|${rawBody}`);
+  const body = uniqueIds((host ? stage(ctx, host) : '') + rawBody, suffix);
   const asset = (p: string) => `${ctx.assetBase}${p}`;
   // The inbox preview pads itself out with zero-width joiners so the client does not fill the
   // rest of the preview line with the first words of the body.
@@ -304,14 +333,7 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
 .ob-btn:hover{background:#ffd66e !important;}
 .ob-nav-a:hover{color:#ffffff !important;text-decoration:underline !important;}
 .ob-pick:hover{transform:translateY(-2px);}
-/* Interactive layer (checkbox toggles). Clients that strip <input> (Gmail, Outlook, Yahoo) never
-   match these rules, so they keep the plain layout: the menu as a row of links, a revealed
-   answer simply shown. Only where the input survives does the toggle take over. */
 .ob-burger,.ob-rv-btn{display:none;}
-.ob-rv-input + .ob-rv-btn{display:inline-block !important;}
-.ob-rv-input ~ .ob-rv-body{display:none;}
-.ob-rv-input:checked ~ .ob-rv-body{display:block !important;}
-.ob-rv-input:checked + .ob-rv-btn{display:none !important;}
 @media screen and (max-width:620px){
   .ob-outer{padding:12px 8px 24px !important;}
   .ob-pad{padding:28px 20px 12px !important;}
@@ -321,15 +343,6 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
   .ob-col{max-width:100% !important;width:100% !important;}
   .ob-col-img{padding:0 0 14px !important;}
   .ob-hero-img{width:100% !important;height:auto !important;}
-  .ob-menu-input + .ob-burger{display:block !important;position:absolute;top:16px;right:14px;width:44px;height:44px;border-radius:12px;background:#2a2364;cursor:pointer;}
-  .ob-burger span{display:block;width:20px;height:2px;margin:6px auto 0;border-radius:2px;background:${color.title};transition:transform .25s ease,opacity .2s ease;}
-  .ob-burger span:first-child{margin-top:15px;}
-  .ob-menu-input:checked + .ob-burger span:nth-child(1){transform:translateY(8px) rotate(45deg);}
-  .ob-menu-input:checked + .ob-burger span:nth-child(2){opacity:0;}
-  .ob-menu-input:checked + .ob-burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
-  .ob-menu-input ~ .ob-nav{max-height:0;overflow:hidden;padding-top:0 !important;transition:max-height .35s ease;}
-  .ob-menu-input:checked ~ .ob-nav{max-height:420px;padding-top:14px !important;}
-  .ob-menu-input ~ .ob-nav .ob-nav-a{display:block !important;margin:0 !important;padding:13px 6px !important;border-top:1px solid #3a3190;font-size:17px !important;text-align:left;}
 }
 @media screen and (max-width:360px){
   .ob-outer{padding:8px 4px 20px !important;}
@@ -339,7 +352,6 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
   .ob-h1{font-size:24px !important;}
   .ob-btn{padding:14px 18px 12px !important;}
   .ob-logo{width:136px !important;height:auto !important;}
-  .ob-menu-input + .ob-burger{right:10px !important;}
 }
 @media (prefers-color-scheme:dark){
   .ob-page{background:${color.darkPage} !important;}
@@ -351,6 +363,7 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
   .ob-quote{background:${color.ink} !important;}
   .ob-rule{border-color:#3a3190 !important;}
   .ob-card{background:${color.ink} !important;border-color:#3a3190 !important;}
+  .ob-bubble{background:${color.ink} !important;}
 }
 [data-ogsc] .ob-page{background:${color.darkPage} !important;}
 [data-ogsc] .ob-paper{background:${color.darkPaper} !important;border-color:${color.ink2} !important;}
@@ -358,7 +371,44 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
 [data-ogsc] .ob-text{color:${color.darkText} !important;}
 [data-ogsc] .ob-muted,[data-ogsc] .ob-eyebrow{color:${color.darkMuted} !important;}
 [data-ogsc] .ob-link{color:${color.darkLink} !important;}
-[data-ogsb] .ob-quote,[data-ogsb] .ob-card{background:${color.ink} !important;}
+[data-ogsb] .ob-quote,[data-ogsb] .ob-card,[data-ogsb] .ob-bubble{background:${color.ink} !important;}
+</style>
+<style>
+/* Interactive layer (checkbox toggles), in a block of its own so a client that rejects any of it
+   drops only this. Clients that strip <input> (Gmail, Outlook, Yahoo) never match these rules and
+   keep the plain layout: the menu as a row of links, a revealed answer simply shown. The WebKit
+   gate keeps it to the clients that toggle reliably (Apple Mail, iOS Mail, Samsung Email), so a
+   client that keeps the checkbox but cannot flip it never shows a dead button or hides content. */
+@media screen and (-webkit-min-device-pixel-ratio:0){
+  .ob-rv-input + .ob-rv-btn{display:inline-block !important;}
+  .ob-rv-input ~ .ob-rv-body{display:none;}
+  .ob-rv-input:checked ~ .ob-rv-body{display:block !important;}
+  .ob-rv-input:checked + .ob-rv-btn{display:none !important;}
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) and (max-width:620px){
+  .ob-menu-input + .ob-burger{display:block !important;position:absolute;top:16px;right:14px;width:44px;height:44px;border-radius:12px;background:#2a2364;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .ob-burger span{display:block;width:20px;height:2px;margin:6px auto 0;border-radius:2px;background:${color.title};transition:transform .25s ease,opacity .2s ease;}
+  .ob-burger span:first-child{margin-top:15px;}
+  .ob-menu-input:checked + .ob-burger{background:#3a3190;}
+  .ob-menu-input:checked + .ob-burger span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+  .ob-menu-input:checked + .ob-burger span:nth-child(2){opacity:0;}
+  .ob-menu-input:checked + .ob-burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+  .ob-menu-input ~ .ob-nav{max-height:0;overflow:hidden;padding-top:0 !important;transition:max-height .35s ease,padding-top .35s ease;}
+  .ob-menu-input:checked ~ .ob-nav{max-height:420px;padding-top:14px !important;}
+  .ob-menu-input ~ .ob-nav .ob-nav-a{display:block !important;margin:0 !important;padding:13px 6px !important;border-top:1px solid #3a3190;font-size:17px !important;text-align:left;}
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) and (prefers-reduced-motion:no-preference){${stageCss}
+}
+@media screen and (-webkit-min-device-pixel-ratio:0){
+  .ob-host-input:checked + .ob-host .ob-f-main{display:none !important;}
+  .ob-host-input:checked + .ob-host .ob-f-alt{display:block !important;height:96px !important;max-height:none !important;}
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) and (max-width:360px){
+  .ob-menu-input + .ob-burger{right:10px !important;}
+}
+@media (prefers-reduced-motion:reduce){
+  .ob-burger span,.ob-nav,.ob-pick,.ob-btn{transition:none !important;}
+}
 </style>
 </head>
 <body id="body" class="ob-page" style="margin:0;padding:0;width:100%;background:${color.cream};word-spacing:normal;">
@@ -371,12 +421,13 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
 <tr><td class="ob-head" align="center" bgcolor="${color.ink}" style="background:${color.ink};border-radius:20px 20px 0 0;padding:22px 32px;text-align:center;position:relative;">
 <a href="${SITE}${ctx.locale === 'en' ? '/' : `/${ctx.locale}`}" style="display:inline-block;text-decoration:none;"><img class="ob-logo" src="${esc(asset('/assets/logo/outbrick-wordmark.png'))}" width="168" height="33" alt="${esc(logoAlt)}" style="display:block;margin:0 auto;width:168px;height:33px;border:0;color:${color.title};font-family:${f.display};font-size:24px;font-weight:600;"></a>
-${nav ? navBlock(ctx) : ''}
+${nav ? uniqueIds(navBlock(ctx), suffix) : ''}
 </td></tr>
 <tr><td style="font-size:0;line-height:0;">${courseStripe()}</td></tr>
 <tr><td class="ob-paper ob-pad" bgcolor="${color.paper}" style="background:${color.paper};padding:36px 40px 18px;overflow-wrap:break-word;word-wrap:break-word;border-left:1px solid ${color.paperEdge};border-right:1px solid ${color.paperEdge};">
 ${body}
 </td></tr>
+ <tr><td style="font-size:0;line-height:0;">${courseStripe(8)}</td></tr>
 <tr><td class="ob-foot" bgcolor="${color.ink}" style="background:${color.ink};border-radius:0 0 20px 20px;padding:26px 40px 32px;overflow-wrap:break-word;word-wrap:break-word;">
 ${footer}
 ${brandFooter(ctx, year)}
@@ -402,6 +453,28 @@ export function footerBlock(ctx: Ctx, opts: { links: [string, string][]; lines: 
     .join('\n');
   return `<p style="margin:0 0 14px;font-family:${f.text};font-size:15px;line-height:1.6;color:${color.lilac};">${linkHtml}</p>
 ${lines}`;
+}
+
+/**
+ * Campaign tags on links back to the site, so GA4 credits a visit to the email that brought it
+ * (utm_source=outbrick-email, utm_medium=email, utm_campaign=<the send's form tag>). Only plain
+ * www.outbrick.site pages are tagged: a link with a query string (every signed, sign-in and
+ * confirmation link), a handler under /.netlify/ or /api/, and an affiliate /r/ link are left
+ * exactly as written, so no signature or referral is touched. Only href attributes in the HTML
+ * part change; the text/plain part keeps its short, readable addresses. A fragment stays last.
+ */
+export function tagLinks(html: string, campaign: string): string {
+  const slug = campaign.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'email';
+  const params = `utm_source=outbrick-email&amp;utm_medium=email&amp;utm_campaign=${slug}`;
+  return html
+    .replace(/href="https:\/\/www\.outbrick\.site(\/[^"?#]*)?(#[^"]*)?"/g, (whole, path: string | undefined, hash: string | undefined) => {
+      const p = path ?? '/';
+      if (/^\/(?:\.netlify|api|r|assets|fonts)\//.test(p)) return whole;
+      return `href="https://www.outbrick.site${p}?${params}${hash ?? ''}"`;
+    })
+    // The App Store badge in the brand footer says which email sent the download, too
+    // (App Analytics campaigns; Apple caps ct at 40 characters).
+    .replace(/(href="https:\/\/apps\.apple\.com\/[^"]*[?&](?:amp;)?ct=)web-email-footer/g, (_, head: string) => `${head}${`email-${slug}`.slice(0, 40)}`);
 }
 
 /** Wraps plain text at a readable width for the text/plain part. */

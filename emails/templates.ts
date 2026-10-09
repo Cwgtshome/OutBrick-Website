@@ -3,6 +3,7 @@
 // Every value that came from a visitor or an issue file is escaped here (esc / escLines /
 // inlineMarkdown), never in the copy catalogue; the text/plain part gets the raw value.
 
+import { puzzle, type FriendId, type Puzzle, type PuzzleCopy } from './friends.ts';
 import { contactTopics } from '../lib/business.ts';
 import { brandFooterText } from './brand.ts';
 import { appStoreUrl } from '../lib/app-store-url.ts';
@@ -148,7 +149,7 @@ export function contactAcknowledgement(input: ContactInput): Rendered {
   ].join('\n');
 
   const subject = input.caseRef ? `${c.subject} [${input.caseRef}]` : c.subject;
-  const html = shell({ ctx, title: subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'contact') });
+  const html = shell({ ctx, host: { friend: 'sprout', pose: 'idle', mood: 'got' }, title: subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'contact') });
   const text = textBlock([
     input.caseRef ? lifecycleCopy[input.locale].caseRef(input.caseRef) : null,
     c.heading(name),
@@ -194,7 +195,7 @@ export function careersAcknowledgement(input: CareersInput): Rendered {
     button(ctx, sitePath(input.locale, '/careers'), esc(c.cta)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'careers') });
+  const html = shell({ ctx, host: { friend: 'bricko', pose: 'idle', mood: 'got' }, title: subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'careers') });
   const text = textBlock([
     c.heading(name),
     '',
@@ -244,7 +245,7 @@ export function affiliateAcknowledgement(input: AffiliateInput): Rendered {
     button(ctx, sitePath(input.locale, '/affiliates'), esc(c.cta)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'affiliate') });
+  const html = shell({ ctx, host: { friend: 'bricko', pose: 'idle', mood: 'got' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: supportFooter(ctx, c.why, 'affiliate') });
   const text = textBlock([
     c.heading(name),
     '',
@@ -316,7 +317,7 @@ export function newsletterConfirm(input: ConfirmInput): Rendered {
     para(ctx, esc(c.ignore)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: newsFooter(ctx, null, c.why) });
+  const html = shell({ ctx, host: { friend: 'bloo', pose: 'idle', mood: 'key' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, footer: newsFooter(ctx, null, c.why) });
   const text = textBlock([c.heading, '', c.intro, '', `${c.cta}:`, url, '', c.expiry.replace(/:$/, '.'), '', c.ignore, '', `— ${t.signoff}`, '', ...newsFooterText(input.locale, null, c.why)]);
   return { subject: c.subject, html, text };
 }
@@ -339,7 +340,7 @@ export function newsletterWelcome(input: WelcomeInput): Rendered {
     para(ctx, `${esc(c.leave)} ${link(input.unsubscribeUrl, esc(t.news.unsubscribe))}`, { muted: true, size: 16 }),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, nav: true, footer: newsFooter(ctx, input.unsubscribeUrl, t.news.why, undefined, input.preferencesUrl) });
+  const html = shell({ ctx, host: { friend: 'bloo', pose: 'cheer', mood: 'welcome' }, title: c.subject, preheader: c.preheader, logoAlt: t.logoAlt, body, nav: true, footer: newsFooter(ctx, input.unsubscribeUrl, t.news.why, undefined, input.preferencesUrl) });
   const text = textBlock([
     c.heading,
     '',
@@ -371,6 +372,8 @@ export type IssueContent = {
   release?: { version: string; title: string; items: string[]; link?: { label: string; href: string } };
   /** An event or season announcement: a ticket-shaped card under the hero (see eventBlock). */
   event?: { title: string; dates: string; body: string; link?: { label: string; href: string } };
+  /** A board to solve in the email (see friends.ts puzzle), hosted by one of the friends. */
+  puzzle?: { host?: FriendId; board: Puzzle; copy: PuzzleCopy };
   cta?: { label: string; href: string };
 };
 
@@ -476,6 +479,7 @@ export function newsletterCampaign(input: CampaignInput): Rendered {
     issue.hero.image ? `<div style="margin:0 0 20px;">${img(ctx, issue.hero.image, 520, 'ob-hero-img')}</div>` : '',
     paragraphs(ctx, issue.hero.body),
     issue.event ? eventBlock(ctx, issue.event) : '',
+    issue.puzzle ? puzzle(ctx, issue.puzzle.board, issue.puzzle.copy, issue.puzzle.host ?? 'bloo') : '',
     ...issue.stories.slice(0, 3).map((s, i) => story(ctx, s, i)),
     issue.release ? releaseBlock(ctx, issue.release) : '',
     `<div style="text-align:center;">${button(ctx, safeUrl(cta.href), esc(cta.label), 320).replace('style="margin:8px 0 22px;"', 'align="center" style="margin:8px auto 22px;"')}</div>`,
@@ -483,6 +487,11 @@ export function newsletterCampaign(input: CampaignInput): Rendered {
   ].join('\n');
   const html = shell({
     ctx,
+    host: issue.puzzle
+      ? { friend: issue.puzzle.host ?? 'bloo', pose: 'think', mood: 'puzzle' }
+      : issue.event
+        ? { friend: 'flurry', pose: 'cheer', mood: 'event' }
+        : { friend: 'bloo', pose: 'idle', mood: 'news' },
     title: issue.subject,
     preheader: issue.preheader,
     logoAlt: t.logoAlt,
@@ -501,6 +510,9 @@ export function newsletterCampaign(input: CampaignInput): Rendered {
       s.link ? `${s.link.label}: ${safeUrl(s.link.href)}` : null,
       '',
     ]).filter((v): v is string => v !== null),
+    issue.puzzle && `## ${issue.puzzle.copy.eyebrow}: ${issue.puzzle.copy.question}`,
+    issue.puzzle && `${issue.puzzle.copy.answerLabel}: ${issue.puzzle.copy.answer}`,
+    issue.puzzle && `${issue.puzzle.copy.cta.label}: ${safeUrl(issue.puzzle.copy.cta.href)}\n`,
     issue.event && `## ${issue.event.title} · ${issue.event.dates}`,
     issue.event && plainMarkdown(issue.event.body),
     issue.event?.link && `${issue.event.link.label}: ${safeUrl(issue.event.link.href)}`,
@@ -535,6 +547,7 @@ export function unsubscribePage(locale: EmailLocale, actionUrl: string): string 
   ].join('\n');
   return shell({
     ctx,
+    host: { friend: 'zippy', pose: 'think' },
     title: p.title,
     preheader: p.body,
     logoAlt: t.logoAlt,
@@ -552,6 +565,7 @@ export function confirmPage(locale: EmailLocale, actionUrl: string): string {
   const f = fonts(locale);
   return shell({
     ctx,
+    host: { friend: 'bloo', pose: 'idle', mood: 'key' },
     title: p.subject,
     preheader: p.intro,
     logoAlt: t.logoAlt,

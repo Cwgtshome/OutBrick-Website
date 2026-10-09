@@ -196,3 +196,43 @@ test('Resend templates have separate plain bodies and only create after a genuin
     }
   }
 });
+
+test('confirm links can carry a signed submission id; old links without one still verify', async () => {
+  const { verifyConfirm } = await import('../emails/links.ts');
+  const id = '0b7c3c1e-1111-4222-8333-444455556666';
+  const withId = new URL(confirmUrl(site, env.RESEND_API_KEY, address, 'de', Date.now(), id)).searchParams;
+  assert.deepEqual(verifyConfirm(withId, env.RESEND_API_KEY), { ok: true, email: address, locale: 'de', submissionId: id });
+  const old = new URL(confirmUrl(site, env.RESEND_API_KEY, address, 'de')).searchParams;
+  assert.equal(old.has('s'), false);
+  assert.deepEqual(verifyConfirm(old, env.RESEND_API_KEY), { ok: true, email: address, locale: 'de' });
+  const swapped = new URLSearchParams(withId);
+  swapped.set('s', '0b7c3c1e-1111-4222-8333-444455556667');
+  assert.equal(verifyConfirm(swapped, env.RESEND_API_KEY).ok, false);
+  const dropped = new URLSearchParams(withId);
+  dropped.delete('s');
+  assert.equal(verifyConfirm(dropped, env.RESEND_API_KEY).ok, false);
+});
+
+test('a rate-limited address gets no visitor email, the team still does, and acknowledgements quote only an excerpt', async () => {
+  const { handleSubmission, ACK_EXCERPT_CHARS } = await import('../emails/submission.ts');
+  const originalFetch = globalThis.fetch;
+  const calls = [];
+  globalThis.fetch = async (_url, options) => { calls.push(JSON.parse(options.body)); return Response.json({ id: 'test-id' }); };
+  try {
+    const limited = await handleSubmission({ id: 'limited-1', form_name: 'contact', acknowledge: false, data: { email: address, message: 'hello', consent: 'yes' } }, env);
+    assert.equal(limited.status, 'skipped');
+    assert.equal(limited.reason, 'address rate limit');
+    assert.equal(limited.team, 'sent');
+    assert.equal(calls.length, 1);
+    assert.deepEqual(calls[0].to, ['support@outbrick.site']);
+
+    calls.length = 0;
+    const long = `${'a'.repeat(ACK_EXCERPT_CHARS)}TAIL-MARKER${'b'.repeat(4000)}`;
+    const ok = await handleSubmission({ id: 'long-1', form_name: 'contact', data: { email: address, message: long, consent: 'yes' } }, env);
+    assert.equal(ok.status, 'sent');
+    assert.ok(!calls[0].text.includes('TAIL-MARKER'), 'the acknowledgement stops at the excerpt');
+    assert.ok(!calls[0].html.includes('TAIL-MARKER'));
+    assert.ok(calls[0].text.includes('…'));
+    assert.ok(calls[1].text.includes('TAIL-MARKER'), 'the team copy keeps the whole message');
+  } finally { globalThis.fetch = originalFetch; }
+});

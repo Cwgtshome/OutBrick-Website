@@ -159,11 +159,16 @@ export default {
     if (process.env.JOBS_ENABLED !== 'true' || !env.DATABASE_URL) return;
     await scoped(env, async () => {
       const now = new Date(controller.scheduledTime);
-      await notify();
-      if (now.getUTCMinutes() % 10 === 0) { await outbox(); await drainForms(); }
-      if (now.getUTCMinutes() === 0) await releases();
-      if (now.getUTCDay() === 1 && now.getUTCHours() >= 8 && now.getUTCHours() <= 10 && now.getUTCMinutes() % 10 === 0) await digest();
-      if (now.getUTCHours() === 8 && now.getUTCMinutes() === 0) { await trust(); await badges(); }
+      // Each job is isolated: one that throws is logged and the rest of the tick still runs.
+      const job = async (name: string, work: () => Promise<unknown>) => {
+        try { await work(); }
+        catch { console.error(JSON.stringify({ event: 'outbrick-job-failed', job: name })); }
+      };
+      await job('notify', notify);
+      if (now.getUTCMinutes() % 10 === 0) { await job('outbox', outbox); await job('forms', drainForms); }
+      if (now.getUTCMinutes() === 0) await job('releases', releases);
+      if (now.getUTCDay() === 1 && now.getUTCHours() >= 8 && now.getUTCHours() <= 10 && now.getUTCMinutes() % 10 === 0) await job('digest', digest);
+      if (now.getUTCHours() === 8 && now.getUTCMinutes() === 0) { await job('trust', trust); await job('badges', badges); }
     });
   },
 } satisfies ExportedHandler<CloudflareEnv>;

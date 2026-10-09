@@ -28,7 +28,13 @@ export type SubmissionPayload = {
   human_fields?: Record<string, unknown>;
   spam?: boolean;
   state?: string;
+  /** False when the address already had its share of visitor emails today (cloudflare/forms.ts). */
+  acknowledge?: boolean;
 };
+
+/** How much of a contact message the acknowledgement quotes back: enough to recognise it. */
+export const ACK_EXCERPT_CHARS = 600;
+const excerpt = (text: string, max: number) => (text.length > max ? `${text.slice(0, max).trimEnd()}…` : text);
 
 export type Outcome = {
   id: string;
@@ -81,6 +87,7 @@ async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<
 
   const to = normalizeEmail(data.email);
   if (!to) return done('skipped', 'no usable email address');
+  const limited = payload.acknowledge === false;
   const locale0 = submissionLocale(data, form);
   // Contact messages become support cases and applications are stored, so the team can answer
   // and decide from the dashboard. Optional: without a database the emails still go out.
@@ -105,6 +112,9 @@ async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<
   if (!apiKey) return done('skipped', 'RESEND_API_KEY is not set');
 
   const locale = submissionLocale(data, form);
+  // The submission is kept and the team still gets its copy; the address just isn't emailed
+  // again, so the form can't be used to flood someone else's inbox.
+  if (limited) return done('skipped', 'address rate limit', locale);
   const name = str(data.name, 120);
   let rendered: Rendered | null = null;
   let sender: { from: string; replyTo: string } = SENDERS.support;
@@ -116,7 +126,8 @@ async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<
         locale,
         name,
         topic: str(data.topic, 40),
-        message: str(data.message),
+        // Only an excerpt is echoed back: the acknowledgement must not relay arbitrary text.
+        message: excerpt(str(data.message), ACK_EXCERPT_CHARS),
         device: str(data.device, 80),
         iosVersion: str(data['ios-version'], 20),
         appVersion: str(data['app-version'], 20),
@@ -130,7 +141,8 @@ async function visitorEmail(payload: SubmissionPayload | undefined, env: Record<
       // Double opt-in: this only asks. The address reaches the segment when the link is used.
       if (str(data.consent, 10) !== 'yes') return done('skipped', 'no consent tick', locale);
       // Always the canonical host: the link must outlive whichever deploy took the submission.
-      rendered = newsletterConfirm({ locale, confirmUrl: confirmUrl(SITE, apiKey, to, locale) });
+      // The stored submission's id rides in the signed link, so the confirmation records its consent.
+      rendered = newsletterConfirm({ locale, confirmUrl: confirmUrl(SITE, apiKey, to, locale, Date.now(), id === 'unknown' ? undefined : id) });
       sender = SENDERS.news;
       headers = { 'X-Entity-Ref-ID': `confirm-${id}` };
     }

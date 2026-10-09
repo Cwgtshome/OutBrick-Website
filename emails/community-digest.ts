@@ -59,7 +59,7 @@ export function communityWeeklyDigest(input: WeeklyDigestInput): Rendered {
     button(ctx, input.communityUrl, esc(d.cta)),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: d.subject, preheader: d.preheader, logoAlt: emailCopy[locale].logoAlt, body, footer: footer(ctx, d.why, input) });
+  const html = shell({ ctx, host: { friend: 'moss', pose: 'idle', mood: 'digest' }, title: d.subject, preheader: d.preheader, logoAlt: emailCopy[locale].logoAlt, body, footer: footer(ctx, d.why, input) });
   const textThread = (t: DigestThread) => [`* ${clip(t.title, 120)} (${meta(t)})`, `  ${t.url}`];
   const text = textBlock([
     d.heading,
@@ -108,7 +108,7 @@ export function communityReplyBounce(input: ReplyBounceInput): Rendered {
     rule(),
     signoff(ctx),
   ].join('\n');
-  const html = shell({ ctx, title: subject, preheader: b.preheader, logoAlt: emailCopy[locale].logoAlt, body, footer: footer(ctx, b.why, links) });
+  const html = shell({ ctx, host: { friend: 'vio', pose: 'think', mood: 'oops' }, title: subject, preheader: b.preheader, logoAlt: emailCopy[locale].logoAlt, body, footer: footer(ctx, b.why, links) });
   const text = textBlock([
     b.heading,
     '',

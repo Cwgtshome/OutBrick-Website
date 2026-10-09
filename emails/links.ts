@@ -43,10 +43,18 @@ const unb64 = (s: string) => {
   }
 };
 
-export function confirmUrl(siteUrl: string, apiKey: string, email: string, locale: EmailLocale, nowMs = Date.now()): string {
+const SUBMISSION_ID = /^[A-Za-z0-9-]{8,80}$/;
+
+/**
+ * The confirm link. `submissionId` (the stored sign-up, web_form_submissions.id) is signed in
+ * with the rest when given, so the confirmation can record which sign-up it answers; links
+ * without one (sent before it existed) still verify.
+ */
+export function confirmUrl(siteUrl: string, apiKey: string, email: string, locale: EmailLocale, nowMs = Date.now(), submissionId?: string): string {
   const x = String(Math.floor(nowMs / 1000) + CONFIRM_TTL_SECONDS);
-  const t = mac(linkKey(apiKey), ['confirm', email, locale, x]);
-  const q = new URLSearchParams({ e: b64(email), l: locale, x, t });
+  const s = submissionId && SUBMISSION_ID.test(submissionId) ? submissionId : '';
+  const t = mac(linkKey(apiKey), ['confirm', email, locale, x, ...(s ? [s] : [])]);
+  const q = new URLSearchParams({ e: b64(email), l: locale, x, ...(s ? { s } : {}), t });
   return `${siteUrl}/.netlify/functions/newsletter-confirm?${q.toString()}`;
 }
 
@@ -56,7 +64,7 @@ export function unsubscribeUrl(siteUrl: string, apiKey: string, email: string, l
   return `${siteUrl}/.netlify/functions/newsletter-unsubscribe?${q.toString()}`;
 }
 
-export type Verified = { ok: true; email: string; locale: EmailLocale } | { ok: false; reason: 'invalid' | 'expired'; locale: EmailLocale };
+export type Verified = { ok: true; email: string; locale: EmailLocale; submissionId?: string } | { ok: false; reason: 'invalid' | 'expired'; locale: EmailLocale };
 
 function readLocale(params: URLSearchParams): EmailLocale {
   const l = params.get('l');
@@ -67,11 +75,12 @@ export function verifyConfirm(params: URLSearchParams, apiKey: string, nowMs = D
   const locale = readLocale(params);
   const email = normalizeEmail(unb64(params.get('e') ?? ''));
   const x = params.get('x') ?? '';
+  const s = params.get('s') ?? '';
   const t = params.get('t') ?? '';
-  if (!email || !/^\d{9,11}$/.test(x) || !t) return { ok: false, reason: 'invalid', locale };
-  if (!same(mac(linkKey(apiKey), ['confirm', email, locale, x]), t)) return { ok: false, reason: 'invalid', locale };
+  if (!email || !/^\d{9,11}$/.test(x) || !t || (s && !SUBMISSION_ID.test(s))) return { ok: false, reason: 'invalid', locale };
+  if (!same(mac(linkKey(apiKey), ['confirm', email, locale, x, ...(s ? [s] : [])]), t)) return { ok: false, reason: 'invalid', locale };
   if (Number(x) * 1000 < nowMs) return { ok: false, reason: 'expired', locale };
-  return { ok: true, email, locale };
+  return { ok: true, email, locale, ...(s ? { submissionId: s } : {}) };
 }
 
 export function verifyUnsubscribe(params: URLSearchParams, apiKey: string): Verified {
@@ -81,6 +90,16 @@ export function verifyUnsubscribe(params: URLSearchParams, apiKey: string): Veri
   if (!email || !t) return { ok: false, reason: 'invalid', locale };
   if (!same(mac(linkKey(apiKey), ['unsubscribe', email]), t)) return { ok: false, reason: 'invalid', locale };
   return { ok: true, email, locale };
+}
+
+/**
+ * The address as email analytics stores it (email_events.address_hash): an HMAC under a key of
+ * its own (same derivation as linkKey, purpose 'analytics'), so unique readers can be counted
+ * without keeping the address. Rotating RESEND_API_KEY starts a new series of hashes.
+ */
+export function analyticsHash(apiKey: string, email: string): string {
+  const key = Buffer.from(hkdfSync('sha256', apiKey, SALT, 'analytics', 32));
+  return createHmac('sha256', key).update(email.trim().toLowerCase()).digest('base64url').slice(0, 32);
 }
 
 /** A short, stable, non-reversible tag for an address, for idempotency keys and logs. */

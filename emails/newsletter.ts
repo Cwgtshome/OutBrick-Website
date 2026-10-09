@@ -8,7 +8,8 @@ import { SENDERS, newsletterSegments, sendEmail, subscribeContact, unsubscribeCo
 import { newsletterWelcome, unsubscribePage, confirmPage } from './templates.ts';
 import { SITE } from './core.ts';
 import { databaseAvailable } from '../netlify/community/db.ts';
-import { onConfirmed, onUnsubscribed, preferencesUrl } from '../netlify/lifecycle/newsletter.ts';
+import { recordSiteEvent } from '../netlify/lifecycle/analytics.ts';
+import { consentFor, markResendSynced, onConfirmed, onUnsubscribed, preferencesUrl, queueConfirmRetry, type Consent } from '../netlify/lifecycle/newsletter.ts';
 
 type Env = Record<string, string | undefined>;
 
@@ -38,6 +39,16 @@ export function listUnsubscribeHeaders(url: string): Record<string, string> {
   };
 }
 
+const confirmHeaders = {
+  'Content-Type': 'text/html; charset=utf-8',
+  'Cache-Control': 'no-store',
+  'X-Robots-Tag': 'noindex, nofollow',
+  // Chrome sends Origin: null on a form POST from a no-referrer page. Keep the
+  // same-origin POST verifiable while suppressing the signed URL for external links.
+  'Referrer-Policy': 'same-origin',
+  'Content-Security-Policy': "default-src 'none'; img-src 'self' https://www.outbrick.site; style-src 'unsafe-inline'; font-src 'self' https://www.outbrick.site; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+};
+
 export async function handleConfirm(req: Request, env: Env): Promise<Response> {
   const params = new URL(req.url).searchParams;
   if (req.method === 'HEAD') return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
@@ -55,17 +66,7 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
   const { email, locale } = verified;
   if (req.method === 'GET') {
     const url = new URL(req.url);
-    return new Response(confirmPage(locale, `${url.pathname}${url.search}`), {
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'no-store',
-        'X-Robots-Tag': 'noindex, nofollow',
-        // Chrome sends Origin: null on a form POST from a no-referrer page. Keep the
-        // same-origin POST verifiable while suppressing the signed URL for external links.
-        'Referrer-Policy': 'same-origin',
-        'Content-Security-Policy': "default-src 'none'; img-src 'self' https://www.outbrick.site; style-src 'unsafe-inline'; font-src 'self' https://www.outbrick.site; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
-      },
-    });
+    return new Response(confirmPage(locale, `${url.pathname}${url.search}`), { headers: confirmHeaders });
   }
   const origin = req.headers.get('Origin');
   if (origin && origin !== new URL(req.url).origin) return new Response('Forbidden', { status: 403 });
@@ -75,13 +76,60 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
     console.error('[newsletter] confirm: RESEND_SEGMENT_ID is not set');
     return redirect(req, locale, '/newsletter/link-expired');
   }
+  const lifecycle = databaseAvailable(env);
+  // With the database, the reader and their consent are recorded first, so nothing Resend does
+  // next can lose them: a failed contact or welcome is queued and retried from the outbox.
+  // Without it (previews, scripts), Resend alone is the list, as it always was.
+  let recorded = false;
+  if (lifecycle) {
+    let consent: Consent = {};
+    try {
+      consent = await consentFor(email, verified.submissionId);
+    } catch (error) {
+      console.error(`[newsletter] consent lookup ${tag}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+    for (let attempt = 0; attempt < 2 && !recorded; attempt++) {
+      try {
+        await onConfirmed(email, locale, { consent, resendPending: true });
+        recorded = true;
+        await recordSiteEvent('confirmed', { email, locale, source: consent.source, apiKey });
+      } catch (error) {
+        console.error(`[newsletter] record ${tag} (attempt ${attempt + 1}): ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+    if (!recorded) {
+      // Never say "you're on the list" when we could not write it down: the same page again,
+      // whose button simply tries once more.
+      const url = new URL(req.url);
+      return new Response(confirmPage(locale, `${url.pathname}${url.search}`), {
+        status: 503,
+        headers: { ...confirmHeaders, 'Retry-After': '30' },
+      });
+    }
+  }
+  const retryKey = params.get('x') ?? '';
   const added = await subscribeContact(apiKey, email, segments);
   if (!added.ok) {
     console.error(`[newsletter] confirm ${tag}: ${added.error}`);
-    return redirect(req, locale, '/newsletter/link-expired');
+    if (!recorded) return redirect(req, locale, '/newsletter/link-expired');
+    try {
+      await queueConfirmRetry(email, locale, segments, retryKey, { sync: true, welcome: true });
+      console.log(`[newsletter] confirmed ${tag} [${locale}]; Resend contact and welcome queued for retry`);
+      return redirect(req, locale, '/newsletter/confirmed');
+    } catch (error) {
+      // The row says resend_pending, so the daily sweep still syncs the contact.
+      console.error(`[newsletter] retry queue ${tag}: ${error instanceof Error ? error.message : String(error)}`);
+      return redirect(req, locale, '/newsletter/confirmed');
+    }
+  }
+  if (recorded) {
+    try {
+      await markResendSynced(email);
+    } catch (error) {
+      console.error(`[newsletter] sync flag ${tag}: ${error instanceof Error ? error.message : String(error)}`);
+    }
   }
   const unsub = unsubscribeUrl(SITE, apiKey, email, locale);
-  const lifecycle = databaseAvailable(env);
   const welcome = newsletterWelcome({ locale, unsubscribeUrl: unsub, preferencesUrl: lifecycle ? preferencesUrl(apiKey, email, locale) : undefined });
   const sent = await sendEmail(
     apiKey,
@@ -95,16 +143,16 @@ export async function handleConfirm(req: Request, env: Env): Promise<Response> {
       tags: [{ name: 'form', value: 'newsletter-welcome' }, { name: 'locale', value: locale }],
     },
     // A scanner and the reader both opening the link send one welcome, not two.
-    `welcome-${tag}-${params.get('x') ?? ''}`,
+    `welcome-${tag}-${retryKey}`,
   );
-  if (!sent.ok) console.error(`[newsletter] welcome ${tag}: ${sent.error}`);
-  // The welcome series' letters 2 and 3, and the reader's own preferences (optional: the list
-  // itself lives in Resend, so a database hiccup never blocks a confirmation).
-  if (lifecycle) {
-    try {
-      await onConfirmed(email, locale);
-    } catch (error) {
-      console.error(`[newsletter] lifecycle ${tag}: ${error instanceof Error ? error.message : String(error)}`);
+  if (!sent.ok) {
+    console.error(`[newsletter] welcome ${tag}: ${sent.error}`);
+    if (recorded) {
+      try {
+        await queueConfirmRetry(email, locale, segments, retryKey, { sync: false, welcome: true });
+      } catch (error) {
+        console.error(`[newsletter] welcome retry queue ${tag}: ${error instanceof Error ? error.message : String(error)}`);
+      }
     }
   }
   console.log(`[newsletter] confirmed ${tag} [${locale}]`);
@@ -151,6 +199,7 @@ export async function handleUnsubscribe(req: Request, env: Env): Promise<Respons
   if (databaseAvailable(env)) {
     try {
       await onUnsubscribed(email);
+      await recordSiteEvent('unsubscribed_site', { email, locale, source: oneClick ? 'one-click' : 'page', apiKey });
     } catch (error) {
       console.error(`[newsletter] lifecycle ${tag}: ${error instanceof Error ? error.message : String(error)}`);
     }

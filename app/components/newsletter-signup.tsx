@@ -3,7 +3,7 @@
 import { useLocale } from './locale-context';
 import { formWords } from '../../lib/i18n/forms';
 import { validateForm, useHydrated } from './netlify-form';
-import { newsletterWords } from '../../lib/i18n/newsletter';
+import { NEWSLETTER_CONSENT_VERSION, newsletterWords } from '../../lib/i18n/newsletter';
 import { localePath } from '../../lib/i18n/locales';
 import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
 import '../styles/growth.css';
@@ -23,7 +23,8 @@ import { track } from '../../lib/track';
  * if that request fails, the form falls back to the plain POST.
  *
  * What is collected (email, chosen language, the consent tick) is described
- * on /privacy.
+ * on /privacy. The confirmation also records, as proof of consent, the page
+ * the form was on and NEWSLETTER_CONSENT_VERSION (the hidden field below).
  */
 
 const languages = [
@@ -89,6 +90,8 @@ export function NewsletterSignup({
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       setState('done');
       track('newsletter_signup', { form_name: 'newsletter' });
+      // GA4's recommended lead event; the page path only, never the address.
+      track('generate_lead', { method: 'newsletter', source: window.location.pathname });
     } catch {
       // Let the browser post it the old way: /newsletter/thanks still records it.
       setState('idle');
@@ -126,6 +129,7 @@ export function NewsletterSignup({
         noValidate={ready}
       >
         <input type="hidden" name="form-name" value="newsletter" />
+        <input type="hidden" name="consent-version" value={NEWSLETTER_CONSENT_VERSION} />
         <p hidden>
           <label>
             {t.empty} <input name="bot-field" tabIndex={-1} autoComplete="off" />
