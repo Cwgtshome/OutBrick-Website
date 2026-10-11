@@ -184,7 +184,8 @@ export function mapCopy(value: unknown, text: (english: string) => string, fn: (
   if (Array.isArray(value)) {
     // A drawn board's rows ("R . B+") are cell codes; a table's rows are arrays of prose.
     if (key === 'rows' && value.every((row) => typeof row === 'string')) return value;
-    return value.map((item) => mapCopy(item, text, fn, key));
+    // A table's row inside `rows` is prose: give it its own key so the board-code rule skips it.
+    return value.map((item) => mapCopy(item, text, fn, Array.isArray(item) && key === 'rows' ? 'cells' : key));
   }
   if (value && typeof value === 'object') {
     // Elements, dates, maps and the like are not copy.

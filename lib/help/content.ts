@@ -28,7 +28,19 @@ function catalogComplete(locale: Locale, slug: string): boolean {
   if (!complete.has(key)) {
     const article = en.articles.find((a) => a.slug === slug);
     let missing = !article;
-    if (article) mapCopy(article, (text) => { if (catalogLookup(locale, text) === undefined) missing = true; return text; }, (fn) => fn);
+    // Table cells were added to the catalogs after the first guides were translated; until a
+    // language has them, they show in English inside an otherwise translated guide.
+    const cells = new Set<string>();
+    const collect = (value: unknown, key = ''): void => {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          if (key === 'rows' && Array.isArray(item)) item.forEach((cell) => { if (typeof cell === 'string') cells.add(cell); });
+          else collect(item, key);
+        }
+      } else if (value && typeof value === 'object') for (const [k, v] of Object.entries(value)) collect(v, k);
+    };
+    collect(article);
+    if (article) mapCopy(article, (text) => { if (!cells.has(text) && catalogLookup(locale, text) === undefined) missing = true; return text; }, (fn) => fn);
     complete.set(key, !missing);
   }
   return complete.get(key)!;
