@@ -1,3 +1,4 @@
+import { catalogRecord } from '../lib/i18n/catalog.ts';
 // Every word the OutBrick Community emails and their link pages say, in the site's six languages.
 //
 // Same rules as emails/i18n.ts: the site's voice (warm, plain, British spelling in English),
@@ -938,4 +939,4 @@ const ptBR: CommunityCopy = {
   },
 };
 
-export const communityCopy: Record<EmailLocale, CommunityCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const communityCopy: Record<EmailLocale, CommunityCopy> = catalogRecord<CommunityCopy>('emails', 'communityCopy', { en, fr, de, es, ja, 'pt-BR': ptBR });

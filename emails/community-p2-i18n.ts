@@ -1,3 +1,4 @@
+import { catalogRecord } from '../lib/i18n/catalog.ts';
 // Words for the OutBrick Community's phase-2 emails, in the site's six languages: the weekly
 // digest, the "reply by email" hint under a notification's button, and the note sent back when
 // a reply by email could not be posted.
@@ -40,26 +41,26 @@ export type BounceCopy = {
   why: string;
 };
 
-export const categoryNames: Record<EmailLocale, Record<CategoryKindName, string>> = {
+export const categoryNames: Record<EmailLocale, Record<CategoryKindName, string>> = catalogRecord<Record<CategoryKindName, string>>('emails', 'categoryNames', {
   en: { announcements: 'Announcements', support: 'Help & support', bugs: 'Bug reports', ideas: 'Ideas & feedback', accessibility: 'Accessibility', showcase: 'Show & tell', general: 'General' },
   fr: { announcements: 'Annonces', support: 'Aide et assistance', bugs: 'Signalements de bugs', ideas: 'Idées et suggestions', accessibility: 'Accessibilité', showcase: 'Vos réussites', general: 'Général' },
   de: { announcements: 'Ankündigungen', support: 'Hilfe & Support', bugs: 'Fehlerberichte', ideas: 'Ideen & Feedback', accessibility: 'Barrierefreiheit', showcase: 'Zeigen & erzählen', general: 'Allgemeines' },
   es: { announcements: 'Anuncios', support: 'Ayuda y soporte', bugs: 'Informes de errores', ideas: 'Ideas y sugerencias', accessibility: 'Accesibilidad', showcase: 'Enseña lo tuyo', general: 'General' },
   ja: { announcements: 'お知らせ', support: 'ヘルプとサポート', bugs: '不具合の報告', ideas: 'アイデアとご意見', accessibility: 'アクセシビリティ', showcase: '見せて語ろう', general: '雑談' },
   'pt-BR': { announcements: 'Novidades', support: 'Ajuda e suporte', bugs: 'Relatos de problemas', ideas: 'Ideias e sugestões', accessibility: 'Acessibilidade', showcase: 'Mostre o que você fez', general: 'Geral' },
-};
+});
 
 /** Under the button of a notification whose Reply-To posts a reply. */
-export const replyHints: Record<EmailLocale, string> = {
+export const replyHints: Record<EmailLocale, string> = catalogRecord<string>('emails', 'replyHints', {
   en: 'You can also reply to this email: what you write above the quoted message is posted as your reply in the thread.',
   fr: 'Vous pouvez aussi répondre à cet e-mail : ce que vous écrivez au-dessus du message cité est publié comme votre réponse dans la discussion.',
   de: 'Sie können auch direkt auf diese E-Mail antworten: Was Sie über der zitierten Nachricht schreiben, erscheint als Ihre Antwort im Thema.',
   es: 'También puedes responder a este correo: lo que escribas encima del mensaje citado se publica como tu respuesta en el tema.',
   ja: 'このメールに返信することもできます。引用部分より上に書いた内容が、スレッドへのあなたの返信として投稿されます。',
   'pt-BR': 'Você também pode responder a este e-mail: o texto que escrever acima da mensagem citada será publicado como sua resposta na conversa.',
-};
+});
 
-export const weeklyDigestCopy: Record<EmailLocale, WeeklyDigestCopy> = {
+export const weeklyDigestCopy: Record<EmailLocale, WeeklyDigestCopy> = catalogRecord<WeeklyDigestCopy>('emails', 'weeklyDigestCopy', {
   en: {
     subject: 'Your week in OutBrick Community',
     preheader: 'The busiest threads you follow, new releases and your open questions.',
@@ -150,9 +151,9 @@ export const weeklyDigestCopy: Record<EmailLocale, WeeklyDigestCopy> = {
     cta: 'Acessar a comunidade',
     why: 'Você recebe este e-mail porque ativou o resumo semanal nas configurações da comunidade OutBrick. Ele chega às segundas-feiras, somente quando há novidades.',
   },
-};
+});
 
-export const bounceCopy: Record<EmailLocale, BounceCopy> = {
+export const bounceCopy: Record<EmailLocale, BounceCopy> = catalogRecord<BounceCopy>('emails', 'bounceCopy', {
   en: {
     subject: (title) => `Your reply to “${title}” wasn’t posted`,
     preheader: 'Your email reply didn’t reach the thread. Here’s why, and what you wrote.',
@@ -267,4 +268,4 @@ export const bounceCopy: Record<EmailLocale, BounceCopy> = {
     cta: 'Abrir a conversa',
     why: 'Você recebe este e-mail porque respondeu por e-mail a uma notificação da comunidade OutBrick.',
   },
-};
+});

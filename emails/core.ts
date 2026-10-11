@@ -18,6 +18,7 @@
 // and are bundled by esbuild into the Netlify functions.
 
 import type { EmailLocale } from './i18n.ts';
+import { localeDir } from '../lib/i18n/locales.ts';
 import { brandFooter, navBlock } from './brand.ts';
 import { stage, stageCss, studs, type Host } from './friends.ts';
 
@@ -306,7 +307,7 @@ export function shell({ ctx, title, preheader, body: rawBody, footer, logoAlt, h
   // rest of the preview line with the first words of the body.
   const filler = '&#8204;&nbsp;'.repeat(90);
   return `<!DOCTYPE html>
-<html lang="${ctx.locale}" dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html lang="${ctx.locale}" dir="${localeDir(ctx.locale)}" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -395,7 +396,7 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
   .ob-menu-input:checked + .ob-burger span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
   .ob-menu-input ~ .ob-nav{max-height:0;overflow:hidden;padding-top:0 !important;transition:max-height .35s ease,padding-top .35s ease;}
   .ob-menu-input:checked ~ .ob-nav{max-height:420px;padding-top:14px !important;}
-  .ob-menu-input ~ .ob-nav .ob-nav-a{display:block !important;margin:0 !important;padding:13px 6px !important;border-top:1px solid #3a3190;font-size:17px !important;text-align:left;}
+  .ob-menu-input ~ .ob-nav .ob-nav-a{display:block !important;margin:0 !important;padding:13px 6px !important;border-top:1px solid #3a3190;font-size:17px !important;text-align:start;}
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) and (prefers-reduced-motion:no-preference){${stageCss}
 }
@@ -412,7 +413,7 @@ u + #body a{color:inherit;text-decoration:none;font-size:inherit;font-family:inh
 </style>
 </head>
 <body id="body" class="ob-page" style="margin:0;padding:0;width:100%;background:${color.cream};word-spacing:normal;">
-<div role="article" aria-roledescription="email" aria-label="${esc(title)}" lang="${ctx.locale}" dir="ltr" style="font-family:${f.text};">
+<div role="article" aria-roledescription="email" aria-label="${esc(title)}" lang="${ctx.locale}" dir="${localeDir(ctx.locale)}" style="font-family:${f.text};">
 <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:${color.cream};opacity:0;">${esc(preheader)}${filler}</div>
 <table role="presentation" class="ob-page" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${color.cream}" style="background:${color.cream};">
 <tr><td class="ob-outer" align="center" style="padding:28px 12px 36px;">

@@ -1,14 +1,15 @@
 #!/usr/bin/env node
+import { translatedLocales } from './lib/site-locales.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { listHtmlFiles, fileToRoute, distDir, repoRoot } from './lib/pages.mjs';
 import { extractRenderedCopy, extractMetadataCopy, findCarryovers, carryoverException } from './lib/rendered-copy.mjs';
 
 const builtRoot = path.resolve(process.argv[2] ?? distDir);
-const locales = ['fr', 'de', 'es', 'ja', 'pt-BR'];
+const locales = translatedLocales;
 const files = listHtmlFiles(builtRoot);
 const fileByRoute = new Map(files.map((file) => [fileToRoute(file), file]));
-const englishFiles = files.filter((file) => !/^(fr|de|es|ja|pt-BR)(?:\/|\.html)/.test(file) && !/^google[^/]*\.html$/.test(file));
+const englishFiles = files.filter((file) => !/^(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(?:\/|\.html)/.test(file) && !/^google[^/]*\.html$/.test(file));
 const issues = new Map();
 const exceptions = new Map();
 const missing = [];

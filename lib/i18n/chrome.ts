@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 /**
  * The shared furniture of the brick site — masthead, App Store badge, footer,
  * language switcher — in every language the home page and play guide are
@@ -328,4 +329,4 @@ const ptBR: ChromeCopy = {
   language: 'Idioma',
 };
 
-export const chromeCopy: Record<Locale, ChromeCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const chromeCopy: Record<Locale, ChromeCopy> = catalogRecord<ChromeCopy>('ui', 'chromeCopy', { en, fr, de, es, ja, 'pt-BR': ptBR });

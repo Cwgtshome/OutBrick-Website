@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 import type { Locale } from './locales';
 
 /**
@@ -5,7 +6,7 @@ import type { Locale } from './locales';
  * It shows the newest stories, so every journal article is at most two clicks from its home
  * page (home → story, or home → journal → story).
  */
-export const homeJournalCopy: Record<Locale, { eyebrow: string; title: string; lede: string; list: string; more: string }> = {
+export const homeJournalCopy: Record<Locale, { eyebrow: string; title: string; lede: string; list: string; more: string }> = catalogRecord<{ eyebrow: string; title: string; lede: string; list: string; more: string }>('ui', 'homeJournalCopy', {
   en: {
     eyebrow: 'From the journal',
     title: 'Notes from around the board.',
@@ -48,4 +49,4 @@ export const homeJournalCopy: Record<Locale, { eyebrow: string; title: string; l
     list: 'Artigos mais recentes do blog',
     more: 'Ler o blog',
   },
-};
+});

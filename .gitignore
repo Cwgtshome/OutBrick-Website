@@ -46,3 +46,6 @@ tsconfig.tsbuildinfo
 
 # Netlify CLI state
 .netlify
+
+# Generated catalog scripts (scripts/i18n/publish.mts)
+/public/i18n/

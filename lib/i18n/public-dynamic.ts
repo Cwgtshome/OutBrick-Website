@@ -5,10 +5,14 @@ import { getShelf } from '../journal';
 import { tagPageCopy } from './journal-tags';
 import { journalUi, localizeArticle } from './blog';
 import type { TranslatedLocale } from './locales';
+import { isLegacyLocale } from './locales';
+import { catalogStrings, catalogTemplate } from './catalog.ts';
 
 const cached: Partial<Record<TranslatedLocale, Record<string,string>>> = {};
 export function journalTextTranslations(locale: TranslatedLocale): Record<string,string> {
   if (cached[locale]) return cached[locale]!;
+  // The journal is not translated into the catalog languages.
+  if (!isLegacyLocale(locale)) return (cached[locale] = {});
   const map: Record<string,string> = { ...journalUi[locale].categories };
   if (locale === 'pt-BR') Object.assign(map, { Journal: 'Blog', insight: 'percepção', smartphones: 'celulares', feedback: 'retorno', nostalgia: 'nostalgia' });
   for (const author of authors) {
@@ -30,8 +34,22 @@ const phrases = {
  ja: { journal:'OutBrickジャーナル', author:(name:string)=>`${name} — OutBrickジャーナルの著者`, count:(n:number)=>`OutBrickジャーナルの記事${n}本。`, remote:(title:string)=>`${title} — OutBrickのリモート求人`, collection:(label:string)=>`${label} — OutBrickジャーナル`, cited:(n:number)=>`OutBrickジャーナルの記事${n}本。研究に関する主張はすべて出典を示しています。` },
  'pt-BR': { journal:'Blog da OutBrick', author:(name:string)=>`${name}, autor(a) do blog da OutBrick`, count:(n:number)=>`${n} artigos no blog da OutBrick.`, remote:(title:string)=>`${title} — vaga remota na OutBrick`, collection:(label:string)=>`${label} — Blog da OutBrick`, cited:(n:number)=>`${n} artigos no blog da OutBrick; toda afirmação baseada em pesquisa tem sua fonte.` },
 };
+/** The English of `phrases`, as templates for the catalog languages. */
+const english = catalogStrings('pages', 'dynamic-titles', {
+  journal: 'The OutBrick Journal',
+  author: '{0}, author at the OutBrick Journal',
+  count: '{0, plural, one {# article} other {# articles}} in the OutBrick Journal.',
+  remote: '{0} — remote job at OutBrick',
+  collection: '{0} — The OutBrick Journal',
+  cited: '{0, plural, one {# article} other {# articles}} from the OutBrick Journal; every research claim is cited.',
+});
+function phrasesFor(locale: TranslatedLocale): (typeof phrases)['fr'] {
+  if (isLegacyLocale(locale)) return phrases[locale];
+  const t = (template: string, ...args: unknown[]) => catalogTemplate(locale, template, args);
+  return { journal: t(english.journal), author: (name) => t(english.author, name), count: (n) => t(english.count, n), remote: (title) => t(english.remote, title), collection: (label) => t(english.collection, label), cited: (n) => t(english.cited, n) };
+}
 export function dynamicPageCopy(path:string,locale:TranslatedLocale,t:(text:string)=>string): {title:string;description:string}|undefined {
-  const p=phrases[locale];
+  const p=phrasesFor(locale);
   if(path.startsWith('/authors/')) {
     const author=authors.find(a=>a.id===path.split('/')[2]); if(!author)return;
     const bio=journalUi[locale].authors[author.id]?.bio??t(author.bio);

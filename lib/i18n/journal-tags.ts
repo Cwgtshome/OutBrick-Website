@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 /**
  * Copy for the journal's tag pages (/blog/tag/<slug> and its five translations): the heading,
  * the introduction, the search snippet and the page title, in every language.
@@ -11,14 +12,15 @@
 import type { BlogArticle } from '../blog';
 import { getTagPages, isIndexedTag, type Tag } from '../journal';
 import { journalUi, localizeArticle } from './blog';
-import type { Locale, TranslatedLocale } from './locales';
+import type { LegacyLocale, Locale } from './locales';
+import { isLegacyLocale } from './locales';
 import { journalTextTranslations } from './public-dynamic';
 
 /**
  * Where two English tags translate to the same words in a language, the tag page keeps them
  * apart with these labels (so two tag pages never share a title or a heading).
  */
-export const distinctTagLabels: Record<TranslatedLocale, Record<string, string>> = {
+export const distinctTagLabels: Record<LegacyLocale, Record<string, string>> = {
   fr: { 'gaming-habits': 'habitudes de jeu', 'player-habits': 'habitudes des joueurs' },
   de: { 'gaming-habits': 'Spielgewohnheiten', 'player-habits': 'Gewohnheiten der Spieler' },
   es: { 'gaming-habits': 'hábitos de juego', 'player-habits': 'hábitos de los jugadores', 'mobile-games': 'juegos móviles', 'mobile-gaming': 'jugar en el móvil' },
@@ -38,6 +40,7 @@ export const distinctTagLabels: Record<TranslatedLocale, Record<string, string>>
 /** The tag's name in `locale`. */
 export function tagLabel(tag: Tag, locale: Locale): string {
   if (locale === 'en') return tag.label;
+  if (!isLegacyLocale(locale)) return tag.label;
   return distinctTagLabels[locale][tag.slug] ?? journalTextTranslations(locale)[tag.label] ?? tag.label;
 }
 
@@ -61,7 +64,7 @@ type Words = {
   title: (label: string, n: number) => string;
 };
 
-const words: Record<Locale, Words> = {
+const words: Record<Locale, Words> = catalogRecord<Words>('blog', 'words', {
   en: {
     h1: (label) => `Stories about ${label}`,
     lede: (n, shelves, list) => `${n} stories from the journal share this topic, on the ${list(shelves)} ${shelves.length === 1 ? 'shelf' : 'shelves'}.`,
@@ -122,7 +125,7 @@ const words: Record<Locale, Words> = {
     quote: (t) => `“${t}”`,
     title: (label) => `${label}: artigos — Blog da OutBrick`,
   },
-};
+});
 
 const listIn = (locale: Locale) => (items: string[]) =>
   locale === 'ja' ? items.join('、') : new Intl.ListFormat(locale, { style: 'long', type: 'conjunction' }).format(items);

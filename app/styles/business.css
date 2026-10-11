@@ -73,7 +73,7 @@
 :is(.ed, .ob-site) .obf .obf-field textarea { min-height: 132px; resize: vertical; }
 :is(.ed, .ob-site) .obf .obf-field select {
   appearance: none;
-  padding-right: 46px;
+  padding-inline-end: 46px;
   background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='20' height='20'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%231d1747' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center / 20px 20px;
   cursor: pointer;
 }
@@ -279,8 +279,8 @@
 .ed .aff-proposal::before {
   content: '';
   position: absolute;
-  left: 7%;
-  right: 7%;
+  inset-inline-start: 7%;
+  inset-inline-end: 7%;
   top: 7px;
   height: 5px;
   border-radius: 999px;
@@ -319,7 +319,7 @@
 .ed .bz-list { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
 .ed .bz-list li {
   position: relative;
-  padding-left: 28px;
+  padding-inline-start: 28px;
   font-size: 1.04rem;
   line-height: 1.6;
   color: #2b2650;
@@ -327,7 +327,7 @@
 .ed .bz-list li::before {
   content: '';
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 0.5em;
   width: 14px;
   height: 10px;
@@ -360,7 +360,7 @@
   content: '';
   position: absolute;
   top: -9px;
-  left: 26px;
+  inset-inline-start: 26px;
   width: 94px;
   height: 12px;
   background: radial-gradient(ellipse 11px 6px at 11px 6px, #fff 98%, transparent) 0 0 / 36px 12px repeat-x;
@@ -411,7 +411,7 @@
   text-align: center;
   rotate: -2deg;
 }
-.ed .bz-codeslab .ed-studs { left: 50%; translate: -50% 0; }
+.ed .bz-codeslab .ed-studs { inset-inline-start: 50%; translate: -50% 0; }
 .ed .bz-codeslab-label { font-family: var(--ed-display); font-weight: 500; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; }
 .ed .bz-codeslab-code { font-family: var(--ed-display); font-weight: 600; font-size: clamp(1.9rem, 1.3rem + 2vw, 2.6rem); letter-spacing: 0.06em; line-height: 1; }
 .ed .bz-codeslab-link { font-size: 0.95rem; }
@@ -428,7 +428,7 @@
 .ed .bz-receipt-tag {
   position: absolute;
   top: -14px;
-  right: 22px;
+  inset-inline-end: 22px;
   padding: 6px 14px 5px;
   border-radius: 9px;
   font-family: var(--ed-display);
@@ -535,7 +535,7 @@
 .ed .bz-boiler p { font-size: 1.12rem; line-height: 1.7; color: #2b2650; max-width: 64ch; }
 
 .ed .bz-quote { margin: 26px 0 0; max-width: 900px; }
-.ed .bz-quote blockquote { margin: 0; position: relative; padding-left: clamp(24px, 4vw, 48px); border-left: 8px solid var(--ed-gold); }
+.ed .bz-quote blockquote { margin: 0; position: relative; padding-inline-start: clamp(24px, 4vw, 48px); border-inline-start: 8px solid var(--ed-gold); }
 .ed .bz-quote blockquote p {
   font-family: var(--ed-display);
   font-weight: 500;
@@ -543,12 +543,12 @@
   line-height: 1.3;
   color: var(--ed-title);
 }
-.ed .bz-quote figcaption { display: flex; align-items: center; gap: 14px; margin-top: 24px; padding-left: clamp(24px, 4vw, 48px); }
+.ed .bz-quote figcaption { display: flex; align-items: center; gap: 14px; margin-top: 24px; padding-inline-start: clamp(24px, 4vw, 48px); }
 .ed .bz-quote figcaption img { width: 56px; height: 56px; border-radius: 22%; box-shadow: 0 4px 0 #0b0730; }
 .ed .bz-quote figcaption b { display: block; font-family: var(--ed-display); font-weight: 600; color: var(--ed-title); }
 .ed .bz-quote figcaption span { color: var(--ed-lilac-2); font-size: 0.95rem; }
 .ed .bz-quote-inline { margin: 1.6em 0; }
-.ed .bz-quote-inline blockquote { border-left-color: #7b5cf0; }
+.ed .bz-quote-inline blockquote { border-inline-start-color: #7b5cf0; }
 .ed .bz-quote-inline blockquote p { font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem); color: var(--ed-on-paper); }
 .ed .bz-quote-inline figcaption { margin-top: 14px; }
 .ed .bz-quote-inline figcaption b { color: var(--ed-on-paper); }
@@ -607,9 +607,9 @@
 
 .ed .bz-crew { display: flex; justify-content: center; align-items: flex-end; }
 .ed .bz-crew img { width: min(170px, 30vw); filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.35)); }
-.ed .bz-crew img:nth-child(1) { rotate: -6deg; margin-right: -26px; }
+.ed .bz-crew img:nth-child(1) { rotate: -6deg; margin-inline-end: -26px; }
 .ed .bz-crew img:nth-child(2) { position: relative; z-index: 2; width: min(210px, 36vw); }
-.ed .bz-crew img:nth-child(3) { rotate: 6deg; margin-left: -26px; }
+.ed .bz-crew img:nth-child(3) { rotate: 6deg; margin-inline-start: -26px; }
 
 .ed .bz-filter { display: flex; flex-wrap: wrap; gap: 10px; min-width: 0; margin: 28px 0 0; padding: 0; border: 0; }
 .ed .bz-filter button {
@@ -702,7 +702,7 @@
   content: counter(step);
   position: absolute;
   top: 16px;
-  left: 18px;
+  inset-inline-start: 18px;
   display: grid;
   place-items: center;
   width: 44px;
@@ -742,7 +742,7 @@
 .ed .bz-benefits li::before {
   content: '';
   position: absolute;
-  left: 18px;
+  inset-inline-start: 18px;
   top: 22px;
   width: 18px;
   height: 13px;
@@ -763,8 +763,8 @@
 .ed .bz-jobart { position: relative; display: grid; justify-items: center; align-items: end; padding-bottom: 8px; }
 .ed .bz-jobart-plinth {
   position: absolute;
-  left: 8%;
-  right: 8%;
+  inset-inline-start: 8%;
+  inset-inline-end: 8%;
   bottom: 0;
   height: 46%;
   border-radius: 22px;
@@ -774,8 +774,8 @@
 .ed .bz-jobart-plinth::before {
   content: '';
   position: absolute;
-  left: 8%;
-  right: 8%;
+  inset-inline-start: 8%;
+  inset-inline-end: 8%;
   top: 8px;
   height: 7px;
   border-radius: 999px;
@@ -808,7 +808,7 @@
   height: 100%;
   padding: 16px 18px;
   border-radius: 14px;
-  border-left: 10px solid var(--c);
+  border-inline-start: 10px solid var(--c);
   text-decoration: none;
   background: var(--ed-ink-3);
   box-shadow: 0 4px 0 #0b0730;

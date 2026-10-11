@@ -1,3 +1,4 @@
+import { locales } from './i18n/locales.ts';
 import { currentGameCopy } from './i18n/current-game.ts';
 /**
  * The site's structured data (schema.org JSON-LD), in one place.
@@ -64,8 +65,8 @@ const appStoreFallback = {
 /** Mourad Hamdi's App Store developer page: the one public profile of his that exists today. */
 const FOUNDER_APP_STORE_PROFILE = 'https://apps.apple.com/us/developer/mourad-hamdi/id1831080974';
 
-/** Languages the site itself is published in (home page and play guide; the rest is English). */
-export const siteLanguages = ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'];
+/** Languages the site itself is published in. */
+export const siteLanguages: string[] = [...locales];
 
 const founderAuthor = authors.find((author) => author.id === 'mourad-hamdi')!;
 

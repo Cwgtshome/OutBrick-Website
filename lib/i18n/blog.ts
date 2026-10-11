@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 import { currentGameCopy } from './current-game.ts';
 /**
  * The journal in the languages it is translated into.
@@ -34,11 +35,11 @@ import { remainingJa } from '../blog-l10n/remaining/ja.ts';
 import { remainingPtBRA } from '../blog-l10n/remaining/pt-BR-a.ts';
 import { remainingPtBRB } from '../blog-l10n/remaining/pt-BR-b.ts';
 import { remainingPtBRc } from '../blog-l10n/remaining/pt-BR-c.ts';
-const remainingGuides: Record<TranslatedLocale, ExtraGuides> = { fr: remainingFr, de: remainingDe, es: remainingEs, ja: remainingJa, 'pt-BR': { ...remainingPtBRA, ...remainingPtBRB, ...remainingPtBRc } };
+const remainingGuides: Record<LegacyLocale, ExtraGuides> = { fr: remainingFr, de: remainingDe, es: remainingEs, ja: remainingJa, 'pt-BR': { ...remainingPtBRA, ...remainingPtBRB, ...remainingPtBRc } };
 import { siteUrl } from '../site.ts';
 import { localizedAsset } from './assets.ts';
-import type { Locale, TranslatedLocale } from './locales.ts';
-import { translatedLocales } from './locales.ts';
+import type { LegacyLocale, Locale, TranslatedLocale } from './locales.ts';
+import { isLegacyLocale, legacyLocales } from './locales.ts';
 
 /** The five cornerstone guides, typed section by section. */
 const cornerstoneSlugs = [
@@ -125,7 +126,7 @@ export type LocaleGuides = { [S in GuideSlug]: GuideTranslation<S> };
 export type ExtraGuideTranslation = Omit<GuideTranslation<GuideSlug>, 'sections'> & { sections: Record<string, SectionTranslation> };
 export type ExtraGuides = Record<string, ExtraGuideTranslation>;
 
-const guides: Record<TranslatedLocale, LocaleGuides> = { fr, de, es, ja, 'pt-BR': ptBRCore1 as LocaleGuides };
+const guides: Record<LegacyLocale, LocaleGuides> = { fr, de, es, ja, 'pt-BR': ptBRCore1 as LocaleGuides };
 
 /* ------------------------------------------------------------------ UI words */
 
@@ -535,7 +536,7 @@ const jaUi: JournalUi = {
   },
 };
 
-export const journalUi: Record<Locale, JournalUi> = { en, fr: frUi, de: deUi, es: esUi, ja: jaUi, 'pt-BR': ptBRJournalUi };
+export const journalUi: Record<Locale, JournalUi> = catalogRecord<JournalUi>('ui', 'journalUi', { en, fr: frUi, de: deUi, es: esUi, ja: jaUi, 'pt-BR': ptBRJournalUi });
 
 /* ------------------------------------------------------------------ paths */
 
@@ -551,7 +552,7 @@ export function guideUrl(locale: Locale, slug: string): string {
 /** hreflang set for a translated guide: every language, `x-default` English. Absolute URLs. */
 export function guideLanguages(slug: string): Record<string, string> {
   const languages: Record<string, string> = { en: guideUrl('en', slug) };
-  for (const l of translatedLocales) languages[l] = guideUrl(l, slug);
+  for (const l of legacyLocales) languages[l] = guideUrl(l, slug);
   languages['x-default'] = guideUrl('en', slug);
   return languages;
 }
@@ -564,7 +565,7 @@ export function journalPath(locale: Locale): string {
 /** hreflang set for the journal index: the English journal and the four translated indexes. */
 export function journalLanguages(): Record<string, string> {
   const languages: Record<string, string> = { en: `${siteUrl}/blog` };
-  for (const l of translatedLocales) languages[l] = `${siteUrl}/${l}/blog`;
+  for (const l of legacyLocales) languages[l] = `${siteUrl}/${l}/blog`;
   languages['x-default'] = `${siteUrl}/blog`;
   return languages;
 }
@@ -586,6 +587,8 @@ function sameShape(what: string, english: unknown[] | undefined, translated: unk
 export function localizeArticle(slug: string, locale: TranslatedLocale): BlogArticle {
   const english = getArticle(slug);
   if (!english) throw new Error(`lib/i18n/blog.ts: ${slug} is not in lib/blog.ts`);
+  // The journal is translated into the first five languages only; callers fall back to English.
+  if (!isLegacyLocale(locale)) throw new Error(`lib/blog-l10n: the journal has no ${locale} translation`);
   const t = ((guides[locale] as Record<string, unknown>)[slug] ?? extraGuides[locale][slug] ?? remainingGuides[locale][slug]) as ExtraGuideTranslation | undefined;
   if (!t) throw new Error(`lib/blog-l10n: ${slug} has no ${locale} translation`);
   const where = `${locale}/${slug}`;
@@ -631,7 +634,7 @@ export function localizeArticle(slug: string, locale: TranslatedLocale): BlogArt
 export function assertCompleteArticleTranslations() {
   const expected = new Set(articles.map(a => a.slug));
   if (expected.size !== articles.length) throw new Error('Duplicate English article slugs');
-  for (const locale of translatedLocales) {
+  for (const locale of legacyLocales) {
     const supplied: ExtraGuides = { ...guides[locale], ...extraGuides[locale], ...remainingGuides[locale] };
     const missing = [...expected].filter(slug => !supplied[slug]);
     const orphan = Object.keys(supplied).filter(slug => !expected.has(slug));

@@ -179,7 +179,7 @@ export function safeReturn(
   if (!value || !value.startsWith('/') || value.startsWith('//'))
     return communityPath(locale);
   const path = value.split(/[?#]/)[0];
-  return /^\/(?:(?:fr|de|es|ja|pt-BR)\/)?community(?:\/|$)/.test(path)
+  return /^\/(?:(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)\/)?community(?:\/|$)/.test(path)
     ? value
     : communityPath(locale);
 }

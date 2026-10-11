@@ -1,3 +1,4 @@
+import { catalogRecord } from '../../i18n/catalog.ts';
 import type { Locale } from '../../i18n/locales.ts';
 import type { SupportCopy } from '../model.ts';
 import { en } from './en.ts';
@@ -12,4 +13,4 @@ import { ptBR } from './pt-BR.ts';
  * content, so client components can read them by locale (some entries are functions, which
  * cannot be passed from a server component as props).
  */
-export const supportCopies: Record<Locale, SupportCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const supportCopies: Record<Locale, SupportCopy> = catalogRecord<SupportCopy>('support', 'supportCopies', { en, fr, de, es, ja, 'pt-BR': ptBR });

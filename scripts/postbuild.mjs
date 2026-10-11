@@ -26,7 +26,9 @@ import { decodeEntities, distDir, indexablePages, listHtmlFiles, fileToRoute, me
 const { articles, authors } = await import('../lib/blog.ts');
 const { localizeArticle, journalUi, assertCompleteArticleTranslations } = await import('../lib/i18n/blog.ts');
 const { homeCopy } = await import('../lib/i18n/home.ts');
-const { translatedLocales, storefronts } = await import('../lib/i18n/locales.ts');
+const { translatedLocales, legacyLocales, storefronts } = await import('../lib/i18n/locales.ts');
+// The catalog languages' words, for the feeds and manifests written below.
+await import('../lib/i18n/catalog/install-all.ts');
 assertCompleteArticleTranslations();
 const { releases, releaseAnchor, currentReleaseIn } = await import('../lib/releases.ts');
 /** A feed item's title: "OutBrick 5.0.1: <headline>", unless the headline already names the version. */
@@ -210,17 +212,17 @@ const pages = indexablePages();
 if (pages.length === 0) throw new Error('[postbuild] no indexable pages found in dist/client — refusing to write an empty sitemap');
 
 // The guides the journal is translated into other languages (lib/i18n/blog.ts), read from what was built.
-const localizedGuideSlugs = new Set(pages.map((p) => p.route.match(/^\/(?:fr|de|es|ja|pt-BR)\/blog\/([^/]+)$/)?.[1]).filter(Boolean));
+const localizedGuideSlugs = new Set(pages.map((p) => p.route.match(/^\/(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)\/blog\/([^/]+)$/)?.[1]).filter(Boolean));
 
 const entries = pages.map((page) => {
   let lastmod;
   // An article in English (/blog/<slug>) or translated (/fr/blog/<slug> …): its lastmod is the
   // article's own updatedAt, which a translation shares.
-  const articleSlug = page.route.match(/^(?:\/(?:fr|de|es|ja|pt-BR))?\/blog\/([^/]+)$/)?.[1];
-  const collection = page.route.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/blog\/(category|tag)\/([^/]+)$/);
+  const articleSlug = page.route.match(/^(?:\/(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn))?\/blog\/([^/]+)$/)?.[1];
+  const collection = page.route.match(/^(?:\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn))?\/blog\/(category|tag)\/([^/]+)$/);
   if (articleSlug && articleBySlug.has(articleSlug)) {
     lastmod = isoDate(articleBySlug.get(articleSlug).updatedAt);
-  } else if (/^\/(fr|de|es|ja|pt-BR)\/blog$/.test(page.route)) {
+  } else if (/^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)\/blog$/.test(page.route)) {
     // A translated journal index changes when one of its guides does.
     const guides = articles.filter((a) => localizedGuideSlugs.has(a.slug));
     lastmod = guides.map((a) => isoDate(a.updatedAt)).reduce((max, d) => (d > max ? d : max), '') || undefined;
@@ -251,7 +253,7 @@ entries.sort((a, b) => (a.loc === `${siteUrl}/` ? -1 : b.loc === `${siteUrl}/` ?
 // with scripts/lib/sitemap.mjs; netlify/functions/deploy-succeeded.mjs does the same live.
 const sectionOf = (loc) => {
   const route = new URL(loc).pathname;
-  const m = route.match(/^\/(fr|de|es|ja|pt-BR)(\/.*)?$/);
+  const m = route.match(/^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(\/.*)?$/);
   const locale = m ? m[1] : 'en';
   const rest = m ? m[2] ?? '/' : route;
   return `${/^\/blog(\/|$)/.test(rest) ? 'journal' : 'pages'}-${locale}`;
@@ -450,8 +452,8 @@ const indexJson = JSON.stringify(searchIndex);
 fs.writeFileSync(path.join(distDir, 'journal-index.json'), indexJson);
 console.log(`[postbuild] journal-index.json: ${searchIndex.length} stories, ${(indexJson.length / 1024).toFixed(1)} KB`);
 
-// Each language has a complete searchable journal, independent feed, and category feeds.
-for (const locale of translatedLocales) {
+// Each journal language has a complete searchable journal, independent feed, and category feeds.
+for (const locale of legacyLocales) {
   const ui = journalUi[locale];
   const localized = feedArticles.map(article => ({ ...localizeArticle(article.slug, locale), category: ui.categories[article.category] ?? article.category }));
   const dir = path.join(distDir, locale);
@@ -519,14 +521,8 @@ console.log(`[postbuild] whats-new/feed.xml: ${releaseItems.length} items`);
 // ---------------------------------------------------------------------------------------
 // Known issues: one RSS feed per language (support/known-issues/feed.xml), newest check first.
 {
-  const issueSets = {
-    en: (await import('../lib/support/issues/en.ts')).en,
-    fr: (await import('../lib/support/issues/fr.ts')).fr,
-    de: (await import('../lib/support/issues/de.ts')).de,
-    es: (await import('../lib/support/issues/es.ts')).es,
-    ja: (await import('../lib/support/issues/ja.ts')).ja,
-    'pt-BR': (await import('../lib/support/issues/pt-BR.ts')).ptBR,
-  };
+  const { knownIssues } = await import('../lib/support/content.ts');
+  const issueSets = Object.fromEntries(['en', ...translatedLocales].map((locale) => [locale, knownIssues(locale)]));
   const { supportCopies } = await import('../lib/support/copy/index.ts');
   const plain = (t) => String(t).replace(/\*\*([^*]+)\*\*/g, '$1').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
   for (const [locale, list] of Object.entries(issueSets)) {
@@ -542,7 +538,7 @@ console.log(`[postbuild] whats-new/feed.xml: ${releaseItems.length} items`);
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, 'feed.xml'), xml);
   }
-  console.log('[postbuild] support/known-issues/feed.xml in 6 languages');
+  console.log(`[postbuild] support/known-issues/feed.xml in ${Object.keys(issueSets).length} languages`);
 }
 
 for (const locale of translatedLocales) {
@@ -575,9 +571,9 @@ const home = pages.find((p) => p.route === '/');
 const blogPages = pages.filter((p) => p.route === '/blog' || p.route.startsWith('/blog/'));
 const legalRoutes = /^\/(privacy|privacy-choices|terms|eula|license-agreement|refunds|age-rating|accessibility)$/;
 const legalPages = pages.filter((p) => legalRoutes.test(p.route));
-const localizedRoutes = /^\/(fr|de|es|ja|pt-BR)(\/|$)/;
+const localizedRoutes = /^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(\/|$)/;
 // The journal's five cornerstone guides in French, German, Spanish and Japanese, and their indexes.
-const translatedBlogPages = pages.filter((p) => /^\/(fr|de|es|ja|pt-BR)\/blog(\/|$)/.test(p.route));
+const translatedBlogPages = pages.filter((p) => /^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)\/blog(\/|$)/.test(p.route));
 const localizedPages = pages.filter((p) => localizedRoutes.test(p.route) && !translatedBlogPages.includes(p));
 const mainPages = pages.filter((p) => p !== home && !blogPages.includes(p) && !legalPages.includes(p) && !localizedPages.includes(p));
 

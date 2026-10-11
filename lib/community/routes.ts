@@ -11,6 +11,7 @@
  */
 
 import type { CommunityLocale } from './contract.ts';
+import { translatedLocales } from '../i18n/locales.ts';
 import { categorySlugs } from '../i18n/community.ts';
 
 /** Single-segment pages of the client app. */
@@ -37,10 +38,11 @@ const singlePages = new Set([
 const staticFiles = /^(?:faq|guidelines)\.(?:html|rsc)$/;
 
 export type CommunityAddress = { locale: CommunityLocale; known: boolean };
+const communityPattern = new RegExp(`^(?:/(${translatedLocales.map((l) => l.replace('-', '\\-')).join('|')}))?/community(/.*)?$`);
 
 /** `null` when the path is not inside a community at all. */
 export function communityAddress(pathname: string): CommunityAddress | null {
-  const match = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/community(\/.*)?$/);
+  const match = pathname.match(communityPattern);
   if (!match) return null;
   const locale = (match[1] as CommunityLocale | undefined) ?? 'en';
   let parts: string[];

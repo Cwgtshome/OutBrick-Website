@@ -84,7 +84,7 @@ const EMAIL = /\b[A-Z0-9._%+-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)*\.[A-Z]{2,}\b/gi;
     if (!/\.(txt|xml|json|rsc|webmanifest)$/.test(full) || full.includes(`${path.sep}_next${path.sep}`)) continue;
     // The contact page's own RSC payload repeats the one address it is allowed to show (below).
     const rel = path.relative(distDir, full).split(path.sep).join('/');
-    const contactPayload = /^(?:(?:fr|de|es|ja|pt-BR)\/)?contact\.rsc$/.test(rel);
+    const contactPayload = /^(?:(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)\/)?contact\.rsc$/.test(rel);
     const text = fs.readFileSync(full, 'utf8');
     const found = [...new Set((contactPayload ? text.replaceAll('support@outbrick.site', '') : text).match(EMAIL) ?? [])];
     if (found.length) {
@@ -113,7 +113,7 @@ for (const file of listHtmlFiles()) {
   // payload) fails the audit.
   // One deliberate exception (owner's request, October 2026): the contact page itself, in each
   // language, offers support@outbrick.site as a mailto link beside the form. Nowhere else.
-  const allowedEmail = /^\/(?:(?:fr|de|es|ja|pt-BR)\/)?contact$/.test(route) ? 'support@outbrick.site' : null;
+  const allowedEmail = /^\/(?:(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)\/)?contact$/.test(route) ? 'support@outbrick.site' : null;
   const scanned = allowedEmail ? html.replaceAll(`mailto:${allowedEmail}`, '').replaceAll(allowedEmail, '') : html;
   if (/mailto:/i.test(scanned)) err('page contains a mailto: link — link to /contact instead');
   const emails = [...new Set(scanned.match(EMAIL) ?? [])];

@@ -1,3 +1,4 @@
+import { catalogRecord } from '../lib/i18n/catalog.ts';
 // The words the feature board adds to the community emails (community-fx, 7 October 2026): the
 // 'badge' notification and the badge names, and the ideas status "In progress", in the site's
 // six languages. emails/community-i18n.ts folds these into each language's CommunityCopy.
@@ -193,4 +194,4 @@ const ptBR: BadgeEmailCopy = {
   fallback: 'uma nova medalha',
 };
 
-export const badgeEmailCopy: Record<EmailLocale, BadgeEmailCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const badgeEmailCopy: Record<EmailLocale, BadgeEmailCopy> = catalogRecord<BadgeEmailCopy>('emails', 'badgeEmailCopy', { en, fr, de, es, ja, 'pt-BR': ptBR });

@@ -1,3 +1,4 @@
+import { catalogRecord } from '../i18n/catalog.ts';
 import type { Locale } from '../i18n/locales.ts';
 import { helpArticle, helpArticles } from '../help/content.ts';
 import { plainInline } from './inline.ts';
@@ -11,7 +12,7 @@ import { es as esIssues } from './issues/es.ts';
 import { ja as jaIssues } from './issues/ja.ts';
 import { ptBR as ptBRIssues } from './issues/pt-BR.ts';
 
-const issues: Record<Locale, KnownIssue[]> = { en: enIssues, fr: frIssues, de: deIssues, es: esIssues, ja: jaIssues, 'pt-BR': ptBRIssues };
+const issues: Record<Locale, KnownIssue[]> = catalogRecord<KnownIssue[]>('support', 'issues', { en: enIssues, fr: frIssues, de: deIssues, es: esIssues, ja: jaIssues, 'pt-BR': ptBRIssues });
 
 export const supportCopy = (locale: Locale): SupportCopy => supportCopies[locale] ?? supportCopies.en;
 

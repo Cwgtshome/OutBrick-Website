@@ -34,9 +34,9 @@ export type IssueFile = { id: string; name: string; note?: string; address?: str
 /** The postal address every email now prints in its brand footer (emails/brand.ts). Kept under its old name for the scripts. */
 export const PLACEHOLDER_ADDRESS = postalAddress('en');
 
-const sampleNames: Record<EmailLocale, string> = { en: 'Ada Lovelace', fr: 'Camille Martin', de: 'Lena Schmidt', es: 'Lucía García', ja: '山田 花子', 'pt-BR': 'Ana Souza' };
+const sampleNamesWritten: Partial<Record<EmailLocale, string>> = { en: 'Ada Lovelace', fr: 'Camille Martin', de: 'Lena Schmidt', es: 'Lucía García', ja: '山田 花子', 'pt-BR': 'Ana Souza' };
 
-const sampleMessages: Record<EmailLocale, string> = {
+const sampleMessagesWritten: Partial<Record<EmailLocale, string>> = {
   en: 'Level 213 keeps telling me I’m out of moves one move before the gate.\nIs that board solvable at the target? <b>Not bold</b> & not a link: https://example.com',
   fr: 'Le niveau 213 me dit que je n’ai plus de coups juste avant la porte.\nCe plateau est-il faisable dans l’objectif ? <b>Pas en gras</b> & pas un lien.',
   de: 'Stufe 213 sagt mir einen Zug vor dem Tor, dass ich keine Züge mehr habe.\nIst das Spielfeld im Ziel lösbar? <b>Nicht fett</b> & kein Link.',
@@ -140,7 +140,7 @@ export const templateTitles: Record<TemplateName, string> = {
   ...lifecycleTemplateTitles,
 };
 
-const sampleTitles: Record<EmailLocale, string> = {
+const sampleTitlesWritten: Partial<Record<EmailLocale, string>> = {
   en: 'VoiceOver reads the move counter <i>twice</i>',
   fr: 'VoiceOver lit le compteur de coups <i>deux fois</i>',
   de: 'VoiceOver liest den Zugzähler <i>doppelt</i> vor',
@@ -149,9 +149,9 @@ const sampleTitles: Record<EmailLocale, string> = {
   'pt-BR': 'O VoiceOver lê o contador de movimentos <i>duas vezes</i>',
 };
 
-const sampleActors: Record<EmailLocale, string> = { en: 'Ada', fr: 'Camille', de: 'Lena', es: 'Lucía', ja: '花子', 'pt-BR': 'Ana' };
+const sampleActorsWritten: Partial<Record<EmailLocale, string>> = { en: 'Ada', fr: 'Camille', de: 'Lena', es: 'Lucía', ja: '花子', 'pt-BR': 'Ana' };
 
-const sampleNotes: Record<EmailLocale, string> = {
+const sampleNotesWritten: Partial<Record<EmailLocale, string>> = {
   en: 'Fixed in 5.1. Thanks for the clear steps!',
   fr: 'Corrigé dans la 5.1. Merci pour les étapes si claires !',
   de: 'Behoben in 5.1. Danke für die klaren Schritte!',
@@ -160,7 +160,7 @@ const sampleNotes: Record<EmailLocale, string> = {
   'pt-BR': 'Corrigido na versão 5.1. Obrigado por explicar tão bem!',
 };
 
-const sampleReasons: Record<EmailLocale, string> = {
+const sampleReasonsWritten: Partial<Record<EmailLocale, string>> = {
   en: 'It shared another player’s email address. You’re welcome to post it again without that line.',
   fr: 'Il contenait l’adresse e-mail d’un autre joueur. Vous pouvez le republier sans cette ligne.',
   de: 'Er enthielt die E-Mail-Adresse eines anderen Spielers. Sie können ihn gern ohne diese Zeile erneut posten.',
@@ -170,38 +170,47 @@ const sampleReasons: Record<EmailLocale, string> = {
 };
 
 function sampleItem(locale: EmailLocale, kind: NotificationItem['kind']): NotificationItem {
-  const thread = { title: sampleTitles[locale], url: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/community/t/42/voiceover-move-counter#post-3` };
+  const thread = { title: sampleTitlesOf(locale), url: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/community/t/42/voiceover-move-counter#post-3` };
   return {
     kind,
-    actorName: kind === 'release' || kind === 'moderation' ? null : sampleActors[locale],
+    actorName: kind === 'release' || kind === 'moderation' ? null : sampleActorsOf(locale),
     threadTitle: kind === 'release' ? 'OutBrick 5.1' : thread.title,
     url: thread.url,
-    excerpt: `**${sampleMessages[locale].split('\n')[0]}**\n\n> ${sampleMessages[locale].split('\n')[1]}`,
+    excerpt: `**${sampleMessagesOf(locale).split('\n')[0]}**\n\n> ${sampleMessagesOf(locale).split('\n')[1]}`,
     status: kind === 'status' ? 'fixed' : null,
-    statusNote: kind === 'status' ? sampleNotes[locale] : null,
+    statusNote: kind === 'status' ? sampleNotesOf(locale) : null,
     version: kind === 'release' ? '5.1' : null,
-    reason: kind === 'moderation' ? `${sampleReasons[locale]} <b>Not bold</b>` : null,
-    fromTitle: kind === 'merged' ? `${sampleTitles[locale]} <b>Not bold</b>` : null,
+    reason: kind === 'moderation' ? `${sampleReasonsOf(locale)} <b>Not bold</b>` : null,
+    fromTitle: kind === 'merged' ? `${sampleTitlesOf(locale)} <b>Not bold</b>` : null,
     ...(kind === 'badge' ? { actorName: null, threadTitle: '', url: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/community/u/7`, excerpt: '', badge: 'helpful', level: 10 } : {}),
   };
 }
 
-const sampleEmails: Record<EmailLocale, string> = { en: 'ada@example.com', fr: 'camille@example.com', de: 'lena@example.com', es: 'lucia@example.com', ja: 'hanako@example.com', 'pt-BR': 'ana@example.com' };
+const sampleEmailsWritten: Partial<Record<EmailLocale, string>> = { en: 'ada@example.com', fr: 'camille@example.com', de: 'lena@example.com', es: 'lucia@example.com', ja: 'hanako@example.com', 'pt-BR': 'ana@example.com' };
 const sampleId = '6a0f3c1e2b9d4a0008a1b2c3';
 const sampleAt = '2026-10-07T07:35:26.000Z';
 
 /** Renders one template with sample data. Sample links are inert (#preview). */
+// Preview samples: the catalog languages show the English sample person and message.
+const sampleNamesOf = (locale: EmailLocale): string => sampleNamesWritten[locale] ?? sampleNamesWritten.en!;
+const sampleMessagesOf = (locale: EmailLocale): string => sampleMessagesWritten[locale] ?? sampleMessagesWritten.en!;
+const sampleTitlesOf = (locale: EmailLocale): string => sampleTitlesWritten[locale] ?? sampleTitlesWritten.en!;
+const sampleActorsOf = (locale: EmailLocale): string => sampleActorsWritten[locale] ?? sampleActorsWritten.en!;
+const sampleNotesOf = (locale: EmailLocale): string => sampleNotesWritten[locale] ?? sampleNotesWritten.en!;
+const sampleReasonsOf = (locale: EmailLocale): string => sampleReasonsWritten[locale] ?? sampleReasonsWritten.en!;
+const sampleEmailsOf = (locale: EmailLocale): string => sampleEmailsWritten[locale] ?? sampleEmailsWritten.en!;
+
 export function renderSample(name: TemplateName, locale: EmailLocale, issue: IssueFile, assetBase?: string): Rendered {
   const sampleLink = 'https://www.outbrick.site/newsletter#preview-link';
   switch (name) {
     case 'contact':
-      return contactAcknowledgement({ locale, assetBase, name: sampleNames[locale], topic: 'support', message: sampleMessages[locale], device: 'iPhone 17 Pro', iosVersion: '27.0', appVersion: '4.5' });
+      return contactAcknowledgement({ locale, assetBase, name: sampleNamesOf(locale), topic: 'support', message: sampleMessagesOf(locale), device: 'iPhone 17 Pro', iosVersion: '27.0', appVersion: '4.5' });
     case 'contact-bug':
-      return contactAcknowledgement({ locale, assetBase, name: sampleNames[locale], topic: 'bug', message: sampleMessages[locale] });
+      return contactAcknowledgement({ locale, assetBase, name: sampleNamesOf(locale), topic: 'bug', message: sampleMessagesOf(locale) });
     case 'careers':
-      return careersAcknowledgement({ locale, assetBase, name: sampleNames[locale], role: 'Content Marketing Lead' });
+      return careersAcknowledgement({ locale, assetBase, name: sampleNamesOf(locale), role: 'Content Marketing Lead' });
     case 'affiliate':
-      return affiliateAcknowledgement({ locale, assetBase, name: sampleNames[locale], code: 'ADA27' });
+      return affiliateAcknowledgement({ locale, assetBase, name: sampleNamesOf(locale), code: 'ADA27' });
     case 'newsletter-confirm':
       return newsletterConfirm({ locale, assetBase, confirmUrl: `${sampleLink}-confirm` });
     case 'newsletter-welcome':
@@ -213,7 +222,7 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
     case 'community-confirm-change':
       return communityConfirmEmail({ locale, assetBase, url: `${sampleLink}-confirm-change`, reason: 'change' });
     case 'community-welcome':
-      return communityWelcome({ locale, assetBase, name: `${sampleActors[locale]} <b>Not bold</b>` });
+      return communityWelcome({ locale, assetBase, name: `${sampleActorsOf(locale)} <b>Not bold</b>` });
     case 'community-reply':
     case 'community-mention':
     case 'community-watched':
@@ -237,11 +246,11 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
     case 'community-reply-by-email':
       return communityNotification({ locale, assetBase, item: sampleItem(locale, 'reply'), manageUrl: `${sampleLink}-settings`, unsubscribeUrl: `${sampleLink}-unsubscribe`, unsubscribeKind: 'reply', replyByEmail: true });
     case 'community-weekly-digest': {
-      const thread = (n: number, replies: number, votes?: number) => ({ title: `${sampleTitles[locale]} ${n} <b>Not bold</b>`, url: `${sampleLink}-thread-${n}`, replies, votes });
+      const thread = (n: number, replies: number, votes?: number) => ({ title: `${sampleTitlesOf(locale)} ${n} <b>Not bold</b>`, url: `${sampleLink}-thread-${n}`, replies, votes });
       return communityWeeklyDigest({
         locale,
         assetBase,
-        name: `${sampleActors[locale]} <b>Not bold</b>`,
+        name: `${sampleActorsOf(locale)} <b>Not bold</b>`,
         releases: [{ version: '5.1', url: `${sampleLink}-release` }],
         categories: [
           { kind: 'accessibility', threads: [thread(1, 12), thread(2, 4)] },
@@ -259,9 +268,9 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
         locale,
         assetBase,
         reason: 'locked',
-        threadTitle: sampleTitles[locale],
+        threadTitle: sampleTitlesOf(locale),
         threadUrl: `${sampleLink}-thread`,
-        text: `${sampleMessages[locale]} <b>Not bold</b>`,
+        text: `${sampleMessagesOf(locale)} <b>Not bold</b>`,
         manageUrl: `${sampleLink}-settings`,
       });
     case 'community-digest':
@@ -282,7 +291,7 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
         submissionId: sampleId,
         createdAt: sampleAt,
         acknowledgement: 'sent',
-        data: { name: sampleNames[locale], email: sampleEmails[locale], topic: 'bug', message: sampleMessages[locale], device: 'iPhone 17 Pro', 'ios-version': '27.0', 'app-version': '5.1.1', locale, referrer: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/contact`, user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 27_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Mobile/15E148 Safari/604.1', ip: '203.0.113.7', 'bot-field': '' },
+        data: { name: sampleNamesOf(locale), email: sampleEmailsOf(locale), topic: 'bug', message: sampleMessagesOf(locale), device: 'iPhone 17 Pro', 'ios-version': '27.0', 'app-version': '5.1.1', locale, referrer: `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}/contact`, user_agent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 27_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Mobile/15E148 Safari/604.1', ip: '203.0.113.7', 'bot-field': '' },
       });
     case 'team-careers':
       return teamNotification({
@@ -292,7 +301,7 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
         submissionId: sampleId,
         createdAt: sampleAt,
         acknowledgement: 'sent',
-        data: { name: sampleNames[locale], email: sampleEmails[locale], role: 'Content Marketing Lead', location: 'Lyon, France', portfolio: 'https://example.com/portfolio', 'cover-note': sampleMessages[locale], locale, referrer: 'https://www.outbrick.site/careers' },
+        data: { name: sampleNamesOf(locale), email: sampleEmailsOf(locale), role: 'Content Marketing Lead', location: 'Lyon, France', portfolio: 'https://example.com/portfolio', 'cover-note': sampleMessagesOf(locale), locale, referrer: 'https://www.outbrick.site/careers' },
       });
     case 'team-affiliate':
       return teamNotification({
@@ -302,7 +311,7 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
         submissionId: sampleId,
         createdAt: sampleAt,
         acknowledgement: 'sent',
-        data: { name: sampleNames[locale], email: sampleEmails[locale], handle: '@ada_plays', channels: ['YouTube', 'TikTok'], audience: '12,000 subscribers, mostly puzzle players', country: 'United Kingdom', plan: 'A video series on the hardest Journey boards <b>Not bold</b>', code: 'ADA27', locale, referrer: 'https://www.outbrick.site/affiliates' },
+        data: { name: sampleNamesOf(locale), email: sampleEmailsOf(locale), handle: '@ada_plays', channels: ['YouTube', 'TikTok'], audience: '12,000 subscribers, mostly puzzle players', country: 'United Kingdom', plan: 'A video series on the hardest Journey boards <b>Not bold</b>', code: 'ADA27', locale, referrer: 'https://www.outbrick.site/affiliates' },
       });
     case 'team-newsletter':
       return teamNotification({
@@ -312,7 +321,7 @@ export function renderSample(name: TemplateName, locale: EmailLocale, issue: Iss
         submissionId: sampleId,
         createdAt: sampleAt,
         acknowledgement: 'sent',
-        data: { email: sampleEmails[locale], language: locale, consent: 'yes', referrer: 'https://www.outbrick.site/newsletter' },
+        data: { email: sampleEmailsOf(locale), language: locale, consent: 'yes', referrer: 'https://www.outbrick.site/newsletter' },
       });
     case 'newsletter-campaign': {
       const content = issue.locales[locale] ?? issue.locales.en;

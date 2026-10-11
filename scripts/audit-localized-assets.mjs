@@ -1,8 +1,9 @@
 /** Check the explicit neutral-asset manifest without requiring image services or OCR in CI. */
+import { translatedLocales } from './lib/site-locales.mjs';
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { localizedAsset, localizedAssetManifest } from '../lib/i18n/assets.ts';
 
-const locales = ['fr', 'de', 'es', 'ja', 'pt-BR'];
+const locales = translatedLocales;
 const failures = [];
 for (const [source, target] of Object.entries(localizedAssetManifest)) {
   for (const file of [source, target]) {

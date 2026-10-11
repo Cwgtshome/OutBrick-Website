@@ -1,3 +1,4 @@
+import { phraseRecord } from './catalog.ts';
 import { currentPublicCopy } from './current-public.ts';
 import type { TranslatedLocale } from './locales';
 import { de } from './public-pages-de.ts';
@@ -20,6 +21,6 @@ import { communitySupportPhrases as cm } from './community.ts';
 import { helpSitePhrases as hc } from '../help/site-phrases.ts';
 import { supportSitePhrases as sc } from '../support/site-phrases.ts';
 /** Full, phrase-level page translations shared by existing English layouts. */
-export const publicPages: Record<TranslatedLocale, Record<string, string>> = {
+export const publicPages: Record<TranslatedLocale, Record<string, string>> = phraseRecord<Record<string, string>>({
   fr: {...fr, ...extraFr, ...emailPages.fr, ...cm('fr'), ...hc('fr'), ...sc('fr'), ...currentPublicCopy.fr}, de: {...de, ...extraDe, ...emailPages.de, ...cm('de'), ...hc('de'), ...sc('de'), ...currentPublicCopy.de}, es: {...es, ...extraEs, ...emailPages.es, ...cm('es'), ...hc('es'), ...sc('es'), ...currentPublicCopy.es}, ja: {...ja, ...extraJa, ...emailPages.ja, ...cm('ja'), ...hc('ja'), ...sc('ja'), ...currentPublicCopy.ja}, 'pt-BR': {...ptBR, ...ptBR1, ...ptBR2, ...ptBR3, ...challengePtBR, ...mascotCreatorPtBR, ...pressTermsPtBR, ...emailPages['pt-BR'], ...cm('pt-BR'), ...hc('pt-BR'), ...sc('pt-BR'), ...currentPublicCopy['pt-BR'], Breadcrumb: 'Navegação estrutural', Cookies: 'Cookies', 'Newsletter:': 'Boletim por e-mail:', newsletter: 'boletim por e-mail', Newsletter: 'Boletim por e-mail', Journal: 'Blog'},
-};
+});

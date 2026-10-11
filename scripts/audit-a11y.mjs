@@ -32,9 +32,9 @@ const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePa
 let failures = 0;
 const englishCopy = new Map();
 async function hydratedCarryovers(page, pagePath) {
-  const locale = pagePath.match(/^\/(fr|de|es|ja|pt-BR)(?:\/|$)/)?.[1];
+  const locale = pagePath.match(/^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(?:\/|$)/)?.[1];
   if (!locale) return [];
-  const route = new URL(pagePath, base).pathname.replace(/^\/(fr|de|es|ja|pt-BR)(?=\/|$)/, '') || '/';
+  const route = new URL(pagePath, base).pathname.replace(/^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(?=\/|$)/, '') || '/';
   if (!englishCopy.has(route)) {
     const file = route === '/' ? 'index.html' : route.slice(1) + '.html';
     const html = await readFile(new URL('../dist/client/' + file, import.meta.url), 'utf8');

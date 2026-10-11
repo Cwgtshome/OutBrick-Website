@@ -1,10 +1,12 @@
 import { boardResults, type BoardResult } from '../../app/(en)/play/result/results';
 import { boardLevels } from '../board-levels';
 import { boardStrings } from './board';
-import type { TranslatedLocale } from './locales';
+import type { LegacyLocale, TranslatedLocale } from './locales';
+import { isLegacyLocale } from './locales';
+import { catalogStrings, catalogTemplate } from './catalog.ts';
 
 type ResultCopy = { title: (b: number,s: number) => string; description: (b:number,n:string,t:number,s:number)=>string; line:(n:string,t:number,s:number)=>string; alt:(b:number,n:string,t:number,s:number)=>string; };
-const copy: Record<TranslatedLocale, ResultCopy> = {
+const copy: Record<LegacyLocale, ResultCopy> = {
   fr: {
     title:(b,s)=>`J’ai terminé le plateau ${b} d’OutBrick avec ${s} étoile${s===1?'':'s'}`,
     description:(b,n,t,s)=>`Plateau ${b}, ${n}, terminé ${s===3?`en ${t} coups sans annuler`:s===2?`en ${t} coups, exactement l’objectif`:`avec quelques coups de plus que l’objectif de ${t}`} : ${s} étoile${s===1?'':'s'}. Jouez gratuitement au même plateau dans votre navigateur, puis retrouvez-en 2 000 autres dans OutBrick sur l’App Store.`,
@@ -36,11 +38,33 @@ const copy: Record<TranslatedLocale, ResultCopy> = {
     alt:(b,n,t,s)=>`Tabuleiro ${b} de OutBrick, ${n}, concluído com ${s} de 3 estrelas. Meta: ${t} movimentos.`,
   },
 };
+/** The English result copy as templates, for the catalog languages (see app/(en)/play/result/results.ts). */
+const english = catalogStrings('pages', 'results', {
+  title: 'I cleared OutBrick board {0} with {1, plural, one {# star} other {# stars}}',
+  description3: 'Board {0}, {1}, cleared in {2} moves without an undo: three stars. Play the same board free in your browser, then find 2,000 more in OutBrick on the App Store.',
+  description2: 'Board {0}, {1}, cleared in {2} moves, right on target: two stars. Play the same board free in your browser, then find 2,000 more in OutBrick on the App Store.',
+  description1: 'Board {0}, {1}, cleared a few moves over its target of {2}: one star. Play the same board free in your browser, then find 2,000 more in OutBrick on the App Store.',
+  line3: 'Someone cleared {0} in {1} moves, no undo. Your turn.',
+  line2: 'Someone cleared {0} in {1} moves. Can you do it without an undo?',
+  line1: 'Someone cleared {0}. Now try it in {1} moves.',
+  alt: 'OutBrick board {0}, {1}, cleared with {2} of 3 stars. Target {3} moves.',
+});
+function resultCopy(locale: TranslatedLocale): ResultCopy {
+  if (isLegacyLocale(locale)) return copy[locale];
+  const t = (template: string, ...args: unknown[]) => catalogTemplate(locale, template, args);
+  const pickStars = <K extends string>(s: number, three: K, two: K, one: K) => (s === 3 ? three : s === 2 ? two : one);
+  return {
+    title: (b, s) => t(english.title, b, s),
+    description: (b, n, tg, s) => t(english[pickStars(s, 'description3', 'description2', 'description1')], b, n, tg),
+    line: (n, tg, s) => t(english[pickStars(s, 'line3', 'line2', 'line1')], n, tg),
+    alt: (b, n, tg, s) => t(english.alt, b, n, s, tg),
+  };
+}
 export function localizedResult(result: BoardResult, locale: TranslatedLocale): BoardResult {
   const level = boardLevels[result.levelIndex];
   const name = boardStrings[locale].levelName[level.id] ?? result.name;
-  const c = copy[locale];
-  return { ...result, name, title:c.title(result.board,result.stars), description:c.description(result.board,name,result.target,result.stars), line:c.line(name,result.target,result.stars), image:`/share/${locale}/board-${result.id}.png`, imageAlt:c.alt(result.board,name,result.target,result.stars) };
+  const c = resultCopy(locale);
+  return { ...result, name, title:c.title(result.board,result.stars), description:c.description(result.board,name,result.target,result.stars), line:c.line(name,result.target,result.stars), image:isLegacyLocale(locale)?`/share/${locale}/board-${result.id}.png`:`/share/board-${result.id}.png`, imageAlt:c.alt(result.board,name,result.target,result.stars) };
 }
 export function resultTextTranslations(locale: TranslatedLocale): Record<string,string> {
   return Object.fromEntries(boardResults.flatMap(result => {

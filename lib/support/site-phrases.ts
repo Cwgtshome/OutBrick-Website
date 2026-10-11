@@ -1,4 +1,4 @@
-import type { TranslatedLocale } from '../i18n/locales.ts';
+import type { LegacyLocale } from '../i18n/locales.ts';
 
 /**
  * The contact form's and contact page's Support Centre wording, in the phrase dictionary the
@@ -6,7 +6,7 @@ import type { TranslatedLocale } from '../i18n/locales.ts';
  * Keyed by the English text exactly as it appears in app/(en)/contact/contact-form.tsx and
  * app/(en)/contact/page.tsx. The Support Centre pages themselves use lib/support/copy/*.
  */
-const phrases: Record<string, Record<TranslatedLocale, string>> = {
+const phrases: Record<string, Record<LegacyLocale, string>> = {
   'We will never ask for your Apple Account password, your card details or a code sent to your phone.': { fr: "Nous ne vous demanderons jamais le mot de passe de votre compte Apple, vos données de carte ni un code reçu sur votre téléphone.", de: "Wir fragen nie nach dem Passwort deines Apple Accounts, nach Kartendaten oder nach einem Code, der an dein Telefon geschickt wurde.", es: "Nunca te pediremos la contraseña de tu cuenta de Apple, los datos de tu tarjeta ni un código enviado a tu teléfono.", ja: "Appleアカウントのパスワード、カード情報、スマートフォンに届いたコードをおたずねすることは決してありません。", "pt-BR": "Nunca vamos pedir a senha da sua Conta Apple, os dados do seu cartão nem um código enviado ao seu celular." },
   'Beta testing': { fr: 'Tests bêta', de: 'Beta-Test', es: 'Pruebas beta', ja: 'ベータテスト', 'pt-BR': 'Testes beta' },
   'Accessibility panel': { fr: 'Panel accessibilité', de: 'Barrierefreiheits-Panel', es: 'Panel de accesibilidad', ja: 'アクセシビリティパネル', 'pt-BR': 'Painel de acessibilidade' },
@@ -85,6 +85,6 @@ const phrases: Record<string, Record<TranslatedLocale, string>> = {
   },
 };
 
-export function supportSitePhrases(locale: TranslatedLocale): Record<string, string> {
+export function supportSitePhrases(locale: LegacyLocale): Record<string, string> {
   return Object.fromEntries(Object.entries(phrases).map(([english, t]) => [english, t[locale]]));
 }

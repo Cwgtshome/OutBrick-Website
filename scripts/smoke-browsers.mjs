@@ -1,3 +1,4 @@
+import { siteLocales } from './lib/site-locales.mjs';
 // Cross-browser smoke test: key pages in WebKit (Safari's engine, desktop and iPhone) and
 // Firefox (desktop and phone width). Fails on a console or page error, sideways scroll, a
 // heading or paragraph left invisible after scrolling (a reveal that never ran), or the
@@ -84,7 +85,7 @@ for (const [label, type, options] of targets.filter((_, index) => targetIndex ==
 
   // Solve and share board 1 in every locale using real pointer input.
   const starText = { en: '3 stars of 3', fr: '3 étoiles sur 3', de: '3 Sterne von 3', es: '3 estrellas de 3', ja: 'スター3個中3個', 'pt-BR': '3 de 3 estrelas' };
-  for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
+  for (const locale of siteLocales) {
     const prefix = locale === 'en' ? '' : `/${locale}`;
     const page = await browser.newPage({ viewport: { width: label.includes('desktop') ? 1440 : 390, height: 844 } });
     await page.addInitScript(() => Object.defineProperty(navigator, 'share', { configurable: true, value: async data => { window.__outbrickShared = data; } }));

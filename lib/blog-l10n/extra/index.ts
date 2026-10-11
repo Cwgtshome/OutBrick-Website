@@ -1,5 +1,5 @@
 import type { ExtraGuides } from '../../i18n/blog.ts';
-import type { TranslatedLocale } from '../../i18n/locales.ts';
+import type { LegacyLocale } from '../../i18n/locales.ts';
 import { de1 } from './de-1.ts';
 import { de2 } from './de-2.ts';
 import { de3 } from './de-3.ts';
@@ -59,7 +59,7 @@ import { ptBR10 } from './pt-BR-10.ts';
 import { ptBR11 } from './pt-BR-11.ts';
 
 /** The journal batches' translations, one file per language and batch. */
-export const extraGuides: Record<TranslatedLocale, ExtraGuides> = {
+export const extraGuides: Record<LegacyLocale, ExtraGuides> = {
   fr: { ...fr1, ...fr2, ...fr3, ...fr4, ...fr5, ...fr6, ...fr7, ...fr8, ...fr9, ...fr10, ...fr11 },
   de: { ...de1, ...de2, ...de3, ...de4, ...de5, ...de6, ...de7, ...de8, ...de9, ...de10, ...de11 },
   es: { ...es1, ...es2, ...es3, ...es4, ...es5, ...es6, ...es7, ...es8, ...es9, ...es10, ...es11 },

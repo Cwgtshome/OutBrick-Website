@@ -1,11 +1,11 @@
-import type { TranslatedLocale } from '../i18n/locales.ts';
+import type { LegacyLocale } from '../i18n/locales.ts';
 
 /**
  * The sentences the Support and Accessibility pages use to point at the Help Centre, in the
  * phrase dictionary the localized page tree reads (lib/i18n/public-pages.ts). Keyed by the
  * English text exactly as it appears in app/(en)/support/page.tsx and app/(en)/accessibility/page.tsx.
  */
-const phrases: Record<string, Record<TranslatedLocale, string>> = {
+const phrases: Record<string, Record<LegacyLocale, string>> = {
   'Help Centre': { fr: 'Centre d’aide', de: 'Hilfe-Center', es: 'Centro de ayuda', ja: 'ヘルプセンター', 'pt-BR': 'Central de Ajuda' },
   'Illustrated guides': { fr: 'Guides illustrés', de: 'Bebilderte Anleitungen', es: 'Guías ilustradas', ja: '図解ガイド', 'pt-BR': 'Guias ilustrados' },
   'The Help Centre explains every screen, menu and setting in OutBrick 5.1 with real screenshots from the game, with a whole shelf on VoiceOver and accessibility.': {
@@ -28,6 +28,6 @@ const phrases: Record<string, Record<TranslatedLocale, string>> = {
   'Accessibility guides': { fr: 'Guides d’accessibilité', de: 'Anleitungen zu Bedienungshilfen', es: 'Guías de accesibilidad', ja: 'アクセシビリティガイド', 'pt-BR': 'Guias de acessibilidade' },
 };
 
-export function helpSitePhrases(locale: TranslatedLocale): Record<string, string> {
+export function helpSitePhrases(locale: LegacyLocale): Record<string, string> {
   return Object.fromEntries(Object.entries(phrases).map(([english, t]) => [english, t[locale]]));
 }

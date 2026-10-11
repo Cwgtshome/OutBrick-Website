@@ -3,7 +3,7 @@ import BlogPage from '../../(en)/blog/page';
 import { localizePageTree } from '../../localized-public-page';
 import { notFound } from 'next/navigation';
 import { journalLanguages, journalPath, journalUi, localizeArticle, translatedGuideSlugs } from '../../../lib/i18n/blog';
-import { isTranslatedLocale, ogLocales, translatedLocales } from '../../../lib/i18n/locales';
+import { isTranslatedLocale, legacyLocales, ogLocales } from '../../../lib/i18n/locales';
 import { siteUrl } from '../../../lib/site';
 
 /**
@@ -16,7 +16,7 @@ type JournalIndexProps = { params: Promise<{ locale: string }> };
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return translatedLocales.map((locale) => ({ locale }));
+  return legacyLocales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({ params }: JournalIndexProps): Promise<Metadata> {

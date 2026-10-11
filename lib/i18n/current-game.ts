@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 import type { Locale } from './locales';
 
 // The released iOS game: 5.1 "Slide & Match" shipped on 8 October 2026 and 5.1.1 is the live
@@ -13,7 +14,7 @@ type GameCopy = {
   /** The support FAQ's "How much do extra moves cost?" answer (coin ladder and the video chain). */
   extraMoves: string;
 };
-export const currentGameCopy: Record<Locale, GameCopy> = {
+export const currentGameCopy: Record<Locale, GameCopy> = catalogRecord<GameCopy>('ui', 'currentGameCopy', {
   'pt-BR': {
     description: 'Deslize e combine: um quebra-cabeça tranquilo de tijolos, com 2.000 tabuleiros comprovados, 167 vilas, nove amigos, VoiceOver e jogo offline. Grátis.',
     playDescription: 'Como funcionam deslizes, trocas, combinações, especiais, estrelas, vidas e desfazer no OutBrick, e um jogo clássico de deslizar, separado, no navegador.',
@@ -153,4 +154,4 @@ export const currentGameCopy: Record<Locale, GameCopy> = {
     moves: '盤面には残り手数を表示し、時計やタイマーはありません。手数切れでは5手追加が同じ挑戦中に300、500、900コインと上がります。報酬動画では2手、次に1手、その次に無料のUFOがもらえます。退出やクリアで価格はリセットされます。',
     extraMoves: '一回の挑戦内で5手が300、次に500、次に900コインです。リワード動画なら2手、次に1手、その次に無料のUFOがもらえます。コインの価格は離れるかクリアで300へ戻ります。',
   },
-};
+});

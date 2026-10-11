@@ -8,9 +8,9 @@
 }
 .ob-site .play-hero h1 { margin: 10px 0 18px; }
 .ob-site .play-keys { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 10px; }
-.ob-site .play-keys li { color: var(--lilac); font-size: 1rem; padding-left: 22px; position: relative; }
+.ob-site .play-keys li { color: var(--lilac); font-size: 1rem; padding-inline-start: 22px; position: relative; }
 .ob-site .play-keys li::before {
-  content: ''; position: absolute; left: 0; top: 0.45em; width: 11px; height: 11px;
+  content: ''; position: absolute; inset-inline-start: 0; top: 0.45em; width: 11px; height: 11px;
   border-radius: 3px; background: #ffc53d; box-shadow: 0 3px 0 #b8780a;
 }
 .ob-site .play-keys b { color: #fff; font-weight: 600; }

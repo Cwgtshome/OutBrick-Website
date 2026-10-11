@@ -3,6 +3,7 @@
  * The map is deliberately explicit: missing variants never become invented URLs.
  */
 import type { Locale } from './locales.ts';
+import { isLegacyLocale } from './locales.ts';
 const neutralAssets: Record<string, string> = {
   "/blog/outbrick-accessibility-commitment.webp": "/blog/neutral/outbrick-accessibility-commitment.webp",
   "/blog/outbrick-voiceover-spatial-board.webp": "/blog/neutral/outbrick-voiceover-spatial-board.webp",
@@ -188,12 +189,23 @@ const neutralAssets: Record<string, string> = {
 export function localizedAsset(value: string, locale: Locale): string {
   if (locale === 'en') return value;
   // Also supports responsive srcSet and absolute metadata image URLs.
-  if (value.endsWith('/og.png')) return value.replace(/\/og\.png$/, `/og/${locale}.png`);
+  // Social cards are drawn for the first five languages (scripts/generate-localized-og.mjs); the others use the English card.
+  if (value.endsWith('/og.png')) return isLegacyLocale(locale) ? value.replace(/\/og\.png$/, `/og/${locale}.png`) : value;
   return value.replace(/\/(?:assets|blog)\/[^,\s?#]+/g, source => {
     return neutralAssets[source] ?? source;
   });
 }
 export const localizedAssetManifest = neutralAssets;
+
+/** Apple's black App Store badge in the page language where the site has Apple's artwork, English otherwise. */
+export function appStoreBadgePath(locale: Locale): string {
+  return ['fr', 'de', 'es', 'ja'].includes(locale) ? `/assets/badge/appstore-black-${locale}.svg` : '/assets/badge/appstore-black.svg';
+}
+
+/** The social card for `locale`: drawn for English and the first five translations, English otherwise. */
+export function ogImagePath(locale: Locale): string {
+  return isLegacyLocale(locale) ? `/og/${locale}.png` : '/og.png';
+}
 
 /** Preserve node shape and all text, changing only explicitly mapped asset URLs. */
 export function localizedAssetTree<T>(value: T, locale: Locale): T {

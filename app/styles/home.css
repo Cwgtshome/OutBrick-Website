@@ -108,15 +108,15 @@
   border-radius: 2px;
   background: currentColor;
 }
-.ob-home .arrow::before { left: 0; right: 2px; height: 3px; margin-top: -1.5px; }
+.ob-home .arrow::before { inset-inline-start: 0; inset-inline-end: 2px; height: 3px; margin-top: -1.5px; }
 .ob-home .arrow::after {
-  right: 0;
+  inset-inline-end: 0;
   width: 9px;
   height: 9px;
   margin-top: -4.5px;
   background: none;
   border-top: 3px solid currentColor;
-  border-right: 3px solid currentColor;
+  border-inline-end: 3px solid currentColor;
   border-radius: 0 2px 0 0;
   transform: rotate(45deg);
 }
@@ -207,8 +207,8 @@
 }
 .ob-home .slab-studs {
   position: absolute;
-  left: 0.22em;
-  right: 0.22em;
+  inset-inline-start: 0.22em;
+  inset-inline-end: 0.22em;
   top: -0.11em;
   display: flex;
   justify-content: space-between;
@@ -229,7 +229,7 @@
   animation: ob-fade-up var(--dur-reveal) var(--ease-glide) 900ms both;
 }
 .ob-home .hero-cta { margin-top: 30px; gap: 10px 14px; animation: ob-fade-up var(--dur-reveal) var(--ease-glide) 1.05s both; }
-.ob-home .hero-cta .badge { padding: 0; margin-right: 6px; }
+.ob-home .hero-cta .badge { padding: 0; margin-inline-end: 6px; }
 @keyframes ob-fade-up {
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: none; }
@@ -328,7 +328,7 @@
   --depth: -8px;
   z-index: 1;
   width: 46%;
-  right: -30%;
+  inset-inline-end: -30%;
   top: 8%;
   rotate: 14deg;
   animation: ob-peek-right 900ms var(--ease-slide) 1.35s both, fm-idle var(--idle-dur) ease-in-out 2.3s infinite;
@@ -337,7 +337,7 @@
   --depth: 18px;
   z-index: 3;
   width: 60%;
-  left: -42%;
+  inset-inline-start: -42%;
   bottom: 8%;
   rotate: -6deg;
   animation: ob-peek-left 900ms var(--ease-slide) 1.2s both, fm-idle var(--idle-dur) ease-in-out 2.1s infinite;
@@ -346,7 +346,7 @@
   --depth: 24px;
   z-index: 3;
   width: 52%;
-  right: -36%;
+  inset-inline-end: -36%;
   bottom: 0%;
   rotate: 5deg;
   animation: ob-peek-up 900ms var(--ease-slide) 1.5s both, fm-idle var(--idle-dur) ease-in-out 2.4s infinite;
@@ -493,8 +493,8 @@
 .ob-home .plaque-brick::before {
   content: '';
   position: absolute;
-  left: 7%;
-  right: 7%;
+  inset-inline-start: 7%;
+  inset-inline-end: 7%;
   top: 8px;
   height: 7px;
   border-radius: 999px;
@@ -511,8 +511,8 @@
 }
 .ob-home .studs-top {
   position: absolute;
-  left: 10%;
-  right: 10%;
+  inset-inline-start: 10%;
+  inset-inline-end: 10%;
   top: -11px;
   display: flex;
   justify-content: space-around;
@@ -574,8 +574,8 @@
 .ob-home .journey-track::before {
   content: '';
   position: absolute;
-  left: -40vw;
-  right: -40vw;
+  inset-inline-start: -40vw;
+  inset-inline-end: -40vw;
   top: 44%;
   height: 74px;
   border-radius: 8px;
@@ -591,7 +591,7 @@
   width: clamp(160px, 14vw, 206px);
   scroll-snap-align: start;
   transform: translateY(var(--y, 0));
-  text-align: left;
+  text-align: start;
 }
 .ob-home .village .frame {
   border-radius: 20px;
@@ -678,11 +678,11 @@
 .ob-home .passes::before {
   content: '';
   position: absolute;
-  left: 16px;
+  inset-inline-start: 16px;
   top: 16px;
   bottom: 16px;
   width: 4px;
-  margin-left: -2px;
+  margin-inline-start: -2px;
   border-radius: 2px;
   background: repeating-linear-gradient(180deg, var(--paving) 0 8px, transparent 8px 14px);
   opacity: 0.5;
@@ -756,10 +756,10 @@
   content: '';
   position: absolute;
   bottom: -12px;
-  left: 0;
+  inset-inline-start: 0;
   width: 26px;
   height: 26px;
-  margin-left: -13px;
+  margin-inline-start: -13px;
   border-radius: 0 0 6px 0;
   background: var(--cream);
   box-shadow: 5px 5px 0 #d9c49c;
@@ -800,8 +800,8 @@ html.js .ob-home .bubble-line[data-active] { margin: 0; animation: ob-say 420ms 
   /* the ledge they all stand on */
   content: '';
   position: absolute;
-  left: -8px;
-  right: -8px;
+  inset-inline-start: -8px;
+  inset-inline-end: -8px;
   bottom: 36px;
   height: 14px;
   border-radius: 6px;
@@ -992,7 +992,7 @@ html.js .ob-home .bubble-line[data-active] { margin: 0; animation: ob-say 420ms 
 .ob-home .tile-gc .big-num::before { content: attr(data-n); }
 .ob-home .tile-gc .big-num {
   position: absolute;
-  right: 18px;
+  inset-inline-end: 18px;
   top: -6px;
   margin: 0;
   font-family: var(--display);
@@ -1147,7 +1147,7 @@ html.js .ob-home .bubble-line[data-active] { margin: 0; animation: ob-say 420ms 
 /* the gate: every colour, so every brick is let through */
 .ob-home .gate {
   position: absolute;
-  right: 0;
+  inset-inline-end: 0;
   top: 0;
   bottom: 0;
   width: 14px;
@@ -1298,8 +1298,8 @@ html.js .ob-home [data-reveal='unmask']:not(.in) img { clip-path: inset(0 0 100%
   .ob-home .hero-cta .btn { padding: 13px 18px 13px 22px; }
   .ob-home .phone { width: 200px; border-radius: 36px; padding: 7px; }
   .ob-home .phone img { border-radius: 30px; }
-  .ob-home .peek-bloo { left: -40%; }
-  .ob-home .peek-peach { right: -36%; }
+  .ob-home .peek-bloo { inset-inline-start: -40%; }
+  .ob-home .peek-peach { inset-inline-end: -36%; }
   .ob-home .wall { column-gap: 12px; }
   .ob-home .plaque-brick { padding: 28px 16px 20px; }
   .ob-home .studs-top i { width: 22px; }
@@ -1423,15 +1423,15 @@ html.js .ob-home [data-reveal='unmask']:not(.in) img { clip-path: inset(0 0 100%
 }
 .ob-home .dev img { display: block; width: 100%; height: auto; }
 .ob-home .dev-ipad {
-  left: 50%;
+  inset-inline-start: 50%;
   width: min(560px, 62%);
   translate: -50% 18%;
   border-radius: 40px 40px 0 0;
   z-index: 1;
 }
 .ob-home .dev-phone { width: min(250px, 27%); border-radius: 46px 46px 0 0; z-index: 2; }
-.ob-home .dev-phone-a { left: 6%; translate: 0 10%; rotate: -4deg; transform-origin: bottom center; }
-.ob-home .dev-phone-b { right: 6%; translate: 0 16%; rotate: 4deg; transform-origin: bottom center; }
+.ob-home .dev-phone-a { inset-inline-start: 6%; translate: 0 10%; rotate: -4deg; transform-origin: bottom center; }
+.ob-home .dev-phone-b { inset-inline-end: 6%; translate: 0 16%; rotate: 4deg; transform-origin: bottom center; }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .ob-home .device-stage:hover .dev-ipad { translate: -50% 14%; }
   .ob-home .device-stage:hover .dev-phone-a { translate: 0 6%; }
@@ -1441,8 +1441,8 @@ html.js .ob-home [data-reveal='unmask']:not(.in) img { clip-path: inset(0 0 100%
   .ob-home .device-stage { height: clamp(340px, 96vw, 460px); }
   .ob-home .dev-ipad { width: 78%; translate: -50% 26%; }
   .ob-home .dev-phone { width: 38%; border-radius: 30px 30px 0 0; padding: 6px 6px 0; }
-  .ob-home .dev-phone-a { left: -2%; }
-  .ob-home .dev-phone-b { right: -2%; }
+  .ob-home .dev-phone-a { inset-inline-start: -2%; }
+  .ob-home .dev-phone-b { inset-inline-end: -2%; }
 }
 
 /* The widgets tile keeps its words while the montage waits for a current capture. */

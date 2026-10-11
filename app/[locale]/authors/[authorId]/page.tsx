@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import * as EnglishSource from '../../../(en)/authors/[authorId]/page';
-import { localizePageTree, localizedMetadata, publicLocale, publicStaticParams } from '../../../localized-public-page';
+import { localizePageTree, localizedMetadata, publicLocale, journalStaticParams } from '../../../localized-public-page';
 
 type Props = { params: Promise<{ locale: string; [key: string]: string }> };
 const source = EnglishSource as unknown as {
@@ -12,7 +12,7 @@ const source = EnglishSource as unknown as {
 };
 export const dynamicParams = false;
 
-export function generateStaticParams() { return publicStaticParams(source.generateStaticParams?.()); }
+export function generateStaticParams() { return journalStaticParams(source.generateStaticParams?.()); }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const values = await props.params;

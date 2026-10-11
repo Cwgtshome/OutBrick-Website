@@ -1,3 +1,4 @@
+import { publishedCatalogLocales, withCatalogRoutes } from './catalog-routes.mjs';
 // Shared helpers for the post-build scripts: find the prerendered pages in dist/client,
 // work out the public URL of each one, and read what netlify.toml does to them.
 //
@@ -48,11 +49,13 @@ export function routeToUrl(route) {
 export function readNetlifyRedirects() {
   const toml = fs.readFileSync(path.join(repoRoot, 'netlify.toml'), 'utf8');
   const blocks = toml.split(/^\s*\[\[redirects\]\]\s*$/m).slice(1);
-  return blocks.map((block) => {
+  const rules = blocks.map((block) => {
     const body = block.split(/^\s*\[/m)[0];
     const field = (name) => body.match(new RegExp(`^\\s*${name}\\s*=\\s*("?)([^"\\n#]*)\\1`, 'm'))?.[2]?.trim();
     return { from: field('from'), to: field('to'), status: Number(field('status') ?? 301), force: field('force') === 'true' };
   }).filter((r) => r.from && r.to);
+  // The published catalog languages' rules, as the Worker gets them (scripts/cloudflare/prepare-routes.mjs).
+  return withCatalogRoutes(rules, publishedCatalogLocales(repoRoot));
 }
 
 /** Paths that 301/302 elsewhere, normalised without ".html" and trailing slash. */

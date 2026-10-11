@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 /**
  * Every string the playable board (app/components/playable-board.tsx) shows
  * or announces, per language. The board is a client component, so it takes a
@@ -437,4 +438,4 @@ for (const [locale, strings] of Object.entries({ fr, de, es, ja, 'pt-BR': ptBR }
   Object.assign(strings.levelName, additionalBoardNames[locale as Locale]);
 }
 
-export const boardStrings: Record<Locale, BoardStrings> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const boardStrings: Record<Locale, BoardStrings> = catalogRecord<BoardStrings>('ui', 'boardStrings', { en, fr, de, es, ja, 'pt-BR': ptBR });

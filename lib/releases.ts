@@ -1,3 +1,5 @@
+import { catalogRecord } from './i18n/catalog.ts';
+import type { Locale } from './i18n/locales.ts';
 /**
  * OutBrick's release notes, for /whats-new, its translations and /whats-new/feed.xml.
  *
@@ -34,7 +36,7 @@ export type Release = ReleaseNotes & {
 };
 
 /** The languages the current release's notes are published in on this site. */
-export type ReleaseLocale = 'en' | 'fr' | 'de' | 'es' | 'ja' | 'pt-BR';
+export type ReleaseLocale = Locale;
 
 /** The URL fragment for a version: "4.2" -> "4-2", so /whats-new#4-2. */
 export function releaseAnchor(version: string): string {
@@ -42,7 +44,7 @@ export function releaseAnchor(version: string): string {
 }
 
 /** 4.2's notes in every language the site is published in, from fastlane. */
-const notes42: Record<ReleaseLocale, ReleaseNotes> = {
+const notes42: Record<ReleaseLocale, ReleaseNotes> = catalogRecord<ReleaseNotes>('ui', 'notes42', {
   en: {
     headline: 'A harder game, on a Journey rebuilt in brick.',
     sections: [
@@ -496,9 +498,9 @@ const notes42: Record<ReleaseLocale, ReleaseNotes> = {
       },
     ],
   },
-};
+});
 
-const notes501: Record<ReleaseLocale, ReleaseNotes> = {
+const notes501: Record<ReleaseLocale, ReleaseNotes> = catalogRecord<ReleaseNotes>('ui', 'notes501', {
   "en": {
     "headline": "Thank you for every message about 5.0. This update is built from your feedback.",
     "sections": [
@@ -625,10 +627,10 @@ const notes501: Record<ReleaseLocale, ReleaseNotes> = {
       }
     ]
   }
-};
+});
 
 /** 5.1's notes (Slide & Match), word for word from the App Store's What's New, in every language the site is published in. */
-const notes51: Record<ReleaseLocale, ReleaseNotes> = {
+const notes51: Record<ReleaseLocale, ReleaseNotes> = catalogRecord<ReleaseNotes>('ui', 'notes51', {
   "en": {
     "headline": "OutBrick 5.1 changes how every board plays.",
     "sections": [
@@ -731,10 +733,10 @@ const notes51: Record<ReleaseLocale, ReleaseNotes> = {
       }
     ]
   }
-};
+});
 
 /** 5.1.1's notes, word for word from the App Store's What's New. */
-const notes511: Record<ReleaseLocale, ReleaseNotes> = {
+const notes511: Record<ReleaseLocale, ReleaseNotes> = catalogRecord<ReleaseNotes>('ui', 'notes511', {
   "en": {
     "headline": "OutBrick 5.1.1 fixes a board that could seem frozen.",
     "sections": [
@@ -801,7 +803,7 @@ const notes511: Record<ReleaseLocale, ReleaseNotes> = {
       }
     ]
   }
-};
+});
 
 /** Every release with notes on this site, newest first. English. */
 export const releases: Release[] = [

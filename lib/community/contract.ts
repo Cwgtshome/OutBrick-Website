@@ -1,3 +1,4 @@
+import { locales, type Locale } from '../i18n/locales.ts';
 /**
  * The OutBrick Community API contract: every shape that crosses /api/community/*.
  *
@@ -51,8 +52,9 @@
  * version to Announcements), community-notify.mts (every 5 minutes: emails pending notifications).
  */
 
-export type CommunityLocale = 'en' | 'fr' | 'de' | 'es' | 'ja' | 'pt-BR';
-export const communityLocales: readonly CommunityLocale[] = ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'];
+/** Every site language: the community is published wherever the site is. */
+export type CommunityLocale = Locale;
+export const communityLocales: readonly CommunityLocale[] = locales;
 
 export type MemberRole = 'member' | 'trusted' | 'moderator' | 'team' | 'admin';
 export type Provider = 'apple' | 'google' | 'facebook' | 'email';

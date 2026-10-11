@@ -7,7 +7,7 @@ import { homeCopy } from '../../lib/i18n/home';
 import { localizedAsset } from '../../lib/i18n/assets';
 import { coverSrcSet, friendSrcSet } from '../../lib/images';
 import { localizedVillageName } from '../../lib/i18n/village-names';
-import { localeAlternates, localePath, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
+import { isLegacyLocale, localeAlternates, localePath, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
 import { articles as journalArticles } from '../../lib/blog';
 import { byNewest } from '../../lib/journal';
 import { journalUi, localizeArticle } from '../../lib/i18n/blog';
@@ -117,7 +117,9 @@ export function HomePage({ locale }: { locale: Locale }) {
   const headline = t.headline;
   const friends = cast.map((friend) => ({ ...friend, line: t.cast.lines[friend.slug] ?? friend.line }));
   const journal = homeJournalCopy[locale];
-  const latestStories = [...journalArticles].sort(byNewest).slice(0, 3).map((article) => (locale === 'en' ? article : localizeArticle(article.slug, locale)));
+  // The journal is published in English and the first five translations only.
+  const showJournal = locale === 'en' || isLegacyLocale(locale);
+  const latestStories = showJournal ? [...journalArticles].sort(byNewest).slice(0, 3).map((article) => (locale === 'en' ? article : localizeArticle(article.slug, locale))) : [];
 
   return (
     <div className="ob-site ob-home">
@@ -500,7 +502,7 @@ export function HomePage({ locale }: { locale: Locale }) {
 
         {/* ============================ FROM THE JOURNAL ============================ */}
         {/* The newest stories, so every article is within two clicks of this page. */}
-        <section id="journal" className="band-cream journal-latest" aria-labelledby="journal-latest-title">
+        {showJournal ? <section id="journal" className="band-cream journal-latest" aria-labelledby="journal-latest-title">
           <div className="wrap">
             <div className="journal-latest-head">
               <div>
@@ -534,7 +536,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               </a>
             </div>
           </div>
-        </section>
+        </section> : null}
 
         {/* ============================ CLOSE ============================ */}
         <section className="close" data-gate="">

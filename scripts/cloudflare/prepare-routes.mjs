@@ -1,3 +1,4 @@
+import { publishedCatalogLocales, withCatalogRoutes } from '../lib/catalog-routes.mjs';
 import fs from 'node:fs/promises';
 const source = await fs.readFile('netlify.toml', 'utf8');
 const redirects = source.split('[[redirects]]').slice(1).map((block) => {
@@ -7,6 +8,9 @@ const redirects = source.split('[[redirects]]').slice(1).map((block) => {
   if (!field('from') || !field('to') || ![200, 301, 302, 404].includes(status)) throw new Error('Unsupported Netlify redirect; port it explicitly.');
   return { from: field('from'), to: field('to'), status, force: /^\s*force\s*=\s*true/m.test(section) };
 });
+// The catalog languages published by scripts/i18n/publish.mts get the same rules as the first five.
+const routes = withCatalogRoutes(redirects, publishedCatalogLocales(process.cwd()));
+redirects.splice(0, redirects.length, ...routes);
 await fs.mkdir('cloudflare/generated', { recursive: true });
 await fs.writeFile('cloudflare/generated/redirects.json', JSON.stringify(redirects, null, 2) + '\n');
 console.log(`Prepared ${redirects.length} existing route rules.`);

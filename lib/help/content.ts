@@ -1,4 +1,5 @@
-import type { Locale } from '../i18n/locales.ts';
+import { catalogLookup, catalogRecord, mapCopy } from '../i18n/catalog.ts';
+import { isCatalogLocale, type Locale } from '../i18n/locales.ts';
 import { helpOrder, type HelpArticle, type HelpContent } from './model.ts';
 import { en } from './content/en.ts';
 import { fr } from './content/fr.ts';
@@ -7,7 +8,7 @@ import { es } from './content/es.ts';
 import { ja } from './content/ja.ts';
 import { ptBR } from './content/pt-BR.ts';
 
-const byLocale: Record<Locale, HelpContent> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+const byLocale: Record<Locale, HelpContent> = catalogRecord<HelpContent>('help', 'byLocale', { en, fr, de, es, ja, 'pt-BR': ptBR });
 
 /** Every article in `locale`, in hub order. A slug missing from a translation falls back to English. */
 export function helpArticles(locale: Locale): HelpArticle[] {
@@ -20,8 +21,26 @@ export function helpArticle(locale: Locale, slug: string): HelpArticle | undefin
   return helpArticles(locale).find((a) => a.slug === slug);
 }
 
-/** Whether `locale` has its own translation of `slug` (rather than the English fallback). */
+const complete = new Map<string, boolean>();
+/** Whether every string of an English guide is in `locale`'s catalogs (a catalog language). */
+function catalogComplete(locale: Locale, slug: string): boolean {
+  const key = `${locale}:${slug}`;
+  if (!complete.has(key)) {
+    const article = en.articles.find((a) => a.slug === slug);
+    let missing = !article;
+    if (article) mapCopy(article, (text) => { if (catalogLookup(locale, text) === undefined) missing = true; return text; }, (fn) => fn);
+    complete.set(key, !missing);
+  }
+  return complete.get(key)!;
+}
+
+/**
+ * Whether `locale` has its own translation of `slug` (rather than the English fallback). A
+ * catalog language has a guide once its catalogs cover every string of it; until then the guide
+ * shows partly in English and is not indexed in that language.
+ */
 export function isTranslated(locale: Locale, slug: string): boolean {
+  if (isCatalogLocale(locale)) return catalogComplete(locale, slug);
   return byLocale[locale].articles.some((a) => a.slug === slug);
 }
 

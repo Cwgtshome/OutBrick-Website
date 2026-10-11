@@ -20,7 +20,7 @@ import { Fragment } from 'react';
 import { Badge, Bond, Crumbs, EditorialPage, JsonLd, Studs } from '../editorial-shell';
 import { getArticle, getAuthor, type BlogArticle, type BlogReference } from '../../lib/blog';
 import { guideLanguages, guidePath, guideUrl, isTranslatedGuide, journalPath, journalUi, type JournalUi } from '../../lib/i18n/blog';
-import { localeNames, localePath, locales, ogLocales, type Locale, type TranslatedLocale } from '../../lib/i18n/locales';
+import { isLegacyLocale, localeNames, localePath, locales, ogLocales, type Locale, type TranslatedLocale } from '../../lib/i18n/locales';
 import { categoryPath, tagHref } from '../../lib/journal';
 import { siteUrl } from '../../lib/site';
 import { authorByline, breadcrumbNode, graph, ids, isoDateTime, ref, webPageNode } from '../../lib/structured-data';
@@ -171,7 +171,7 @@ export function LanguageLinks({ locale, pathFor }: { locale: TranslatedLocale; p
     <nav className="ed-langs" aria-label={journalUi[locale].languages}>
       <span aria-hidden="true">{journalUi[locale].languages}</span>
       <ul>
-        {locales.map((l) => (
+        {locales.filter((l) => l === 'en' || isLegacyLocale(l)).map((l) => (
           <li key={l}>
             <a href={pathFor(l)} lang={l} hrefLang={l} aria-current={l === locale ? 'page' : undefined}>
               {localeNames[l]}

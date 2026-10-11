@@ -1,3 +1,4 @@
+import { catalogRecord } from '../i18n/catalog.ts';
 import type { Locale } from '../i18n/locales.ts';
 import type { HelpCategory } from './model.ts';
 
@@ -48,7 +49,7 @@ export type HelpUi = {
   top: string;
 };
 
-export const helpUi: Record<Locale, HelpUi> = {
+export const helpUi: Record<Locale, HelpUi> = catalogRecord<HelpUi>('help-ui', 'helpUi', {
   en: {
     name: 'Help Centre',
     eyebrow: 'OutBrick Help Centre',
@@ -415,4 +416,4 @@ export const helpUi: Record<Locale, HelpUi> = {
     alsoIn: 'Este guia em outros idiomas',
     top: 'Voltar ao topo',
   },
-};
+});

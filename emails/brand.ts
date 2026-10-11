@@ -1,3 +1,4 @@
+import { catalogRecord } from '../lib/i18n/catalog.ts';
 // The brand line at the foot of every email and email-shell page: the social tiles, the handle,
 // Apple's App Store badge linking to the game, and the copyright, all centred: social, then the
 // badge, then the legal line last, as the brand block of a well-made email footer runs. shell() in core.ts appends it under each template's own footer, so no
@@ -29,14 +30,14 @@ export const HANDLE = '@outbrick';
  */
 export const PO_BOX = '330279';
 
-const brandCopy: Record<EmailLocale, { follow: (handle: string) => string; rights: string; postal: string }> = {
+const brandCopy: Record<EmailLocale, { follow: (handle: string) => string; rights: string; postal: string }> = catalogRecord<{ follow: (handle: string) => string; rights: string; postal: string }>('emails', 'brandCopy', {
   en: { follow: (h) => `Follow OutBrick: ${h}`, rights: 'All rights reserved.', postal: `P.O. Box ${PO_BOX}` },
   fr: { follow: (h) => `Suivez OutBrick : ${h}`, rights: 'Tous droits réservés.', postal: `Boîte postale ${PO_BOX}` },
   de: { follow: (h) => `Folgen Sie OutBrick: ${h}`, rights: 'Alle Rechte vorbehalten.', postal: `Postfach ${PO_BOX}` },
   es: { follow: (h) => `Sigue a OutBrick: ${h}`, rights: 'Todos los derechos reservados.', postal: `Apartado de correos ${PO_BOX}` },
   ja: { follow: (h) => `OutBrickをフォロー：${h}`, rights: 'All rights reserved.', postal: `私書箱 ${PO_BOX}` },
   'pt-BR': { follow: (h) => `Siga a OutBrick: ${h}`, rights: 'Todos os direitos reservados.', postal: `Caixa Postal ${PO_BOX}` },
-};
+});
 
 /** "OutBrick · P.O. Box 330279", in the reader's language. On every email. */
 export function postalAddress(locale: EmailLocale): string {
@@ -73,7 +74,7 @@ ${items}
 }
 
 /** Badge artwork per language, and its width at the 40 px height Apple's artwork is drawn at. */
-const badges: Record<EmailLocale, { file: string; width: number }> = {
+const badges: Partial<Record<EmailLocale, { file: string; width: number }>> = {
   en: { file: 'en', width: 120 },
   fr: { file: 'fr', width: 127 },
   de: { file: 'de', width: 120 },
@@ -99,7 +100,7 @@ export function copyright(locale: EmailLocale, year: number = new Date().getUTCF
 export function brandFooter(ctx: Ctx, year?: number): string {
   const f = fonts(ctx.locale);
   const words = siteWords[ctx.locale];
-  const badge = badges[ctx.locale];
+  const badge = (badges[ctx.locale] ?? badges.en!);
   const tiles = shownSocialProfiles().map((p) => {
     const name = esc(words.on(p.label));
     return `<!--[if mso]><td style="padding:0 4px;"><![endif]--><a href="${esc(p.url)}" title="${name}" style="display:inline-block;margin:0 3px 8px;text-decoration:none;"><img src="${esc(`${ctx.assetBase}/assets/email/social-${p.network}.png`)}" width="44" height="48" alt="${name}" style="display:block;width:44px;height:48px;border:0;color:${color.title};font-family:${f.text};font-size:11px;line-height:1.2;"></a><!--[if mso]></td><![endif]-->`;

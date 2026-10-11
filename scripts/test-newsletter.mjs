@@ -173,11 +173,11 @@ test('all four forms send a localized visitor email and an escaped English team 
 });
 
 
-test('Resend templates have separate plain bodies and only create after a genuine 404', () => {
+test('Resend templates have separate plain bodies and only create after a genuine 404', async () => {
   const mock = `globalThis.fetch = async (url, options) => { const p = new URL(url).pathname; console.log('MOCK_ENDPOINT:' + options.method + ':' + p); if (options.method === 'GET') return Response.json({message:'lookup failed'}, {status:403}); throw new Error('unexpected template write'); };`;
   const run = spawnSync(process.execPath, ['--experimental-strip-types', '--import', `data:text/javascript,${encodeURIComponent(mock)}`, 'scripts/build-resend-templates.mjs', '--push'], { cwd: new URL('..', import.meta.url), encoding: 'utf8', env: { ...process.env, CONTEXT: '', RESEND_API_KEY: env.RESEND_API_KEY } });
   assert.equal(run.status, 1);
-  assert.equal((run.stdout.match(/MOCK_ENDPOINT:GET:/g) ?? []).length, 6);
+  assert.equal((run.stdout.match(/MOCK_ENDPOINT:GET:/g) ?? []).length, (await import('../emails/i18n.ts')).emailLocales.length);
   assert.ok(!run.stdout.includes('MOCK_ENDPOINT:POST:'));
   for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
     const template = JSON.parse(fs.readFileSync(new URL(`../outputs/resend-templates/${locale}.json`, import.meta.url), 'utf8'));

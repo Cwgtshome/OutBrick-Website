@@ -31,7 +31,8 @@ export type TeamInput = {
   assetBase?: string;
 };
 
-const languageNames: Record<EmailLocale, string> = { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese', 'pt-BR': 'Portuguese (Brazil)' };
+const writtenLanguageNames: Partial<Record<EmailLocale, string>> = { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese', 'pt-BR': 'Portuguese (Brazil)' };
+const languageNames = new Proxy(writtenLanguageNames, { get: (names, code: string) => names[code as EmailLocale] ?? new Intl.DisplayNames(['en'], { type: 'language' }).of(code) ?? code }) as Record<EmailLocale, string>;
 
 /** The form's colour in the brick course, and what it is called in the inbox. */
 const forms: Record<TeamForm, { label: string; accent: string }> = {

@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 import { currentGameCopy } from './current-game.ts';
 /**
  * The home page's words, in every language it is published in.
@@ -1140,7 +1141,7 @@ const ja: HomeCopy = {
   },
 };
 
-export const homeCopy: Record<Locale, HomeCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const homeCopy: Record<Locale, HomeCopy> = catalogRecord<HomeCopy>('ui', 'homeCopy', { en, fr, de, es, ja, 'pt-BR': ptBR });
 
 // Keep current app facts separate from the classic browser demo below the hero.
 for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'] as const) {

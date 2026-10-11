@@ -5,8 +5,8 @@
 .ob-consent {
   position: fixed;
   z-index: 60;
-  left: 16px;
-  right: 16px;
+  inset-inline-start: 16px;
+  inset-inline-end: 16px;
   bottom: 16px;
   max-width: 460px;
   max-height: calc(100vh - 32px);

@@ -62,7 +62,7 @@ function writeChoice(choice: Choice) {
 function excludedPage(): boolean {
   const path = window.location.pathname;
   return (
-    /^\/(?:(?:fr|de|es|ja|pt-BR)\/)?(?:404|community\/admin)(?:\/|\.html|$)/.test(path) ||
+    /^\/(?:(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)\/)?(?:404|community\/admin)(?:\/|\.html|$)/.test(path) ||
     path.startsWith('/email-previews') ||
     document.querySelector('.nf-page') !== null
   );

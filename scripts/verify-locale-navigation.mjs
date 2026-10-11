@@ -1,3 +1,4 @@
+import { siteLocales } from './lib/site-locales.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -7,7 +8,7 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright')
 const outDir = fileURLToPath(new URL('../outputs/', import.meta.url));
 fs.mkdirSync(outDir, { recursive: true });
 const base = process.argv[2] ?? 'http://127.0.0.1:4321';
-const locales = ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'];
+const locales = siteLocales;
 const editorialLabels = {
   en: ['The game','Journal','Mascots','Press','About','Authors','Research','Community','Support'],
   fr: ['Le jeu','Journal','Mascottes','Presse','À propos','Auteurs','Recherche','Communauté','Assistance'],
@@ -26,7 +27,7 @@ const firstUndoRule = {
   'pt-BR':'A primeira ação de desfazer em cada tabuleiro é grátis e não consome sua reserva.',
 };
 async function verifyChrome(page, locale) {
-  if(locale !== 'en' && new URL(page.url()).pathname.match(/^\/(fr|de|es|ja|pt-BR)\/c(?:\/|$)/)) {
+  if(locale !== 'en' && new URL(page.url()).pathname.match(/^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)\/c(?:\/|$)/)) {
     const appCopy=await page.locator('.challenge .lede,.challenge .facts,.grid.g3 .card:nth-child(2) p').allTextContents();
     assert.ok(appCopy.join(' ').includes(firstUndoRule[locale]), `${locale}: first undo consumes no reserve`);
     assert.doesNotMatch(appCopy.join(' '), /sans limite|unbegrenzt|ilimitada|何度でも|não acaba|sem limite|ilimitado/i);

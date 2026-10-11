@@ -45,7 +45,9 @@ const urlMark = (key) => `/${mark(key)}`;
 const abs = (src) => (src.startsWith('https://') ? src : `${SITE}${src.startsWith('/') ? '' : '/'}${src}`);
 
 function build(locale) {
-  const c = sample.locales[locale];
+  // The catalog languages start from the English sample stories: an editor replaces them per issue,
+  // and the shell (header, friend, footer) is already in the language.
+  const c = sample.locales[locale] ?? sample.locales.en;
   if (!c) throw new Error(`the sample issue has no ${locale}`);
   const vars = [];
   const v = (key, fallback) => {

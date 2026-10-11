@@ -9,7 +9,8 @@
  * "tú" in Spanish, and polite です・ます in Japanese.
  */
 
-import type { Locale } from './locales.ts';
+import type { LegacyLocale, Locale } from './locales.ts';
+import { catalogRecord } from './catalog.ts';
 
 export type CategorySlug = 'announcements' | 'help' | 'bugs' | 'ideas' | 'accessibility' | 'show-and-tell' | 'general';
 export const categorySlugs: readonly CategorySlug[] = ['announcements', 'help', 'bugs', 'ideas', 'accessibility', 'show-and-tell', 'general'];
@@ -3184,7 +3185,7 @@ function pluralPt(unit: string): N {
   return (n, formatted) => n === 1 ? `1 ${unit}` : `${formatted} ${unit === 'conversa' ? 'conversas' : unit === 'publicação' ? 'publicações' : unit === 'resposta' ? 'respostas' : unit === 'visualização' ? 'visualizações' : 'votos'}`;
 }
 
-export const communityCopy: Record<Locale, CommunityCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const communityCopy: Record<Locale, CommunityCopy> = catalogRecord<CommunityCopy>('community', 'communityCopy', { en, fr, de, es, ja, 'pt-BR': ptBR });
 
 /** The colour of each category's brick, from the site's course. */
 export const categoryColours: Record<CategorySlug, string> = {
@@ -3203,7 +3204,7 @@ export function categoryWords(locale: Locale, slug: string): Words {
 }
 
 /** The phrases the support pages add, for the localized page tree (lib/i18n/public-pages.ts). */
-export function communitySupportPhrases(locale: Exclude<Locale, 'en'>): Record<string, string> {
+export function communitySupportPhrases(locale: LegacyLocale): Record<string, string> {
   const source = en.supportCta;
   const target = communityCopy[locale].supportCta;
   return { [source.heading]: target.heading, [source.text]: target.text, [source.ask]: target.ask, [source.bug]: target.bug, Community: { fr: 'Communauté', de: 'Community', es: 'Comunidad', ja: 'コミュニティ', 'pt-BR': 'Comunidade' }[locale] };

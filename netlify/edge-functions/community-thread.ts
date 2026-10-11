@@ -25,6 +25,7 @@
  * already allows exactly as the site's other JSON-LD.
  */
 
+import { ogLocales as siteOgLocales } from '../../lib/i18n/locales.ts';
 import type { ThreadDetail, CommunityLocale } from '../../lib/community/contract.ts';
 import { communityPath, threadPath } from '../../lib/community/contract.ts';
 import { STATIC_END, STATIC_START, memberName, threadStaticHtml } from '../../lib/community/static-html.ts';
@@ -35,7 +36,7 @@ const SITE = 'https://www.outbrick.site';
 
 type EdgeContext = { next: () => Promise<Response>; fetch?: typeof fetch };
 
-const ogLocales: Record<CommunityLocale, string> = { en: 'en_US', fr: 'fr_FR', de: 'de_DE', es: 'es_ES', ja: 'ja_JP', 'pt-BR': 'pt_BR' };
+const ogLocales: Record<CommunityLocale, string> = siteOgLocales;
 
 /** The security headers public/_headers gives every page, for the case where a custom header set does not reach an edge response. */
 const securityHeaders: Record<string, string> = {
@@ -48,7 +49,7 @@ const securityHeaders: Record<string, string> = {
 };
 
 export function parseThreadPath(pathname: string): { locale: CommunityLocale; id: number; slug: string } | null {
-  const match = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/community\/t\/(\d{1,12})(?:\/([^/]*))?\/?$/);
+  const match = pathname.match(/^(?:\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn))?\/community\/t\/(\d{1,12})(?:\/([^/]*))?\/?$/);
   if (!match) return null;
   let slug = '';
   try {

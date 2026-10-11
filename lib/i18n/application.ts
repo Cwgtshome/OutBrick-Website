@@ -1,7 +1,8 @@
 import { appStoreStorefrontUrl } from '../app-store-url';
 import { homeCopy } from './home';
-import { localizedAsset } from './assets';
-import { localeUrl, storefronts, type Locale } from './locales';
+import { localizedAsset, ogImagePath } from './assets';
+import { isLegacyLocale, localeUrl, storefronts, type Locale } from './locales';
+import { catalogStrings, catalogText } from './catalog.ts';
 
 const captions = {
   'pt-BR': ['OutBrick no iPhone: tela inicial com três amigos de blocos', 'OutBrick no iPhone: tabuleiro cheio com portais coloridos ao redor', 'OutBrick no iPhone: tabuleiro de formato especial com chaves, fechaduras e caixas', 'OutBrick no iPhone: coleção de cartas de blocos', 'OutBrick no iPad: tela inicial diante de um vilarejo de blocos', 'OutBrick no iPad: tabuleiro durante uma partida'],
@@ -19,23 +20,26 @@ const labels = {
   ja: { puzzle: 'パズルゲーム', casual: 'カジュアルゲーム', free: '無料', later: '以降' },
 };
 
+const englishLabels = catalogStrings('pages', 'app-schema', { puzzle: 'Puzzle game', casual: 'Casual game', free: 'free', later: 'or later' });
+
 /** Localize descriptive schema fields while retaining product identity, facts and enums. */
 export function localizedApplicationNode(source: Record<string, unknown>, locale: Locale): Record<string, unknown> {
   if (locale === 'en') return source;
-  const copy = labels[locale];
+  const copy = isLegacyLocale(locale) ? labels[locale] : { puzzle: catalogText(locale, englishLabels.puzzle), casual: catalogText(locale, englishLabels.casual), free: catalogText(locale, englishLabels.free), later: catalogText(locale, englishLabels.later) };
   const node = { ...source };
   node.url = localeUrl(locale, '/');
   if (node.description === homeCopy.en.appDescription) node.description = homeCopy[locale].appDescription;
   node.applicationSubCategory = copy.puzzle;
   if (typeof node.operatingSystem === 'string') node.operatingSystem = node.operatingSystem.replace(/iOS ([\d.]+) or later/, (_, version) => locale === 'ja' ? `iOS ${version}${copy.later}` : `iOS ${version} ${copy.later}`);
   if (Array.isArray(node.genre)) node.genre = node.genre.map(genre => genre === 'Puzzle' ? copy.puzzle : genre === 'Casual' ? copy.casual : genre);
-  if (node.image && typeof node.image === 'object') node.image = { ...node.image, url: `https://www.outbrick.site/og/${locale}.png`, caption: homeCopy[locale].meta.ogImageAlt };
+  if (node.image && typeof node.image === 'object') node.image = { ...node.image, url: `https://www.outbrick.site${ogImagePath(locale)}`, caption: homeCopy[locale].meta.ogImageAlt };
   if (Array.isArray(node.screenshot)) node.screenshot = node.screenshot.map(shot => {
     if (!shot || typeof shot !== 'object') return shot;
     const value = shot as Record<string, unknown>;
     const sourceUrl = typeof value.url === 'string' ? value.url : undefined;
     const index = sourceUrl ? screenshotFiles.findIndex(file => sourceUrl.endsWith(`/${file}`)) : -1;
-    return { ...value, ...(typeof value.url === 'string' ? { url: localizedAsset(value.url, locale) } : {}), ...(index >= 0 ? { caption: captions[locale][index] } : {}) };
+    const caption = index < 0 ? undefined : isLegacyLocale(locale) ? captions[locale][index] : typeof value.caption === 'string' ? catalogText(locale, value.caption) : undefined;
+    return { ...value, ...(typeof value.url === 'string' ? { url: localizedAsset(value.url, locale) } : {}), ...(caption ? { caption } : {}) };
   });
   const store = appStoreStorefrontUrl(storefronts[locale]);
   node.installUrl = store; node.downloadUrl = store;

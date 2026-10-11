@@ -1,5 +1,6 @@
 import { currentGameCopy } from '../i18n/current-game.ts';
 import type { Locale } from '../i18n/locales.ts';
+import { catalogRecord } from '../i18n/catalog.ts';
 
 /** Editorial team guides, first checked against released 5.0.1 on 7 October 2026 and
  * rechecked against released 5.1.1 (Slide & Match) and its App Store description on
@@ -9,7 +10,7 @@ import type { Locale } from '../i18n/locales.ts';
  * The community database holds a copy of each guide's opening post. After changing this
  * file, run scripts/build-player-guide-seed.mts to write a NEW migration that updates the
  * opening posts the team has not edited; applied migrations never change. */
-export const guideWords = {
+export const guideWords = catalogRecord('community', 'guideWords', {
   en: {
     label: 'Player guides',
     intro:
@@ -151,7 +152,7 @@ export const guideWords = {
     undo: 'A primeira ação de desfazer de cada tabuleiro é grátis. As seguintes usam um tanque com cinco, que recupera uma ação a cada vinte e cinco minutos; um vídeo com recompensa concede duas. Confira a quantidade exibida antes de desfazer novamente. A ação ilimitada de desfazer existe somente na demonstração clássica de blocos no navegador.',
     help: 'Você pode ler sem ter uma conta. Entre com Apple, Google ou um link enviado por e-mail para fazer uma pergunta, responder ou votar. Se escolher Ocultar Meu E-mail, a Apple pode fornecer um endereço privado de retransmissão; entre pelo mesmo método para voltar à conta. Ao relatar um erro, inclua a versão e a compilação do jogo, dispositivo, versão do iOS, fase, etapas, resultado esperado e o que aconteceu. Para acessibilidade, informe se usou VoiceOver, Controle por Voz, Controle Assistivo ou outro ajuste, além do anúncio ou controle que causou dificuldade. Envie uma captura somente se ajudar e esconda dados da conta. Nunca publique senha, código de acesso ou comprovante de compra. Use Ajuda para dúvidas de jogo, Bugs para problemas reproduzíveis e Acessibilidade para barreiras de uso. Acompanhe a conversa e confira suas preferências de notificação por e-mail.',
   },
-} as const;
+});
 
 export const guideKeys = [
   'first-board',
@@ -203,11 +204,12 @@ const steps = {
 export function playerGuides(locale: Locale) {
   const c = currentGameCopy[locale],
     w = guideWords[locale];
+  const step = steps[locale as keyof typeof steps] ?? steps.en;
   const bodies = [
-    [c.summary, steps[locale].first, c.match, c.goals, c.moves],
+    [c.summary, step.first, c.match, c.goals, c.moves],
     [c.specials, c.goals, c.stars],
     [w.journey, c.apple],
-    [steps[locale].voice, c.voiceover, w.settings],
+    [step.voice, c.voiceover, w.settings],
     [w.settings, c.voiceover],
     [c.lives, c.moves, w.undo, c.ads],
     [w.help, c.community],

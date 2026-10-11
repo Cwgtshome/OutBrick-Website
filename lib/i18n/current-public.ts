@@ -1,12 +1,12 @@
 import { currentGameCopy } from './current-game.ts';
-import type { TranslatedLocale } from './locales';
+import type { LegacyLocale } from './locales';
 
 /**
  * Translations for English page copy about the current iOS release (5.1.1, Slide & Match).
  * Strings from lib/i18n/current-game.ts are derived below, so a change there needs no second
  * edit here; the hand-written entries in `pageCopy` take precedence over the derived ones.
  */
-const pageCopy: Record<TranslatedLocale, Record<string, string>> = {
+const pageCopy: Record<LegacyLocale, Record<string, string>> = {
   "fr": {
     "Four in a line makes a line blaster; an L or T makes a bomb; a square makes a homing dart; five in a line makes a colour bomb. Tap a special or combine two for a bigger clear.": "Quatre briques alignées créent un blaster de ligne ; un L ou un T, une bombe ; un carré, une fléchette guidée ; cinq briques alignées, une bombe de couleur. Touchez un spécial ou combinez-en deux.",
     "Siri can answer about lives, refill time, the Daily Brick and village stars. Widgets, Live Activities, Spotlight, Shortcuts and Focus filters bring the game into Apple’s system features; supported Apple Intelligence features depend on your device and system. iCloud keeps progress across your devices.": "Siri répond sur les vies, leur retour, la brique du jour et les étoiles du village. Widgets, Activités en direct, Spotlight, Raccourcis et filtres de concentration relient le jeu au système. Les fonctions Apple Intelligence compatibles dépendent de l’appareil et du système. iCloud conserve votre progression entre appareils.",
@@ -178,14 +178,14 @@ const pageCopy: Record<TranslatedLocale, Record<string, string>> = {
 };
 
 /** Every English current-game string mapped to its translation in `locale`. */
-function gameCopy(locale: TranslatedLocale): Record<string, string> {
+function gameCopy(locale: LegacyLocale): Record<string, string> {
   const english = currentGameCopy.en as Record<string, string>;
   const translated = currentGameCopy[locale] as Record<string, string>;
   return Object.fromEntries(Object.keys(english).map((key) => [english[key], translated[key]]));
 }
 
 /** Slide & Match descriptions on the about, press, press-kit and challenge pages. */
-const slideAndMatch: Record<TranslatedLocale, Record<string, string>> = {
+const slideAndMatch: Record<LegacyLocale, Record<string, string>> = {
   fr: {
     'Who makes OutBrick, the slide-and-match brick puzzle, what the game is built to respect, and why it publishes a cited journal alongside it.': 'Qui crée OutBrick, le puzzle où l’on glisse et aligne des briques, ce que le jeu respecte et pourquoi il publie un journal avec sources.',
     'OutBrick is a calm slide-and-match brick puzzle for the moments between things. It is an independent project by': 'OutBrick est un puzzle apaisant où l’on glisse et aligne des briques, pour les moments entre deux activités. C’est un projet indépendant de',
@@ -230,7 +230,7 @@ const slideAndMatch: Record<TranslatedLocale, Record<string, string>> = {
  * adds two moves, then one, then a free UFO (ContinueOffer); the ad list in the privacy pages
  * names the live rewards. The English keys are the pages' current text.
  */
-const factCheck: Record<TranslatedLocale, Record<string, string>> = {
+const factCheck: Record<LegacyLocale, Record<string, string>> = {
   fr: {
     "Challenge should come from the puzzle’s idea, not from unclear controls. Every board shows its goals and its move limit from the first tap.": "Le défi doit venir de l’idée du puzzle, pas de commandes obscures. Chaque plateau affiche ses objectifs et sa limite de coups dès le premier toucher.",
     "Slide each brick out through the gate of its own colour. A brick glides until something stops it, so plan the order. This classic board is simpler than the app’s Slide & Match boards, where you can also swap neighbours and line up three; the one you were dared to is waiting in the app.": "Faites glisser chaque brique vers la sortie de sa couleur. Une brique glisse jusqu’à ce qu’un obstacle l’arrête : prévoyez donc l’ordre de vos coups. Ce plateau classique est plus simple que les plateaux Glisse et aligne de l’application, où l’on peut aussi échanger des voisines et en aligner trois ; celui du défi qui vous a été envoyé vous attend dans l’application.",
@@ -318,7 +318,7 @@ const factCheck: Record<TranslatedLocale, Record<string, string>> = {
   },
 };
 
-export const currentPublicCopy: Record<TranslatedLocale, Record<string, string>> = {
+export const currentPublicCopy: Record<LegacyLocale, Record<string, string>> = {
   fr: { ...gameCopy('fr'), ...pageCopy.fr, ...slideAndMatch.fr, ...factCheck.fr },
   de: { ...gameCopy('de'), ...pageCopy.de, ...slideAndMatch.de, ...factCheck.de },
   es: { ...gameCopy('es'), ...pageCopy.es, ...slideAndMatch.es, ...factCheck.es },

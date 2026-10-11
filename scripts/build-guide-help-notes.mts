@@ -26,7 +26,7 @@ export const guideHelpSlugs: Record<string, string> = {
 };
 
 /** The note, by language: one for a guide, one for the library thread that lists them. */
-const notes: Record<Locale, { guide: (url: string) => string; library: (url: string) => string }> = {
+const notes: Partial<Record<Locale, { guide: (url: string) => string; library: (url: string) => string }>> = {
   en: {
     guide: (u) => `**Illustrated guide:** this guide is also in the [Help Centre](${u}), with real screenshots from the game.`,
     library: (u) => `**Illustrated guides:** the player guides are also in the [Help Centre](${u}), with real screenshots from the game.`,
@@ -60,7 +60,8 @@ export function helpUrl(locale: Locale, key: string): string {
 
 export function noteFor(locale: Locale, key: string): { md: string; html: string } {
   const url = helpUrl(locale, key);
-  const md = key === 'index' ? notes[locale].library(url) : notes[locale].guide(url);
+  const note = notes[locale] ?? notes.en!;
+  const md = key === 'index' ? note.library(url) : note.guide(url);
   return { md, html: renderMarkdown(md).html };
 }
 

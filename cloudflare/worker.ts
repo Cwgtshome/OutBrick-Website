@@ -21,6 +21,8 @@ import { routeRule } from './routing.ts';
 import { submitForm, drainForms } from './forms.ts';
 import type { TranslationBudget } from './translation-budget.ts';
 import { communityAddress } from '../lib/community/routes.ts';
+import { languageRedirect } from './language.ts';
+import '../lib/i18n/catalog/install-worker.ts';
 
 const legacy: Record<string, (req: Request) => Promise<Response>> = {
   'newsletter-confirm': newsletterConfirm,
@@ -54,7 +56,7 @@ async function fetchSite(req: Request, env: CloudflareEnv): Promise<Response> {
     if (!handler) return new Response('Not found', { status: 404 });
     return env.DATABASE_URL ? handler(req) : unavailable();
   }
-  const nativeForm = /^\/(?:(?:fr|de|es|ja|pt-BR)\/)?(?:contact|careers|affiliates|newsletter)\/thanks\/?$/.test(path);
+  const nativeForm = /^\/(?:(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)\/)?(?:contact|careers|affiliates|newsletter)\/thanks\/?$/.test(path);
   if (req.method === 'POST' && (path === '/' || nativeForm)) {
     if (!env.DATABASE_URL) return unavailable();
     const response = await submitForm(req);
@@ -73,6 +75,10 @@ async function fetchSite(req: Request, env: CloudflareEnv): Promise<Response> {
     headers.set('Cache-Control', 'no-store');
     return new Response(req.method === 'HEAD' ? null : page.body, { status: 404, headers });
   }
+
+  // A first visit to an English page goes to the reader's own language (cloudflare/language.ts).
+  const language = languageRedirect(req, url);
+  if (language) return language;
 
   const rule = routeRule(path);
   // Force rules override physical alias files, just as they did on Netlify.

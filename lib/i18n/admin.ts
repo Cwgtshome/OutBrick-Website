@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 import type { Locale } from './locales';
 const enCore = {
   title: 'Administration',
@@ -1132,7 +1133,7 @@ const ptOps: OpsCopy = {
   audienceRequired: 'Escolha pelo menos um público.',
 };
 
-export const adminWords: Record<Locale, Copy> = {
+export const adminWords: Record<Locale, Copy> = catalogRecord<Copy>('admin', 'adminWords', {
   en: { ...enCore, ...enOps },
   fr: translated(
     [
@@ -1424,4 +1425,4 @@ export const adminWords: Record<Locale, Copy> = {
     ['Membro', 'Membro de confiança', 'Moderador', 'Equipe', 'Administrador'],
     ptOps,
   ),
-};
+});

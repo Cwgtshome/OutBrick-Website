@@ -24,7 +24,7 @@ const linkPattern = /\[([^\]]+)\]\(([^)\s]+)\)/g;
  * them, so a link never points at a translation that has not been published.
  */
 function localHref(href: string, locale: string): string | null {
-  if (!href.startsWith('/') || href.startsWith('//') || /^\/(fr|de|es|ja|pt-BR)(?:[/?#]|$)/.test(href)) return href;
+  if (!href.startsWith('/') || href.startsWith('//') || /^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(?:[/?#]|$)/.test(href)) return href;
   if (/\.[a-z0-9]+(?:[?#]|$)/i.test(href)) return href;
   return href === '/' ? `/${locale}` : href.startsWith('/#') || href.startsWith('/?') ? `/${locale}${href.slice(1)}` : `/${locale}${href}`;
 }
@@ -154,7 +154,7 @@ export function FollowJournal({ current, locale = 'en' }: { current?: string; lo
   const feedPath = localePath(locale, '/feed.xml');
   const feedLabel = (category?: string) => {
     const c = category ? journalUi[locale].categories[category] ?? category : '';
-    return { en: category ? `Copy the ${c} feed address` : 'Copy the feed address', fr: category ? `Copier l’adresse du flux « ${c} »` : 'Copier l’adresse du flux', de: category ? `Feed-Adresse für ${c} kopieren` : 'Feed-Adresse kopieren', es: category ? `Copiar la dirección del canal de ${c}` : 'Copiar la dirección del canal', ja: category ? `「${c}」のフィードアドレスをコピー` : 'フィードのアドレスをコピー', 'pt-BR': category ? `Copiar o endereço do feed de ${c}` : 'Copiar o endereço do feed' }[locale];
+    return { en: category ? `Copy the ${c} feed address` : 'Copy the feed address', fr: category ? `Copier l’adresse du flux « ${c} »` : 'Copier l’adresse du flux', de: category ? `Feed-Adresse für ${c} kopieren` : 'Feed-Adresse kopieren', es: category ? `Copiar la dirección del canal de ${c}` : 'Copiar la dirección del canal', ja: category ? `「${c}」のフィードアドレスをコピー` : 'フィードのアドレスをコピー', 'pt-BR': category ? `Copiar o endereço do feed de ${c}` : 'Copiar o endereço do feed' }[locale as 'en'] ?? (category ? `Copy the ${c} feed address` : 'Copy the feed address');
   };
   const shelves = getShelves();
   return (

@@ -79,12 +79,12 @@ export const lifecycleTemplateTitles: Record<LifecycleTemplateName, string> = {
   'notice-policy-news': 'Notice: terms changing (newsletter subscribers)',
 };
 
-const names: Record<EmailLocale, string> = { en: 'Ada Lovelace', fr: 'Camille Martin', de: 'Lena Schmidt', es: 'Lucía García', ja: '山田 花子', 'pt-BR': 'Ana Souza' };
+const namesWritten: Partial<Record<EmailLocale, string>> = { en: 'Ada Lovelace', fr: 'Camille Martin', de: 'Lena Schmidt', es: 'Lucía García', ja: '山田 花子', 'pt-BR': 'Ana Souza' };
 const link = 'https://www.outbrick.site/support#preview-link';
 const at = '2026-10-08T07:35:26.000Z';
 
 /** The friends' letter sample: Poppy, the storyteller, writes October's letter. */
-const sampleLetters: Record<EmailLocale, { subject: string; preheader: string; eyebrow: string; title: string; letter: string; community: [string, string]; cta: string }> = {
+const sampleLettersWritten: Partial<Record<EmailLocale, { subject: string; preheader: string; eyebrow: string; title: string; letter: string; community: [string, string]; cta: string }>> = {
   en: {
     subject: 'A letter from Poppy, and a board to solve',
     preheader: 'Poppy went out to the farm, and brought back a puzzle.',
@@ -148,28 +148,28 @@ export function renderLifecycleSample(name: LifecycleTemplateName, locale: Email
     case 'support-reply':
       return supportReply({
         ...base,
-        name: names[locale],
+        name: (namesWritten[locale] ?? namesWritten.en!),
         ref: 'OB-7K3Q2M',
         staff: 'Mourad',
         message: 'Thanks for the detailed report. Level 213 is **solvable within its moves**, but the last gate needs the colour bomb from the left column.\n\nIf you still get stuck, reply with a screenshot and I’ll look at your exact board. <b>Not bold</b>',
         original: 'Level 213 keeps telling me I’m out of moves one move before the gate.',
       });
     case 'support-fixed':
-      return supportFixed({ ...base, name: names[locale], ref: 'OB-7K3Q2M', version: '5.1.1', note: 'The out-of-moves wall no longer appears one move early on boards with a sealed room.' });
+      return supportFixed({ ...base, name: (namesWritten[locale] ?? namesWritten.en!), ref: 'OB-7K3Q2M', version: '5.1.1', note: 'The out-of-moves wall no longer appears one move early on boards with a sealed room.' });
     case 'support-feedback':
-      return supportFeedback({ ...base, name: names[locale], ref: 'OB-7K3Q2M', links: { solved: `${link}-yes`, notSolved: `${link}-no`, rate: [1, 3, 5].map((n) => `${link}-${n}`) as [string, string, string] } });
+      return supportFeedback({ ...base, name: (namesWritten[locale] ?? namesWritten.en!), ref: 'OB-7K3Q2M', links: { solved: `${link}-yes`, notSolved: `${link}-no`, rate: [1, 3, 5].map((n) => `${link}-${n}`) as [string, string, string] } });
     case 'team-case-update':
       return teamCaseUpdate({ ref: 'OB-7K3Q2M', caseUrl: `${link}-case`, solved: false, rating: 2, comment: 'Still happens on level 214 too. <b>Not bold</b>', reopened: true, locale, assetBase });
     case 'affiliate-approved':
-      return affiliateApproved({ ...base, name: names[locale], code: 'ADA27' });
+      return affiliateApproved({ ...base, name: (namesWritten[locale] ?? namesWritten.en!), code: 'ADA27' });
     case 'affiliate-declined':
-      return affiliateDeclined({ ...base, name: names[locale], message: 'Your channel focuses on racing games, and the programme is for puzzle and casual audiences for now.' });
+      return affiliateDeclined({ ...base, name: (namesWritten[locale] ?? namesWritten.en!), message: 'Your channel focuses on racing games, and the programme is for puzzle and casual audiences for now.' });
     case 'careers-in-review':
-      return careersInReview({ ...base, name: names[locale], role: 'Content Marketing Lead' });
+      return careersInReview({ ...base, name: (namesWritten[locale] ?? namesWritten.en!), role: 'Content Marketing Lead' });
     case 'careers-next-step':
-      return careersNextStep({ ...base, name: names[locale], role: 'Content Marketing Lead', message: 'Could you do a 30-minute video call next week? Tuesday or Thursday afternoon (CET) work for us.' });
+      return careersNextStep({ ...base, name: (namesWritten[locale] ?? namesWritten.en!), role: 'Content Marketing Lead', message: 'Could you do a 30-minute video call next week? Tuesday or Thursday afternoon (CET) work for us.' });
     case 'careers-declined':
-      return careersDeclined({ ...base, name: names[locale], role: 'Content Marketing Lead', message: 'Your portfolio was lovely; we chose someone with more App Store experience for this role.' });
+      return careersDeclined({ ...base, name: (namesWritten[locale] ?? namesWritten.en!), role: 'Content Marketing Lead', message: 'Your portfolio was lovely; we chose someone with more App Store experience for this role.' });
     case 'newsletter-welcome-2':
       return welcomeBoards({ ...base, unsubscribeUrl: `${link}-unsubscribe`, preferencesUrl: `${link}-prefs` });
     case 'newsletter-welcome-3':
@@ -193,7 +193,7 @@ export function renderLifecycleSample(name: LifecycleTemplateName, locale: Email
     }
     case 'newsletter-letter': {
       const c = weeklyPuzzleCopy[locale];
-      const l = sampleLetters[locale];
+      const l = (sampleLettersWritten[locale] ?? sampleLettersWritten.en!);
       const site = `https://www.outbrick.site${locale === 'en' ? '' : `/${locale}`}`;
       return newsletterCampaign({
         ...base,

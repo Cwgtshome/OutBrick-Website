@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { freshDatabase } from './test/harness.ts';
 import { renderMarkdown } from './markdown.ts';
-import { locales } from '../../lib/i18n/locales.ts';
+import { legacyLocales } from '../../lib/i18n/locales.ts';
+// The seeded guides and FAQ exist in the first six languages (the migrations); the catalog languages read the English ones.
+const locales = ['en', ...legacyLocales] as const;
 import { homeStaticHtml } from '../../lib/community/static-html.ts';
 import { guideWords } from '../../lib/community/player-guides.ts';
 
@@ -39,7 +41,7 @@ void test('all six languages: team guides resolve every internal thread link, su
       assert.equal(renderMarkdown(g.body_md).html, g.body_html);
       for (const match of g.body_html.matchAll(/href="([^"]+)"/g)) {
         // The 8 October note at the top points to the guide's Help Centre page.
-        if (/^https:\/\/www\.outbrick\.site(?:\/(?:fr|de|es|ja|pt-BR))?\/community\/help(?:\/|$)/.test(match[1])) continue;
+        if (/^https:\/\/www\.outbrick\.site(?:\/(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn))?\/community\/help(?:\/|$)/.test(match[1])) continue;
         assert.ok(paths.has(match[1]), `missing guide: ${match[1]}`);
       }
     }

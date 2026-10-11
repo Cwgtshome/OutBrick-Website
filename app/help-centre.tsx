@@ -122,7 +122,7 @@ export function resolveHref(href: string, locale: Locale): string {
     return (slug ? guidePath(locale, slug) : hubPath(locale)) + (hash ? `#${hash}` : '');
   }
   // A path already in a language (/pt-BR/community) is left as written.
-  if (/^\/(?:fr|de|es|ja|pt-BR)(?:[/?#]|$)/.test(href)) return href;
+  if (/^\/(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(?:[/?#]|$)/.test(href)) return href;
   if (href.startsWith('/')) {
     // Community addresses are prefixed the same way; anchors survive.
     const [path, hash] = href.split('#');

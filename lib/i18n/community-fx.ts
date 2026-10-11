@@ -5,7 +5,10 @@
  * each file stays readable; same rules: written translations, the site's tone, British English.
  */
 
-import type { Locale } from './locales.ts';
+import type { LegacyLocale, Locale } from './locales.ts';
+import { allTranslatedLocales, localeNames } from './locales.ts';
+import { catalogRecord } from './catalog.ts';
+const allLocales: readonly Locale[] = ['en', ...allTranslatedLocales];
 import type { BadgeKey, ReactionKind, LeaderboardKind, LeaderboardPeriod, RoadmapStatus } from '../community/contract.ts';
 
 type N = (n: number, formatted: string) => string;
@@ -1084,10 +1087,10 @@ const ptBR: CommunityFxCopy = {
   errors: { too_many: 'Muitas ações de uma vez. Aguarde um pouco e tente novamente.', translate_failed: 'Não foi possível traduzir desta vez. Tente novamente em um minuto.', unknown_credential: 'Esta chave de acesso não está vinculada a nenhuma conta daqui.', poll_closed: 'Esta enquete está encerrada.', poll_has_votes: 'A enquete já recebeu votos e não pode mais ser alterada.' },
 };
 
-export const communityFx: Record<Locale, CommunityFxCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const communityFx: Record<Locale, CommunityFxCopy> = catalogRecord<CommunityFxCopy>('community', 'communityFx', { en, fr, de, es, ja, 'pt-BR': ptBR });
 
 /** Language names as an adjective for "Machine translation from French", in each page language. */
-export const languageNamesIn: Record<Locale, Record<Locale, string>> = {
+const legacyLanguageNames: Record<'en' | LegacyLocale, Partial<Record<Locale, string>>> = {
   en: { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese', 'pt-BR': 'Brazilian Portuguese' },
   fr: { en: 'de l’anglais', fr: 'du français', de: 'de l’allemand', es: 'de l’espagnol', ja: 'du japonais', 'pt-BR': 'du portugais du Brésil' },
   de: { en: 'Englischen', fr: 'Französischen', de: 'Deutschen', es: 'Spanischen', ja: 'Japanischen', 'pt-BR': 'brasilianischen Portugiesisch' },
@@ -1095,5 +1098,20 @@ export const languageNamesIn: Record<Locale, Record<Locale, string>> = {
   ja: { en: '英語', fr: 'フランス語', de: 'ドイツ語', es: 'スペイン語', ja: '日本語', 'pt-BR': 'ブラジルポルトガル語' },
   'pt-BR': { en: 'do inglês', fr: 'do francês', de: 'do alemão', es: 'do espanhol', ja: 'do japonês', 'pt-BR': 'do português do Brasil' },
 };
+/** A language's name inside "Machine translation from …", in the reader's language. */
+function languageNameIn(viewer: Locale, from: Locale): string {
+  const written = legacyLanguageNames[viewer as 'en' | LegacyLocale]?.[from];
+  if (written) return written;
+  let name: string = from;
+  try { name = new Intl.DisplayNames([viewer], { type: 'language' }).of(from) ?? from; } catch { /* keep the code */ }
+  // The first translations name a language inside a phrase ("de l’anglais", "aus dem Englischen").
+  if (viewer === 'fr') return /^[aeiouyhâéè]/i.test(name) ? `de l’${name}` : `du ${name}`;
+  if (viewer === 'de') return name.endsWith('isch') ? `${name}en` : name;
+  if (viewer === 'pt-BR') return `do ${name}`;
+  if (viewer === 'es') return name.toLowerCase();
+  return name;
+}
+export const languageNamesIn = Object.fromEntries(allLocales.map((viewer) => [viewer, Object.fromEntries(allLocales.map((from) => [from, languageNameIn(viewer, from)]))])) as Record<Locale, Record<Locale, string>>;
+
 /** "Translate to <my language>": the target named in the page's own language. */
-export const targetNamesIn: Record<Locale, string> = { en: 'English', fr: 'français', de: 'Deutsch', es: 'Español', ja: '日本語', 'pt-BR': 'português do Brasil' };
+export const targetNamesIn: Record<Locale, string> = { ...localeNames, en: 'English', fr: 'français', de: 'Deutsch', es: 'Español', ja: '日本語', 'pt-BR': 'português do Brasil' };

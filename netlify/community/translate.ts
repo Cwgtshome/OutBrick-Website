@@ -31,7 +31,8 @@ export const TRANSLATE_MODEL = 'claude-haiku-4-5-20251001';
 
 export const translateConfigured = (env: Record<string, string | undefined> = process.env) => Boolean(platformTranslator() || env.ANTHROPIC_API_KEY?.trim());
 
-const languageNames: Record<CommunityLocale, string> = { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese', 'pt-BR': 'Brazilian Portuguese' };
+const writtenNames: Partial<Record<CommunityLocale, string>> = { en: 'English', fr: 'French', de: 'German', es: 'Spanish', ja: 'Japanese', 'pt-BR': 'Brazilian Portuguese' };
+const languageNames = new Proxy(writtenNames, { get: (names, code: string) => names[code as CommunityLocale] ?? new Intl.DisplayNames(['en'], { type: 'language' }).of(code) ?? code }) as Record<CommunityLocale, string>;
 
 export function systemPrompt(to: CommunityLocale): string {
   return [

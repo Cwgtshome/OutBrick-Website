@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { withPublicMetadataSnippet } from '../../../../lib/i18n/public-metadata';
 import { notFound } from 'next/navigation';
 import { isTranslatedGuide, localizeArticle, translatedGuideSlugs } from '../../../../lib/i18n/blog';
-import { isTranslatedLocale } from '../../../../lib/i18n/locales';
+import { isTranslatedLocale, legacyLocales } from '../../../../lib/i18n/locales';
 import { ArticleView, articleMetadata } from '../../../components/journal-article';
 
 /**
@@ -16,7 +16,7 @@ export const dynamicParams = false;
 
 // The locales come from app/[locale]/layout.tsx; this adds the five slugs to each.
 export function generateStaticParams() {
-  return translatedGuideSlugs.map((slug) => ({ slug }));
+  return legacyLocales.flatMap((locale) => translatedGuideSlugs.map((slug) => ({ locale, slug })));
 }
 
 export async function generateMetadata({ params }: GuidePageProps): Promise<Metadata> {

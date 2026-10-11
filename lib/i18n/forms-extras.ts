@@ -1,8 +1,11 @@
-import type { Locale } from './locales';
+import type { LegacyLocale, Locale } from './locales';
+import { isLegacyLocale } from './locales';
+import { catalogTemplate, phraseRecord } from './catalog.ts';
+import { phrases } from './catalog-phrases.ts';
 
 const affiliateConfirmation = '. If the code is already taken, we will suggest the nearest one. Please don’t share the link until we confirm it: until then it is only a proposal and earns nothing.';
 /** Hydrated success copy containing user values is absent from the static page inventory. */
-export const formExtraWords: Record<Locale, Record<string, string>> = {
+const legacyFormExtraWords: Record<'en' | LegacyLocale, Record<string, string>> = {
   en: {},
   fr: { [affiliateConfirmation]: '. Si le code est déjà pris, nous vous proposerons le code disponible le plus proche. Ne partagez pas le lien avant notre confirmation : jusque-là, ce n’est qu’une proposition et il ne rapporte rien.' },
   de: { [affiliateConfirmation]: '. Falls der Code bereits vergeben ist, schlagen wir den nächstliegenden verfügbaren Code vor. Bitte teile den Link erst nach unserer Bestätigung: Bis dahin ist er nur ein Vorschlag und bringt keine Einnahmen.' },
@@ -11,9 +14,12 @@ export const formExtraWords: Record<Locale, Record<string, string>> = {
   'pt-BR': { [affiliateConfirmation]: '. Se o código já estiver em uso, sugeriremos o código disponível mais parecido. Não compartilhe o link até receber nossa confirmação: até lá, ele é apenas uma proposta e não gera ganhos.' },
 };
 
+export const formExtraWords: Record<Locale, Record<string, string>> = { ...legacyFormExtraWords, ...phraseRecord(legacyFormExtraWords) };
+
 export function formDynamicText(text: string, locale: Locale): string | undefined {
   const match = text.trim().match(/^Proposed code ([A-Z0-9 ]+)\.$/);
   if (!match || locale === 'en') return undefined;
   const code = match[1];
+  if (!isLegacyLocale(locale)) return catalogTemplate(locale, phrases.proposedCode, [code]);
   return ({ fr: `Code proposé : ${code}.`, de: `Vorgeschlagener Code: ${code}.`, es: `Código propuesto: ${code}.`, ja: `候補のコード：${code}。`, 'pt-BR': `Código sugerido: ${code}.` })[locale];
 }

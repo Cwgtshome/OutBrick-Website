@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { tagPageCopy } from './journal-tags';
-import type { TranslatedLocale } from './locales';
+import type { LegacyLocale, TranslatedLocale } from './locales';
+import { isLegacyLocale } from './locales';
+import { catalogText } from './catalog.ts';
 
 // Search snippets are concise editorial summaries. The complete translated page,
 // article dek and research caveats remain intact in the document itself.
 type Snippet = { title?: string; description?: string };
-const copy: Record<TranslatedLocale, Record<string, Snippet>> = {
+const copy: Record<LegacyLocale, Record<string, Snippet>> = {
   fr: {
     '/accessibility': { title: 'Accessibilité OutBrick : symboles et VoiceOver', description: 'Découvrez les symboles, VoiceOver et les options de mouvement d’OutBrick, ainsi que les limites actuelles et les moyens de demander de l’aide.' },
     '/authors/mourad-hamdi': { description: 'Mourad Hamdi, créateur d’OutBrick, écrit sur le design de puzzles et le jeu au quotidien. Retrouvez ses articles dans le journal OutBrick.' },
@@ -117,7 +119,8 @@ export function publicMetadataSnippet(path: string, locale: TranslatedLocale): S
     const tag=tagPageCopy(path.split('/')[3]??'',locale);
     return tag ? { title: tag.title, description: tag.description } : undefined;
   }
-  return copy[locale][path];
+  // The catalog languages use the page's own translated title and description.
+  return isLegacyLocale(locale) ? copy[locale][path] : undefined;
 }
 
 export function withPublicMetadataSnippet(metadata: Metadata, path: string, locale: TranslatedLocale): Metadata {
@@ -142,7 +145,7 @@ export function withPublicSchemaSnippets(value: unknown, locale: TranslatedLocal
   const types=Array.isArray(node['@type'])?node['@type']:[node['@type']];
   const nodeUrl=typeof node.url==='string'?node.url:typeof node['@id']==='string'?node['@id']:'';
   if(types.includes('NewsArticle') && nodeUrl && new URL(nodeUrl,'https://www.outbrick.site').pathname===`/${locale}/press/outbrick-4-2`) {
-    result.headline={fr:'OutBrick 4.2 arrive sur l’App Store',de:'OutBrick 4.2 ist im App Store erhältlich',es:'OutBrick 4.2 llega al App Store',ja:'OutBrick 4.2がApp Storeに登場','pt-BR':'OutBrick 4.2 chega à App Store'}[locale];
+    result.headline=isLegacyLocale(locale)?{fr:'OutBrick 4.2 arrive sur l’App Store',de:'OutBrick 4.2 ist im App Store erhältlich',es:'OutBrick 4.2 llega al App Store',ja:'OutBrick 4.2がApp Storeに登場','pt-BR':'OutBrick 4.2 chega à App Store'}[locale]:catalogText(locale,String(node.headline));
   }
   if(types.some(type=>['WebPage','CollectionPage','AboutPage','ContactPage','BlogPosting'].includes(String(type)))&&typeof node.url==='string') {
     const path=new URL(node.url,'https://www.outbrick.site').pathname;

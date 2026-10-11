@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 import { currentGameCopy } from './current-game.ts';
 /**
  * The play guide's words (/play and its translations). `en` is the original
@@ -360,7 +361,7 @@ const ptBR: PlayCopy = {
   close: { title: 'Gostou? O jogo tem mais 2.000.', lede: 'Uma Jornada por 167 vilas construídas com blocos e nove amigos. Grátis na App Store e funciona offline.' },
 };
 
-export const playCopy: Record<Locale, PlayCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const playCopy: Record<Locale, PlayCopy> = catalogRecord<PlayCopy>('ui', 'playCopy', { en, fr, de, es, ja, 'pt-BR': ptBR });
 
 for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'] as const) {
   const t = currentGameCopy[locale];

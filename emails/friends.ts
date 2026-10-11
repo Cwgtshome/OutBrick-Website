@@ -1,3 +1,4 @@
+import { catalogRecord } from '../lib/i18n/catalog.ts';
 // The nine friends in email: who hosts a message, what they say, and the one game an email can
 // hold, a tappable brick puzzle.
 //
@@ -44,7 +45,7 @@ export type Mood =
   | 'welcome' | 'key' | 'tip' | 'friends' | 'release' | 'news' | 'event' | 'miss' | 'prefs' | 'got' | 'reply'
   | 'fixed' | 'rate' | 'yay' | 'thanks' | 'security' | 'notice' | 'bye' | 'digest' | 'badge' | 'puzzle' | 'oops';
 
-const lines: Record<EmailLocale, Record<Mood, string>> = {
+const lines: Record<EmailLocale, Record<Mood, string>> = catalogRecord<Record<Mood, string>>('emails', 'lines', {
   en: {
     welcome: 'Welcome in! I saved you a spot.',
     key: 'One tap and you’re in.',
@@ -189,7 +190,7 @@ const lines: Record<EmailLocale, Record<Mood, string>> = {
     puzzle: 'Consegue resolver este?',
     oops: 'Hum, esse não chegou.',
   },
-};
+});
 
 export function friendLine(locale: EmailLocale, mood: Mood): string {
   return lines[locale][mood];
@@ -281,14 +282,14 @@ export const BRICK: Record<BrickColour, { face: string; foot: string; ink: strin
 };
 export type BrickColour = 'red' | 'yellow' | 'green' | 'blue' | 'purple' | 'pink' | 'orange' | 'teal';
 
-const colourNames: Record<EmailLocale, Record<BrickColour, string>> = {
+const colourNames: Record<EmailLocale, Record<BrickColour, string>> = catalogRecord<Record<BrickColour, string>>('emails', 'colourNames', {
   en: { red: 'Red', yellow: 'Yellow', green: 'Green', blue: 'Blue', purple: 'Purple', pink: 'Pink', orange: 'Orange', teal: 'Teal' },
   fr: { red: 'Rouge', yellow: 'Jaune', green: 'Vert', blue: 'Bleu', purple: 'Violet', pink: 'Rose', orange: 'Orange', teal: 'Turquoise' },
   de: { red: 'Rot', yellow: 'Gelb', green: 'Grün', blue: 'Blau', purple: 'Lila', pink: 'Pink', orange: 'Orange', teal: 'Türkis' },
   es: { red: 'Rojo', yellow: 'Amarillo', green: 'Verde', blue: 'Azul', purple: 'Morado', pink: 'Rosa', orange: 'Naranja', teal: 'Turquesa' },
   ja: { red: 'あか', yellow: 'きいろ', green: 'みどり', blue: 'あお', purple: 'むらさき', pink: 'ピンク', orange: 'オレンジ', teal: 'ティール' },
   'pt-BR': { red: 'Vermelho', yellow: 'Amarelo', green: 'Verde', blue: 'Azul', purple: 'Roxo', pink: 'Rosa', orange: 'Laranja', teal: 'Turquesa' },
-};
+});
 
 export function colourName(locale: EmailLocale, colour: BrickColour): string {
   return colourNames[locale][colour];
@@ -319,14 +320,14 @@ export type PuzzleCopy = {
   cta: { label: string; href: string };
 };
 
-const puzzleUi: Record<EmailLocale, { tap: string; again: string }> = {
+const puzzleUi: Record<EmailLocale, { tap: string; again: string }> = catalogRecord<{ tap: string; again: string }>('emails', 'puzzleUi', {
   en: { tap: 'Tap the brick that moves first:', again: 'Try another brick.' },
   fr: { tap: 'Touchez la brique qui part en premier :', again: 'Essayez une autre brique.' },
   de: { tap: 'Tippen Sie auf den Stein, der zuerst zieht:', again: 'Versuchen Sie einen anderen Stein.' },
   es: { tap: 'Toca el ladrillo que se mueve primero:', again: 'Prueba con otro ladrillo.' },
   ja: { tap: '最初に動かすブロックをタップ：', again: 'ほかのブロックを試してみましょう。' },
   'pt-BR': { tap: 'Toque no bloco que se move primeiro:', again: 'Tente outro bloco.' },
-};
+});
 
 const CELL = 46;
 const EDGE = 10;
@@ -451,7 +452,7 @@ export const firstPuzzle: Puzzle = {
   options: ['red', 'blue', 'yellow'],
 };
 
-const firstPuzzleCopy: Record<EmailLocale, Omit<PuzzleCopy, 'cta'> & { cta: string }> = {
+const firstPuzzleCopy: Record<EmailLocale, Omit<PuzzleCopy, 'cta'> & { cta: string }> = catalogRecord<Omit<PuzzleCopy, 'cta'> & { cta: string }>('emails', 'firstPuzzleCopy', {
   en: {
     eyebrow: 'Your first puzzle',
     question: 'Red wants to go home through the red gate. Which brick moves first?',
@@ -506,7 +507,7 @@ const firstPuzzleCopy: Record<EmailLocale, Omit<PuzzleCopy, 'cta'> & { cta: stri
     answer: 'Primeiro o azul: ele sobe pelo portão azul e então o vermelho tem caminho livre até o portão vermelho.',
     cta: 'Jogar o tabuleiro do dia',
   },
-};
+});
 
 export function firstPuzzleBlock(ctx: Ctx, dailyUrl: string): string {
   const c = firstPuzzleCopy[ctx.locale];
@@ -538,7 +539,7 @@ export const weeklyPuzzle: Puzzle = {
   options: ['green', 'pink', 'purple'],
 };
 
-export const weeklyPuzzleCopy: Record<EmailLocale, Omit<PuzzleCopy, 'cta'> & { cta: string }> = {
+export const weeklyPuzzleCopy: Record<EmailLocale, Omit<PuzzleCopy, 'cta'> & { cta: string }> = catalogRecord<Omit<PuzzleCopy, 'cta'> & { cta: string }>('emails', 'weeklyPuzzleCopy', {
   en: {
     eyebrow: 'Brick of the week',
     question: 'Three bricks, three gates, and only one order works. Which brick moves first?',
@@ -593,21 +594,21 @@ export const weeklyPuzzleCopy: Record<EmailLocale, Omit<PuzzleCopy, 'cta'> & { c
     answer: 'Primeiro o rosa, para cima pelo portão dele. Isso libera o caminho do verde para a direita, e quando o verde sai o roxo pode subir.',
     cta: 'Jogar o tabuleiro do dia',
   },
-};
+});
 
 // ---------------------------------------------------------------------------------------
 // The friends' letter: once a month one friend writes the newsletter's opening letter, in their
 // own voice, signed by hand. The research behind it: the best-loved game newsletters open with a
 // named person's short letter, and players stay for the cast (docs/EMAIL-DESIGN-SYSTEM.md).
 
-const letterUi: Record<EmailLocale, { from: (name: string) => string; community: string }> = {
+const letterUi: Record<EmailLocale, { from: (name: string) => string; community: string }> = catalogRecord<{ from: (name: string) => string; community: string }>('emails', 'letterUi', {
   en: { from: (n) => `A letter from ${n}`, community: 'From the community' },
   fr: { from: (n) => `Une lettre de ${n}`, community: 'Dans la communauté' },
   de: { from: (n) => `Ein Brief von ${n}`, community: 'Aus der Community' },
   es: { from: (n) => `Una carta de ${n}`, community: 'Desde la comunidad' },
   ja: { from: (n) => `${n}からの手紙`, community: 'コミュニティから' },
   'pt-BR': { from: (n) => `Uma carta de ${n}`, community: 'Da comunidade' },
-};
+});
 
 export function letterTitle(locale: EmailLocale, friend: FriendId): string {
   return letterUi[locale].from(FRIENDS[friend].name);

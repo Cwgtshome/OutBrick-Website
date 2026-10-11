@@ -4,7 +4,7 @@ import { useLocale } from './locale-context';
 import { formWords } from '../../lib/i18n/forms';
 import { validateForm, useHydrated } from './netlify-form';
 import { NEWSLETTER_CONSENT_VERSION, newsletterWords } from '../../lib/i18n/newsletter';
-import { localePath } from '../../lib/i18n/locales';
+import { localePath, localeNames, locales, type Locale } from '../../lib/i18n/locales';
 import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
 import '../styles/growth.css';
 import { track } from '../../lib/track';
@@ -27,16 +27,10 @@ import { track } from '../../lib/track';
  * the form was on and NEWSLETTER_CONSENT_VERSION (the hidden field below).
  */
 
-const languages = [
-  { value: 'en', label: 'English' },
-  { value: 'fr', label: 'Français' },
-  { value: 'de', label: 'Deutsch' },
-  { value: 'es', label: 'Español' },
-  { value: 'ja', label: '日本語' },
-  { value: 'pt-BR', label: 'Português (Brasil)' },
-] as const;
+/** Every published site language, each named in itself. */
+const languages = locales.map((value) => ({ value, label: localeNames[value] }));
 
-export type NewsletterLanguage = (typeof languages)[number]['value'];
+export type NewsletterLanguage = Locale;
 
 export function NewsletterSignup({
   heading = 'Get a letter when there’s a new village',

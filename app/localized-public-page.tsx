@@ -24,7 +24,10 @@ import { notFound } from 'next/navigation';
 import { hiringCountriesText } from '../lib/business';
 import { friends } from '../lib/mascots';
 import { siteUrl } from '../lib/site';
-import { isTranslatedLocale, localeAlternates, localePath, ogLocales, storefronts, translatedLocales, type TranslatedLocale } from '../lib/i18n/locales';
+import { hasLocalePage, isCatalogLocale, isLegacyLocale, isTranslatedLocale, localeAlternates, localePath, localePrefixPattern, locales, ogLocales, storefronts, translatedLocales, type CatalogLocale, type LegacyLocale, type TranslatedLocale } from '../lib/i18n/locales';
+import { catalogLookup, catalogTemplate } from '../lib/i18n/catalog.ts';
+import { pagePatterns } from '../lib/i18n/catalog-maps.ts';
+import '../lib/i18n/catalog/install-all.ts';
 import { localizeArticle } from '../lib/i18n/blog';
 import { journalExtras } from '../lib/i18n/journal-extras';
 import { publicPages } from '../lib/i18n/public-pages';
@@ -56,10 +59,52 @@ function localizedUsdAmount(text: string, locale: TranslatedLocale): string | un
   return `${amount[1] ? '− ' : ''}${formatted}`;
 }
 
-export function translatedText(text: string, locale: TranslatedLocale): string {
+const hiringRegions = ['GB', 'FR', 'DE', 'ES', 'US', 'CA'];
+
+function catalogPageText(text: string, locale: CatalogLocale): string {
   const normalized = norm(text);
   const friendDescription = friends.find(friend => normalized === norm(`${friend.role}. ${friend.line}`));
-  if (friendDescription) return translatedText(friendDescription.role,locale) + (locale==='ja'?'。':'. ') + translatedText(friendDescription.line,locale);
+  if (friendDescription) return catalogPageText(friendDescription.role,locale) + (/^(zh|ja)/.test(locale)?'。':locale==='th'?' ':'. ') + catalogPageText(friendDescription.line,locale);
+  const t = (template: string, ...args: unknown[]) => catalogTemplate(locale, template, args);
+  const shelves = normalized.match(/^(\d+) shelves$/);
+  if (shelves) return t(pagePatterns.shelves, Number(shelves[1]));
+  const usdAmount = localizedUsdAmount(normalized, locale);
+  if (usdAmount !== undefined) return usdAmount;
+  if (/^(?:\d{1,2} [A-Z][a-z]+ \d{4}|[A-Z][a-z]+ \d{1,2}, \d{4})$/.test(normalized)) {
+    const day = new Date(normalized + ' 12:00:00 UTC');
+    if(!Number.isNaN(day.getTime())) return new Intl.DateTimeFormat(locale,{dateStyle:'long',timeZone:'UTC'}).format(day);
+  }
+  const regionNames = new Intl.DisplayNames(locale, { type: 'region' });
+  const countries = new Intl.ListFormat(locale,{style:'long',type:'disjunction'}).format(hiringRegions.map(r => regionNames.of(r) ?? r));
+  if (normalized===hiringCountriesText()) return countries;
+  const remoteLine=normalized.match(/^Remote\. Open to applicants living in (.+)\. (.+)\.$/);
+  if (remoteLine && remoteLine[1]===hiringCountriesText()) return t(pagePatterns.remote, countries, catalogPageText(remoteLine[2], locale));
+  const dailyLine=normalized.match(/^The daily boards take turns, (\d+) of them from a gentle warm-up to a proper gridlock, and every one was cleared by a solver before it went up\.$/);
+  if (dailyLine) return t(pagePatterns.daily, Number(dailyLine[1]));
+  const affiliateEarn=normalized.match(/^Earn (\d+)% of what follows$/);
+  if (affiliateEarn) return t(pagePatterns.earn, affiliateEarn[1]);
+  const affiliateCommission=normalized.match(/^When App Store Connect attributes in-app purchases to your campaign — Brick Pass, Remove Ads, coins — you earn (\d+)% of OutBrick’s net proceeds from them, for (\d+) months from each download\.$/);
+  if (affiliateCommission) return t(pagePatterns.commission, affiliateCommission[1], Number(affiliateCommission[2]));
+  const affiliatePayout=normalized.match(/^Monthly\. Once Apple has paid OutBrick for a month’s sales, we pay your (\d+)% of the net proceeds attributed to you in that month\. Balances under (.+) roll over to the next month\. We agree the payment method with you when you are approved, and you are responsible for any tax due on what you earn\.$/);
+  if (affiliatePayout) return t(pagePatterns.payout, affiliatePayout[1], localizedUsdAmount(affiliatePayout[2],locale)??affiliatePayout[2]);
+  const affiliatePurchases=normalized.match(/^All in-app purchases App Analytics attributes to your campaign — the Brick Pass, Remove Ads and coin bundles — for (\d+) months from each referred download, and only as far as App Analytics attributes them\. Refunded purchases are taken back out\. Downloads themselves earn nothing, because OutBrick is free\.$/);
+  if (affiliatePurchases) return t(pagePatterns.purchases, Number(affiliatePurchases[1]));
+  const resultCopy = resultCopies[locale] ??= resultTextTranslations(locale);
+  const copy = dynamicCopies[locale]?.[normalized] ?? resultCopy[normalized] ?? catalogLookup(locale, normalized);
+  if (copy === undefined) return text;
+  const start = text.match(/^\s*/)?.[0] ?? '';
+  const end = text.match(/\s*$/)?.[0] ?? '';
+  return start + copy + end;
+}
+
+export function translatedText(text: string, locale: TranslatedLocale): string {
+  return isCatalogLocale(locale) ? catalogPageText(text, locale) : legacyTranslatedText(text, locale);
+}
+
+function legacyTranslatedText(text: string, locale: LegacyLocale): string {
+  const normalized = norm(text);
+  const friendDescription = friends.find(friend => normalized === norm(`${friend.role}. ${friend.line}`));
+  if (friendDescription) return legacyTranslatedText(friendDescription.role,locale) + (locale==='ja'?'。':'. ') + legacyTranslatedText(friendDescription.line,locale);
   if (normalized === 'press') return {fr:'presse',de:'Presse',es:'prensa',ja:'報道関係のお問い合わせ','pt-BR':'imprensa'}[locale];
   const tagged = normalized.match(/^Tagged “(.+)”$/);
   if (tagged) {
@@ -110,11 +155,13 @@ export function localizedPublicHref(href: string, locale: TranslatedLocale): str
   if (href === APP_STORE_URL || href.startsWith(APP_STORE_URL + '?') || href.startsWith(APP_STORE_URL + '#')) return appStoreStorefrontUrl(storefronts[locale]) + href.slice(APP_STORE_URL.length);
   const absolute = href.startsWith(siteUrl);
   const path = absolute ? href.slice(siteUrl.length) || '/' : href;
-  if (!path.startsWith('/') || path.startsWith('//') || /^\/(fr|de|es|ja|pt-BR)(\/|$)/.test(path)) return href;
+  if (!path.startsWith('/') || path.startsWith('//') || localePrefixPattern.test(path)) return href;
   const route = path.split(/[?#]/)[0];
   const root = route.split('/')[1];
   // Images, downloads, APIs and RSS feeds are intentional language-neutral assets.
   if (route !== '/' && (!publicRoots.has(root) || (/\.[a-z\d]+$/i.test(route) && !route.endsWith('/feed.xml')))) return href;
+  // The journal is not published in the catalog languages: its links keep the English address.
+  if (!hasLocalePage(locale, route)) return href;
   const next = localePath(locale, path);
   return absolute ? siteUrl + next : next;
 }
@@ -126,7 +173,7 @@ function localizedObject(value: unknown, locale: TranslatedLocale, key = ''): un
   if (isValidElement(value)) return value;
   if (typeof value === 'string') {
     const stringValue = ['src','srcSet','image','imageUrl','images','url','href','thumbnailUrl','contentUrl','poster'].includes(key) ? localizedAsset(value,locale) : value;
-    if (key === 'url' && /\/share\/board-\d+-\d+\.png$/.test(stringValue)) return stringValue.replace('/share/board-', `/share/${locale}/board-`);
+    if (key === 'url' && isLegacyLocale(locale) && /\/share\/board-\d+-\d+\.png$/.test(stringValue)) return stringValue.replace('/share/board-', `/share/${locale}/board-`);
     if (stringValue === 'en' && key === 'inLanguage') return locale;
     if (key === '@id' && /\/#(organization|website|app|publisher|person|founder)/.test(stringValue)) return stringValue;
     if (key === '@id') return localizedPublicHref(stringValue, locale);
@@ -178,7 +225,7 @@ export async function localizePageTree(node: ReactNode, locale: TranslatedLocale
   const translated = props;
   if (typeof element.type === 'function' || (typeof element.type === 'object' && element.type !== null)) translated.locale = locale;
   // Explicit language destinations already identify their target locale.
-  if (element.type === 'a' && ['en','fr','de','es','ja','pt-BR'].includes(String(element.props.hrefLang))) translated.href = element.props.href;
+  if (element.type === 'a' && (locales as readonly string[]).includes(String(element.props.hrefLang))) translated.href = element.props.href;
   if ('children' in props) translated.children = await localizePageTree(props.children as ReactNode, locale);
   if (element.type === 'script' && props.type === 'application/ld+json' && props.dangerouslySetInnerHTML) {
     const html = (props.dangerouslySetInnerHTML as { __html: string }).__html;
@@ -218,4 +265,9 @@ export async function publicLocale(params: Promise<{ locale: string }>): Promise
 
 export function publicStaticParams(records: Record<string,string>[] = [{}]) {
   return translatedLocales.flatMap(locale => records.map(record => ({...record,locale})));
+}
+
+/** The journal and its authors are published in the first five translations only. */
+export function journalStaticParams(records: Record<string,string>[] = [{}]) {
+  return translatedLocales.filter(isLegacyLocale).flatMap(locale => records.map(record => ({...record,locale})));
 }

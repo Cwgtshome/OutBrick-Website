@@ -48,7 +48,7 @@
   width: 7px;
   height: 7px;
   margin: 0 11px;
-  border-right: 2px solid var(--muted);
+  border-inline-end: 2px solid var(--muted);
   border-top: 2px solid var(--muted);
   transform: rotate(45deg);
 }
@@ -121,7 +121,7 @@
 }
 .ob-site .hc-finder svg {
   position: absolute;
-  left: 18px;
+  inset-inline-start: 18px;
   color: var(--panel);
   pointer-events: none;
 }
@@ -200,7 +200,7 @@
 .ob-site .hc-cat-head p { margin: 0; font-size: 1rem; }
 .ob-site .hc-cat-head .count {
   display: inline-block;
-  margin-left: 6px;
+  margin-inline-start: 6px;
   font-family: var(--display);
   font-weight: 600;
   font-size: 0.78rem;
@@ -371,7 +371,7 @@
 }
 .ob-site .hc-sec h2 .anchor {
   position: absolute;
-  left: -0.9em;
+  inset-inline-start: -0.9em;
   color: var(--paving-dark);
   text-decoration: none;
   opacity: 0;
@@ -381,11 +381,11 @@
 .ob-site .hc-sec h3 { font-size: 1.16rem; margin: 24px 0 8px; }
 .ob-site .hc-sec p { margin: 0 0 16px; font-size: 1.03rem; }
 .ob-site .hc-sec .points { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
-.ob-site .hc-sec .points li { position: relative; padding-left: 30px; font-size: 1.02rem; }
+.ob-site .hc-sec .points li { position: relative; padding-inline-start: 30px; font-size: 1.02rem; }
 .ob-site .hc-sec .points li::before {
   content: '';
   position: absolute;
-  left: 2px;
+  inset-inline-start: 2px;
   top: 0.45em;
   width: 14px;
   height: 14px;
@@ -441,7 +441,7 @@
   padding: 16px 18px;
   border-radius: 14px;
   background: var(--c-soft);
-  border-left: 6px solid var(--c);
+  border-inline-start: 6px solid var(--c);
 }
 .ob-site .hc-callout svg { flex: none; color: var(--c); margin-top: 2px; }
 .ob-site .hc-callout p { margin: 0; font-size: 1rem; color: var(--hc-ink); }
@@ -474,7 +474,7 @@
 }
 .ob-site .hc-table caption {
   caption-side: top;
-  text-align: left;
+  text-align: start;
   padding: 12px 16px 8px;
   font-family: var(--display);
   font-weight: 600;
@@ -482,7 +482,7 @@
   background: #fbf3e2;
 }
 .ob-site .hc-table th,
-.ob-site .hc-table td { padding: 11px 16px; text-align: left; vertical-align: top; color: var(--hc-muted); }
+.ob-site .hc-table td { padding: 11px 16px; text-align: start; vertical-align: top; color: var(--hc-muted); }
 .ob-site .hc-table thead th {
   font-family: var(--display);
   font-weight: 600;
@@ -578,7 +578,7 @@
 }
 .ob-site .hc-band .hc-pager a:hover { filter: brightness(1.07); }
 .ob-site .hc-band .hc-pager a:active { transform: translateY(3px); }
-.ob-site .hc-pager .next { text-align: right; grid-column: 2; }
+.ob-site .hc-pager .next { text-align: end; grid-column: 2; }
 @media (max-width: 600px) {
   .ob-site .hc-pager .next { grid-column: 1; }
 }

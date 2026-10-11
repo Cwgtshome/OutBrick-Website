@@ -23,7 +23,7 @@ const manifests=[];
 const publicRoots=new Set(['about','accessibility','accessibility-support','affiliates','age-rating','age-suitability','authors','blog','c','careers','contact','creators','daily','eula','eula-apple','license','license-agreement','mascots','newsletter','play','press','press-kit','privacy','privacy-choices','privacy-policy','refund','refunds','research','support','community','terms','whats-new']);
 const noindexEvidence=[];
 const schemaLanguages=[];
-const englishRoutes=[...pages.keys()].filter(route=>!/^\/(fr|de|es|ja|pt-BR)(\/|$)/.test(route)&&route!='/404'&&!/^\/google[0-9a-f]+$/.test(route));
+const englishRoutes=[...pages.keys()].filter(route=>!/^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(\/|$)/.test(route)&&route!='/404'&&!/^\/google[0-9a-f]+$/.test(route));
 for(const locale of locales) {
  const missingCopy=inventory.filter(({text})=>!(text in publicPages[locale]));
  if(missingCopy.length) problems.push(`${locale}: ${missingCopy.length} missing public dictionary entries`);
@@ -78,7 +78,7 @@ for(const locale of locales) {
    const tag=match[0];if(/(?:lang|hreflang)="en"/i.test(tag))continue;
    for(const dest of tag.matchAll(/(?:href|action|formaction)="([^"]+)"/gi)) {
     const url=decodeEntities(dest[1]);const path=url.startsWith(siteUrl)?url.slice(siteUrl.length):url;
-    if(!path.startsWith('/')||path.startsWith('//')||/^\/(?:fr|de|es|ja|pt-BR)(?:\/|$)/.test(path))continue;
+    if(!path.startsWith('/')||path.startsWith('//')||/^\/(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(?:\/|$)/.test(path))continue;
     const base=path.split(/[?#]/)[0];const root=base.split('/')[1];
     const asset=/\.[a-z\d]+$/i.test(base)&&!base.endsWith('/feed.xml');
     if(!asset&&(base==='/'||publicRoots.has(root)))problems.push(`${translated}: English internal destination ${url}`);

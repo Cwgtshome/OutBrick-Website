@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 import type { Locale } from './locales';
 
 // The admin dashboard's Email panel (app/components/community/views-admin-email.tsx).
@@ -63,7 +64,7 @@ const en = {
 };
 export type AdminEmailCopy = typeof en;
 
-export const adminEmailWords: Record<Locale, AdminEmailCopy> = {
+export const adminEmailWords: Record<Locale, AdminEmailCopy> = catalogRecord<AdminEmailCopy>('admin', 'adminEmailWords', {
   en,
   fr: {
     title: 'E-mails',
@@ -365,4 +366,4 @@ export const adminEmailWords: Record<Locale, AdminEmailCopy> = {
     laterClicks: 'Clicaram numa mensagem posterior',
     of: (part, whole) => `${part} de ${whole}`,
   },
-};
+});

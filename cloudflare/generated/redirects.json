@@ -498,6 +498,42 @@
     "force": false
   },
   {
+    "from": "/it/c/*",
+    "to": "/it/c",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/it/community/*",
+    "to": "/it/community",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/ko/c/*",
+    "to": "/ko/c",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/ko/community/*",
+    "to": "/ko/community",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/ar/c/*",
+    "to": "/ar/c",
+    "status": 200,
+    "force": false
+  },
+  {
+    "from": "/ar/community/*",
+    "to": "/ar/community",
+    "status": 200,
+    "force": false
+  },
+  {
     "from": "/pt-BR/*",
     "to": "/pt-BR/404",
     "status": 404,
@@ -572,6 +608,258 @@
   {
     "from": "/ja/*",
     "to": "/ja/404",
+    "status": 404,
+    "force": false
+  },
+  {
+    "from": "/it/play-*",
+    "to": "/it/play",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/privacy-policy",
+    "to": "/it/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/privacy-policy.html",
+    "to": "/it/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/license",
+    "to": "/it/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/license.html",
+    "to": "/it/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/refund",
+    "to": "/it/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/refund.html",
+    "to": "/it/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/eula-apple",
+    "to": "/it/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/eula-apple.html",
+    "to": "/it/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/accessibility-support",
+    "to": "/it/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/accessibility-support.html",
+    "to": "/it/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/age-suitability",
+    "to": "/it/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/age-suitability.html",
+    "to": "/it/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/play-*",
+    "to": "/ko/play",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/privacy-policy",
+    "to": "/ko/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/privacy-policy.html",
+    "to": "/ko/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/license",
+    "to": "/ko/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/license.html",
+    "to": "/ko/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/refund",
+    "to": "/ko/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/refund.html",
+    "to": "/ko/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/eula-apple",
+    "to": "/ko/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/eula-apple.html",
+    "to": "/ko/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/accessibility-support",
+    "to": "/ko/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/accessibility-support.html",
+    "to": "/ko/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/age-suitability",
+    "to": "/ko/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ko/age-suitability.html",
+    "to": "/ko/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/play-*",
+    "to": "/ar/play",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/privacy-policy",
+    "to": "/ar/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/privacy-policy.html",
+    "to": "/ar/privacy",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/license",
+    "to": "/ar/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/license.html",
+    "to": "/ar/license-agreement",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/refund",
+    "to": "/ar/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/refund.html",
+    "to": "/ar/refunds",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/eula-apple",
+    "to": "/ar/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/eula-apple.html",
+    "to": "/ar/eula",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/accessibility-support",
+    "to": "/ar/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/accessibility-support.html",
+    "to": "/ar/accessibility",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/age-suitability",
+    "to": "/ar/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/ar/age-suitability.html",
+    "to": "/ar/age-rating",
+    "status": 301,
+    "force": true
+  },
+  {
+    "from": "/it/*",
+    "to": "/it/404",
+    "status": 404,
+    "force": false
+  },
+  {
+    "from": "/ko/*",
+    "to": "/ko/404",
+    "status": 404,
+    "force": false
+  },
+  {
+    "from": "/ar/*",
+    "to": "/ar/404",
     "status": 404,
     "force": false
   }

@@ -265,10 +265,10 @@ async function resolve(pathname) {
   if (found) return found;
   // netlify.toml: /community/* and /<locale>/community/* are served from the language's shell.
   // netlify/edge-functions/community-route.ts: an address the community cannot draw is a 404.
-  const community = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/community\//);
+  const community = pathname.match(/^(?:\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn))?\/community\//);
   if (community && !communityAddress(pathname)?.known) return null;
   if (community) return join(root, community[1] ? `${community[1]}/community.html` : 'community.html');
-  const challenge = pathname.match(/^(?:\/(fr|de|es|ja|pt-BR))?\/c\//);
+  const challenge = pathname.match(/^(?:\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn))?\/c\//);
   if (challenge) return join(root, challenge[1] ? `${challenge[1]}/c.html` : 'c.html');
   return null;
 }
@@ -343,7 +343,7 @@ createServer(async (req, res) => {
 
     const found = await resolve(pathname);
     if (!found) {
-      const locale = pathname.match(/^\/(fr|de|es|ja|pt-BR)(?:\/|$)/)?.[1];
+      const locale = pathname.match(/^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(?:\/|$)/)?.[1];
       res.writeHead(404, { 'content-type': 'text/html; charset=utf-8' });
       return res.end(await readFile(join(root, locale ? `${locale}/404.html` : '404.html')));
     }

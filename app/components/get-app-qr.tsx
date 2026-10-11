@@ -10,6 +10,7 @@
  * beyond the badge image.
  */
 
+import { appStoreBadgePath } from '../../lib/i18n/assets';
 import { chromeCopy } from '../../lib/i18n/chrome';
 import type { Locale } from '../../lib/i18n/locales';
 import { getAppCopy } from '../../lib/i18n/whats-new';
@@ -30,7 +31,7 @@ export function GetAppQr({ locale = 'en', centred = false }: { locale?: Locale; 
         <p className="obx-getapp-title">{copy.title}</p>
         <p className="obx-getapp-caption">{copy.caption}</p>
         <a className="obx-getapp-badge" href={localeStoreUrl('qr-card', locale)} aria-label={chrome.badgeLabel}>
-          <img src={locale === 'en' || locale === 'pt-BR' ? '/assets/badge/appstore-black.svg' : `/assets/badge/appstore-black-${locale}.svg`} alt={chrome.badgeAlt} width={120} height={40} loading="lazy" decoding="async" />
+          <img src={appStoreBadgePath(locale)} alt={chrome.badgeAlt} width={120} height={40} loading="lazy" decoding="async" />
         </a>
       </div>
     </aside>

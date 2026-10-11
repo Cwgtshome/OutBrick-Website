@@ -1,3 +1,4 @@
+import { phraseRecord } from './catalog.ts';
 import type { TranslatedLocale } from './locales';
 import { ptBRLegalPart1 } from './legal-pages-pt-BR-part-1.ts';
 import { ptBRLegalPart2 } from './legal-pages-pt-BR-part-2.ts';
@@ -7,7 +8,7 @@ import { ptBRLegalPart3 } from './legal-pages-pt-BR-part-3.ts';
 // metadata, inline-link text, list items and the shared face-data disclosures.
 // Keys use decoded JSX text with whitespace normalized; links and legal claims
 // stay in the shared source pages.
-export const legalPages: Record<TranslatedLocale, Record<string, string>> = {
+export const legalPages: Record<TranslatedLocale, Record<string, string>> = phraseRecord<Record<string, string>>({
   "fr": {
     "OutBrick privacy policy: data, ads and choices": "Politique de confidentialité OutBrick : données, publicités et choix",
     "OutBrick privacy policy": "Politique de confidentialité d’OutBrick",
@@ -1817,4 +1818,4 @@ export const legalPages: Record<TranslatedLocale, Record<string, string>> = {
     "A real line to the team": "チームへの直接の連絡先"
   },
   'pt-BR': { ...ptBRLegalPart1, ...ptBRLegalPart2, ...ptBRLegalPart3 }
-};
+});

@@ -1,3 +1,4 @@
+import { catalogRecord } from '../lib/i18n/catalog.ts';
 // The Support Centre's emails and email fragments, in all six languages:
 //
 //   trackLine / trackLabel   the "Track your request" link added to the contact acknowledgement,
@@ -19,7 +20,7 @@ type Copy = {
   link: { subject: (ref: string) => string; preheader: string; heading: string; intro: string; cta: string; expiry: string; why: string };
 };
 
-export const supportCentreEmailCopy: Record<EmailLocale, Copy> = {
+export const supportCentreEmailCopy: Record<EmailLocale, Copy> = catalogRecord<Copy>('emails', 'supportCentreEmailCopy', {
   en: {
     trackLabel: 'Track your request',
     trackLine: 'See where your request stands, read every reply and add details at any time:',
@@ -98,7 +99,7 @@ export const supportCentreEmailCopy: Record<EmailLocale, Copy> = {
       why: 'Você recebeu este e-mail porque o link da sua solicitação de suporte do OutBrick foi pedido em outbrick.site.',
     },
   },
-};
+});
 
 const ctxOf = (locale: EmailLocale, assetBase = SITE): Ctx => ({ locale, assetBase });
 

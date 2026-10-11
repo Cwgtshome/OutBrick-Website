@@ -10,6 +10,7 @@
  * (netlify/edge-functions/community-thread.ts), into the same slot.
  */
 
+import { ogImagePath } from '../lib/i18n/assets';
 import type { Metadata } from 'next';
 import type { CommunityLocale } from '../lib/community/contract';
 import { communityPath } from '../lib/community/contract';
@@ -48,7 +49,7 @@ export function communityMetadata(locale: Locale, view: CommunityShellView): Met
   const { title, description } = words(locale, view);
   const path = pagePath[view];
   const url = `${siteUrl}${localePath(locale, path)}`;
-  const image = locale === 'en' ? `${siteUrl}/og.png` : `${siteUrl}/og/${locale}.png`;
+  const image = `${siteUrl}${ogImagePath(locale)}`;
   const alt = communityCopy[locale].name;
   return {
     title: { absolute: title },

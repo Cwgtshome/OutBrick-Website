@@ -48,7 +48,7 @@ export function Flag({ locale, size = 22 }: { locale: Locale; size?: number }) {
           <path d="M10.6 8.3c2.8-.7 5.5-.4 8.3.8" fill="none" stroke="#fff" strokeWidth=".7" />
         </svg>
       );
-    default:
+    case 'en':
       return (
         <svg {...common}>
           {/* The SVG viewport clips the diagonals, so no clipPath (and no shared id) is needed. */}
@@ -61,5 +61,18 @@ export function Flag({ locale, size = 22 }: { locale: Locale; size?: number }) {
           </g>
         </svg>
       );
+    default: {
+      // The catalog languages get a brick tile with their code rather than a flag: a language is
+      // not a country, and several (Arabic, Chinese, Catalan, Latin American Spanish) have no one flag.
+      const colours = ['#e2352f', '#1f8f88', '#6a4bdc', '#2f74d0', '#2f9e38', '#c8620f'];
+      const index = locale.split('').reduce((n, c) => n + c.charCodeAt(0), 0) % colours.length;
+      const code = locale.split('-')[0].toUpperCase();
+      return (
+        <svg {...common}>
+          <rect width="30" height="20" rx="3" fill={colours[index]} />
+          <text x="15" y="14.2" textAnchor="middle" fontSize="11" fontWeight="800" fontFamily="Figtree, Arial, sans-serif" fill="#fff">{code}</text>
+        </svg>
+      );
+    }
   }
 }

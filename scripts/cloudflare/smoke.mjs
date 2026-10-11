@@ -1,4 +1,5 @@
 // Static-route acceptance checks. Database/sign-in acceptance is a separate gate.
+import { siteLocales, translatedLocales } from '../lib/site-locales.mjs';
 import assert from 'node:assert/strict';
 const base = process.argv[2];
 if (!base) throw new Error('Supply the Worker preview URL.');
@@ -22,13 +23,23 @@ await check('/sitemap.xml', 200, { type: 'application/xml', contains: '<sitemapi
 await check('/robots.txt', 200, { type: 'text/plain', contains: 'Sitemap:' });
 await check('/privacy-policy?source=old-link', 301, { location: '/privacy?source=old-link' });
 await check('/c/42?test=1', 200, { type: 'text/html' });
-for (const locale of ['fr', 'de', 'es', 'ja', 'pt-BR']) {
+// A first visit follows the browser's language; a remembered choice (English included) always wins.
+{
+  const first = translatedLocales.at(-1);
+  const response = await fetch(new URL('/play', base), { redirect: 'manual', headers: { 'Accept-Language': first, 'User-Agent': 'Mozilla/5.0 smoke' } });
+  assert.equal(response.status, 302, '/play Accept-Language redirect');
+  assert.equal(new URL(response.headers.get('location'), base).pathname, `/${first}/play`, '/play Accept-Language target');
+  const kept = await fetch(new URL('/play', base), { redirect: 'manual', headers: { 'Accept-Language': first, Cookie: 'ob_lang=en', 'User-Agent': 'Mozilla/5.0 smoke' } });
+  assert.equal(kept.status, 200, '/play with ob_lang=en');
+  checks.push({ path: '/play (Accept-Language)', method: 'GET', status: 302 });
+}
+for (const locale of translatedLocales) {
   await check(`/${locale}/privacy`, 200, { type: 'text/html' });
   await check(`/${locale}/c/42`, 200, { type: 'text/html' });
   await check(`/${locale}/missing-legal-document`, 404, { type: 'text/html' });
 }
 await check('/missing-legal-document', 404);
-for (const locale of ['en', 'fr', 'de', 'es', 'ja', 'pt-BR']) {
+for (const locale of siteLocales) {
   const prefix = locale === 'en' ? '' : `/${locale}`;
   await check(`${prefix}/community/no-such-page`, 404, { type: 'text/html' });
   await check(`${prefix}/community/c/no-such-category`, 404, { type: 'text/html' });

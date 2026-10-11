@@ -1,3 +1,4 @@
+import { catalogRecord } from '../lib/i18n/catalog.ts';
 // Every word of the customer-lifecycle emails (emails/lifecycle.ts), in the site's six languages.
 //
 // Same voice as emails/i18n.ts: warm, plain, a brick friend at the counter, never a ticket
@@ -571,5 +572,5 @@ const en: LifecycleCopy = {
   },
 };
 
-export const lifecycleCopy: Record<EmailLocale, LifecycleCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const lifecycleCopy: Record<EmailLocale, LifecycleCopy> = catalogRecord<LifecycleCopy>('emails', 'lifecycleCopy', { en, fr, de, es, ja, 'pt-BR': ptBR });
 export { en as lifecycleEn };

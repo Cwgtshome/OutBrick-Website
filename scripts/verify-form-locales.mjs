@@ -1,3 +1,4 @@
+import { translatedLocales } from './lib/site-locales.mjs';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ?? 'playwright');
 import fs from 'node:fs';
 import path from 'node:path';
@@ -7,7 +8,7 @@ fs.mkdirSync(outDir, { recursive: true });
 const base = process.env.QA_BASE ?? process.argv[2] ?? 'http://127.0.0.1:4321';
 const browser = await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
 const report={base,browser:'Isolated Playwright Chromium; all POSTs intercepted locally',flows:[],noJS:[],errors:[]};
-for(const locale of ['fr','de','es','ja','pt-BR']) {
+for(const locale of translatedLocales) {
  const context=await browser.newContext(); const page=await context.newPage(); let status=500;let posts=[];const interceptedFailures=new Set();
  page.on('pageerror',e=>report.errors.push({locale,error:e.message}));
  page.on('console',m=>{if(m.type()==='error' && !(m.text()==='Failed to load resource: the server responded with a status of 500 (Internal Server Error)' && interceptedFailures.has(m.location().url)))report.errors.push({locale,error:m.text(),url:m.location().url});});

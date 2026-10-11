@@ -14,6 +14,7 @@
 // tiny Markdown as issue files (core.ts inlineMarkdown), so a reply can never inject markup.
 // Copy lives in lifecycle-i18n*.ts. Senders, queues and links are chosen by netlify/lifecycle/.
 
+import { localeNames as siteLocaleNames } from '../lib/i18n/locales.ts';
 import {
   SITE,
   bricks,
@@ -674,7 +675,8 @@ export const topicKeys = ['releases', 'tips', 'events'] as const;
 export type Frequency = 'everything' | 'monthly';
 export const frequencyKeys = ['everything', 'monthly'] as const;
 
-const localeNames: Record<EmailLocale, string> = { en: 'English', fr: 'Français', de: 'Deutsch', es: 'Español', ja: '日本語', 'pt-BR': 'Português (Brasil)' };
+// Every published language, named in itself, for the preferences page's language choice.
+const localeNames: Record<EmailLocale, string> = siteLocaleNames;
 
 /** What else the preferences page shows: the reader's frequency, and the end of a pause still running. */
 export type PreferencesState = { frequency?: Frequency; pausedUntil?: Date | string | null };

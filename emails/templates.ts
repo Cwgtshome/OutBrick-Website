@@ -3,9 +3,11 @@
 // Every value that came from a visitor or an issue file is escaped here (esc / escLines /
 // inlineMarkdown), never in the copy catalogue; the text/plain part gets the raw value.
 
+import { storefronts } from '../lib/i18n/locales.ts';
 import { FRIENDS, communityBlock, communityTitle, letterBlock, letterTitle, puzzle, type FriendId, type Puzzle, type PuzzleCopy } from './friends.ts';
 import { trackHtml, trackText } from './support-centre.ts';
-import { contactTopics } from '../lib/business.ts';
+import { contactTopics, jobs } from '../lib/business.ts';
+import { catalogStrings } from '../lib/i18n/catalog.ts';
 import { brandFooterText } from './brand.ts';
 import { appStoreUrl } from '../lib/app-store-url.ts';
 import { publicPages } from '../lib/i18n/public-pages.ts';
@@ -37,7 +39,11 @@ import { lifecycleCopy } from './lifecycle-i18n.ts';
 
 export type Rendered = { subject: string; html: string; text: string };
 
-const storefront: Record<EmailLocale, string> = { en: 'us', fr: 'fr', de: 'de', es: 'es', ja: 'jp', 'pt-BR': 'br' };
+const storefront: Record<EmailLocale, string> = storefronts;
+
+// The site labels emails quote (contact topics, job titles), so the Worker carries them for the
+// catalog languages in the emails catalog.
+catalogStrings('emails', 'site-labels', Object.fromEntries([...contactTopics.map((t) => t.label), 'Other', 'Device', ...jobs.map((j) => j.title)].map((label) => [label, label])));
 
 /** An English site label (a contact topic, a job title) in the email's language, from the site's own dictionary. */
 export function siteLabel(locale: EmailLocale, english: string): string {

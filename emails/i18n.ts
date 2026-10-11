@@ -1,3 +1,4 @@
+import { catalogRecord } from '../lib/i18n/catalog.ts';
 // Every word the emails say, in the site's six languages.
 //
 // The voice is the site's: warm, plain, a brick friend at the counter rather than a ticket
@@ -7,8 +8,14 @@
 // German follows the site: "Sie" throughout, except the affiliate email, which uses "du" as the
 // affiliate programme pages do.
 
-export const emailLocales = ['en', 'fr', 'de', 'es', 'ja', 'pt-BR'] as const;
-export type EmailLocale = (typeof emailLocales)[number];
+// The 31 catalog languages read their words from lib/i18n/catalog/<locale>/emails.json (installed
+// below); a reader gets them once the language is published on the site.
+import '../lib/i18n/catalog/install-worker.ts';
+import { locales, type Locale } from '../lib/i18n/locales.ts';
+
+/** Every published site language. */
+export const emailLocales: readonly Locale[] = locales;
+export type EmailLocale = Locale;
 
 export function isEmailLocale(value: unknown): value is EmailLocale {
   return typeof value === 'string' && (emailLocales as readonly string[]).includes(value);
@@ -581,4 +588,4 @@ const ptBR: EmailCopy = {
   },
 };
 
-export const emailCopy: Record<EmailLocale, EmailCopy> = { en, fr, de, es, ja, 'pt-BR': ptBR };
+export const emailCopy: Record<EmailLocale, EmailCopy> = catalogRecord<EmailCopy>('emails', 'emailCopy', { en, fr, de, es, ja, 'pt-BR': ptBR });

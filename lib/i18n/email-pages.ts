@@ -1,10 +1,10 @@
-import type { TranslatedLocale } from './locales';
+import type { LegacyLocale } from './locales';
 
 // Copy added with the email system (October 2026): the contact page's email line, the
 // double opt-in wording on the newsletter pages, and the three pages the newsletter links
 // land on (/newsletter/confirmed, /newsletter/unsubscribed, /newsletter/link-expired).
 // Merged into publicPages; every key is also listed in public-source-inventory.json.
-export const emailPages: Record<TranslatedLocale, Record<string, string>> = {
+export const emailPages: Record<LegacyLocale, Record<string, string>> = {
   fr: {
     "Prefer email?": "Vous préférez l’e-mail ?",
     "Every letter ends with a one-click unsubscribe link; you can also reply to any letter or use the": "Chaque lettre se termine par un lien de désinscription en un clic ; vous pouvez aussi répondre à une lettre ou utiliser le",

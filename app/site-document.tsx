@@ -12,10 +12,17 @@
 
 import type { Metadata } from 'next';
 import { LocaleProvider } from './components/locale-context';
-import { isTranslatedLocale, localePath, type Locale } from '../lib/i18n/locales';
+import { isCatalogLocale, isLegacyLocale, isTranslatedLocale, localeDir, localePath, type Locale } from '../lib/i18n/locales';
+import '../lib/i18n/catalog/install-all.ts';
+import clientScriptManifest from '../lib/i18n/catalog/client-scripts.json';
+const clientScripts = clientScriptManifest as Record<string, string>;
+import { catalogText } from '../lib/i18n/catalog.ts';
+import { phrases } from '../lib/i18n/catalog-phrases.ts';
 import { homeCopy } from '../lib/i18n/home';
 import { journalUi } from '../lib/i18n/blog';
+import { authors } from '../lib/blog';
 import { siteWords } from '../lib/i18n/site';
+import { ogImagePath } from '../lib/i18n/assets';
 import './styles/fonts.css';
 import './globals.css';
 import './styles/consent.css';
@@ -99,9 +106,9 @@ export function localizedRootMetadata(locale: Locale): Metadata {
   return { ...shared, title: { default: copy.title, template: '%s — OutBrick' }, description: copy.description,
     authors: [{ name: 'Mourad Hamdi', url: localePath(locale, '/authors/mourad-hamdi') }],
     keywords: undefined, manifest: locale === 'en' ? '/site.webmanifest' : `/${locale}/site.webmanifest`,
-    category: {en:'games',fr:'jeux',de:'Spiele',es:'juegos',ja:'ゲーム','pt-BR':'jogos'}[locale],
-    openGraph: { ...rootMetadata.openGraph, title: copy.ogTitle, description: copy.ogDescription, images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, width: 1200, height: 630, alt: copy.ogImageAlt }] },
-    twitter: { card: 'summary_large_image', title: copy.ogTitle, description: copy.ogDescription, images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, alt: copy.ogImageAlt }] },
+    category: isLegacyLocale(locale) || locale === 'en' ? {en:'games',fr:'jeux',de:'Spiele',es:'juegos',ja:'ゲーム','pt-BR':'jogos'}[locale] : catalogText(locale, phrases.category),
+    openGraph: { ...rootMetadata.openGraph, title: copy.ogTitle, description: copy.ogDescription, images: [{ url: ogImagePath(locale), width: 1200, height: 630, alt: copy.ogImageAlt }] },
+    twitter: { card: 'summary_large_image', title: copy.ogTitle, description: copy.ogDescription, images: [{ url: ogImagePath(locale), alt: copy.ogImageAlt }] },
   };
 }
 function localizedSiteGraph(locale: Locale) {
@@ -111,7 +118,7 @@ function localizedSiteGraph(locale: Locale) {
   for (const node of source['@graph']) {
     if (node['@type'] === 'Organization') {
       node.description = t.organization;
-      node.knowsAbout = {
+      node.knowsAbout = !isLegacyLocale(locale) ? [phrases.knowsAbout1, phrases.knowsAbout2, phrases.knowsAbout3, phrases.knowsAbout4].map((w) => catalogText(locale, w)) : {
         fr:['conception de jeux de puzzle','habitudes de jeu','accessibilité des jeux','expérience des joueurs'],
         de:['Puzzle-Spieldesign','Spielgewohnheiten','Barrierefreiheit in Spielen','Spielerlebnis'],
         es:['diseño de juegos de puzles','hábitos de juego','accesibilidad de los juegos','experiencia de quienes juegan'],
@@ -123,8 +130,11 @@ function localizedSiteGraph(locale: Locale) {
       const contact = node.contactPoint as Record<string, unknown>;
       contact.contactType = t.support; contact.url = `${siteUrl}${localePath(locale, '/contact')}`;
     } else if (node['@type'] === 'Person') {
-      node.jobTitle = journalUi[locale].authors['mourad-hamdi'].role;
-      node.description = journalUi[locale].authors['mourad-hamdi'].bio;
+      // The catalog languages translate the founder's English role and bio (lib/blog.ts).
+      const written = journalUi[locale].authors['mourad-hamdi'];
+      const founder = authors.find((a) => a.id === 'mourad-hamdi');
+      node.jobTitle = written?.role ?? (founder ? catalogText(locale, founder.role) : node.jobTitle);
+      node.description = written?.bio ?? (founder ? catalogText(locale, founder.bio) : node.description);
       node.url = `${siteUrl}${localePath(locale, '/authors/mourad-hamdi')}`;
     } else if (node['@type'] === 'WebSite') {
       node.description = t.website; node.inLanguage = locale; node.url = `${siteUrl}/${locale}`;
@@ -139,8 +149,14 @@ export function SiteDocument({ lang, children }: { lang: string; children: React
   return (
     // suppressHydrationWarning: the inline script below adds `js` to <html>
     // before React hydrates, which is the whole point of it.
-    <html lang={lang} suppressHydrationWarning>
+    <html lang={lang} dir={localeDir(lang as Locale)} suppressHydrationWarning>
       <head>
+        {/*
+          The catalog languages' words for client components (scripts/i18n/publish.mts): a classic
+          script, so it runs before the deferred app scripts hydrate.
+        */}
+        {/* oxlint-disable-next-line next/no-sync-scripts -- it must run before hydration; one small cached file */}
+        {isCatalogLocale(lang) && clientScripts[lang] ? <script src={clientScripts[lang]} /> : null}
         {/*
           Self-hosted type (app/styles/fonts.css): Fredoka for display — the
           nearest web equivalent of the rounded type the game sets its titles

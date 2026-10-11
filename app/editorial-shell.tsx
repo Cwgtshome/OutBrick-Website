@@ -8,6 +8,7 @@
  * the small pieces every editorial page shares live here.
  */
 
+import { appStoreBadgePath } from '../lib/i18n/assets';
 import type { ReactNode } from 'react';
 // The editorial stylesheet travels with this shell, so only the pages that render `.ed` load it
 // (it was part of the site-wide stylesheet until 8 October 2026). Pages outside the editorial
@@ -152,7 +153,7 @@ export function Badge({ locale }: { locale?: TranslatedLocale } = {}) {
     const copy = chromeCopy[locale];
     return (
       <a className="ed-badge" href={localeStoreUrl('journal', locale)} aria-label={copy.badgeLabel}>
-        <img src={locale === 'pt-BR' ? '/assets/badge/appstore-black.svg' : `/assets/badge/appstore-black-${locale}.svg`} alt={copy.badgeAlt} width={132} height={44} loading="lazy" decoding="async" />
+        <img src={appStoreBadgePath(locale)} alt={copy.badgeAlt} width={132} height={44} loading="lazy" decoding="async" />
       </a>
     );
   }

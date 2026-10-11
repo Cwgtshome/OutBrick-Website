@@ -9,6 +9,7 @@
  * what lets the new chrome sit above the old body copy without rewriting it.
  */
 
+import { appStoreBadgePath } from '../lib/i18n/assets';
 import { shownSocialProfiles, type SocialNetwork } from '../lib/site';
 import type { CSSProperties, ReactNode } from 'react';
 import { publicPages } from '../lib/i18n/public-pages';
@@ -18,6 +19,7 @@ import { chromeCopy } from '../lib/i18n/chrome';
 import { supportCopies } from '../lib/support/copy/index';
 import { helpUi } from '../lib/help/ui';
 import {
+  hasLocalePage,
   localeNames,
   localePath,
   locales,
@@ -55,7 +57,7 @@ export function AppStoreBadge({ campaign = 'badge', locale = 'en' }: { campaign?
   const copy = chromeCopy[locale];
   return (
     <a className="badge" href={localeStoreUrl(campaign, locale)} aria-label={copy.badgeLabel}>
-      <img src={locale === 'en' || locale === 'pt-BR' ? '/assets/badge/appstore-black.svg' : `/assets/badge/appstore-black-${locale}.svg`} alt={copy.badgeAlt} width={143} height={48} />
+      <img src={appStoreBadgePath(locale)} alt={copy.badgeAlt} width={143} height={48} />
     </a>
   );
 }
@@ -333,7 +335,7 @@ export function LanguageSwitcher({ locale, page, languages }: { locale: Locale; 
         <ul>
           {locales.map((l) => (
             <li key={l}>
-              <a href={languages?.[l] ?? localePath(l, page ?? '/')} lang={l} hrefLang={l} aria-current={l === locale ? 'page' : undefined}>
+              <a href={languages?.[l] ?? localePath(l, page && hasLocalePage(l, page) ? page : '/')} lang={l} hrefLang={l} aria-current={l === locale ? 'page' : undefined}>
                 <Flag locale={l} />
                 <span>{localeNames[l]}</span>
               </a>

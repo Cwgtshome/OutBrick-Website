@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 import type { Locale } from './locales';
 
 /**
@@ -15,7 +16,7 @@ export type ConsentWords = {
   saved: { granted: string; denied: string };
 };
 
-export const consentWords: Record<Locale, ConsentWords> = {
+export const consentWords: Record<Locale, ConsentWords> = catalogRecord<ConsentWords>('ui', 'consentWords', {
   en: {
     region: 'Analytics choice',
     title: 'May we count your visit?',
@@ -70,4 +71,4 @@ export const consentWords: Record<Locale, ConsentWords> = {
     decline: 'Recusar',
     saved: { granted: 'Análise aceita. Obrigado.', denied: 'Análise recusada. Nada é medido.' },
   },
-};
+});

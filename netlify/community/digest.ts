@@ -17,6 +17,7 @@
 // 08:00 UTC every ten minutes until 10:50, so a large list that does not fit in one run's time
 // budget is finished by the later runs, and the later runs are no-ops once everyone has theirs.
 
+import { communityLocales } from '../../lib/community/contract.ts';
 import { threadPath, type CommunityLocale } from '../../lib/community/contract.ts';
 import { communityUrl } from '../../emails/community.ts';
 import { communityWeeklyDigest, digestHasContent, type CategoryKindName, type DigestThread } from '../../emails/community-digest.ts';
@@ -41,7 +42,7 @@ export function isoWeek(date: Date): string {
   return `${d.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
 }
 
-const asLocale = (v: unknown): CommunityLocale => (['en', 'fr', 'de', 'es', 'ja', 'pt-BR'].includes(String(v)) ? (v as CommunityLocale) : 'en');
+const asLocale = (v: unknown): CommunityLocale => ((communityLocales as readonly string[]).includes(String(v)) ? (v as CommunityLocale) : 'en');
 const url = (locale: CommunityLocale, t: Record<string, unknown>) => `${SITE}${threadPath(locale, { id: Number(t.id), slug: String(t.slug) })}`;
 
 type Member = { id: number; display_name: string; email: string; locale: string };

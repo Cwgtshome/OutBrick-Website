@@ -1,3 +1,4 @@
+import { catalogRecord } from './catalog.ts';
 /**
  * The words around the release notes on /whats-new and its translations, and
  * the "scan to get OutBrick" card. The notes themselves are in lib/releases.ts,
@@ -27,7 +28,7 @@ export type WhatsNewCopy = {
 
 export type GetAppCopy = { eyebrow: string; title: string; caption: string; qrLabel: string };
 
-export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
+export const whatsNewCopy: Record<Locale, WhatsNewCopy> = catalogRecord<WhatsNewCopy>('ui', 'whatsNewCopy', {
   en: {
     meta: {
       title: 'What’s new in OutBrick: every update, newest first',
@@ -143,9 +144,9 @@ export const whatsNewCopy: Record<Locale, WhatsNewCopy> = {
     olderInEnglish: { note: 'As versões anteriores estão descritas em inglês.', link: 'Ver o histórico completo' },
     cta: { title: 'Já está jogando? A atualização está esperando.', lede: 'OutBrick é grátis na App Store para iPhone e iPad. As atualizações chegam automaticamente ou pela página da sua conta na App Store.' },
   },
-};
+});
 
-export const getAppCopy: Record<Locale, GetAppCopy> = {
+export const getAppCopy: Record<Locale, GetAppCopy> = catalogRecord<GetAppCopy>('ui', 'getAppCopy', {
   en: {
     eyebrow: 'On a computer?',
     title: 'Scan to get OutBrick on iPhone',
@@ -177,12 +178,12 @@ export const getAppCopy: Record<Locale, GetAppCopy> = {
     qrLabel: 'QR コード：App Store の OutBrick',
   },
   'pt-BR': { eyebrow: 'Está no computador?', title: 'Escaneie para baixar OutBrick no iPhone', caption: 'Aponte a câmera do iPhone para o código para abrir OutBrick na App Store.', qrLabel: 'Código QR: OutBrick na App Store' },
-};
+});
 
 /** "22 September 2026", "22 septembre 2026", "22. September 2026", "2026年9月22日" for a YYYY-MM-DD date. */
 // Spelled out by hand rather than through `Date` and `Intl`: the prerender treats a page that
 // touches `Date` as dynamic, and a calendar date needs no clock.
-const monthNames: Record<Exclude<Locale, 'ja'>, string[]> = {
+const monthNames: Partial<Record<Locale, string[]>> = {
   en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   fr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
   de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
@@ -193,7 +194,9 @@ const monthNames: Record<Exclude<Locale, 'ja'>, string[]> = {
 export function formatReleaseDate(iso: string, locale: Locale): string {
   const [year, month, day] = iso.split('-').map(Number);
   if (locale === 'ja') return `${year}年${month}月${day}日`;
-  const name = monthNames[locale][month - 1];
+  // The catalog languages use the calendar's own words; Date.UTC reads no clock.
+  if (!monthNames[locale]) return new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(Date.UTC(year, month - 1, day));
+  const name = monthNames[locale]![month - 1];
   if (locale === 'de') return `${day}. ${name} ${year}`;
   if (locale === 'es') return `${day} de ${name} de ${year}`;
   if (locale === 'fr') return `${day === 1 ? '1er' : day} ${name} ${year}`;

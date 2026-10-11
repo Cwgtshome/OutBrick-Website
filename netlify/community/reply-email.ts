@@ -24,6 +24,7 @@
 // signature, 503 when switched off, and 500 when Resend's API could not be read (Resend retries;
 // the message's claim is released first).
 
+import { communityLocales } from '../../lib/community/contract.ts';
 import { createHmac, hkdfSync } from 'node:crypto';
 import { threadPath, type CommunityLocale } from '../../lib/community/contract.ts';
 import { communityUrl } from '../../emails/community.ts';
@@ -131,7 +132,7 @@ function bounceReason(error: unknown): BounceReason {
 async function bounce(apiKey: string, member: Viewer, threadId: number, messageId: string, reason: BounceReason, text: string): Promise<void> {
   // Never more than a few a day: a misbehaving autoresponder must not start a loop.
   if (!(await rateAllow(`reply-bounce:${member.id}`, 5, 86400))) return;
-  const locale = (['en', 'fr', 'de', 'es', 'ja', 'pt-BR'].includes(member.locale) ? member.locale : 'en') as CommunityLocale;
+  const locale = ((communityLocales as readonly string[]).includes(member.locale) ? member.locale : 'en') as CommunityLocale;
   const [t] = await sql`SELECT id::int AS id, slug, title FROM threads WHERE id = ${threadId}`;
   const threadUrl = t ? `${SITE}${threadPath(locale, { id: Number(t.id), slug: String(t.slug) })}` : communityUrl(locale);
   const rendered = communityReplyBounce({ locale, reason, threadTitle: t ? String(t.title) : '', threadUrl, text, manageUrl: communityUrl(locale, '/settings') });
