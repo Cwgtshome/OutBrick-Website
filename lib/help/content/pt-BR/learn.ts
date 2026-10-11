@@ -333,7 +333,7 @@ export const learnArticles: HelpArticle[] = [
           {
             t: 'steps',
             items: [
-              'No momento em que o último objetivo é cumprido, o tabuleiro para de aceitar jogadas e mostra **Objetivo concluído!**, com “N jogadas restantes viram raios de linha!” embaixo. Agora nada pode fazer você perder o tabuleiro: nenhuma vida está em risco e nenhuma jogada é necessária.',
+              'No momento em que o último objetivo é cumprido, o tabuleiro para de aceitar jogadas e mostra **Objetivo concluído!**, com “N jogadas restantes viram raios!” embaixo. Agora nada pode fazer você perder o tabuleiro: nenhuma vida está em risco e nenhuma jogada é necessária.',
               'Uma faísca por jogada sai do contador de jogadas e cai num tijolo comum, que vira um raio de linha. Cada uma soma **150 pontos**. Até 30 jogadas viram raios no tabuleiro; as que passarem disso são pagas mesmo assim.',
               'Depois, todos os especiais do tabuleiro disparam, os raios novos e os que você deixou sem usar, até não sobrar nada para disparar.',
               'Seus amigos dão uma volta de comemoração e o cartão de vitória mostra sua pontuação, estrelas e moedas.',
@@ -352,7 +352,7 @@ export const learnArticles: HelpArticle[] = [
           {
             t: 'callout',
             kind: 'a11y',
-            text: 'O VoiceOver diz “Objetivo concluído! 4 jogadas restantes viram raios de linha!” na hora, e depois “Pontuação final” com o número e as estrelas quando o cartão de vitória aparece. Com **Reduzir Movimento** ativado, a faixa aparece e some com um esmaecimento e o tabuleiro já acomodado aparece sem o show.',
+            text: 'O VoiceOver diz “Objetivo concluído! 4 jogadas restantes viram raios!” na hora, e depois “Pontuação final” com o número e as estrelas quando o cartão de vitória aparece. Com **Reduzir Movimento** ativado, a faixa aparece e some com um esmaecimento e o tabuleiro já acomodado aparece sem o show.',
           },
         ],
       },
@@ -587,7 +587,7 @@ export const learnArticles: HelpArticle[] = [
             facts: [
               { label: 'Aparece pela primeira vez', text: 'Nível 49.' },
               { label: 'Jogo limpo', text: 'Nenhuma dica, mão de ensino, rotor, som de linha ou palavra do VoiceOver jamais revela a cor dele. A dica não sugere uma jogada que mova, troque ou limpe um tijolo virado, então, num tabuleiro cheio deles, pode não aparecer dica nenhuma.' },
-              { label: 'O VoiceOver diz', text: '“Tijolo virado, desvira quando um tijolo ao lado sai do tabuleiro”. As trocas dele nunca dizem “sem combinação”, e um caminho que termina num portão é oferecido como “Deslizar para a esquerda, para dentro do portão”. O Controle por Voz o chama de “Virado”, como em “Deslizar Virado 14 para a esquerda”.' },
+              { label: 'O VoiceOver diz', text: '“Tijolo virado, desvira quando um tijolo ao lado sai do tabuleiro”. As trocas dele nunca dizem “sem combinação”, e um caminho que termina num portão é oferecido como “Deslizar para a esquerda para o portão”. O Controle por Voz o chama de “Virado”, como em “Deslizar Virado 14 para a esquerda”.' },
             ],
             tip: 'Limpe primeiro os tijolos em volta de um grupo de tijolos “?”: cada tijolo que sai pode desvirar até quatro deles, e aí dá para planejar.',
           },
@@ -612,7 +612,7 @@ export const learnArticles: HelpArticle[] = [
             facts: [
               { label: 'Aparece pela primeira vez', text: 'Nível 6, Tijolos longos.' },
               { label: 'Onde os tijolos caem', text: 'Ele cai como uma unidade, uma linha por vez, e só quando todas as casas embaixo dele estão livres: um caixote embaixo de uma das casas segura a peça inteira.' },
-              { label: 'O VoiceOver diz', text: '“Tijolo longo, vermelho, 2 de altura”, “Tijolo quadrado grande, azul”. As ações dizem o nome dele: “Deslizar o tijolo longo vermelho para a esquerda, sai pelo portão vermelho”.' },
+              { label: 'O VoiceOver diz', text: '“Tijolo longo, vermelho, 2 de altura”, “Tijolo quadrado grande, azul”. As ações dizem o nome dele: “Deslizar o tijolo longo vermelho para a esquerda e sair pelo portão: vermelho”.' },
             ],
             tip: 'Antes de abrir um caminho, confira a largura do portão. Um portão de uma casa nunca vai receber um tijolo longo, por mais bem alinhado que ele esteja.',
           },
@@ -760,7 +760,7 @@ export const learnArticles: HelpArticle[] = [
             how: 'Cada tijolo que passa por ele, deslizando, combinado ou explodido na frente dele, tira um. No zero, ele **fecha de vez** e vira parede. Ele só conta os tijolos que passam por ele; tijolos da cor dele combinados em outro lugar continuam contando para um objetivo “Envie ou combine”, mas não mexem no número do portão.',
             facts: [
               { label: 'Aparece pela primeira vez', text: 'Nível 11, O grande dia.' },
-              { label: 'O VoiceOver diz', text: '“aberto, aceita mais 3”, depois “fechado de vez”. Ao tocar: “Portão vermelho: aceita mais 3 blocos (vermelho) e depois fecha”.' },
+              { label: 'O VoiceOver diz', text: '“aberto, aceita mais 3”, depois “fechado de vez”. Ao tocar: “Portão Vermelho: aceita mais 3 blocos (vermelho) e depois fecha”.' },
             ],
             tip: 'Em O grande dia, o portão contado recebe um pouco mais do que o objetivo dele pede. Tijolos longos da cor dele só podem sair por um portão, então guarde as vagas dele para eles.',
           },
@@ -1154,7 +1154,7 @@ export const learnArticles: HelpArticle[] = [
         blocks: [
           {
             t: 'p',
-            text: 'Alguns tabuleiros são mais difíceis que os vizinhos. A parada do nível no mapa da Jornada mostra uma placa antes de você jogar (**DIFÍCIL**, **SUPERDIFÍCIL**, **CHEFE** ou **NOITE**), e o tabuleiro leva a mesma placa embaixo do cabeçalho.',
+            text: 'Alguns tabuleiros são mais difíceis que os vizinhos. A parada do nível no mapa da Jornada mostra uma placa antes de você jogar (**DIFÍCIL**, **MUITO DIFÍCIL**, **CHEFE** ou **NOITE**), e o tabuleiro leva a mesma placa embaixo do cabeçalho.',
           },
           {
             t: 'shot',

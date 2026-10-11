@@ -140,7 +140,7 @@ export const startMoreArticles: HelpArticle[] = [
             items: [
               {
                 q: 'OutBrick fonctionne-t-il hors ligne ?',
-                a: 'Oui. **Tous les plateaux se jouent hors ligne** : un tunnel ou un vol ne vous arrête pas. Quelques fonctions ont besoin d’une connexion : les vidéos facultatives, les achats et **Restaurer l’achat**, l’onglet Classement, les courses et Game Center. Votre progression est conservée sur votre appareil et dans votre iCloud, et se synchronise dès que vous êtes de nouveau en ligne.',
+                a: 'Oui. **Tous les plateaux se jouent hors ligne** : un tunnel ou un vol ne vous arrête pas. Quelques fonctions ont besoin d’une connexion : les vidéos facultatives, les achats et **Restaurer l’achat**, l’onglet Palmarès, les courses et Game Center. Votre progression est conservée sur votre appareil et dans votre iCloud, et se synchronise dès que vous êtes de nouveau en ligne.',
               },
               {
                 q: 'Vais-je perdre ma progression si je change de téléphone ?',
@@ -292,8 +292,8 @@ export const startMoreArticles: HelpArticle[] = [
               },
               {
                 day: 'Jour 5',
-                title: 'Le Classement, et des difficultés plus corsées',
-                text: 'L’onglet **Classement** s’ouvre au niveau 21. Les plateaux Très difficile commencent à apparaître dans les premiers villages, et à partir du niveau 40, le dernier plateau de chaque chapitre est un **Boss**. Les plateaux plus difficiles rapportent plus de pièces. Voir [Comment battre un plateau difficile](help:hard-boards) quand l’un d’eux vous arrête.',
+                title: 'Le Palmarès, et des difficultés plus corsées',
+                text: 'L’onglet **Palmarès** s’ouvre au niveau 21. Les plateaux Très difficile commencent à apparaître dans les premiers villages, et à partir du niveau 40, le dernier plateau de chaque chapitre est un **Boss**. Les plateaux plus difficiles rapportent plus de pièces. Voir [Comment battre un plateau difficile](help:hard-boards) quand l’un d’eux vous arrête.',
               },
               {
                 day: 'Jour 6',
@@ -310,7 +310,7 @@ export const startMoreArticles: HelpArticle[] = [
           {
             t: 'callout',
             kind: 'note',
-            text: 'Les niveaux exacts dépendent de votre rythme. Le Classement (niveau 21) et la Collection (niveau 95) se débloquent selon le niveau, pas selon le jour, et quelques plateaux de chaque village sont Difficile par conception.',
+            text: 'Les niveaux exacts dépendent de votre rythme. Le Palmarès (niveau 21) et la Collection (niveau 95) se débloquent selon le niveau, pas selon le jour, et quelques plateaux de chaque village sont Difficile par conception.',
           },
         ],
       },
@@ -979,7 +979,7 @@ export const startMoreArticles: HelpArticle[] = [
               { term: 'Sauvetage d’ami, Course du village, Brick Royale, Course de l’équipe', text: 'Des courses et des sauvetages qui ont lieu en parallèle du Voyage. Chacun peut être désactivé dans **Réglages › Jeu › Fonctions du jeu**. Voir [Événements et courses](help:rewards-and-events#events).' },
               { term: 'Tirelire', text: 'Se remplit de pièces à mesure que vous terminez de nouveaux niveaux ; quand elle est prête, vous pouvez la casser pour un petit prix. Voir [Ce que contient la Boutique](help:shop-and-purchases#shelves).' },
               { term: 'Ciné-briques', text: 'Un tableau de cases de prix dans le Voyage ; chaque vidéo facultative retourne une case.' },
-              { term: 'Classement', text: 'L’onglet du classement de tous les temps, ouvert à partir du niveau 21. Voir [Classement et Game Center](help:rewards-and-events#leaders).' },
+              { term: 'Palmarès', text: 'L’onglet du classement de tous les temps, ouvert à partir du niveau 21. Voir [Palmarès et Game Center](help:rewards-and-events#leaders).' },
               { term: 'Supprimer les pubs', text: 'Un achat unique qui transforme chaque bouton Regarder en **Réclamer la récompense**, dans les mêmes limites quotidiennes. Voir [Supprimer les pubs et le Pass Brique](help:shop-and-purchases#remove-ads).' },
             ],
           },

@@ -18,7 +18,7 @@ const areas = arg('--area') ? [arg('--area')!] : [...catalogAreas];
 const strict = process.argv.includes('--strict');
 const quiet = process.argv.includes('--quiet');
 
-const placeholders = (s: string) => [...s.matchAll(/\{(\d+)[,}]/g)].map((m) => m[1]).sort().join(',');
+const placeholders = (s: string) => [...new Set([...s.matchAll(/\{(\d+)[,}]/g)].map((m) => m[1]))].sort().join(',');
 const links = (s: string) => [...s.matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1]).sort().join(' ');
 const keys = (s: string) => [...s.matchAll(/\{\{([^}]+)\}\}/g)].length;
 const bold = (s: string) => (s.match(/\*\*/g) ?? []).length;

@@ -236,7 +236,7 @@ export const accessibilityArticles: HelpArticle[] = [
             t: 'steps',
             items: [
               'Coloque o VoiceOver sobre uma peça.',
-              'Passe o dedo para cima ou para baixo para ouvir as ações dela, como “Deslizar para a esquerda, sai pelo portão vermelho”, “Deslizar para cima até o fim, 3 casas” ou “Trocar para cima com tijolo azul”. As trocas que funcionam vêm primeiro; uma troca que não formaria nada diz “sem combinação”.',
+              'Passe o dedo para cima ou para baixo para ouvir as ações dela, como “Deslizar para a esquerda e sair pelo portão: vermelho”, “Deslizar para cima até o fim, 3 casas” ou “Trocar para cima com tijolo azul”. As trocas que funcionam vêm primeiro; uma troca que não formaria nada diz “sem combinação”.',
               'Toque duas vezes para fazer a ação que você ouviu.',
             ],
           },
@@ -323,7 +323,7 @@ export const accessibilityArticles: HelpArticle[] = [
               'Para onde um tijolo foi: “Deslizou 3 casas, até linha 2, coluna 4”, “Pelo portal, saiu em…”, “Saiu pelo portão: 1 (vermelho)”.',
               'O que mudou: “Desvirou: vermelho e azul”, “A tampa com contador abriu. Os tijolos dela já se movem”, “Novos portões se abrem”.',
               'O que sumiu: peças, cascatas, combos e os especiais criados, e quais objetivos avançaram.',
-              'As jogadas restantes, com um aviso em cinco, três e uma: “Só restam 5 jogadas”.',
+              'As jogadas restantes, com um aviso em cinco, três e uma: “Atenção: Restam 5 jogadas”.',
               'O fim: “Todos os objetivos cumpridos. Nível concluído” ou “Sem jogadas”.',
               'Se nenhuma jogada for possível, o tabuleiro é embaralhado e diz “O tabuleiro foi embaralhado. Sua vez.”',
             ],
@@ -367,7 +367,7 @@ export const accessibilityArticles: HelpArticle[] = [
             t: 'list',
             items: [
               'Todo elemento do mapa tem duas ações: **Onde estou** e **Ir para meu próximo nível**, que rola o mapa e coloca o VoiceOver no seu próximo nível.',
-              'O toque duplo com dois dedos fala o guia, por exemplo “Cidade Jardim, 7 de 12 níveis concluídos. Próximo: nível 8. 3 estrelas para a recompensa da vila.”',
+              'O toque duplo com dois dedos fala o guia, por exemplo “Cidade Jardim, 7 de 12 níveis concluídos. Próximo: nível 8. Faltam 3 estrelas para a recompensa da vila.”',
               'Um nível bloqueado diz quanto falta: “Faltam 4 para desbloquear”.',
               'Passe três dedos para avançar uma vila de cada vez.',
             ],

@@ -12,7 +12,8 @@ is the community's knowledge base: the forum is for questions the guides do not 
 | Data model, guide order, the version and date checked | `lib/help/model.ts` (`helpOrder`, `helpCheckpoint`) |
 | English guides (the source) | `lib/help/content/en/*.ts` |
 | Translations | `lib/help/content/<locale>.ts` (and `<locale>/*.ts` where split) |
-| Help Centre interface words, six languages | `lib/help/ui.ts` |
+| Help Centre interface words (six in code, the other 33 in `lib/i18n/catalog/<locale>/help-ui.json`) | `lib/help/ui.ts` |
+| Guides in the 33 catalog languages: a guide is shown translated only when every string of it is in the catalog, otherwise the English guide is shown | `lib/i18n/catalog/<locale>/help-*.json` |
 | Support/Accessibility page sentences that point here | `lib/help/site-phrases.ts`, merged into `lib/i18n/public-pages.ts` |
 | Rendering (hub, guide, inline markup, structured data) | `app/help-centre.tsx` |
 | Guide search on the hub | `app/components/help-finder.tsx` |

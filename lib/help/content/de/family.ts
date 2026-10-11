@@ -147,7 +147,7 @@ export const familyArticles: HelpArticle[] = [
               '**Käufe** wickelt Apple ab. OutBrick sieht und speichert nie Kartendaten.',
               '**Game Center** ist freiwillig und wird von Apple betrieben, nach deinen Game-Center-Einstellungen.',
               '**Werbung:** Der einzige Drittanbieter im Spiel ist Googles Werbedienst, und er läuft nur, wenn jemand ein Video ansehen möchte. Videowerbung ist auf Googles Inhaltseinstufung für ein allgemeines Publikum beschränkt. Fragt iOS, ob OutBrick tracken darf, ändert **App bitten, kein Tracking durchzuführen** nichts am Spiel. In der EU, im Vereinigten Königreich und in der Schweiz erscheint vor dem ersten Video ein Einwilligungsformular, und **Einstellungen › Spiel › Werbeoptionen** öffnet es erneut.',
-              '**Werbung entfernen** oder der Brick Pass der aktuellen Saison sorgt dafür, dass das Spiel gar nicht mehr nach Werbung fragt, und die Belohnungen gibt es trotzdem.',
+              '**Werbung entfernen** oder der Steinpass der aktuellen Saison sorgt dafür, dass das Spiel gar nicht mehr nach Werbung fragt, und die Belohnungen gibt es trotzdem.',
               '**Daten löschen**, ganz unten in **Einstellungen › Spiel**, setzt den Fortschritt auf dem Gerät zurück und bittet iCloud, den Spielstand zu löschen. Siehe [Fortschritt, iCloud und Datenschutz](help:progress-privacy-and-account#delete).',
             ],
           },
@@ -338,7 +338,7 @@ export const familyArticles: HelpArticle[] = [
               { term: 'Bewegung reduzieren', text: 'In den iPhone-**Einstellungen › Bedienungshilfen › Bewegung**. Die Ruhebewegung auf dem Brett hört auf, Leuchten bleiben still, Tipps schimmern an Ort und Stelle, Bildschirme blenden über, statt zu gleiten, und jede Siegesfeier wird zu einem sanften Leuchten.' },
               { term: 'Blinkende Lichter abdunkeln', text: 'Ebenfalls unter **Bewegung**. Bildschirmfüllende Blitze großer Kombos sinken auf ein Drittel ihrer Stärke und folgen nie dichter als etwa eine Drittelsekunde aufeinander.' },
               { term: 'Animationstempo', text: 'In OutBrick unter **Einstellungen › Bedienungshilfen**: 50 %, 75 %, 100 %, 150 % oder 200 %. Bei 75 % oder 50 % laufen Tauschen, Fallen und Verschwinden langsamer und sind leichter zu verfolgen.' },
-              { term: 'Sanftes Leuchten und Ruhiger Umriss', text: 'Zwei Gratis-Teile in der **Garderobe**: **Sanftes Leuchten** unter **Feiern** (ein weiches Leuchten, nichts fliegt) und **Ruhiger Umriss** unter **Tauschspuren** (ein stiller Umriss dort, wo ein Stein war). Tippe auf **Tragen**.' },
+              { term: 'Sanftes Leuchten und Ruhiger Umriss', text: 'Zwei Gratis-Teile in der **Garderobe**: **Sanftes Leuchten** unter **Jubel** (ein weiches Leuchten, nichts fliegt) und **Ruhiger Umriss** unter **Tauschspuren** (ein stiller Umriss dort, wo ein Stein war). Tippe auf **Tragen**.' },
             ],
           },
           {
@@ -509,7 +509,7 @@ export const familyArticles: HelpArticle[] = [
     cover: 'wall',
     title: 'So funktionieren Belohnungen, Leben und Werbung, einfach erklärt',
     summary:
-      'Jede Zahl hinter Leben, Rückgängig, dem Ende der Züge und den acht freiwilligen Videos, was Werbung entfernen und der Brick Pass ändern, was Münzen kaufen und was OutBrick nie verkauft.',
+      'Jede Zahl hinter Leben, Rückgängig, dem Ende der Züge und den acht freiwilligen Videos, was Werbung entfernen und der Steinpass ändern, was Münzen kaufen und was OutBrick nie verkauft.',
     keywords:
       'spielwirtschaft leben herzen rückgängig züge weiterspielen keine züge mehr münzen preise kosten video werbung werbevideo belohnung ansehen tagesgrenze limit werbung entfernen werbefrei brick pass kostenlos gratis pay to win geld ausgeben fair ehrlich nie verkauft',
     host: 'sprout',
@@ -525,7 +525,7 @@ export const familyArticles: HelpArticle[] = [
               '**Verlieren kostet ein Leben, Spielen und Gewinnen nicht.** Leben kommen von selbst zurück, alle 30 Minuten eins.',
               '**Keine Züge mehr ist nicht das Ende.** Du kannst mit Münzen oder einem Video weiterspielen oder es einfach noch einmal versuchen.',
               '**Videos sind immer deine Entscheidung.** Es gibt acht Arten, jede mit einer Tagesgrenze, insgesamt 39. Nichts läuft von selbst.',
-              '**Bezahlen nimmt die Videos weg, nie die Belohnungen.** Werbung entfernen und der Brick Pass zahlen dieselben Belohnungen ohne Video aus.',
+              '**Bezahlen nimmt die Videos weg, nie die Belohnungen.** Werbung entfernen und der Steinpass zahlen dieselben Belohnungen ohne Video aus.',
               '**Nichts ist ein Abo, und vor Level 6 erscheint auf einem Brett nichts Kostenpflichtiges.**',
             ],
           },
@@ -543,7 +543,7 @@ export const familyArticles: HelpArticle[] = [
           {
             t: 'list',
             items: [
-              'Du kannst bis zu **5 Leben** haben, oder **8**, solange dir der Brick Pass der aktuellen Saison gehört.',
+              'Du kannst bis zu **5 Leben** haben, oder **8**, solange dir der Steinpass der aktuellen Saison gehört.',
               'Alle **30 Minuten** kommt ein Leben zurück, auch wenn das Spiel geschlossen ist.',
               'Zum Öffnen eines Bretts brauchst du ein Leben, aber es **wird nicht verbraucht**.',
             ],
@@ -612,7 +612,7 @@ export const familyArticles: HelpArticle[] = [
             items: [
               'Der Preis fällt bei jedem neuen Versuch auf 300 Münzen zurück, ebenso, wenn du das Brett verlässt oder schaffst. Über 900 steigt er nie.',
               'Oder sieh dir ein **freiwilliges Video** an: **+2 Züge**, dann **+1 Zug**, dann ein **Gratis-UFO**. Ein Video treibt den Münzpreis nie nach oben.',
-              'Ein gespeichertes **+5 Züge** lässt sich hier ebenfalls einsetzen. Mit dem Brick Pass bekommst du hier außerdem **drei Gratiszüge**.',
+              'Ein gespeichertes **+5 Züge** lässt sich hier ebenfalls einsetzen. Mit dem Steinpass bekommst du hier außerdem **drei Gratiszüge**.',
               'Auf einem Brett, das du schon oft versucht hast, bringt jedes Weiterspielen etwas mehr: einen Extrazug für jeden verlorenen Versuch nach dem dritten, bis zu +15.',
               '**Aufgeben** beendet den Versuch und kostet ein Leben.',
             ],
@@ -668,7 +668,7 @@ export const familyArticles: HelpArticle[] = [
       },
       {
         id: 'remove-ads-and-pass',
-        title: 'Werbung entfernen und der Brick Pass',
+        title: 'Werbung entfernen und der Steinpass',
         blocks: [
           {
             t: 'p',
@@ -676,7 +676,7 @@ export const familyArticles: HelpArticle[] = [
           },
           {
             t: 'table',
-            head: ['Vergleich', 'Werbung entfernen', 'Brick Pass'],
+            head: ['Vergleich', 'Werbung entfernen', 'Steinpass'],
             rows: [
               ['Was es ist', 'Ein einmaliger Kauf, der dir für immer gehört', 'Ein einmaliger Kauf für eine Saison'],
               ['Videos', 'Für immer weg', 'Weg, solange dir der Pass der aktuellen Saison gehört'],
@@ -688,7 +688,7 @@ export const familyArticles: HelpArticle[] = [
           },
           {
             t: 'p',
-            text: 'Die Preise siehst du im Shop in deiner eigenen Währung. Keins von beiden verlängert sich von selbst. Siehe [Der Shop, Käufe und Wiederherstellen](help:shop-and-purchases#remove-ads) und [den Brick Pass](help:rewards-and-events#pass).',
+            text: 'Die Preise siehst du im Shop in deiner eigenen Währung. Keins von beiden verlängert sich von selbst. Siehe [Der Shop, Käufe und Wiederherstellen](help:shop-and-purchases#remove-ads) und [den Steinpass](help:rewards-and-events#pass).',
           },
         ],
       },
@@ -698,7 +698,7 @@ export const familyArticles: HelpArticle[] = [
         blocks: [
           {
             t: 'p',
-            text: 'Münzen verdienst du beim Spielen: **25** für ein normales Brett, **50** für Schwer oder Nacht, **80** für Sehr schwer oder Boss, **100** für den Täglichen Stein, dazu Serien, das Steinrad, Missionen, Sternbelohnungen der Dörfer und der Brick Pass. Münzpakete lassen sich auch im Shop kaufen.',
+            text: 'Münzen verdienst du beim Spielen: **25** für ein normales Brett, **50** für Schwer oder Nacht, **80** für Sehr schwer oder Boss, **100** für den Täglichen Stein, dazu Serien, das Steinrad, Missionen, Sternbelohnungen der Dörfer und der Steinpass. Münzpakete lassen sich auch im Shop kaufen.',
           },
           {
             t: 'table',
@@ -770,7 +770,7 @@ export const familyArticles: HelpArticle[] = [
                 a: 'Nein. Auf denselben Tasten steht **Belohnung abholen**, und sie zahlen sofort aus, innerhalb derselben Tagesgrenzen.',
               },
               {
-                q: 'Ist der Brick Pass ein Abo?',
+                q: 'Ist der Steinpass ein Abo?',
                 a: 'Nein. Er ist ein einmaliger Kauf für eine Saison und verlängert sich nicht von selbst.',
               },
             ],

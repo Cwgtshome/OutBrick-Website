@@ -146,7 +146,7 @@ export const progressArticles: HelpArticle[] = [
         blocks: [
           {
             t: 'p',
-            text: 'Toca **Misiones** en Inicio, o la tarjeta de Misiones de la pestaña Pase: tres cosas para hoy y tres para la semana, cada una con su recompensa. Termina una y toca **Recoger**, o **Recoger todo**. Las misiones diarias se reinician a medianoche UTC; las semanales, los lunes.',
+            text: 'Toca **Misiones** en Inicio, o la tarjeta de Misiones de la pestaña Pase: tres cosas para hoy y tres para la semana, cada una con su recompensa. Termina una y toca **Cobrar**, o **Recoger todo**. Las misiones diarias se reinician a medianoche UTC; las semanales, los lunes.',
           },
         ],
       },

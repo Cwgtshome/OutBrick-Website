@@ -98,6 +98,7 @@ export const ptBRLegalPart2: Record<string, string> = {
   "Open Report a Problem": "Acessar Relatar um Problema",
   "Request a refund": "Solicitar um reembolso",
   "Open": "Acesse",
+  "Go to": "Acesse",
   "reportaproblem.apple.com": "reportaproblem.apple.com",
   "and sign in with the Apple Account used for the purchase.": "e inicie sessão com a Conta Apple usada na compra.",
   "Choose “Request a refund,” select the relevant reason and OutBrick purchase, then submit it to Apple.": "Escolha “Solicitar um reembolso”, selecione o motivo correspondente e a compra do OutBrick e envie a solicitação à Apple.",

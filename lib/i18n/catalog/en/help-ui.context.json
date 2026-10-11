@@ -57,7 +57,6 @@
  "Widgets, Siri, Spotlight, Game Center, Messages and notifications.": "helpUi",
  "Your first board and a tour of every menu.": "helpUi",
  "Your first week, day by day.": "helpUi",
- "screen": "helpUi",
  "{0} guides": "helpUi()",
  "{n} guides match.": "helpUi"
 }

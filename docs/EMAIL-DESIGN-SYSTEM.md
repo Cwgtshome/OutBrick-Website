@@ -83,8 +83,9 @@ Each email a reader gets opens with one friend. Art: `public/assets/email/friend
 
 **Moods** (`friendLine`) are written per language: welcome, key, tip, friends, release, news, event,
 miss, prefs, got, reply, fixed, rate, yay, thanks, security, notice, bye, digest, badge, puzzle,
-oops. Add a mood in all six languages at once, in each language's register (fr vous, de Sie, es tú,
-pt-BR você, ja polite).
+oops. Add a mood in all six code-written languages at once, in each language's register (fr vous, de Sie,
+es tú, pt-BR você, ja polite); the 33 catalog languages then need the new keys in
+`lib/i18n/catalog/<locale>/emails.json` (`pnpm i18n:extract`, see docs/TRANSLATION-BRIEF.md).
 
 ## The interactive layer: rules
 
@@ -131,7 +132,7 @@ sample, hosted by Sprout). Any issue file can carry `"puzzle": { host, board, co
 
 ## Checking a change
 
-1. `pnpm emails:preview`: renders all 300 emails (50 templates × 6 languages) and fails on a
+1. `pnpm emails:preview`: renders every template in every live language (39) and fails on a
    missing alt, an unescaped sample, a missing plain-text part, or HTML over Gmail's 102 KB.
 2. `pnpm emails:check-interactive` (Playwright outside the project; see the script header): 22
    checks in WebKit on an emulated iPhone and desktop. Menu in all reader emails, host cheer,

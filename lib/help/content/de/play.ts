@@ -114,7 +114,7 @@ export const playArticles: HelpArticle[] = [
     cover: 'home',
     title: 'Ein Rundgang durch jedes Menü',
     summary:
-      'Die untere Leiste, Start, die Karte der Reise, der Shop, der Brick Pass, Ränge, dein Profil, die Sammlung und die Einstellungen: wofür alles da ist und wie du hinkommst.',
+      'Die untere Leiste, Start, die Karte der Reise, der Shop, der Steinpass, Ränge, dein Profil, die Sammlung und die Einstellungen: wofür alles da ist und wie du hinkommst.',
     keywords: 'navigation tabs reiter untere leiste wo finde ich taste knopf profil sammlung zahnrad menü',
     sections: [
       {
@@ -130,7 +130,7 @@ export const playArticles: HelpArticle[] = [
               ['**Ränge**', 'Die Bestenliste. Sie wird ab Level 21 freigeschaltet.'],
               ['**Reise**', 'Der erhöhte Tab in der Mitte: die Karte aller 2.000 Level.'],
               ['**Shop**', 'Münzen, Booster, Pakete, Leben und die Garderobe.'],
-              ['**Pass**', 'Die Saison des Brick Pass, dazu Abkürzungen zu Missionen und Sammlung.'],
+              ['**Pass**', 'Die Saison des Steinpasses, dazu Abkürzungen zu Missionen und Sammlung.'],
             ],
           },
         ],
@@ -181,7 +181,7 @@ export const playArticles: HelpArticle[] = [
               '**Kopfzeile:** dein Avatar, die **Leben** (tippen zeigt, wann das nächste kommt), die Münzen, die **Sterne** des Dorfs (tippen zeigt die Sternbelohnungen) und das Zahnrad.',
               '**Levelstationen:** Tippe auf dein aktuelles Level oder ein geschafftes, um es sofort zu spielen. Eine gesperrte Station sagt dir, wie viele Level sie noch entfernt ist.',
               '**Abzeichen rechts:** Event-, Stern- und Dorfgeschenk-Belohnungen, Rennen, **Game Center** (wenn du angemeldet bist) und **Alle Dörfer**, ein Atlas aller Orte, die du besuchen kannst.',
-              '**Abzeichen links:** die Serien-Challenge, das Sparschwein, der Brick Pass, Angebote, die Shoptür und weitere Belohnungen.',
+              '**Abzeichen links:** die Serien-Challenge, das Sparschwein, der Steinpass, Angebote, die Shoptür und weitere Belohnungen.',
               '**Mein Level:** Die Stecknadel-Taste bringt dich zurück zu deinem aktuellen Level.',
             ],
           },
@@ -202,7 +202,7 @@ export const playArticles: HelpArticle[] = [
           },
           {
             t: 'p',
-            text: 'Siehe [Der Shop, Käufe und Wiederherstellen](help:shop-and-purchases) und [Belohnungen, Events und der Brick Pass](help:rewards-and-events).',
+            text: 'Siehe [Der Shop, Käufe und Wiederherstellen](help:shop-and-purchases) und [Belohnungen, Events und der Steinpass](help:rewards-and-events).',
           },
         ],
       },
@@ -596,7 +596,7 @@ export const playArticles: HelpArticle[] = [
         blocks: [
           {
             t: 'p',
-            text: 'Tippe auf einen leeren Booster, um einen mit Münzen zu kaufen (Tipp 150, Rakete 300, UFO 500) oder ein Paket im Shop. Booster gibt es auch am Steinrad, als Sternbelohnungen der Dörfer, für Missionen, im Brick Pass und bei Events.',
+            text: 'Tippe auf einen leeren Booster, um einen mit Münzen zu kaufen (Tipp 150, Rakete 300, UFO 500) oder ein Paket im Shop. Booster gibt es auch am Steinrad, als Sternbelohnungen der Dörfer, für Missionen, im Steinpass und bei Events.',
           },
         ],
       },
@@ -665,7 +665,7 @@ export const playArticles: HelpArticle[] = [
           {
             t: 'list',
             items: [
-              'Du kannst bis zu **fünf Leben** haben (acht, solange dir der aktuelle Brick Pass gehört). Alle **30 Minuten** kommt eins zurück, auch wenn das Spiel geschlossen ist.',
+              'Du kannst bis zu **fünf Leben** haben (acht, solange dir der aktuelle Steinpass gehört). Alle **30 Minuten** kommt eins zurück, auch wenn das Spiel geschlossen ist.',
               'Zum Öffnen eines Bretts brauchst du ein Leben, aber es **wird nicht verbraucht**. Ein Leben geht nur verloren, wenn du einen Versuch **verlierst**.',
               '**Ein Sieg kostet nie ein Leben.** Gehen oder Neustarten vor deinem ersten Zug ebenso wenig.',
             ],
@@ -784,7 +784,7 @@ export const playArticles: HelpArticle[] = [
           {
             t: 'callout',
             kind: 'note',
-            text: 'Mit **Werbung entfernen** oder dem aktuellen **Brick Pass** steht auf denselben Belohnungen **Belohnung abholen**, und sie zahlen sofort aus, ganz ohne Video, innerhalb derselben Tagesgrenzen.',
+            text: 'Mit **Werbung entfernen** oder dem aktuellen **Steinpass** steht auf denselben Belohnungen **Belohnung abholen**, und sie zahlen sofort aus, ganz ohne Video, innerhalb derselben Tagesgrenzen.',
           },
         ],
       },

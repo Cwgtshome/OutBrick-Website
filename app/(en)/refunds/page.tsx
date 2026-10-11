@@ -35,7 +35,7 @@ export default function RefundsPage() {
         <h2>Request a refund</h2>
         <ul className="points">
           <li>
-            Open{' '}
+            Go to{' '}
             <a href="https://reportaproblem.apple.com/" target="_blank" rel="noopener noreferrer">reportaproblem.apple.com</a>{' '}
             and sign in with the Apple Account used for the purchase.
           </li>

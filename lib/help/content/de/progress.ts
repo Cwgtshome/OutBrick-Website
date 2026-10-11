@@ -94,9 +94,9 @@ export const progressArticles: HelpArticle[] = [
     slug: 'rewards-and-events',
     category: 'progress',
     cover: 'pass',
-    title: 'Belohnungen, Events und der Brick Pass',
+    title: 'Belohnungen, Events und der Steinpass',
     summary:
-      'Der Tägliche Stein und Tagesserien, das Steinrad, Missionen, der Brick Pass, Events und Rennen sowie die Bestenliste.',
+      'Der Tägliche Stein und Tagesserien, das Steinrad, Missionen, der Steinpass, Events und Rennen sowie die Bestenliste.',
     keywords: 'täglicher stein tagesstein serie glücksrad steinrad drehen missionen brick pass saison stufen premium event rennen royale rettung crew bestenliste ränge rangliste erfolge game center sparschwein kino stempel',
     sections: [
       {
@@ -152,7 +152,7 @@ export const progressArticles: HelpArticle[] = [
       },
       {
         id: 'pass',
-        title: 'Der Brick Pass',
+        title: 'Der Steinpass',
         blocks: [
           {
             t: 'shot',
@@ -165,7 +165,7 @@ export const progressArticles: HelpArticle[] = [
             items: [
               'Jede **Saison** hat **30 Stufen**. Mit neuen geschafften Leveln steigst du auf; schwere Bretter zählen eins extra, sehr schwere zwei.',
               'Die Spur **Gratis** zahlt allen Münzen und Booster aus.',
-              'Die Spur **Premium**, freigeschaltet durch den Kauf des Brick Pass dieser Saison, bringt größere Belohnungen. Mit ihm bekommst du außerdem drei Leben mehr in deinen Vorrat und drei Gratiszüge auf dem Bildschirm „Keine Züge mehr“, und die Videos fallen weg: Belohnungen holst du ab, ohne etwas anzusehen.',
+              'Die Spur **Premium**, freigeschaltet durch den Kauf des Steinpasses dieser Saison, bringt größere Belohnungen. Mit ihm bekommst du außerdem drei Leben mehr in deinen Vorrat und drei Gratiszüge auf dem Bildschirm „Keine Züge mehr“, und die Videos fallen weg: Belohnungen holst du ab, ohne etwas anzusehen.',
               'Premium-Stufen, die du schon erreicht hast, werden in dem Moment ausgezahlt, in dem du ihn freischaltest.',
             ],
           },
@@ -220,7 +220,7 @@ export const progressArticles: HelpArticle[] = [
     cover: 'shop',
     title: 'Der Shop, Käufe und Wiederherstellen',
     summary:
-      'Was in jedem Regal des Shops liegt, was Werbung entfernen und der Brick Pass tun, wie du Käufe auf einem neuen Gerät wiederherstellst und wie Rückerstattungen funktionieren.',
+      'Was in jedem Regal des Shops liegt, was Werbung entfernen und der Steinpass tun, wie du Käufe auf einem neuen Gerät wiederherstellst und wie Rückerstattungen funktionieren.',
     keywords: 'kaufen kauf in-app preis münzen paket werbung entfernen werbefrei kauf wiederherstellen rückerstattung geld zurück beleg quittung familie',
     sections: [
       {
@@ -235,7 +235,7 @@ export const progressArticles: HelpArticle[] = [
           },
           {
             t: 'p',
-            text: 'Die Regale von oben nach unten: **Angebote** (das Starterpaket, solange es da ist, das Sparschwein, der Booster-Pass, der Brick Pass und Werbung entfernen), das **Angebot der Woche**, Event-Angebote während eines Events, das **Wochenend-Angebot** von Freitag bis Montag, **Booster & Züge**, **Booster**, **Pässe**, **Pakete**, **Leben**, die **Garderobe**, **Münzen** und zum Schluss **Wiederherstellen** und die rechtlichen Links.',
+            text: 'Die Regale von oben nach unten: **Angebote** (das Starterpaket, solange es da ist, das Sparschwein, der Booster-Pass, der Steinpass und Werbung entfernen), das **Angebot der Woche**, Event-Angebote während eines Events, das **Wochenend-Angebot** von Freitag bis Montag, **Booster & Züge**, **Booster**, **Pässe**, **Pakete**, **Leben**, die **Garderobe**, **Münzen** und zum Schluss **Wiederherstellen** und die rechtlichen Links.',
           },
           {
             t: 'list',
@@ -251,11 +251,11 @@ export const progressArticles: HelpArticle[] = [
       },
       {
         id: 'remove-ads',
-        title: 'Werbung entfernen und der Brick Pass',
+        title: 'Werbung entfernen und der Steinpass',
         blocks: [
           {
             t: 'p',
-            text: '**Werbung entfernen** nimmt alle freiwilligen Videos weg, aber nicht die Belohnungen: Auf Tasten, auf denen bisher Ansehen stand, steht jetzt **Belohnung abholen**, und sie zahlen sofort aus, innerhalb derselben Tagesgrenzen. Gehört dir der **Brick Pass** der aktuellen Saison, gilt dasselbe für diese Saison, und du bekommst drei Leben mehr in deinen Vorrat.',
+            text: '**Werbung entfernen** nimmt alle freiwilligen Videos weg, aber nicht die Belohnungen: Auf Tasten, auf denen bisher Ansehen stand, steht jetzt **Belohnung abholen**, und sie zahlen sofort aus, innerhalb derselben Tagesgrenzen. Gehört dir der **Steinpass** der aktuellen Saison, gilt dasselbe für diese Saison, und du bekommst drei Leben mehr in deinen Vorrat.',
           },
         ],
       },

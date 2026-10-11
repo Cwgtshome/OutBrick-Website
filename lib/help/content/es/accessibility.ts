@@ -46,7 +46,7 @@ export const accessibilityArticles: HelpArticle[] = [
           {
             t: 'shot',
             id: 'settings-a11y',
-            alt: 'La pantalla de Ajustes en la pestaña Accesibilidad. La Velocidad de animación está al 100 %, con opciones del 50 % al 200 %. El Detalle de los avisos está en Estándar, con Breve y Completo a cada lado. Debajo hay interruptores de Sí y No para Modo daltónico (activado), Tablero de alto contraste, Bandeja para zurdos, Confirmar cambios y Sonido de fila (todos desactivados).',
+            alt: 'La pantalla de Ajustes en la pestaña Accesibilidad. La Velocidad de animación está al 100 %, con opciones del 50 % al 200 %. El Detalle de los avisos está en Estándar, con Breve y Completo a cada lado. Debajo hay interruptores de Sí y No para Daltónico (activado), Tablero de alto contraste, Bandeja para zurdos, Confirmar cambios y Sonido de fila (todos desactivados).',
             caption: 'Ajustes › Accesibilidad. La línea bajo cada control es también lo que VoiceOver dice como su sugerencia.',
           },
           {
@@ -61,7 +61,7 @@ export const accessibilityArticles: HelpArticle[] = [
             rows: [
               ['Velocidad de animación', 'Lo rápido que las piezas se cambian, caen y desaparecen: 50 %, 75 %, 100 %, 150 % o 200 %. Más lento es más fácil de seguir.', '100 %'],
               ['Detalle de los avisos', 'Cuánto dice VoiceOver después de cada movimiento: Breve, Estándar o Completo.', 'Estándar'],
-              ['Modo daltónico', 'Estampa una forma en cada ladrillo para que el color nunca sea la única diferencia.', 'Activado'],
+              ['Daltónico', 'Estampa una forma en cada ladrillo para que el color nunca sea la única diferencia.', 'Activado'],
               ['Tablero de alto contraste', 'Un suelo oscuro liso, contornos blancos, símbolos de color grandes y marcos de puerta gruesos.', 'Desactivado'],
               ['Bandeja para zurdos', 'Pone los potenciadores bajo tu pulgar izquierdo y la Pausa a la derecha.', 'Desactivado'],
               ['Confirmar cambios', 'Con Control por botón, VoiceOver, Control por voz o un teclado, eliges cada movimiento dos veces antes de que se juegue.', 'Desactivado'],
@@ -71,7 +71,7 @@ export const accessibilityArticles: HelpArticle[] = [
           {
             t: 'callout',
             kind: 'note',
-            text: 'El Modo daltónico se guarda en iCloud y te sigue a tus otros dispositivos. Los demás ajustes del tablero se quedan en el dispositivo donde los elegiste, porque lo que va bien en un iPad puede no ir bien en un iPhone.',
+            text: 'El ajuste Daltónico se guarda en iCloud y te sigue a tus otros dispositivos. Los demás ajustes del tablero se quedan en el dispositivo donde los elegiste, porque lo que va bien en un iPad puede no ir bien en un iPhone.',
           },
         ],
       },
@@ -86,7 +86,7 @@ export const accessibilityArticles: HelpArticle[] = [
             rows: [
               ['eres ciego o usas VoiceOver', 'Lee [Jugar con VoiceOver](help:voiceover). Para empezar, deja el **Detalle de los avisos** en Estándar, y prueba el **Sonido de fila** para recorrer una fila de oído.'],
               ['tienes baja visión', 'Activa el **Tablero de alto contraste**, sube el **Texto más grande** en los Ajustes del iPhone y mantén pulsada la cabecera o la bandeja del tablero para ampliarla.'],
-              ['ves los colores de otra forma', 'Deja activado el **Modo daltónico**: cada color tiene su propia forma. El alto contraste hace esas formas más grandes.'],
+              ['ves los colores de otra forma', 'Deja activado **Daltónico**: cada color tiene su propia forma. El alto contraste hace esas formas más grandes.'],
               ['eres sensible al movimiento o a los destellos', 'Activa **Reducir movimiento** y **Atenuar luces intermitentes** en los Ajustes del iPhone, y pon la **Velocidad de animación** al 75 % o al 50 %.'],
               ['juegas con una mano o tienes un alcance limitado', 'Prueba la **Bandeja para zurdos** si sujetas el teléfono con la mano izquierda, y **Confirmar cambios** si un desliz del dedo pudiera jugar un movimiento.'],
               ['usas botones, tu voz o un teclado', 'Lee [Control por voz, Control por botón y teclados](help:voice-control-switch-control-keyboard).'],
@@ -323,7 +323,7 @@ export const accessibilityArticles: HelpArticle[] = [
               'Adónde ha ido un ladrillo: «Deslizado 3 casillas, hasta fila 2, columna 4», «Por el portal, sale en…», «Salió por su puerta: 1 (rojo)».',
               'Qué ha cambiado: «Se dio la vuelta: rojo y azul», «La tapa con contador se abrió. Sus ladrillos ya se mueven», «Se abren nuevas puertas».',
               'Qué se ha despejado: piezas, cascadas, combos y los especiales creados, y qué objetivos han avanzado.',
-              'Los movimientos que quedan, con un aviso a los cinco, tres y uno: «Solo: 5 movimientos».',
+              'Los movimientos que quedan, con un aviso a los cinco, tres y uno: «¡Ojo! Quedan 5 movimientos».',
               'El final: «Todos los objetivos cumplidos. Nivel completado» o «Sin movimientos».',
               'Si no hay ningún movimiento posible, el tablero se mezcla y dice «El tablero se ha mezclado. Te toca.»',
             ],
@@ -367,7 +367,7 @@ export const accessibilityArticles: HelpArticle[] = [
             t: 'list',
             items: [
               'Cada elemento del mapa tiene dos acciones: **Dónde estoy** e **Ir a mi siguiente nivel**, que desplaza el mapa y pone VoiceOver sobre tu siguiente nivel.',
-              'El toque doble con dos dedos dice la guía, por ejemplo «Ciudad Jardín, 7 de 12 niveles superados. Siguiente: nivel 8. 3 estrellas para la recompensa de la aldea.»',
+              'El toque doble con dos dedos dice la guía, por ejemplo «Ciudad Jardín, 7 de 12 niveles superados. Siguiente: nivel 8. Faltan 3 estrellas para la recompensa del pueblo.»',
               'Un nivel bloqueado dice a qué distancia está: «4 más para desbloquear».',
               'Desliza tres dedos para avanzar de aldea en aldea.',
             ],
@@ -532,7 +532,7 @@ export const accessibilityArticles: HelpArticle[] = [
         blocks: [
           {
             t: 'p',
-            text: 'El **Modo daltónico** está activado desde el primer tablero. Cada ladrillo lleva estampada una forma según su color, los especiales de color llevan una pequeña insignia con su forma y los objetivos de la cabecera muestran la misma forma, así que puedes emparejar ladrillos y objetivos sin distinguir los colores.',
+            text: '**Daltónico** está activado desde el primer tablero. Cada ladrillo lleva estampada una forma según su color, los especiales de color llevan una pequeña insignia con su forma y los objetivos de la cabecera muestran la misma forma, así que puedes emparejar ladrillos y objetivos sin distinguir los colores.',
           },
           {
             t: 'table',
@@ -552,7 +552,7 @@ export const accessibilityArticles: HelpArticle[] = [
           {
             t: 'list',
             items: [
-              'Actívalo en **Ajustes › Accesibilidad › Modo daltónico**, en el menú de **Pausa** durante un tablero, o desde el **Centro de control** si añades el control de OutBrick.',
+              'Actívalo en **Ajustes › Accesibilidad › Daltónico**, en el menú de **Pausa** durante un tablero, o desde el **Centro de control** si añades el control de OutBrick.',
               'Los símbolos también se activan siempre que estén activados **Diferenciar sin color** en el iPhone o el **Tablero de alto contraste** del juego.',
               'Tu elección se guarda en iCloud, así que te sigue a tus otros dispositivos.',
             ],
@@ -563,7 +563,7 @@ export const accessibilityArticles: HelpArticle[] = [
               {
                 id: 'board-slide',
                 alt: 'Un tablero de Slide & Match en una playa, nivel 25. La cabecera muestra 5 vidas, 15 movimientos restantes, una barra de estrellas con una encendida, objetivos de 1 ladrillo amarillo y 3 azules, y el amigo anfitrión con gorra de marinero. El tablero tiene ladrillos rosas, amarillos, naranjas y azules, cada uno con la forma de su color, puertas amarillas, naranjas y azules en los bordes y una tapa dorada con cerradura sobre una fila de ladrillos. Abajo, la bandeja: Pausa, luego Pista, Cohete y OVNI marcados como gratis, y Deshacer con 6.',
-                caption: 'Modo daltónico activado: cada color tiene una forma.',
+                caption: 'Daltónico activado: cada color tiene una forma.',
               },
               {
                 id: 'board-contrast',

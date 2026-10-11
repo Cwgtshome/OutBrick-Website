@@ -114,7 +114,7 @@ export const playArticles: HelpArticle[] = [
     cover: 'home',
     title: 'La visite de tous les menus',
     summary:
-      'La barre du bas, l’Accueil, la carte du Voyage, la Boutique, le Pass Brique, le Classement, votre Profil, la Collection et les Réglages : à quoi sert chacun et comment y accéder.',
+      'La barre du bas, l’Accueil, la carte du Voyage, la Boutique, le Pass Brique, le Palmarès, votre Profil, la Collection et les Réglages : à quoi sert chacun et comment y accéder.',
     keywords: 'navigation onglets barre du bas où trouver bouton profil collection engrenage menu',
     sections: [
       {
@@ -127,7 +127,7 @@ export const playArticles: HelpArticle[] = [
             head: ['Onglet', 'Ce qu’il contient'],
             rows: [
               ['**Accueil**', 'Vos amis sur leur scène en briques et le grand bouton **Niveau**.'],
-              ['**Classement**', 'Le classement des joueurs. Il se débloque au niveau 21.'],
+              ['**Palmarès**', 'Le classement des joueurs. Il se débloque au niveau 21.'],
               ['**Voyage**', 'L’onglet central surélevé : la carte des 2 000 niveaux.'],
               ['**Boutique**', 'Pièces, bonus, packs, vies et garde-robe.'],
               ['**Pass**', 'La saison du Pass Brique, avec des raccourcis vers les Missions et la Collection.'],
@@ -190,14 +190,14 @@ export const playArticles: HelpArticle[] = [
       },
       {
         id: 'shop-pass-leaders',
-        title: 'Boutique, Pass et Classement',
+        title: 'Boutique, Pass et Palmarès',
         blocks: [
           {
             t: 'shots',
             items: [
               { id: 'shop', alt: 'La boutique : 2 580 pièces et le rayon Offres spéciales, avec un pack de départ unique de pièces, de vies et de bonus, la tirelire, et un Booster Pass de 60 minutes d’OVNI et de fusées gratuits.', caption: 'La Boutique. **Restaurer l’achat** se trouve tout en bas.' },
               { id: 'pass', alt: 'L’onglet Pass Brique avec les colonnes de récompenses Gratuit et Premium qui montent de palier en palier.', caption: 'Le Pass : 30 paliers de récompenses gratuites et premium.' },
-              { id: 'leaders', alt: 'L’onglet Classement avec un exemple de classement : un podium pour les trois premiers avec leurs drapeaux et niveaux, puis la liste, et votre propre ligne épinglée en bas (87e, niveau 214). Une barre en haut propose de se connecter à Game Center pour voir ses amis.', caption: 'Classement : un seul tableau, de tous les temps (exemple affiché).' },
+              { id: 'leaders', alt: 'L’onglet Palmarès avec un exemple de classement : un podium pour les trois premiers avec leurs drapeaux et niveaux, puis la liste, et votre propre ligne épinglée en bas (87e, niveau 214). Une barre en haut propose de se connecter à Game Center pour voir ses amis.', caption: 'Palmarès : un seul tableau, de tous les temps (exemple affiché).' },
             ],
           },
           {

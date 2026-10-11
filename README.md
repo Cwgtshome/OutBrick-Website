@@ -78,7 +78,7 @@ to English.
   in the footer opens a one-button confirmation page (link scanners fetch every GET, so a GET never
   unsubscribes anybody). Either way the contact is set to `unsubscribed: true`.
 * `emails/` — the templates (TypeScript functions returning `{ subject, html, text }`), the copy in
-  six languages (`emails/i18n.ts`), the Resend client (`emails/resend.ts`, plain `fetch`) and the
+  six code-written languages (`emails/i18n.ts`) plus 33 catalog languages (`lib/i18n/catalog`), the Resend client (`emails/resend.ts`, plain `fetch`) and the
   link signing (`emails/links.ts`). Table-based, inline-styled, 600 px, dark-mode aware, with a
   VML button for desktop Outlook, a preheader and a plain-text part. Every visitor value is
   escaped.

@@ -21,8 +21,8 @@
  "Important": "חשוב",
  "Journey and rewards": "המסע ופרסים",
  "Know every brick": "להכיר כל לבנה",
- "Lives, VoiceOver, undo, iCloud…": "חיים, VoiceOver, ביטול, iCloud…",
- "Moves, goals, special bricks, blockers and boosters.": "מהלכים, יעדים, לבנים מיוחדות, מכשולים ומאיצים.",
+ "Lives, VoiceOver, undo, iCloud…": "חיים, VoiceOver, ביטול מהלך, iCloud…",
+ "Moves, goals, special bricks, blockers and boosters.": "מהלכים, יעדים, לבנים מיוחדות, מכשולים ובוסטרים.",
  "Moving to a new iPhone": "מעבר ל־iPhone חדש",
  "New to OutBrick?": "חדשים ב־OutBrick?",
  "Next guide": "המדריך הבא",
@@ -57,7 +57,6 @@
  "Widgets, Siri, Spotlight, Game Center, Messages and notifications.": "וידג׳טים, Siri, Spotlight, Game Center, Messages והתראות.",
  "Your first board and a tour of every menu.": "הלוח הראשון שלכם וסיור בכל תפריט.",
  "Your first week, day by day.": "השבוע הראשון שלכם, יום אחר יום.",
- "screen": "מסך",
  "{0} guides": "{0, plural, one {מדריך אחד} two {2 מדריכים} other {# מדריכים}}",
  "{n} guides match.": "{n} מדריכים מתאימים."
 }

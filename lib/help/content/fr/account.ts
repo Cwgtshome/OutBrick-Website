@@ -39,7 +39,7 @@ export const accountArticles: HelpArticle[] = [
               ['Vibrations', 'De petites vibrations quand les pièces bougent, s’alignent et retombent. Seulement sur les appareils qui peuvent vibrer.', 'Activé'],
               ['Jeu rapide', 'Après une victoire, passe directement au plateau suivant au lieu de revenir à la carte du Voyage.', 'Activé'],
               ['IA des mascottes', 'Les amis inventent leurs propres répliques avec le modèle de langage de votre appareil. Affiché seulement là où le modèle intégré d’Apple est disponible dans votre langue.', 'Activé'],
-              ['M’afficher au classement', 'Publie votre nom de joueur et votre niveau, visibles par tous dans l’onglet Classement. Le désactiver vous en retire.', 'Activé'],
+              ['M’afficher au classement', 'Publie votre nom de joueur et votre niveau, visibles par tous dans l’onglet Palmarès. Le désactiver vous en retire.', 'Activé'],
             ],
           },
           {
@@ -260,7 +260,7 @@ export const accountArticles: HelpArticle[] = [
         blocks: [
           {
             t: 'p',
-            text: 'Connectez-vous à Game Center dans les Réglages de l’iPhone pour débloquer 65 succès (dont un pour chacun des 50 premiers chapitres) et des classements pour le niveau le plus élevé, le total de plateaux terminés, aujourd’hui et cette semaine. Ouvrez Game Center depuis le badge du Voyage ou depuis le menu Pause. L’onglet Classement du jeu est un tableau distinct, tous temps confondus.',
+            text: 'Connectez-vous à Game Center dans les Réglages de l’iPhone pour débloquer 65 succès (dont un pour chacun des 50 premiers chapitres) et des classements pour le niveau le plus élevé, le total de plateaux terminés, aujourd’hui et cette semaine. Ouvrez Game Center depuis le badge du Voyage ou depuis le menu Pause. L’onglet Palmarès du jeu est un tableau distinct, tous temps confondus.',
           },
         ],
       },
@@ -318,7 +318,7 @@ export const accountArticles: HelpArticle[] = [
           {
             t: 'list',
             items: [
-              '**L’onglet Classement** affiche votre nom de joueur, votre niveau et, si vous le souhaitez, un drapeau. Désactivez **Réglages › Jeu › M’afficher au classement** pour en être retiré ; masquez votre drapeau dans votre Profil.',
+              '**L’onglet Palmarès** affiche votre nom de joueur, votre niveau et, si vous le souhaitez, un drapeau. Désactivez **Réglages › Jeu › M’afficher au classement** pour en être retiré ; masquez votre drapeau dans votre Profil.',
               '**Course du village et Brick Royale** partagent votre nom de joueur avec les joueurs de cette course, uniquement si vous y participez.',
               '**Game Center** appartient à Apple et dépend de vos réglages Game Center.',
               'OutBrick n’utilise **aucun outil d’analyse**, et les données propres au jeu ne servent pas à vous suivre. Le partenaire publicitaire (Google AdMob) gère ses propres données pour les vidéos facultatives ; voir notre [politique de confidentialité](/privacy).',

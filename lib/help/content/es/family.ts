@@ -338,13 +338,13 @@ export const familyArticles: HelpArticle[] = [
               { term: 'Reducir movimiento', text: 'En **Ajustes › Accesibilidad › Movimiento** del iPhone. El movimiento de reposo del tablero se detiene, los brillos se quedan quietos, las pistas destellan en su sitio, las pantallas se funden en lugar de deslizarse y todas las celebraciones de victoria se convierten en un brillo suave.' },
               { term: 'Atenuar luces intermitentes', text: 'También en **Movimiento**. Los destellos a pantalla completa de los grandes combos bajan a un tercio de su intensidad y nunca se suceden a menos de un tercio de segundo.' },
               { term: 'Velocidad de animación', text: 'En **Ajustes › Accesibilidad** de OutBrick: 50 %, 75 %, 100 %, 150 % o 200 %. Al 75 % o al 50 %, los cambios, las caídas y los despejes van más despacio y son más fáciles de seguir.' },
-              { term: 'Calm Glow y Calm Outline', text: 'Dos piezas gratis del **Armario**: **Calm Glow** en **Celebraciones** (un brillo suave, nada que salga volando) y **Calm Outline** en **Estelas** (un contorno quieto donde estaba un ladrillo). Toca **Ponérselo**.' },
+              { term: 'Brillo tranquilo y Contorno tranquilo', text: 'Dos piezas gratis del **Armario**: **Brillo tranquilo** en **Celebraciones** (un brillo suave, nada que salga volando) y **Contorno tranquilo** en **Estelas** (un contorno quieto donde estaba un ladrillo). Toca **Ponérselo**.' },
             ],
           },
           {
             t: 'shot',
             id: 'settings-a11y',
-            alt: 'La pestaña Accesibilidad: Velocidad de animación del 50 % al 200 %, Detalle de los avisos Breve, Estándar o Completo, e interruptores para Modo daltónico, Tablero de alto contraste, Bandeja para zurdos, Confirmar cambios y Sonido de fila.',
+            alt: 'La pestaña Accesibilidad: Velocidad de animación del 50 % al 200 %, Detalle de los avisos Breve, Estándar o Completo, e interruptores para Daltónico, Tablero de alto contraste, Bandeja para zurdos, Confirmar cambios y Sonido de fila.',
             caption: 'Ajustes › Accesibilidad. La Velocidad de animación está arriba del todo.',
           },
           {
@@ -485,7 +485,7 @@ export const familyArticles: HelpArticle[] = [
               },
               {
                 q: '¿Puedo quitar el confeti al ganar?',
-                a: 'Sí. Ponte la celebración gratis **Calm Glow** del Armario, o activa **Reducir movimiento**, que hace tranquilas todas las celebraciones.',
+                a: 'Sí. Ponte la celebración gratis **Brillo tranquilo** del Armario, o activa **Reducir movimiento**, que hace tranquilas todas las celebraciones.',
               },
               {
                 q: '¿Cómo quito el globo del icono?',
@@ -1125,7 +1125,7 @@ export const familyArticles: HelpArticle[] = [
           },
           {
             t: 'p',
-            text: 'El sonido, la música, la vibración, las notificaciones y la mayoría de los ajustes de accesibilidad del tablero se quedan en cada dispositivo, así que vuelve a elegirlos en el nuevo. Tu elección del Modo daltónico viaja con tu progreso.',
+            text: 'El sonido, la música, la vibración, las notificaciones y la mayoría de los ajustes de accesibilidad del tablero se quedan en cada dispositivo, así que vuelve a elegirlos en el nuevo. Tu elección del ajuste Daltónico viaja con tu progreso.',
           },
         ],
       },

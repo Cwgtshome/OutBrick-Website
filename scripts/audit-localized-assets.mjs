@@ -1,5 +1,5 @@
 /** Check the explicit neutral-asset manifest without requiring image services or OCR in CI. */
-import { translatedLocales } from './lib/site-locales.mjs';
+import { legacyLocales, translatedLocales } from './lib/site-locales.mjs';
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { localizedAsset, localizedAssetManifest } from '../lib/i18n/assets.ts';
 
@@ -25,7 +25,7 @@ for (const dir of ['public/blog', 'public/blog/neutral']) {
     if (!existsSync(variant) || !statSync(variant).size) failures.push(`Missing 960px cover variant: ${variant.slice(6)}`);
   }
 }
-for (const locale of locales) {
+for (const locale of legacyLocales) { // social cards are drawn for the five code-written translations; the rest use the English card
   if (!existsSync(`public/og/${locale}.png`)) failures.push(`Missing ${locale} social card`);
 }
 if (failures.length) throw new Error(failures.join('\n'));

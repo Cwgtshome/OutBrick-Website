@@ -175,7 +175,7 @@ export const familyArticles: HelpArticle[] = [
           {
             t: 'defs',
             items: [
-              { term: 'Onglet Classement', text: 'Se débloque au niveau 21. Il affiche les noms de joueur et les niveaux, avec un drapeau facultatif. Désactivez **Réglages › Jeu › M’afficher au classement** pour en être retiré, et masquez le drapeau dans le Profil.' },
+              { term: 'Onglet Palmarès', text: 'Se débloque au niveau 21. Il affiche les noms de joueur et les niveaux, avec un drapeau facultatif. Désactivez **Réglages › Jeu › M’afficher au classement** pour en être retiré, et masquez le drapeau dans le Profil.' },
               { term: 'Courses', text: 'La **Course du village** et **Brick Royale** partagent le nom de joueur avec les autres joueurs de cette course, et seulement si votre enfant y participe. Chacune peut être désactivée dans **Réglages › Jeu › Fonctions du jeu**, tout comme le Sauvetage d’ami, la Course de l’équipe et les offres sur la carte.' },
               { term: 'Nom de joueur', text: 'Se choisit dans le Profil (touchez l’avatar). Un nom inventé est une bonne idée.' },
               { term: 'Game Center', text: 'Le service d’Apple pour les succès, les classements et les amis. Ses réglages d’amis et de jeu multijoueur se trouvent dans **Temps d’écran › Restrictions de contenu et de confidentialité**, à la section Game Center.' },
@@ -214,7 +214,7 @@ export const familyArticles: HelpArticle[] = [
               ['☐', 'Un temps d’arrêt pour l’heure du coucher', '**Réglages › Temps d’écran › Temps d’arrêt**'],
               ['☐', 'Les rappels et la pastille comme vous les voulez', 'Dans OutBrick, **Réglages › Jeu › Notifications**, ou **Réglages › Notifications › OutBrick**'],
               ['☐', 'Un nom de joueur inventé', 'OutBrick : touchez l’avatar pour ouvrir le **Profil**'],
-              ['☐', 'Affiché ou non dans l’onglet Classement', 'Dans OutBrick, **Réglages › Jeu › M’afficher au classement**'],
+              ['☐', 'Affiché ou non dans l’onglet Palmarès', 'Dans OutBrick, **Réglages › Jeu › M’afficher au classement**'],
               ['☐', 'Les courses et les offres sur la carte, ou non', 'Dans OutBrick, **Réglages › Jeu › Fonctions du jeu**'],
               ['☐', 'La réponse sur le suivi', '**Réglages › Confidentialité et sécurité › Suivi**'],
               ['☐', 'Connecté à iCloud, pour que la progression soit à l’abri', '**Réglages ›** votre nom **› iCloud**'],
@@ -259,7 +259,7 @@ export const familyArticles: HelpArticle[] = [
             items: [
               {
                 q: 'Mon enfant peut-il parler à des inconnus dans OutBrick ?',
-                a: 'Non. Le jeu n’a ni chat ni messagerie entre joueurs. Les autres joueurs peuvent voir un nom de joueur et un niveau dans l’onglet Classement, et dans une course à laquelle votre enfant choisit de participer. Les deux peuvent être désactivés dans **Réglages › Jeu**.',
+                a: 'Non. Le jeu n’a ni chat ni messagerie entre joueurs. Les autres joueurs peuvent voir un nom de joueur et un niveau dans l’onglet Palmarès, et dans une course à laquelle votre enfant choisit de participer. Les deux peuvent être désactivés dans **Réglages › Jeu**.',
               },
               {
                 q: 'Mon enfant verra-t-il des pubs qu’il n’a pas choisies ?',
@@ -318,7 +318,7 @@ export const familyArticles: HelpArticle[] = [
             items: [
               'Vous pouvez observer un plateau aussi longtemps que vous voulez. Posez le téléphone, revenez, continuez.',
               'Si aucun coup n’est possible, le plateau est mélangé gratuitement. Vous ne pouvez jamais être vraiment bloqué.',
-              'Chaque essai comprend un **Indice**, une **Fusée** et un **OVNI** offerts, et la première **annulation** de chaque plateau est gratuite.',
+              'Chaque essai comprend un **Indice**, une **Fusée** et un **OVNI** offerts, et le premier **Annuler** de chaque plateau est gratuit.',
             ],
           },
           {
@@ -338,7 +338,7 @@ export const familyArticles: HelpArticle[] = [
               { term: 'Réduire les animations', text: 'Dans les Réglages de l’iPhone, **Accessibilité › Mouvement**. Les mouvements au repos sur le plateau s’arrêtent, les lueurs restent fixes, les indices scintillent sur place, les écrans se fondent au lieu de glisser, et chaque célébration de victoire devient une douce lueur.' },
               { term: 'Atténuer les lumières clignotantes', text: 'Également sous **Mouvement**. Les flashs plein écran des grands combos tombent au tiers de leur intensité et ne se rapprochent jamais à moins d’un tiers de seconde environ.' },
               { term: 'Vitesse des animations', text: 'Dans OutBrick, **Réglages › Accessibilité** : 50 %, 75 %, 100 %, 150 % ou 200 %. À 75 % ou 50 %, les échanges, les chutes et les disparitions se jouent plus lentement et sont plus faciles à suivre.' },
-              { term: 'Lueur calme et Contour calme', text: 'Deux pièces gratuites de la **Garde-robe** : **Lueur calme** dans **Célébrations** (une lueur douce, rien qui s’envole) et **Contour calme** dans **Traînées d’échange** (un contour immobile là où se trouvait la brique). Touchez **Porter**.' },
+              { term: 'Lueur calme et Contour calme', text: 'Deux pièces gratuites de la **Garde-robe** : **Lueur calme** dans **Célébrations** (une lueur douce, rien qui s’envole) et **Contour calme** dans **Traînées** (un contour immobile là où se trouvait la brique). Touchez **Porter**.' },
             ],
           },
           {
@@ -382,7 +382,7 @@ export const familyArticles: HelpArticle[] = [
             items: [
               { term: 'Fonctions du jeu', text: '**Réglages › Jeu › Fonctions du jeu** désactive le **Sauvetage d’ami**, la **Course du village**, **Brick Royale**, la **Course de l’équipe** et les **Offres sur la carte**. Vous ne perdez rien de ce que vous avez gagné.' },
               { term: 'Jeu rapide', text: 'Activé dès le départ : une victoire mène directement au plateau suivant. Désactivez-le dans **Réglages › Jeu** et une victoire vous ramène plutôt à la carte du Voyage, un endroit tout trouvé pour faire une pause.' },
-              { term: 'M’afficher au classement', text: 'Désactivez-le si vous préférez ne pas apparaître dans l’onglet Classement.' },
+              { term: 'M’afficher au classement', text: 'Désactivez-le si vous préférez ne pas apparaître dans l’onglet Palmarès.' },
               { term: 'IA des mascottes', text: 'Là où le modèle intégré d’Apple est disponible, les amis inventent leurs propres répliques. Désactivez-la pour retrouver leurs répliques habituelles.' },
             ],
           },
@@ -809,7 +809,7 @@ export const familyArticles: HelpArticle[] = [
           {
             t: 'shot',
             id: 'home',
-            alt: 'L’accueil : en haut, l’avatar, 2 580 pièces, une série de 12 jours, Missions et la roue des Réglages. Sous le logo OUTBRICK, une carte annonce le Défi objectif, qui commence bientôt. Trois amis briques en chapeau de soleil se tiennent sur une pelouse de briques, au-dessus d’un bouton vert Niveau 214. La barre du bas affiche Accueil, Classement, Voyage, Boutique et Pass.',
+            alt: 'L’accueil : en haut, l’avatar, 2 580 pièces, une série de 12 jours, Missions et la roue des Réglages. Sous le logo OUTBRICK, une carte annonce le Défi objectif, qui commence bientôt. Trois amis briques en chapeau de soleil se tiennent sur une pelouse de briques, au-dessus d’un bouton vert Niveau 214. La barre du bas affiche Accueil, Palmarès, Voyage, Boutique et Pass.',
             caption: 'Trois amis à la fois se tiennent sur la scène de l’Accueil, à tour de rôle.',
           },
         ],
@@ -1139,7 +1139,7 @@ export const familyArticles: HelpArticle[] = [
               '**Game Center** est un service d’Apple. Il conserve vos 65 succès et les classements du niveau le plus élevé, du total de plateaux terminés, d’aujourd’hui et de cette semaine.',
               'Votre **progression dans le Voyage n’est pas enregistrée dans Game Center**. Elle voyage par iCloud.',
               'Connectez-vous à Game Center dans les Réglages de l’iPhone avec le même compte Apple pour retrouver vos succès.',
-              'L’onglet **Classement** du jeu est un tableau distinct, tous temps confondus. Vous y apparaissez tant que **Réglages › Jeu › M’afficher au classement** est activé.',
+              'L’onglet **Palmarès** du jeu est un tableau distinct, tous temps confondus. Vous y apparaissez tant que **Réglages › Jeu › M’afficher au classement** est activé.',
             ],
           },
         ],

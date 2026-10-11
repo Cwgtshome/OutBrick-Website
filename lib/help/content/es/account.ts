@@ -88,12 +88,12 @@ export const accountArticles: HelpArticle[] = [
           {
             t: 'shot',
             id: 'settings-a11y',
-            alt: 'La pestaña Accesibilidad: Velocidad de animación del 50 % al 200 %, Detalle de los avisos Breve, Estándar o Completo, e interruptores para Modo daltónico, Tablero de alto contraste, Bandeja para zurdos, Confirmar cambios y Sonido de fila.',
+            alt: 'La pestaña Accesibilidad: Velocidad de animación del 50 % al 200 %, Detalle de los avisos Breve, Estándar o Completo, e interruptores para Daltónico, Tablero de alto contraste, Bandeja para zurdos, Confirmar cambios y Sonido de fila.',
             caption: 'Ajustes › Accesibilidad.',
           },
           {
             t: 'p',
-            text: 'Velocidad de animación, Detalle de los avisos, Modo daltónico, Tablero de alto contraste, Bandeja para zurdos, Confirmar cambios y Sonido de fila se explican uno a uno en [Accesibilidad en OutBrick](help:accessibility#where).',
+            text: 'Velocidad de animación, Detalle de los avisos, Daltónico, Tablero de alto contraste, Bandeja para zurdos, Confirmar cambios y Sonido de fila se explican uno a uno en [Accesibilidad en OutBrick](help:accessibility#where).',
           },
         ],
       },
@@ -285,7 +285,7 @@ export const accountArticles: HelpArticle[] = [
             t: 'list',
             items: [
               'El progreso se guarda en tu dispositivo y, si has iniciado sesión en iCloud, en tu propia cuenta de iCloud. No hay ninguna cuenta de OutBrick que crear.',
-              'iCloud guarda tu nivel, tus estrellas, monedas, potenciadores, vidas y deshacer, tus rachas, el Pase Ladrillo, la Colección, el Armario, tu nombre, tu avatar y tus estadísticas, y tu elección del Modo daltónico.',
+              'iCloud guarda tu nivel, tus estrellas, monedas, potenciadores, vidas y deshacer, tus rachas, el Pase Ladrillo, la Colección, el Armario, tu nombre, tu avatar y tus estadísticas, y tu elección del ajuste Daltónico.',
               'El sonido, la música, la vibración, las notificaciones y los ajustes de accesibilidad del tablero se quedan en cada dispositivo.',
               'Cuando dos dispositivos no coinciden, no se sobrescribe nada: se conservan el nivel y las cuentas más altos, las colecciones se combinan y las monedas gastadas en un dispositivo nunca se devuelven desde otro.',
             ],

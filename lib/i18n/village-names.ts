@@ -1,4 +1,5 @@
-import type { Locale } from './locales';
+import { isCatalogLocale, type Locale } from './locales.ts';
+import { catalogLookup } from './catalog.ts';
 
 const ptBR: Record<string, string> = {
   'Garden City': 'Cidade Jardim',
@@ -32,5 +33,8 @@ const ptBR: Record<string, string> = {
 };
 
 export function localizedVillageName(name: string, locale: Locale): string {
-  return locale === 'pt-BR' ? ptBR[name] ?? name : name;
+  if (locale === 'pt-BR') return ptBR[name] ?? name;
+  // The catalog languages use the game's own village names (village.name.N in the game catalog).
+  if (isCatalogLocale(locale)) return catalogLookup(locale, name) ?? name;
+  return name;
 }

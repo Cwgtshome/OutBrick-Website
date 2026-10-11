@@ -8,8 +8,9 @@ belong in the separate game repository; coordinate before editing shared checkou
 
 The shared status document records implementation, production evidence and unresolved acceptance
 checks. Do not restart completed setup or claim a provider login, email delivery or native release
-from configuration alone. Preserve existing design components and all six website languages:
-English, French, German, Spanish, Japanese and Brazilian Portuguese.
+from configuration alone. Preserve existing design components and all 39 website languages: the
+six written in code (English, French, German, Spanish, Japanese, Brazilian Portuguese) and the 33
+string-catalog languages (see AGENTS.md and docs/TRANSLATION-BRIEF.md).
 
 Update the shared status after substantive work so Claude and Codex read the same context.
 Keep credentials exclusively in approved secret storage; document variable names and behavior only.

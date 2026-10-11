@@ -208,7 +208,7 @@ const en: CommunityCopy = {
     preheader: 'Replies, mentions and updates since we last wrote, all in one email.',
     heading: (count) => `${count} new things since we last wrote`,
     intro: 'We’ve gathered them into one email so your inbox stays calm.',
-    open: 'Open',
+    open: 'Read',
     more: (count) => (count === 1 ? 'and 1 more' : `and ${count} more`),
     cta: 'See all notifications',
   },

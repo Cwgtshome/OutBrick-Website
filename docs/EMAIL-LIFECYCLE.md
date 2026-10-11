@@ -29,7 +29,7 @@ All of this is added by the shared shell in `emails/core.ts` and `emails/brand.t
 - **Year:** the year of rendering.
 - **Address source:** the owner-supplied text "OutBrick PO 330279". Do not invent a fuller address. `NEWSLETTER_POSTAL_ADDRESS` is still accepted but no longer printed twice.
 - **Interactive pieces:** tap-to-reveal tips and one-tap rating faces. Every one degrades to plain, readable content where checkboxes are stripped.
-- **Width check:** all 294 sample emails (49 templates × 6 languages) are checked for horizontal overflow at 280, 320, 360, 375, 414, 600, 768, 1024 and 1440 px. That is a browser check, not a Litmus or device test.
+- **Width check:** the sample emails (49 templates × 6 languages when this was last run; there are now 39 languages) are checked for horizontal overflow at 280, 320, 360, 375, 414, 600, 768, 1024 and 1440 px. That is a browser check, not a Litmus or device test.
 
 ## Reply by email (9 October 2026)
 

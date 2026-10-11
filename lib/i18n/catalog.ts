@@ -161,7 +161,7 @@ export const machineKeys = new Set([
   'href', 'url', 'src', 'srcSet', 'path', 'slug', 'id', 'kind', 'type', 'tone', 'icon', 'image', 'img', 'colour',
   'color', 'host', 'hostPose', 'pose', 'shot', 'className', 'class', 'anchor', 'hash', 'locale', 'lang', 'hreflang',
   'rel', 'target', 'method', 'emoji', 'accent', 't', 'side', 'dir', 'cover', 'related', 'category', 'friend', 'mood',
-  'campaign', 'route', 'sectionId', 'width', 'height',
+  'campaign', 'route', 'sectionId', 'section', 'width', 'height',
 ]);
 
 /** True for a string that carries words a reader sees, as opposed to a path, id or number. */
@@ -218,7 +218,7 @@ export function translateDeep<T>(value: T, locale: CatalogLocale): T {
 }
 
 /** Every locale map registered with `catalogRecord`, for the extractor. */
-export const registeredRecords: { area: string; name: string; english: unknown }[] = [];
+export const registeredRecords: { area: string; name: string; english: unknown; written?: Partial<Record<LegacyLocale, unknown>> }[] = [];
 
 /**
  * English strings a module looks up in the catalogs itself (with `catalogText` or
@@ -236,7 +236,7 @@ export function catalogStrings<T extends Record<string, string>>(area: string, n
  * at import time).
  */
 export function catalogRecord<T>(area: string, name: string, base: { en: T } & Record<LegacyLocale, T>): Record<Locale, T> {
-  registeredRecords.push({ area, name, english: base.en });
+  registeredRecords.push({ area, name, english: base.en, written: base });
   const built = new Map<string, { size: number; value: T }>();
   const target = base as Record<string, T>;
   return new Proxy(target, {
@@ -295,7 +295,7 @@ export function phraseRecord<T extends Record<string, string>>(legacy: Record<Le
  * translations, completed for the catalog languages from the catalogs.
  */
 export function catalogMap<T>(area: string, name: string, map: { en: T } & Partial<Record<LegacyLocale, T>>): (locale: Locale) => T {
-  registeredRecords.push({ area, name, english: map.en });
+  registeredRecords.push({ area, name, english: map.en, written: map });
   return (locale) => (locale === 'en' ? map.en : (map as Partial<Record<string, T>>)[locale] ?? translateDeep(map.en, locale as CatalogLocale));
 }
 

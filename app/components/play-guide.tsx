@@ -1,5 +1,6 @@
 import { CurrentGameFeatures } from './current-game-features';
 import type { Metadata } from 'next';
+import { ogImagePath } from '../../lib/i18n/assets';
 import { homeCopy } from '../../lib/i18n/home';
 import { chromeCopy } from '../../lib/i18n/chrome';
 import { localeAlternates, localePath, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
@@ -32,9 +33,9 @@ export function playMetadata(locale: Locale): Metadata {
       locale: ogLocales[locale],
       title,
       description,
-      images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, width: 1200, height: 630, alt: homeCopy[locale].meta.ogImageAlt }],
+      images: [{ url: ogImagePath(locale), width: 1200, height: 630, alt: homeCopy[locale].meta.ogImageAlt }],
     },
-    twitter: { card: 'summary_large_image', title, description, images: [locale === 'en' ? '/og.png' : `/og/${locale}.png`] },
+    twitter: { card: 'summary_large_image', title, description, images: [ogImagePath(locale)] },
   };
 }
 

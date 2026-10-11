@@ -17,7 +17,7 @@ export const accountArticles: HelpArticle[] = [
         blocks: [
           {
             t: 'p',
-            text: 'Tippe oben rechts auf dem **Startbildschirm** oder auf der **Reise** auf das Zahnrad. Die Einstellungen füllen den Bildschirm; das rote **×** schließt sie (ebenso {{Esc}} auf einer Tastatur oder die Z-Geste mit zwei Fingern mit VoiceOver). Es gibt zwei Tabs: **Spiel**, der sich zuerst öffnet, und **Bedienungshilfen**.',
+            text: 'Tippe oben rechts auf dem Tab **Start** oder auf der **Reise** auf das Zahnrad. Die Einstellungen füllen den Bildschirm; das rote **×** schließt sie (ebenso {{Esc}} auf einer Tastatur oder die Z-Geste mit zwei Fingern mit VoiceOver). Es gibt zwei Tabs: **Spiel**, der sich zuerst öffnet, und **Bedienungshilfen**.',
           },
           {
             t: 'p',
@@ -238,7 +238,7 @@ export const accountArticles: HelpArticle[] = [
               'Das Spiel fragt beim Start nie nach Mitteilungen. Nach deinem dritten geschafften Brett fragt es, ob Bloo dir deinen Platz freihalten darf; **Jetzt nicht** wartet eine Woche.',
               'Höchstens **eine Mitteilung alle 20 Stunden** und nie zwischen 22:00 und 09:00. Jede bietet **Spielen**, **Später** (drei Stunden) oder **Bis morgen schlummern**.',
               'Die Erinnerungen: ein Brett, das du verlassen hast, aufgefüllte Leben, fertige Missionen, deine Serie (zu der Uhrzeit, die du im Widget Serie wählst, standardmäßig 20:30), beginnende Events, ein Saisonende und ein Rückblick am Sonntag.',
-              'Das **Kennzeichen am App-Symbol** zählt Belohnungen, die auf dich warten (abholbare Missionen, Stufen im Brick Pass, Sternbelohnungen der Dörfer, das erste geschaffte Brett des Tages), bis höchstens neun. Wenn du das Spiel öffnest, verschwindet es, ohne dass etwas abgeholt wird.',
+              'Das **Kennzeichen am App-Symbol** zählt Belohnungen, die auf dich warten (abholbare Missionen, Stufen im Steinpass, Sternbelohnungen der Dörfer, das erste geschaffte Brett des Tages), bis höchstens neun. Wenn du das Spiel öffnest, verschwindet es, ohne dass etwas abgeholt wird.',
               'Erinnerungen schaltest du unter **Einstellungen › Spiel › Mitteilungen** aus oder in den iPhone-Einstellungen.',
             ],
           },
@@ -285,7 +285,7 @@ export const accountArticles: HelpArticle[] = [
             t: 'list',
             items: [
               'Dein Fortschritt wird auf deinem Gerät gesichert und, wenn du bei iCloud angemeldet bist, in deinem eigenen iCloud-Konto. Ein OutBrick-Konto musst du nicht anlegen.',
-              'iCloud bewahrt dein Level, Sterne, Münzen, Booster, Leben und Rückgängig, Serien, den Brick Pass, die Sammlung, die Garderobe, Name, Avatar und Statistiken sowie deine Wahl bei Farbenblind.',
+              'iCloud bewahrt dein Level, Sterne, Münzen, Booster, Leben und Rückgängig, Serien, den Steinpass, die Sammlung, die Garderobe, Name, Avatar und Statistiken sowie deine Wahl bei Farbenblind.',
               'Töne, Musik, Haptik, Mitteilungen und die Bedienungshilfen für das Brett bleiben auf jedem Gerät für sich.',
               'Sind zwei Geräte unterschiedlicher Meinung, wird nichts überschrieben: Das höhere Level und die höheren Zahlen bleiben, Sammlungen werden zusammengeführt, und Münzen, die du auf einem Gerät ausgegeben hast, werden von einem anderen nie zurückerstattet.',
             ],
@@ -301,7 +301,7 @@ export const accountArticles: HelpArticle[] = [
             items: [
               'Melde dich auf dem neuen Gerät mit demselben Apple Account an und schalte iCloud ein.',
               'Installiere OutBrick aus dem App Store und öffne es. Dein Fortschritt wird beim Start des Spiels abgerufen und zusammengeführt.',
-              'Öffne den **Shop**, scrolle ganz nach unten und tippe auf **Wiederherstellen**, um Werbung entfernen, die Saisons des Brick Pass und Garderobe-Artikel zurückzuholen.',
+              'Öffne den **Shop**, scrolle ganz nach unten und tippe auf **Wiederherstellen**, um Werbung entfernen, die Saisons des Steinpasses und Garderobe-Artikel zurückzuholen.',
             ],
           },
           {

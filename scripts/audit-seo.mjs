@@ -67,7 +67,7 @@ const CJK = /[\u1100-\u11ff\u2e80-\u9fff\uac00-\ud7af\uf900-\ufaff\ufe30-\ufe4f\
 const displayLength = (s) => [...s].reduce((n, ch) => n + (CJK.test(ch) ? 2 : 1), 0);
 
 const report = [];
-const homeRoutes = new Set(['/', '/fr', '/de', '/es', '/ja', '/pt-BR']);
+const homeRoutes = new Set(['/', ...'fr de es ja pt-BR it ko nl ru tr zh-Hans ar ca cs da fi hr hu id ms nb pl ro sk sv th vi zh-Hant es-419 he pt-PT el uk fr-CA hi sl ur bn'.split(' ').map((l) => `/${l}`)]);
 const seenTitles = new Map();
 const seenDescriptions = new Map();
 
@@ -323,7 +323,7 @@ fileIssues('sitemap.xml', (xml, err) => {
     let u;
     try { u = new URL(loc); } catch { err(`child sitemap ${loc} is not an absolute URL`); continue; }
     if (u.host !== siteHost) err(`child sitemap ${loc} is on another host`);
-    else if (!/^\/sitemap-[a-z]+-[A-Za-z-]+\.xml$/.test(u.pathname)) err(`child sitemap ${loc} is not a sitemap-<section>-<locale>.xml`);
+    else if (!/^\/sitemap-[a-z]+-[A-Za-z0-9-]+\.xml$/.test(u.pathname)) err(`child sitemap ${loc} is not a sitemap-<section>-<locale>.xml`);
     else sitemapChildren.push(u.pathname.slice(1));
     const lastmod = block.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
     if (lastmod && !/^\d{4}-\d{2}-\d{2}/.test(lastmod)) err(`child lastmod "${lastmod}" is not a W3C datetime`);

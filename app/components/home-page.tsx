@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { cast, passes, villages } from '../../lib/villages';
 import { chromeCopy } from '../../lib/i18n/chrome';
 import { homeCopy } from '../../lib/i18n/home';
-import { localizedAsset } from '../../lib/i18n/assets';
+import { localizedAsset, ogImagePath } from '../../lib/i18n/assets';
 import { coverSrcSet, friendSrcSet } from '../../lib/images';
 import { localizedVillageName } from '../../lib/i18n/village-names';
 import { isLegacyLocale, localeAlternates, localePath, localeUrl, ogLocales, type Locale } from '../../lib/i18n/locales';
@@ -33,7 +33,7 @@ export function homeMetadata(locale: Locale): Metadata {
     title: locale === 'en' ? copy.title : { absolute: copy.title },
     description: copy.description,
     alternates: localeAlternates(locale, '/'),
-    twitter: { card: 'summary_large_image', title: copy.ogTitle, description: copy.ogDescription, images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, alt: copy.ogImageAlt }] },
+    twitter: { card: 'summary_large_image', title: copy.ogTitle, description: copy.ogDescription, images: [{ url: ogImagePath(locale), alt: copy.ogImageAlt }] },
     openGraph: {
       type: 'website',
       url,
@@ -41,7 +41,7 @@ export function homeMetadata(locale: Locale): Metadata {
       locale: ogLocales[locale],
       title: copy.ogTitle,
       description: copy.ogDescription,
-      images: [{ url: locale === 'en' ? '/og.png' : `/og/${locale}.png`, width: 1200, height: 630, alt: copy.ogImageAlt }],
+      images: [{ url: ogImagePath(locale), width: 1200, height: 630, alt: copy.ogImageAlt }],
     },
   };
 }

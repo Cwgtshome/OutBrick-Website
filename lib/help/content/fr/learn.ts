@@ -365,7 +365,7 @@ export const learnArticles: HelpArticle[] = [
             rows: [
               ['Vous arrivez sur une spéciale', 'Son type, sa couleur et ce qu’elle fait, par exemple « Rayon de ligne, rouge, horizontal, vide sa ligne ».'],
               ['Ses actions', '**Activer la spéciale** vient en premier, puis ses glissements, puis ses échanges. Les échanges qui déclenchent quelque chose passent avant ceux qui ne créent rien.'],
-              ['Vous en touchez une', '« Déclenché : bombe rouge ».'],
+              ['Vous en touchez une', '« Déclenché : bombe, rouge ».'],
               ['Un indice en propose une', 'Par exemple « Indice : déclenche la bombe rouge », avec sa ligne et sa colonne.'],
               ['Après un coup', 'Les spéciales créées par le coup, un éventuel combo et les cascades, dans le résumé du coup.'],
             ],

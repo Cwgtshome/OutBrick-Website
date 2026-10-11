@@ -301,7 +301,7 @@ export const accessibilityArticles: HelpArticle[] = [
             t: 'table',
             head: ['Geste', 'Sur un plateau', 'Sur la carte du Voyage', 'Ailleurs'],
             rows: [
-              ['{{Toucher deux fois avec deux doigts}} (toucher magique)', 'Un indice gratuit. Le meilleur coup scintille et il est annoncé ; votre bonus Indice n’est pas utilisé.', 'Annonce le guide : votre village, les niveaux réussis, votre prochain niveau et les étoiles qui manquent pour la prochaine récompense.', 'Accueil : lance votre prochain niveau. Boutique, Classement et Pass : active ou coupe la musique.'],
+              ['{{Toucher deux fois avec deux doigts}} (toucher magique)', 'Un indice gratuit. Le meilleur coup scintille et il est annoncé ; votre bonus Indice n’est pas utilisé.', 'Annonce le guide : votre village, les niveaux réussis, votre prochain niveau et les étoiles qui manquent pour la prochaine récompense.', 'Accueil : lance votre prochain niveau. Boutique, Palmarès et Pass : active ou coupe la musique.'],
               ['{{Frotter avec deux doigts}} (Échap)', 'Ne quitte jamais le plateau, donc ne peut jamais coûter de vie. Ferme une carte, repose une pièce choisie, range une carte d’apprentissage ou ouvre la Pause, dans cet ordre.', 'Ferme une carte ouverte.', 'Appuie sur le bouton de fermeture de l’écran ou revient en arrière.'],
               ['{{Balayer avec trois doigts}}', '—', 'Avance d’un village à la fois et annonce son nom.', 'Fait défiler.'],
               ['{{Balayer vers le haut ou le bas}}', 'Parcourt les actions d’une pièce.', 'Parcourt **Où suis-je** et **Aller à mon prochain niveau**.', 'Règle une commande.'],
@@ -323,7 +323,7 @@ export const accessibilityArticles: HelpArticle[] = [
               'Où est allée une brique : « Glissée de 3 cases, jusqu’à ligne 2, colonne 4 », « À travers le portail, sortie en… », « Sortie par sa porte : 1 (rouge) ».',
               'Ce qui a changé : « Retournée : rouge et bleue », « Le couvercle à compteur s’est ouvert. Ses briques peuvent bouger », « De nouvelles portes s’ouvrent ».',
               'Ce qui a disparu : les pièces, les cascades, les combos et les spéciales créées, et les objectifs qui ont avancé.',
-              'Les coups restants, avec une alerte à cinq, trois et un : « Seulement : 5 coups ».',
+              'Les coups restants, avec une alerte à cinq, trois et un : « Attention : Encore 5 coups ».',
               'La fin : « Tous les objectifs atteints. Niveau réussi » ou « Plus de coups ».',
               'Si aucun coup n’est possible, le plateau est mélangé et VoiceOver dit « Le plateau a été mélangé. À toi de jouer. »',
             ],

@@ -183,7 +183,7 @@ export const learnArticles: HelpArticle[] = [
           {
             t: 'callout',
             kind: 'a11y',
-            text: 'Con el **Modo daltónico** activado (lo está desde el principio), los rayos de línea, las bombas, los dardos guiados y las llaves llevan en una esquina una pequeña insignia con el símbolo de su color, para que distingas su color sin depender solo del color.',
+            text: 'Con **Daltónico** activado (lo está desde el principio), los rayos de línea, las bombas, los dardos guiados y las llaves llevan en una esquina una pequeña insignia con el símbolo de su color, para que distingas su color sin depender solo del color.',
           },
         ],
       },
@@ -333,7 +333,7 @@ export const learnArticles: HelpArticle[] = [
           {
             t: 'steps',
             items: [
-              'En cuanto cumples tu último objetivo, el tablero deja de admitir movimientos y muestra **¡Objetivo cumplido!**, con «¡N movimientos sobrantes se convierten en rayos!» debajo. Ya nada puede hacerte perder el tablero: no arriesgas ninguna vida y no hace falta ningún movimiento.',
+              'En cuanto cumples tu último objetivo, el tablero deja de admitir movimientos y muestra **¡Objetivo cumplido!**, con «¡N movimientos restantes se vuelven rayos!» debajo. Ya nada puede hacerte perder el tablero: no arriesgas ninguna vida y no hace falta ningún movimiento.',
               'Por cada movimiento, una chispa sale del contador de movimientos y aterriza en un ladrillo normal, que se convierte en un rayo de línea. Cada una suma **150 puntos**. Hasta 30 movimientos se convierten en rayos sobre el tablero; si sobran más, se pagan igualmente.',
               'Después estallan todos los especiales del tablero, los rayos nuevos y los que dejaste sin usar, hasta que no queda nada que disparar.',
               'Tus amigos dan una vuelta de honor y la tarjeta de victoria muestra tu puntuación, tus estrellas y tus monedas.',
@@ -352,7 +352,7 @@ export const learnArticles: HelpArticle[] = [
           {
             t: 'callout',
             kind: 'a11y',
-            text: 'VoiceOver dice «¡Objetivo cumplido! ¡4 movimientos sobrantes se convierten en rayos!» al momento, y después «Puntuación final» con el número y las estrellas cuando aparece la tarjeta de victoria. Con **Reducir movimiento** activado, el aviso aparece y desaparece con un fundido y el tablero ya asentado se muestra sin la animación.',
+            text: 'VoiceOver dice «¡Objetivo cumplido! ¡4 movimientos restantes se vuelven rayos!» al momento, y después «Puntuación final» con el número y las estrellas cuando aparece la tarjeta de victoria. Con **Reducir movimiento** activado, el aviso aparece y desaparece con un fundido y el tablero ya asentado se muestra sin la animación.',
           },
         ],
       },
@@ -599,7 +599,7 @@ export const learnArticles: HelpArticle[] = [
             how: 'Se juega exactamente como un ladrillo de su color: deslízalo, cámbialo, combínalo. En cuanto **sale del tablero**, combinado en una línea, despejado por una explosión o deslizado por una puerta de su color, la tapa con cerradura se abre.',
             facts: [
               { label: 'VoiceOver dice', text: '«Llave, rojo».' },
-              { label: 'Modo daltónico', text: 'Lleva una insignia en una esquina con el símbolo de su color.' },
+              { label: 'Daltónico', text: 'Lleva una insignia en una esquina con el símbolo de su color.' },
             ],
             tip: 'Si su puerta está lejos, una línea de tres es más rápida: una llave combinada en cualquier sitio abre la cerradura igual.',
           },
@@ -760,7 +760,7 @@ export const learnArticles: HelpArticle[] = [
             how: 'Cada ladrillo que pasa por ella, deslizado, combinado o estallado delante, le resta uno. Al llegar a cero **se cierra para siempre** y se convierte en pared. Solo cuenta los ladrillos que pasan por ella; los ladrillos de su color combinados en otra parte siguen contando para un objetivo «Envía o combina», pero no cambian el número de la puerta.',
             facts: [
               { label: 'Aparece por primera vez', text: 'Nivel 11, El gran día.' },
-              { label: 'VoiceOver dice', text: '«abierta, admite 3 más» y después «cerrada para siempre». Al tocarla: «Puerta roja: admite 3 ladrillos más (rojo) y luego se cierra».' },
+              { label: 'VoiceOver dice', text: '«abierta, admite 3 más» y después «cerrada para siempre». Al tocarla: «Puerta Rojo: admite 3 ladrillos más (rojo) y luego se cierra».' },
             ],
             tip: 'En El gran día, la puerta contada admite un poco más de lo que pide su objetivo. Los ladrillos largos de su color solo pueden salir por una puerta, así que reserva su hueco para ellos.',
           },

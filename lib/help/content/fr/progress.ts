@@ -197,15 +197,15 @@ export const progressArticles: HelpArticle[] = [
       },
       {
         id: 'leaders',
-        title: 'Classement et Game Center',
+        title: 'Palmarès et Game Center',
         blocks: [
           {
             t: 'list',
             items: [
-              'L’onglet **Classement** se débloque au niveau 21 : un seul tableau de joueurs, tous temps confondus, avec leurs drapeaux. Touchez **Voir plus** pour descendre plus bas.',
+              'L’onglet **Palmarès** se débloque au niveau 21 : un seul tableau de joueurs, tous temps confondus, avec leurs drapeaux. Touchez **Voir plus** pour descendre plus bas.',
               'Vous y apparaissez tant que **Réglages › Jeu › M’afficher au classement** est activé. Ce réglage publie votre nom de joueur et votre niveau ; le désactiver vous retire du classement.',
               'Choisissez ou masquez votre **drapeau** dans votre Profil.',
-              '**Game Center** propose 65 succès et des classements pour le niveau le plus élevé, le total de plateaux terminés, aujourd’hui et cette semaine. Connectez-vous avec la barre de l’onglet Classement, ou ouvrez Game Center depuis le badge du Voyage ou le menu Pause.',
+              '**Game Center** propose 65 succès et des classements pour le niveau le plus élevé, le total de plateaux terminés, aujourd’hui et cette semaine. Connectez-vous avec la barre de l’onglet Palmarès, ou ouvrez Game Center depuis le badge du Voyage ou le menu Pause.',
             ],
           },
         ],

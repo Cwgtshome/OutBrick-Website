@@ -321,6 +321,17 @@ export function AlsoRead({ current, locale = 'en' }: { current?: string; locale?
  * `hreflang` to match. `languages` names the page's own versions (a journal guide in each
  * language); otherwise a page published only in English leads to each language's home page.
  */
+/** Where the switcher sends `l`: the page's own address there, or that language's home when the
+ * page is not published in it (the journal is English and the six code-written languages only). */
+function switcherHref(l: Locale, page: LocalizedPage | undefined, given: string | undefined): string {
+  if (given) {
+    const path = given.replace(/^https?:\/\/[^/]+/, '');
+    const english = l === 'en' ? path : path.replace(new RegExp(`^/${l}(?=/|$)`), '') || '/';
+    if (hasLocalePage(l, english.split(/[?#]/)[0])) return given;
+  }
+  return localePath(l, page && hasLocalePage(l, page) ? page : '/');
+}
+
 export function LanguageSwitcher({ locale, page, languages }: { locale: Locale; page?: LocalizedPage; languages?: Partial<Record<Locale, string>> }) {
   const label = chromeCopy[locale].language;
   return (
@@ -335,7 +346,7 @@ export function LanguageSwitcher({ locale, page, languages }: { locale: Locale; 
         <ul>
           {locales.map((l) => (
             <li key={l}>
-              <a href={languages?.[l] ?? localePath(l, page && hasLocalePage(l, page) ? page : '/')} lang={l} hrefLang={l} aria-current={l === locale ? 'page' : undefined}>
+              <a href={switcherHref(l, page, languages?.[l])} lang={l} hrefLang={l} aria-current={l === locale ? 'page' : undefined}>
                 <Flag locale={l} />
                 <span>{localeNames[l]}</span>
               </a>
@@ -392,7 +403,7 @@ export function VillageFooter({ locale = 'en', page, languages }: { locale?: Loc
               <li><a href={localePath(locale, '/whats-new')}>{copy.whatsNew}</a></li>
               <li><a href={localePath(locale, '/daily')}>{copy.daily}</a></li>
               {/* The journal has an index in every language (its translated guides). */}
-              <li><a href={locale === 'en' ? '/blog' : `/${locale}/blog`}>{copy.journal}</a></li>
+              <li><a href={localePath(locale, '/blog')}>{copy.journal}</a></li>
               <li><a href={localePath(locale, '/press-kit')}>{copy.pressKit}</a></li>
             </ul>
           </div>

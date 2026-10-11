@@ -3,9 +3,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { decodeEntities, distDir, fileToRoute, listHtmlFiles, metaContent, readNetlifyRedirects, repoRoot, siteUrl } from './lib/pages.mjs';
-const locales=['fr','de','es','ja','pt-BR'];
+const { translatedLocales: locales, ogLocales, hasLocalePage } = await import('../lib/i18n/locales.ts');
+// The catalog languages' words (published ones), so their pages can be checked like the first five.
+await import('../lib/i18n/catalog/install-all.ts');
 const { chromeCopy } = await import('../lib/i18n/chrome.ts');
-const breadcrumbLabels = {fr:'Fil d’Ariane',de:'Brotkrumennavigation',es:'Ruta de navegación',ja:'パンくずリスト','pt-BR':'Navegação estrutural'};
+const legacyBreadcrumbs = {fr:'Fil d’Ariane',de:'Brotkrumennavigation',es:'Ruta de navegación',ja:'パンくずリスト','pt-BR':'Navegação estrutural'};
+const breadcrumbLabels = new Proxy(legacyBreadcrumbs, { get: (labels, locale) => labels[locale] ?? publicPages[locale]?.Breadcrumb ?? 'Breadcrumb' });
 const editorialRoutes=['/','/blog','/mascots','/press','/about','/authors','/research','/community','/support'];
 const publicPages=(await import('../lib/i18n/public-pages.ts')).publicPages;
 const inventory=JSON.parse(fs.readFileSync(path.join(repoRoot,'lib/i18n/public-source-inventory.json'),'utf8'));
@@ -22,18 +25,27 @@ const problems=[];
 const manifests=[];
 const publicRoots=new Set(['about','accessibility','accessibility-support','affiliates','age-rating','age-suitability','authors','blog','c','careers','contact','creators','daily','eula','eula-apple','license','license-agreement','mascots','newsletter','play','press','press-kit','privacy','privacy-choices','privacy-policy','refund','refunds','research','support','community','terms','whats-new']);
 const noindexEvidence=[];
+const fallbackGuide=(locale,route)=>{
+ if(!route.startsWith('/community/help/'))return false;
+ const html=pages.get(`/${locale}${route}`);
+ return !!html&&/noindex/i.test(metaContent(html,'robots').join(' '));
+};
 const schemaLanguages=[];
 const englishRoutes=[...pages.keys()].filter(route=>!/^\/(zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(\/|$)/.test(route)&&route!='/404'&&!/^\/google[0-9a-f]+$/.test(route));
 for(const locale of locales) {
  const missingCopy=inventory.filter(({text})=>!(text in publicPages[locale]));
  if(missingCopy.length) problems.push(`${locale}: ${missingCopy.length} missing public dictionary entries`);
  for(const route of englishRoutes) {
+  if(!hasLocalePage(locale,route))continue; // the journal is not published in the catalog languages
   const translated=route==='/'?`/${locale}`:`/${locale}${route}`;
   const html=pages.get(translated);
   const alias=aliasRoutes.has(route);
   const record={locale,english:`${siteUrl}${route==='/'?'/':route}`,url:`${siteUrl}${translated}`,alias,rendered:!!html};
   manifests.push(record);
   if(!html){problems.push(`Missing counterpart ${translated}`);continue;}
+  // A Help Centre guide not yet translated in a catalog language is served in English, noindex,
+  // and left out of the hreflang set; there is nothing to compare.
+  if(fallbackGuide(locale,route))continue;
   const lang=html.match(/<html\b[^>]*\slang="([^"]+)"/i)?.[1];
   if(lang!==locale)problems.push(`${translated}: html lang=${lang}`);
   if(alias)continue;
@@ -41,15 +53,17 @@ for(const locale of locales) {
   const canonical=head.match(/<link\b[^>]*rel="canonical"[^>]*href="([^"]+)"/i)?.[1];
   if(canonical!==`${siteUrl}${translated}`)problems.push(`${translated}: wrong canonical ${canonical}`);
   for(const code of ['en',...locales,'x-default']) {
+   if(code!=='en'&&code!=='x-default'&&(!hasLocalePage(code,route)||fallbackGuide(code,route)))continue;
    if(!new RegExp(`<link\\b[^>]*hreflang="${code}"`,'i').test(head))problems.push(`${translated}: missing hreflang ${code}`);
   }
   if(!metaContent(html,'description')[0])problems.push(`${translated}: missing description`);
   for(const code of ['en',...locales,'x-default']) {
+   if(code!=='en'&&code!=='x-default'&&(!hasLocalePage(code,route)||fallbackGuide(code,route)))continue;
    const expected=siteUrl+(code==='en'||code==='x-default'?route:(route==='/'?`/${code}`:`/${code}${route}`));
    const links=[...head.matchAll(/<link\b[^>]*>/gi)].filter(m=>new RegExp(`hreflang="${code}"`,'i').test(m[0]));
    if(!links.some(m=>{const url=m[0].match(/href="([^"]+)"/i)?.[1];return url&&new URL(url).href===new URL(expected).href;}))problems.push(`${translated}: incorrect concrete hreflang ${code}, expected ${expected}`);
   }
-  const ogLocale={fr:'fr_FR',de:'de_DE',es:'es_ES',ja:'ja_JP','pt-BR':'pt_BR'}[locale];
+  const ogLocale=ogLocales[locale];
   if(metaContent(html,'og:locale')[0]!==ogLocale)problems.push(`${translated}: incorrect OG locale`);
   for(const key of ['og:title','og:description','twitter:title','twitter:description']) {
    const value=metaContent(html,key)[0];
@@ -68,7 +82,7 @@ for(const locale of locales) {
     for(const menu of translatedHeader.matchAll(/<nav\b[^>]*>([\s\S]*?)<\/nav>/g)) {
       const links=[...menu[1].matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
       if(links.length!==editorialRoutes.length)problems.push(`${translated}: incomplete shared editorial menu`);
-      links.forEach((link,i)=>{if(link[1]!==`/${locale}${editorialRoutes[i]==='/'?'':editorialRoutes[i]}`||normalize(link[2])!==chromeCopy[locale].editorialNav[i])problems.push(`${translated}: untranslated or incorrect shared editorial menu item ${i}`);});
+      links.forEach((link,i)=>{if(link[1]!==(hasLocalePage(locale,editorialRoutes[i])?`/${locale}${editorialRoutes[i]==='/'?'':editorialRoutes[i]}`:editorialRoutes[i])||normalize(link[2])!==chromeCopy[locale].editorialNav[i])problems.push(`${translated}: untranslated or incorrect shared editorial menu item ${i}`);});
     }
   }
   for(const crumbs of visible.matchAll(/<nav\b[^>]*class="ed-crumbs"[^>]*>/g)) {
@@ -81,7 +95,7 @@ for(const locale of locales) {
     if(!path.startsWith('/')||path.startsWith('//')||/^\/(?:zh-Hans|zh-Hant|es-419|pt-BR|pt-PT|fr-CA|fr|de|es|ja|it|ko|nl|ru|tr|ar|ca|cs|da|fi|hr|hu|id|ms|nb|pl|ro|sk|sv|th|vi|he|el|uk|hi|sl|ur|bn)(?:\/|$)/.test(path))continue;
     const base=path.split(/[?#]/)[0];const root=base.split('/')[1];
     const asset=/\.[a-z\d]+$/i.test(base)&&!base.endsWith('/feed.xml');
-    if(!asset&&(base==='/'||publicRoots.has(root)))problems.push(`${translated}: English internal destination ${url}`);
+    if(!asset&&(base==='/'||publicRoots.has(root))&&hasLocalePage(locale,base))problems.push(`${translated}: English internal destination ${url}`);
    }
   }
   for(const block of html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)) {

@@ -57,7 +57,6 @@
  "Widgets, Siri, Spotlight, Game Center, Messages and notifications.": "Виджеты, Siri, Spotlight, Game Center, Сообщения и уведомления.",
  "Your first board and a tour of every menu.": "Ваше первое поле и обзор всех меню.",
  "Your first week, day by day.": "Ваша первая неделя, день за днём.",
- "screen": "экран",
  "{0} guides": "{0, plural, one {# руководство} few {# руководства} many {# руководств} other {# руководства}}",
  "{n} guides match.": "Найдено руководств: {n}."
 }

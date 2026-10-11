@@ -171,7 +171,7 @@ export const startMoreArticles: HelpArticle[] = [
             items: [
               {
                 q: 'Dá para jogar sendo cego ou com baixa visão?',
-                a: 'Sim. Com o **VoiceOver**, cada tabuleiro é lido casa por casa, cada peça é nomeada por tipo, cor e estado, e você desliza e troca com ações como “Deslizar para a esquerda, sai pelo portão vermelho”. Os rotores vão direto aos objetivos, especiais, bloqueios e portões, e o toque duplo com dois dedos dá uma dica grátis. Para baixa visão, experimente o **Tabuleiro de alto contraste** e o Texto Maior. Veja [Como jogar com o VoiceOver](help:voiceover) e [Visão, audição e movimento](help:vision-hearing-and-motion).\n\nNas versões 5.1 e 5.1.1, o VoiceOver pode perder o lugar no tabuleiro; uma correção está a caminho. Veja os [problemas conhecidos](/support/known-issues) para saber o que fazer enquanto isso.',
+                a: 'Sim. Com o **VoiceOver**, cada tabuleiro é lido casa por casa, cada peça é nomeada por tipo, cor e estado, e você desliza e troca com ações como “Deslizar para a esquerda e sair pelo portão: vermelho”. Os rotores vão direto aos objetivos, especiais, bloqueios e portões, e o toque duplo com dois dedos dá uma dica grátis. Para baixa visão, experimente o **Tabuleiro de alto contraste** e o Texto Maior. Veja [Como jogar com o VoiceOver](help:voiceover) e [Visão, audição e movimento](help:vision-hearing-and-motion).\n\nNas versões 5.1 e 5.1.1, o VoiceOver pode perder o lugar no tabuleiro; uma correção está a caminho. Veja os [problemas conhecidos](/support/known-issues) para saber o que fazer enquanto isso.',
               },
               {
                 q: 'Dá para jogar sendo daltônico?',

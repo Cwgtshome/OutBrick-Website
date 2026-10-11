@@ -152,7 +152,7 @@ export const startMoreArticles: HelpArticle[] = [
               },
               {
                 q: '¿Puedo jugar en mi iPhone y en mi iPad?',
-                a: 'Sí. Con la misma Cuenta de Apple, los dos dispositivos comparten una partida a través de iCloud. Cuando no coinciden, no se sobrescribe nada: se conservan el nivel y las cuentas más altos y las colecciones se combinan. Los ajustes de sonido y la mayoría de los ajustes de accesibilidad del tablero se quedan en cada dispositivo; tu elección del Modo daltónico te sigue.',
+                a: 'Sí. Con la misma Cuenta de Apple, los dos dispositivos comparten una partida a través de iCloud. Cuando no coinciden, no se sobrescribe nada: se conservan el nivel y las cuentas más altos y las colecciones se combinan. Los ajustes de sonido y la mayoría de los ajustes de accesibilidad del tablero se quedan en cada dispositivo; tu elección del ajuste Daltónico te sigue.',
               },
               {
                 q: '¿Cómo vuelvo a empezar desde el nivel 1?',
@@ -175,7 +175,7 @@ export const startMoreArticles: HelpArticle[] = [
               },
               {
                 q: '¿Puedo jugar si soy daltónico?',
-                a: 'Sí. Los símbolos del **Modo daltónico** están activados desde el primer tablero: cada color tiene su propia forma (rojo círculo, naranja triángulo, amarillo cuadrado, verde rombo, azul signo más, morado estrella, rosa barra, turquesa hexágono), y los objetivos y las puertas llevan la misma forma. Consulta [Símbolos para daltonismo](help:vision-hearing-and-motion#colour-blind).',
+                a: 'Sí. Los símbolos de **Daltónico** están activados desde el primer tablero: cada color tiene su propia forma (rojo círculo, naranja triángulo, amarillo cuadrado, verde rombo, azul signo más, morado estrella, rosa barra, turquesa hexágono), y los objetivos y las puertas llevan la misma forma. Consulta [Símbolos para daltonismo](help:vision-hearing-and-motion#colour-blind).',
               },
               {
                 q: '¿Puedo jugar con botones, con la voz o con un teclado?',
@@ -382,7 +382,7 @@ export const startMoreArticles: HelpArticle[] = [
             rows: [
               ['Superar un tablero al día', 'Te da el **Ladrillo diario** (100 monedas) y hace crecer tu racha de días: 100 monedas a los 3 días, 250 y un salvarrachas a los 7.'],
               ['Girar la Rueda', 'Un giro gratis al día para ganar monedas o un potenciador. Supera tres niveles nuevos ese día y el giro gratis te dará el doble de monedas.'],
-              ['Mirar las Misiones', 'Tres para hoy y tres para la semana, cada una con su recompensa. Toca **Recoger** o **Recoger todo**.'],
+              ['Mirar las Misiones', 'Tres para hoy y tres para la semana, cada una con su recompensa. Toca **Cobrar** o **Recoger todo**.'],
               ['Recoger las recompensas por estrellas', 'Una insignia en el mapa te avisa cuando hay una recompensa por estrellas de la aldea esperándote.'],
               ['Usar los potenciadores gratis', 'La Pista, el Cohete y el OVNI gratis de cada intento no se pueden guardar, así que úsalos.'],
             ],
@@ -1009,7 +1009,7 @@ export const startMoreArticles: HelpArticle[] = [
           {
             t: 'defs',
             items: [
-              { term: 'Modo daltónico', text: 'Estampa una forma en cada ladrillo, puerta y objetivo para que el color nunca sea la única pista. Activado desde el principio. Consulta [Símbolos para daltonismo](help:vision-hearing-and-motion#colour-blind).' },
+              { term: 'Daltónico', text: 'Estampa una forma en cada ladrillo, puerta y objetivo para que el color nunca sea la única pista. Activado desde el principio. Consulta [Símbolos para daltonismo](help:vision-hearing-and-motion#colour-blind).' },
               { term: 'Tablero de alto contraste', text: 'Un suelo casi negro, contornos blancos, símbolos grandes y contornos de puerta gruesos. Consulta [Tablero de alto contraste](help:vision-hearing-and-motion#contrast).' },
               { term: 'Velocidad de animación', text: 'Lo rápido que las piezas se cambian, caen y desaparecen, del 50 % al 200 %.' },
               { term: 'Confirmar cambios', text: 'Con VoiceOver, Control por voz, Control por botón o un teclado, cada movimiento se elige dos veces antes de jugarse. Consulta [Confirmar cambios](help:voice-control-switch-control-keyboard#hold-to-confirm).' },

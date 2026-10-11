@@ -74,7 +74,7 @@ export const startMoreArticles: HelpArticle[] = [
               },
               {
                 q: 'Wie schnell kommen Leben zurück?',
-                a: 'Alle **30 Minuten** eins, auch wenn das Spiel geschlossen ist, bis zu **fünf** (acht, solange dir der aktuelle Brick Pass gehört). Tippe auf das Herz in der Kopfzeile der Reise, um zu sehen, wann das nächste kommt.',
+                a: 'Alle **30 Minuten** eins, auch wenn das Spiel geschlossen ist, bis zu **fünf** (acht, solange dir der aktuelle Steinpass gehört). Tippe auf das Herz in der Kopfzeile der Reise, um zu sehen, wann das nächste kommt.',
               },
               {
                 q: 'Was ist die helfende Hand?',
@@ -113,7 +113,7 @@ export const startMoreArticles: HelpArticle[] = [
               },
               {
                 q: 'Was macht Werbung entfernen?',
-                a: 'Es nimmt alle freiwilligen Videos weg, behält aber die Belohnungen: Auf Tasten, auf denen Ansehen stand, steht **Belohnung abholen**, und sie zahlen sofort aus, innerhalb derselben Tagesgrenzen. Gehört dir der aktuelle Brick Pass, gilt dasselbe für diese Saison. Siehe [Werbung entfernen und der Brick Pass](help:shop-and-purchases#remove-ads).',
+                a: 'Es nimmt alle freiwilligen Videos weg, behält aber die Belohnungen: Auf Tasten, auf denen Ansehen stand, steht **Belohnung abholen**, und sie zahlen sofort aus, innerhalb derselben Tagesgrenzen. Gehört dir der aktuelle Steinpass, gilt dasselbe für diese Saison. Siehe [Werbung entfernen und der Steinpass](help:shop-and-purchases#remove-ads).',
               },
               {
                 q: 'Ist irgendetwas ein Abo?',
@@ -303,7 +303,7 @@ export const startMoreArticles: HelpArticle[] = [
               {
                 day: 'Tag 7',
                 title: 'Eine Woche geschafft',
-                text: 'Sieben Tage in Folge bringen **250 Münzen und einen Serienretter**, der später einen verpassten Tag zurückholen kann. Wöchentliche Missionen werden am Montag zurückgesetzt, und jedes neue Level, das du schaffst, hat dich im **Brick Pass** Stufe um Stufe nach oben gebracht. Tippe auf deinen Avatar, um deine bisherigen Statistiken zu sehen.',
+                text: 'Sieben Tage in Folge bringen **250 Münzen und einen Serienretter**, der später einen verpassten Tag zurückholen kann. Wöchentliche Missionen werden am Montag zurückgesetzt, und jedes neue Level, das du schaffst, hat dich im **Steinpass** Stufe um Stufe nach oben gebracht. Tippe auf deinen Avatar, um deine bisherigen Statistiken zu sehen.',
               },
             ],
           },
@@ -403,7 +403,7 @@ export const startMoreArticles: HelpArticle[] = [
             t: 'list',
             items: [
               'Ein Hinweis **GRATIS** auf einem Booster bedeutet, dass der nächste Einsatz nichts kostet; das Spiel verbraucht Gratis-Booster vor denen, die dir gehören.',
-              'Booster, die dir gehören (aus dem Willkommensgeschenk, vom Steinrad, aus Sternbelohnungen, Missionen und dem Brick Pass), bleiben, bis du sie einsetzt.',
+              'Booster, die dir gehören (aus dem Willkommensgeschenk, vom Steinrad, aus Sternbelohnungen, Missionen und dem Steinpass), bleiben, bis du sie einsetzt.',
               'Siegesserien bringen mehr für dein nächstes Brett: 2 Siege in Folge einen Tipp, 3 eine Rakete, 4 ein UFO und 5 alle drei. Es zählen nur neue Level.',
               'Heb Raketen und UFOs, die dir gehören, für schwere, sehr schwere und Boss-Bretter auf, wo ein einziges Hindernis an der falschen Stelle ein Brett kosten kann.',
             ],
@@ -430,7 +430,7 @@ export const startMoreArticles: HelpArticle[] = [
             items: [
               '[Ein Rundgang durch jedes Menü](help:menus-tour), damit du weißt, was jede Taste tut.',
               '[Die Reise und ihre Dörfer](help:journey-and-villages), für Truhen, Geschenke und den Atlas aller Dörfer.',
-              '[Belohnungen, Events und der Brick Pass](help:rewards-and-events), für Serien, Missionen und Events.',
+              '[Belohnungen, Events und der Steinpass](help:rewards-and-events), für Serien, Missionen und Events.',
               '[Das OutBrick-Glossar](help:glossary), wann immer dir ein Wort neu ist.',
             ],
           },
@@ -559,7 +559,7 @@ export const startMoreArticles: HelpArticle[] = [
           {
             t: 'list',
             items: [
-              '**Vereistes Tor:** taut jedes Mal ein wenig, wenn irgendein Stein durch irgendein Tor nach Hause geht, und wenn Teile davor verschwinden. Schick früh andere Farben nach Hause, um es schneller zu öffnen.',
+              '**Eistor:** taut jedes Mal ein wenig, wenn irgendein Stein durch irgendein Tor nach Hause geht, und wenn Teile davor verschwinden. Schick früh andere Farben nach Hause, um es schneller zu öffnen.',
               '**Zähltor:** nimmt nur eine bestimmte Zahl von Steinen und schließt sich dann für immer. Verschwende seine Plätze nicht an Steine, die stattdessen eine Reihe abräumen könnte.',
               '**Etappentor:** bleibt versiegelt, bis die zweite Etappe der Ziele beginnt. Verbrauch in Etappe eins keine Züge, um Steine dafür aufzureihen.',
             ],
@@ -722,7 +722,7 @@ export const startMoreArticles: HelpArticle[] = [
             items: [
               'Der Preis steigt innerhalb eines Versuchs von 300 → 500 → 900 und beginnt bei jedem neuen Versuch von vorn.',
               'Auf einem Brett, das du schon oft versucht hast, bringt jedes Weiterspielen einen Extrazug für jeden verlorenen Versuch nach dem dritten, bis zu +15.',
-              'Der aktuelle **Brick Pass** bringt auf dem Bildschirm „Keine Züge mehr“ drei Gratiszüge dazu.',
+              'Der aktuelle **Steinpass** bringt auf dem Bildschirm „Keine Züge mehr“ drei Gratiszüge dazu.',
               'Vor Level 6 wird nichts Kostenpflichtiges angeboten.',
             ],
           },
@@ -823,7 +823,7 @@ export const startMoreArticles: HelpArticle[] = [
     hostPose: 'idle',
     title: 'Das OutBrick-Glossar',
     summary:
-      'Jedes Wort, das dir in OutBrick begegnet, von Toren und Liniensteinen bis zu Deckeln, der helfenden Hand, dem Brick Pass und der Garderobe, in ein, zwei Sätzen erklärt, mit einem Link zu der Anleitung, die es behandelt.',
+      'Jedes Wort, das dir in OutBrick begegnet, von Toren und Liniensteinen bis zu Deckeln, der helfenden Hand, dem Steinpass und der Garderobe, in ein, zwei Sätzen erklärt, mit einem Link zu der Anleitung, die es behandelt.',
     keywords:
       'glossar wörterbuch lexikon begriffe wörter bedeutung definition erklärung was ist was bedeutet was heißt vokabular liste a-z',
     sections: [
@@ -923,7 +923,7 @@ export const startMoreArticles: HelpArticle[] = [
           {
             t: 'defs',
             items: [
-              { term: 'Leben', text: 'Wird nur verbraucht, wenn du einen Versuch verlierst: beim Aufgeben, wenn die Züge ausgehen, oder beim Verlassen oder Neustarten nach einem Zug. Bis zu fünf (acht mit dem aktuellen Brick Pass), alle 30 Minuten kommt eins zurück. Siehe [Leben](help:lives-moves-and-undos#lives).' },
+              { term: 'Leben', text: 'Wird nur verbraucht, wenn du einen Versuch verlierst: beim Aufgeben, wenn die Züge ausgehen, oder beim Verlassen oder Neustarten nach einem Zug. Bis zu fünf (acht mit dem aktuellen Steinpass), alle 30 Minuten kommt eins zurück. Siehe [Leben](help:lives-moves-and-undos#lives).' },
               { term: 'Gratisversuch', text: 'Einmal am Tag ohne Leben ein Gratisversuch an einem Brett: Gewinnst du, behältst du das Leben; verlierst du, kostet es nichts.' },
               { term: 'Unbegrenzte Leben', text: 'Ein Zeitfenster von 1, 3 oder 24 Stunden, in dem Verlieren kein Leben kostet. Siehe [Keine Leben mehr](help:lives-moves-and-undos#out-of-lives).' },
               { term: 'Keine Züge mehr', text: 'Der Bildschirm, den du siehst, wenn die Züge ausgehen, bevor die Ziele erreicht sind, mit Wegen, im selben Versuch weiterzuspielen, oder **Aufgeben**. Siehe [Keine Züge mehr](help:lives-moves-and-undos#out-of-moves).' },
@@ -974,13 +974,13 @@ export const startMoreArticles: HelpArticle[] = [
               { term: 'Serienretter', text: 'Gibt es mit Serienbelohnungen. Er holt innerhalb einer Woche gratis einen verpassten Tag zurück; du kannst zwei haben.' },
               { term: 'Steinrad', text: 'Eine Gratisdrehung am Tag für Münzen oder einen Booster, über seine Taste auf dem Startbildschirm. Siehe [Das Steinrad](help:rewards-and-events#wheel).' },
               { term: 'Missionen', text: 'Drei Aufgaben für heute und drei für die Woche, jede mit einer Belohnung. Siehe [Missionen](help:rewards-and-events#missions).' },
-              { term: 'Brick Pass', text: 'Eine Saison mit 30 Stufen, die du mit neuen geschafften Leveln hinaufsteigst, mit einer Gratis-Spur für alle und einer Premium-Spur zum Kaufen. Siehe [Der Brick Pass](help:rewards-and-events#pass).' },
+              { term: 'Steinpass', text: 'Eine Saison mit 30 Stufen, die du mit neuen geschafften Leveln hinaufsteigst, mit einer Gratis-Spur für alle und einer Premium-Spur zum Kaufen. Siehe [Der Steinpass](help:rewards-and-events#pass).' },
               { term: 'Events', text: 'Kommen und gehen nach einem Kalender, angezeigt als Banner auf dem Startbildschirm und als Abzeichen auf der Reise. Manche verdoppeln oder verdreifachen die Münzen fürs Schaffen.' },
               { term: 'Freundesrettung, Dorfrennen, Brick Royale, Crew-Rennen', text: 'Rennen und Rettungen, die neben der Reise laufen. Jedes lässt sich unter **Einstellungen › Spiel › Spielfunktionen** ausschalten. Siehe [Events und Rennen](help:rewards-and-events#events).' },
               { term: 'Sparschwein', text: 'Füllt sich mit Münzen, während du neue Level schaffst; ist es bereit, kannst du es für einen kleinen Preis öffnen. Siehe [Was es im Shop gibt](help:shop-and-purchases#shelves).' },
               { term: 'Stein-Kino', text: 'Eine Tafel mit Preisfeldern auf der Reise; jedes freiwillige Video dreht ein Feld um.' },
               { term: 'Ränge', text: 'Der Tab mit der ewigen Bestenliste, offen ab Level 21. Siehe [Ränge und Game Center](help:rewards-and-events#leaders).' },
-              { term: 'Werbung entfernen', text: 'Ein einmaliger Kauf, der jede Taste Ansehen zu **Belohnung abholen** macht, innerhalb derselben Tagesgrenzen. Siehe [Werbung entfernen und der Brick Pass](help:shop-and-purchases#remove-ads).' },
+              { term: 'Werbung entfernen', text: 'Ein einmaliger Kauf, der jede Taste Ansehen zu **Belohnung abholen** macht, innerhalb derselben Tagesgrenzen. Siehe [Werbung entfernen und der Steinpass](help:shop-and-purchases#remove-ads).' },
             ],
           },
         ],

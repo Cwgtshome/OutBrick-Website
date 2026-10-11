@@ -411,7 +411,7 @@ export function puzzle(ctx: Ctx, p: Puzzle, copy: PuzzleCopy, host: FriendId = '
 <div style="text-align:center;">
 <!--[if !mso]><!-->${radios}<!--<![endif]-->
 <div class="ob-pz-wrap" style="display:inline-block;overflow:hidden;border-radius:14px;background:#2a2364;padding:2px;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="${width}" style="width:${width}px;border-collapse:collapse;">${rows.join('')}</table>
+<table role="presentation" dir="ltr" cellpadding="0" cellspacing="0" border="0" width="${width}" style="width:${width}px;border-collapse:collapse;">${rows.join('')}</table>
 </div>
 <div class="ob-pz-play" style="display:none;padding-top:14px;mso-hide:all;">
 <p style="margin:0 0 8px;font-family:${f.text};font-size:15px;line-height:1.4;color:#c9c2ff;">${esc(ui.tap)}</p>

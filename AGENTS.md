@@ -17,9 +17,17 @@ Check Git status, remote, branch and concurrent ownership. Preserve unrelated ch
   (8 October 2026) is iOS 5.1.1 released, the release after 5.1 Slide & Match; verify again with
   Apple's lookup before changing release claims. Do not announce a release from a branch,
   simulator build or planned What's New.
-- Update all six languages: English, French, German, Spanish, Japanese and Brazilian Portuguese.
-  English routes are unprefixed; translated routes use `/fr`, `/de`, `/es`, `/ja` and `/pt-BR`.
-  Preserve localized navigation and metadata.
+- The site and every email speak the game's 39 languages. English, French, German, Spanish,
+  Japanese and Brazilian Portuguese are written in code beside the English: update all six when
+  copy changes. The other 33 are string catalogs (`lib/i18n/catalog/<locale>/<area>.json`): after
+  changing English copy run `pnpm i18n:extract`, then translate the new keys per
+  [the translation brief](docs/TRANSLATION-BRIEF.md) (`pnpm i18n:check` lists them; a missing key
+  shows English until then). A catalog language is published only when its site and email
+  catalogs are complete (`pnpm i18n:publish`, run by the build). English routes are unprefixed;
+  every other language uses its code as a prefix (`/fr`, `/pt-BR`, `/zh-Hant`, `/es-419` …). The
+  journal is published in English and the first five translations only. Arabic, Hebrew and
+  Urdu pages are right-to-left: use logical CSS properties (`margin-inline-start`, not
+  `margin-left`). Preserve localized navigation and metadata.
 - Follow the existing `.ob-site` design, typography, colors and components in `app/globals.css`
   and `app/styles/`. Reuse the established cards, sections, focus states and responsive layouts.
   A `.ledger` row has a marker column: include its `.mark` before the content so prose has room.

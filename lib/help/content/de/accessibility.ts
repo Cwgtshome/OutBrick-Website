@@ -38,7 +38,7 @@ export const accessibilityArticles: HelpArticle[] = [
           {
             t: 'steps',
             items: [
-              'Tippe auf dem **Startbildschirm** oder auf der **Reise** oben rechts auf das Zahnrad. Mit VoiceOver ist das die Taste **Einstellungen**.',
+              'Tippe auf dem Tab **Start** oder auf der **Reise** oben rechts auf das Zahnrad. Mit VoiceOver ist das die Taste **Einstellungen**.',
               'Wähle oben in den Einstellungen den Tab **Bedienungshilfen**. (Im Tab **Spiel** liegen Töne, Musik, Haptik und Mitteilungen; siehe [Alle Einstellungen erklärt](help:settings).)',
               'Ändere immer nur eine Sache und spiel dann ein Brett, das du kennst, um den Unterschied zu spüren.',
             ],
@@ -323,7 +323,7 @@ export const accessibilityArticles: HelpArticle[] = [
               'Wohin ein Stein ging: „Um 3 Felder geschoben, nach Reihe 2, Spalte 4“, „Durch das Portal, heraus bei …“, „Durch sein Tor hinaus: 1 (Rot)“.',
               'Was sich geändert hat: „Umgedreht: Rot und Blau“, „Der Zählerdeckel ist offen. Seine Steine können sich bewegen“, „Neue Tore öffnen sich“.',
               'Was verschwunden ist: Teile, Kaskaden, Kombos und entstandene Spezialsteine, und welche Ziele sich bewegt haben.',
-              'Die übrigen Züge, mit einer Warnung bei fünf, drei und einem: „Nur noch 5 Züge“.',
+              'Die übrigen Züge, mit einer Warnung bei fünf, drei und einem: „Achtung: Noch 5 Züge“.',
               'Das Ende: „Alle Ziele erreicht. Level geschafft“ oder „Keine Züge mehr“.',
               'Ist kein Zug möglich, wird das Brett gemischt, und du hörst „Das Brett wurde gemischt. Du bist dran.“',
             ],
