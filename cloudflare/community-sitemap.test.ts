@@ -1,0 +1,27 @@
+import { after, before, test } from 'node:test';
+import assert from 'node:assert/strict';
+import type { PGlite } from '@electric-sql/pglite';
+import { freshDatabase } from '../netlify/community/test/harness.ts';
+import { communitySitemap } from './community-sitemap.ts';
+let pg: PGlite;
+before(async () => { pg = await freshDatabase(); });
+after(async () => { await pg.close(); });
+void test('sitemap excludes moderation-only threads, merged stubs and editorial drafts', async () => {
+  const { rows } = await pg.query<{ id: number }>('SELECT id::int FROM threads ORDER BY id LIMIT 5');
+  const ids = rows.map(row => row.id);
+  await pg.query('UPDATE threads SET hidden=true WHERE id=$1', [ids[0]]);
+  await pg.query('UPDATE threads SET pending=true WHERE id=$1', [ids[1]]);
+  await pg.query('UPDATE threads SET deleted_at=now() WHERE id=$1', [ids[2]]);
+  await pg.query('UPDATE threads SET merged_into=$1 WHERE id=$2', [ids[4], ids[3]]);
+  const { rows: members } = await pg.query<{ id: number }>('SELECT id::int FROM members ORDER BY id LIMIT 1');
+  for (const state of ['draft', 'published']) await pg.query(`INSERT INTO editorial_content (locale,kind,slug,title,body_md,body_html,state,author_id,editor_id) VALUES ('fr','blog',$1,'Indexing test','Body','<p>Body</p>',$2,$3,$3)`, [`indexing-${state}`, state, members[0].id]);
+  const response = await communitySitemap();
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get('content-type') ?? '', /application\/xml/);
+  const xml = await response.text();
+  for (const id of ids.slice(0,4)) assert.ok(!xml.includes(`/t/${id}/`));
+  assert.ok(xml.includes(`/t/${ids[4]}/`));
+  assert.ok(xml.includes('/fr/community/content/blog/indexing-published'));
+  assert.ok(!xml.includes('indexing-draft'));
+  assert.ok(!xml.includes('@'), 'no member emails in XML');
+});
