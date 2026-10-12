@@ -1,3 +1,4 @@
+import { communitySitemap } from './community-sitemap.ts';
 import communityApi from '../netlify/functions/community-api.mts';
 import communityAuth, { config as authConfig } from '../netlify/functions/community-auth.mts';
 import newsletterConfirm from '../netlify/functions/newsletter-confirm.mts';
@@ -63,6 +64,16 @@ async function fetchSite(req: Request, env: CloudflareEnv): Promise<Response> {
     return nativeForm && response.ok ? Response.redirect(url.href, 303) : response;
   }
   if (!['GET', 'HEAD'].includes(req.method)) return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET, HEAD' } });
+  if (path === '/sitemap-community.xml') {
+    if (!env.DATABASE_URL) return unavailable();
+    try {
+      const response = await communitySitemap();
+      return req.method === 'HEAD' ? new Response(null, { headers: response.headers }) : response;
+    } catch {
+      console.error(JSON.stringify({ event: 'community-sitemap-unavailable' }));
+      return new Response('Sitemap temporarily unavailable', { status: 503, headers: { 'Retry-After': '300', 'Cache-Control': 'no-store' } });
+    }
+  }
 
   // Share the forum's accepted address shapes with its client and Netlify edge handler.
   // Read the localized 404 through the asset binding, never through the public origin.
