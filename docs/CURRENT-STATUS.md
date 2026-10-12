@@ -1,3 +1,15 @@
+## Search discovery coverage — 12 October 2026
+
+A fresh live audit found 3,086 static URLs across all 39 languages; every URL
+returned 200 without noindex. Google accepted the index and all 45 section
+sitemaps, Bing accepted the same feeds and 100 direct URLs under its daily
+quota, and IndexNow accepted all 3,086 URLs. Confirmed indexing remains distinct
+from submission acceptance. A dynamic community sitemap now covers public
+threads and published editorial pages omitted from the static build, reusing
+anonymous visibility rules. Local regression verifies moderation and drafts
+stay excluded. Publication and expanded live submissions require a matching
+production build receipt. See [search indexing](SEARCH-INDEXING.md).
+
 # OutBrick website: current status
 
 **All 39 game languages, 11 October 2026 (branch `claude/37-languages`):** the site and every email now run in the six code-written languages plus 33 catalog languages (it ko nl ru tr zh-Hans ar ca cs da fi hr hu id ms nb pl ro sk sv th vi zh-Hant es-419 he pt-PT el uk fr-CA hi sl ur bn; ar, he and ur right-to-left). Catalogs: `lib/i18n/catalog/<locale>/<area>.json`, brief in `docs/TRANSLATION-BRIEF.md`; `scripts/i18n/publish.mts` (run by `pnpm build`) publishes a language once its non-Help areas are complete, which all 33 are. Help Centre guides in a catalog language are shown translated only when every string of the guide is in the catalog; otherwise the English guide is served under the locale URL with noindex and left out of hreflang. Guides are fully translated in it ko nl ru ar uk es-419 fr-CA pt-PT tr zh-Hans zh-Hant he; the other 20 catalog languages show the English guides. The journal (blog, authors) stays in English and the five code-written languages. Game terms, quoted labels and VoiceOver lines in the guides were synced with the game's `Localizable.xcstrings` (perf-snappy 430cbb79), and village names follow the game's `village.name.N` in every catalog language. Accept-Language picks a first-visit language on English page roots (302, `Vary: Accept-Language, Cookie`); the language picker's `ob_lang` cookie always wins. Email language comes from the stored contact locale. **Migration to run on production Neon:** `netlify/database/migrations/20261010120000_all-site-languages` widens the locale CHECK constraints to all 39 codes; until it is applied, `cloudflare/adapters.ts` stores a catalog language as its nearest legacy language (es-419→es, pt-PT→pt-BR, fr-CA→fr, else en). Evidence: build, typecheck, lint, 98 backend tests, catalog check (0 errors), JSON-LD, help and asset audits; emails rendered in en ar he ur ja de (`scripts/i18n/render-emails.mts`). Follow-ups: native review of the machine-assisted translations (fr-CA, es-419, pt-PT are adaptations; el, he, uk, hi, sl, ur, bn had no game glossary at first), Help Centre guides for the remaining 20 languages, and a re-sync of quoted VoiceOver lines after the game's `feat-vo-grammar` lands.

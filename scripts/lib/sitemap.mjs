@@ -42,6 +42,8 @@ export async function sitemapUrls(load, rootUrl = `${siteUrl}/sitemap.xml`) {
 /** Load a sitemap URL from the local build (dist/client). */
 export function loadLocal(url) {
   const pathname = new URL(url).pathname;
+  // Database-backed content has no local static artifact; live submissions still fetch it.
+  if (pathname === '/sitemap-community.xml') return '<urlset></urlset>';
   return fs.readFileSync(path.join(distDir, pathname), 'utf8');
 }
 

@@ -323,6 +323,8 @@ fileIssues('sitemap.xml', (xml, err) => {
     let u;
     try { u = new URL(loc); } catch { err(`child sitemap ${loc} is not an absolute URL`); continue; }
     if (u.host !== siteHost) err(`child sitemap ${loc} is on another host`);
+    // Served by the Worker from public database records; covered by its visibility regression.
+    else if (u.pathname === '/sitemap-community.xml') continue;
     else if (!/^\/sitemap-[a-z]+-[A-Za-z0-9-]+\.xml$/.test(u.pathname)) err(`child sitemap ${loc} is not a sitemap-<section>-<locale>.xml`);
     else sitemapChildren.push(u.pathname.slice(1));
     const lastmod = block.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];

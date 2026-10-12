@@ -291,11 +291,12 @@ const sitemapIndex = [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
   ...children.map((c) => `  <sitemap><loc>${xmlEscape(c.loc)}</loc>${c.lastmod ? `<lastmod>${c.lastmod}</lastmod>` : ''}</sitemap>`),
+  `  <sitemap><loc>${siteUrl}/sitemap-community.xml</loc></sitemap>`,
   '</sitemapindex>',
   '',
 ].join('\n');
 fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemapIndex);
-console.log(`[postbuild] sitemap.xml: index of ${children.length} sitemaps, ${entries.length} URLs, ${entries.reduce((n, e) => n + e.images.length, 0)} images`);
+console.log(`[postbuild] sitemap.xml: index of ${children.length + 1} sitemaps (including live community), ${entries.length} URLs, ${entries.reduce((n, e) => n + e.images.length, 0)} images`);
 for (const c of children) console.log(`[postbuild]   ${c.loc.slice(siteUrl.length + 1)}: ${c.count} URLs, ${c.images} images`);
 
 // Every article in lib/blog.ts should have been prerendered; say so loudly if one was not.
