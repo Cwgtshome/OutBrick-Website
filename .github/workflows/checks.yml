@@ -55,6 +55,9 @@ jobs:
       - name: Administrative roles and editorial publishing
         run: node --experimental-strip-types --test netlify/community/admin.test.ts netlify/community/moderation.test.ts
 
+      - name: Public community sitemap excludes private content
+        run: node --experimental-strip-types --test cloudflare/community-sitemap.test.ts
+
       - name: Rate-limit IP hash is keyed by a secret
         run: node --experimental-strip-types --test netlify/community/ip-hash.test.ts
 
