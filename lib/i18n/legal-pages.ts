@@ -1,4 +1,5 @@
 import { phraseRecord } from './catalog.ts';
+import { appAnalyticsLegalTranslations } from './app-analytics-privacy';
 import type { TranslatedLocale } from './locales';
 import { ptBRLegalPart1 } from './legal-pages-pt-BR-part-1.ts';
 import { ptBRLegalPart2 } from './legal-pages-pt-BR-part-2.ts';
@@ -10,6 +11,7 @@ import { ptBRLegalPart3 } from './legal-pages-pt-BR-part-3.ts';
 // stay in the shared source pages.
 export const legalPages: Record<TranslatedLocale, Record<string, string>> = phraseRecord<Record<string, string>>({
   "fr": {
+    ...appAnalyticsLegalTranslations["fr"],
     "OutBrick privacy policy: data, ads and choices": "Politique de confidentialité OutBrick : données, publicités et choix",
     "OutBrick privacy policy": "Politique de confidentialité d’OutBrick",
     "Your board stays yours.": "Votre plateau reste le vôtre.",
@@ -463,6 +465,7 @@ export const legalPages: Record<TranslatedLocale, Record<string, string>> = phra
     "A real line to the team": "Un contact direct avec l’équipe"
   },
   "de": {
+    ...appAnalyticsLegalTranslations["de"],
     "OutBrick privacy policy: data, ads and choices": "OutBrick-Datenschutzrichtlinie: Daten, Werbung und Wahlmöglichkeiten",
     "OutBrick privacy policy": "OutBrick-Datenschutzrichtlinie",
     "Your board stays yours.": "Ihr Spielfeld bleibt Ihres.",
@@ -916,6 +919,7 @@ export const legalPages: Record<TranslatedLocale, Record<string, string>> = phra
     "A real line to the team": "Ein direkter Kontakt zum Team"
   },
   "es": {
+    ...appAnalyticsLegalTranslations["es"],
     "OutBrick privacy policy: data, ads and choices": "Política de privacidad de OutBrick: datos, anuncios y opciones",
     "OutBrick privacy policy": "Política de privacidad de OutBrick",
     "Your board stays yours.": "Tu tablero sigue siendo tuyo.",
@@ -1369,6 +1373,7 @@ export const legalPages: Record<TranslatedLocale, Record<string, string>> = phra
     "A real line to the team": "Una vía directa al equipo"
   },
   "ja": {
+    ...appAnalyticsLegalTranslations["ja"],
     "OutBrick privacy policy: data, ads and choices": "OutBrickプライバシーポリシー：データ、広告、選択",
     "OutBrick privacy policy": "OutBrickプライバシーポリシー",
     "Your board stays yours.": "あなたの盤面は、あなたのもの。",
@@ -1821,5 +1826,5 @@ export const legalPages: Record<TranslatedLocale, Record<string, string>> = phra
     "Apple handles billing": "請求はAppleが対応",
     "A real line to the team": "チームへの直接の連絡先"
   },
-  'pt-BR': { ...ptBRLegalPart1, ...ptBRLegalPart2, ...ptBRLegalPart3 }
+  'pt-BR': { ...appAnalyticsLegalTranslations['pt-BR'], ...ptBRLegalPart1, ...ptBRLegalPart2, ...ptBRLegalPart3 }
 });

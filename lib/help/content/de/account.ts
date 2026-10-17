@@ -1,3 +1,4 @@
+import { appAnalyticsPrivacy } from '../../../i18n/app-analytics-privacy.ts';
 import type { HelpArticle } from '../../model.ts';
 
 /** Einstellungen, Apple-Funktionen, Fortschritt und Datenschutz, auf Deutsch. Geprüft mit 5.1.1 (68). */
@@ -321,7 +322,7 @@ export const accountArticles: HelpArticle[] = [
               '**Der Tab Ränge** zeigt deinen Spielernamen, dein Level und, wenn du willst, eine Flagge. Schalte **Einstellungen › Spiel › Mich in der Rangliste zeigen** aus, um entfernt zu werden; die Flagge blendest du in deinem Profil aus.',
               '**Dorfrennen und Brick Royale** teilen deinen Spielernamen mit den Spielern in diesem Rennen, nur wenn du mitmachst.',
               '**Game Center** gehört Apple und folgt deinen Game-Center-Einstellungen.',
-              'OutBrick hat **keine Analyse-Tools**, und die eigenen Daten des Spiels werden nicht zum Tracking verwendet. Der Werbepartner (Google AdMob) verarbeitet für die freiwilligen Videos seine eigenen Daten; siehe unsere [Datenschutzerklärung](/privacy).',
+              appAnalyticsPrivacy['de'].help,
             ],
           },
         ],

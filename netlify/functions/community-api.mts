@@ -44,6 +44,7 @@ import { getLeaderboard, suggestMembers } from '../community/people.ts';
 import { votePoll } from '../community/polls.ts';
 import { bookmark, react } from '../community/reactions.ts';
 import { dashboard, watchAll, saveContent, publishContent, publicContent } from '../community/admin.ts';
+import { listStudioTokens, createStudioToken, revokeStudioToken, studioBlogRequest } from '../community/studio-blog.ts';
 import { caseRoutes } from '../lifecycle/cases.ts';
 import { playerCaseRoutes } from '../lifecycle/player-cases.ts';
 import { attachmentRoutes } from '../lifecycle/support-attachments.ts';
@@ -87,6 +88,9 @@ const routes: Route[] = [
   // Email analytics (9 October 2026), admins only.
   ...analyticsRoutes(base),
   { method: 'GET', pattern: `${base}/admin`, run: dashboard },
+  { method: 'GET', pattern: `${base}/admin/studio-tokens`, run: listStudioTokens },
+  { method: 'POST', pattern: `${base}/admin/studio-tokens`, run: createStudioToken },
+  { method: 'DELETE', pattern: `${base}/admin/studio-tokens/:id`, run: revokeStudioToken },
   { method: 'POST', pattern: `${base}/admin/watch`, run: watchAll },
   { method: 'POST', pattern: `${base}/admin/content`, run: saveContent },
   { method: 'PATCH', pattern: `${base}/admin/content/:id`, run: saveContent },
@@ -137,7 +141,7 @@ const routes: Route[] = [
   { method: 'DELETE', pattern: `${base}/uploads/:id`, run: deleteUpload },
 ];
 
-const communityApi = async (req: Request): Promise<Response> => handle(req, routes);
+const communityApi = async (req: Request): Promise<Response> => new URL(req.url).pathname.startsWith('/api/community/studio/') ? studioBlogRequest(req) : handle(req, routes);
 
 export default communityApi;
 
@@ -146,6 +150,7 @@ export const config = {
   path: [
     '/api/community/admin',
     '/api/community/admin/*',
+    '/api/community/studio/*',
     '/api/community/content',
     '/api/community/content/*',
     '/api/community/categories',

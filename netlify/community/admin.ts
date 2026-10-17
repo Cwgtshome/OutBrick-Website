@@ -13,7 +13,7 @@ import {
 } from './forum.ts';
 import { ApiError, badRequest, json, notFound, readJson, str } from './http.ts';
 import { renderMarkdown } from './markdown.ts';
-import { requireRole } from './session.ts';
+import { requireRole, hasRole, type Viewer } from './session.ts';
 type Handler = (
   req: Request,
   params: Record<string, string>,
@@ -140,10 +140,14 @@ function fields(body: Record<string, unknown>) {
     html: renderMarkdown(md).html,
   };
 }
-export const saveContent: Handler = async (req, params) => {
-  const v = await staff(req);
+export const saveContent: Handler = async (req, params) => saveContentAs(req, params, await staff(req));
+/** Internal service entry: callers must establish a current verified staff identity. */
+export async function saveContentAs(req: Request, params: Record<string, string>, v: Viewer, resourceKind?: 'blog', auditData: Record<string, unknown> = {}): Promise<Response> {
+  if (v.banned || v.deleted_at || !hasRole(v, 'team')) throw new ApiError(403, 'forbidden', 'Staff access required.');
+  requireCanWrite(v);
   const body = await readJson(req),
     f = fields(body);
+  if (resourceKind && f.kind !== resourceKind) throw new ApiError(403, 'forbidden', 'This connection can manage blog articles only.');
   const id = params.id ? idParam(params.id) : null;
   const result = await transaction(async (q) => {
     let old: Record<string, unknown> | undefined;
@@ -153,6 +157,7 @@ export const saveContent: Handler = async (req, params) => {
         [id],
       );
       if (!old) throw notFound();
+      if (resourceKind && old.kind !== resourceKind) throw notFound();
       if (body.revision !== Number(old.revision))
         throw new ApiError(
           409,
@@ -207,13 +212,17 @@ export const saveContent: Handler = async (req, params) => {
       id ? 'content.edit' : 'content.create',
       'content',
       Number(r.id),
+      '', auditData,
     );
     return r;
   });
   return json({ content: view(result) }, { status: id ? 200 : 201 });
 };
-export const publishContent: Handler = async (req, params) => {
-  const v = await staff(req, 'admin');
+export const publishContent: Handler = async (req, params) => publishContentAs(req, params, await staff(req, 'admin'));
+/** Internal service entry shares the same revisions, transactions and audit trail. */
+export async function publishContentAs(req: Request, params: Record<string, string>, v: Viewer, resourceKind?: 'blog', auditData: Record<string, unknown> = {}): Promise<Response> {
+  if (v.banned || v.deleted_at || !hasRole(v, 'admin')) throw new ApiError(403, 'forbidden', 'Admin access required.');
+  requireCanWrite(v);
   const body = await readJson(req),
     id = idParam(params.id);
   if (typeof body.published !== 'boolean')
@@ -224,6 +233,7 @@ export const publishContent: Handler = async (req, params) => {
       [id],
     );
     if (!r) throw notFound();
+    if (resourceKind && r.kind !== resourceKind) throw notFound();
     if (body.revision !== Number(r.revision))
       throw new ApiError(
         409,
@@ -244,6 +254,7 @@ export const publishContent: Handler = async (req, params) => {
       body.published ? 'content.publish' : 'content.unpublish',
       'content',
       id,
+      '', auditData,
     );
     return saved;
   });

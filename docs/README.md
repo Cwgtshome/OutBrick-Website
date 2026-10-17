@@ -28,4 +28,8 @@ Dated plans explain intent; current code and scoped verification establish what 
 
 - [Cloudflare migration checkpoint](CLOUDFLARE-MIGRATION.md): live Cloudflare operations, transferred data, accepted SQL gap, recovery boundaries and functional acceptance checklist.
 
+- [Private Studio blog delegation](STUDIO-BLOG-DELEGATION.md): prepared owner-granted blog API, scoped credentials, revision safety and deployment/consent gates.
+
+- [App analytics disclosure](APP-ANALYTICS-DISCLOSURE.md): source-matched consent/data/retention and current website processor disclosures, six-language render checks, and publication gates.
+
 - [Search indexing](SEARCH-INDEXING.md): all-language sitemaps, public community coverage and submission versus indexing evidence.

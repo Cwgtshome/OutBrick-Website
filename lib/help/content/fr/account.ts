@@ -1,3 +1,4 @@
+import { appAnalyticsPrivacy } from '../../../i18n/app-analytics-privacy.ts';
 import type { HelpArticle } from '../../model.ts';
 
 /** Réglages, fonctions Apple, progression et confidentialité, en français. Vérifié avec la 5.1.1 (68). */
@@ -321,7 +322,7 @@ export const accountArticles: HelpArticle[] = [
               '**L’onglet Palmarès** affiche votre nom de joueur, votre niveau et, si vous le souhaitez, un drapeau. Désactivez **Réglages › Jeu › M’afficher au classement** pour en être retiré ; masquez votre drapeau dans votre Profil.',
               '**Course du village et Brick Royale** partagent votre nom de joueur avec les joueurs de cette course, uniquement si vous y participez.',
               '**Game Center** appartient à Apple et dépend de vos réglages Game Center.',
-              'OutBrick n’utilise **aucun outil d’analyse**, et les données propres au jeu ne servent pas à vous suivre. Le partenaire publicitaire (Google AdMob) gère ses propres données pour les vidéos facultatives ; voir notre [politique de confidentialité](/privacy).',
+              appAnalyticsPrivacy['fr'].help,
             ],
           },
         ],

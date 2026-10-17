@@ -53,7 +53,7 @@ jobs:
         run: node --experimental-strip-types --test netlify/community/player-guides.test.ts netlify/community/threads.test.ts
 
       - name: Administrative roles and editorial publishing
-        run: node --experimental-strip-types --test netlify/community/admin.test.ts netlify/community/moderation.test.ts
+        run: node --experimental-strip-types --test netlify/community/admin.test.ts netlify/community/moderation.test.ts netlify/community/studio-blog.test.ts
 
       - name: Public community sitemap excludes private content
         run: node --experimental-strip-types --test cloudflare/community-sitemap.test.ts
@@ -63,6 +63,8 @@ jobs:
 
       - name: Support Centre (request tracking, guide feedback) and support-case lifecycle
         run: node --experimental-strip-types --test netlify/lifecycle/player-cases.test.ts netlify/lifecycle/support-extras.test.ts netlify/lifecycle/lifecycle.test.ts
+      - name: App analytics privacy in six primary languages
+        run: node --experimental-strip-types scripts/check-app-analytics-privacy.mjs
       - name: SEO audit
         run: pnpm audit:seo
 

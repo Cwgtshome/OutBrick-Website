@@ -1,3 +1,4 @@
+import { appAnalyticsPrivacy } from '../../../i18n/app-analytics-privacy.ts';
 import type { HelpArticle } from '../../model.ts';
 
 /** 設定、Appleの機能、進行状況とプライバシー（日本語）。5.1.1 (68) で確認。 */
@@ -321,7 +322,7 @@ export const accountArticles: HelpArticle[] = [
               '**ランキングのタブ**には、プレイヤー名、レベル、そして選んだ場合は国旗が表示されます。**設定 › ゲーム › 公開ランキングに表示**をオフにすると外れます。国旗はプロフィールで非表示にできます。',
               '**村レースとブリック・ロワイヤル**では、参加した場合にだけ、そのレースのプレイヤーにプレイヤー名が共有されます。',
               '**Game Center**はAppleのサービスで、Game Centerの設定に従います。',
-              'OutBrickは**分析ツールを使っておらず**、ゲーム自体のデータがあなたのトラッキングに使われることはありません。広告パートナー（Google AdMob）は、任意の動画のために自社のデータを扱います。[プライバシーポリシー](/privacy)をご覧ください。',
+              appAnalyticsPrivacy['ja'].help,
             ],
           },
         ],
