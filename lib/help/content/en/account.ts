@@ -1,3 +1,4 @@
+import { appAnalyticsPrivacy } from '../../../i18n/app-analytics-privacy.ts';
 import type { HelpArticle } from '../../model.ts';
 
 /** Settings, Apple features, progress and privacy, in English. Checked against 5.1.1 (68). */
@@ -321,7 +322,7 @@ export const accountArticles: HelpArticle[] = [
               '**The Leaders tab** shows your player name, level and, if you choose, a flag. Turn off **Settings › Game › Show me on the standings board** to be removed; hide your flag in your Profile.',
               '**Village Race and Brick Royale** share your player name with the players in that race, only if you join.',
               '**Game Center** is Apple’s, under your Game Center settings.',
-              'OutBrick has **no analytics**, and the game’s own data is not used to track you. The ad partner (Google AdMob) handles its own data for optional videos; see our [privacy policy](/privacy).',
+              appAnalyticsPrivacy['en'].help,
             ],
           },
         ],

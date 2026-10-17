@@ -1,3 +1,4 @@
+import { appAnalyticsPrivacy } from '../../../lib/i18n/app-analytics-privacy';
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
 import { LegalPage, Pills, SiteLink } from '../../legal-page';
@@ -14,8 +15,8 @@ export default function PrivacyChoicesPage() {
     <LegalPage
       eyebrow="User privacy choices"
       title="Your choices, clearly."
-      summary="The OutBrick app has no account system and no analytics; this website uses analytics only if you accept them. These are the controls available to you — over advertising, what is stored on your device, what Apple services hold, website analytics and our emails."
-      updated="8 October 2026"
+      summary={appAnalyticsPrivacy.en.choicesSummary}
+      updated="17 October 2026"
       current="/privacy-choices"
     >
       <div className="brick headline">
@@ -63,13 +64,7 @@ export default function PrivacyChoicesPage() {
 
       <section className="brick">
         <h2>OutBrick data</h2>
-        <p>
-          The developer does not receive gameplay or face data, create game accounts, run analytics in
-          the game, or sell data. The game stores progress and preferences locally so the board can work
-          offline. When available, iCloud also syncs progress, profile choices, and the colour-blind
-          preference to your own Apple Account. Manage the app&rsquo;s iCloud access in device Settings.
-          Apple controls separate device backups.
-        </p>
+        <p>{appAnalyticsPrivacy.en.storage}</p>
       </section>
 
       <section className="brick">
@@ -103,14 +98,20 @@ export default function PrivacyChoicesPage() {
         </p>
       </section>
 
+      <section className="brick" id="app-analytics">
+        <h2>{appAnalyticsPrivacy.en.appTitle}</h2>
+        <p>{appAnalyticsPrivacy.en.consent}</p>
+        <p>{appAnalyticsPrivacy.en.withdrawal}</p>
+        <p><a href="/privacy#app-analytics">{appAnalyticsPrivacy.en.appTitle}</a></p>
+      </section>
+      <section className="brick" id="diagnostics">
+        <h2>{appAnalyticsPrivacy.en.diagnosticsTitle}</h2>
+        <p>{appAnalyticsPrivacy.en.diagnostics}</p>
+      </section>
+
       <section className="brick" id="analytics">
         <h2>Website analytics</h2>
-        <p>
-          New as of 8 October 2026. This website can measure visits with Google Analytics, but only if
-          you accept it in the cookie banner; until you do, nothing loads from Google. Your answer is
-          kept in this browser for 12 months, and you can change it here at any time. The app is not
-          affected either way: it has no analytics.
-        </p>
+        <p>{appAnalyticsPrivacy.en.websiteScope}</p>
         <div className="act">
           <button type="button" className="btn" data-ob-consent-open>Change my analytics choice</button>
         </div>

@@ -1,3 +1,4 @@
+import { appAnalyticsPrivacy } from '../../../lib/i18n/app-analytics-privacy';
 import { currentGameCopy } from '../../../lib/i18n/current-game';
 import type { Metadata } from 'next';
 import { pageMetadata } from '../../../lib/site';
@@ -8,7 +9,7 @@ export const metadata: Metadata = pageMetadata({
   path: '/privacy',
   title: 'OutBrick privacy policy: data, ads and choices',
   description:
-    'OutBrick privacy policy: no analytics in the app, website analytics only with consent, what ads, the community and our emails store, and your choices.',
+    appAnalyticsPrivacy.en.metadata,
 });
 
 export default function PrivacyPage() {
@@ -17,21 +18,12 @@ export default function PrivacyPage() {
       eyebrow="OutBrick privacy policy"
       title="Your board stays yours."
       summary="OutBrick is designed to work entirely on your device. This policy explains what the app does and does not collect, how Apple services fit in, what this website and the optional OutBrick Community store, what our emails record, and how to make privacy choices."
-      updated="9 October 2026"
+      updated="17 October 2026"
       current="/privacy"
     >
       <div className="brick headline">
-        <h2>No accounts in the app, no analytics in the app, and no ad you did not ask for.</h2>
-        <p>
-          The app has no accounts, and there is no analytics SDK in OutBrick. The developer does not
-          receive your gameplay or face data. The app stores gameplay data locally and can sync
-          progress through your own iCloud account. There is one third party in the app:
-          Google&rsquo;s advertising SDK, which runs only when you choose to watch a rewarded video in
-          exchange for something you pressed a button to ask for — a life, undos, more moves, the clear
-          card&rsquo;s coins paid again, a spin of the Brick Wheel, or a prize from the gift balloon or
-          Brick Cinema. It is described in full below, and buying Remove Ads or holding the Brick Pass switches
-          it off entirely.
-        </p>
+        <h2>{appAnalyticsPrivacy.en.headline}</h2>
+        <p>{appAnalyticsPrivacy.en.intro}</p>
         <p>
           The one account we run is optional and lives on this website: the OutBrick Community, our
           forum. It is described in its own section below, and joining it or not changes nothing in the
@@ -53,18 +45,15 @@ export default function PrivacyPage() {
         <ul className="points">
           <li><b>New host:</b> Cloudflare now hosts this website and runs its forms, the OutBrick Community and the storage for images in posts. Netlify did this until 9 October 2026.</li>
           <li><b>New database:</b> Neon now runs the website&rsquo;s database for us directly, still in the United States (US East). Until 9 October 2026, Netlify ran it with Neon.</li>
-          <li><b>Translation on request:</b> community posts are now translated by Cloudflare Workers AI, on Cloudflare&rsquo;s own network.</li>
+          <li>{appAnalyticsPrivacy.en.translationProvider}</li>
           <li><b>Earlier records:</b> our records were copied to the new services. Netlify still holds the earlier copy — form submissions sent before 9 October 2026, the former database and its request logs — which we keep only as a backup of the move. We will have it deleted once the move is confirmed, and in any case within the periods set out in this policy.</li>
           <li><b>Email statistics:</b> we now count deliveries, opens and clicks for every email we send, without storing your address with them, and stop sending the newsletter to an address that bounces or reports spam. Details are under Email open and click tracking below.</li>
         </ul>
       </section>
 
       <section className="brick" id="changes">
-        <h2>What changed on 8 October 2026</h2>
-        <p>
-          This revision covers four changes to the website and our emails. Nothing changed in the app:
-          it still has no analytics.
-        </p>
+        <h2>{appAnalyticsPrivacy.en.changeTitle}</h2>
+        <p>{appAnalyticsPrivacy.en.change}</p>
         <ul className="points">
           <li><b>Website analytics:</b> Google Analytics can now measure visits to this website, but only if you accept it in the cookie banner. Nothing loads from Google until you do, and you can change your answer at any time.</li>
           <li><b>Newsletter open and click tracking:</b> OutBrick News emails now record whether they were opened and which links were clicked, so that we can stop writing to people who no longer read them.</li>
@@ -110,12 +99,7 @@ export default function PrivacyPage() {
 
       <section className="brick">
         <h2>Information stored on your device</h2>
-        <p>
-          OutBrick stores gameplay state such as level progress, coins, boosters, settings,
-          accessibility preferences, and local statistics in the app&rsquo;s local storage. This
-          information is used to provide the game and is not transmitted to OutBrick. It may be included
-          in an iCloud device backup if you have enabled that Apple feature.
-        </p>
+        <p>{appAnalyticsPrivacy.en.storage}</p>
       </section>
 
       <section className="brick">
@@ -168,13 +152,7 @@ export default function PrivacyPage() {
           only opened a draft in your own mail app and sent nothing itself; it now sends your message
           directly, and the site gained three more forms.
         </p>
-        <p>
-          The contact form, the <a href="/affiliates">affiliate programme</a> application, the job
-          applications on our <a href="/careers">careers</a> pages and the{' '}
-          <a href="/newsletter">newsletter</a> sign-up send what you type to OutBrick. They are received by this website&rsquo;s own server, which Cloudflare runs for us: it stores each submission in our database, which Neon runs for us, and emails it to us through Resend. Cloudflare acts as our service provider under its own <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">privacy policy</a>.
-          The acknowledgement and newsletter emails described below are sent through Resend; no other
-          third party receives it, and nothing is sent until you press the button.
-        </p>
+        <p>{appAnalyticsPrivacy.en.formsProvider}</p>
         <ul className="points">
           <li><b>Contact form:</b> the topic, your name, email address and message, and — only if you fill them in — your device, iOS version and app version.</li>
           <li><b>Screenshots:</b> if you attach them to the contact form or to your request page, up to three images per message. We remove location and camera data before storing them with Cloudflare; only the team, and you through the private link to your request, can see them. They are kept and deleted with your support request.</li>
@@ -185,7 +163,7 @@ export default function PrivacyPage() {
           <li><b>Job application:</b> the role, your name, email address, a link to your portfolio or profile, where you live and your time zone, and your note.</li>
           <li><b>Newsletter:</b> your email address, the language you chose for the emails, and a record that you ticked the consent box. Sign-up is double opt-in: your address joins the list only when you press the button in the confirmation email, which works for 7 days. What we keep while you are subscribed, and how to change your topics or unsubscribe, is set out in the next two sections. Signing up or not changes nothing in the app.</li>
           <li><b>Emails we send you:</b> after the contact form, an affiliate application or a job application, an acknowledgement email to the address you gave, with a copy of what you sent, and later the team&rsquo;s replies, the decision on an application, a note when a fix you reported ships, and one short &ldquo;Did we solve it?&rdquo; email; for the newsletter, the confirmation email and then the welcome letters. They are sent through Resend, our email delivery provider, which acts as our processor under its own <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>. Resend receives the address, the language and the content of each email and keeps a delivery log; for newsletter subscribers it also stores the address, the date you confirmed and whether you have unsubscribed. Our Resend account sends from the EU (Ireland), and it can record opens and clicks, as explained under Email open and click tracking below.</li>
-          <li><b>With every form:</b> your consent tick, the language of the page you used, the time, and the address of the page you came from. We do not store your IP address with a submission. To keep out spam, each form has a hidden field that only automated programs fill in, and we briefly keep a salted one-way hash of your IP address to limit how many forms can be sent from one connection; those records are deleted after two days.</li>
+          <li>{appAnalyticsPrivacy.en.formTechnical}</li>
         </ul>
         <p>
           We use these details only for the reason you sent them: to answer your message, to review and
@@ -193,20 +171,13 @@ export default function PrivacyPage() {
           for. We do not sell them, use them for advertising, or add you to a mailing list you did not
           sign up for.
         </p>
-        <p>
-          <b>How long we keep them.</b> We delete the copies of form submissions kept in our database, and the emails they arrive as, within 12 months of our last exchange with you — unless there is an ongoing relationship that needs them: a support case still open, an approved affiliate (for as long as they take part, plus what tax and accounting law requires for payments), or someone we hire. The other records kept in our database have their own periods, set out in the next section.
-        </p>
-        <p>
-          <b>Deleting them sooner.</b> Ask us through the <a href="/contact?topic=privacy">contact form</a>{' '}
-          with the topic set to Privacy, or by replying to any email from us, and we will delete your submissions from our database and from our inbox and confirm when it is done. You can also ask for a copy of what we hold, or for a correction.
-        </p>
+        <p>{appAnalyticsPrivacy.en.formRetention}</p>
+        <p>{appAnalyticsPrivacy.en.formDeletion}</p>
       </section>
 
       <section className="brick" id="website-data">
         <h2>What our website&rsquo;s database keeps</h2>
-        <p>
-          Since 8 October 2026 the contact form, the applications and the newsletter also keep a record in our website&rsquo;s database, the one that runs the OutBrick Community, so that a reply, a decision or a welcome letter can refer back to what you sent. Neon runs this database for us in the United States (US East). Each record has a fixed lifetime, and an automatic job deletes it when that time is up.
-        </p>
+        <p>{appAnalyticsPrivacy.en.databaseProvider}</p>
         <ul className="points">
           <li><b>Support cases:</b> when you use the contact form, we keep your message, name, email address, language and topic, the device, app and iOS versions you gave us, a case reference, the team&rsquo;s replies, the case&rsquo;s status, the version a fix shipped in, and your answer to &ldquo;Did we solve it?&rdquo; with any comment you add. We keep a case for 24 months after it is closed or resolved, then delete it.</li>
           <li><b>Affiliate and job applications:</b> what you submitted and the decision we made. We keep an application for 24 months after the decision, then delete it.</li>
@@ -284,12 +255,8 @@ export default function PrivacyPage() {
           <li><b>IP addresses:</b> the community&rsquo;s database does not store them. To slow down spam and abuse, the community briefly keeps a salted one-way hash of your IP address to count requests, and records older than two days are deleted.</li>
           <li><b>Public posts:</b> everything you post — threads, replies, your display name and your bio — is public. Anyone can read it without an account, and search engines index it. Please do not post your own or anyone else&rsquo;s personal information.</li>
         </ul>
-        <p>
-          <b>Who processes it.</b> Cloudflare, which hosts this website, runs the community&rsquo;s server code and stores its images. The community&rsquo;s database is a Postgres database that Neon runs for us in the United States (US East). Resend delivers the community&rsquo;s emails. All three act as our service providers, as described in the forms section above. If you choose to sign in with Apple, Google or Facebook, that company handles the sign-in under its own privacy policy and shares with us only the user id and email address described above. Nobody else receives community data, and we do not sell it or use it for advertising.
-        </p>
-        <p>
-          <b>Cloudflare&rsquo;s request logs.</b> Like any web host, Cloudflare records technical details of the requests made to this website and its server — such as the time, the address requested, your IP address and your browser&rsquo;s user agent — to deliver the site, keep it secure and investigate problems. These logs are kept by Cloudflare for a limited period under its own policy. We read them only to diagnose errors, and never to identify or profile visitors.
-        </p>
+        <p>{appAnalyticsPrivacy.en.communityProvider}</p>
+        <p>{appAnalyticsPrivacy.en.hostingLogs}</p>
         <p>
           <b>Emails.</b> We email you sign-in links when you ask for one, a confirmation when you add or
           change your email address, a welcome when you join, and notifications: replies to you,
@@ -340,7 +307,7 @@ export default function PrivacyPage() {
           These OutBrick Community features are live, except reply by email, which is not switched on yet; until it is, none of its data is collected.
         </p>
         <ul className="points">
-          <li><b>Images in posts:</b> images you attach to a post are stored in Cloudflare R2, Cloudflare&rsquo;s file storage. Each image needs a text description (alt text) for people who cannot see it, and the location and other metadata embedded in the file are removed when you upload it. An image is public, like the post it belongs to.</li>
+          <li>{appAnalyticsPrivacy.en.uploadsProvider}</li>
           <li><b>Reply by email:</b> you will be able to answer a notification email to post your reply. Resend receives and processes the incoming email on our behalf, and we post its text as your reply, under your account.</li>
           <li><b>Passkeys:</b> if you sign in with a passkey, we store only its public key and a credential id. The private key never leaves your device or password manager, and no fingerprint or face data is ever sent to us.</li>
           <li><b>Translation on request:</b> if you ask for a post to be translated, the text of that post is sent to Cloudflare Workers AI, which runs an open translation model on Cloudflare&rsquo;s own network, and the translation is shown to you. Translations are saved so that the same post is not sent twice. Nothing is sent unless someone asks for a translation, and your account details are never part of it.</li>
@@ -348,12 +315,19 @@ export default function PrivacyPage() {
         </ul>
       </section>
 
+      <section className="brick" id="app-analytics">
+        <h2>{appAnalyticsPrivacy.en.appTitle}</h2>
+        {(['consent', 'data', 'identifier', 'exclusions', 'withdrawal', 'provider', 'retention'] as const).map(key => <p key={key}>{appAnalyticsPrivacy.en[key]}</p>)}
+        <p><a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer">Google Analytics for Firebase</a></p>
+      </section>
+      <section className="brick" id="diagnostics">
+        <h2>{appAnalyticsPrivacy.en.diagnosticsTitle}</h2>
+        <p>{appAnalyticsPrivacy.en.diagnostics}</p>
+      </section>
+
       <section className="brick" id="analytics">
         <h2>Website analytics</h2>
-        <p>
-          This section is new as of 8 October 2026, and it is about this website only. The OutBrick app
-          contains no analytics SDK, and nothing described here happens in the app.
-        </p>
+        <p>{appAnalyticsPrivacy.en.websiteScope}</p>
         <p>
           With your consent, this website uses Google Analytics 4, provided by Google Ireland Limited
           and Google LLC, which process the data on our behalf as our processor. Until you press Accept
@@ -367,7 +341,7 @@ export default function PrivacyPage() {
           <li><b>What is not:</b> Google Analytics 4 does not log or store IP addresses. Google signals and ad personalisation are switched off, so the data is not combined with your Google account or used for advertising.</li>
           <li><b>Why:</b> to understand which pages help people, and to improve the site.</li>
           <li><b>Legal basis:</b> where EU or UK law applies, your consent. Withdrawing it stops future measurement; it does not undo what was measured before.</li>
-          <li><b>How long:</b> analytics data is kept for 14 months at most, then deleted.</li>
+          <li>{appAnalyticsPrivacy.en.retention}</li>
           <li><b>Where:</b> Google may process the data outside your country, including in the United States.</li>
         </ul>
         <p>
@@ -438,15 +412,7 @@ export default function PrivacyPage() {
 
       <section className="brick">
         <h2>Children</h2>
-        <p>
-          OutBrick is rated 4+ and the game does not send personal gameplay or face information to the
-          developer. Please avoid including children&rsquo;s personal information in support messages.
-          The game has no public chat and no account registration. It does contain rewarded video
-          advertising, described above, which only ever plays when a player chooses it. Those ads are
-          limited to Google&rsquo;s general-audience content rating, and whether they are personalised
-          follows the advertising and tracking choices described above; OutBrick is not in the App
-          Store&rsquo;s Kids category.
-        </p>
+        <p>{appAnalyticsPrivacy.en.children}</p>
         <p>
           The OutBrick Community on this website is separate from the game and is not meant for
           children: you must be at least 16 to create an account, or older if the age of digital
@@ -457,9 +423,7 @@ export default function PrivacyPage() {
 
       <section className="brick">
         <h2>Third parties and changes</h2>
-        <p>
-          Apple services, App Store purchases, Game Center, iCloud sync, and iCloud backups are operated under their own terms and privacy policies. Google is the one advertising partner in the app, described above. On this website, Cloudflare hosts the pages and runs the forms, the OutBrick Community and its image storage; Neon runs the database behind them; Resend sends our emails and records whether they are delivered, opened and clicked; and Google Analytics measures visits when you allow it, all described above. If you sign in to the community with Apple, Google or Facebook, that company handles the sign-in under its own terms and privacy policy. We do not add a third-party analytics or advertising partner without updating this policy first, and, for the app, its App Store privacy information too; this revision moves the website from Netlify to Cloudflare and Neon, and the app is unchanged. We may update this page when the app, the website or our practices change; the effective date above shows the latest revision, and the latest changes are summarised at the top.
-        </p>
+        <p>{appAnalyticsPrivacy.en.partners}</p>
       </section>
 
       <section className="brick">

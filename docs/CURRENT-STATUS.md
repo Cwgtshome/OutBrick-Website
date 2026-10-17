@@ -1,3 +1,44 @@
+## Studio/privacy integration onto current main — 17 October 2026
+
+The release branch `codex/studio-blog-privacy-release` integrates the prepared changes onto
+`feb3b3c`, preserving the subsequent support, email, sitemap and 39-language work. All existing
+33 catalog languages remain published. The six primary languages have the new complete privacy
+copy; new paragraphs in catalog languages currently fall back to English. Extraction check
+reports the `legal` and `help-account` English catalogs as stale. Those catalogs/publication
+flags were not manually falsified or rewritten to remove locales. Translation completion is a
+separate follow-up; no paid or over-quota translation was started.
+
+The new additive `20261017160000_studio_blog_delegation` migration was applied to preview and
+production under exact project/branch and SHA-256 guards. Existing members, threads, posts,
+editorial and support rows were unchanged in the same transaction; the new token table is empty.
+No credential or article was created. Publication and live readback follow the normal GitHub
+Actions deployment and remain separate from these preparation receipts.
+
+# Prepared optional app analytics disclosure — 17 October 2026 (not deployed)
+
+[Disclosure evidence and source map](APP-ANALYTICS-DISCLOSURE.md) records the six-language
+privacy/control/Help updates for opt-in FirebaseAnalyticsCore13.0.1. Pseudonymous/Apple-linked
+identifiers, event/purchase/ad categories, install-local default-off consent, withdrawal limits
+and separate MetricKit/advertising choices are explicit. The owner verified the shared GA4
+property's 14-month user/event retention with user-activity reset; aggregate reports remain
+separate. Current Cloudflare/Neon/R2/Resend/WorkersAI provider wording replaces stale active
+Netlify claims. No production deployment, SDK consent or remote data deletion is claimed.
+
+# Prepared Studio blog delegation — 17 October 2026 (not deployed)
+
+Isolated branch `codex/dashboard-blog-delegation`, based on the Cloudflare source checkpoint
+`33ba02b`, prepares a revocable, verified-staff blog connection for the private OutBrick Studio.
+[Connection contract and rollout gates](STUDIO-BLOG-DELEGATION.md) describe the one-time owner
+credential action, exact audience/scopes, server-only token handling and existing editorial
+revision/publishing safeguards. No migration, deployment, production credential grant, draft or
+public article has been created by this work. Static historical blog sources remain Git-managed.
+
+Local PGlite tests pass 16/16 (existing admin/editorial plus delegation security, revision,
+resource-kind, payload bound, rate and six-language tests). Typecheck, lint and production vinext
+build pass; the build prerendered 1,794 routes and retains the existing large-chunk warning.
+Checks used the bundled Node 24.19.0 runtime, which satisfies package engines; the documented
+CI Node 22.13.0 run and real owner UI sign-in/credential/revoke flow remain separate gates.
+
 ## Search discovery coverage — 12 October 2026
 
 A fresh live audit found 3,086 static URLs across all 39 languages; every URL

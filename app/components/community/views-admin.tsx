@@ -18,6 +18,7 @@ import { adminWords } from '../../../lib/i18n/admin';
 import { localeNames } from '../../../lib/i18n/locales';
 import { renderMarkdown } from '../../../netlify/community/markdown';
 import { api, ApiFailure } from './api';
+import { StudioBlogConnection } from './studio-connection';
 import { View, Pending, ErrorNotice, Field, Loading, Time, useApp, useLoad } from './core';
 import { EmailAnalytics } from './views-admin-email';
 function AdminError({ error }: { error: ApiFailure }) {
@@ -128,6 +129,7 @@ function Dashboard() {
           </div>
         ))}
       </dl>
+      <StudioBlogConnection isAdmin={isAdmin} />
       <SupportCases initialCase={link.caseId} />
       <GuideFeedbackPanel />
       <SiteStatusPanel />

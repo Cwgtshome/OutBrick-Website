@@ -1,3 +1,4 @@
+import { appAnalyticsPrivacy } from '../../../i18n/app-analytics-privacy.ts';
 import type { HelpArticle } from '../../model.ts';
 
 /** Ajustes, funciones de Apple, progreso y privacidad, en español. Comprobado con la 5.1.1 (68). */
@@ -321,7 +322,7 @@ export const accountArticles: HelpArticle[] = [
               '**La pestaña Ranking** muestra tu nombre de jugador, tu nivel y, si quieres, una bandera. Desactiva **Ajustes › Juego › Mostrarme en la clasificación** para desaparecer de ella; oculta tu bandera en tu Perfil.',
               '**Carrera del pueblo y Brick Royale** comparten tu nombre de jugador con los jugadores de esa carrera, solo si te unes.',
               '**Game Center** es de Apple y depende de tus ajustes de Game Center.',
-              'OutBrick **no usa analíticas**, y los datos propios del juego no se usan para rastrearte. El socio publicitario (Google AdMob) gestiona sus propios datos para los vídeos opcionales; consulta nuestra [política de privacidad](/privacy).',
+              appAnalyticsPrivacy['es'].help,
             ],
           },
         ],
